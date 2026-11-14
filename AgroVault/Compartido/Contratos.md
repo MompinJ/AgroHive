@@ -2,12 +2,12 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: contratos/*.schema.json (v0.10.0, A1.1)
+fuente: contratos/*.schema.json (v0.11.0, A1.1)
 ---
 
 # Contratos
 
-La fuente de verdad son los JSON Schema de `contratos/` (versión `0.10.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.11.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
 - Detalle y reglas: `contratos/README.md`
 - Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`
@@ -28,6 +28,7 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.10.0`, acti
 | `serie-clima.schema.json` | Respuesta de `GET /api/clima`: serie diaria del periodo, sin escenario | API `GET /api/clima` |
 | `ndvi.schema.json` | NDVI MOD13Q1 (250 m) por punto, evidencia con límites declarados; no entra al ranking | API `GET /api/ndvi` (A4.11) |
 | `smap.schema.json` | Humedad superficial SMAP L3 (36 km o 9 km, ~0-5 cm), contraste; no entra al ranking ni al balance | API `GET /api/smap` (A4.8) |
+| `serie-balance.schema.json` | Series diarias y mensuales del balance de agua por rotación, escenario y ciclo, para graficar (A4.1); la interfaz no recalcula | Motor |
 | `clima-escenario.schema.json` | Serie diaria de un año real (seco, habitual, lluvioso) y cómo se eligió; humedad de POWER opcional (`humedadRaizFraccionSat`, fracción de saturación) | Motor (A2.5), desde `serie-clima` |
 | `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo bandas por mes, `horizonteMeses` fijo en 6 | API + motor (A2.13) |
 | `plan-siembra.schema.json` | Rotación del selector: cultivo, temporada y fecha elegida por el usuario por ciclo, con `porQue`; `calendarioLocal` usado; `asignacionClima` = `temporada_tipica` | Front (selector) |
