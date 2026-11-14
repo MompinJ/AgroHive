@@ -44,6 +44,15 @@ Decisiones afectadas:
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
 
+### 2026-11-14 — A2.12: losas de suelo por tipo y humedad; visor corregido (Mafer)
+
+- **Archivos:** nuevos `modelos/suelos/` (`suelos.py`, 9 `.bbmodel` y `visor_suelos.html`) y `web/src/escena/pruebas/suelos.test.ts`; `modelos/paleta.py` y `paleta.md` (18 colores nuevos, índices 60 a 77); los 15 `.bbmodel` de `modelos/cultivos/` (solo cambia la textura incrustada); `herramientas/voxelkit.py` (plantilla del visor); `docs/07`, `docs/14`, Pendientes.
+- **Cambio:** 9 losas (arenoso, franco, arcilloso × seco, medio, húmedo) para ponerse encima de la columna de suelo de la escena. Se hacen losas y no bloques porque la columna se estira con el relieve y un bloque voxel se deformaría; ver `docs/07`. El franco usa solo colores que ya existían para coincidir con la columna.
+- **Visor (pedido de Mompin, #69):** la vista "todos" pasa de una fila diagonal a una cuadrícula por familia y encuadra la esfera envolvente del conjunto (antes `calabaza_podrida` quedaba casi fuera de cuadro); el plano del visor baja a y = −0.14 (tapaba el cuerpo de las losas y parpadeaba); aviso si no llega a cargar. **No se reprodujo el "visor en blanco" con `file://`**: en Chrome se ve completo; la causa en el equipo de Mompin no se conoce (conexión, otro navegador). Se documentó cómo servirlo en local.
+- **Verificación:** `cd web && npm test`: 231 pruebas (19 nuevas: 9 losas × paleta y medidas); `tsc` sin errores. Los 15 `.bbmodel` de plantas se compararon con `HEAD`: solo cambia `textures`; los `elements` son idénticos. Capturas en Chrome headless de los visores de milpa y suelos.
+- **Pendiente:** la escena no carga todavía las losas ni pinta la columna por tipo de suelo. Colores a ojo. Falta que una persona abra `visor_suelos.html`.
+- **Decisiones afectadas:** A2.12 (en revisión).
+
 ### 2026-11-14 — A3.3: estados visuales legibles con daltonismo; A2.11: frijol y calabaza (Mafer)
 
 - **Archivos:** `web/src/escena/estilos-estado.ts`, `patrones.ts`, `EscenaParcela.tsx` (una línea), nuevos `daltonismo.ts` y `pruebas/daltonismo.test.ts`; `modelos/` (frijol, calabaza, paleta y los 5 `.bbmodel` del maíz); `docs/06`, `docs/14`, `AgroVault/Compartido/Pendientes.md`. Los archivos de `escena/` son de Mompin, que dejó escrito que A3.3 los ajusta ahí.

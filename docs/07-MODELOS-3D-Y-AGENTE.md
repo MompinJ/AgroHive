@@ -31,6 +31,8 @@ python3 herramientas/voxelkit.py preview modelo.bbmodel salida.png [escala] [azi
 python3 herramientas/voxelkit.py visor salida.html a.bbmodel b.bbmodel ...
 ```
 
+**El visor carga Three.js desde internet** (CDN). Necesita conexión. Si al abrirlo con doble clic sale en blanco, sírvelo en local: en la raíz del repo, `python -m http.server` y abre `http://localhost:8000/modelos/cultivos/visor_milpa.html`. Si no llega a cargar, el propio visor muestra un aviso a los 4 segundos. La vista "todos" ordena los modelos en una cuadrícula, una fila por familia (el nombre sin su último tramo: `maiz`, `frijol`, `suelo_arenoso`...), y encuadra el conjunto completo.
+
 ## Convenciones (las del agente mandan)
 
 | Tema | Convención |
@@ -61,6 +63,20 @@ Del ejemplo de la zanahoria, que conviene repetir para cada cultivo:
 | `suelo` | Bloque de suelo base de la celda |
 
 Todas las etapas comparten el mismo punto de anclaje para poder interpolar escala. El motor (05) decide la etapa y el estado; el modelo solo los representa.
+
+## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
+
+En la escena, el suelo es una columna procedural que se estira hasta la altura del relieve y se pinta según la humedad del motor (`escena/suelo.ts`); un bloque voxel completo se deformaría al estirarlo. Por eso las variantes son **losas delgadas que se ponen encima de la columna**, no bloques.
+
+| Tema | Convención |
+| --- | --- |
+| Nombre | `suelo_<tipo>_<humedad>.bbmodel`; tipo: `arenoso`, `franco`, `arcilloso` (los 3 grupos del selector de suelo); humedad: `seco`, `medio`, `humedo` (los 3 puntos de la escala de `suelo.ts`). 9 modelos |
+| Forma | Llena la celda: x y z de −8 a 8 (las celdas contiguas encajan sin huecos). Cuerpo de 2 unidades **bajo** y = 0 (de y = −2 a 0) y detalle de superficie de **a lo más 1 unidad** por encima de y = 0. Los modelos de planta se apoyan en y = 0 sobre su lomo de 14 × 2 × 10, así que el detalle se ve sobre todo en los márgenes y, en suelo desnudo, en toda la cara superior |
+| Color | El franco usa los colores de la columna (`suelo_seco`, `soil`, `suelo_humedo`) para que coincida. Arenoso y arcilloso tienen tonos propios (índices 60 a 77 de la paleta, a ojo, no medidos) |
+| Aspecto (cualitativo) | Arenoso: claro y de grano fino, rizos y piedritas en seco. Franco: terroncitos. Arcilloso: placas agrietadas en seco y superficie lisa y oscura con brillos en húmedo. Son representaciones, no mediciones |
+| Presupuesto | 12 a 24 cubos por losa |
+
+**Pendiente (A3, fuera de `modelos/`):** la escena todavía no las carga; hoy colorea la columna con una sola escala sin distinguir el tipo de suelo. Para usarlas hay que elegir la losa con el tipo de `suelo` y la humedad del registro, y pintar la columna con el tono del tipo (hoy solo el franco coincide). Una prueba (`web/src/escena/pruebas/suelos.test.ts`) verifica nombres, paleta y medidas.
 
 ## Carga en la web
 
