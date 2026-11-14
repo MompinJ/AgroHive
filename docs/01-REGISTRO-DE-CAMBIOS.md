@@ -97,6 +97,13 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Pilar de exceso de agua `[DECIDIDO]`; contratos 0.7.0 (compatible)
+
+- **Archivos:** `contratos/resultado-rotacion.schema.json`, ejemplos, casos inválidos, tipos, README; `13`; vault.
+- **Cambio y motivo:** Mompin decidió sumar un pilar de exceso de agua al ranking B, según la propuesta del motor. Se agrega `$defs.pilarExcesoHidrico` con `excesoTotalMm`, `diasExceso` y `fraccionLluviaPercolada`. En `NO_EVALUABLE` o `ERROR_DATOS` todo va en `null` y el motivo es obligatorio. También se suma `excesoHidrico` a los pilares por escenario, a los pesos de `ponderacion` y a `pilaresExcluidos`. Todo es opcional: lo que validaba sigue validando. Nota: los otros pilares no tienen esa regla condicional; se agregó solo a este, como se pidió.
+- **Fuente / evidencia:** FAO-56 (Allen et al., 1998), capítulo 8, "Soil water balance", subsección "Deep percolation (DP)", ecuación 88: DPi = (Pi - ROi) + Ii - ETc,i - Dr,i-1 ≥ 0, verificada en https://www.fao.org/4/x0490e/x0490e0e.htm el 14/11. La normalización 1 - fracción queda como `SUPUESTO`. `npm test` 58/58.
+- **Decisiones afectadas:** ranking B (un pilar más).
+
 ### 2026-11-14 (noche) — Contratos 0.6.0 (compatible): lluvia por temporadas y etapa nula
 
 - **Archivos:** `contratos/clima-escenario.schema.json`, `contratos/resultado-celda.schema.json`, ejemplos, casos inválidos, tipos, README; versión en la vault.

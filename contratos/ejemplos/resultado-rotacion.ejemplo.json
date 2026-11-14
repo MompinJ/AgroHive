@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.6.0",
+    "versionContrato": "0.7.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -54,6 +54,13 @@
           "motivo": "Regla simple: la rotacion incluye frijol.",
           "incluyeLeguminosa": true,
           "especiesDistintas": 2
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 12.0,
+          "diasExceso": 3,
+          "fraccionLluviaPercolada": 0.04
         }
       },
       "puntaje": 0.52
@@ -90,6 +97,13 @@
           "motivo": "Regla simple: la rotacion incluye frijol.",
           "incluyeLeguminosa": true,
           "especiesDistintas": 2
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 85.0,
+          "diasExceso": 11,
+          "fraccionLluviaPercolada": 0.18
         }
       },
       "puntaje": 0.71
@@ -126,6 +140,13 @@
           "motivo": "Regla simple: la rotacion incluye frijol.",
           "incluyeLeguminosa": true,
           "especiesDistintas": 2
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 240.0,
+          "diasExceso": 27,
+          "fraccionLluviaPercolada": 0.37
         }
       },
       "puntaje": 0.63
@@ -140,14 +161,15 @@
   "arrepentimiento": 0.06,
   "ponderacion": {
     "pesos": {
-      "deficitHidrico": 0.5,
-      "proteccionSuelo": 0.5
+      "deficitHidrico": 0.3333,
+      "proteccionSuelo": 0.3333,
+      "excesoHidrico": 0.3333
     },
     "etiqueta": "SUPUESTO",
     "pilaresExcluidos": [
       "compatibilidadCiclo"
     ],
-    "nota": "EJEMPLO: pesos iguales entre los pilares evaluables, declarados como supuesto; compatibilidad de ciclo excluida por NO_EVALUABLE. Riesgo por calor y aporte indirecto se muestran aparte, no entran al puntaje en este ejemplo."
+    "nota": "EJEMPLO: pesos iguales entre los pilares evaluables (deficit, proteccion del suelo y exceso de agua), declarados como supuesto; compatibilidad de ciclo excluida por NO_EVALUABLE. El exceso se normaliza como 1 - fraccionLluviaPercolada (SUPUESTO)."
   },
   "ranking": {
     "posicion": 1,
