@@ -33,10 +33,14 @@
             "id": "b3685816bd71af1d",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Vista gráfica"
+              "type": "markdown",
+              "state": {
+                "file": "Compartido/Resumen.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Resumen"
             }
           }
         ]
@@ -117,6 +121,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Compartido/Resumen.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -135,6 +140,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Compartido/Resumen.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -177,6 +183,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Compartido/Resumen.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -205,8 +212,9 @@
   },
   "active": "b3685816bd71af1d",
   "lastOpenFiles": [
-    "Compartido/Cronograma.md",
+    "Compartido/Codigo.md",
     "Bienvenido.md",
+    "Compartido/Cronograma.md",
     "Compartido/Servidor.md",
     "Compartido/APIs.md",
     "Claude/INSTRUCCIONES.md",
