@@ -15,10 +15,10 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
 | **Eduardo** | 12 | 2 | 3 | 2 | 63 % de 19 |
-| **Mafer** | 8 | 2 | 0 | 1 | 73 % de 11 |
+| **Mafer** | 9 | 1 | 0 | 1 | 82 % de 11 |
 | **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
-Proyecto completo: **44 de 61** actividades hechas (72 %), 4 en curso, 3 bloqueadas.
+Proyecto completo: **45 de 61** actividades hechas (74 %), 3 en curso, 3 bloqueadas.
 
 ## Mompin
 
@@ -72,7 +72,7 @@ Proyecto completo: **44 de 61** actividades hechas (72 %), 4 en curso, 3 bloquea
 - [x] **A2.12** Bloques de suelo por tipo y humedad `HECHO`
 - [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
 - [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
-- [/] **A3.9** Cultivos 4 en adelante, props y mascota `EN CURSO`
+- [x] **A3.9** Cultivos 4 en adelante, props y mascota `HECHO`
 - [ ] **A5.6** Guion, video de demo y ensayo
 - [/] **A5.7** README con método, fuentes, límites, licencias y declaración de IA `EN CURSO`
 
