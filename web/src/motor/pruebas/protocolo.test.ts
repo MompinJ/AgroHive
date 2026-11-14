@@ -46,6 +46,9 @@ describe('protocolo del Web Worker', () => {
     m.atender({ id: 5, tipo: 'simular', entradas: { ...base, plan: plan('frijol') } });
     const c2 = m.atender({ id: 6, tipo: 'celdas', rotacionId: 'R1', escenario: 'seco', fecha: '2016-07-01' });
     expect(c2.ok && (c2.resultado as { registros: { cultivo: string }[] }).registros[0]?.cultivo).toBe('frijol');
+    const rk = m.atender({ id: 61, tipo: 'rankear' });
+    expect(rk.ok && (rk.resultado as { orden: { rotacionId: string }[] }).orden.map((f) => f.rotacionId)).toEqual(['R1']);
+    expect(m.atender({ id: 62, tipo: 'rankear', rotacionIds: ['R2'] }).ok).toBe(false);
     m.atender({ id: 7, tipo: 'olvidar' });
     expect(m.atender({ id: 8, tipo: 'celdas', rotacionId: 'R1', escenario: 'seco', fecha: '2016-07-01' }).ok).toBe(false);
   });

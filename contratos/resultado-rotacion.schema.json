@@ -429,6 +429,9 @@
             },
             "aporteIndirecto": {
               "$ref": "#/$defs/pilarAporteIndirecto"
+            },
+            "excesoHidrico": {
+              "$ref": "#/$defs/pilarExcesoHidrico"
             }
           },
           "additionalProperties": false
@@ -623,6 +626,11 @@
               "type": "number",
               "minimum": 0,
               "maximum": 1
+            },
+            "excesoHidrico": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
             }
           },
           "additionalProperties": false
@@ -643,7 +651,8 @@
               "compatibilidadCiclo",
               "proteccionSuelo",
               "riesgoCalor",
-              "aporteIndirecto"
+              "aporteIndirecto",
+              "excesoHidrico"
             ]
           },
           "uniqueItems": true
@@ -705,6 +714,86 @@
         }
       },
       "additionalProperties": false
+    },
+    "pilarExcesoHidrico": {
+      "title": "PilarExcesoHidrico",
+      "description": "Pilar de exceso de agua (decidido por Mompin el 14/11): percolacion por debajo de la raiz, FAO-56 ec. 88 (DP = (P - RO) + I - ETc - Dr,i-1 >= 0, cap. 8, 'Soil water balance'). fraccionLluviaPercolada = percolacion / lluvia de los dias de ciclo. Normalizacion del ranking: 1 - fraccionLluviaPercolada, declarada SUPUESTO (sin umbral publicado de encharcamiento por cultivo). Opcional (agregado en 0.7.0).",
+      "type": "object",
+      "required": [
+        "estado",
+        "excesoTotalMm",
+        "diasExceso",
+        "fraccionLluviaPercolada"
+      ],
+      "properties": {
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "excesoTotalMm": {
+          "description": "Percolacion profunda acumulada en los dias de ciclo (mm).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "diasExceso": {
+          "description": "Dias de ciclo con percolacion profunda mayor que cero.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "fraccionLluviaPercolada": {
+          "description": "Percolacion / lluvia de los dias de ciclo (0 a 1).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "NO_EVALUABLE o ERROR_DATOS: todos los indicadores en null y motivo obligatorio.",
+          "if": {
+            "properties": {
+              "estado": {
+                "enum": [
+                  "NO_EVALUABLE",
+                  "ERROR_DATOS"
+                ]
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "required": [
+              "motivo"
+            ],
+            "properties": {
+              "excesoTotalMm": {
+                "type": "null"
+              },
+              "diasExceso": {
+                "type": "null"
+              },
+              "fraccionLluviaPercolada": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

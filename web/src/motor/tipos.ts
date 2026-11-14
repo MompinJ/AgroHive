@@ -6,6 +6,7 @@ export type {
   ClaseTextura,
   Celda,
   ClimaEscenario,
+  CriterioRanking,
   Cultivo,
   CultivoNoRecomendado,
   DiaClima,
@@ -19,7 +20,9 @@ export type {
   Parcela,
   PilarAporteIndirecto,
   PilarDeficitHidrico,
+  PesosPilares,
   PlanSiembra,
+  Ponderacion,
   RegistroCelda,
   ResultadoCeldas,
   ResultadoRotacion,
@@ -33,9 +36,14 @@ export type {
 import type { Escenario } from '../../../contratos/tipos/contratos';
 
 /** Version de contratos/ con la que el motor genera sus salidas. */
-export const VERSION_CONTRATO = '0.5.0';
+export const VERSION_CONTRATO = '0.7.0';
 
 export const ESCENARIOS: readonly Escenario[] = ['seco', 'habitual', 'lluvioso'];
+
+/** Pilar de exceso de agua ([DECIDIDO] 14/11, contratos 0.7.0) y alias usados por el motor. */
+export type { PilarExcesoHidrico } from '../../../contratos/tipos/contratos';
+export type PilaresMotor = import('../../../contratos/tipos/contratos').Pilares;
+export type PesosMotor = import('../../../contratos/tipos/contratos').PesosPilares;
 
 /** Etapas FAO-56 (Tabla 11). */
 export type EtapaFao = 'inicial' | 'desarrollo' | 'media' | 'final';

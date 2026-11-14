@@ -35,9 +35,13 @@ export interface BalanceCiclo {
   tawMm: number;
   dias: DiaBalance[];
   etcTotalMm: number;
+  /** Lluvia de los dias del ciclo (mm): la base de la fraccion percolada del pilar de exceso. */
+  lluviaTotalMm: number;
   deficitTotalMm: number;
   excesoTotalMm: number;
   diasDeficit: number;
+  /** Dias con exceso (percolacion mayor que cero). */
+  diasExceso: number;
   /** null si el cultivo no tiene etapas sensibles con fuente. */
   diasDeficitEtapasSensibles: number | null;
 }
@@ -66,9 +70,11 @@ export function balanceCiclo(e: EntradaBalance): BalanceCiclo {
   let dr = Math.min(Math.max(0, e.drInicialMm), taw);
   const dias: DiaBalance[] = [];
   let etcTotal = 0;
+  let lluviaTotal = 0;
   let deficitTotal = 0;
   let exceso = 0;
   let diasDeficit = 0;
+  let diasExceso = 0;
   let diasSens = 0;
   for (let i = 1; i <= n; i++) {
     const lluvia = e.lluviaMm[i - 1] as number;
@@ -82,8 +88,10 @@ export function balanceCiclo(e: EntradaBalance): BalanceCiclo {
     const deficit = etc - etcAj;
     const etapa = etapaFao(c, i);
     etcTotal += etc;
+    lluviaTotal += lluvia;
     deficitTotal += deficit;
     exceso += dp;
+    if (dp > 0) diasExceso++;
     if (deficit > 0) {
       diasDeficit++;
       if (c.etapasSensibles?.includes(etapa)) diasSens++;
@@ -105,9 +113,11 @@ export function balanceCiclo(e: EntradaBalance): BalanceCiclo {
     tawMm: taw,
     dias,
     etcTotalMm: etcTotal,
+    lluviaTotalMm: lluviaTotal,
     deficitTotalMm: deficitTotal,
     excesoTotalMm: exceso,
     diasDeficit,
+    diasExceso,
     diasDeficitEtapasSensibles: c.etapasSensibles ? diasSens : null,
   };
 }

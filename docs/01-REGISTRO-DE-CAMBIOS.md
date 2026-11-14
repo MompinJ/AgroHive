@@ -12,6 +12,41 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Pilar de exceso de agua en el ranking B y capa de próxima temporada en el motor (Mompin)
+
+- **Archivos:** `web/src/motor/` (`balance.ts`, `motor.ts`, `ranking.ts`, `tipos.ts`, `proxima.ts` nuevo, `protocolo.ts`, `cliente.ts`, `index.ts`; pruebas `ranking.test.ts`, `c2.test.ts`, `proxima.test.ts`), `docs/05`, `docs/13`, `docs/14` (con las vistas de `herramientas/cronograma.py` regeneradas), `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
+- **Decisión `[DECIDIDO]` (Mompin, 14/11):** el exceso de agua entra como pilar del ranking B. El motor emite `excesoHidrico` (contratos 0.7.0) con `excesoTotalMm`, `diasExceso` y `fraccionLluviaPercolada` (percolación de FAO-56 ec. 88 entre la lluvia de los días de ciclo). Subpuntaje = 1 − fracción percolada; la normalización queda `SUPUESTO` porque no hay un umbral publicado de encharcamiento por cultivo (FAO-56 no lo trae y EcoCrop solo da clases de drenaje), y no se inventan umbrales por cultivo. Peso igual que los demás pilares (`SUPUESTO`), salvo que el usuario dé el suyo.
+- **Efecto:** con déficit y exceso hay dos pilares con número y el ranking pasa del respaldo A al criterio B. Con el paquete de demo (suelo franco del selector): 1.º frijol-frijol (arrepentimiento máximo 0.007), 2.º milpa (0.051), 3.º maíz-maíz (0.064); para las tres el peor escenario es el lluvioso (2024). Con A el orden era el inverso.
+- **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
+- **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
+
+### 2026-11-14 — A2.16: pedotransferencia de Saxton y Rawls verificada contra el artículo (Mafer)
+
+- **Archivos:** nuevos `datos/catalogos/saxton_rawls.py` y `test_saxton_rawls.py`; `datos/catalogos/README.md`; `docs/14` (tablero) y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** `retencion(arena, arcilla, materia_organica)` calcula θsat, θFC, θWP y TAW (ecuaciones [1] a [5] de la Tabla 1) y `agua_pedotransferencia(...)` arma el objeto `agua` del contrato `suelo` (`tawMmPorM`, `metodoTaw`, `retencion`, todo `SUPUESTO`). Si falta una entrada o cae fuera del rango del artículo, `NO_EVALUABLE` con motivo, sin número por defecto. Falta que Eduardo la conecte a `/api/suelo` (la API todavía no obtiene la materia orgánica).
+- **Verificación:** coeficientes copiados de la Tabla 1 del artículo (PDF de Saxton y Rawls 2006 bajado por Mafer) y reproducida la **Tabla 3** (12 clases texturales, 2.5 %w de materia orgánica): diferencia máxima 0.5 puntos de humedad, conductividad y densidad también coinciden. Cierra el `[VERIFICAR]` de la entrada de las decisiones de suelo.
+- **Hallazgo:** arena y arcilla entran como fracción y la **materia orgánica como porcentaje (2.5 para 2.5 %)**, sin dividir entre 100. Una implementación de código abierto (`pedotri`) la divide entre 100 y falla la Tabla 3 (saturación hasta 11 puntos abajo, conductividad 74 %). Las otras dos que se compararon (`rcropmod`, `pedon`) coinciden con el artículo. El carbono orgánico de SoilGrids se convierte a materia orgánica con el factor 1.724, que hay que citar.
+- **Límites del artículo:** se derivó sin muestras con materia orgánica mayor a 8 %w ni arcilla mayor a 60 %w; fuera de ese rango no se extrapola. Densidad normal, sin grava ni salinidad.
+- **Fuente / evidencia:** Saxton, K. E. y Rawls, W. J. (2006), Soil Sci. Soc. Am. J. 70(5): 1569-1578, doi:10.2136/sssaj2005.0117, Tablas 1 y 3. `python -m unittest discover -s datos/catalogos`: 9 pruebas; salida validada contra `contratos/suelo.schema.json` (`agua`).
+- **Decisiones afectadas:** A2.16 (parte de datos y método hecha; integración en la API pendiente de Eduardo).
+
+### 2026-11-14 — A0.6: calendario de Isla cargado desde SIAP e INIFAP (Mafer)
+
+- **Archivos:** nuevos `datos/catalogos/calendario-isla.json` y `datos/catalogos/fuentes/siap_isla_2021_2025.csv`; `generar.py` y `validar.mjs` (valida el calendario); `README.md` de catálogos; `docs/04` (SIAP), `docs/13` y `AgroVault/Compartido/Pendientes.md` (V-20).
+- **Cambio:** el calendario va en un archivo con la forma del contrato `calendario-local` (0.5.0), no en el catálogo de cultivos. Por cultivo y temporada, la ventana con fuente y la presencia en SIAP 2021-2025 (calculada desde el CSV). Con ventana: maíz PV (1 jun-15 jul, INIFAP, DDR San Andrés Tuxtla), maíz OI (nov-dic) y frijol OI (20 sep-20 oct), estos dos de la Agenda Técnica de Veracruz (recomendación estatal). Sin ventana, `NO_EVALUABLE` con motivo: frijol PV, chile y calabaza.
+- **Hallazgo:** SIAP no registra calabaza en Isla (`no_registrado`); se muestra en la demo como no recomendable (decisión de Mompin). SIAP no tiene API: es un CSV por año, anotado en `docs/04`.
+- **Fuente / evidencia:** CSV de cierre agrícola municipal de SIAP y los PDF de INIFAP citados en `datos/catalogos/README.md`; consultado el 14/11/2026.
+- **Decisiones afectadas:** V-20 cerrado (calendario cargado); la zona demo de 13 pasa a verificada.
+
+### 2026-11-14 — A4.2 ranking, contratos 0.6.0 en el motor y escenarios con el paquete de demo (Mompin)
+
+- **Archivos:** `web/src/motor/ranking.ts` (nuevo), `motor.ts`, `balance.ts`, `escenarios.ts`, `protocolo.ts`, `cliente.ts`, `index.ts`, `tipos.ts`; pruebas `ranking.test.ts` y `c2.test.ts`; se borra el fixture propio `web/src/motor/pruebas/datos/power-isla-2006-2025.json` (las pruebas usan `datos/demo/respuestas/`); `docs/05`, `docs/13`, `docs/14`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
+- **A4.2:** criterio B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio) con respaldo automático A cuando solo el pilar hídrico tiene número, que es el caso hasta A3.7. Normalización definida en A4.2 (doc 05, paso 7): déficit hídrico = fracción de la demanda cubierta; compatibilidad = fracción de siembras en ventana; protección del suelo = 1 − índice de erosión; calor y aporte indirecto son complementarios y quedan fuera del puntaje. Pesos iguales `SUPUESTO` si no hay pesos del usuario ni con fuente. Las rotaciones `EXPLORATORIO` no reciben posición.
+- **Exceso de agua:** se calcula y se expone (`excesoTotalMm`, `excesoMm` por celda; los días con exceso van en la evidencia de la tarjeta y en `ResultadoMotor.exceso`, porque el contrato no tiene campo para ellos). No entra al ranking hasta que el equipo lo decida.
+- **Contratos 0.6.0:** el motor llena `seleccion.lluviaTemporadasMm` (PV, OI y total con la fuente SIAP) y deja `etapa: null` en los registros sin parámetros del cultivo.
+- **Cambio de escenario habitual:** con la ventana del paquete de demo (2005-10-01 a 2025-12-31: 20 años agrícolas) el habitual pasa de **2016 a 2008**; seco 2023 y lluvioso 2024 no cambian. Con 20 años el p50 es el punto medio de los dos años centrales (2016: 1 912.0 mm; 2008: 1 932.1 mm), que empatan, y la regla de desempate elige el más antiguo. Reemplaza el "habitual 2016" de la entrada anterior.
+- **Evidencia de C2:** con `suelo.json` del paquete (franco arcillo arenoso) la rotación es `NO_EVALUABLE` (TAW hasta A2.16); con el selector manual declarado (franco) da resultados por celda y por rotación conformes al contrato y el ranking A de tres rotaciones. 59 pruebas en verde.
+
 ### 2026-11-14 — A2.5, A2.6 y A2.7: motor de agua y escenarios (Mompin)
 
 - **Archivos:** `web/src/motor/` (escenarios, ET0, cultivo y Kc, cubeta, suelo, estados, motor, protocolo y Web Worker, cliente; pruebas en `web/src/motor/pruebas/` con un fixture real de POWER), `web/package.json` (vitest 5.1.0 y script `test`), `docs/05`, `docs/04`, `docs/13`, `docs/14`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
@@ -69,6 +104,13 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — Pilar de exceso de agua `[DECIDIDO]`; contratos 0.7.0 (compatible)
+
+- **Archivos:** `contratos/resultado-rotacion.schema.json`, ejemplos, casos inválidos, tipos, README; `13`; vault.
+- **Cambio y motivo:** Mompin decidió sumar un pilar de exceso de agua al ranking B, según la propuesta del motor. Se agrega `$defs.pilarExcesoHidrico` con `excesoTotalMm`, `diasExceso` y `fraccionLluviaPercolada`. En `NO_EVALUABLE` o `ERROR_DATOS` todo va en `null` y el motivo es obligatorio. También se suma `excesoHidrico` a los pilares por escenario, a los pesos de `ponderacion` y a `pilaresExcluidos`. Todo es opcional: lo que validaba sigue validando. Nota: los otros pilares no tienen esa regla condicional; se agregó solo a este, como se pidió.
+- **Fuente / evidencia:** FAO-56 (Allen et al., 1998), capítulo 8, "Soil water balance", subsección "Deep percolation (DP)", ecuación 88: DPi = (Pi - ROi) + Ii - ETc,i - Dr,i-1 ≥ 0, verificada en https://www.fao.org/4/x0490e/x0490e0e.htm el 14/11. La normalización 1 - fracción queda como `SUPUESTO`. `npm test` 58/58.
+- **Decisiones afectadas:** ranking B (un pilar más).
 
 ### 2026-11-14 (noche) — Contratos 0.6.0 (compatible): lluvia por temporadas y etapa nula
 

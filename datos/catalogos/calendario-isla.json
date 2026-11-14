@@ -1,0 +1,264 @@
+{
+  "meta": {
+    "versionContrato": "0.6.0",
+    "esEjemplo": false,
+    "generado": "2026-11-14T00:00:00Z",
+    "aviso": "Ventanas de recomendaciones regionales de INIFAP y presencia segun SIAP; no son un calendario validado para la parcela. Requieren validacion con un tecnico local."
+  },
+  "id": "calendario-isla",
+  "ubicacion": {
+    "pais": "Mexico",
+    "claveEstadoInegi": "30",
+    "estado": "Veracruz",
+    "claveMunicipioInegi": "077",
+    "municipio": "Isla",
+    "ddr": "San Andres Tuxtla"
+  },
+  "entradas": [
+    {
+      "cultivo": "maiz",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "EVALUABLE",
+      "ventana": {
+        "estado": "EVALUABLE",
+        "desdeMes": 6,
+        "desdeDia": 1,
+        "hastaMes": 7,
+        "hastaDia": 15,
+        "fuente": {
+          "nombre": "INIFAP, Tecnologia de produccion de maiz de temporal en el sur de Veracruz (region del Istmo de Tehuantepec) para el ciclo de primavera-verano (C. A. Tinoco Alfaro, Campo Experimental Cotaxtla, 2022)",
+          "url": "https://www.gob.mx/cms/uploads/attachment/file/723016/Maiz_temporal_tehuantepec.pdf",
+          "cita": "Seccion Siembra, 'Fecha de siembra', pag. 9",
+          "consultado": "2026-11-14",
+          "nota": "Texto: sembrar una vez establecidas las lluvias, lo cual puede ocurrir entre el 1 de junio y el 15 de julio. La guia cubre el DDR San Andres Tuxtla, al que pertenece Isla."
+        }
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Superficie sembrada de temporal por anio: 2021: 4,100 ha, 2022: 4,102 ha, 2023: 4,104 ha, 2024: 4,103 ha, 2025: 4,108 ha."
+      }
+    },
+    {
+      "cultivo": "maiz",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "EVALUABLE",
+      "ventana": {
+        "estado": "EVALUABLE",
+        "desdeMes": 11,
+        "hastaMes": 12,
+        "fuente": {
+          "nombre": "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
+          "url": "https://www.gob.mx/cms/uploads/attachment/file/1066118/Agenda_T_cnica_Agr_cola_-_Veracruz-compressed.pdf",
+          "cita": "Capitulo Maiz, 'Epocas de siembra', pag. 58",
+          "consultado": "2026-11-14",
+          "nota": "Texto: para siembras de riego y humedad residual se sugiere sembrar en noviembre y diciembre. Recomendacion estatal, no especifica de Isla; se registra como temporal porque SIAP clasifica el maiz OI de Isla como temporal."
+        }
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Superficie sembrada de temporal por anio: 2021: 4,479 ha, 2022: 4,480 ha, 2023: 4,480 ha, 2024: 4,490 ha, 2025: 4,495 ha."
+      }
+    },
+    {
+      "cultivo": "frijol",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "La ventana de verano de la Agenda Tecnica de Veracruz es solo para Las Altas Montanas; no hay ventana con fuente para Isla.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "La ventana de verano de la Agenda Tecnica de Veracruz es solo para Las Altas Montanas; no hay ventana con fuente para Isla."
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2024-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Superficie sembrada de temporal por anio: 2021: 30 ha, 2022: 32 ha, 2023: 33 ha, 2024: 34 ha."
+      }
+    },
+    {
+      "cultivo": "frijol",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "EVALUABLE",
+      "ventana": {
+        "estado": "EVALUABLE",
+        "desdeMes": 9,
+        "desdeDia": 20,
+        "hastaMes": 10,
+        "hastaDia": 20,
+        "fuente": {
+          "nombre": "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
+          "url": "https://www.gob.mx/cms/uploads/attachment/file/1066118/Agenda_T_cnica_Agr_cola_-_Veracruz-compressed.pdf",
+          "cita": "Capitulo Frijol, 'Epocas de siembra', pag. 40",
+          "consultado": "2026-11-14",
+          "nota": "Texto: en otono-invierno con humedad residual, sembrar del 20 de septiembre al 20 de octubre. Recomendacion estatal, no especifica de Isla."
+        }
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Superficie sembrada de temporal por anio: 2021: 191 ha, 2022: 192 ha, 2023: 195 ha, 2024: 198 ha, 2025: 196 ha."
+      }
+    },
+    {
+      "cultivo": "chile",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo extra: aun no se consulta una fuente de calendario de siembra (INIFAP) para chile.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo extra: aun no se consulta una fuente de calendario de siembra (INIFAP) para chile."
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2022-01-01",
+          "hasta": "2024-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Superficie sembrada de temporal por anio: 2022: 112 ha, 2023: 114 ha, 2024: 115 ha."
+      }
+    },
+    {
+      "cultivo": "chile",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo extra: aun no se consulta una fuente de calendario de siembra (INIFAP) para chile.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo extra: aun no se consulta una fuente de calendario de siembra (INIFAP) para chile."
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Superficie sembrada de temporal por anio: 2021: 232 ha, 2022: 233 ha, 2023: 234 ha, 2024: 235 ha, 2025: 236 ha."
+      }
+    },
+    {
+      "cultivo": "calabaza",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "SIAP no registra calabaza en Isla y la Agenda Tecnica de Veracruz no da calendario de calabaza.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "SIAP no registra calabaza en Isla y la Agenda Tecnica de Veracruz no da calendario de calabaza."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "calabaza",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "SIAP no registra calabaza en Isla y la Agenda Tecnica de Veracruz no da calendario de calabaza.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "SIAP no registra calabaza en Isla y la Agenda Tecnica de Veracruz no da calendario de calabaza."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "VENTANAS_REGIONALES",
+      "severidad": "aviso",
+      "mensaje": "Solo el maiz de primavera-verano tiene una guia que cubre el distrito de Isla; el resto son recomendaciones estatales de Veracruz."
+    },
+    {
+      "codigo": "CALABAZA_NO_REGISTRADA",
+      "severidad": "aviso",
+      "mensaje": "SIAP no registra calabaza en Isla entre 2021 y 2025: se muestra en la demo, pero no es recomendable alli."
+    }
+  ]
+}

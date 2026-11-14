@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.6.0",
+    "versionContrato": "0.7.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -54,6 +54,13 @@
           "motivo": "Regla simple: la rotacion incluye frijol.",
           "incluyeLeguminosa": true,
           "especiesDistintas": 2
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 12.0,
+          "diasExceso": 3,
+          "fraccionLluviaPercolada": 0.04
         }
       },
       "puntaje": null
@@ -90,6 +97,13 @@
           "motivo": "Regla simple: la rotacion incluye frijol.",
           "incluyeLeguminosa": true,
           "especiesDistintas": 2
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 85.0,
+          "diasExceso": 11,
+          "fraccionLluviaPercolada": 0.18
         }
       },
       "puntaje": null
@@ -126,6 +140,13 @@
           "motivo": "Regla simple: la rotacion incluye frijol.",
           "incluyeLeguminosa": true,
           "especiesDistintas": 2
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 240.0,
+          "diasExceso": 27,
+          "fraccionLluviaPercolada": 0.37
         }
       },
       "puntaje": null
