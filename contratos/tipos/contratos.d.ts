@@ -50,9 +50,9 @@ export type EstadoPlanta = "normal" | "estresada" | "marchita" | "podrida";
  */
 export type FiltroClima = boolean | null;
 /**
- * A: menor exposicion hidrica en el peor caso, sin puntaje compuesto. B: puntaje por escenario, robustez = peor puntaje, minimax de arrepentimiento.
+ * B (principal): puntaje por escenario combinando pilares, robustez = peor puntaje, minimax de arrepentimiento, desempate por promedio. A (respaldo): menor exposicion hidrica en el peor caso, sin puntaje compuesto.
  */
-export type CriterioRanking = "A_exposicion_hidrica_peor_caso" | "B_minimax_arrepentimiento";
+export type CriterioRanking = "B_minimax_arrepentimiento" | "A_exposicion_hidrica_peor_caso";
 /**
  * Clase textural USDA (12 clases).
  */
@@ -549,7 +549,7 @@ export interface RegistroCelda {
   riesgoErosion: number | null;
 }
 /**
- * Metricas de una rotacion en los tres escenarios, peor caso, ranking y explicacion (doc 05, pasos 6 a 8). Admite los dos criterios de ranking documentados (A y B) porque la eleccion sigue [EN EVENTO]. Los null son huecos que el motor llena con valores calculados, nunca con numeros inventados.
+ * Metricas de una rotacion en los tres escenarios, peor caso, ranking y explicacion (doc 05, pasos 6 a 8). Criterio principal B (decidido el 14/11): puntaje compuesto por escenario, robustez = peor puntaje, minimax de arrepentimiento y desempate por promedio. El criterio A (solo pilar hidrico) se conserva como respaldo si los pilares 2 y 3 (A3.7) no llegan. Los null son huecos que el motor llena con valores calculados, nunca con numeros inventados.
  */
 export interface ResultadoRotacion {
   meta: Meta;
@@ -562,9 +562,13 @@ export interface ResultadoRotacion {
    */
   peorCaso: PeorCaso | null;
   /**
-   * Solo criterio B: arrepentimiento maximo entre escenarios. null con el criterio A o si no es evaluable.
+   * Criterio B: arrepentimiento maximo entre escenarios (mejor puntaje del escenario entre las rotaciones comparadas menos el puntaje de esta). null con el criterio A de respaldo o si no es evaluable.
    */
   arrepentimiento: number | null;
+  /**
+   * Criterio B: pesos con que se combinan los pilares en el puntaje. null con el criterio A o si no es evaluable. Sin pesos con fuente o justificados, se usan pesos iguales declarados como SUPUESTO; nunca pesos inventados presentados como dato.
+   */
+  ponderacion: Ponderacion | null;
   /**
    * Posicion en el ranking de robustez; null si la rotacion no es evaluable o no se ha ordenado.
    */
@@ -585,7 +589,7 @@ export interface MetricasEscenario {
   estado: EstadoEvaluacion;
   pilares: Pilares;
   /**
-   * Solo criterio B: puntaje compuesto del escenario. null con el criterio A.
+   * Criterio B: puntaje compuesto del escenario, de 0 a 1 (mayor es mejor). La normalizacion de cada pilar se documenta en A4.2. null con el criterio A o si el escenario no es evaluable.
    */
   puntaje: number | null;
 }
@@ -647,6 +651,25 @@ export interface PeorCaso {
    */
   metrica: string;
   valor: number;
+}
+export interface Ponderacion {
+  pesos: PesosPilares;
+  etiqueta: EtiquetaProcedencia;
+  fuente?: Fuente;
+  pilaresExcluidos: (
+    "deficitHidrico" | "compatibilidadCiclo" | "proteccionSuelo" | "riesgoCalor" | "aporteIndirecto"
+  )[];
+  nota: string;
+}
+/**
+ * Peso de cada pilar que entra al puntaje (suman 1). Un pilar NO_EVALUABLE no lleva peso y va en pilaresExcluidos.
+ */
+export interface PesosPilares {
+  deficitHidrico?: number;
+  compatibilidadCiclo?: number;
+  proteccionSuelo?: number;
+  riesgoCalor?: number;
+  aporteIndirecto?: number;
 }
 export interface Ranking {
   posicion: number;

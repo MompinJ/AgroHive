@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://agrohive.example/contratos/resultado-rotacion.schema.json",
   "title": "ResultadoRotacion",
-  "description": "Metricas de una rotacion en los tres escenarios, peor caso, ranking y explicacion (doc 05, pasos 6 a 8). Admite los dos criterios de ranking documentados (A y B) porque la eleccion sigue [EN EVENTO]. Los null son huecos que el motor llena con valores calculados, nunca con numeros inventados.",
+  "description": "Metricas de una rotacion en los tres escenarios, peor caso, ranking y explicacion (doc 05, pasos 6 a 8). Criterio principal B (decidido el 14/11): puntaje compuesto por escenario, robustez = peor puntaje, minimax de arrepentimiento y desempate por promedio. El criterio A (solo pilar hidrico) se conserva como respaldo si los pilares 2 y 3 (A3.7) no llegan. Los null son huecos que el motor llena con valores calculados, nunca con numeros inventados.",
   "type": "object",
   "required": [
     "meta",
@@ -11,6 +11,7 @@
     "porEscenario",
     "peorCaso",
     "arrepentimiento",
+    "ponderacion",
     "ranking",
     "advertencias",
     "explicacion"
@@ -66,12 +67,23 @@
       ]
     },
     "arrepentimiento": {
-      "description": "Solo criterio B: arrepentimiento maximo entre escenarios. null con el criterio A o si no es evaluable.",
+      "description": "Criterio B: arrepentimiento maximo entre escenarios (mejor puntaje del escenario entre las rotaciones comparadas menos el puntaje de esta). null con el criterio A de respaldo o si no es evaluable.",
       "type": [
         "number",
         "null"
       ],
       "minimum": 0
+    },
+    "ponderacion": {
+      "description": "Criterio B: pesos con que se combinan los pilares en el puntaje. null con el criterio A o si no es evaluable. Sin pesos con fuente o justificados, se usan pesos iguales declarados como SUPUESTO; nunca pesos inventados presentados como dato.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ponderacion"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "ranking": {
       "description": "Posicion en el ranking de robustez; null si la rotacion no es evaluable o no se ha ordenado.",
@@ -121,6 +133,40 @@
           },
           "ranking": {
             "type": "null"
+          },
+          "ponderacion": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "description": "Con el criterio B el resultado declara sus pesos y su arrepentimiento.",
+      "if": {
+        "properties": {
+          "peorCaso": {
+            "type": "object",
+            "required": [
+              "criterio"
+            ],
+            "properties": {
+              "criterio": {
+                "const": "B_minimax_arrepentimiento"
+              }
+            }
+          }
+        },
+        "required": [
+          "peorCaso"
+        ]
+      },
+      "then": {
+        "properties": {
+          "ponderacion": {
+            "type": "object"
+          },
+          "arrepentimiento": {
+            "type": "number"
           }
         }
       }
@@ -129,11 +175,11 @@
   "$defs": {
     "criterioRanking": {
       "title": "CriterioRanking",
-      "description": "A: menor exposicion hidrica en el peor caso, sin puntaje compuesto. B: puntaje por escenario, robustez = peor puntaje, minimax de arrepentimiento.",
+      "description": "B (principal): puntaje por escenario combinando pilares, robustez = peor puntaje, minimax de arrepentimiento, desempate por promedio. A (respaldo): menor exposicion hidrica en el peor caso, sin puntaje compuesto.",
       "type": "string",
       "enum": [
-        "A_exposicion_hidrica_peor_caso",
-        "B_minimax_arrepentimiento"
+        "B_minimax_arrepentimiento",
+        "A_exposicion_hidrica_peor_caso"
       ]
     },
     "pilarDeficitHidrico": {
@@ -358,11 +404,13 @@
           "additionalProperties": false
         },
         "puntaje": {
-          "description": "Solo criterio B: puntaje compuesto del escenario. null con el criterio A.",
+          "description": "Criterio B: puntaje compuesto del escenario, de 0 a 1 (mayor es mejor). La normalizacion de cada pilar se documenta en A4.2. null con el criterio A o si el escenario no es evaluable.",
           "type": [
             "number",
             "null"
-          ]
+          ],
+          "minimum": 0,
+          "maximum": 1
         }
       },
       "additionalProperties": false
@@ -504,6 +552,93 @@
         }
       },
       "additionalProperties": false
+    },
+    "ponderacion": {
+      "title": "Ponderacion",
+      "type": "object",
+      "required": [
+        "pesos",
+        "etiqueta",
+        "pilaresExcluidos",
+        "nota"
+      ],
+      "properties": {
+        "pesos": {
+          "title": "PesosPilares",
+          "description": "Peso de cada pilar que entra al puntaje (suman 1). Un pilar NO_EVALUABLE no lleva peso y va en pilaresExcluidos.",
+          "type": "object",
+          "minProperties": 1,
+          "properties": {
+            "deficitHidrico": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "compatibilidadCiclo": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "proteccionSuelo": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "riesgoCalor": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "aporteIndirecto": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "etiqueta": {
+          "description": "SUPUESTO: pesos iguales por defecto. USUARIO: prioridades del agricultor (F8). FUENTE: pesos con referencia.",
+          "$ref": "comun.schema.json#/$defs/etiquetaProcedencia"
+        },
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        },
+        "pilaresExcluidos": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "deficitHidrico",
+              "compatibilidadCiclo",
+              "proteccionSuelo",
+              "riesgoCalor",
+              "aporteIndirecto"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "nota": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "properties": {
+          "etiqueta": {
+            "const": "FUENTE"
+          }
+        },
+        "required": [
+          "etiqueta"
+        ]
+      },
+      "then": {
+        "required": [
+          "fuente"
+        ]
+      }
     }
   }
 }

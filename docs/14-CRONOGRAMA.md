@@ -132,7 +132,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
 | A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | R1 | M | Sonnet | A2.7 | Gráficas reales del escenario |
-| A4.2 | Ranking de rotaciones por robustez (peor caso) | R2 | M | Opus | A2.7 | Tabla ordenada con 3 o más rotaciones |
+| A4.2 | Ranking de rotaciones por robustez: criterio B `[DECIDIDO]` (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | R2 | M | Opus | A2.7 (y A3.7 para B) | Tabla ordenada con 3 o más rotaciones; pesos y criterio declarados |
 | A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | R2 | S | Sonnet | A4.3 | Con respaldo en plantilla |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |

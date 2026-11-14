@@ -15,14 +15,14 @@ Fecha de este resumen: **14 de noviembre de 2026**, primer día del hackathon. Y
 | IA | Nota de entrada | Cómo la carga |
 | --- | --- | --- |
 | Cursor | [[Cursor/INSTRUCCIONES]] | Regla del workspace o lectura al empezar la tarea |
-| ChatGPT Codex | [[Codex/AGENTS]] | Archivo `AGENTS.md` (Copilot/Codex lo busca por ese nombre) |
+| ChatGPT Codex | [[Codex/AGENTS]] | Codex carga el `AGENTS.md` de la raíz del repo, que enlaza a esta ficha |
 | Claude | [[Claude/INSTRUCCIONES]] | `CLAUDE.md` y el agente `.claude/agents/modelador-voxel.md` |
 
 Las tres leen el mismo núcleo:
 
 - [[Compartido/Resumen]] — qué es el producto, stack, ciencia y demo
 - [[Compartido/Reglas]] — lo que ninguna IA puede saltarse
-- [[Compartido/Contratos]] — formas de datos que ya están escritas
+- [[Compartido/Contratos]] — resumen de `contratos/*.schema.json` (la fuente de verdad)
 - [[Compartido/Lectura]] — qué documento de `docs/` abrir según la tarea
 - [[Compartido/APIs]] — APIs candidatas, endpoints, límites y documentación oficial
 - [[Compartido/Pendientes]] — lo que sigue abierto; no lo cierres tú

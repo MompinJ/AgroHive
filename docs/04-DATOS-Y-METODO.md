@@ -44,6 +44,8 @@
 | **INEGI edafología** | Contexto de suelo | Escala gruesa | `[VERIFICAR]` |
 | **SoilGrids (ISRIC)** | Textura y materia orgánica | **API REST pausada**; no depender de ella | Verificado (pausada) |
 
+> **Investigación del 14/11** (detalle, endpoints y límites en `AgroVault/Compartido/APIs.md`; todo lo marcado `VERIFICAR` allí se prueba con una llamada real): Open-Meteo Elevation (Copernicus GLO-90, hasta 100 coordenadas por llamada) es candidato para la elevación junto a Terrarium y SRTM (V-08); la página original de FAO EcoCrop ya no responde y hay copias públicas de su base cuya licencia falta verificar; SoilGrids se consulta por WCS mientras la API REST siga pausada; el pronóstico estacional de Open-Meteo documenta 7 meses de horizonte (V-21).
+
 ### Suelo: la fuente más débil
 El MVP usa un **selector manual de tipo de suelo** (arcilloso, franco, arenoso) con valores de retención de agua de FAO-56, siempre etiquetado `SUPUESTO`. Alternativas posteriores: GeoTIFF de SoilGrids, Earth Engine, mapas de INEGI.
 
