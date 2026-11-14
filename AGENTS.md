@@ -23,6 +23,7 @@ Contexto resumido por herramienta: `AgroVault/` (Codex: `AgroVault/Codex/AGENTS.
 - Nunca inventes datos: un parametro faltante es `NO_EVALUABLE`, no un numero. Toda cifra cientifica o agronomica lleva fuente; las fuentes las verifica una persona.
 - El frontend no recalcula indicadores; el 3D solo representa lo que entrega el motor. Cambiar 2D/3D no vuelve a pedir datos.
 - Lo marcado `[EN EVENTO]`, `[DEPENDE-DATOS]` o `[VERIFICAR]` no se fija por cuenta propia.
+- Ya estamos en el evento: lo que decida Mompin es decision del equipo; registrarla como `[DECIDIDO]` (en 13 y 01).
 - Registra cambios de alcance en `docs/01-REGISTRO-DE-CAMBIOS.md`.
 - No subas llaves, tokens ni `.env`. Sin emojis en el codigo.
 - Trabaja contra los ejemplos de `contratos/ejemplos/` hasta que la pieza real exista.

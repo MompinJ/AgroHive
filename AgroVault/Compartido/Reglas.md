@@ -31,6 +31,7 @@ Aplican a Cursor, Codex y Claude. El detalle de producto está en [[Resumen]].
 ## Alcance y equipo
 
 - Antes y después de trabajar, verifica los cambios (`git fetch`, revisa lo que subieron otros, corre las pruebas) y actualiza la documentación existente que tu cambio afecte (`docs/`, `AgroVault/`, README, `AGENTS.md`) en vez de dejarla desfasada o crear duplicados.
+- Ya estamos en el evento: lo que decida Mompin es decisión del equipo; se registra como `[DECIDIDO]` (en `docs/13` y `docs/01`).
 - `[EN EVENTO]` y `[DEPENDE-DATOS]` no se fijan sin acuerdo. Si hace falta un default para compilar, déjalo marcado y anótalo.
 - Un archivo, un responsable. No edites archivos de otra persona sin avisarle.
 - Rama propia (`balam`, `Mompin`, `Mafer`, `Eduardo`). Integración a `main` por pull request.
