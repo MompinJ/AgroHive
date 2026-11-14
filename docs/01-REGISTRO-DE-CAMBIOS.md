@@ -202,6 +202,22 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Borrador del README para A5.7
+
+- **Archivos:** nuevo `docs/README-borrador.md` (no se tocó `README.md`).
+- **Cambio y motivo:** pedido de Mompin. Es un borrador para Mafer (dueña de A5.7) con qué es AgroHive, cómo correr la web, la API y la demo sin internet, el método (escenarios, balance FAO-56, pilares, ranking B, próxima temporada), las fuentes NASA y no NASA con licencias, los límites y supuestos, y una declaración de uso de IA marcada `[VERIFICAR]` hasta conocer las reglas oficiales (V-03, V-04). Cada punto remite a `docs/` o `contratos/`. Las licencias que no constan en el repo quedan `[VERIFICAR]`. La IP del servidor no se repite (hallazgo de la revisión de merges).
+- **Fuente / evidencia:** `docs/00`, `04`, `05`, `10`, `11`, `13`, `14`; `api/README.md`, `web/README.md`, `datos/demo/LEEME.md`, `datos/catalogos/README.md`, `AgroVault/Compartido/APIs.md`.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Orientación de la cuadrícula y rotaciones de la demo `[DECIDIDO]`
+
+- **Archivos:** `contratos/parcela.schema.json` (descripción de `celda`, `i` y `j`), `contratos/ejemplos/parcela.ejemplo.json` y los dos inválidos de parcela, tipos; `13`.
+- **Cambio y motivo:** Mompin decidió dos cosas.
+  1. **Cuadrícula:** `i` se cuenta desde el sur (0 = fila más al sur, crece hacia el norte) y `j` desde el oeste (crece hacia el este), igual que `web/src/ui/cuadricula.ts` de balam (verificado: `y = sur + i * lado`, `x = oeste + j * lado`). El ejemplo tenía `i = 0` al norte; se corrigieron los centros. Solo cambian la descripción y el ejemplo, así que es compatible.
+  2. **Demo:** compara R1 a R4 y muestra como sugerida R4 (milpa dentro de las ventanas de INIFAP).
+- **Fuente / evidencia:** decisión transmitida por la sesión maestra; `web/src/ui/cuadricula.ts`; doc 05, paso 7. `npm test` 82/82.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — A1.7: contratos 0.10.0 para el alcance mundial (compatible)
 
 - **Archivos:** `contratos/{serie-clima,clima-escenario,calendario-local}.schema.json`, nuevos `contratos/ndvi.schema.json` y `contratos/smap.schema.json`, ejemplos (uno fuera de México y uno con IMERG), 11 casos inválidos, tipos, README; `13`, `14` (A1.7 `[HECHO]`); vault.

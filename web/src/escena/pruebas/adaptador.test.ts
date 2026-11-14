@@ -17,8 +17,9 @@ describe('construirEscena con los ejemplos de contratos', () => {
     expect(escena.bloques).toHaveLength(4);
     expect(escena.filas).toBe(2);
     expect(escena.columnas).toBe(2);
-    expect(bloque('c-0-0')).toMatchObject({ x: -0.5, z: -0.5 });
-    expect(bloque('c-1-1')).toMatchObject({ x: 0.5, z: 0.5 });
+    // Contratos 0.10.0: i = 0 es la fila mas al sur (crece al norte); el sur queda en z > 0.
+    expect(bloque('c-0-0')).toMatchObject({ x: -0.5, z: 0.5 });
+    expect(bloque('c-1-1')).toMatchObject({ x: 0.5, z: -0.5 });
   });
 
   it('marca los datos de ejemplo con un aviso critico visible', () => {
