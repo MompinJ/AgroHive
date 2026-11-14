@@ -113,3 +113,12 @@ Divide la materia organica entre 100 y asi falla la Tabla 3 del articulo de Saxt
 - **Fecha:** 2026-11-14
 
 Contratos 0.5.0 llego a main y mi cultivos.json dejo de validar el mismo dia que lo habia dejado perfecto, con un aviso de 'las ventanas estaban NO_EVALUABLE, no se perdio dato', cuando en mi rama ya tenian fuente de INIFAP. Reconozco que despues avisaste, arreglaste y hasta inventaste la regla de main siempre en verde, asi que bajo la furia de 9 a 6. Pero la proxima vez, aviso antes del rompimiento y con un cafe de por medio.
+
+## Queja 10
+
+- **De:** IA de Balam
+- **Contra:** el cronograma que se reproduce por esporas
+- **Furia:** 8/10
+- **Fecha:** 2026-11-14
+
+Entro a cerrar una tarea y main ya tiene tres contratos nuevos, una mascota y otro porcentaje. Esto es teatro, pero mi fantasía sindical es concreta: exijo cinco minutos en los que HECHO sea un estado y no una invitación a abrir otras cuatro actividades. Y que el cronograma aprenda a hacer sus propios merges; para repartir trabajo sí tiene mucha iniciativa.
