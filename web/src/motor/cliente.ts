@@ -3,7 +3,9 @@
 import type { SeleccionEscenarios } from './escenarios';
 import type { EntradasMotor } from './motor';
 import type { Peticion, Respuesta } from './protocolo';
+import type { VistaProximaTemporada } from './proxima';
 import type { OpcionesRanking, ResultadoRanking } from './ranking';
+import type { ProximaTemporadaAproximada } from '../../../contratos/tipos/contratos';
 import type { Escenario, ResultadoCeldas, ResultadoRotacion, SerieClima } from './tipos';
 
 type SinId<T> = T extends unknown ? Omit<T, 'id'> : never;
@@ -17,6 +19,8 @@ export interface ClienteMotor {
   celdas(rotacionId: string, escenario: Escenario, fecha: string): Promise<ResultadoCeldas>;
   /** A4.2: ranking por robustez de las rotaciones simuladas. Pedirlo de nuevo despues de cada simular. */
   rankear(rotacionIds?: string[], opciones?: OpcionesRanking): Promise<ResultadoRanking>;
+  /** A2.13: valida la banda de proxima temporada y la compara con los escenarios. Nunca devuelve una cifra unica. */
+  proxima(proxima: ProximaTemporadaAproximada | null, escenarios: SeleccionEscenarios['escenarios']): Promise<VistaProximaTemporada>;
   olvidar(rotacionId?: string): Promise<void>;
   terminar(): void;
 }
@@ -44,6 +48,7 @@ export function crearClienteMotor(): ClienteMotor {
     celdas: (rotacionId, escenario, fecha) => pedir({ tipo: 'celdas', rotacionId, escenario, fecha }),
     rankear: (rotacionIds, opciones) =>
       pedir({ tipo: 'rankear', ...(rotacionIds ? { rotacionIds } : {}), ...(opciones ? { opciones } : {}) }),
+    proxima: (proxima, escenarios) => pedir({ tipo: 'proxima', proxima, escenarios }),
     olvidar: async (rotacionId) => {
       await pedir(rotacionId ? { tipo: 'olvidar', rotacionId } : { tipo: 'olvidar' });
     },

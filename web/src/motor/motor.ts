@@ -29,6 +29,8 @@ import {
   type Parcela,
   type PilarAporteIndirecto,
   type PilarDeficitHidrico,
+  type PilarExcesoHidrico,
+  type PilaresMotor,
   type PlanSiembra,
   type RegistroCelda,
   type ResultadoCeldas,
@@ -86,15 +88,20 @@ export interface SimulacionEscenario {
   metodoEt0: Record<MetodoEt0, number> & { sinDato: number };
 }
 
-/** Exceso de agua (percolacion) por escenario, promedio de la parcela. Fuera del ranking por ahora (decision pendiente). */
+/**
+ * Exceso de agua (percolacion, FAO-56 ec. 88) por escenario, promedio de la parcela. Pilar de exceso [DECIDIDO]
+ * 14/11: fraccionLluviaPercolada = percolacion / lluvia de los dias de ciclo; el ranking usa 1 - fraccion (SUPUESTO).
+ */
 export interface ExcesoEscenario {
   mm: number;
   dias: number;
+  /** 0 a 1. Si no llovio en los ciclos, 0 (no hubo exceso). */
+  fraccionLluviaPercolada: number;
 }
 
 export interface ResultadoMotor {
   rotacion: ResultadoRotacion;
-  /** null si el escenario no es evaluable. Los mm tambien estan en el pilar (excesoTotalMm); los dias no tienen campo en el contrato. */
+  /** null si el escenario no es evaluable. Lo mismo va en el pilar excesoHidrico de cada escenario (contratos 0.7.0). */
   exceso: Record<Escenario, ExcesoEscenario | null>;
   simulaciones: Record<Escenario, SimulacionEscenario>;
   /** Ciclos de cada celda (generales con los reemplazos de porCelda). */
@@ -317,6 +324,7 @@ function excesoEscenario(sim: SimulacionEscenario, celdas: Parcela['celdas'], ci
   let w = 0;
   let mm = 0;
   let dias = 0;
+  let lluvia = 0;
   for (const celda of celdas) {
     const peso = celda.fraccionDentro ?? 1;
     w += peso;
@@ -324,9 +332,10 @@ function excesoEscenario(sim: SimulacionEscenario, celdas: Parcela['celdas'], ci
       const b = sim.ciclos.get(clave(c.ciclo, c.cultivo))?.balance as BalanceCiclo;
       mm += peso * b.excesoTotalMm;
       dias += peso * b.diasExceso;
+      lluvia += peso * b.lluviaTotalMm;
     }
   }
-  return { mm: r(mm / w, 1), dias: Math.round(dias / w) };
+  return { mm: r(mm / w, 1), dias: Math.round(dias / w), fraccionLluviaPercolada: lluvia > 0 ? r(Math.min(1, mm / lluvia), 4) : 0 };
 }
 
 function pilarHidrico(sim: SimulacionEscenario, celdas: Parcela['celdas'], ciclosPorCelda: Map<string, CicloPlan[]>): PilarDeficitHidrico {
@@ -395,22 +404,24 @@ function metricas(
   aporte: PilarAporteIndirecto,
 ): MetricasEscenario {
   const hidrico = pilarHidrico(sim, e.parcela.celdas, ciclosPorCelda);
+  const ex = excesoEscenario(sim, e.parcela.celdas, ciclosPorCelda);
+  const exceso: PilarExcesoHidrico = ex
+    ? { estado: hidrico.estado, excesoTotalMm: ex.mm, diasExceso: ex.dias, fraccionLluviaPercolada: ex.fraccionLluviaPercolada }
+    : { estado: hidrico.estado, motivo: hidrico.motivo ?? `Escenario ${hidrico.estado}.`, excesoTotalMm: null, diasExceso: null, fraccionLluviaPercolada: null };
+  if (ex && hidrico.motivo) exceso.motivo = hidrico.motivo;
   const umbrales = [...new Set([...ciclosPorCelda.values()].flat().map((c) => c.cultivo))].map((c) => catalogo.get(c)?.umbrales.tEstresCalorC);
   const sinUmbral = umbrales.some((u) => !u || u.estado !== 'EVALUABLE');
-  return {
-    anioReal: sim.anioReal,
-    estado: hidrico.estado,
-    pilares: {
+  const pilares: PilaresMotor = {
       deficitHidrico: hidrico,
+      excesoHidrico: exceso,
       compatibilidadCiclo: { estado: 'NO_EVALUABLE', motivo: 'Pilar 2 pendiente (A3.7).', siembrasFueraDeVentana: null },
       proteccionSuelo: { estado: 'NO_EVALUABLE', motivo: 'Pilar 3 pendiente (A3.7).', indiceErosionRelativo: null, diasSueloDesnudo: null },
       riesgoCalor: sinUmbral
         ? { estado: 'NO_EVALUABLE', motivo: 'El catalogo no tiene umbral de estres por calor con fuente para todos los cultivos del plan.', diasEstresCalor: null }
         : { estado: 'NO_EVALUABLE', motivo: 'Riesgo por calor pendiente (A3.7).', diasEstresCalor: null },
       aporteIndirecto: aporte,
-    },
-    puntaje: null,
   };
+  return { anioReal: sim.anioReal, estado: hidrico.estado, pilares, puntaje: null };
 }
 
 /** Simula la rotacion del plan en los tres escenarios. */

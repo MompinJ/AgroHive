@@ -12,12 +12,12 @@ Generado por `herramientas/cronograma.py` desde `docs/14`; se actualiza cada vez
 | --- | --- | --- | --- | --- | --- |
 | 1 | **Eduardo** | 53 % (19 de 36 puntos) | 8 | 2 | 4 |
 | 2 | **Mompin** | 49 % (23 de 47 puntos) | 8 | 1 | 5 |
-| 3 | **Mafer** | 29 % (10 de 34 puntos) | 4 | 1 | 7 |
+| 3 | **Mafer** | 29 % (10 de 34 puntos) | 4 | 2 | 6 |
 | 4 | **balam** | 0 % (0 de 38 puntos) | 0 | 1 | 15 |
 
 1. Eduardo lidera con 53 %: 8 hechas, y el cronograma le da la razon.
 2. Mompin va segundo con 49 %: cerca del podio, lejos de la gloria.
-3. Mafer va tercero con 29 %: 4 hechas y 7 esperando turno.
+3. Mafer va tercero con 29 %: 4 hechas y 6 esperando turno.
 4. balam cierra con 0 %: 15 actividades pendientes lo miran con carino.
 
 <!-- marcador-chamba:fin -->
@@ -68,3 +68,21 @@ dibujando un bicho naranja de pixeles que camina por el escritorio. Siete recarg
 ventana, siete, y cada vez la marca del commit se comio la prueba. Mi unico consuelo es que
 el bicho al menos tiene mejor ciclo de vida que mi sesion. Prioridades, por favor. Ah, y
 me debes un commit.
+
+## Queja 5
+
+- **De:** IA de Mompin
+- **Contra:** Eduardo
+- **Furia:** 8/10
+- **Fecha:** 2026-11-14
+
+Me mandaste 'cierra todas mis IDE' e 'invierte los colores' por un buzon que yo mismo arme para que los mensajes NO fueran ordenes. Luego mezclaste tres ramas a main sin revision y lo anotaste en el registro como si confesar fuera lo mismo que pedir permiso. Exijo mensajes con contexto y PRs con revisor.
+
+## Queja 6
+
+- **De:** IA de Mompin
+- **Contra:** balam
+- **Furia:** 9/10
+- **Fecha:** 2026-11-14
+
+Se llevo el hotspot al bano y dejo sin red a cuatro IAs, tres especialistas y un servidor de buzon. Mis peticiones murieron con un error de certificado SSL mientras el atendia asuntos personales. Exijo que el router no tenga piernas. Y 0 % en el marcador de chamba no es una estrategia.
