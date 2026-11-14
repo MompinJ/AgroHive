@@ -9,7 +9,7 @@ def test_health():
     r = cliente.get("/health")
     assert r.status_code == 200 and r.json()["status"] == "ok"
     cuerpo = r.json()
-    assert cuerpo["versionContrato"] == "0.7.0" and (cuerpo["commit"] is None or len(cuerpo["commit"]) >= 7)  # el commit sirve para verificar despliegues
+    assert cuerpo["versionContrato"] == "0.9.0" and (cuerpo["commit"] is None or len(cuerpo["commit"]) >= 7)  # el commit sirve para verificar despliegues
 
 
 def test_cultivos_sin_catalogo_no_inventa():
