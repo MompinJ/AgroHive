@@ -13,12 +13,12 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 11 | 0 | 0 | 3 | 79 % de 14 |
-| **Eduardo** | 9 | 1 | 2 | 2 | 64 % de 14 |
+| **Mompin** | 11 | 1 | 0 | 2 | 79 % de 14 |
+| **Eduardo** | 10 | 3 | 2 | 0 | 67 % de 15 |
 | **Mafer** | 4 | 3 | 0 | 5 | 33 % de 12 |
 | **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
 
-Proyecto completo: **24 de 56** actividades hechas (43 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **25 de 56** actividades hechas (45 %), 6 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -34,7 +34,7 @@ Proyecto completo: **24 de 56** actividades hechas (43 %), 4 en curso, 2 bloquea
 - [x] **A3.2** Cargador de .bbmodel con instancing por cultivo y etapa `HECHO`
 - [ ] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
-- [ ] **A4.6** Conectar front y API (cliente generado, estados de carga y error)
+- [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
 - [ ] **A5.5** Pruebas de regresión del motor y de contratos
 
 ## Eduardo
@@ -48,9 +48,10 @@ Proyecto completo: **24 de 56** actividades hechas (43 %), 4 en curso, 2 bloquea
 - [x] **A2.4** Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) `HECHO` — paquete conforme a contratos (clima 2005-10-01 a 2025-12-31, terreno, suelo, proxima temporada) sobre una parcela ficticia en Isla; el motor ya corre con el
 - [x] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `HECHO` — 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9)
 - [x] **A2.14** Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché ([[APIs]]) `HECHO`
-- [ ] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios)
+- [x] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) `HECHO`
+- [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)
-- [ ] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan)
+- [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — sondeo de viabilidad (viable o no, cuenta Earthdata, peso y tiempo por punto); sin tocar el repo todavia
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
 - [-] **A5.8** Respaldo local sin internet y capturas `BLOQUEADO` — espera A2.4 con la zona real y el front conectado (A4.6)
 
