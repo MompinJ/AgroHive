@@ -125,7 +125,7 @@ Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 
 | A3.5 `[HECHO]` | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | R1 + R2 | S | Sonnet | A3.4 | Prueba manual documentada |
 | A3.6 | Modo 2D ligero con los mismos valores del motor | R1 | M | Sonnet | A2.7 | Alternar 2D/3D no cambia métricas |
 | A3.7 `[HECHO]` 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente) | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | R2 | **L** | Opus | A2.7 | Entran solo si los datos alcanzan |
-| A3.8 | Tooltips y valores por bloque | R1 | S | Sonnet | A3.4 | Toque o hover muestra humedad, déficit, pendiente |
+| A3.8 `[HECHO]` con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas) | Tooltips y valores por bloque | R1 | S | Sonnet | A3.4 | Toque o hover muestra humedad, déficit, pendiente |
 | A3.9 `[EN CURSO]` | Cultivos 4 en adelante, props y mascota | R4 | M | Sonnet | A2.11 | Extras según tiempo |
 
 Compuerta **C3** al terminar A3.1 y A3.2.
@@ -197,10 +197,10 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 
 | Responsable | Rama | Herramientas de IA | Actividades | Primera tarea |
 | --- | --- | --- | --- | --- |
-| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor) `[HECHO]`, A3.7 `[HECHO]`, A5.5 `[HECHO]`; integra y administra `main`, A1.7 | A1.1 (contratos con ejemplos) |
+| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor) `[HECHO]`, A3.7 `[HECHO]`, A5.5 `[HECHO]`, A3.8 (con balam) `[HECHO]`; integra y administra `main`, A1.7 | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.6 (cliente de la API, con balam), A4.7, A4.8, A4.10, A4.11, A4.12, A4.13 (después de C4), A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
 | **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[HECHO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[HECHO]`, A2.11 `[HECHO]`, A2.12 `[HECHO]`, A3.3 `[HECHO]`, A3.9 `[EN CURSO]`, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
-| **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A3.8, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
+| **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
 
 Cada actividad se marca en este documento con su estado (`EN CURSO`, `BLOQUEADO`, `HECHO`) al lado del ID. Si alguien termina, toma la siguiente actividad libre del camino crítico antes que un extra.
 
@@ -214,10 +214,10 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
+| **Mompin** | 15 | 1 | 0 | 0 | 94 % de 16 |
 | **Eduardo** | 11 | 3 | 2 | 3 | 58 % de 19 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
-| **balam** | 6 | 1 | 0 | 9 | 38 % de 16 |
+| **balam** | 6 | 1 | 0 | 8 | 40 % de 15 |
 
 ### Mompin
 
@@ -235,6 +235,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A3.1 | Escena 3D con relieve (altura por bloque, InstancedMesh) | HECHO |  |
 | A3.2 | Cargador de .bbmodel con instancing por cultivo y etapa | HECHO |  |
 | A3.7 | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | HECHO | 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente) |
+| A3.8 | Tooltips y valores por bloque | HECHO | con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas) |
 | A4.2 | Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | HECHO | 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3) |
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | EN CURSO | cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor |
 | A5.5 | Pruebas de regresión del motor y de contratos | HECHO | 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) |
@@ -291,7 +292,6 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | HECHO |  |
 | A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | HECHO |  |
 | A3.6 | Modo 2D ligero con los mismos valores del motor | PENDIENTE |  |
-| A3.8 | Tooltips y valores por bloque | PENDIENTE |  |
 | A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | PENDIENTE |  |
 | A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | EN CURSO | parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam) |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | PENDIENTE |  |
