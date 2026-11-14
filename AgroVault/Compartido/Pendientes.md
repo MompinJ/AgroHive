@@ -51,7 +51,7 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 | A4.3 | Pintar `explicacion` en la comparación. La plantilla ya sale de `rankear` |
 | A4.4 | Redacción con LLM, opcional, solo sobre números ya calculados |
 | A4.5 | Pantalla de método, fuentes y advertencias |
-| A4.8 | `/api/smap` existe y sin token responde 503. Hace falta el OK explícito para `EARTHDATA_TOKEN` en el droplet. No está en la interfaz ni entra al ranking |
+| A4.8 | `[EN CURSO]`. En el droplet `23f8a53`, `GET /api/smap` (2024-06-01 a 2024-06-03) responde 503: no hay `EARTHDATA_TOKEN` en el servicio ni en esta maquina. `web/src` no llama a SMAP. Sin token no se inventa humedad. No entra al ranking |
 | A4.12 | CDL y SSURGO, después de C5. C5 no está cruzada |
 | A4.13 | Hecha en la API: `GET /api/calendario`. El front sigue leyendo solo `calendario-isla.json` (balam) |
 | A5.1 | Animación mínima al cambiar de etapa |
