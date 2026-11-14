@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A3.6: vista 2D con el mismo resultado del motor (balam)
+
+- **Archivos:** `web/src/ui/Parcela2D.tsx`, `parcela2d.css`, `Parcela2D.test.tsx`, `LaboratorioConectado.tsx`, `useLaboratorio.ts`; `docs/06`, `docs/14`, vistas generadas del tablero y `web/README.md`.
+- **Cambio:** selector 2D/3D conservado al navegar. La cuadrícula reutiliza el adaptador, las placas SVG, la leyenda y la ficha del 3D, sin importar Three.js, sin recalcular indicadores y sin consultas nuevas al alternar. Controles táctiles de 48 px, flechas, Inicio/Fin y lista de celdas; huecos y motivos NO_EVALUABLE explícitos. Fallback inicial automático si no hay WebGL2. A5.4 deja de estar bloqueada por A3.6; la medición de hardware sigue pendiente con Eduardo.
+- **Fuente / evidencia:** pruebas de contrato de ejemplo, 1600 celdas y orientación; navegador con R1/ciclo 2/seco muestra frijol, métricas idénticas y cero mensajes/peticiones nuevos al alternar. Sin WebGL: cero canvas y sin descargar el módulo 3D. 320 px sin desborde y axe sin incidencias en los criterios revisados. Capturas `web/evidencia/a3-6-*`.
+- **Decisiones afectadas:** se ejecuta el alcance 2D/3D aprobado de doc 06; no cambia el contrato ni el motor. Para el trabajo de Balam, video y presentación siguen cancelados por su petición expresa. La sincronización conserva también la decisión del equipo registrada por Mompin de definirlos al final; no reactiva trabajo de Balam.
+
 ### 2026-11-14 — Corrección: video y presentación se definen al final, no están canceladas (Mompin, sesión features)
 
 - **Archivos:** `docs/13` (fila "Video y presentación"), `docs/14` (línea bajo F5 y sección "Actividades canceladas" renombrada a "Fuera del tablero hasta el final", A5.6 como "Se define al final"; vistas regeneradas), `docs/guion-video-borrador.md` (encabezado) y `AgroVault/Compartido/Resumen.md`.

@@ -123,7 +123,7 @@ Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 
 | A3.3 `[HECHO]` | Estados visuales: color + icono + patrón, leyenda | R1 | M | Sonnet | A3.2 | Legible con daltonismo |
 | A3.4 `[HECHO]` | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | R1 | M | Sonnet | A2.7 | Cambiar cultivo invalida y recalcula; cada fecha sugerida explica por qué y de dónde sale (calendario local o "sin calendario"); cultivo no registrado en el lugar con aviso |
 | A3.5 `[HECHO]` | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | R1 + R2 | S | Sonnet | A3.4 | Prueba manual documentada |
-| A3.6 | Modo 2D ligero con los mismos valores del motor | R1 | M | Sonnet | A2.7 | Alternar 2D/3D no cambia métricas |
+| A3.6 `[HECHO]` | Modo 2D ligero con los mismos valores del motor | R1 | M | Sonnet | A2.7 | Selector sin recalcular ni descargar; ficha, leyenda compartida y fallback inicial sin WebGL verificados |
 | A3.7 `[HECHO]` 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente) | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | R2 | **L** | Opus | A2.7 | Entran solo si los datos alcanzan |
 | A3.8 `[HECHO]` con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas) | Tooltips y valores por bloque | R1 | S | Sonnet | A3.4 | Toque o hover muestra humedad, déficit, pendiente |
 | A3.9 `[HECHO]` | Cultivos 4 en adelante, props y mascota | R4 | M | Sonnet | A2.11 | Extras según tiempo |
@@ -157,13 +157,13 @@ Compuerta **C4** al terminar A4.6.
 | A5.1 `[HECHO]` con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento. Además (Mompin): lluvia del día desde `serieBalance`, con mm y fuente | Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) | R1 + R4 | M | Sonnet | A3.2 | Transiciones suaves, opción de reducir movimiento |
 | A5.2 | Slider de meses | R1 | M | Sonnet | A3.4 | Reproducir y arrastrar sin acumular animaciones |
 | A5.3 | Móvil y accesibilidad (táctil, teclado) | R1 | M | Sonnet | A4.6 | Operable sin hover |
-| A5.4 `[BLOQUEADO]` espera el modo 2D (A3.6) | Medición de requisitos mínimos y fallback WebGL | R1 | S | Haiku | A3.6 | Cifra documentada para jueces |
+| A5.4 | Medición de requisitos mínimos y fallback WebGL | R1 | S | Haiku | A3.6 | Cifra documentada para jueces; 2D de A3.6 disponible para medir |
 | A5.5 `[HECHO]` 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) | Pruebas de regresión del motor y de contratos | R2 | M | Sonnet | A4.2 | Suite en verde |
 | A5.7 `[EN CURSO]` | README con método, fuentes, límites, licencias y declaración de IA | R4 | S | Sonnet | A4.5 | README completo |
 | A5.8 `[HECHO]` demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
 | A5.9 | Envío final según reglas oficiales | R4 | XS | Haiku | A5.7 | Entrega confirmada (C6) |
 
-Video y presentación se definen al final, cuando el front esté conforme: quedan fuera del tablero, sin asignar y fuera del reparto y de los porcentajes `[DECIDIDO]` (Mompin, 14/11; ver 13). No están canceladas. Esto no cambia los requisitos externos del evento.
+Video y presentación se definen al final, cuando el front esté conforme: quedan fuera del tablero, sin asignar y fuera del reparto y de los porcentajes `[DECIDIDO]` (Mompin, 14/11; ver 13). No están canceladas para el equipo. En el carril de Balam permanecen canceladas por su petición expresa; no se retoman sin una nueva indicación suya. Esto no cambia los requisitos externos del evento.
 
 ## Fuera del tablero hasta el final
 
@@ -222,9 +222,9 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
-| **Eduardo** | 14 | 2 | 1 | 2 | 74 % de 19 |
+| **Eduardo** | 14 | 2 | 0 | 3 | 74 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
-| **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
+| **balam** | 10 | 0 | 0 | 5 | 67 % de 15 |
 
 ### Mompin
 
@@ -269,7 +269,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto, como evidencia de los años de escenario; no entra al ranking. El servicio previsto era ORNL DAAC; se sustituyó porque no respondía | HECHO | ORNL DAAC no respondió (502, 503). La serie sale de Microsoft Planetary Computer, MOD13Q1 V061, validada contra ORNL en 4 fechas. Caché, límites del píxel y paquete completo en `datos/demo/respuestas/ndvi.json`. Cita del producto: doi:10.5067/MODIS/MOD13Q1.061 |
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | PENDIENTE |  |
 | A4.13 | Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP | PENDIENTE |  |
-| A5.4 | Medición de requisitos mínimos y fallback WebGL | BLOQUEADO | espera el modo 2D (A3.6) |
+| A5.4 | Medición de requisitos mínimos y fallback WebGL | PENDIENTE |  |
 | A5.8 | Respaldo local sin internet y capturas | HECHO | demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) |
 
 ### Mafer
@@ -297,7 +297,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | HECHO |  |
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | HECHO |  |
 | A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | HECHO |  |
-| A3.6 | Modo 2D ligero con los mismos valores del motor | PENDIENTE |  |
+| A3.6 | Modo 2D ligero con los mismos valores del motor | HECHO |  |
 | A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | HECHO | series del Worker, graficas y tabla verificadas |
 | A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | HECHO | motor y tarjetas visibles en laboratorio y comparacion |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | PENDIENTE |  |

@@ -98,6 +98,12 @@ Código en `web/src/escena/` (componente `EscenaParcela`; punto de integración 
 ## Modo 2D ligero
 Mapa o cuadrícula 2D coloreada con los **mismos** valores del motor. Es el respaldo si el 3D no está listo y la opción para equipos modestos (una computadora de campo puede tener 4 GB de RAM). **Medir requisitos mínimos** y tener la cifra para los jueces.
 
+**A3.6 implementada (balam, 14/11):** selector 2D/3D en el laboratorio; la selección se conserva al navegar. `ui/Parcela2D.tsx` usa el mismo `ResultadoCeldas` ya consultado y los módulos puros de la escena (`construirEscena`, `rgbaPlaca`, `entradasLeyenda`, `fichaBloque`). No importa Three.js ni usa canvas. Las placas SVG comparten exactamente colores, patrones e iconos del 3D. Norte arriba según los centros de las celdas; conserva huecos de la cuadrícula y marca elevación faltante sin convertirla en cero. La ficha repite valores, unidades, motivos y fuentes recibidos. No muestra exageración vertical porque es una vista plana.
+
+Hasta 1600 botones de 48 px en un área con desplazamiento interno: toque, flechas, Inicio/Fin y lista nativa para acceder a cualquier celda. Un solo botón entra en el orden de tabulación. Si la prueba inicial de WebGL2 falla, se abre 2D automáticamente y no se descarga la escena 3D. Fallos posteriores del contexto o rendimiento insuficiente conservan el selector manual; la medición de requisitos mínimos y ese seguimiento corresponden a A5.4 (Eduardo).
+
+Verificación: R1 + ciclo 2 + seco muestra frijol; alternar 2D/3D conserva métricas y no manda mensajes nuevos al Worker ni peticiones nuevas. Sin WebGL: 2D operativo sin canvas ni descarga de `EscenaParcela`. A 320 px sin desborde horizontal; revisión axe de los criterios WCAG A/AA configurados sin incidencias. Prueba de render con 1600 celdas, orientación y ficha con datos faltantes. Evidencia en `web/evidencia/a3-6-*`; esto no sustituye medir hardware real en A5.4.
+
 ## Valores en pantalla
 
 | Dónde | Qué muestra |

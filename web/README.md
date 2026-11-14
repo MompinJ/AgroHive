@@ -151,3 +151,9 @@ La escena recibe `avisosDatos` estructurados: directamente del hook para parcela
 Método agrupa las referencias por publicación sin eliminar citas/metadatos. `ui/licencias.ts` reúne condiciones y enlaces de los proveedores del README, con Esri y OpenStreetMap; permisos sin confirmar siguen visibles como no verificados. Los datos originales no se reescriben y las referencias del paquete se conservan en el detalle. Captura: `evidencia/metodo-licencias-320.png`. Revisión humana de licencias pendiente; no se declara una certificación legal.
 
 Video y presentación quedan canceladas por Balam y fuera de este flujo de implementación; el estado se conserva en docs/13 y docs/14.
+
+## A3.6: vista 2D ligera
+
+El laboratorio ofrece 2D/3D con el mismo ResultadoCeldas guardado: alternar no simula ni consulta datos. La vista 2D carga diferida, sin Three.js ni canvas; comparte adaptador, placas, leyenda y ficha con la escena. Celdas de 48 px, norte arriba, flechas, Inicio/Fin y selector nativo; hasta 1600 celdas con desplazamiento interno. Sin WebGL2 al abrir, activa 2D automáticamente. Se conservan los datos faltantes y sus motivos.
+
+Verificado en producción: R1/ciclo 2/seco muestra frijol; alternar conserva métricas y no añade mensajes al Worker ni peticiones. Sin WebGL no carga EscenaParcela. A 320 px sin desborde horizontal; axe sin incidencias en WCAG A/AA revisadas. Pruebas de ficha NO_EVALUABLE, parcela incorrecta y cuadrícula de 1600 celdas orientada al norte. Capturas: evidencia/a3-6-2d-320.png y a3-6-2d-sin-webgl.png. La medición en hardware real, rendimiento y pérdida posterior del contexto sigue en A5.4 (Eduardo).
