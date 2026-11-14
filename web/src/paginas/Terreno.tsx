@@ -30,7 +30,7 @@ export function Terreno({ polygonMode, onSelectDemo, parcela, onGuardar }: { pol
           <p>{demo.areaHa} hectáreas ficticias para explorar la interfaz. No corresponden a un levantamiento real del terreno.</p>
           <div className="terrain-data-note">
             <svg width="32" height="28" viewBox="0 0 32 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M9 23h15a5.5 5.5 0 0 0 1-10.9A8 8 0 0 0 9.4 9 7 7 0 0 0 9 23Z" strokeLinejoin="round" /></svg>
-            <p>El clima, la elevación y las propiedades del suelo están pendientes de integrar en esta pantalla.</p>
+            <p>El laboratorio ya integra clima histórico, elevación y estimaciones del suelo. La demo usa un contorno ficticio; cada fuente conserva sus advertencias.</p>
           </div>
         </div>
       </section>

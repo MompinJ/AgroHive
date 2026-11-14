@@ -14,6 +14,7 @@
 .ui-action[aria-pressed="true"] { background: var(--color-action); color: var(--color-on-action); }
 .ui-flow > .card { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
 .ui-flow summary { min-height: 44px; padding-block: var(--space-3); }
+.ranking-method { margin-block: var(--space-6); padding-block: var(--space-4); }
 .rotation-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
 .rotation-cards .card { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--space-4); }
 .rotation-cards ul { padding-inline-start: var(--space-6); margin: 0; }
