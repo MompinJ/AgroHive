@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Lluvia del día en la escena con datos reales (Mompin)
+
+- **Archivos:** `web/src/escena/lluvia.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (prop `serieBalance`), `escena.css`, `vista-previa.tsx`, prueba `lluvia.test.ts`; `docs/06`, `docs/14` (nota en A5.1), `INTEGRACION.md`.
+- **Cambio:** lluvia animada proporcional a los mm del día, tomados de la serie del motor (`serieBalance.lluviaMm`). La escena no inventa ni recalcula nada. Hay un indicador fijo con mm, clase, día real del clima y fuente. Sin dato: sin lluvia y `NO_EVALUABLE`. Con reducir movimiento solo queda el indicador. Cortes `[PROPUESTA]`.
+- **Fuente / evidencia:** prueba contra la serie real del motor con el paquete de demo; headless: 43.8 mm el 2024-06-16 (igual a `serie-clima.json`), 1 576 gotas y unos 31 cuadros por segundo; día seco y reducir movimiento: 0 gotas y 0 cuadros en reposo; 400 px sin desborde; cero errores.
+
 ### 2026-11-14 — A5.1 animaciones de la escena y lugar de la mascota (Mompin, con Mafer)
 
 - **Archivos:** `web/src/escena/animacion.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (control "Viento leve", prop `mascota`), `voxel/fuente-modelos.ts` (también `modelos/props/`), prueba `animacion.test.ts`; `docs/06`, `docs/14` (A5.1 pasa a Mompin, con Mafer).
@@ -55,6 +61,12 @@ Decisiones afectadas:
 - **Archivos:** `web/src/escena/suelo.ts`, `adaptador.ts`, `modelo.ts`, `render/escena-three.ts`, `voxel/fuente-modelos.ts`, `EscenaParcela.tsx` (nueva prop `suelo`), `vista-previa.tsx`, prueba `suelo-escena.test.ts`; `docs/06`, `INTEGRACION.md`.
 - **Cambio:** la escena carga las 9 losas de Mafer (`modelos/suelos/`) y pinta la columna con el tono del tipo de suelo. La losa sale de `textura.grupo` del contrato `suelo` y de la `humedad` del motor, con cortes en tercios de TAW `[PROPUESTA]`. Si falta el tipo o la humedad no hay losa, y sin humedad la columna va en gris.
 - **Fuente / evidencia:** tonos tomados de `modelos/paleta.md` (verificado en prueba); 159 pruebas de escena; headless con el motor real: suelo del mapa de Isla (arcilloso) y selector manual (franco).
+
+### 2026-11-14 — Video y presentación fuera del cronograma (Mompin)
+
+- **Archivos:** `docs/14` (sin A5.6; A5.9 solo envío y sin depender de A5.6; C6, A0.5, área R4 y camino crítico sin video ni pitch; tablero de Mafer; vistas regeneradas), `docs/13` (fila "Video y presentación" `[DECIDIDO]`; V-24 sin dueño), `AgroVault/Compartido/Pendientes.md`, `AgroVault/Compartido/Resumen.md`, `AgroVault/Compartido/Codigo.md` y `docs/guion-video-borrador.md` (aviso de borrador).
+- **Cambio y motivo:** el equipo veía el video y la presentación como pendientes y eso confundía los roles. Se definen al final, cuando el front esté conforme, y no se asignan ahora.
+- **Decisiones afectadas:** A5.6 (eliminada), A5.9, compuerta C6, V-24.
 
 ### 2026-11-14 — Calendario y aptitud fuera de México: GGCMI fase 3 y GAEZ v4 (Mompin, sesión features)
 
@@ -130,6 +142,26 @@ Decisiones afectadas:
 - **Efecto:** con déficit y exceso hay dos pilares con número y el ranking pasa del respaldo A al criterio B. Con el paquete de demo (suelo franco del selector): 1.º frijol-frijol (arrepentimiento máximo 0.007), 2.º milpa (0.051), 3.º maíz-maíz (0.064); para las tres el peor escenario es el lluvioso (2024). Con A el orden era el inverso.
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
+
+### 2026-11-14 — A5.7: correcciones de citas del README, verificadas (Mafer)
+
+- **Archivos:** `README.md`, este registro. A pedido de Mompin (#163), con hallazgos de Eduardo-B. Cada corrección se contrastó con su fuente; **quien contrastó fue una sesión de IA**.
+- **(1) IMERG: confirmado, con matiz.** El producto que se usa es el **diario** (`GPM_3IMERGDF` V07, doi:10.5067/GPM/IMERGDF/DAY/07; mismos autores y año; catálogo CMR de NASA), no el semihorario que citaba el README. **La fecha de inicio no coincide con ninguna de las dos que circulaban:** `APIs.md` dice 2000-06-01 y el aviso decía 1998-06-01, pero llamando a la API real de POWER (14/11/2026, parcela demo, `time-standard=utc`) el último día con `-999` es 1997-12-31 y el primero con dato es **1998-01-01**, igual que la cobertura del catálogo CMR. La línea de `AgroVault/Compartido/APIs.md` es de Eduardo y no la edité.
+- **(2) OpenLandMap: confirmado.** El registro `15535762` contiene el archivo `..._p84_...` (percentil 84) y el `15535759` contiene `p16` y `m` (mediana); el README ahora cita el segundo. Todos los archivos de Zenodo son de 120 m, y la API lee 30 m del STAC. **El STAC declara `CC-BY-4.0` en las cinco colecciones** (arcilla, arena, limo, pH y carbono orgánico) y es la fuente real de la licencia de lo que se lee. Queda `[VERIFICAR]` qué registro de Zenodo corresponde a cada capa de 30 m.
+- **Corrección a mi aviso a Eduardo (#sobre `openlandmap.py`):** dije que el DOI de la constante era un error por citar la arcilla 2000-2005. **No lo es:** es el DOI que el propio STAC declara para la colección (`15528399`), y los cinco DOI del STAC apuntan a registros de 2000-2005 aunque las capas leídas son de 2020-2022. Lo que sí es cierto es esa diferencia de años; la constante es fiel a la fuente.
+- **(3) SMAP: confirmado.** Los metadatos del DOI en DataCite dan *O'Neill, P., Chan, S., Njoku, E., Jackson, T., Bindlish, R. y Chaubell, J. (2023), SMAP L3 Radiometer Global Daily 36 km EASE-Grid Soil Moisture, Version 9*. La página de cita recomendada de NSIDC sigue dando 404.
+- **(4) Mapas base: agregados, con dos pendientes.** La interfaz usa Esri World Imagery (por defecto) y OpenStreetMap (opción «calles»), ambos con atribución. Esri: licencia *Esri Master License Agreement* y créditos que coinciden con los de la interfaz (leídos del ítem y del servicio de ArcGIS). OSM: ODbL y política de tiles leídas en sus páginas. **Pendiente:** (a) la interfaz muestra «© OpenStreetMap» y la política dice «© OpenStreetMap contributors» (de balam); (b) si el uso directo de los tiles de Esri desde una web que no es de ArcGIS cumple su acuerdo, que no pude leer completo: lo valida una persona.
+- **Fuente / evidencia:** catálogo CMR de NASA; DataCite; API de Zenodo; `collection.json` del STAC de OpenLandMap; llamada a POWER; ítem y servicio de ArcGIS Online; `openstreetmap.org/copyright` y `operations.osmfoundation.org/policies/tiles/`.
+- **Decisiones afectadas:** A5.7 (sigue en curso: falta revisión humana).
+
+### 2026-11-14 — A5.1: revisión de "reducir movimiento" (Mafer)
+
+- **Archivos:** ninguno de código; solo este registro. La revisión la pidió Mompin al pasar A5.1 a la sesión de la escena.
+- **Qué se revisó:** el código (`escena/animacion.ts`, `render/escena-three.ts`, `EscenaParcela.tsx` y todo el CSS) y el comportamiento real en **Chrome** (headless con SwiftShader, conducido por CDP) sobre `web/escena.html`, la vista previa con el motor real y el paquete de demo. 30 comprobaciones; los controles (sin reducir) hacen que la prueba no sea vacía.
+- **Resultado: cumple.** (1) Sin reducir, al cambiar de etapa hay transición y termina; con la preferencia del sistema o el checkbox, **no hay transición** ni mallas "saliendo", y las plantas quedan de inmediato en su escala final. (2) Con la preferencia activa **en el arranque** y **en vivo** (incluso a media transición): las transiciones terminan al instante, el viento se apaga y su control se deshabilita, y la escena queda en **0 cuadros** en reposo. (3) **Inercia real:** al arrastrar y soltar, sin reducir la cámara sigue 11.1 unidades; con reducir, 0.00000 (la vista sigue girando mientras se arrastra). (4) **Cambios rápidos:** 8 cambios en 0.3 s, con y sin reducir, no dejan mallas de más, salientes ni transiciones colgadas. (5) El checkbox manual funciona igual que la preferencia, y al desmarcarlo la animación vuelve. (6) La mascota es estática. (7) El CSS no define animaciones propias y las transiciones de botones solo existen bajo `prefers-reduced-motion: no-preference`.
+- **Observaciones (no son fallas):** (a) si el sistema quita la preferencia con la escena abierta, el control **no** se desmarca solo (conservador: queda reducido hasta que la persona lo desmarque). (b) Las transiciones CSS de botones fuera de la escena obedecen solo a la preferencia del sistema, no al checkbox, que es de la escena. (c) La duración observada fue de ~500 ms contra los 450 ms nominales: lo explican la carga asíncrona del modelo y el muestreo cada 25 ms, no un fallo.
+- **Límites de la prueba:** Chrome headless con render por software, no un navegador interactivo ni un móvil; la demo solo tiene una malla de plantas (un cultivo y una etapa a la vez); se midió el estado interno y la posición de la cámara, no los píxeles; la duración de 450 ms y el lugar de la mascota no se juzgaron (son `[PROPUESTA]`). El script de la prueba está en `herramientas/prueba-movimiento/` (pedido de Mompin, #154): lanza su propio Chrome, necesita Node 22 o más y tiene su README.
+- **Decisiones afectadas:** A5.1 (de Mompin, con Mafer): revisión de Mafer hecha.
 
 ### 2026-11-14 — A5.7: README con licencias y reglas oficiales verificadas (Mafer)
 
@@ -272,6 +304,23 @@ Decisiones afectadas:
 - **Decisiones afectadas:** ninguna.
 
 ## Historial
+
+### 2026-11-14 (noche) — Contratos 0.12.1: inicio de IMERG en 1998-01-01
+
+- **Archivos:** `contratos/clima-escenario.schema.json` (descripción de `lluviaSatelital`, que también usa `serie-clima`), versión en ejemplos e inválidos, tipos, README; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.1, en un commit aparte).
+- **Cambio y motivo:** Mafer hizo una llamada real a POWER (`time-standard=utc`) en la parcela demo: el último día con -999 es el 1997-12-31 y el primer día con dato, el 1998-01-01, igual que la cobertura del catálogo CMR. La descripción fija el inicio en 1998-01-01 según POWER y CMR, quita el 1998-06-01 y deja el 2000-06-01 como dato del espejo de UCAR. Solo cambia la descripción: es compatible.
+- **Fuente / evidencia:** llamada real de Mafer del 14/11, transmitida por la sesión maestra.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Contratos 0.12.0: correcciones de citas de IMERG, SMAP y MOD13 (compatible)
+
+- **Archivos:** `contratos/clima-escenario.schema.json` (`lluviaSatelital`, que también usa `serie-clima`), `contratos/smap.schema.json`, `contratos/ndvi.schema.json`, ejemplo de SMAP, un caso inválido, tipos, README; vault (`Contratos.md`, `Pendientes.md`); `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.0, en un commit aparte).
+- **Cambio y motivo:** correcciones que encontró Eduardo-B.
+  1. **IMERG:** la descripción decía que empieza el 2000-06-01. Ahora registra las tres fechas que dan las fuentes: POWER 1998-06-01, el catálogo de NASA 1998-01-01 y el espejo de UCAR 2000-06-01, con `[VERIFICAR]` contra GES DISC. Agrega el producto GPM_3IMERGDF V07 y su DOI, 10.5067/GPM/IMERGDF/DAY/07, que confirma el catálogo de NASA (data.nasa.gov).
+  2. **SMAP:** campo opcional `pases[].calidad` (alta, baja o desconocida): alta si `retrieval_qual_flag` vale 0 u 8, baja si el bit 0 está en 1. Lo confirman el ATBD de O'Neill y Bindlish (rev. F, 2020) y la guía de NSIDC. El DOI 10.5067/4XXOGX0OOW1S y la Tabla 6 de la guía de 2023 no se pudieron confirmar: `[VERIFICAR]`. Ojo: "cualquier bit en 1 es malo" no es exacto, porque el 8 tiene un bit en 1 y es de alta calidad.
+  3. **MOD13:** se documenta la pixel reliability: 0 bueno, 1 marginal, 2 nieve o hielo y 3 nublado, confirmados para v061. El -1 de relleno solo consta para V005: `[VERIFICAR]` en v6.1 y en ORNL DAAC.
+- **Fuente / evidencia:** data.nasa.gov (GPM_3IMERGDF V07); ATBD L2/L3 SM P rev. F (smap.jpl.nasa.gov); NSIDC, interpretación de banderas de los productos pasivos; documentación de MOD13Q1 v061 (Earth Engine) y página de QA de V005 del LP DAAC. `npm test` 92/92.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — Contratos 0.11.0: `serie-balance` para el dashboard (A4.1)
 
@@ -696,3 +745,36 @@ Primera documentación por tema a partir del video del compañero, el audio de l
 - La escena se monta con carga diferida y la parcela guardada en App, resultados y fecha; se habilitan modelos fuera de web en desarrollo. A4.9 muestra la banda mensual y los años análogos del motor con estados, motivos, fuentes y aviso de no predicción.
 - Verificación: JSON Schema de planes, R1 ciclo 2 seco muestra frijol/2023 y estado del motor; pruebas, build y TypeScript. Chromium a 1440/1024/768/390/320, navegación P2/P3, mensajes del Worker, error API/reintento simulado, teclado y movimiento reducido. Axe sin incidencias automáticas en los estados revisados de P2/P3. Evidencia y límites en web/evidencia/revision-sistema.md.
 - La plantilla documental System Design no pudo renderizarse por falta de LibreOffice; no se entrega un documento sin verificar. La funcionalidad y revisión web sí se completan. A4.6 continúa en curso: no se declara validada la disponibilidad pública ni todas las combinaciones de carga en vivo.
+
+### 2026-11-14 — A4.3 A4.5 y A4.6 de Balam
+- A4.3: `TarjetasRotacion` muestra por rotación la explicación recibida del motor, beneficios, evidencia y fuentes, riesgos y huecos siempre visibles; no genera texto con LLM ni calcula indicadores.
+- A4.5: ruta `#/metodo` con fuentes de la sesión (período, resolución, coordenada, unidades y citas), advertencias, supuestos y límites; conserva selecciones al volver. Comparte tokens y controles con el laboratorio. Pruebas de extracción de fuentes y tarjetas.
+- A4.6: Laboratorio y Comparación usan `usarDatosParcela` desde su estado compartido; no se duplica el cargador. Se avisó a Eduardo antes de ajustar la guarda de clave del hook: al cambiar centroide o reintentar oculta el estado anterior; las peticiones se cancelan al cambiar.
+- Verificación funcional en Chromium contra FastAPI local real, usando el paquete precargado y un proxy de QA hacia 127.0.0.1:8017: GET clima (ventana estándar), suelo, cultivos y próxima temporada devuelven 200, el Worker procesa la parcela dibujada y se llega a comparación. Se guardó sin relieve de forma explícita; no se inventaron alturas. Fallos/reintentos ya tienen pruebas del cliente y recorrido con 503 simulado.
+- La descarga anticipada de la serie no se reprodujo en el build de producción con caché de navegador nueva: Inicio no solicitó serie-clima; laboratorio sí. Se mantiene import dinámico. No se presenta esta prueba local como verificación del despliegue público.
+- Tras integrar main, la escena recibe también suelo y la demo usa R1/R2/R4, según la decisión de 13. A3.8 se conserva como entrega de la sesión de escena.
+- A4.1 sigue pendiente de la operación serieBalance del Worker; el contrato serie-balance ya llegó. Solicitud a Mompin #127 y respuesta #132. No se agrega el balance en la interfaz.
+
+### 2026-11-14 — A4.1 dashboard conectado de Balam
+- Tras la entrega de serieBalance por Mompin, el dashboard pide al Worker la serie de la rotación/escenario calculados. Las sumas mensuales, la demanda y el balance se reciben del motor; la UI solo representa y formatea. No usa los valores ficticios del ejemplo.
+- `ui/DashboardBalance.tsx` usa Recharts con carga diferida al abrir las gráficas. Cada ciclo muestra lluvia/ETc/consumo ajustado y déficit/percolación mensuales, unidades, estado, fuentes, TAW y una tabla con humedad media y mes climático. Datos faltantes se muestran como NO_EVALUABLE. Los trazos distinguen las series sin depender del color; sin animación y con tabla accesible.
+- Se comparó el primer valor de lluvia de la tabla contra el mensaje recibido del Worker; coincide. Instrumentación confirmó que cambiar escenario consulta serieBalance sin reenviar simular. Layout estable tras ResizeObserver a 1440/768/390/320 px; axe sin incidencias automáticas en el estado revisado. Captura dashboard-320.png.
+- A4.1 se marca HECHO; las notas anteriores de espera describen el estado previo a la llegada de la operación del motor. Recharts está fijado a la versión exacta registrada en package.json/lockfile. Referencias técnicas en web/README.md.
+
+### 2026-11-14 — A4.8: producto SMAP en la respuesta y login de earthaccess con candado
+- **Cambio:** `GET /api/smap` ahora devuelve `producto` (`SPL3SMP`, 36 km, 0 a 5 cm, `m3/m3`), como pide `contratos/smap.schema.json` (de Mompin); las pruebas validan la respuesta completa contra ese schema, incluidos los días sin dato y con error de la fuente.
+- **Corrección de una revisión:** `earthaccess` guarda el login en estado global y la ruta lee hasta 3 días a la vez en hilos distintos. La sesión autenticada se crea una sola vez, bajo `threading.Lock`, y se reutiliza 30 minutos (prueba con 6 hilos: un solo login). El token sigue saliendo solo de `EARTHDATA_TOKEN`.
+- **Sin cambio de alcance.** El token en el droplet y el despliegue siguen siendo de la sesión A; esta rama no toca NDVI (A4.11 está en pausa).
+- **Verificación:** api 87, contratos 91/91, catálogos y `unittest`, `tsc` y vitest de web (338) en verde.
+
+### 2026-11-14 — Vista satelital predeterminada en el mapa de Balam
+- Balam aprobó en el chat usar vista satelital por defecto, con selector para volver al mapa de calles. MapaParcela alterna Esri World Imagery y OpenStreetMap manteniendo el mismo mapa, vértices y cuadrícula; no consulta de nuevo clima, suelo ni elevación.
+- Se conserva la atribución del servicio activo. El crédito de World Imagery se tomó de copyrightText del servicio oficial (consulta 14/11/2026): Esri, Vantor, Earthstar Geographics y GIS User Community. Se aclara en pantalla que las imágenes no son en vivo y que fecha/detalle dependen del lugar; no se inventa su fecha de captura.
+- Contorno con borde oscuro y trazo blanco sobre satélite, vértices con relleno contrastado y cuadrícula visible. Las imágenes son solo fondo de orientación; no cambian parámetros del motor ni identifican cultivos.
+- Chromium sobre build de producción: teselas reales de ambos servicios cargaron, cuatro vértices y cuadrícula persistieron al alternar, sin consultas a /api/; sin desbordamiento a 320 px. Se forzó fallo de teselas satelitales y se recuperó cambiando a calles. Captura web/evidencia/mapa-satelital.png.
+
+### 2026-11-14 — Correcciones de la verificación de citas: inicio de IMERG y licencia de POWER
+- **Cambio:** `INICIO_IMERG` pasa de 2000-06-01 a **1998-06-01** (`api/app/clientes/power.py`), con dos pruebas: la petición se recorta a 1998-06-01 y un rango de 1999 ya no se recorta. Antes la API descartaba dos años de datos válidos de IMERG V07 para rangos que empiezan antes de 2000-06-01. No cambia la ventana estándar de la demo (2005-10-01 a 2025-12-31).
+- **Fuente / evidencia:** la metodología de POWER lista "IMERG Precipitation, 0.1 grados, diario UTC, inicio June 1, 1998" (https://power.larc.nasa.gov/docs/methodology/); el catálogo CMR de NASA da cobertura de `GPM_3IMERGDF` V07 desde 1998-01-01. Esto **desmiente** la nota anterior de que los valores no nulos de 1999 eran "de origen no verificado": son IMERG V07 válidos.
+- **`APIs.md`:** se quita "Licencia CC BY 4.0" de NASA POWER. Su guía de referencia (`docs/referencing`, `docs` y `docs/services/api`) no declara licencia; los datos de misiones NASA siguen la política general de Earthdata (CC0 salvo restricción marcada), `VERIFICAR`. Se conserva la cita obligatoria.
+- **Pendiente de otros dueños (no se tocó):** `contratos/clima-escenario.schema.json` (descripción de `lluviaSatelital`) y `features/imerg/LEEME.md` y `features/encargos/eduardo-datos-globales.md` siguen diciendo 2000-06-01 (Mompin); los DOI del `README.md` (IMERG diario y carbono orgánico de OpenLandMap) son de Mafer.

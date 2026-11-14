@@ -47,7 +47,7 @@ Cómo se reparte:
 | **R1** Interfaz y 3D | React, mapa, polígono, paneles, selector, escena 3D, 2D | `web/` |
 | **R2** Motor científico | Escenarios, balance de agua, pilares, ranking, explicaciones, pruebas | `web/src/motor/` |
 | **R3** Datos y servidor | FastAPI, POWER, Open-Meteo, elevación, caché, catálogo de cultivos, despliegue | `api/`, `datos/` |
-| **R4** Arte, integración y entrega | Modelos con `modelador-voxel`, paleta, iconos, video, pitch, README | `modelos/`, `docs/` |
+| **R4** Arte, integración y entrega | Modelos con `modelador-voxel`, paleta, iconos, README | `modelos/`, `docs/` |
 
 Un archivo, un responsable. Los contratos (`contratos/`) los toca solo quien los propone, avisando al resto.
 
@@ -65,7 +65,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | **C3 · Escena viva** | Bloques 3D con relieve y estado coloreado desde el motor | Plan 2D y plantas procedurales |
 | **C4 · Congelar funciones** | Ya no entran funciones nuevas | Recortar extras |
 | **C5 · Congelar producto** | Solo errores y pulido | — |
-| **C6 · Entrega lista** | Demo, video, README y envío listos | Respaldo local y video |
+| **C6 · Entrega lista** | Demo, README y envío listos | Respaldo local |
 
 ## F0 · Arranque
 
@@ -75,7 +75,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A0.2 `[HECHO]` | Documentación consolidada en `docs/` | Mompin | S | Haiku | — | `docs/` al día, registro en 01 |
 | A0.3 | Acordar roles, cultivos iniciales y criterio de ranking (V-18, V-19) | Todos | XS | Haiku | — | Acta breve en 11 |
 | A0.4 `[HECHO]` | Acceso SSH, firewall y hostname del servidor (V-15 a V-17) | R3 / Eduardo | S | Sonnet | — | `https://<host>/health` responde |
-| A0.5 | Verificar reglas de entrega, IA y video (V-03, V-04) | R4 | XS | Haiku | — | Notas en 11 |
+| A0.5 | Verificar reglas de entrega e IA (V-03, V-04) | R4 | XS | Haiku | — | Notas en 11 |
 | A0.6 `[HECHO]` | Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) | R3 | S | Sonnet | — | Zona y cultivos confirmados en 13; calendario de Isla en `calendario-local` con fuente (SIAP o INIFAP) |
 | A0.7 `[HECHO]` | Verificar Open-Meteo estacional, CORS de POWER y acceso a elevación (V-21, V-22) | R3 | S | Sonnet | — | Parámetros probados con una llamada real, anotados en 04 |
 
@@ -107,7 +107,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.10 `[HECHO]` | Mapa y dibujo de polígono libre (Leaflet) | R1 | M | Sonnet | A1.2 | El usuario dibuja y ve su parcela (P1) |
 | A2.11 `[HECHO]` | Cultivos 1 a 3 completos, todas las etapas y estados de estrés | R4 | **L** | Opus | A1.4 | Modelos probados en la escena real (V-14) |
 | A2.12 `[HECHO]` | Bloques de suelo por tipo y humedad | R4 | S | Sonnet | A1.4 | Variantes en `modelos/` |
-| A2.13 `[HECHO]` 14/11: backend (Eduardo) y motor (Mompin); banda y años análogos `EXPLORATORIO` (contratos 0.8.0). La interfaz es A4.9, hecha | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | R2 + R3 | M | Opus | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, horizonte de 6 meses, etiquetado como aproximado. Después del motor; no bloquea el MVP |
+| A2.13 `[HECHO]` 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9) | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | R2 + R3 | M | Opus | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, horizonte de 6 meses, etiquetado como aproximado. Después del motor; no bloquea el MVP |
 | A2.14 `[HECHO]` | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | R3 | M | Sonnet | A1.3, A0.7 | `GET /api/suelo` devuelve textura y pH con etiqueta `SUPUESTO`; respaldo manual (V-23) |
 | A2.15 `[HECHO]` | Cliente OpenLandMap y comparación con ISRIC en `GET /api/suelo` (V-23: ambos servicios) | R3 | S | Sonnet | A2.14 | `GET /api/suelo` devuelve `estimaciones` de ISRIC y OpenLandMap con fuente y `estimacionUsada` |
 | A2.16 (Mafer) `[HECHO]` | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | R3 / Mafer | M | Opus | A2.14, A1.6 | `agua.tawMmPorM` con `metodoTaw` y `retencion` (θsat, θFC, θWP), citado y `SUPUESTO`; prueba contra valores publicados del artículo |
@@ -126,7 +126,7 @@ Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 
 | A3.6 | Modo 2D ligero con los mismos valores del motor | R1 | M | Sonnet | A2.7 | Alternar 2D/3D no cambia métricas |
 | A3.7 `[HECHO]` 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente) | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | R2 | **L** | Opus | A2.7 | Entran solo si los datos alcanzan |
 | A3.8 `[HECHO]` con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas) | Tooltips y valores por bloque | R1 | S | Sonnet | A3.4 | Toque o hover muestra humedad, déficit, pendiente |
-| A3.9 `[EN CURSO]` | Cultivos 4 en adelante, props y mascota | R4 | M | Sonnet | A2.11 | Extras según tiempo |
+| A3.9 `[HECHO]` | Cultivos 4 en adelante, props y mascota | R4 | M | Sonnet | A2.11 | Extras según tiempo |
 
 Compuerta **C3** al terminar A3.1 y A3.2.
 
@@ -134,17 +134,17 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
-| A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | R1 | M | Sonnet | A2.7 | Gráficas reales del escenario |
+| A4.1 `[HECHO]` series del Worker, graficas y tabla verificadas | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | R1 | M | Sonnet | A2.7 | Gráficas reales del escenario |
 | A4.2 `[HECHO]` 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3) | Ranking de rotaciones por robustez: criterio B `[DECIDIDO]` (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | R2 | M | Opus | A2.7 (y A3.7 para B) | Tabla ordenada con 3 o más rotaciones; pesos y criterio declarados |
-| A4.3 `[EN CURSO]` parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam) | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
+| A4.3 `[HECHO]` motor y tarjetas visibles en laboratorio y comparacion | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | R2 | S | Sonnet | A4.3 | Con respaldo en plantilla |
-| A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |
-| A4.6 `[EN CURSO]` cliente, laboratorio y comparación ya cargan el paquete de demo o la API y llaman al Worker; sigue abierto porque el droplet está en `d182af4` y no se probó cada carga en vivo | Conectar front y API (cliente generado, estados de carga y error) | R1 + R3 | M | Opus | A2.1, A3.4 | Flujo P0 a P3 con datos reales |
-| A4.7 `[EN CURSO]` `https://64-23-143-102.sslip.io` responde (front 200, `/health` en el commit `d182af4`, contrato 0.9.0). El código más nuevo de la rama no está desplegado | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
-| A4.8 `[EN CURSO]` `GET /api/smap` probado en Isla y `contratos/smap.schema.json` ya existe. No está en la interfaz. El droplet no tiene `EARTHDATA_TOKEN`; sin el OK explícito responde 503 | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
+| A4.5 `[HECHO]` | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |
+| A4.6 `[HECHO]` usarDatosParcela y flujo con FastAPI local verificados; despliegue en A4.7 | Conectar front y API (cliente generado, estados de carga y error) | R1 + R3 | M | Opus | A2.1, A3.4 | Flujo P0 a P3 con datos reales |
+| A4.7 `[EN CURSO]` front servido en el droplet; falta la demo real (A4.6) | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
+| A4.8 `[EN CURSO]` `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN` | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
 | A4.9 `[HECHO]` | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | Sonnet | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
-| A4.10 `[HECHO]` `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance | Lluvia GPM IMERG vía NASA POWER (`IMERG_PRECTOT` con `time-standard=UTC`, sin cuenta Earthdata) en `GET /api/clima` y en el paquete de demo, como **evidencia**: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en `features/imerg/` y `features/encargos/eduardo-datos-globales.md` | R3 | S | Sonnet | A2.1, A1.7 | Serie IMERG con fuente y estándar de hora; `-999` como `null`; prueba con respuesta guardada; paquete de demo regenerado |
-| A4.11 `[HECHO]` ORNL DAAC no respondió (502, 503). La serie sale de Microsoft Planetary Computer, MOD13Q1 V061, validada contra ORNL en 4 fechas. Caché, límites del píxel y paquete completo en `datos/demo/respuestas/ndvi.json`. Cita del producto: doi:10.5067/MODIS/MOD13Q1.061 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto, como evidencia de los años de escenario; no entra al ranking. El servicio previsto era ORNL DAAC; se sustituyó porque no respondía | R3 | S | Sonnet | A1.3, A1.7 | `GET /api/ndvi` con caché, cita del producto y el límite del píxel (250 m, más grande que la parcela) declarado |
+| A4.10 `[HECHO]` `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance || Lluvia GPM IMERG vía NASA POWER (`IMERG_PRECTOT` con `time-standard=UTC`, sin cuenta Earthdata) en `GET /api/clima` y en el paquete de demo, como **evidencia**: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en `features/imerg/` y `features/encargos/eduardo-datos-globales.md` | R3 | S | Sonnet | A2.1, A1.7 | Serie IMERG con fuente y estándar de hora; `-999` como `null`; prueba con respuesta guardada; paquete de demo regenerado |
+| A4.11 `[BLOQUEADO]` ORNL DAAC no responde de forma usable (502, 503 y llamadas de 40 s sin respuesta); cliente y ruta listos y probados con respuestas reales, apagados del paquete de demo hasta que el servicio funcione || NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking | R3 | S | Sonnet | A1.3, A1.7 | `GET /api/ndvi` con caché, cita `doi:10.3334/ORNLDAAC/1600` y el límite del píxel (250 m, más grande que la parcela) declarado |
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | R3 | **L** | Opus | A4.6 | Parcela de prueba en EE. UU. con su rotación real de CDL, con fuente |
 | A4.13 | Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (`mai_rf`) y frijol (`bea_rf`, `[VERIFICAR]` que sea frijol), servido como `calendario-local` con su fuente. Calabaza y chile quedan `NO_EVALUABLE`; en México siguen mandando SIAP e INIFAP | R3 | M | Opus | A1.7, A4.6 (C4) | Una coordenada fuera de México devuelve la ventana de siembra del maíz con fuente GGCMI; en Isla sigue la de SIAP/INIFAP |
 
@@ -154,19 +154,20 @@ Compuerta **C4** al terminar A4.6.
 
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
-| A5.1 `[HECHO]` con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento | Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) | R1 + R4 | M | Sonnet | A3.2 | Transiciones suaves, opción de reducir movimiento |
+| A5.1 `[HECHO]` con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento. Además (Mompin): lluvia del día desde `serieBalance`, con mm y fuente | Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) | R1 + R4 | M | Sonnet | A3.2 | Transiciones suaves, opción de reducir movimiento |
 | A5.2 | Slider de meses | R1 | M | Sonnet | A3.4 | Reproducir y arrastrar sin acumular animaciones |
 | A5.3 | Móvil y accesibilidad (táctil, teclado) | R1 | M | Sonnet | A4.6 | Operable sin hover |
 | A5.4 `[BLOQUEADO]` espera el modo 2D (A3.6) | Medición de requisitos mínimos y fallback WebGL | R1 | S | Haiku | A3.6 | Cifra documentada para jueces |
 | A5.5 `[HECHO]` 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) | Pruebas de regresión del motor y de contratos | R2 | M | Sonnet | A4.2 | Suite en verde |
-| A5.6 | Guion, video de demo y ensayo | R4 | M | Sonnet | A4.6 | Video grabado con respaldo |
 | A5.7 `[EN CURSO]` | README con método, fuentes, límites, licencias y declaración de IA | R4 | S | Sonnet | A4.5 | README completo |
-| A5.8 `[BLOQUEADO]` el paquete de demo ya responde sin red; faltan las capturas y probar el front con la red apagada | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
-| A5.9 | Envío final según reglas oficiales | R4 | XS | Haiku | A5.6, A5.7 | Entrega confirmada (C6) |
+| A5.8 `[HECHO]` demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
+| A5.9 | Envío final según reglas oficiales | R4 | XS | Haiku | A5.7 | Entrega confirmada (C6) |
+
+Video y presentación se definen al final, cuando el front esté conforme: quedan fuera del tablero y no se asignan ahora `[DECIDIDO]` (Mompin, 14/11; ver 13).
 
 ## Camino crítico
 
-`A1.1 -> A2.1 -> A2.6 -> A2.7 -> A3.4 -> A4.6 -> A5.6 -> A5.9`
+`A1.1 -> A2.1 -> A2.6 -> A2.7 -> A3.4 -> A4.6 -> A5.9`
 
 La escena 3D (`A2.9 -> A3.1 -> A3.2`) va en paralelo y también es crítica para la demo. Si cualquiera se atrasa, activar el plan de recorte.
 
@@ -199,7 +200,7 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 | --- | --- | --- | --- | --- |
 | **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor) `[HECHO]`, A3.7 `[HECHO]`, A5.5 `[HECHO]`, A3.8 (con balam) `[HECHO]`, A5.1 (con Mafer) `[HECHO]`; integra y administra `main`, A1.7 | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.6 (cliente de la API, con balam), A4.7, A4.8, A4.10, A4.11, A4.12, A4.13 (después de C4), A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
-| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[HECHO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[HECHO]`, A2.11 `[HECHO]`, A2.12 `[HECHO]`, A3.3 `[HECHO]`, A3.9 `[EN CURSO]`, A5.6, A5.7 `[EN CURSO]` | A1.4 (paleta y primer modelo del maíz) |
+| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[HECHO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[HECHO]`, A2.11 `[HECHO]`, A2.12 `[HECHO]`, A3.3 `[HECHO]`, A3.9 `[HECHO]`, A5.7 `[EN CURSO]` | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
 
 Cada actividad se marca en este documento con su estado (`EN CURSO`, `BLOQUEADO`, `HECHO`) al lado del ID. Si alguien termina, toma la siguiente actividad libre del camino crítico antes que un extra.
@@ -214,10 +215,10 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 16 | 1 | 0 | 0 | 94 % de 17 |
-| **Eduardo** | 12 | 3 | 2 | 2 | 63 % de 19 |
-| **Mafer** | 8 | 2 | 0 | 1 | 73 % de 11 |
-| **balam** | 6 | 1 | 0 | 8 | 40 % de 15 |
+| **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
+| **Eduardo** | 13 | 2 | 2 | 2 | 68 % de 19 |
+| **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
+| **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
 ### Mompin
 
@@ -231,14 +232,14 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.6 | ET0, ETc y balance de agua por bloque (cubeta) | HECHO | 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7) |
 | A2.7 | Pilar de déficit hídrico y estados de evaluabilidad | HECHO | 14/11 |
 | A2.8 | Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) | HECHO | (c) `temporada_tipica`, 14/11 |
-| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | HECHO | 14/11: backend (Eduardo) y motor (Mompin); banda y años análogos `EXPLORATORIO` (contratos 0.8.0). La interfaz es A4.9, hecha |
+| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | HECHO | 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9) |
 | A3.1 | Escena 3D con relieve (altura por bloque, InstancedMesh) | HECHO |  |
 | A3.2 | Cargador de .bbmodel con instancing por cultivo y etapa | HECHO |  |
 | A3.7 | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | HECHO | 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente) |
 | A3.8 | Tooltips y valores por bloque | HECHO | con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas) |
 | A4.2 | Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | HECHO | 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3) |
-| A4.6 | Conectar front y API (cliente generado, estados de carga y error) | EN CURSO | cliente, laboratorio y comparación ya cargan el paquete de demo o la API y llaman al Worker; sigue abierto porque el droplet está en `d182af4` y no se probó cada carga en vivo |
-| A5.1 | Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) | HECHO | con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento |
+| A4.6 | Conectar front y API (cliente generado, estados de carga y error) | HECHO | usarDatosParcela y flujo con FastAPI local verificados; despliegue en A4.7 |
+| A5.1 | Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) | HECHO | con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento. Además (Mompin): lluvia del día desde `serieBalance`, con mm y fuente |
 | A5.5 | Pruebas de regresión del motor y de contratos | HECHO | 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) |
 
 ### Eduardo
@@ -252,18 +253,18 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.2 | Respaldo Open-Meteo y estados RESPALDO_HISTORICO / ERROR_DATOS | HECHO |  |
 | A2.3 | Elevación por celda (tiles Terrarium o SRTM) y pendiente | HECHO |  |
 | A2.4 | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | HECHO | paquete conforme a contratos (clima 2005-10-01 a 2025-12-31, terreno, suelo, proxima temporada) sobre una parcela ficticia en Isla; el motor ya corre con el |
-| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | HECHO | 14/11: backend (Eduardo) y motor (Mompin); banda y años análogos `EXPLORATORIO` (contratos 0.8.0). La interfaz es A4.9, hecha |
+| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | HECHO | 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9) |
 | A2.14 | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | HECHO |  |
 | A2.15 | Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) | HECHO |  |
-| A4.6 | Conectar front y API (cliente generado, estados de carga y error) | EN CURSO | cliente, laboratorio y comparación ya cargan el paquete de demo o la API y llaman al Worker; sigue abierto porque el droplet está en `d182af4` y no se probó cada carga en vivo |
-| A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | EN CURSO | `https://64-23-143-102.sslip.io` responde (front 200, `/health` en el commit `d182af4`, contrato 0.9.0). El código más nuevo de la rama no está desplegado |
-| A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | EN CURSO | `GET /api/smap` probado en Isla y `contratos/smap.schema.json` ya existe. No está en la interfaz. El droplet no tiene `EARTHDATA_TOKEN`; sin el OK explícito responde 503 |
-| A4.10 | Lluvia GPM IMERG vía NASA POWER (IMERG_PRECTOT con time-standard=UTC, sin cuenta Earthdata) en GET /api/clima y en el paquete de demo, como evidencia: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en features/imerg/ y features/encargos/eduardo-datos-globales.md | HECHO | `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance |
-| A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto, como evidencia de los años de escenario; no entra al ranking. El servicio previsto era ORNL DAAC; se sustituyó porque no respondía | HECHO | ORNL DAAC no respondió (502, 503). La serie sale de Microsoft Planetary Computer, MOD13Q1 V061, validada contra ORNL en 4 fechas. Caché, límites del píxel y paquete completo en `datos/demo/respuestas/ndvi.json`. Cita del producto: doi:10.5067/MODIS/MOD13Q1.061 |
+| A4.6 | Conectar front y API (cliente generado, estados de carga y error) | HECHO | usarDatosParcela y flujo con FastAPI local verificados; despliegue en A4.7 |
+| A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | EN CURSO | front servido en el droplet; falta la demo real (A4.6) |
+| A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | EN CURSO | `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN` |
+| A4.10 |  | HECHO | `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance |
+| A4.11 |  | BLOQUEADO | ORNL DAAC no responde de forma usable (502, 503 y llamadas de 40 s sin respuesta); cliente y ruta listos y probados con respuestas reales, apagados del paquete de demo hasta que el servicio funcione |
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | PENDIENTE |  |
 | A4.13 | Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP | PENDIENTE |  |
 | A5.4 | Medición de requisitos mínimos y fallback WebGL | BLOQUEADO | espera el modo 2D (A3.6) |
-| A5.8 | Respaldo local sin internet y capturas | BLOQUEADO | el paquete de demo ya responde sin red; faltan las capturas y probar el front con la red apagada |
+| A5.8 | Respaldo local sin internet y capturas | HECHO | demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) |
 
 ### Mafer
 
@@ -277,25 +278,24 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.12 | Bloques de suelo por tipo y humedad | HECHO |  |
 | A2.16 | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | HECHO | (Mafer) `[HECHO]` |
 | A3.3 | Estados visuales: color + icono + patrón, leyenda | HECHO |  |
-| A3.9 | Cultivos 4 en adelante, props y mascota | EN CURSO |  |
-| A5.6 | Guion, video de demo y ensayo | PENDIENTE |  |
+| A3.9 | Cultivos 4 en adelante, props y mascota | HECHO |  |
 | A5.7 | README con método, fuentes, límites, licencias y declaración de IA | EN CURSO |  |
 
 ### balam
 
 | ID | Actividad | Estado | Nota |
 | --- | --- | --- | --- |
-| A0.5 | Verificar reglas de entrega, IA y video (V-03, V-04) | PENDIENTE |  |
+| A0.5 | Verificar reglas de entrega e IA (V-03, V-04) | PENDIENTE |  |
 | A1.2 | Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | HECHO | rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados |
 | A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | HECHO |  |
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | HECHO |  |
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | HECHO |  |
 | A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | HECHO |  |
 | A3.6 | Modo 2D ligero con los mismos valores del motor | PENDIENTE |  |
-| A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | PENDIENTE |  |
-| A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | EN CURSO | parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam) |
+| A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | HECHO | series del Worker, graficas y tabla verificadas |
+| A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | HECHO | motor y tarjetas visibles en laboratorio y comparacion |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | PENDIENTE |  |
-| A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | PENDIENTE |  |
+| A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | HECHO |  |
 | A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | HECHO |  |
 | A5.2 | Slider de meses | PENDIENTE |  |
 | A5.3 | Móvil y accesibilidad (táctil, teclado) | PENDIENTE |  |

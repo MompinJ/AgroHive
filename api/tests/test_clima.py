@@ -192,8 +192,16 @@ def test_imerg_no_se_pide_si_el_clima_cae_al_respaldo(simular):
     assert not any("IMERG" in u for u in llamadas), "con POWER caido no se insiste con una segunda llamada a POWER"
 
 
-def test_imerg_anterior_a_su_inicio_se_recorta_a_2000_06_01(simular):
+def test_imerg_anterior_a_su_inicio_se_recorta_a_1998_06_01(simular):
     llamadas = simular(responder())
-    cliente.get("/api/clima?lat=18.03&lon=-95.53&desde=1999-01-01&hasta=2000-06-10")
+    cliente.get("/api/clima?lat=18.03&lon=-95.53&desde=1990-01-01&hasta=1998-07-10")
     u = next(x for x in llamadas if "IMERG" in x)
-    assert "start=20000601" in u
+    assert "start=19980601" in u
+
+
+def test_imerg_de_1999_no_se_recorta(simular):
+    """Antes se recortaba a 2000-06-01 y se perdian dos anios de datos validos de IMERG V07 (verificado contra la metodologia de POWER)."""
+    llamadas = simular(responder())
+    cliente.get("/api/clima?lat=18.03&lon=-95.53&desde=1999-01-01&hasta=1999-01-10")
+    u = next(x for x in llamadas if "IMERG" in x)
+    assert "start=19990101" in u

@@ -8,6 +8,8 @@ archivo). El token de Earthdata sale SOLO de la variable de entorno EARTHDATA_TO
 import asyncio
 import io
 import os
+import threading
+import time
 from datetime import date
 
 from .. import http
@@ -22,6 +24,23 @@ FILAS, COLUMNAS = 406, 964
 PIXEL_M = 36032.220840584
 X0, Y0 = -17367530.445161499, 7314540.830638599  # esquina superior izquierda de la rejilla
 BLOQUE = 4 << 20  # bloques alineados de 4 MiB: la latencia (1 a 2 s por peticion) pesa mas que los bytes
+
+
+VIGENCIA_SESION_S = 1800
+_candado_sesion = threading.Lock()
+_sesion = {"cuando": 0.0, "objeto": None}
+
+
+def _sesion_autenticada():
+    """Sesion HTTP autenticada de earthaccess. earthaccess guarda el login en estado global, asi que se hace una sola vez, bajo candado, y se reutiliza."""
+    import earthaccess
+
+    with _candado_sesion:
+        if _sesion["objeto"] is None or time.time() - _sesion["cuando"] > VIGENCIA_SESION_S:
+            if not earthaccess.login(strategy="environment").authenticated:
+                raise http.ErrorFuente("Earthdata rechazo el token")
+            _sesion["objeto"], _sesion["cuando"] = earthaccess.get_requests_https_session(), time.time()
+        return _sesion["objeto"]
 
 
 class SinToken(http.ErrorFuente):
@@ -113,15 +132,13 @@ def _leer_sync(lon: float, lat: float, dia: date) -> dict | None:
     sitio = celda(lon, lat)
     if sitio is None:
         return None
-    if not earthaccess.login(strategy="environment").authenticated:
-        raise http.ErrorFuente("Earthdata rechazo el token")
+    sesion = _sesion_autenticada()
     resultados = earthaccess.search_data(short_name=PRODUCTO, point=(lon, lat), temporal=(dia.isoformat(), dia.isoformat()), count=1)
     if not resultados:
         return None
     enlaces = [e for e in resultados[0].data_links(access="external") if e.endswith(".h5")]
     if not enlaces:
         return None
-    sesion = earthaccess.get_requests_https_session()
     pases = leer_pases(ArchivoPorRangos(sesion, enlaces[0]), *sitio)
     return {"granulo": resultados[0]["umm"]["GranuleUR"], "celda": list(sitio), "centro": list(centro(*sitio)), "pases": pases}
 

@@ -155,7 +155,7 @@
           "minLength": 1
         },
         "calidad": {
-          "description": "Confiabilidad del pixel segun el producto (pixel reliability), si viene.",
+          "description": "Pixel reliability de MOD13 (SummaryQA): 0 dato bueno, 1 marginal (revisar el QA detallado), 2 nieve o hielo, 3 nublado (v061); -1 relleno o sin dato segun la documentacion de V005 [VERIFICAR -1 en v6.1 y en el servicio de ORNL DAAC]. null si no viene.",
           "type": [
             "integer",
             "null"

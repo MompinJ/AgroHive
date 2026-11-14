@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.11.0",
+    "versionContrato": "0.12.1",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -42,12 +42,14 @@
         {
           "pase": "AM",
           "humedadM3M3": 0.31,
-          "banderaCalidad": 0
+          "banderaCalidad": 0,
+          "calidad": "alta"
         },
         {
           "pase": "PM",
           "humedadM3M3": 0.29,
-          "banderaCalidad": 0
+          "banderaCalidad": 0,
+          "calidad": "alta"
         }
       ],
       "humedadM3M3": 0.3

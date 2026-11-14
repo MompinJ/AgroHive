@@ -279,7 +279,7 @@
     },
     "lluviaSatelital": {
       "title": "LluviaSatelital",
-      "description": "Lluvia por satelite GPM IMERG via NASA POWER (IMERG_PRECTOT, en UTC; sin UTC POWER no la entrega). Es EVIDENCIA: no entra al balance ni a la eleccion de escenarios. El -999 de POWER (fill_value) se guarda como null, nunca como 0. IMERG existe desde 2000-06-01 y los ultimos meses pueden faltar. Opcional (agregado en 0.10.0).",
+      "description": "Lluvia por satelite GPM IMERG via NASA POWER (IMERG_PRECTOT, en UTC; sin UTC POWER no la entrega). Es EVIDENCIA: no entra al balance ni a la eleccion de escenarios. El -999 de POWER (fill_value) se guarda como null, nunca como 0. Cobertura: IMERG empieza el 1998-01-01 segun NASA POWER y el catalogo CMR de NASA (evidencia: llamada real a POWER con time-standard=UTC en la parcela demo el 14/11, hecha por Mafer: ultimo dia con -999 el 1997-12-31, primer dia con dato el 1998-01-01). El espejo de UCAR indica 2000-06-01. Los ultimos meses pueden faltar (IMERG Final tarda meses en publicarse). Producto: GPM IMERG Final Precipitation L3 1 day 0.1 degree V07 (GPM_3IMERGDF), doi:10.5067/GPM/IMERGDF/DAY/07. Opcional (agregado en 0.10.0).",
       "type": "object",
       "required": [
         "variable",

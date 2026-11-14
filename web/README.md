@@ -100,7 +100,7 @@ Verificación de esta entrega: `npm run build` (incluye TypeScript estricto) y `
 
 ## Terreno: A2.10 y A2.9
 
-Esta sección sustituye las referencias anteriores al mapa y la cuadrícula pendientes. En `#/terreno?modo=poligono` se dibuja el contorno en Leaflet o mediante coordenadas; hay controles para deshacer, reiniciar y centrar. La base es OpenStreetMap con atribución y requiere red; si falla, el formulario sigue disponible.
+Esta sección sustituye las referencias anteriores al mapa y la cuadrícula pendientes. En `#/terreno?modo=poligono` se dibuja el contorno en Leaflet o mediante coordenadas; hay controles para deshacer, reiniciar y centrar. La vista predeterminada es satelital (Esri World Imagery), con OpenStreetMap como alternativa en el selector. Ambas requieren red y conservan su atribución; si falla una vista, el formulario sigue disponible.
 
 La cuadrícula usa Turf para área e intersecciones, como máximo 1600 celdas y bordes parciales; el lado mínimo es una decisión técnica de visualización (10 m), no la resolución de los datos NASA. Límites y plan en `src/ui/TERRENO-PLAN.md`. El usuario confirma antes de consultar elevación con el cliente de Eduardo. Se muestran estado, fuente, advertencias y errores con reintento; también se puede guardar sin relieve (null, NO_EVALUABLE). La parcela se conserva en App al navegar, no después de recargar. La simulación y el suelo se conectarán en A3.4/A4.6.
 
@@ -119,3 +119,27 @@ Los planes R1 a R4, las selecciones y la banda se conservan en App durante la na
 Verificación de esta entrega: pruebas de planes contra JSON Schema, prueba R1/frijol/2023, build y TypeScript. En Chromium se verificó que los cambios de escenario/ciclo y banda no envían otra petición simular; cambiar cultivo sí la envía. P2/P3 conservan selección al navegar. Anchos de laboratorio 1440/1024/768/390/320 sin desbordamiento; las cuatro rutas y la entrada polígono también pasan la comprobación a 320. Axe no encontró incidencias automáticas WCAG A/AA en los estados revisados de laboratorio y comparación. No se hizo revisión con lector de pantalla ni zoom nativo al 200 %. Fuentes/estados científicos requieren la validación humana del proyecto.
 
 Capturas: `evidencia/laboratorio-conectado-desktop.png` y `evidencia/laboratorio-conectado-320.png`. El paquete Three.js y la serie climática se descargan por carga diferida y generan advertencias de tamaño de chunk en Vite; no bloquean el build. La plantilla documental System Design no pudo renderizarse por ausencia de LibreOffice; no se entrega un DOCX sin verificación visual.
+
+## Tarjetas, método y carga compartida
+
+A4.3 muestra `ranking.rotaciones[].explicacion` en laboratorio y comparación, con huecos y riesgos visibles, sin LLM. A4.5 agrega `#/metodo`, accesible desde navegación y método, con las fuentes efectivas de la sesión, unidades, resolución, períodos y advertencias. La extracción conserva citas recibidas sin inventar campos faltantes.
+
+A4.6 usa `usarDatosParcela` de Eduardo para las parcelas propias. Su estado está vinculado al centroide para evitar mostrar datos anteriores; reintentar invalida el estado visible. La prueba de recorrido usó FastAPI real local en 8017 y su paquete precargado: las cuatro consultas respondieron 200 y el flujo llegó a comparación. El proxy de navegador de QA solo redirigió solicitudes al servidor local, no sustituyó sus respuestas. Esto no mide disponibilidad pública ni corrige problemas del despliegue.
+
+La serie se verificó en `npm run preview -- --port 4174` con una sesión de Chromium nueva: cero solicitudes serie-clima desde Inicio, descarga al abrir laboratorio. Ya estaba cargada con import dinámico; no se introdujo una segunda estrategia de carga. Evidencia: `evidencia/tarjetas-rotacion-320.png` y `evidencia/metodo-fuentes-320.png`. Tarjetas y método sin desbordamiento en la revisión a 320 px; prueba de fuentes y render estático de huecos/riesgos incluida. Dashboard A4.1 espera la operación del Worker; no usa valores del ejemplo del contrato.
+
+## Dashboard A4.1
+
+El botón Mostrar gráficas de agua carga `DashboardBalance` y Recharts solo cuando se abre. Consulta `cliente.serieBalance(rotacionId, escenario)` y grafica la salida mensual del motor por ciclo: lluvia, demanda ETc, consumo ajustado, déficit y percolación. La tabla añade el mes climático y humedad media. No agrega indicadores ni sustituye null por cero. Esta sección sustituye la nota anterior de dashboard a la espera del Worker.
+
+Rotación o escenario cambian la consulta de series y descartan respuestas viejas; no se vuelve a simular ni a consultar la API. Se muestran fuentes, unidades, estado y motivos cuando no hay datos. Leyendas y trazos discontinuos distinguen las series, sin animación; tabla accesible en región desplazable con aviso visible.
+
+Verificado en Chromium sobre el build de producción: el dato de lluvia de la tabla coincide con el del mensaje del Worker; cambiar escenario no envía simular. Sin desbordamiento estable tras adaptación del ResizeObserver a 1440/768/390/320; axe sin incidencias automáticas en el estado revisado. Captura `evidencia/dashboard-320.png`.
+
+Referencias oficiales: [Recharts ResponsiveContainer](https://recharts.github.io/en-US/api/ResponsiveContainer/), [LineChart y accesibilidad](https://recharts.github.io/en-US/api/LineChart/). Las series y sus agregados pertenecen al motor, no a Recharts.
+
+## Fondo satelital del mapa
+
+Por decisión de Balam, el mapa abre en Satélite (Esri World Imagery). El selector Vista del mapa permite volver a calles de OpenStreetMap sin borrar geometría. El fondo no alimenta el motor. Se muestra que no son imágenes en vivo, y se conserva la atribución de la capa activa. No hay fecha de captura local verificada, por lo que no se anuncia una.
+
+Se comprobaron imágenes reales, alternancia con cuadrícula/vértices conservados, cero consultas de datos adicionales y recuperación de un fallo satelital al cambiar a calles. Captura: `evidencia/mapa-satelital.png`. Fuente y crédito del servicio: [World Imagery](https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer?f=pjson).

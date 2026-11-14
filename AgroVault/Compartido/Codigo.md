@@ -90,7 +90,7 @@ Generadores: `modelos/cultivos/{maiz,frijol,calabaza,chile}.py`, `modelos/suelos
 
 ## Borradores que no sustituyen al archivo oficial
 
-- `docs/guion-video-borrador.md` — guion de A5.6, todavía no es el video.
+- `docs/guion-video-borrador.md` — borrador del guion para el final; no es tarea activa.
 - `docs/README-borrador.md` — texto para A5.7. `README.md` de la raíz sigue siendo la ficha corta.
 - `docs/08` — arquitectura de antes del 14/11. El motor no está en el servidor y varios nombres de campos cambiaron.
 
