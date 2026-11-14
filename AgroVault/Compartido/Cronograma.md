@@ -16,9 +16,9 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
 | **Eduardo** | 15 | 2 | 1 | 1 | 79 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
-| **balam** | 10 | 0 | 0 | 5 | 67 % de 15 |
+| **balam** | 12 | 0 | 0 | 3 | 80 % de 15 |
 
-Proyecto completo: **49 de 60** actividades hechas (82 %), 3 en curso, 1 bloqueadas.
+Proyecto completo: **51 de 60** actividades hechas (85 %), 3 en curso, 1 bloqueadas.
 
 ## Mompin
 
@@ -89,8 +89,8 @@ Proyecto completo: **49 de 60** actividades hechas (82 %), 3 en curso, 1 bloquea
 - [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)
 - [x] **A4.5** Pantalla de método, fuentes y advertencias (A1, A3) `HECHO`
 - [x] **A4.9** Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción `HECHO`
-- [ ] **A5.2** Slider de meses
-- [ ] **A5.3** Móvil y accesibilidad (táctil, teclado)
+- [x] **A5.2** Slider de meses `HECHO`
+- [x] **A5.3** Móvil y accesibilidad (táctil, teclado) `HECHO`
 - [ ] **A5.9** Envío final según reglas oficiales
 
 ## Equipo (sin responsable único)

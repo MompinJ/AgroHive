@@ -86,6 +86,16 @@ Código en `web/src/escena/` (componente `EscenaParcela`; punto de integración 
 
 ## Animaciones (según tiempo)
 
+### Plan de ejecución A5.2 / A5.3 (balam, 14/11)
+
+Alcance autorizado en el chat al continuar con las tareas siguientes: control temporal común para 2D/3D, reproducción manual y revisión móvil/accesibilidad sobre el sistema global de `DESIGN.md`.
+
+- [x] A5.2: probar primero fechas UTC, fin de mes, años bisiestos, límites y ciclos sin serie. Crear `ui/tiempo.ts` y `tiempo.test.ts`; las fechas disponibles salen de `SerieBalance.ciclos[].desde` y la longitud de sus columnas, sin asumir la duración de un cultivo.
+- [x] Crear `ui/ControlTiempo.tsx`: rango diario, fecha exacta, paso mensual y reproducir/pausar. No inicia solo; un único temporizador espera el resultado de celdas antes de avanzar. Se cancela al desmontar/cambiar contexto, ocultar la pestaña o activar movimiento reducido. Reutilizar controles y tokens globales; sin nuevas bibliotecas.
+- [x] Extraer la consulta compartida a `ui/useSerieBalance.ts`; `LaboratorioConectado`, `DashboardBalance` y la lluvia 3D consumen la misma respuesta guardada. Fecha y vista no invalidan simulación ni descargan clima. Consultas de celdas al arrastrar se agrupan con un retardo corto; respuestas antiguas se descartan.
+- [x] A5.3: recorrer Inicio, Terreno, Laboratorio, Comparación y Método con teclado, 320 px, escritorio, zoom/texto ampliado y movimiento reducido. Corregir en `ui/system.css` y componentes de UI/páginas los problemas demostrados de foco, tamaño táctil, legibilidad o desborde. No cambiar motor, contratos ni escena.
+- [x] Verificar pruebas, build, flujos reales y axe; pedir revisión independiente, documentar evidencia y actualizar `docs/14` y sus vistas generadas. Commit y push a `balam`, aviso a Mompin y sin push a `main`.
+
 **Implementado (A5.1, con Mafer, 14/11):** al cambiar de etapa, la planta vieja se encoge mientras la nueva crece (450 ms `[PROPUESTA]`). Dentro de la misma etapa, la escala pasa suave al nuevo `avanceEtapa`. Hay viento leve en el shader, apagado por defecto y activable en la escena. Con "reducir movimiento" (control de la escena o `prefers-reduced-motion`, también si cambia con la escena abierta) no hay transiciones, viento ni inercia. Un cambio nuevo corta la transición en curso, sin acumular. Se dibuja solo mientras algo se mueve. La cámara ya no vuelve a la vista inicial al cambiar fecha o escenario, solo al cambiar de parcela. La mascota de Mafer (`modelos/props/mascota_feliz.bbmodel`) va fuera de la parcela, en la esquina noreste, al 60 %; prop `mascota` de `EscenaParcela`, y si no hay modelo no aparece.
 
 
@@ -140,3 +150,13 @@ Cambiar un plan invalida de inmediato el cálculo visible y crea una nueva sesi�
 A4.9 muestra rangos mensuales y resultados de años análogos del motor, estados EXPLORATORIO/NO_EVALUABLE, fuentes, ciclos fuera del horizonte y advertencia de que no es predicción. No se suman los extremos mensuales ni se inventan valores para datos faltantes.
 
 Revisión de diseño: better-interface y sus seis áreas, better-ui, con el stack existente (React/Vite/TS y CSS). La plantilla System Design fue localizada y su flujo documental leído; su render falló por falta de LibreOffice/soffice.exe, por lo que no se entrega un DOCX sin verificar ni se sustituyó su plantilla. Esto no afecta al sistema web. Evidencia de interfaz y comprobaciones en web/README.md y web/evidencia.
+
+### Entrega A5.2 / A5.3: comprobaciones y límites
+
+`ControlTiempo` ofrece fecha exacta, rango diario nativo y saltos/reproducción mensual. El horizonte sale de `SerieBalance` para el ciclo seleccionado; sin días, solo permite fecha manual y explica el hueco. Fechas UTC para no desplazar días por horario de verano, con finales de mes y bisiestos probados. La fecha elegida se conserva entre 2D/3D y navegación. Cambiar fecha consulta celdas guardadas, sin simular ni pedir clima. `useSerieBalance` comparte la respuesta del Worker con las gráficas y la lluvia 3D.
+
+No hay reproducción automática al cargar. Pausa visible, un único temporizador, espera al resultado antes del siguiente mes; desmontar/cambiar ciclo, escenario, rotación o vista, ocultar pestaña, errores y movimiento reducido cancelan el recorrido. El arrastre agrupa peticiones durante 120 ms, y una respuesta vieja no sustituye la fecha vigente. Hay reintentos separados para serie y celdas; un éxito limpia su aviso previo.
+
+A5.3: foco del h1 conservado al completar la carga; opciones táctiles de 44 px; controles de formulario de al menos 16 px en puntero grueso; palabras largas e imagen de Terreno adaptables con texto ampliado. Better-interface (sus seis dominios), better-ui y revisión React aplicados sobre el sistema global. Verificado en Chrome automatizado: cinco pantallas a 320/720/1440 px con tamaño base de texto al 200%, sin desborde; axe sin incidencias WCAG A/AA configuradas; teclado para recorrido y diálogo con retorno de foco por Escape. Movimiento reducido probado al activarse con reproducción abierta. Errores/retrasos del Worker y visibilidad de pestaña simulados. Capturas en `web/evidencia/a5-2-tiempo-*`.
+
+No equivale a certificación: lector de pantalla real, zoom de navegador fuera de las comprobaciones descritas y hardware táctil físico no verificados. A5.4 mantiene la medición de requisitos y pérdida de contexto WebGL a cargo de Eduardo.
