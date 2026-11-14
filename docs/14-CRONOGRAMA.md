@@ -194,7 +194,7 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 | --- | --- | --- | --- | --- |
 | **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1, A3.2, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor), A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.7, A4.8, A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
-| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16, A2.11, A2.12, A3.3, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
+| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[EN CURSO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[EN CURSO]`, A2.11, A2.12, A3.3, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A3.8, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
 
 Cada actividad se marca en este documento con su estado (`EN CURSO`, `BLOQUEADO`, `HECHO`) al lado del ID. Si alguien termina, toma la siguiente actividad libre del camino crítico antes que un extra.
@@ -211,7 +211,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 8 | 1 | 0 | 5 | 57 % de 14 |
 | **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
-| **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
+| **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
 ### Mompin
@@ -256,13 +256,13 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | ID | Actividad | Estado | Nota |
 | --- | --- | --- | --- |
-| A0.6 | Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) | PENDIENTE |  |
+| A0.6 | Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) | EN CURSO |  |
 | A1.4 | Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) | HECHO |  |
 | A1.5 | Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente | HECHO |  |
 | A1.6 | Tabla de suelos (TAW por textura, FAO-56) | HECHO |  |
 | A2.11 | Cultivos 1 a 3 completos, todas las etapas y estados de estrés | PENDIENTE |  |
 | A2.12 | Bloques de suelo por tipo y humedad | PENDIENTE |  |
-| A2.16 | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | PENDIENTE | (Mafer) |
+| A2.16 | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | EN CURSO | (Mafer) |
 | A3.3 | Estados visuales: color + icono + patrón, leyenda | PENDIENTE |  |
 | A3.9 | Cultivos 4 en adelante, props y mascota | PENDIENTE |  |
 | A5.1 | Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) | PENDIENTE |  |
