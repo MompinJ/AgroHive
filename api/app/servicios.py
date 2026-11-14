@@ -198,23 +198,29 @@ async def suelo(lat: float, lon: float) -> dict:
     fuente = {"nombre": isric.NOMBRE, "url": "https://maps.isric.org", "coordenada": (lon, lat), "unidades": "% (arena, limo, arcilla), pH en agua",
               "consultado": registro["consultado"], "resolucion": "250 m",
               "nota": f"Media de 0 a 30 cm ponderada por espesor de capa; mediana de los pixeles con dato a menos de {radio} m del punto. "
-                      "Fracciones normalizadas a 100. El grupo del selector es una propuesta pendiente de A1.6 (VERIFICAR)."}
+                      "Fracciones normalizadas a 100. El grupo y el TAW vienen de la tabla de suelos de A1.6."}
     advertencias = [{"codigo": "SUELO_SUPUESTO", "mensaje": "pH y textura estimados por un modelo global de 250 m; no son una medicion de su parcela.", "severidad": "aviso"}]
     if radio > 1000:
         advertencias.append({"codigo": "SUELO_SIN_DATO_CERCANO", "mensaje": "El mapa no tiene dato cerca del punto; el valor viene de pixeles a mas de 1 km.", "severidad": "aviso"})
     if any(p and p["capas"] < len(isric.PROFUNDIDADES) for p in props.values()):
         advertencias.append({"codigo": "SUELO_CAPAS_INCOMPLETAS", "mensaje": "Alguna capa de profundidad no tiene dato; la media usa las capas disponibles.", "severidad": "info"})
     ph = props.get("phh2o")
+    tabla = clasificacion.cargar_catalogo_suelos().get(clase)
+    grupo = tabla["grupo"] if tabla else clasificacion.GRUPO[clase]
+    if tabla:
+        taw = tabla["tawMmPorM"]
+    else:
+        taw = {"estado": "NO_EVALUABLE", "motivo": "La tabla de suelos (A1.6, datos/catalogos/suelos.json) no esta disponible en este servidor."}
     fuente_ph = {**fuente, "unidades": "pH en agua (adimensional)",
                  "nota": f"Media de 0 a 30 cm ponderada por espesor de capa; mediana de los pixeles con dato a menos de {radio} m del punto."}
     return {
         "meta": _meta(), "id": _id_suelo(lat, lon), "etiqueta": "SUPUESTO", "origen": "mapa_global",
         "aviso": "pH y textura estimados por un modelo global (SoilGrids, 250 m); no son una medicion de la parcela.",
         "coordenada": (lon, lat), "profundidad": {"desdeCm": 0, "hastaCm": 30},
-        "textura": {"estado": "EVALUABLE", "etiqueta": "SUPUESTO", "clase": clase, "grupo": clasificacion.GRUPO[clase],
+        "textura": {"estado": "EVALUABLE", "etiqueta": "SUPUESTO", "clase": clase, "grupo": grupo,
                     "fraccionesPct": {"arena": round(arena, 1), "limo": round(limo, 1), "arcilla": round(arcilla, 1)}, "fuente": fuente},
         "ph": ({"estado": "EVALUABLE", "etiqueta": "SUPUESTO", "valor": round(ph["valor"], 1), "fuente": fuente_ph} if ph
                else {"estado": "NO_EVALUABLE", "motivo": "SoilGrids no tiene dato de pH en esta zona."}),
-        "agua": {"tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": "Pendiente de la tabla de suelos A1.6 (FAO-56) con fuente."}},
+        "agua": {"tawMmPorM": taw},
         "advertencias": advertencias,
     }

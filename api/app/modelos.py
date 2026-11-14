@@ -32,6 +32,7 @@ class Fuente(SinNulos):
     url: str | None = None
     coordenada: LonLat | None = None
     periodo: Periodo | None = None
+    cita: str | None = None
     unidades: str | None = None
     consultado: date | None = None
     resolucion: str | None = None
@@ -136,8 +137,16 @@ class PhEstimado(SinNulos):
     fuente: Fuente
 
 
+class ValorEvaluable(SinNulos):
+    estado: Literal["EVALUABLE"] = "EVALUABLE"
+    valor: float
+    unidad: str
+    fuente: Fuente
+    etiqueta: Literal["FUENTE", "SUPUESTO", "USUARIO"] | None = None
+
+
 class AguaSuelo(BaseModel):
-    tawMmPorM: ValorNoEvaluable
+    tawMmPorM: ValorEvaluable | ValorNoEvaluable
 
 
 class Suelo(SinNulos):

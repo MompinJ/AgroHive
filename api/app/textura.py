@@ -1,9 +1,12 @@
 """Clase textural USDA (12 clases) a partir de arena, limo y arcilla en %, y grupo del selector manual.
 
 Las reglas son el triangulo textural USDA (Soil Survey Manual) en la forma de umbrales usada por NRCS.
-El agrupamiento en arenoso, franco y arcilloso es una PROPUESTA: debe coincidir con la tabla de suelos
-de A1.6 (FAO-56) y la confirma quien lleve esa actividad.
+El grupo (arenoso, franco, arcilloso) y el TAW salen de la tabla de suelos de A1.6 (`datos/catalogos/suelos.json`, de Mafer):
+si el archivo existe manda; GRUPO es solo la copia de respaldo de esa tabla al 14/11.
 """
+import json
+
+from . import config
 
 
 def clasificar(arena: float, limo: float, arcilla: float) -> str | None:
@@ -35,9 +38,18 @@ def clasificar(arena: float, limo: float, arcilla: float) -> str | None:
     return None
 
 
-GRUPO = {  # PROPUESTA, ver docstring
-    "arena": "arenoso", "arena_franca": "arenoso", "franco_arenoso": "arenoso",
-    "franco": "franco", "franco_limoso": "franco", "limo": "franco", "franco_arcillo_arenoso": "franco",
-    "franco_arcilloso": "arcilloso", "franco_arcillo_limoso": "arcilloso", "arcillo_arenoso": "arcilloso",
-    "arcillo_limoso": "arcilloso", "arcilla": "arcilloso",
+GRUPO = {  # copia de respaldo de datos/catalogos/suelos.json (A1.6, 14/11); si el archivo existe, manda el archivo
+    "arena": "arenoso", "arena_franca": "arenoso",
+    "franco_arenoso": "franco", "franco": "franco", "franco_limoso": "franco", "limo": "franco",
+    "franco_arcillo_limoso": "arcilloso", "arcillo_limoso": "arcilloso", "arcilla": "arcilloso",
+    "franco_arcillo_arenoso": "arcilloso", "franco_arcilloso": "arcilloso", "arcillo_arenoso": "arcilloso",
 }
+
+
+def cargar_catalogo_suelos() -> dict[str, dict]:
+    """Tabla de suelos de A1.6 por clase USDA ({} si el archivo aun no esta en este checkout)."""
+    try:
+        datos = json.loads((config.CATALOGOS_DIR / "suelos.json").read_text(encoding="utf-8"))
+        return {t["clase"]: t for t in datos["texturas"]}
+    except (OSError, ValueError, KeyError, TypeError):
+        return {}
