@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.4.0",
+    "versionContrato": "0.5.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -94,10 +94,6 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Pendiente de A1.5: umbral de calor con fuente."
         }
-      },
-      "ventanasSiembra": {
-        "estado": "NO_EVALUABLE",
-        "motivo": "Pendiente de V-20: calendario del municipio en SIAP."
       },
       "modelo3d": {
         "prefijo": "maiz"
@@ -304,18 +300,6 @@
           "etiqueta": "SUPUESTO"
         }
       },
-      "ventanasSiembra": [
-        {
-          "temporada": "primavera_verano",
-          "desdeMes": 6,
-          "hastaMes": 7,
-          "regimen": "temporal",
-          "fuente": {
-            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
-            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
-          }
-        }
-      ],
       "notas": "Cultivo inventado SOLO para mostrar la forma EVALUABLE de un valor citado. No usar en la demo."
     }
   ]

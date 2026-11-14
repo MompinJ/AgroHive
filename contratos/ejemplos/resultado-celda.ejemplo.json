@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.4.0",
+    "versionContrato": "0.5.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -76,7 +76,12 @@
       "etcMm": null,
       "estresCalor": null,
       "riesgoErosion": null,
-      "motivo": "Sin elevacion ni parametros de calabaza: no se calcula, nunca se asigna cero."
+      "motivo": "Calabaza no registrada en el municipio (ejemplo) y sin parametros: se muestra, no se recomienda ni se calcula.",
+      "noRecomendadoEnLugar": true,
+      "fuenteMotivo": {
+        "nombre": "EJEMPLO - valores ficticios (forma de SIAP)",
+        "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+      }
     }
   ],
   "advertencias": [

@@ -34,6 +34,13 @@
         "null"
       ]
     },
+    "cultivosNoRecomendados": {
+      "description": "Cultivos de la rotacion que se muestran pero no se recomiendan en el lugar. Si hay alguno, la rotacion no puede ser EVALUABLE (queda EXPLORATORIO: se ilustra, no se recomienda).",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/cultivoNoRecomendado"
+      }
+    },
     "porEscenario": {
       "title": "MetricasPorEscenario",
       "type": "object",
@@ -167,6 +174,29 @@
           },
           "arrepentimiento": {
             "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "description": "Una rotacion con cultivos no recomendados en el lugar no es EVALUABLE.",
+      "if": {
+        "properties": {
+          "cultivosNoRecomendados": {
+            "type": "array",
+            "minItems": 1
+          }
+        },
+        "required": [
+          "cultivosNoRecomendados"
+        ]
+      },
+      "then": {
+        "properties": {
+          "estado": {
+            "not": {
+              "const": "EVALUABLE"
+            }
           }
         }
       }
@@ -639,6 +669,42 @@
           "fuente"
         ]
       }
+    },
+    "cultivoNoRecomendado": {
+      "title": "CultivoNoRecomendado",
+      "description": "Cultivo que se muestra en la rotacion pero no se recomienda en ese lugar (por ejemplo, la fuente no lo registra en el municipio).",
+      "type": "object",
+      "required": [
+        "cultivo",
+        "ciclos",
+        "motivo",
+        "fuente"
+      ],
+      "properties": {
+        "cultivo": {
+          "$ref": "comun.schema.json#/$defs/idCultivo"
+        },
+        "ciclos": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        },
+        "calendarioId": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://agrohive.example/contratos/cultivo.schema.json",
   "title": "CatalogoCultivos",
-  "description": "Catalogo propio de cultivos (decision 14/11, doc 13; actividad A1.5), sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y FAO-56 (Kc y duracion de etapas). Cada parametro lleva su fuente o es NO_EVALUABLE; un cultivo con parametros esenciales faltantes es NO_EVALUABLE para el motor.",
+  "description": "Catalogo propio de cultivos (decision 14/11, doc 13; actividad A1.5), sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y FAO-56 (Kc y duracion de etapas). Cada parametro lleva su fuente o es NO_EVALUABLE; un cultivo con parametros esenciales faltantes es NO_EVALUABLE para el motor. Solo lleva lo que no depende del lugar: las ventanas de siembra viven en calendario-local.",
   "type": "object",
   "required": [
     "meta",
@@ -38,8 +38,7 @@
         "cicloDias",
         "duracionEtapasDias",
         "kc",
-        "umbrales",
-        "ventanasSiembra"
+        "umbrales"
       ],
       "properties": {
         "id": {
@@ -189,21 +188,6 @@
           },
           "additionalProperties": false
         },
-        "ventanasSiembra": {
-          "description": "Ventanas de siembra locales (calendario SIAP o INIFAP, V-20). NO_EVALUABLE si no hay calendario con fuente.",
-          "oneOf": [
-            {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/$defs/ventanaSiembra"
-              }
-            },
-            {
-              "$ref": "comun.schema.json#/$defs/valorNoEvaluable"
-            }
-          ]
-        },
         "modelo3d": {
           "title": "Modelo3d",
           "description": "Prefijo de los archivos .bbmodel (doc 07: <cultivo>_<etapa>.bbmodel).",
@@ -221,46 +205,6 @@
         },
         "notas": {
           "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "ventanaSiembra": {
-      "title": "VentanaSiembra",
-      "type": "object",
-      "required": [
-        "temporada",
-        "desdeMes",
-        "hastaMes",
-        "fuente"
-      ],
-      "properties": {
-        "temporada": {
-          "type": "string",
-          "enum": [
-            "primavera_verano",
-            "otono_invierno"
-          ]
-        },
-        "desdeMes": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 12
-        },
-        "hastaMes": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 12
-        },
-        "regimen": {
-          "type": "string",
-          "enum": [
-            "temporal",
-            "riego"
-          ]
-        },
-        "fuente": {
-          "$ref": "comun.schema.json#/$defs/fuente"
         }
       },
       "additionalProperties": false

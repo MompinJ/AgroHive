@@ -2,9 +2,17 @@
    No editar a mano: cambiar el schema y correr `npm run tipos`. */
 
 /**
- * Escenario climatico historico (doc 04): anio real cercano a p10 (seco), p50 (habitual) o p90 (lluvioso).
+ * Identificador del cultivo en el catalogo (minusculas, sin acentos), por ejemplo 'maiz'. Coincide con el prefijo de los modelos .bbmodel (doc 07).
  */
-export type Escenario = "seco" | "habitual" | "lluvioso";
+export type IdCultivo = string;
+/**
+ * Ciclo agricola: PV (primavera-verano) u OI (otono-invierno), como los publica SIAP.
+ */
+export type Temporada = "PV" | "OI";
+/**
+ * Estados de respuesta de doc 04. EVALUABLE: parametros y fechas justificados. NO_EVALUABLE: falta un parametro, calendario o entrada esencial (nunca se sustituye por cero). EXPLORATORIO: ilustracion limitada y etiquetada, no es recomendacion. ERROR_DATOS: fallo de la API sin respaldo. RESPALDO_HISTORICO: se uso respaldo (Open-Meteo o cache); siempre visible.
+ */
+export type EstadoEvaluacion = "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
 /**
  * Coordenada [longitud, latitud] en grados WGS84 (orden GeoJSON).
  *
@@ -14,13 +22,9 @@ export type Escenario = "seco" | "habitual" | "lluvioso";
 export type LonLat = [number, number];
 export type Fecha = string;
 /**
- * Identificador del cultivo en el catalogo (minusculas, sin acentos), por ejemplo 'maiz'. Coincide con el prefijo de los modelos .bbmodel (doc 07).
+ * Escenario climatico historico (doc 04): anio real cercano a p10 (seco), p50 (habitual) o p90 (lluvioso).
  */
-export type IdCultivo = string;
-/**
- * Estados de respuesta de doc 04. EVALUABLE: parametros y fechas justificados. NO_EVALUABLE: falta un parametro, calendario o entrada esencial (nunca se sustituye por cero). EXPLORATORIO: ilustracion limitada y etiquetada, no es recomendacion. ERROR_DATOS: fallo de la API sin respaldo. RESPALDO_HISTORICO: se uso respaldo (Open-Meteo o cache); siempre visible.
- */
-export type EstadoEvaluacion = "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+export type Escenario = "seco" | "habitual" | "lluvioso";
 /**
  * Parametro numerico con fuente obligatoria, o NO_EVALUABLE con motivo. Nunca un numero sin fuente.
  */
@@ -87,6 +91,7 @@ export type FraccionesTextura = {
 export type TawPorMetro = ValorCitado & {};
 
 export interface ContratosAgroHive {
+  "calendario-local"?: CalendarioLocal;
   "clima-escenario"?: ClimaEscenario;
   cultivo?: CatalogoCultivos;
   parcela?: Parcela;
@@ -99,28 +104,16 @@ export interface ContratosAgroHive {
   "tabla-suelos"?: TablaSuelos;
 }
 /**
- * Serie climatica diaria de un escenario historico (seco, habitual, lluvioso). Es un anio real del historico, no una prediccion. La misma serie aplica a todas las celdas de la parcela.
+ * Calendario agricola de un lugar (A0.6, V-20; decidido el 14/11): por cultivo y temporada (PV, OI), la ventana de siembra con su fuente (SIAP, INIFAP) y si el cultivo se registra en el lugar. Depende del lugar, no del cultivo: por eso no esta en el catalogo. Sin dato, NO_EVALUABLE con motivo.
  */
-export interface ClimaEscenario {
+export interface CalendarioLocal {
   meta: Meta;
-  escenario: Escenario;
+  id: string;
+  ubicacion: UbicacionCalendario;
   /**
-   * Anio real del historico que representa el escenario. Siempre visible en la interfaz.
+   * @minItems 1
    */
-  anioReal: number;
-  /**
-   * EVALUABLE con la fuente principal; RESPALDO_HISTORICO si se uso Open-Meteo o cache; EXPLORATORIO si la serie es ilustrativa o esta ajustada ('que pasa si': lluvia x factor); ERROR_DATOS si no hay serie.
-   */
-  estado: "EVALUABLE" | "RESPALDO_HISTORICO" | "EXPLORATORIO" | "ERROR_DATOS" | "NO_EVALUABLE";
-  /**
-   * true si los datos no vienen de la fuente principal (NASA POWER).
-   */
-  respaldo: boolean;
-  coordenada: LonLat;
-  fuente: Fuente;
-  seleccion: SeleccionEscenario;
-  diario: DiaClima[];
-  humedadSuelo?: MetadatoHumedadSuelo;
+  entradas: [EntradaCalendario, ...EntradaCalendario[]];
   advertencias?: Advertencia[];
 }
 /**
@@ -143,6 +136,41 @@ export interface Meta {
    * Momento en que se genero el documento (ISO 8601).
    */
   generado?: string;
+}
+export interface UbicacionCalendario {
+  pais: string;
+  /**
+   * Clave INEGI de la entidad (2 digitos).
+   */
+  claveEstadoInegi: string;
+  estado: string;
+  /**
+   * Clave INEGI del municipio dentro de la entidad (3 digitos).
+   */
+  claveMunicipioInegi: string;
+  municipio: string;
+  /**
+   * Distrito de Desarrollo Rural (SIAP), si aplica.
+   */
+  ddr?: string;
+  region?: string;
+}
+export interface EntradaCalendario {
+  cultivo: IdCultivo;
+  temporada: Temporada;
+  regimen: "temporal" | "riego";
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  ventana: VentanaSiembraCitada | ValorNoEvaluable;
+  presencia: PresenciaLocal;
+}
+export interface VentanaSiembraCitada {
+  estado: "EVALUABLE";
+  desdeMes: number;
+  hastaMes: number;
+  desdeDia?: number;
+  hastaDia?: number;
+  fuente: Fuente;
 }
 /**
  * Trazabilidad de un valor (doc 04, principio 5): fuente, coordenada, periodo, unidades y fecha de consulta.
@@ -170,6 +198,55 @@ export interface Fuente {
 export interface Periodo {
   desde: Fecha;
   hasta: Fecha;
+}
+export interface ValorNoEvaluable {
+  estado: "NO_EVALUABLE";
+  /**
+   * Por que falta el valor (parametro sin fuente, dato no disponible, etc.).
+   */
+  motivo: string;
+}
+/**
+ * Si la fuente registra el cultivo en el lugar (por ejemplo, superficie sembrada en SIAP en un periodo). no_registrado permite mostrar el cultivo sin recomendarlo.
+ */
+export interface PresenciaLocal {
+  estado: "registrado" | "no_registrado" | "sin_dato";
+  periodo?: Periodo;
+  fuente: Fuente;
+  nota?: string;
+}
+export interface Advertencia {
+  /**
+   * Identificador estable en MAYUSCULAS, por ejemplo SUELO_SUPUESTO o RESOLUCION_GRUESA.
+   */
+  codigo: string;
+  mensaje: string;
+  severidad: "info" | "aviso" | "critico";
+}
+/**
+ * Serie climatica diaria de un escenario historico (seco, habitual, lluvioso). Es un anio real del historico, no una prediccion. La misma serie aplica a todas las celdas de la parcela.
+ */
+export interface ClimaEscenario {
+  meta: Meta;
+  escenario: Escenario;
+  /**
+   * Anio real del historico que representa el escenario. Siempre visible en la interfaz.
+   */
+  anioReal: number;
+  /**
+   * EVALUABLE con la fuente principal; RESPALDO_HISTORICO si se uso Open-Meteo o cache; EXPLORATORIO si la serie es ilustrativa o esta ajustada ('que pasa si': lluvia x factor); ERROR_DATOS si no hay serie.
+   */
+  estado: "EVALUABLE" | "RESPALDO_HISTORICO" | "EXPLORATORIO" | "ERROR_DATOS" | "NO_EVALUABLE";
+  /**
+   * true si los datos no vienen de la fuente principal (NASA POWER).
+   */
+  respaldo: boolean;
+  coordenada: LonLat;
+  fuente: Fuente;
+  seleccion: SeleccionEscenario;
+  diario: DiaClima[];
+  humedadSuelo?: MetadatoHumedadSuelo;
+  advertencias?: Advertencia[];
 }
 /**
  * Como se eligio el anio del escenario, para que sea reproducible (doc 04).
@@ -229,16 +306,8 @@ export interface MetadatoHumedadSuelo {
    */
   uso: ["condicion_inicial" | "comparacion", ...("condicion_inicial" | "comparacion")[]];
 }
-export interface Advertencia {
-  /**
-   * Identificador estable en MAYUSCULAS, por ejemplo SUELO_SUPUESTO o RESOLUCION_GRUESA.
-   */
-  codigo: string;
-  mensaje: string;
-  severidad: "info" | "aviso" | "critico";
-}
 /**
- * Catalogo propio de cultivos (decision 14/11, doc 13; actividad A1.5), sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y FAO-56 (Kc y duracion de etapas). Cada parametro lleva su fuente o es NO_EVALUABLE; un cultivo con parametros esenciales faltantes es NO_EVALUABLE para el motor.
+ * Catalogo propio de cultivos (decision 14/11, doc 13; actividad A1.5), sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y FAO-56 (Kc y duracion de etapas). Cada parametro lleva su fuente o es NO_EVALUABLE; un cultivo con parametros esenciales faltantes es NO_EVALUABLE para el motor. Solo lleva lo que no depende del lugar: las ventanas de siembra viven en calendario-local.
  */
 export interface CatalogoCultivos {
   meta: Meta;
@@ -267,10 +336,6 @@ export interface Cultivo {
    */
   etapasSensibles?: ("inicial" | "desarrollo" | "media" | "final")[];
   umbrales: UmbralesCultivo;
-  /**
-   * Ventanas de siembra locales (calendario SIAP o INIFAP, V-20). NO_EVALUABLE si no hay calendario con fuente.
-   */
-  ventanasSiembra: [VentanaSiembra, ...VentanaSiembra[]] | ValorNoEvaluable;
   modelo3d?: Modelo3D;
   notas?: string;
 }
@@ -280,13 +345,6 @@ export interface ValorEvaluable {
   unidad: string;
   fuente: Fuente;
   etiqueta?: EtiquetaProcedencia;
-}
-export interface ValorNoEvaluable {
-  estado: "NO_EVALUABLE";
-  /**
-   * Por que falta el valor (parametro sin fuente, dato no disponible, etc.).
-   */
-  motivo: string;
 }
 /**
  * Duracion de las cuatro etapas FAO-56 (inicial, desarrollo, media, final), en dias.
@@ -318,13 +376,6 @@ export interface UmbralesCultivo {
   lluviaAnualMinMm: ValorCitado;
   lluviaAnualMaxMm: ValorCitado;
   tEstresCalorC: ValorCitado;
-}
-export interface VentanaSiembra {
-  temporada: "primavera_verano" | "otono_invierno";
-  desdeMes: number;
-  hastaMes: number;
-  regimen?: "temporal" | "riego";
-  fuente: Fuente;
 }
 /**
  * Prefijo de los archivos .bbmodel (doc 07: <cultivo>_<etapa>.bbmodel).
@@ -422,9 +473,13 @@ export interface PlanSiembra {
   nombre?: string;
   parcelaId: string;
   /**
-   * Como se asigna clima a cada ciclo (doc 05, paso 2; decision A2.8 [EN EVENTO]). mismo_anio: todos los ciclos en el anio del escenario. ventanas_consecutivas: ventanas reales consecutivas del historico. temporada_tipica: cada ciclo en su temporada dentro del anio del escenario. null mientras no se decida.
+   * Calendario local usado para sugerir las fechas, o constancia de que no hay.
    */
-  asignacionClima?: "mismo_anio" | "ventanas_consecutivas" | "temporada_tipica" | null;
+  calendarioLocal: ConCalendarioLocal | SinCalendarioLocal;
+  /**
+   * Como se asigna clima a cada ciclo (doc 05, paso 2). Decidido el 14/11 (A2.8): temporada_tipica, cada ciclo en su temporada tipica (PV u OI) dentro del anio del escenario.
+   */
+  asignacionClima: "temporada_tipica";
   /**
    * @minItems 1
    */
@@ -439,10 +494,26 @@ export interface PlanSiembra {
     [k: string]: [CicloCelda, ...CicloCelda[]];
   } | null;
 }
+export interface ConCalendarioLocal {
+  calendarioId: string;
+}
+export interface SinCalendarioLocal {
+  sinCalendarioLocal: true;
+  motivo: string;
+}
 export interface Ciclo {
   ciclo: number;
   cultivo: IdCultivo;
   siembra: Fecha;
+  temporada: Temporada;
+  /**
+   * Explicacion visible en la interfaz de por que se sugiere o se eligio esa fecha y de donde sale (calendario local y su fuente, o eleccion libre del usuario).
+   */
+  porQue: string;
+  /**
+   * true si la fecha cae en la ventana del calendario local; null si no hay calendario o ventana.
+   */
+  dentroDeVentana?: boolean | null;
 }
 export interface CicloCelda {
   ciclo: number;
@@ -583,6 +654,11 @@ export interface RegistroCelda {
    * Indice relativo de erosion (0 a 1), inspirado en USLE/RUSLE; no son toneladas. null si el pilar no se calcula.
    */
   riesgoErosion: number | null;
+  /**
+   * true si el cultivo se muestra pero no se recomienda en el lugar; el registro explica el motivo y cita la fuente en fuenteMotivo.
+   */
+  noRecomendadoEnLugar?: boolean;
+  fuenteMotivo?: Fuente;
 }
 /**
  * Metricas de una rotacion en los tres escenarios, peor caso, ranking y explicacion (doc 05, pasos 6 a 8). Criterio principal B (decidido el 14/11): puntaje compuesto por escenario, robustez = peor puntaje, minimax de arrepentimiento y desempate por promedio. El criterio A (solo pilar hidrico) se conserva como respaldo si los pilares 2 y 3 (A3.7) no llegan. Los null son huecos que el motor llena con valores calculados, nunca con numeros inventados.
@@ -592,6 +668,10 @@ export interface ResultadoRotacion {
   rotacionId: IdRotacion;
   estado: EstadoEvaluacion;
   filtroClima?: FiltroClima;
+  /**
+   * Cultivos de la rotacion que se muestran pero no se recomiendan en el lugar. Si hay alguno, la rotacion no puede ser EVALUABLE (queda EXPLORATORIO: se ilustra, no se recomienda).
+   */
+  cultivosNoRecomendados?: CultivoNoRecomendado[];
   porEscenario: MetricasPorEscenario;
   /**
    * Escenario en el que la rotacion sale peor segun el criterio de ranking; null si no es evaluable.
@@ -611,6 +691,19 @@ export interface ResultadoRotacion {
   ranking: Ranking | null;
   advertencias: Advertencia[];
   explicacion: Explicacion;
+}
+/**
+ * Cultivo que se muestra en la rotacion pero no se recomienda en ese lugar (por ejemplo, la fuente no lo registra en el municipio).
+ */
+export interface CultivoNoRecomendado {
+  cultivo: IdCultivo;
+  /**
+   * @minItems 1
+   */
+  ciclos: [number, ...number[]];
+  motivo: string;
+  fuente: Fuente;
+  calendarioId?: string;
 }
 export interface MetricasPorEscenario {
   seco: MetricasEscenario;

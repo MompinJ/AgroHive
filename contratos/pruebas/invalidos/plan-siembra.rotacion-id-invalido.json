@@ -1,28 +1,40 @@
 {
   "meta": {
-    "versionContrato": "0.4.0",
+    "versionContrato": "0.5.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
   "rotacionId": "rotacion1",
   "nombre": "Maiz - frijol - maiz (ejemplo)",
   "parcelaId": "parcela-demo-isla",
-  "asignacionClima": null,
+  "calendarioLocal": {
+    "calendarioId": "calendario-demo-isla"
+  },
+  "asignacionClima": "temporada_tipica",
   "ciclos": [
     {
       "ciclo": 1,
       "cultivo": "maiz",
-      "siembra": "2015-06-15"
+      "temporada": "PV",
+      "siembra": "2015-06-15",
+      "porQue": "EJEMPLO: sugerida por el calendario local de Isla (maiz PV, junio a julio); el usuario la confirmo.",
+      "dentroDeVentana": true
     },
     {
       "ciclo": 2,
       "cultivo": "frijol",
-      "siembra": "2015-11-01"
+      "temporada": "OI",
+      "siembra": "2015-11-01",
+      "porQue": "EJEMPLO: sugerida por el calendario local de Isla (frijol OI, octubre a noviembre); el usuario la confirmo.",
+      "dentroDeVentana": true
     },
     {
       "ciclo": 3,
       "cultivo": "maiz",
-      "siembra": "2016-06-15"
+      "temporada": "PV",
+      "siembra": "2016-06-15",
+      "porQue": "EJEMPLO: misma ventana del ciclo 1, en el PV del anio del escenario (temporada_tipica).",
+      "dentroDeVentana": true
     }
   ],
   "porCelda": {
