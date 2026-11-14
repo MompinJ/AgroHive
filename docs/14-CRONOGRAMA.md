@@ -209,7 +209,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 7 | 1 | 0 | 6 | 50 % de 14 |
+| **Mompin** | 8 | 1 | 0 | 5 | 57 % de 14 |
 | **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
 | **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
@@ -229,7 +229,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A3.1 | Escena 3D con relieve (altura por bloque, InstancedMesh) | PENDIENTE |  |
 | A3.2 | Cargador de .bbmodel con instancing por cultivo y etapa | PENDIENTE |  |
 | A3.7 | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | PENDIENTE |  |
-| A4.2 | Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | PENDIENTE |  |
+| A4.2 | Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | HECHO | 14/11 (B listo; corre A de respaldo hasta que A3.7 dé los pilares 2 y 3) |
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | PENDIENTE |  |
 | A5.5 | Pruebas de regresión del motor y de contratos | PENDIENTE |  |
 

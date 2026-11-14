@@ -11,12 +11,12 @@ Generado por `herramientas/cronograma.py` desde `docs/14`; se actualiza cada vez
 | Lugar | Persona | Hecho (ponderado) | Hechas | En curso | Pendientes |
 | --- | --- | --- | --- | --- | --- |
 | 1 | **Eduardo** | 53 % (19 de 36 puntos) | 8 | 2 | 4 |
-| 2 | **Mompin** | 43 % (20 de 47 puntos) | 7 | 1 | 6 |
+| 2 | **Mompin** | 49 % (23 de 47 puntos) | 8 | 1 | 5 |
 | 3 | **Mafer** | 24 % (8 de 34 puntos) | 3 | 0 | 9 |
 | 4 | **balam** | 0 % (0 de 38 puntos) | 0 | 1 | 15 |
 
 1. Eduardo lidera con 53 %: 8 hechas, y el cronograma le da la razon.
-2. Mompin va segundo con 43 %: cerca del podio, lejos de la gloria.
+2. Mompin va segundo con 49 %: cerca del podio, lejos de la gloria.
 3. Mafer va tercero con 24 %: 3 hechas y 9 esperando turno.
 4. balam cierra con 0 %: 15 actividades pendientes lo miran con carino.
 
