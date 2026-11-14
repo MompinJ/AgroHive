@@ -1,0 +1,513 @@
+{
+  "meta": {
+    "prototipo": "features/imerg (rama Mompin-features), no es contrato ni salida del motor",
+    "consulta": {
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?start=20051001&end=20251231&latitude=18.03&longitude=-95.53&community=AG&parameters=IMERG_PRECTOT%2CPRECTOTCORR&format=json&time-standard=UTC",
+      "consultado": "2026-11-14T22:00:25+00:00"
+    },
+    "fuentesPower": [
+      "MERRA2",
+      "IMERG"
+    ],
+    "coordenada": [
+      -95.53,
+      18.03
+    ],
+    "coordenadaNota": "Coordenada ilustrativa del paquete de demo (no es una parcela real).",
+    "estandarHora": "UTC (IMERG no existe en hora solar local en POWER). El dia UTC va unas 6 h corrido respecto al dia local de Veracruz; PRECTOTCORR tambien se pidio en UTC para comparar dia contra dia.",
+    "resolucion": {
+      "IMERG_PRECTOT": "0.1 grados (GPM IMERG)",
+      "PRECTOTCORR": "MERRA-2, 0.5 x 0.625 grados"
+    },
+    "rangos": "Rangos de lluvia acumulada del SMN (via CONADESUCA 2019) aplicados a 24 h: SUPUESTO"
+  },
+  "diasSinDatoImerg": {
+    "total": 0,
+    "primero": null,
+    "ultimo": null
+  },
+  "porAnioAgricola": {
+    "2006": {
+      "imerg": {
+        "totalMm": 2056.0,
+        "maxDiaMm": 221.0,
+        "diasPorRango": {
+          "fuerte": 18,
+          "muy_fuerte": 2,
+          "intensa": 3,
+          "torrencial": 1
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 2044.2,
+        "maxDiaMm": 71.5,
+        "diasPorRango": {
+          "fuerte": 10,
+          "muy_fuerte": 3,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2007": {
+      "imerg": {
+        "totalMm": 1495.3,
+        "maxDiaMm": 113.1,
+        "diasPorRango": {
+          "fuerte": 11,
+          "muy_fuerte": 5,
+          "intensa": 2,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1613.9,
+        "maxDiaMm": 67.3,
+        "diasPorRango": {
+          "fuerte": 7,
+          "muy_fuerte": 1,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2008": {
+      "imerg": {
+        "totalMm": 1686.9,
+        "maxDiaMm": 166.1,
+        "diasPorRango": {
+          "fuerte": 12,
+          "muy_fuerte": 1,
+          "intensa": 1,
+          "torrencial": 1
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1934.0,
+        "maxDiaMm": 79.2,
+        "diasPorRango": {
+          "fuerte": 12,
+          "muy_fuerte": 3,
+          "intensa": 1,
+          "torrencial": 0
+        }
+      }
+    },
+    "2009": {
+      "imerg": {
+        "totalMm": 1387.7,
+        "maxDiaMm": 68.5,
+        "diasPorRango": {
+          "fuerte": 14,
+          "muy_fuerte": 2,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1593.0,
+        "maxDiaMm": 43.5,
+        "diasPorRango": {
+          "fuerte": 9,
+          "muy_fuerte": 0,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2010": {
+      "imerg": {
+        "totalMm": 2436.7,
+        "maxDiaMm": 241.5,
+        "diasPorRango": {
+          "fuerte": 17,
+          "muy_fuerte": 7,
+          "intensa": 3,
+          "torrencial": 1
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 2454.6,
+        "maxDiaMm": 84.4,
+        "diasPorRango": {
+          "fuerte": 17,
+          "muy_fuerte": 5,
+          "intensa": 2,
+          "torrencial": 0
+        }
+      }
+    },
+    "2011": {
+      "imerg": {
+        "totalMm": 1478.5,
+        "maxDiaMm": 85.3,
+        "diasPorRango": {
+          "fuerte": 22,
+          "muy_fuerte": 2,
+          "intensa": 2,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1500.7,
+        "maxDiaMm": 47.7,
+        "diasPorRango": {
+          "fuerte": 11,
+          "muy_fuerte": 0,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2012": {
+      "imerg": {
+        "totalMm": 1800.8,
+        "maxDiaMm": 116.4,
+        "diasPorRango": {
+          "fuerte": 15,
+          "muy_fuerte": 6,
+          "intensa": 2,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 2121.6,
+        "maxDiaMm": 92.0,
+        "diasPorRango": {
+          "fuerte": 11,
+          "muy_fuerte": 0,
+          "intensa": 2,
+          "torrencial": 0
+        }
+      }
+    },
+    "2013": {
+      "imerg": {
+        "totalMm": 1549.6,
+        "maxDiaMm": 65.2,
+        "diasPorRango": {
+          "fuerte": 13,
+          "muy_fuerte": 6,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1794.9,
+        "maxDiaMm": 50.2,
+        "diasPorRango": {
+          "fuerte": 14,
+          "muy_fuerte": 1,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2014": {
+      "imerg": {
+        "totalMm": 1733.1,
+        "maxDiaMm": 234.2,
+        "diasPorRango": {
+          "fuerte": 16,
+          "muy_fuerte": 3,
+          "intensa": 1,
+          "torrencial": 1
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1962.8,
+        "maxDiaMm": 45.7,
+        "diasPorRango": {
+          "fuerte": 16,
+          "muy_fuerte": 0,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2015": {
+      "imerg": {
+        "totalMm": 1489.3,
+        "maxDiaMm": 117.3,
+        "diasPorRango": {
+          "fuerte": 13,
+          "muy_fuerte": 3,
+          "intensa": 2,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1686.7,
+        "maxDiaMm": 67.0,
+        "diasPorRango": {
+          "fuerte": 11,
+          "muy_fuerte": 2,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2016": {
+      "imerg": {
+        "totalMm": 1853.2,
+        "maxDiaMm": 133.8,
+        "diasPorRango": {
+          "fuerte": 18,
+          "muy_fuerte": 3,
+          "intensa": 3,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1908.2,
+        "maxDiaMm": 98.8,
+        "diasPorRango": {
+          "fuerte": 14,
+          "muy_fuerte": 2,
+          "intensa": 1,
+          "torrencial": 0
+        }
+      }
+    },
+    "2017": {
+      "imerg": {
+        "totalMm": 1985.9,
+        "maxDiaMm": 89.8,
+        "diasPorRango": {
+          "fuerte": 20,
+          "muy_fuerte": 5,
+          "intensa": 3,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 2015.2,
+        "maxDiaMm": 51.6,
+        "diasPorRango": {
+          "fuerte": 16,
+          "muy_fuerte": 1,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2018": {
+      "imerg": {
+        "totalMm": 1607.5,
+        "maxDiaMm": 65.7,
+        "diasPorRango": {
+          "fuerte": 15,
+          "muy_fuerte": 4,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1573.1,
+        "maxDiaMm": 55.1,
+        "diasPorRango": {
+          "fuerte": 10,
+          "muy_fuerte": 1,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2019": {
+      "imerg": {
+        "totalMm": 1427.4,
+        "maxDiaMm": 82.2,
+        "diasPorRango": {
+          "fuerte": 10,
+          "muy_fuerte": 5,
+          "intensa": 1,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1457.7,
+        "maxDiaMm": 80.7,
+        "diasPorRango": {
+          "fuerte": 9,
+          "muy_fuerte": 3,
+          "intensa": 1,
+          "torrencial": 0
+        }
+      }
+    },
+    "2020": {
+      "imerg": {
+        "totalMm": 1771.5,
+        "maxDiaMm": 99.5,
+        "diasPorRango": {
+          "fuerte": 16,
+          "muy_fuerte": 6,
+          "intensa": 1,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1988.8,
+        "maxDiaMm": 51.2,
+        "diasPorRango": {
+          "fuerte": 24,
+          "muy_fuerte": 1,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2021": {
+      "imerg": {
+        "totalMm": 1447.7,
+        "maxDiaMm": 69.9,
+        "diasPorRango": {
+          "fuerte": 17,
+          "muy_fuerte": 2,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1889.1,
+        "maxDiaMm": 67.4,
+        "diasPorRango": {
+          "fuerte": 13,
+          "muy_fuerte": 7,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2022": {
+      "imerg": {
+        "totalMm": 1457.3,
+        "maxDiaMm": 59.4,
+        "diasPorRango": {
+          "fuerte": 13,
+          "muy_fuerte": 3,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 2028.1,
+        "maxDiaMm": 65.8,
+        "diasPorRango": {
+          "fuerte": 13,
+          "muy_fuerte": 2,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2023": {
+      "imerg": {
+        "totalMm": 1032.1,
+        "maxDiaMm": 57.7,
+        "diasPorRango": {
+          "fuerte": 10,
+          "muy_fuerte": 2,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 1523.5,
+        "maxDiaMm": 60.2,
+        "diasPorRango": {
+          "fuerte": 8,
+          "muy_fuerte": 2,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2024": {
+      "imerg": {
+        "totalMm": 1575.8,
+        "maxDiaMm": 97.5,
+        "diasPorRango": {
+          "fuerte": 11,
+          "muy_fuerte": 4,
+          "intensa": 1,
+          "torrencial": 0
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 2081.8,
+        "maxDiaMm": 65.5,
+        "diasPorRango": {
+          "fuerte": 17,
+          "muy_fuerte": 1,
+          "intensa": 0,
+          "torrencial": 0
+        }
+      }
+    },
+    "2025": {
+      "imerg": {
+        "totalMm": 1915.9,
+        "maxDiaMm": 161.6,
+        "diasPorRango": {
+          "fuerte": 18,
+          "muy_fuerte": 2,
+          "intensa": 3,
+          "torrencial": 1
+        }
+      },
+      "prectotcorr": {
+        "totalMm": 2082.4,
+        "maxDiaMm": 125.4,
+        "diasPorRango": {
+          "fuerte": 12,
+          "muy_fuerte": 2,
+          "intensa": 2,
+          "torrencial": 0
+        }
+      }
+    }
+  },
+  "escenarios": {
+    "seco": {
+      "p": 0.1,
+      "imerg": {
+        "percentilMm": 1423.4,
+        "anio": 2019
+      },
+      "prectotcorrUtc": {
+        "percentilMm": 1521.2,
+        "anio": 2023
+      },
+      "anioMotorPower": 2023
+    },
+    "habitual": {
+      "p": 0.5,
+      "imerg": {
+        "percentilMm": 1591.7,
+        "anio": 2024
+      },
+      "prectotcorrUtc": {
+        "percentilMm": 1921.1,
+        "anio": 2016
+      },
+      "anioMotorPower": 2016
+    },
+    "lluvioso": {
+      "p": 0.9,
+      "imerg": {
+        "percentilMm": 1992.9,
+        "anio": 2017
+      },
+      "prectotcorrUtc": {
+        "percentilMm": 2086.3,
+        "anio": 2025
+      },
+      "anioMotorPower": 2024
+    }
+  },
+  "mensual": {
+    "meses": 243,
+    "correlacionPearson": 0.923
+  }
+}
