@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "versionContrato": "0.1.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "id": "suelo-demo-isla",
+  "etiqueta": "FUENTE",
+  "origen": "mapa_global",
+  "aviso": "pH y textura estimados por un modelo global; no son una medicion de la parcela. (En este archivo, ademas, son valores ficticios de ejemplo.)",
+  "coordenada": [
+    -95.53,
+    18.03
+  ],
+  "profundidad": {
+    "desdeCm": 0,
+    "hastaCm": 30
+  },
+  "textura": {
+    "estado": "EXPLORATORIO",
+    "etiqueta": "SUPUESTO",
+    "clase": "franco_arenoso",
+    "grupo": "franco",
+    "fraccionesPct": {
+      "arena": 60,
+      "limo": 25,
+      "arcilla": 15
+    },
+    "fuente": {
+      "nombre": "EJEMPLO - valores ficticios (no es una consulta a ISRIC ni OpenLandMap)",
+      "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+    }
+  },
+  "ph": {
+    "estado": "EXPLORATORIO",
+    "etiqueta": "SUPUESTO",
+    "valor": 5.8,
+    "fuente": {
+      "nombre": "EJEMPLO - valores ficticios (no es una consulta a ISRIC ni OpenLandMap)",
+      "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+    }
+  },
+  "agua": {
+    "tawMmPorM": {
+      "estado": "NO_EVALUABLE",
+      "motivo": "Pendiente de la tabla de suelos A1.6 (FAO-56) con fuente."
+    }
+  },
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    }
+  ]
+}
