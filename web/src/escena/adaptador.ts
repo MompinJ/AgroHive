@@ -7,7 +7,9 @@ import type {
   Parcela,
   RegistroCelda,
   ResultadoCeldas,
+  Suelo,
 } from '../../../contratos/tipos/contratos';
+import { claveLosa, grupoDeSuelo } from './suelo';
 import {
   EXAGERACION_VERTICAL_DEFECTO,
   TOPE_CELDAS,
@@ -22,6 +24,8 @@ export interface OpcionesEscena {
   fecha?: string;
   /** Exageracion vertical del relieve (presentacion). */
   exageracionVertical?: number;
+  /** Suelo de la parcela (contrato suelo): su textura.grupo elige el tono y la losa. */
+  suelo?: Suelo | null;
 }
 
 export function estadoVisualDe(registro: RegistroCelda | null): { estado: EstadoVisual; motivo: string | null } {
@@ -70,10 +74,12 @@ export function construirEscena(
   }
   for (const a of parcela.advertencias ?? []) agregarAviso(avisos, a);
 
+  const grupoSuelo = grupoDeSuelo(opciones.suelo);
   const base = {
     esEjemplo,
     parcelaId: parcela.id,
     exageracionVertical: exageracion,
+    grupoSuelo,
     tamanoCeldaM: parcela.tamanoCeldaM,
   };
 
@@ -195,6 +201,7 @@ export function construirEscena(
       etapa: registro?.etapa ?? null,
       avanceEtapa: registro?.avanceEtapa ?? null,
       noRecomendadoEnLugar: registro?.noRecomendadoEnLugar ?? false,
+      losa: claveLosa(grupoSuelo, registro?.humedad),
       registro,
     };
   });

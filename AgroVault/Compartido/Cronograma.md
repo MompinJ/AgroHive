@@ -13,18 +13,19 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 13 | 1 | 0 | 0 | 93 % de 14 |
-| **Eduardo** | 10 | 3 | 2 | 0 | 67 % de 15 |
-| **Mafer** | 8 | 0 | 0 | 4 | 67 % de 12 |
+| **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
+| **Eduardo** | 10 | 3 | 2 | 3 | 56 % de 18 |
+| **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
 | **balam** | 3 | 0 | 0 | 13 | 19 % de 16 |
 
-Proyecto completo: **33 de 56** actividades hechas (59 %), 3 en curso, 2 bloqueadas.
+Proyecto completo: **34 de 60** actividades hechas (57 %), 4 en curso, 2 bloqueadas.
 
 ## Mompin
 
 - [x] **A0.1** Repo Git con 5 ramas y estructura de carpetas `HECHO`
 - [x] **A0.2** Documentación consolidada en docs/ `HECHO`
 - [x] **A1.1** Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS ([[Contratos]]) `HECHO`
+- [x] **A1.7** Contratos para el alcance mundial (13, "Alcance geográfico"): calendario-local con lugar genérico (país más id del lugar; la clave INEGI queda como un caso) y bloque opcional lluviaSatelital (IMERG vía POWER, en UTC) en serie-clima y clima-escenario; cambio compatible `HECHO`
 - [x] **A2.5** Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) `HECHO` — 14/11
 - [x] **A2.6** ET0, ETc y balance de agua por bloque (cubeta) `HECHO` — 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7)
 - [x] **A2.7** Pilar de déficit hídrico y estados de evaluabilidad `HECHO` — 14/11
@@ -51,7 +52,10 @@ Proyecto completo: **33 de 56** actividades hechas (59 %), 3 en curso, 2 bloquea
 - [x] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) `HECHO`
 - [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)
-- [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — desbloqueada: hay token de Earthdata (solo por variable de entorno, nunca en el repo); sondeo confirmado (descarga de un granulo SMAP L3 y lectura de humedad en Isla). Se implementa el cliente SMAP en una rama aparte (Eduardo-B)
+- [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN`
+- [ ] **A4.10** Lluvia GPM IMERG vía NASA POWER (IMERG_PRECTOT con time-standard=UTC, sin cuenta Earthdata) en GET /api/clima y en el paquete de demo, como evidencia: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en features/imerg/ y features/encargos/eduardo-datos-globales.md
+- [ ] **A4.11** NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking
+- [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
 - [-] **A5.8** Respaldo local sin internet y capturas `BLOQUEADO` — espera A2.4 con la zona real y el front conectado (A4.6)
 
@@ -65,7 +69,7 @@ Proyecto completo: **33 de 56** actividades hechas (59 %), 3 en curso, 2 bloquea
 - [x] **A2.12** Bloques de suelo por tipo y humedad `HECHO`
 - [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
 - [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
-- [ ] **A3.9** Cultivos 4 en adelante, props y mascota
+- [/] **A3.9** Cultivos 4 en adelante, props y mascota `EN CURSO`
 - [ ] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento)
 - [ ] **A5.6** Guion, video de demo y ensayo
 - [ ] **A5.7** README con método, fuentes, límites, licencias y declaración de IA

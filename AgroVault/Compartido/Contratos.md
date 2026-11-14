@@ -2,12 +2,12 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: contratos/*.schema.json (v0.8.0, A1.1)
+fuente: contratos/*.schema.json (v0.10.0, A1.1)
 ---
 
 # Contratos
 
-La fuente de verdad son los JSON Schema de `contratos/` (versión `0.8.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.10.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
 - Detalle y reglas: `contratos/README.md`
 - Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`
@@ -26,6 +26,8 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.8.0`, activ
 | `calendario-local.schema.json` | Calendario por municipio (clave INEGI): cultivo, temporada PV/OI, ventana de siembra con fuente y presencia del cultivo en el lugar | `datos/` (A0.6) |
 | `tabla-suelos.schema.json` | TAW por metro y rangos de humedad por clase textural (FAO-56 Tabla 19), con fuente o `NO_EVALUABLE` | `datos/catalogos/` (A1.6) |
 | `serie-clima.schema.json` | Respuesta de `GET /api/clima`: serie diaria del periodo, sin escenario | API `GET /api/clima` |
+| `ndvi.schema.json` | NDVI MOD13Q1 (250 m) por punto, evidencia con límites declarados; no entra al ranking | API `GET /api/ndvi` (A4.11) |
+| `smap.schema.json` | Humedad superficial SMAP L3 (36 km o 9 km, ~0-5 cm), contraste; no entra al ranking ni al balance | API `GET /api/smap` (A4.8) |
 | `clima-escenario.schema.json` | Serie diaria de un año real (seco, habitual, lluvioso) y cómo se eligió; humedad de POWER opcional (`humedadRaizFraccionSat`, fracción de saturación) | Motor (A2.5), desde `serie-clima` |
 | `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo bandas por mes, `horizonteMeses` fijo en 6 | API + motor (A2.13) |
 | `plan-siembra.schema.json` | Rotación del selector: cultivo, temporada y fecha elegida por el usuario por ciclo, con `porQue`; `calendarioLocal` usado; `asignacionClima` = `temporada_tipica` | Front (selector) |
@@ -40,6 +42,7 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.8.0`, activ
 - `NO_EVALUABLE` o `ERROR_DATOS` en una celda ⇒ todos sus indicadores en `null`, nunca en 0. Si el estado no es `EVALUABLE`, el registro lleva `motivo`.
 - El suelo ya no va dentro de la parcela: es su propio documento y la parcela lo enlaza con `sueloId`.
 - `fuente` es un objeto (nombre, url, coordenada, periodo, unidades, consultado), no un texto. La radiación diaria se llama `radiacionMjM2Dia`.
+- Alcance mundial (0.10.0): `calendario-local` acepta un lugar genérico (`paisIso` ISO 3166-1 alfa-2 y `unidadAdministrativa` con su sistema de claves; las claves INEGI siguen válidas en México). `lluviaSatelital` (IMERG vía POWER, en UTC) es evidencia: no entra al balance ni a los escenarios; el -999 de POWER va como `null`.
 - Próxima temporada por rotación (0.8.0): `resultado-rotacion.proximaTemporada` evalúa la rotación con años análogos reales; es `EXPLORATORIO`, `esPrediccion: false`, solo rangos entre análogos y no entra al ranking.
 - Próxima temporada (capa de clima): `esPrediccion` es siempre `false`, el `aviso` es obligatorio y cada mes trae bandas `{inferior, superior}` sin cifra única.
 - Ranking: el criterio principal es B (`B_minimax_arrepentimiento`; `[DECIDIDO]` el 14/11). Con B, el resultado lleva `puntaje` por escenario, `arrepentimiento` y `ponderacion` (pesos, etiqueta `SUPUESTO`/`USUARIO`/`FUENTE`, pilares excluidos). A (`A_exposicion_hidrica_peor_caso`) queda de respaldo si A3.7 no llega; con A, `puntaje`, `arrepentimiento` y `ponderacion` van en `null`. Ejemplo del respaldo: `contratos/ejemplos/resultado-rotacion.respaldo-a.ejemplo.json`.

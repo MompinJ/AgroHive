@@ -3,13 +3,13 @@
 // Punto de integracion propuesto: ver web/src/escena/INTEGRACION.md.
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Advertencia, Parcela, ResultadoCeldas } from '../../../contratos/tipos/contratos';
+import type { Advertencia, Parcela, ResultadoCeldas, Suelo } from '../../../contratos/tipos/contratos';
 import { construirEscena } from './adaptador';
 import { describirBloque, entradasLeyenda, type EntradaLeyenda } from './leyenda';
 import { EXAGERACION_VERTICAL_DEFECTO, type BloqueEscena } from './modelo';
 import { rgbaPlaca } from './placa';
 import { EscenaThree, ErrorWebGL } from './render/escena-three';
-import { TEXTO_ESCALA_SUELO } from './suelo';
+import { textoEscalaSuelo } from './suelo';
 import './escena.css';
 
 export interface EscenaParcelaProps {
@@ -18,6 +18,8 @@ export interface EscenaParcelaProps {
   resultado: ResultadoCeldas | null;
   /** Fecha de los registros a mostrar (slider de meses, A5.2). Por defecto, la primera. */
   fecha?: string;
+  /** Suelo de la parcela (GET /api/suelo o selector manual): su tipo elige el tono y las losas (A2.12). */
+  suelo?: Suelo | null;
   className?: string;
   /** Solo para mediciones (vista previa, A5.4): recibe la escena three ya creada. */
   onEscena?: (escena: EscenaThree | null) => void;
@@ -42,7 +44,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, className = '', onEscena }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, className = '', onEscena }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -52,8 +54,8 @@ export function EscenaParcela({ parcela, resultado, fecha, className = '', onEsc
   const [sinWebGL, setSinWebGL] = useState(false);
 
   const modelo = useMemo(
-    () => construirEscena(parcela, resultado, { exageracionVertical: exageracion, ...(fecha ? { fecha } : {}) }),
-    [parcela, resultado, fecha, exageracion],
+    () => construirEscena(parcela, resultado, { exageracionVertical: exageracion, suelo, ...(fecha ? { fecha } : {}) }),
+    [parcela, resultado, fecha, exageracion, suelo],
   );
   const leyenda = useMemo(() => entradasLeyenda(modelo), [modelo]);
 
@@ -164,7 +166,7 @@ export function EscenaParcela({ parcela, resultado, fecha, className = '', onEsc
             </li>
           ))}
         </ul>
-        <p className="escena-detalle">{TEXTO_ESCALA_SUELO}</p>
+        <p className="escena-detalle">{textoEscalaSuelo(modelo.grupoSuelo)}</p>
       </div>
 
       {otros.length > 0 && (

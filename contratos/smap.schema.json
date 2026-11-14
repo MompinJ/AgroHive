@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/smap.schema.json",
+  "title": "Smap",
+  "description": "Respuesta de GET /api/smap (A4.8): humedad del suelo superficial de SMAP L3 en la celda del punto (36 km; 9 km en el producto enriquecido), por dia y por pase. Profundidad declarada de unos 0 a 5 cm, unidad m3/m3. Es CONTRASTE con la humedad de raiz del motor: nunca es una medicion de la parcela y no entra al ranking ni al balance. Forma tomada de api/app/modelos_smap.py (Eduardo).",
+  "type": "object",
+  "required": [
+    "meta",
+    "estado",
+    "etiqueta",
+    "aviso",
+    "coordenada",
+    "fuente",
+    "dias"
+  ],
+  "properties": {
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
+    "estado": {
+      "type": "string",
+      "enum": [
+        "EVALUABLE",
+        "EXPLORATORIO",
+        "NO_EVALUABLE",
+        "ERROR_DATOS"
+      ]
+    },
+    "etiqueta": {
+      "const": "SUPUESTO"
+    },
+    "aviso": {
+      "type": "string",
+      "minLength": 1
+    },
+    "coordenada": {
+      "$ref": "comun.schema.json#/$defs/lonLat"
+    },
+    "producto": {
+      "title": "ProductoSmap",
+      "type": "object",
+      "required": [
+        "nombre",
+        "resolucionKm"
+      ],
+      "properties": {
+        "nombre": {
+          "description": "Por ejemplo SPL3SMP (36 km) o SPL3SMP_E (9 km enriquecido).",
+          "type": "string",
+          "minLength": 1
+        },
+        "resolucionKm": {
+          "enum": [
+            36,
+            9
+          ]
+        },
+        "profundidadCm": {
+          "title": "ProfundidadSmap",
+          "type": "object",
+          "required": [
+            "desde",
+            "hasta"
+          ],
+          "properties": {
+            "desde": {
+              "type": "number",
+              "minimum": 0
+            },
+            "hasta": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "unidad": {
+          "const": "m3/m3"
+        }
+      },
+      "additionalProperties": false
+    },
+    "celda": {
+      "title": "CeldaSmap",
+      "type": "object",
+      "required": [
+        "fila",
+        "columna",
+        "centro"
+      ],
+      "properties": {
+        "fila": {
+          "type": "integer"
+        },
+        "columna": {
+          "type": "integer"
+        },
+        "centro": {
+          "$ref": "comun.schema.json#/$defs/lonLat"
+        }
+      },
+      "additionalProperties": false
+    },
+    "fuente": {
+      "$ref": "comun.schema.json#/$defs/fuente"
+    },
+    "dias": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dia"
+      }
+    },
+    "advertencias": {
+      "type": "array",
+      "items": {
+        "$ref": "comun.schema.json#/$defs/advertencia"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "pase": {
+      "title": "PaseSmap",
+      "type": "object",
+      "required": [
+        "pase"
+      ],
+      "properties": {
+        "pase": {
+          "enum": [
+            "AM",
+            "PM"
+          ]
+        },
+        "humedadM3M3": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "banderaCalidad": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "dia": {
+      "title": "DiaSmap",
+      "type": "object",
+      "required": [
+        "fecha",
+        "estado"
+      ],
+      "properties": {
+        "fecha": {
+          "$ref": "comun.schema.json#/$defs/fecha"
+        },
+        "estado": {
+          "type": "string",
+          "enum": [
+            "EVALUABLE",
+            "EXPLORATORIO",
+            "NO_EVALUABLE",
+            "ERROR_DATOS"
+          ]
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "granulo": {
+          "type": "string"
+        },
+        "pases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pase"
+          }
+        },
+        "humedadM3M3": {
+          "description": "Media de los pases con dato (m3/m3); ausente o null si ninguno.",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "Sin dato: motivo obligatorio y sin humedad (nunca 0).",
+          "if": {
+            "properties": {
+              "estado": {
+                "enum": [
+                  "NO_EVALUABLE",
+                  "ERROR_DATOS"
+                ]
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "required": [
+              "motivo"
+            ],
+            "properties": {
+              "humedadM3M3": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

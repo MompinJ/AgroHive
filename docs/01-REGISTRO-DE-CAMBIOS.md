@@ -12,6 +12,20 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Losas de suelo de A2.12 en la escena (Mompin, rama `Mompin-escena`)
+
+- **Archivos:** `web/src/escena/suelo.ts`, `adaptador.ts`, `modelo.ts`, `render/escena-three.ts`, `voxel/fuente-modelos.ts`, `EscenaParcela.tsx` (nueva prop `suelo`), `vista-previa.tsx`, prueba `suelo-escena.test.ts`; `docs/06`, `INTEGRACION.md`.
+- **Cambio:** la escena carga las 9 losas de Mafer (`modelos/suelos/`) y pinta la columna con el tono del tipo de suelo. La losa sale de `textura.grupo` del contrato `suelo` y de la `humedad` del motor, con cortes en tercios de TAW `[PROPUESTA]`. Si falta el tipo o la humedad no hay losa, y sin humedad la columna va en gris.
+- **Fuente / evidencia:** tonos tomados de `modelos/paleta.md` (verificado en prueba); 159 pruebas de escena; headless con el motor real: suelo del mapa de Isla (arcilloso) y selector manual (franco).
+
+### 2026-11-14 — Alcance mundial, recursos del reto evaluados e IMERG vía POWER (Mompin, sesión features)
+
+- **Archivos:** `docs/13` (fila "Alcance geográfico" `[DECIDIDO]`), `docs/11` (recursos del reto evaluados y tres riesgos), `docs/14` (A1.7, A4.10, A4.11, A4.12; plan de recorte; tablero), `docs/04` (filas de GPM IMERG y MODIS), `docs/03` (extra de fase 2), `AgroVault/Compartido/APIs.md`; prototipo en `features/imerg/` y encargo en `features/encargos/eduardo-datos-globales.md`.
+- **Decisión (Mompin):** arquitectura mundial con fuentes globales y demo validada en Isla; las fuentes de cada país se suman encima. Los recursos del reto que solo cubren EE. UU. pasan a extra de fase 2 (A4.12, Eduardo). IMERG vía POWER (A4.10) y NDVI de MODIS (A4.11) para Eduardo; contratos para el alcance mundial (A1.7) para Mompin.
+- **Hallazgo:** NASA POWER entrega GPM IMERG (`IMERG_PRECTOT`, 0.1°) sin cuenta Earthdata si se pide con `time-standard=UTC`; en hora local responde `-999`. Con 20 años agrícolas en Isla, IMERG tiene máximos diarios de hasta 241.5 mm (`PRECTOTCORR`: 125.4 mm como máximo) y correlación mensual de 0.923, pero elegiría otros años de escenario (2019, 2024 y 2017). No se cambia la fuente de los escenarios; queda como riesgo en 11.
+- **Fuente / evidencia:** `python3 features/imerg/comparar_imerg.py` (respuesta cruda de POWER guardada, consultada el 14/11/2026) y `python3 -m unittest discover -s features/imerg`.
+- **Decisiones afectadas:** 05 paso 1 (sin cambio, riesgo declarado), A4.8 (IMERG vía POWER es la ruta barata), V-09 y calendario fuera de México (`NO_EVALUABLE`).
+
 ### 2026-11-14 — Escena con la cuadrícula de balam (A2.9) y revisión de A3.3/A2.11 (Mompin, rama `Mompin-escena`)
 
 - **Archivos:** `web/src/escena/adaptador.ts`, `placa.ts`, `demo-motor.ts`, `vista-previa.tsx`, `INTEGRACION.md`, pruebas `cuadricula-balam.test.ts` y `estados.test.ts`; `docs/06`.
@@ -188,6 +202,18 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — A1.7: contratos 0.10.0 para el alcance mundial (compatible)
+
+- **Archivos:** `contratos/{serie-clima,clima-escenario,calendario-local}.schema.json`, nuevos `contratos/ndvi.schema.json` y `contratos/smap.schema.json`, ejemplos (uno fuera de México y uno con IMERG), 11 casos inválidos, tipos, README; `13`, `14` (A1.7 `[HECHO]`); vault.
+- **Cambio y motivo:** A1.7 (decisión de Mompin, 13 "Alcance geográfico").
+  1. `lluviaSatelital` {variable `IMERG_PRECTOT`, estandarHora `UTC`, fuente, dias [{fecha, lluviaMm o null}]}, opcional: evidencia que no entra al balance ni a los escenarios; el -999 va como `null`.
+  2. `calendario-local.ubicacion` acepta la forma INEGI (como el calendario de Isla de Mafer, que sigue validando) o la forma genérica `paisIso` + `unidadAdministrativa` {sistema, clave, nombre, nivel}.
+  3. `ndvi`: punto, producto MOD13Q1 (250 m, 16 días, escala), serie con estado por dato (sin dato, `null` y motivo, nunca 0), fuente con cita doi:10.3334/ORNLDAAC/1600 y los tres límites obligatorios (píxel mayor que la parcela, no muestra el cultivo, no entra al ranking).
+  4. `smap`: forma tomada de `api/app/modelos_smap.py` de Eduardo (rama `Eduardo`), más `producto` opcional (36 o 9 km, ~0-5 cm, m3/m3). Es contraste y no entra al ranking ni al balance.
+  No se tocó la descripción de las celdas de la parcela (pendiente de Mompin).
+- **Fuente / evidencia:** `features/encargos/eduardo-datos-globales.md`. `npm test` 82/82; el calendario de Isla y los catálogos validan.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Contratos 0.9.0 (rama `contratos-nulos`): regla de pilar sin dato para todos los pilares `[DECIDIDO]`
 
 - **Archivos:** `contratos/resultado-rotacion.schema.json`, versión en ejemplos e inválidos, 5 casos inválidos nuevos, README; `13`.
@@ -246,6 +272,15 @@ Decisiones afectadas:
 - **Archivos:** `.gitignore`; se dejan de versionar `.vscode/tasks.json`, `.vscode/settings.json`, `.vscode/agrohive.code-snippets` y `.vscode/mascota/clawd.py`.
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
+
+### 2026-11-14 (noche) — A4.8: GET /api/smap (SMAP L3 36 km), contraste informativo (Eduardo, sesion B)
+
+- **Archivos:** `api/app/clientes/earthdata.py`, `api/app/rutas/smap.py`, `api/app/modelos_smap.py`, `api/tests/test_smap.py`, `api/app/main.py`, `api/requirements.txt` (earthaccess y h5py), OpenAPI y cliente regenerados, `api/README.md`, `docs/14`. Hecho en la rama `Eduardo-B` y mezclado en `Eduardo` por la sesion A tras revisarlo.
+- **Cambio:** `GET /api/smap?lon&lat&desde&hasta` devuelve la humedad del suelo superficial (~5 cm) de SMAP L3 (SPL3SMP, 36 km) por dia y pase AM/PM, con la bandera de calidad sin interpretar, fuente, resolucion y periodo. Alcance acordado con Mompin (#82): **contraste informativo, EXPLORATORIO, fuera del ranking y del balance**. Maximo 10 dias, hasta hoy menos 3 (SMAP publica con retraso).
+- **Token:** solo por la variable de entorno `EARTHDATA_TOKEN`; no esta en el repo, la cache ni los logs (revisado el diff: sin credenciales literales). Sin token, 503 `ERROR_DATOS` con motivo.
+- **Evidencia:** 73 pruebas de la API (13 nuevas, sin red ni token); lectura real en Isla el 2025-06-15: celda (140, 226), humedad PM 0.1754 m3/m3, coincide con el granulo completo.
+- **Limites a decir:** ~20 s por dia (lectura por rangos HTTP) y celda de 36 km (una parcela cabe entera en una celda); mide ~5 cm y **no** es la zona de raices que usa el motor.
+- **Pendiente:** el schema `smap.schema.json` en `contratos/` (propuesta a Mompin; hasta entonces la forma de la respuesta es una propuesta y no hay prueba contra contratos) y el OK **explicito del usuario** para poner `EARTHDATA_TOKEN` en el droplet; no se desplegara antes.
 
 ### 2026-11-14 (noche) — A4.6: cargador de datos de la parcela (Eduardo)
 

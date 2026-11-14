@@ -45,6 +45,9 @@ export interface EstadisticasRender {
 
 /** Hueco de una celda sin elevacion: por debajo del punto mas bajo, nunca "a nivel cero". */
 const TOPE_HUECO = -GROSOR_BASE * 0.6;
+/** Losas de suelo (A2.12): cuerpo de 2 unidades bajo su cara superior y detalle de hasta 1 unidad encima. */
+const CUERPO_LOSA = 2 / 16;
+const DETALLE_LOSA = 1 / 16;
 const LADO_BLOQUE = 0.96;
 const LADO_PLACA_ESCENA = 0.82;
 
@@ -182,6 +185,7 @@ export class EscenaThree {
     this.construirTerreno(modelo);
     this.ajustarTamano();
     this.restablecerVista();
+    void this.construirLosas(modelo, version);
     void this.construirPlantas(modelo, version);
   }
 
@@ -226,10 +230,12 @@ export class EscenaThree {
       const mat = this.registrar(new THREE.MeshLambertMaterial());
       const suelo = new THREE.InstancedMesh(caja, mat, medidos.length);
       medidos.forEach((b, k) => {
-        const tope = b.relieve.tipo === 'medido' ? b.relieve.alturaEscena : 0;
+        // Con losa, la columna baja lo que mide el cuerpo de la losa: la cara superior de la losa
+        // queda a la altura del relieve y no se encima con la de la columna.
+        const tope = (b.relieve.tipo === 'medido' ? b.relieve.alturaEscena : 0) - (this.losaDe(b) ? CUERPO_LOSA : 0);
         m.compose(new THREE.Vector3(b.x, -GROSOR_BASE, b.z), q, new THREE.Vector3(LADO_BLOQUE, tope + GROSOR_BASE, LADO_BLOQUE));
         suelo.setMatrixAt(k, m);
-        const [r, g, bl] = colorSuelo(b.registro?.humedad ?? null);
+        const [r, g, bl] = colorSuelo(b.registro?.humedad ?? null, modelo.grupoSuelo);
         suelo.setColorAt(k, color.setRGB(r / 255, g / 255, bl / 255, THREE.SRGBColorSpace));
       });
       suelo.instanceMatrix.needsUpdate = true;
@@ -268,7 +274,8 @@ export class EscenaThree {
       const mat = this.registrar(new THREE.MeshBasicMaterial({ map: tex, polygonOffset: true, polygonOffsetFactor: -1 }));
       const placa = new THREE.InstancedMesh(plano, mat, lista.length);
       lista.forEach((b, k) => {
-        m.compose(new THREE.Vector3(b.x, this.topeDe(b) + 0.002, b.z), q, new THREE.Vector3(1, 1, 1));
+        // Sobre la losa, la placa va por encima de su detalle para que no la tape.
+        m.compose(new THREE.Vector3(b.x, this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0) + 0.002, b.z), q, new THREE.Vector3(1, 1, 1));
         placa.setMatrixAt(k, m);
       });
       placa.instanceMatrix.needsUpdate = true;
@@ -282,6 +289,49 @@ export class EscenaThree {
 
   private topeDe(b: BloqueEscena): number {
     return b.relieve.tipo === 'medido' ? b.relieve.alturaEscena : TOPE_HUECO;
+  }
+
+  /** Losa que lleva el bloque: solo con relieve medido y si el .bbmodel existe. */
+  private losaDe(b: BloqueEscena): string | null {
+    return b.relieve.tipo === 'medido' && b.losa && MODELOS_DISPONIBLES.has(b.losa) ? b.losa : null;
+  }
+
+  /** Losas de suelo (A2.12): un InstancedMesh por losa, con giro de 90 grados estable por celda. */
+  private async construirLosas(modelo: EscenaModelo, version: number) {
+    const porLosa = new Map<string, BloqueEscena[]>();
+    for (const b of modelo.bloques) {
+      const clave = this.losaDe(b);
+      if (!clave) continue;
+      porLosa.set(clave, [...(porLosa.get(clave) ?? []), b]);
+    }
+    if (porLosa.size === 0) return;
+    const mat = this.registrar(new THREE.MeshLambertMaterial({ vertexColors: true }));
+    const m = new THREE.Matrix4();
+    const q = new THREE.Quaternion();
+    const eje = new THREE.Vector3(0, 1, 0);
+    const uno = new THREE.Vector3(1, 1, 1);
+    for (const [clave, lista] of [...porLosa].sort(([a], [b]) => a.localeCompare(b))) {
+      let geo: THREE.BufferGeometry;
+      try {
+        geo = await this.geometriaDe(clave, 'bbmodel');
+      } catch (e) {
+        this.opciones.onAviso?.('LOSA_ILEGIBLE', `${clave}.bbmodel no se pudo leer (${(e as Error).message}); esas celdas quedan sin losa.`);
+        continue;
+      }
+      if (version !== this.version) return;
+      const losas = new THREE.InstancedMesh(geo, mat, lista.length);
+      lista.forEach((b, k) => {
+        q.setFromAxisAngle(eje, (giroCelda(b.celdaId) * Math.PI) / 2);
+        m.compose(new THREE.Vector3(b.x, this.topeDe(b), b.z), q, uno);
+        losas.setMatrixAt(k, m);
+      });
+      losas.instanceMatrix.needsUpdate = true;
+      losas.computeBoundingSphere();
+      losas.name = `losa-${clave}`;
+      this.raiz.add(losas);
+      this.bloquesPorMalla.set(losas, lista);
+      this.pedirCuadro();
+    }
   }
 
   // ------------------------------------------------------------------ plantas (A3.2)

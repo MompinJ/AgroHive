@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "versionContrato": "0.10.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "estado": "EXPLORATORIO",
+  "aviso": "NDVI de un pixel de 250 m (mayor que la parcela): muestra el verdor de la zona, no el cultivo del usuario, y no entra al ranking. (Valores ficticios de ejemplo.)",
+  "coordenada": [
+    -95.53,
+    18.03
+  ],
+  "periodo": {
+    "desde": "2015-05-25",
+    "hasta": "2015-07-12"
+  },
+  "producto": {
+    "nombre": "MOD13Q1",
+    "version": "061",
+    "banda": "250m_16_days_NDVI",
+    "pixelM": 250,
+    "compuestoDias": 16,
+    "escala": 0.0001
+  },
+  "fuente": {
+    "nombre": "EJEMPLO - estructura de ORNL DAAC MODIS (MOD13Q1), valores ficticios",
+    "url": "https://modis.ornl.gov/rst/api/v1/",
+    "cita": "ORNL DAAC. MODIS and VIIRS Land Products Global Subsetting and Visualization Tool. doi:10.3334/ORNLDAAC/1600",
+    "resolucion": "250 m",
+    "nota": "Los valores de esta serie son inventados."
+  },
+  "limites": [
+    "PIXEL_MAYOR_QUE_PARCELA",
+    "NO_MUESTRA_CULTIVO_DEL_USUARIO",
+    "NO_ENTRA_AL_RANKING"
+  ],
+  "serie": [
+    {
+      "fecha": "2015-05-25",
+      "ndvi": 0.41,
+      "estado": "EXPLORATORIO",
+      "motivo": "Valor ficticio de ejemplo.",
+      "calidad": 0
+    },
+    {
+      "fecha": "2015-06-10",
+      "ndvi": 0.48,
+      "estado": "EXPLORATORIO",
+      "motivo": "Valor ficticio de ejemplo.",
+      "calidad": 1
+    },
+    {
+      "fecha": "2015-06-26",
+      "ndvi": null,
+      "estado": "NO_EVALUABLE",
+      "motivo": "EJEMPLO: pixel nublado o sin dato en el compuesto.",
+      "calidad": 3
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    }
+  ]
+}

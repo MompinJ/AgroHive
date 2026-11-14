@@ -139,6 +139,9 @@
       "description": "Metadatos de la humedad de suelo de POWER si la serie la incluye.",
       "$ref": "#/$defs/humedadSuelo"
     },
+    "lluviaSatelital": {
+      "$ref": "#/$defs/lluviaSatelital"
+    },
     "advertencias": {
       "type": "array",
       "items": {
@@ -269,6 +272,54 @@
               "condicion_inicial",
               "comparacion"
             ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "lluviaSatelital": {
+      "title": "LluviaSatelital",
+      "description": "Lluvia por satelite GPM IMERG via NASA POWER (IMERG_PRECTOT, en UTC; sin UTC POWER no la entrega). Es EVIDENCIA: no entra al balance ni a la eleccion de escenarios. El -999 de POWER (fill_value) se guarda como null, nunca como 0. IMERG existe desde 2000-06-01 y los ultimos meses pueden faltar. Opcional (agregado en 0.10.0).",
+      "type": "object",
+      "required": [
+        "variable",
+        "estandarHora",
+        "fuente",
+        "dias"
+      ],
+      "properties": {
+        "variable": {
+          "const": "IMERG_PRECTOT"
+        },
+        "estandarHora": {
+          "const": "UTC"
+        },
+        "fuente": {
+          "description": "NASA POWER (GPM IMERG, 0.1 grados), con fecha de consulta.",
+          "$ref": "comun.schema.json#/$defs/fuente"
+        },
+        "dias": {
+          "type": "array",
+          "items": {
+            "title": "DiaLluviaSatelital",
+            "type": "object",
+            "required": [
+              "fecha",
+              "lluviaMm"
+            ],
+            "properties": {
+              "fecha": {
+                "$ref": "comun.schema.json#/$defs/fecha"
+              },
+              "lluviaMm": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false
           }
         }
       },

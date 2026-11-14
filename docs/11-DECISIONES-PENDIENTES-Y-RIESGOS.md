@@ -48,6 +48,24 @@
 - **Prioridades del agricultor** (agua, ingreso, suelo) que ponderen el ranking.
 - Sliders "qué pasa si" (lluvia −20 %, temperatura +2 °C).
 
+## Recursos del reto evaluados (14/11, sesión features)
+
+Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Alcance geográfico"). "Probado" = llamada real del 14/11.
+
+| Recurso | Veredicto | Por qué |
+| --- | --- | --- |
+| GPM IMERG | **Sí**, A4.10 | Viene dentro de NASA POWER (`IMERG_PRECTOT`, `time-standard=UTC`, sin cuenta; probado). 0.1°, desde 2000. Ve tormentas que MERRA-2 aplana; es evidencia y no cambia los escenarios (ver riesgos) |
+| MODIS NDVI | **Después**, A4.11 | REST de ORNL DAAC sin cuenta (probado). Evidencia visual; píxel de 250 m, no entra al ranking |
+| SRTM, ERA5 | Ya integrados | Terrarium (elevación compuesta de SRTM y otras fuentes) y respaldo Open-Meteo (ERA5) |
+| SMAP | Después (A4.8) | 9 a 36 km, cuenta Earthdata, capa superficial; cubre los tres años de escenario (desde 2015), útil para contrastar la humedad |
+| FAO GAEZ v4 | **Sí, como respaldo del pilar 2 fuera de México** (falta decidir quién y cuándo) | ArcGIS REST público sin llave (`gaez-services.fao.org/server/rest/services/res05` aptitud, `res02` inicio y duración del ciclo; probado 14/11, unos 5 s por punto) y GeoTIFF directo; 5' (~9 km); clima CRUTS32 1981-2010. Trae maíz y frijol (Phaseolus), **no calabaza ni chile**. En (18.03, -95.53), temporal, insumo bajo: aptitud del maíz 5556/10000 e inicio de ciclo día 106 (~16 de abril, dentro de PV). Licencia **CC BY-NC-SA 4.0** (catálogo de FAO): no comercial. Cita: Fischer et al. 2021, doi:10.4060/cb4744en. Buscar la capa por `name`, porque los `objectid` cambian |
+| Calendario de siembra mundial | **GGCMI fase 3 como respaldo** fuera de México; GEOGLAM si trae México | GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food; doi:10.5281/zenodo.5062513, CC BY 4.0): siembra y madurez de temporal a 0.5°, maíz `mai_rf` y frijol `bea_rf` (`[VERIFICAR]` que "bea" sea frijol). GEOGLAM Crop Monitor (doi:10.5281/zenodo.15850408, CC BY 4.0): por estado, con temporadas de maíz equivalentes a PV y OI; que México venga en la descarga está `[VERIFICAR]`. SAGE (Sacks et al. 2010) es de los años 90 y débil en leguminosas. La API de FAO Crop Calendar (sin documentar) no respondió el 14/11. Ninguna trae calabaza ni chile: para esos cultivos, `NO_EVALUABLE` fuera de México |
+| Landsat / HLS / Sentinel-2 | No antes de C4 | Resolución útil (10 a 30 m), pero nubes en temporal y procesamiento pesado |
+| GLDAS, ECOSTRESS, GEDI | No | Repite `GWETROOT`; revisita irregular y nubes; estructura de bosque |
+| WSS, SSURGO/STATSGO2, CDL, PRISM, NAIP, NLCD, OpenET, LANDFIRE, NWIS, AMS, NASS, Ag Data Commons | Extra fase 2 (A4.12) | Solo EE. UU.; CDL y SSURGO son los únicos que aportan algo propio (rotación real y suelo de campo) |
+| NLDAS | No | Su dominio llega al sur solo hasta 25°N; Isla está en ~18°N |
+| CoCoRaHS | No | Sin evidencia de que opere en México `[VERIFICAR]` |
+
 ## Se decide después (menor)
 - Numeración y nombres de documentos.
 - Secciones que falten o sobren.
@@ -91,6 +109,9 @@
 | Rendimiento pobre en equipos modestos | Medio | Tope de celdas, instancing, modo 2D |
 | Ediciones simultáneas en Drive | Bajo | Un archivo por responsable; registrar en 01 |
 | Percepción de "plantilla de IA" | Bajo | Arte y UI propios |
+| Los años seco / habitual / lluvioso dependen de la fuente de lluvia: con IMERG serían 2019, 2024 y 2017 en vez de 2023, 2016 y 2024 (`features/imerg/`, 14/11) | Medio | Se mantiene `PRECTOTCORR` (decisión vigente, 05 paso 1) y se declara el hallazgo en método y pitch; IMERG se muestra como contraste (A4.10); validar contra una estación del SMN si se consigue `[VERIFICAR]` |
+| Fuera de México no hay calendario de siembra con fuente (alcance mundial, 13) | Medio | Calendario y pilar de compatibilidad `NO_EVALUABLE` con motivo; respaldo mundial con GGCMI fase 3 (calendario) y GAEZ v4 (aptitud), ver "Recursos del reto evaluados"; calabaza y chile quedan `NO_EVALUABLE` fuera de México |
+| Demo validada solo en Isla aunque la arquitectura sea mundial | Bajo | Decir "probado en Isla"; no afirmar validación en otros lugares |
 
 ## Diferencias resueltas entre las versiones anteriores
 

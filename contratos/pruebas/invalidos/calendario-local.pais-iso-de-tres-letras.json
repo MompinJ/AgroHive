@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "versionContrato": "0.10.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "id": "calendario-demo-fuera-de-mexico",
+  "ubicacion": {
+    "pais": "Estados Unidos",
+    "paisIso": "USA",
+    "unidadAdministrativa": {
+      "sistema": "FIPS",
+      "clave": "00000",
+      "nombre": "Condado de ejemplo",
+      "nivel": 2
+    },
+    "region": "EJEMPLO"
+  },
+  "entradas": [
+    {
+      "cultivo": "maiz",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "EXPLORATORIO",
+      "motivo": "Ventana ficticia de ejemplo.",
+      "ventana": {
+        "estado": "EVALUABLE",
+        "desdeMes": 6,
+        "hastaMes": 7,
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (forma de un calendario agricola local)",
+          "nota": "No proviene de ninguna consulta real."
+        }
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (forma de una estadistica agricola local)",
+          "nota": "No proviene de ninguna consulta real."
+        }
+      }
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    }
+  ]
+}

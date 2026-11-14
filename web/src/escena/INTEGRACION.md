@@ -11,6 +11,7 @@ import { EscenaParcela } from '../escena/EscenaParcela';
   parcela={parcela}       // contrato parcela (front + POST /api/elevacion)
   resultado={resultado}   // contrato resultado-celda del motor, o null si aún no hay
   fecha={fecha}           // opcional: fecha de los registros (slider de meses, A5.2)
+  suelo={suelo}           // opcional: contrato suelo (GET /api/suelo o selector manual); su tipo elige tono y losas
 />
 ```
 

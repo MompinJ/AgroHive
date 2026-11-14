@@ -139,7 +139,7 @@ Eduardo toma el servidor (A0.4, A4.7).
 
 ## Estado del repo (14/11, noche)
 
-Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1 `[HECHO]` el 14/11: JSON Schema v0.8.0, ejemplos ficticios, `npm test` y tipos TS; ver [[Contratos]]). También hay código: `api/` (FastAPI de Eduardo, con pruebas), `web/` (esqueleto de balam) y `datos/catalogos/` (cultivos y suelos de Mafer). Antes de subir a `main` se corren las cuatro verificaciones (ver [[Reglas]]). A2.16 (TAW por Saxton y Rawls) la hace Mafer.
+Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1 `[HECHO]` el 14/11: JSON Schema v0.10.0, ejemplos ficticios, `npm test` y tipos TS; ver [[Contratos]]). También hay código: `api/` (FastAPI de Eduardo, con pruebas), `web/` (esqueleto de balam) y `datos/catalogos/` (cultivos y suelos de Mafer). Antes de subir a `main` se corren las cuatro verificaciones (ver [[Reglas]]). A2.16 (TAW por Saxton y Rawls) la hace Mafer.
 
 ## Límites para el pitch
 
