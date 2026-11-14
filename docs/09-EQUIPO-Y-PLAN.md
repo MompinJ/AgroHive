@@ -84,7 +84,7 @@ En ambos casos: cumplir el límite **más temprano** confirmado y no esperar al 
 - [ ] Cultivos iniciales.
 - [ ] Contratos de datos y estructura del repo.
 - [ ] Motor en navegador o en servidor.
-- [ ] Criterio de ranking (05): Mompin eligió B el 14/11; falta ratificarlo en equipo (A de respaldo).
+- [x] Criterio de ranking (05): B `[DECIDIDO]` el 14/11 (A de respaldo).
 - [ ] Responsable de entrega y de video.
 
 ## Logística

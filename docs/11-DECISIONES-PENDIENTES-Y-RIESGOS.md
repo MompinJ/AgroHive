@@ -20,6 +20,7 @@
 | Se medirán requisitos mínimos de hardware | Reunión |
 | Video demo como pieza de venta | Reunión |
 | `NO_EVALUABLE` en vez de inventar datos | v1.2 |
+| Ranking por criterio B: puntaje compuesto por escenario, arrepentimiento minimax, desempate por promedio; respaldo A (menor déficit en peor caso) si A3.7 no llega | Equipo, 14/11 (evento) |
 
 ## Se decide en el evento `[EN EVENTO]`
 
@@ -30,7 +31,6 @@
 | Parcela | Solo demo fija de Isla · también dibujar polígono propio | 03 |
 | Asignación de cultivos | Por parcela completa · pintar por bloques | 03, 06 |
 | Slider de meses | MVP · extra | 03, 06 |
-| Criterio de ranking | **B elegido por Mompin el 14/11** (puntaje compuesto + arrepentimiento minimax, desempate por promedio); falta que el equipo lo ratifique. A (menor déficit en peor caso) queda de respaldo | 05 |
 | Stack final y motor en navegador o servidor | Ver propuesta | 08 |
 | Disposición exacta de paneles | Ver propuesta | 06 |
 
@@ -99,7 +99,7 @@
 | Selector / pintura de cultivos | Pintar por bloques | Una rotación fija | **Selector "what if"**; por bloques en evento |
 | Cultivos | 5–6 propuestos | Maíz, frijol, sorgo | **Se eligen en el evento** |
 | Pilares | Tres | Solo hídrico | **Los tres, según datos** |
-| Ranking | Puntaje + arrepentimiento | Peor caso hídrico | **B (Mompin, 14/11; falta ratificar); A de respaldo** |
+| Ranking | Puntaje + arrepentimiento | Peor caso hídrico | **B `[DECIDIDO]` 14/11; A de respaldo** |
 | Documentación | Notion | Drive + Notion | **Drive; GitHub en el evento** |
 | Modelos 3D | Blockbench → GLB | Sin herramienta fija | **Agente + `.bbmodel` directo** |
 | Cronograma | 48 h | ~39 h | **Se elige en el evento** |

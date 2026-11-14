@@ -60,10 +60,10 @@ Lo ideal es calcular los tres; se recorta según datos y tiempo. `[DEPENDE-DATOS
 | Riesgo por calor | Días de estrés térmico | Complementario |
 | Aporte indirecto al suelo | Presencia de leguminosas y cobertura, diversidad de especies (reglas simples, sin afirmar nitrógeno medido) | Complementario |
 
-## Paso 7: filtro, robustez y ranking `[PROPUESTA]` (B elegido por Mompin el 14/11, falta ratificación del equipo)
+## Paso 7: filtro, robustez y ranking `[DECIDIDO]` (criterio B, 14/11)
 1. **Filtro:** marcar rotaciones que chocan con el clima local (siembra fuera de ventana viable en todos los escenarios).
 2. **Robustez:** el criterio principal es el **peor caso**.
-3. **Criterio elegido: B** (decisión de Mompin del 14/11, pendiente de que el equipo la ratifique):
+3. **Criterio decidido: B** (decisión del equipo, 14/11, en el evento):
    - **B (v0.2), principal:** puntaje por escenario combinando pilares (ponderados por prioridades si existe F8); robustez = peor puntaje; **arrepentimiento** = mejor puntaje posible del escenario − puntaje de la rotación; preferir el menor arrepentimiento máximo; desempate por promedio.
    - **Pesos:** solo con fuente, justificados o dados por el usuario (F8). Si no los hay, **pesos iguales entre los pilares evaluables, declarados como `SUPUESTO`** en el resultado (`ponderacion` en `contratos/resultado-rotacion.schema.json`). Nunca pesos inventados presentados como dato. Un pilar `NO_EVALUABLE` no entra al puntaje y se lista como excluido; si el pilar hídrico no es evaluable, el escenario es `NO_EVALUABLE`.
    - **Normalización:** cómo pasa cada pilar a un subpuntaje de 0 a 1 se define y documenta en A4.2, con su justificación.

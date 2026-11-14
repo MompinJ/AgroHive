@@ -21,6 +21,7 @@ Estas decisiones se tomaron al iniciar el evento y **prevalecen** sobre las prop
 | Cultivos | **Catálogo propio en JSON** (6 a 8 cultivos) sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y Kc de FAO-56, con fuente por valor. Sin API externa de cultivos: ninguna cubre bien la agronomía | Búsqueda de una API de cultivos |
 | Zona y cultivo | Zona demo en Isla, Veracruz (temporal, sin riego), pendiente de **verificar en SIAP**. Núcleo: **milpa (maíz, frijol, calabaza)**; cultivo extra vistoso (chile) si hay tiempo de modelado | Maíz, frijol y sorgo de 03 |
 | Organización | El trabajo **no se reparte por rol sino por actividad**: cada integrante toma actividades del cronograma (ver 14). R1 a R4 quedan como áreas, no como dueños | Roles por nombre (V-18) |
+| Ranking | **Criterio B** (doc 05, paso 7): puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio. Pesos con fuente o iguales declarados `SUPUESTO`. Respaldo: criterio A (solo pilar hídrico) si los pilares 2 y 3 (A3.7) no llegan | Opciones A y B `[EN EVENTO]` en 05 y 11 |
 
 ## Consecuencias técnicas
 
@@ -49,7 +50,7 @@ Reglas para el servidor compartido: AgroHive va en su propio `server` block de n
 | V-16 | Qué servicios y puertos ya usa `mediworks` | Eduardo |
 | V-17 | Elegir hostname (`sslip.io` u otro) y emitir certificado | Eduardo |
 | V-18 | ~~Roles por nombre~~ Reemplazado: reparto por actividad en 14 | Equipo |
-| V-19 | Ranking: **B elegido por Mompin el 14/11** (puntaje compuesto + arrepentimiento minimax, desempate por promedio), falta que el equipo lo ratifique; respaldo A si A3.7 no llega. Pintura por bloques sigue `[EN EVENTO]`; cultivos: milpa decidida, falta confirmar parámetros | Equipo |
+| V-19 | ~~Ranking A o B~~ Decidido: criterio B (ver tabla de arriba). Pintura por bloques sigue `[EN EVENTO]`; cultivos: milpa decidida, falta confirmar parámetros | Equipo |
 | V-20 | Cultivos y calendario del municipio en SIAP; confirmar la zona demo | Quien tome A0.6 |
 | V-21 | Parámetros y horizonte del pronóstico estacional de Open-Meteo (las fuentes no coinciden: 7 o 9 meses; la página oficial dice 7, ver `AgroVault/Compartido/APIs.md`; falta confirmarlo con una llamada) | Quien tome A0.7 |
 | V-22 | Si NASA POWER permite llamadas desde el navegador (CORS); por defecto todo pasa por el backend | Quien tome A0.7 |

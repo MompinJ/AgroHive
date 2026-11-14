@@ -22,7 +22,7 @@ Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un e
 - Un registro `NO_EVALUABLE` o `ERROR_DATOS` lleva todos sus indicadores en `null`, nunca en cero. Si el estado no es `EVALUABLE`, debe incluir un `motivo`.
 - Suelo, textura y pH llevan siempre la etiqueta `SUPUESTO`.
 - La próxima temporada tiene `esPrediccion: false`, un `aviso` obligatorio y bandas `{inferior, superior}` sin cifra única.
-- Ranking B (decisión de Mompin del 14/11, pendiente de ratificar): con B, el resultado declara `ponderacion` (pesos por pilar, etiqueta y pilares excluidos) y `arrepentimiento`. Sin pesos con fuente se usan pesos iguales etiquetados `SUPUESTO`; con etiqueta `FUENTE` la cita es obligatoria. El criterio A (solo pilar hídrico) queda como respaldo si A3.7 no llega.
+- Ranking B (`[DECIDIDO]` el 14/11): con B, el resultado declara `ponderacion` (pesos por pilar, etiqueta y pilares excluidos) y `arrepentimiento`. Sin pesos con fuente se usan pesos iguales etiquetados `SUPUESTO`; con etiqueta `FUENTE` la cita es obligatoria. El criterio A (solo pilar hídrico) queda como respaldo si A3.7 no llega.
 - Todo documento lleva `meta.versionContrato`. Si `meta.esEjemplo` es `true`, también lleva `meta.aviso`.
 - Nomenclatura: `estado` es siempre el estado de evaluación de doc 04. El estado visual de la planta se llama `estadoPlanta`.
 
