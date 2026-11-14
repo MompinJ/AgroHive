@@ -31,7 +31,7 @@ LADO_CALENTAMIENTO_M = 20.0  # cuadricula auxiliar para dejar en cache los tiles
 MARGEN_M = 60.0
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--con-ndvi", action="store_true", help="incluye el NDVI de MODIS (ORNL DAAC); solo si el servicio responde")
+ap.add_argument("--sin-ndvi", action="store_true", help="no incluye el NDVI de MODIS (Planetary Computer)")
 ap.add_argument("--parcela", default=str(CONTRATOS / "ejemplos" / "parcela.ejemplo.json"))
 args = ap.parse_args()
 
@@ -119,20 +119,20 @@ if r.status_code != 200 or r.json()["metodo"] != "anomalia_estacional":
 respuestas["proxima-temporada"] = r.json()
 validar(respuestas["proxima-temporada"], "proxima-temporada#", f"proxima temporada ({respuestas['proxima-temporada']['horizonteMeses']} meses)")
 
-# NDVI de MODIS (A4.11, evidencia): OPCIONAL. ORNL DAAC fue inestable el 14/11 (502, 503 y llamadas de 40 s sin respuesta), asi que el paquete
-# de demo no depende de el: solo se incluye con --con-ndvi, cuando el servicio responda. Sin la bandera el paquete sale igual que antes.
-if args.con_ndvi:
+# NDVI de MODIS (A4.11, evidencia) de toda la ventana estandar: ~460 compuestos de Terra, 12 ventanas de 144 dias, cada una en cache. Viene de Microsoft
+# Planetary Computer (mismo producto MOD13Q1 V061 que ORNL DAAC, que no respondio el 14/11). Se llama a la orquestacion y no a la ruta porque la ruta
+# limita a 400 dias por consulta; pasa por el mismo modelo Ndvi.
+if not args.sin_ndvi:
     from app import ndvi as modulo_ndvi  # noqa: E402
     from app.modelos_ndvi import Ndvi  # noqa: E402
 
-    # Se llama a la orquestacion y no a la ruta porque la ruta limita a 400 dias por consulta; pasa por el mismo modelo Ndvi.
     try:
         respuestas["ndvi"] = Ndvi.model_validate(asyncio.run(modulo_ndvi.serie(lon, lat, desde, hasta))).model_dump(mode="json")
     except servicios.SinDatos as e:
-        raise SystemExit(f"NDVI de MODIS (ORNL DAAC): {e}. El servicio es intermitente: reintenta o genera sin --con-ndvi.")
+        raise SystemExit(f"NDVI de MODIS (Planetary Computer): {e}. Reintenta o genera con --sin-ndvi.")
     if respuestas["ndvi"]["estado"] != "EXPLORATORIO" or any(
-            x["codigo"] in ("NDVI_TRAMOS_SIN_LEER", "NDVI_CALIDAD_NO_DISPONIBLE") for x in respuestas["ndvi"]["advertencias"]):
-        raise SystemExit("el NDVI del paquete debe salir completo (todos los tramos y con calidad); reintenta cuando ORNL responda")
+            x["codigo"] in ("NDVI_TRAMOS_SIN_LEER", "NDVI_CALIDAD_NO_DISPONIBLE", "NDVI_COMPUESTOS_CON_ERROR") for x in respuestas["ndvi"]["advertencias"]):
+        raise SystemExit("el NDVI del paquete debe salir completo (todos los tramos, todos los compuestos y con calidad); reintenta o genera con --sin-ndvi")
     validar(respuestas["ndvi"], "ndvi#", f"NDVI MODIS ({len(respuestas['ndvi']['serie'])} compuestos)")
 
 # Todo cumple: ahora si se escribe el paquete.
@@ -152,7 +152,7 @@ manifiesto = {
     "coordenadasIlustrativas": bool(parcela.get("coordenadasIlustrativas")),
     "ventanaClima": [desde.isoformat(), hasta.isoformat()],
     "versionContrato": respuestas["serie-clima"]["meta"]["versionContrato"],
-    "validadoContra": ["serie-clima", "suelo", "parcela (terreno y celdas)", "proxima-temporada"] + (["ndvi"] if args.con_ndvi else []),
+    "validadoContra": ["serie-clima", "suelo", "parcela (terreno y celdas)", "proxima-temporada"] + ([] if args.sin_ndvi else ["ndvi"]),
     "entradas": entradas,
 }
 (DEMO / "manifiesto.json").write_text(json.dumps(manifiesto, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

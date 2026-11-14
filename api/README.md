@@ -21,16 +21,20 @@ Documentacion interactiva en `/docs` y esquema en `/openapi.json`.
 
 ### NDVI de MODIS (A4.11)
 
-> **Estado (14/11): bloqueado por el servicio.** ORNL DAAC no respondio de forma usable durante la sesion (502, 503 y llamadas de 40 s sin un byte). La ruta y el cliente estan escritos y probados con respuestas reales guardadas, pero **no se usan**: el paquete de demo no incluye NDVI (`datos/demo/generar.py --con-ndvi` lo agrega cuando el servicio responda) y el front no debe llamarla. Si ORNL no responde, `GET /api/ndvi` contesta 503 `ERROR_DATOS` visible, con un tiempo limite de 20 s por llamada.
+`GET /api/ndvi` entrega el NDVI de MODIS **MOD13Q1 V061** (Terra, pixel de 250 m, compuesto de 16 dias) del punto, como **evidencia**: no entra al ranking ni al balance. Los datos son de NASA LP DAAC (cita `doi:10.5067/MODIS/MOD13Q1.061`, que resuelve a la ficha de Earthdata) y se leen de los COG de **Microsoft Planetary Computer** (coleccion `modis-13Q1-061`), sin cuenta.
 
-`GET /api/ndvi` usa el servicio REST de ORNL DAAC (`modis.ornl.gov/rst/api/v1/MOD13Q1/subset`, cita `doi:10.3334/ORNLDAAC/1600`). Verificado el 14/11 contra el propio servicio:
+**Por que Planetary Computer y no ORNL DAAC.** El servicio REST de ORNL DAAC no respondio de forma usable el 14/11 (502, 503 y llamadas de 40 s sin un byte), asi que se sustituyo. Es el **mismo producto y los mismos pixeles**: las cuatro fechas comparadas en Isla (A2023145, A2023161, A2023177, A2023193) dieron igual NDVI y calidad en los dos (3279/1, 3378/0, 4053/3, 3921/3); la prueba `test_validacion_cruzada_con_ornl...` lo conserva con los datos de ORNL guardados.
 
-- **Maximo 10 fechas por llamada** (la 11.a da 400, "exceeds maximum subset tiles support of 10"). Se piden ventanas alineadas de 144 dias (9 a 10 compuestos) y una consulta de un anio son 3 ventanas, cada una con dos llamadas (NDVI y calidad).
-- **Relleno y rango** (de `/MOD13Q1/bands`): NDVI valido de -2000 a 10000, **relleno -3000**, escala 0.0001; calidad valida de 0 a 3, relleno -1. El relleno y todo valor fuera de rango salen como `null` con estado `NO_EVALUABLE` y motivo: **nunca 0, y nunca un NDVI negativo inventado** (-3000 escalado seria -0.3).
-- **La calidad** (`pixel reliability`) se entrega tal cual, sin interpretarla.
-- **El servicio es intermitente** (502 y 503): se reintenta hasta 3 veces; un tramo que no responde se dice (`NDVI_TRAMOS_SIN_LEER`) y no se rellena; si no responde nada, 503 `ERROR_DATOS`.
-- **Cache por punto exacto y ventana**: dos puntos cercanos pueden caer en pixeles distintos. Una ventana sin calidad no se fija en cache.
-- **Limites** (los tres, siempre): el pixel de 250 m es mayor que la parcela de 2 ha, no muestra el cultivo del usuario y no entra al ranking (no hay relacion publicada entre NDVI y los pilares del motor).
+Como funciona y que se verifico:
+
+- **Catalogo STAC publico** (`/api/stac/v1/search`, `intersects` con el punto) y un **token anonimo de lectura** por contenedor (`/api/sas/v1/token/modiseuwest/modis-061-cogs`); sin el, el archivo responde 409. El pixel se lee por rangos HTTP con `rasterio` (unos 2 s por banda). El token **no** llega a la respuesta ni a la cache (hay una prueba).
+- **Solo Terra.** La coleccion mezcla Terra (MOD13Q1) y Aqua (MYD13Q1) intercalados cada 8 dias; el contrato pide MOD13Q1, asi que Aqua se descarta.
+- **Escala y relleno:** la escala es la del STAC (0.0001); `rasterio` reporta 10000 (convencion de HDF), que no se usa. El archivo declara su relleno (NDVI -3000, calidad 255). El relleno y todo valor fuera del rango valido (-2000 a 10000) salen como `null` con estado `NO_EVALUABLE` y motivo: **nunca 0, y nunca un NDVI inventado** (-3000 escalado seria -0.3).
+- **La calidad** (`pixel reliability`, 0 a 3) se entrega tal cual, sin interpretarla.
+- **Fallas que no se esconden:** un compuesto cuyo pixel no se pudo leer sale `ERROR_DATOS` (advertencia `NDVI_COMPUESTOS_CON_ERROR`); un tramo cuyo catalogo no respondio se dice (`NDVI_TRAMOS_SIN_LEER`); una ventana incompleta no se fija en cache; si nada responde, 503 `ERROR_DATOS`.
+- **Cache por punto exacto y ventana** de 144 dias alineada desde 2000-01-01: dos puntos cercanos pueden caer en pixeles distintos. Maximo 400 dias por consulta.
+- **Limites** (los tres, siempre): el pixel de 250 m es mayor que la parcela de 2 ha, no muestra el cultivo del usuario y no entra al ranking.
+- **Licencia:** el STAC de la coleccion marca `proprietary`; los datos son de NASA LP DAAC alojados por Microsoft. `VERIFICAR` las condiciones de uso antes de redistribuir el paquete de demo mas alla del repo.
 
 ### Errores
 

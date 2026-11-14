@@ -1,157 +1,192 @@
-"""A4.11: NDVI de MODIS por ORNL DAAC. Respuestas reales guardadas en datos/pruebas-apis/respuestas/ (14/11/2026)."""
+"""A4.11: NDVI de MODIS (MOD13Q1 V061) desde Microsoft Planetary Computer, que sustituye a ORNL DAAC (caido el 14/11).
+Datos reales guardados en datos/pruebas-apis/respuestas/: busqueda del catalogo y pixeles de Isla leidos el 14/11; los de ORNL sirven de validacion cruzada."""
 import copy
-import json
+import re
 from datetime import date, timedelta
 
 import httpx
 from fastapi.testclient import TestClient
 
-from app.clientes import ornl
+from app.clientes import planetary
 from app.main import app
 from tests.conftest import real_json
 
 cliente = TestClient(app)
 URL = "/api/ndvi?lat=18.03&lon=-95.53&desde=2023-05-01&hasta=2023-08-31"
-NDVI, CALIDAD = real_json("ornl_ndvi_2023.json"), real_json("ornl_calidad_2023.json")
+BUSQUEDA = real_json("pc_modis_busqueda_2023.json")
+PIXELES = {k: tuple(v) for k, v in real_json("pc_modis_pixeles_2023.json").items() if k != "nota"}
+TOKEN_FALSO = "sv=2024-01-01&sig=FIRMA-SECRETA-FALSA"
 
 
-def ornl_simulado(ndvi=NDVI, calidad=CALIDAD, falla_calidad=False, falla_ndvi=lambda params: False):
+def pc_simulado(busqueda=BUSQUEDA, token_ok=True, busqueda_ok=True):
     def handler(request: httpx.Request):
-        if "modis.ornl.gov" not in request.url.host:
-            return httpx.Response(404)
-        banda = request.url.params["band"]
-        if banda == ornl.BANDA_NDVI:
-            return httpx.Response(503) if falla_ndvi(request.url.params) else httpx.Response(200, json=ndvi)
-        return httpx.Response(503) if falla_calidad else httpx.Response(200, json=calidad)
+        u = str(request.url)
+        if "stac/v1/search" in u:
+            return httpx.Response(200, json=busqueda) if busqueda_ok else httpx.Response(503)
+        if "sas/v1/token" in u:
+            return httpx.Response(200, json={"token": TOKEN_FALSO, "msft:expiry": "2099-01-01T00:00:00Z"}) if token_ok else httpx.Response(503)
+        return httpx.Response(404)
     return handler
 
 
-def test_parsea_la_respuesta_real_con_escala_y_calidad():
-    datos, escala = ornl.parsear(NDVI, CALIDAD)
-    assert escala == 0.0001
-    assert [(d["fecha"], d["ndvi"], d["calidad"], d["estado"]) for d in datos] == [
-        ("2023-05-25", 0.3279, 1, "EXPLORATORIO"), ("2023-06-10", 0.3378, 0, "EXPLORATORIO"),
-        ("2023-06-26", 0.4053, 3, "EXPLORATORIO"), ("2023-07-12", 0.3921, 3, "EXPLORATORIO")]
+def leer_real(monkeypatch, fallar=lambda clave: False, sin_calidad=lambda clave: False, lecturas=None):
+    """Reemplaza la lectura del pixel (GDAL) por las lecturas reales guardadas; anota que archivos se leyeron."""
+    leidos = lecturas if lecturas is not None else []
+
+    def _leer(url_ndvi, url_calidad, lon, lat):
+        assert TOKEN_FALSO in url_ndvi and TOKEN_FALSO in url_calidad, "los archivos deben ir firmados con el token de lectura"
+        assert "MYD13Q1" not in url_ndvi, "Aqua (MYD13Q1) no debe leerse: el contrato pide MOD13Q1"
+        clave = re.search(r"\.(A\d{7})\.", url_ndvi).group(1)
+        leidos.append(clave)
+        if fallar(clave):
+            raise OSError(f"fallo simulado {url_ndvi}")  # el mensaje trae la URL con el token: no debe llegar a la respuesta
+        crudo, calidad = PIXELES[clave]
+        return crudo, None if sin_calidad(clave) else calidad
+    monkeypatch.setattr(planetary, "_leer_sync", _leer)
+    return leidos
 
 
-def test_el_relleno_menos_3000_es_null_con_motivo_y_nunca_cero_ni_un_ndvi_negativo():
-    sintetico = copy.deepcopy(NDVI)  # sintetico: no se consiguio un relleno real; el valor -3000 sale de /MOD13Q1/bands
-    sintetico["subset"][0]["data"] = [-3000]
-    d = ornl.parsear(sintetico, CALIDAD)[0][0]
-    assert d["ndvi"] is None and d["estado"] == "NO_EVALUABLE" and "relleno" in d["motivo"]  # no -0.3, no 0
+def test_validacion_cruzada_con_ornl_el_mismo_producto_da_los_mismos_pixeles():
+    """ORNL DAAC (caido hoy) y Planetary Computer sirven el mismo MOD13Q1 V061: en Isla coinciden las cuatro fechas comparadas."""
+    ornl_n, ornl_c = real_json("ornl_ndvi_2023.json"), real_json("ornl_calidad_2023.json")
+    ornl_doy = {x["modis_date"]: (x["data"][0], c["data"][0]) for x, c in zip(ornl_n["subset"], ornl_c["subset"])}
+    assert set(ornl_doy) == {"A2023145", "A2023161", "A2023177", "A2023193"}
+    for fecha_modis, valores in ornl_doy.items():
+        assert PIXELES[fecha_modis] == valores, fecha_modis
 
 
-def test_valor_fuera_del_rango_valido_no_se_acepta():
-    for crudo in (10001, -2001, 15000):
-        sintetico = copy.deepcopy(NDVI)
-        sintetico["subset"][0]["data"] = [crudo]
-        d = ornl.parsear(sintetico, None)[0][0]
-        assert d["ndvi"] is None and d["estado"] == "NO_EVALUABLE", crudo
-    sintetico = copy.deepcopy(NDVI)
-    sintetico["subset"][0]["data"] = [-2000]  # el limite inferior valido (-0.2) si cuenta
-    assert ornl.parsear(sintetico, None)[0][0]["ndvi"] == -0.2
+def test_escala_rango_y_relleno_del_producto():
+    assert planetary.convertir(3279, 1) == {"ndvi": 0.3279, "estado": "EXPLORATORIO", "calidad": 1}
+    r = planetary.convertir(-3000, 0)  # relleno: ni 0 ni -0.3
+    assert r["ndvi"] is None and r["estado"] == "NO_EVALUABLE" and "relleno" in r["motivo"]
+    for fuera in (10001, -2001, 15000):
+        assert planetary.convertir(fuera, 0)["ndvi"] is None, fuera
+    assert planetary.convertir(-2000, 0)["ndvi"] == -0.2  # el limite inferior valido si cuenta
+    assert planetary.convertir(10000, 0)["ndvi"] == 1.0
 
 
-def test_calidad_de_relleno_o_ausente_es_none_sin_interpretarla():
-    c = copy.deepcopy(CALIDAD)
-    c["subset"][0]["data"] = [-1]
-    datos = ornl.parsear(NDVI, c)[0]
-    assert datos[0]["calidad"] is None and datos[2]["calidad"] == 3
-    assert all(d["calidad"] is None for d in ornl.parsear(NDVI, None)[0])
+def test_calidad_de_relleno_o_no_leida_es_none_sin_interpretarla():
+    for relleno in (255, -1, None):
+        assert planetary.convertir(3279, relleno)["calidad"] is None
+    assert planetary.convertir(3279, 3)["calidad"] == 3
 
 
-def test_escala_ausente_es_error_de_la_fuente_no_un_valor_por_defecto():
-    sin = {k: v for k, v in NDVI.items() if k != "scale"}
-    try:
-        ornl.parsear(sin, None)
-        assert False, "debio fallar"
-    except Exception as e:
-        assert "escala" in str(e)
+def test_solo_terra_se_usa_y_aqua_se_descarta():
+    c = planetary.compuestos(BUSQUEDA, date(2023, 4, 1), date(2023, 9, 30))
+    assert len(c) == 8 and all(x["id"].startswith("MOD13Q1.") for x in c)
+    assert [x["fecha"] for x in c] == sorted(x["fecha"] for x in c) and c[1]["fecha"] == "2023-05-25"
+    assert len(BUSQUEDA["features"]) == 16, "el catalogo trae 8 de Terra y 8 de Aqua"
 
 
-def test_fecha_modis_y_ventanas_alineadas_que_no_superan_el_limite_de_diez_fechas():
-    assert ornl.fecha_modis(date(2023, 5, 25)) == "A2023145" and ornl.fecha_modis(date(2024, 12, 31)) == "A2024366"
-    v = ornl.ventanas(date(2005, 10, 1), date(2025, 12, 31))
+def test_compuestos_se_recortan_a_la_ventana_y_no_se_repiten():
+    c = planetary.compuestos(BUSQUEDA, date(2023, 6, 1), date(2023, 6, 30))
+    assert [x["fecha"] for x in c] == ["2023-06-10", "2023-06-26"]
+    duplicada = copy.deepcopy(BUSQUEDA)
+    duplicada["features"] = duplicada["features"] + [f for f in duplicada["features"] if f["id"].startswith("MOD13Q1.")][:2]
+    assert len(planetary.compuestos(duplicada, date(2023, 4, 1), date(2023, 9, 30))) == 8
+
+
+def test_ventanas_alineadas_contiguas_y_cubren_el_periodo():
+    v = planetary.ventanas(date(2005, 10, 1), date(2025, 12, 31))
     assert v[0][0] <= date(2005, 10, 1) and v[-1][1] >= date(2025, 12, 31)
-    for (a, b), (c, _) in zip(v, v[1:]):
-        assert c == b + timedelta(days=1), "las ventanas deben ser contiguas, sin huecos ni solapes"
-    # el compuesto es cada 16 dias y se reinicia el 1 de enero (hueco de 13 a 5 dias): cuenta el peor caso real de cada ventana
-    def compuestos(a, b):
-        n, d = 0, a
-        while d <= b:
-            if (d.timetuple().tm_yday - 1) % 16 == 0 and d.timetuple().tm_yday <= 353 or d.timetuple().tm_yday == 1:
-                n += 1
-            d += timedelta(days=1)
-        return n
-    assert max(compuestos(a, b) for a, b in v) <= 10, "ninguna ventana debe superar las 10 fechas por llamada que admite ORNL"
+    for (_, b), (c, _) in zip(v, v[1:]):
+        assert c == b + timedelta(days=1)
 
 
-def test_ruta_cumple_el_contrato_y_es_evidencia(simular, validar):
-    simular(ornl_simulado())
+def test_ruta_cumple_el_contrato_y_es_evidencia(simular, validar, monkeypatch):
+    simular(pc_simulado())
+    leer_real(monkeypatch)
     r = cliente.get(URL)
     assert r.status_code == 200
     n = r.json()
     validar(n, "ndvi#")
-    assert n["estado"] == "EXPLORATORIO" and n["producto"] == {"nombre": "MOD13Q1", "banda": "250m_16_days_NDVI", "pixelM": 250, "compuestoDias": 16, "escala": 0.0001}
+    assert n["estado"] == "EXPLORATORIO"
+    assert n["producto"] == {"nombre": "MOD13Q1", "version": "061", "banda": "250m_16_days_NDVI", "pixelM": 250, "compuestoDias": 16, "escala": 0.0001}
     assert set(n["limites"]) == {"PIXEL_MAYOR_QUE_PARCELA", "NO_MUESTRA_CULTIVO_DEL_USUARIO", "NO_ENTRA_AL_RANKING"}
-    assert "doi:10.3334/ORNLDAAC/1600" in n["fuente"]["cita"]
-    assert [d["fecha"] for d in n["serie"]] == ["2023-05-25", "2023-06-10", "2023-06-26", "2023-07-12"]  # sin repetidos pese a varias ventanas
-    assert "NDVI_EVIDENCIA" in {a["codigo"] for a in n["advertencias"]}
+    assert "doi:10.5067/MODIS/MOD13Q1.061" in n["fuente"]["cita"] and "Planetary Computer" in n["fuente"]["nombre"]
+    assert [(d["fecha"], d["ndvi"], d["calidad"]) for d in n["serie"][:3]] == [("2023-05-09", 0.315, 1), ("2023-05-25", 0.3279, 1), ("2023-06-10", 0.3378, 0)]
+    assert len(n["serie"]) == 8 and "NDVI_EVIDENCIA" in {a["codigo"] for a in n["advertencias"]}
 
 
-def test_la_serie_se_recorta_al_periodo_pedido(simular, validar):
-    simular(ornl_simulado())
+def test_el_token_de_lectura_nunca_llega_a_la_respuesta_ni_a_la_cache(simular, monkeypatch, tmp_path):
+    simular(pc_simulado())
+    leer_real(monkeypatch, fallar=lambda c: c == "A2023161")  # el mensaje del error simulado trae la URL con el token
+    texto = cliente.get(URL).text
+    assert TOKEN_FALSO not in texto and "FIRMA-SECRETA" not in texto and "blob.core.windows" not in texto
+    from app import config
+    for f in config.CACHE_DIR.rglob("*"):
+        if f.is_file():
+            assert TOKEN_FALSO not in f.read_text(encoding="utf-8", errors="ignore"), f.name
+
+
+def test_la_serie_se_recorta_al_periodo_pedido(simular, validar, monkeypatch):
+    simular(pc_simulado())
+    leer_real(monkeypatch)
     n = cliente.get("/api/ndvi?lat=18.03&lon=-95.53&desde=2023-06-01&hasta=2023-06-30").json()
     validar(n, "ndvi#")
     assert [d["fecha"] for d in n["serie"]] == ["2023-06-10", "2023-06-26"]
 
 
-def test_segunda_consulta_sale_de_la_cache(simular):
-    llamadas = simular(ornl_simulado())
+def test_segunda_consulta_sale_de_la_cache_sin_red_ni_lecturas(simular, monkeypatch):
+    llamadas = simular(pc_simulado())
+    leidos = leer_real(monkeypatch)
     cliente.get(URL)
-    n = len(llamadas)
-    assert n > 0 and cliente.get(URL).status_code == 200
-    assert len(llamadas) == n
+    antes_red, antes_lecturas = len(llamadas), len(leidos)
+    assert antes_red > 0 and antes_lecturas > 0
+    assert cliente.get(URL).status_code == 200
+    assert (len(llamadas), len(leidos)) == (antes_red, antes_lecturas)
 
 
-def test_si_falla_la_calidad_los_datos_salen_sin_ella_y_no_se_fijan_en_cache(simular, validar):
-    llamadas = simular(ornl_simulado(falla_calidad=True))
+def test_aqua_nunca_se_lee(simular, monkeypatch):
+    simular(pc_simulado())
+    leidos = leer_real(monkeypatch)  # la propia lectura simulada falla si le llega un MYD13Q1
+    assert cliente.get(URL).status_code == 200 and leidos
+
+
+def test_si_falla_la_calidad_el_dato_sale_sin_ella_y_no_se_fija_en_cache(simular, validar, monkeypatch):
+    llamadas = simular(pc_simulado())
+    leidos = leer_real(monkeypatch, sin_calidad=lambda c: True)
     n = cliente.get(URL).json()
     validar(n, "ndvi#")
-    assert n["estado"] == "EXPLORATORIO" and all("calidad" not in d for d in n["serie"])
+    assert n["estado"] == "EXPLORATORIO" and all("calidad" not in d for d in n["serie"]) and len(n["serie"]) == 8
     assert "NDVI_CALIDAD_NO_DISPONIBLE" in {a["codigo"] for a in n["advertencias"]}
-    antes = len(llamadas)
+    antes = len(leidos)
     cliente.get(URL)
-    assert len(llamadas) > antes, "una ventana sin calidad se vuelve a pedir"
+    assert len(leidos) > antes, "una ventana incompleta se vuelve a pedir"
 
 
-def test_un_tramo_caido_se_dice_y_no_se_rellena(simular, validar):
-    ventanas = ornl.ventanas(date(2023, 5, 1), date(2023, 8, 31))
-    primera = ornl.fecha_modis(ventanas[0][0])
-    simular(ornl_simulado(falla_ndvi=lambda p: p["startDate"] == primera))
+def test_un_compuesto_que_no_se_puede_leer_es_error_datos_y_no_se_rellena(simular, validar, monkeypatch):
+    simular(pc_simulado())
+    leer_real(monkeypatch, fallar=lambda c: c == "A2023161")
     n = cliente.get(URL).json()
     validar(n, "ndvi#")
-    assert "NDVI_TRAMOS_SIN_LEER" in {a["codigo"] for a in n["advertencias"]}
-    assert n["serie"], "los tramos que si respondieron salen"
+    malo = next(d for d in n["serie"] if d["fecha"] == "2023-06-10")
+    assert malo["estado"] == "ERROR_DATOS" and malo["ndvi"] is None and malo["motivo"]
+    assert "NDVI_COMPUESTOS_CON_ERROR" in {a["codigo"] for a in n["advertencias"]}
+    assert sum(d["ndvi"] is not None for d in n["serie"]) == 7  # los demas salen
 
 
-def test_si_ornl_no_responde_en_nada_es_error_datos(simular):
-    simular(lambda r: httpx.Response(503))
+def test_si_el_catalogo_no_responde_es_error_datos(simular):
+    simular(pc_simulado(busqueda_ok=False))
     r = cliente.get(URL)
-    assert r.status_code == 503 and r.json()["estado"] == "ERROR_DATOS" and "ORNL" in r.json()["motivo"]
+    assert r.status_code == 503 and r.json()["estado"] == "ERROR_DATOS" and "Planetary Computer" in r.json()["motivo"]
 
 
-def test_ornl_400_por_mas_de_diez_fechas_no_se_reintenta(simular):
-    llamadas = simular(lambda r: httpx.Response(400, json="Subset time period exceeds maximum subset tiles support of 10."))
+def test_si_no_se_puede_leer_ningun_pixel_es_error_datos(simular, monkeypatch):
+    simular(pc_simulado())
+    leer_real(monkeypatch, fallar=lambda c: True)
     assert cliente.get(URL).status_code == 503
-    assert len(llamadas) == len(ornl.ventanas(date(2023, 5, 1), date(2023, 8, 31)))  # una por ventana, sin reintentos
 
 
-def test_todo_en_null_es_no_evaluable_con_motivo(simular, validar):
-    relleno = copy.deepcopy(NDVI)
-    for x in relleno["subset"]:
-        x["data"] = [-3000]
-    simular(ornl_simulado(ndvi=relleno))
+def test_sin_token_de_lectura_no_se_inventa_nada(simular, monkeypatch):
+    simular(pc_simulado(token_ok=False))
+    leer_real(monkeypatch)
+    assert cliente.get(URL).status_code == 503
+
+
+def test_todo_relleno_es_no_evaluable_con_motivo(simular, validar, monkeypatch):
+    simular(pc_simulado())
+    monkeypatch.setattr(planetary, "_leer_sync", lambda *a, **k: (-3000, 0))
     n = cliente.get(URL).json()
     validar(n, "ndvi#")
     assert n["estado"] == "NO_EVALUABLE" and n["motivo"] and all(d["ndvi"] is None and d["motivo"] for d in n["serie"])
@@ -162,3 +197,96 @@ def test_periodos_invalidos():
     for q in ("desde=2023-06-01&hasta=2023-05-01", f"desde=2023-01-01&hasta={manana}", "desde=2020-01-01&hasta=2023-01-01"):
         assert cliente.get(f"/api/ndvi?lat=18&lon=-95&{q}").status_code == 422, q
     assert cliente.get("/api/ndvi?lat=99&lon=-95&desde=2023-01-01&hasta=2023-02-01").status_code == 422
+
+
+# ------------------------------------------------------------------ token de lectura compartido (el 429 del 14/11)
+
+def contar_tokens(llamadas):
+    return sum("sas/v1/token" in u for u in llamadas)
+
+
+def test_un_solo_token_para_todas_las_ventanas(simular, monkeypatch):
+    """Antes se pedia un token por ventana (51 en 20 anios) y el servicio respondio HTTP 429. Ahora es uno para toda la consulta."""
+    llamadas = simular(pc_simulado())
+    leer_real(monkeypatch)
+    n = cliente.get("/api/ndvi?lat=18.03&lon=-95.53&desde=2023-01-01&hasta=2023-12-31")  # 3 ventanas
+    assert n.status_code == 200
+    assert sum("stac/v1/search" in u for u in llamadas) >= 3, "varias ventanas"
+    assert contar_tokens(llamadas) == 1
+
+
+def test_el_token_se_reutiliza_entre_consultas_y_se_renueva_al_caducar(simular, monkeypatch):
+    llamadas = simular(pc_simulado())
+    leer_real(monkeypatch)
+    cliente.get(URL)
+    cliente.get("/api/ndvi?lat=18.04&lon=-95.54&desde=2023-05-01&hasta=2023-08-31")  # otro punto: otras ventanas en cache, mismo token
+    assert contar_tokens(llamadas) == 1
+    planetary._TOKEN["expira"] = 0  # caduco
+    cliente.get("/api/ndvi?lat=18.05&lon=-95.55&desde=2023-05-01&hasta=2023-08-31")
+    assert contar_tokens(llamadas) == 2
+
+
+def test_pedidos_simultaneos_comparten_un_unico_pedido_de_token(simular):
+    import asyncio
+
+    llamadas = simular(pc_simulado())
+
+    async def varios():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(pc_simulado())) as c:
+            return await asyncio.gather(*[planetary.token(c) for _ in range(20)])
+    tokens = asyncio.run(varios())
+    assert set(tokens) == {TOKEN_FALSO}
+    assert llamadas == [] or contar_tokens(llamadas) <= 1
+
+
+def test_el_429_del_servicio_de_tokens_se_reintenta(simular, monkeypatch):
+    intentos = {"n": 0}
+    base = pc_simulado()
+
+    def con_429(request):
+        if "sas/v1/token" in str(request.url):
+            intentos["n"] += 1
+            if intentos["n"] < 3:
+                return httpx.Response(429)
+        return base(request)
+    simular(con_429)
+    leer_real(monkeypatch)
+    assert cliente.get(URL).status_code == 200 and intentos["n"] == 3
+
+
+def test_si_el_token_sigue_en_429_se_dice_la_causa_y_no_se_rellena(simular, monkeypatch):
+    base = pc_simulado()
+    simular(lambda r: httpx.Response(429) if "sas/v1/token" in str(r.url) else base(r))
+    leer_real(monkeypatch)
+    r = cliente.get(URL)
+    assert r.status_code == 503 and "429" in r.json()["motivo"]
+
+
+def test_un_tramo_caido_dice_su_causa_en_el_aviso(simular, validar, monkeypatch):
+    import json
+
+    base = pc_simulado()
+    primera = planetary.ventanas(date(2023, 1, 1), date(2023, 12, 31))[0][0].isoformat()  # solo esa ventana falla, con todos sus reintentos
+
+    def cae_la_primera(request):
+        if "stac/v1/search" in str(request.url) and json.loads(request.content)["datetime"].startswith(primera):
+            return httpx.Response(503)
+        return base(request)
+    simular(cae_la_primera)
+    leer_real(monkeypatch)
+    n = cliente.get("/api/ndvi?lat=18.03&lon=-95.53&desde=2023-01-01&hasta=2023-12-31").json()
+    validar(n, "ndvi#")
+    aviso = next(a for a in n["advertencias"] if a["codigo"] == "NDVI_TRAMOS_SIN_LEER")
+    assert "1 tramo" in aviso["mensaje"] and primera in aviso["mensaje"] and "Causa:" in aviso["mensaje"] and "503" in aviso["mensaje"], aviso["mensaje"]
+    assert n["serie"], "las ventanas que si respondieron salen"
+
+
+def test_el_token_nunca_se_guarda_en_disco(simular, monkeypatch, tmp_path):
+    from app import config
+
+    simular(pc_simulado())
+    leer_real(monkeypatch)
+    cliente.get(URL)
+    for f in list(config.CACHE_DIR.rglob("*")) + list(tmp_path.rglob("*")):
+        if f.is_file():
+            assert "FIRMA-SECRETA" not in f.read_text(encoding="utf-8", errors="ignore"), f
