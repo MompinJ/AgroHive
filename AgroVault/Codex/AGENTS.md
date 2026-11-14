@@ -4,23 +4,24 @@ Instrucciones para ChatGPT Codex (CLI o nube) en este repositorio. Léelas al em
 
 1. `AgroVault/Compartido/Reglas.md`
 2. `AgroVault/Compartido/Resumen.md`
-3. `AgroVault/Compartido/Contratos.md` si vas a crear o consumir JSON
-4. `AgroVault/Compartido/Pendientes.md` si te falta un número, una fecha o un criterio
-5. El doc de `docs/` que indique `AgroVault/Compartido/Lectura.md`
+3. `AgroVault/Compartido/Codigo.md`
+4. `AgroVault/Compartido/Contratos.md` si vas a crear o consumir JSON
+5. `AgroVault/Compartido/Pendientes.md` si te falta un número, una fecha o un criterio
+6. El doc de `docs/` que indique `AgroVault/Compartido/Lectura.md`
 
 Si esta ficha y `docs/13-DECISIONES-HACKATHON.md` o `docs/14-CRONOGRAMA.md` no coinciden, mandan esos docs.
 
-Para que Codex te cargue solo, esta ficha tiene que estar en la raíz del repo con el nombre `AGENTS.md`, o la raíz debe decir "lee `AgroVault/Codex/AGENTS.md`". Hoy vive aquí, dentro del vault. No la des por cargada si nadie la enlazó.
+Para que Codex la cargue sola, la raíz del repo ya apunta aquí desde `AGENTS.md`. Si esta ficha y `docs/13`, `docs/14` o `contratos/*.schema.json` no coinciden, mandan esos.
 
 ## Proyecto
 
 Simulador "what if" de rotaciones de cultivos contra años reales de NASA POWER. Se busca la rotación que no colapsa en el peor año, no la de mayor rendimiento. Hackathon NASA Space Apps 2026, reto Field Shift, sede Boca del Río. Equipo de 4. Ramas: `main`, `balam`, `Mompin`, `Mafer`, `Eduardo`.
 
-El 14/11/2026 el hackathon ya empezó. Se puede escribir código. `contratos/` ya existe (A1.1, v0.3.0, falta la revisión de los 4); `web/` y `api/` todavía no tienen código. No inventes que ya compilan.
+El 14/11/2026 el hackathon ya va en código. Contratos `0.10.0`, motor, API, escena, catálogos y demo existen. Léelos antes de crear un segundo cliente o un segundo balance. Mapa de archivos: `AgroVault/Compartido/Codigo.md`. Cifras de la demo: `AgroVault/Compartido/Resumen.md`.
 
 ## Stack
 
-- `web/`: React, Vite, TypeScript. Motor en Web Worker, carpeta prevista `web/src/motor/`. Mapa Leaflet, cuadrícula Turf.js (tope cerca de 1600 celdas), 3D con Three.js y React Three Fiber (`InstancedMesh`), gráficas Recharts. Modelos `.bbmodel` cargados directo.
+- `web/`: React, Vite, TypeScript. Motor en Web Worker, `web/src/motor/` (`crearClienteMotor`). Mapa Leaflet, cuadrícula Turf.js (tope 1600; `i` desde el sur, `j` desde el oeste), 3D con Three.js 0.187 y `InstancedMesh`, sin React Three Fiber. Modelos `.bbmodel` cargados directo. El laboratorio ya está en `web/src/ui/useLaboratorio.ts`.
 - `api/`: Python, FastAPI. Proxy y caché de NASA POWER, Open-Meteo, elevación y suelo. `GET /health`. Los modelos respetan los schemas de `contratos/`, con prueba; OpenAPI solo genera el cliente TS de las llamadas HTTP (`openapi-typescript`).
 - `contratos/`: JSON Schema, fuente de verdad de los contratos (`AgroVault/Compartido/Contratos.md` solo los resume). Ejemplos en `contratos/ejemplos/`, tipos TS en `contratos/tipos/` (son los tipos de datos del motor y del front). Solo los edita Mompin.
 - `datos/`: catálogos y demo precargada. `datos/cache/` no se commitea.
@@ -31,24 +32,18 @@ El backend no ejecuta la simulación. `POST /api/simular` de `docs/08` está sup
 
 ## Comandos
 
-Contratos (ya existe):
-
 ```text
-cd contratos && npm install && npm test
+cd contratos && npm test
 cd contratos && npm run tipos
-```
-
-Todavía no hay `package.json` en `web/` ni app FastAPI. Cuando existan, prefiere los scripts del repo. Hasta entonces no inventes un flujo de build distinto al de abajo.
-
-Previsto:
-
-```text
-cd web && npm run dev
+cd api && python -m pytest
 cd web && npm test
+cd web && npx tsc --noEmit
+node datos/catalogos/validar.mjs
+cd web && npm run dev
 cd api && uvicorn app.main:app --reload
 ```
 
-Esos comandos son el objetivo de A1.2 y A1.3, no algo que ya corra. Si fallan porque el esqueleto no existe, dilo y crea solo la pieza que te pidieron.
+Esos comandos ya corresponden a código que existe. Antes de `main` corren contratos, pytest, catálogos y `tsc`.
 
 Modelos:
 
@@ -74,7 +69,7 @@ Requiere Python 3 y Pillow. La zanahoria de ejemplo no es un cultivo del proyect
 - Cada número citado sale de una fuente que puedas señalar.
 - El front no recalcula déficit, ETc ni ranking. 2D y 3D leen la misma salida. Cambiar de vista no llama a NASA.
 - El 3D no decide etapa ni estrés.
-- No fijes filas `[EN EVENTO]` ni `[DEPENDE-DATOS]`. Ranking (V-19): criterio B `[DECIDIDO]` el 14/11. Usa puntaje compuesto y arrepentimiento minimax con pesos declarados en `ponderacion` (iguales y `SUPUESTO` si no hay fuente; no inventes pesos). Si los pilares 2 y 3 no existen, usa el criterio A de respaldo y decláralo. Fechas de siembra de Isla son V-20: no las inventes.
+- No fijes filas `[EN EVENTO]` ni `[DEPENDE-DATOS]`. Ranking: criterio B, ya en `web/src/motor/ranking.ts`. Pesos iguales `SUPUESTO` si el usuario no da los suyos. Fechas de siembra de Isla: `datos/catalogos/calendario-isla.json`. No inventes otra ventana.
 - No toques nginx, systemd ni puertos de `mediworks` en el droplet.
 - No edites el mismo archivo que otra rama tenga en curso. Un archivo, un responsable.
 - Modelos voxel: sigue `.claude/agents/modelador-voxel.md` y `docs/07`. Paleta: colores nuevos al final. Escala: 1 celda = 16 unidades.
@@ -91,7 +86,9 @@ Requiere Python 3 y Pillow. La zanahoria de ejemplo no es un cultivo del proyect
 
 ## Qué no hacer por iniciativa
 
-- No abras los tres pilares, el pronóstico estacional, SMAP/GPM/MODIS ni el slider de meses en el mismo cambio que el balance de agua.
-- No añadas base de datos.
-- No muevas el motor al servidor "porque es más fácil de probar".
+- No reescribas el balance, los escenarios, el ranking ni los análogos: ya están y tienen regresión.
+- No cambies los años 2023 / 2016 / 2024 ni el TAW 122.3 sin actualizar `demo-isla.json` y `docs/01`.
+- No metas IMERG ni SMAP al balance ni al ranking.
+- No añadas base de datos ni muevas el motor al servidor.
 - No reescribas `docs/` para que coincida con un atajo del código.
+- No despliegues el droplet ni pegues `EARTHDATA_TOKEN` en el repo, el buzón o un log.
