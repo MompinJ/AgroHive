@@ -9,7 +9,7 @@ AgroHive es un **simulador visual "what if"** que compara **rotaciones de cultiv
 - **No busca la rotación de mayor rendimiento, sino la más robusta:** la que no colapsa en el peor escenario histórico (`docs/00`, `docs/05` paso 7).
 - **Arquitectura mundial, demo validada en Isla, Veracruz:** funciona en cualquier coordenada con fuentes globales. Las fuentes de un país (SIAP e INIFAP en México) se suman encima cuando la coordenada cae ahí (`docs/13`, "Alcance geográfico").
 - **Parcela de demo:** 2 ha ficticias en Isla (municipio INEGI 30/077), con coordenadas ilustrativas (`contratos/ejemplos/parcela.ejemplo.json`, `datos/demo/LEEME.md`).
-- **La demo compara R1 a R4** y muestra como sugerida **R4, milpa sembrada dentro de las ventanas de INIFAP** (`docs/13`). El orden que se ve es el que calcula el motor.
+- **La demo compara por defecto R1, R2 y R4** y muestra como sugerida **R4, milpa sembrada dentro de las ventanas de INIFAP**. R3 (frijol-frijol) queda disponible en el selector (`docs/13`). El orden que se ve es el que calcula el motor.
 - **La decisión final es del agricultor.** AgroHive no reemplaza a un agrónomo (`docs/00`, `docs/10`).
 
 ## Cómo correrlo

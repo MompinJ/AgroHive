@@ -225,6 +225,13 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Comparación por defecto de la demo: R1, R2 y R4 `[DECIDIDO]` (corrige "R1 a R4")
+
+- **Archivos:** `13` (fila "Rotaciones de la demo"), `docs/guion-video-borrador.md`, `docs/README-borrador.md`, `AgroVault/Compartido/Resumen.md`.
+- **Cambio y motivo:** Mompin corrigió la decisión anterior. La demo compara por defecto R1, R2 y R4, porque R3 (frijol-frijol) tiene una siembra sin ventana con fuente (frijol PV) y saca el pilar de compatibilidad. Con R1, R2 y R4 entran los cuatro pilares y el orden es R4 (0), R2 (0.077) y R1 (0.099). R3 sigue en el selector. Se quitó del guion la nota de "si se comparan las cuatro" y se actualizó la fila de rotaciones de ejemplo de la vault, que seguía con R0 a R2.
+- **Fuente / evidencia:** decisión transmitida por la sesión maestra; `web/src/motor/pruebas/regresion/demo-isla.json` (`rankingCuatroPilares`); doc 05, paso 7.
+- **Decisiones afectadas:** "Rotaciones de la demo" en 13.
+
 ### 2026-11-14 (noche) — Guion base del video de demo (A5.6)
 
 - **Archivos:** nuevo `docs/guion-video-borrador.md`.
