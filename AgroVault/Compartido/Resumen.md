@@ -34,7 +34,7 @@ Arquitectura **mundial**, demo validada en **Isla**. Las fuentes globales (POWER
 
 ### Qué todavía no está
 
-Modo 2D (A3.6), gráficas del dashboard (A4.1), tarjetas en pantalla (la plantilla ya existe en el motor, A4.3), tooltips por bloque (A3.8), slider de meses, pantalla de método (A4.5), NDVI (A4.11), video y README definitivos. La mascota (elote) no está montada en la escena. Pintar por bloques sigue `[EN EVENTO]`.
+Modo 2D (A3.6), gráficas del dashboard (A4.1), tarjetas en pantalla (la plantilla ya existe en el motor, A4.3), tooltips por bloque (A3.8), slider de meses, pantalla de método (A4.5), NDVI (A4.11) y README definitivo. Video y presentación se definen al final, fuera del tablero (no están canceladas). La mascota (elote) no está montada en la escena. Pintar por bloques sigue `[EN EVENTO]`.
 
 ### Qué no hace
 

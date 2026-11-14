@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fuentesDe } from './fuentes';
+import { agruparFuentes, fuentesDe } from './fuentes';
 
 describe('fuentes de la sesión', () => {
   it('extrae citas anidadas y elimina duplicados sin confundir nombres de cultivos', () => {
@@ -12,5 +12,11 @@ describe('fuentes de la sesión', () => {
   });
   it('conserva citas distintas del mismo servicio', () => {
     expect(fuentesDe({ fuentes: [{ nombre: 'Servicio', cita: 'Tabla 1' }, { nombre: 'Servicio', cita: 'Tabla 2' }] })).toHaveLength(2);
+  });
+  it('agrupa una publicación sin perder sus citas y metadatos distintos', () => {
+    const grupos = agruparFuentes({ fuentes: [{ nombre: 'Saxton y Rawls 2006', cita: 'Tabla 1' }, { nombre: 'Saxton y Rawls (2006)', cita: 'Tabla 3' }, { nombre: 'FAO EcoCrop maíz', nota: 'Temperatura' }, { nombre: 'EcoCrop frijol', nota: 'Lluvia' }] });
+    expect(grupos.map((g) => g.id)).toEqual(['saxton', 'ecocrop']);
+    expect(grupos[0]!.referencias.map((f) => f.cita)).toEqual(['Tabla 1', 'Tabla 3']);
+    expect(grupos[1]!.referencias).toHaveLength(2);
   });
 });

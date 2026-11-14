@@ -1,5 +1,6 @@
 import { ActionLink, Card, DataState, PageHeading } from '../ui/components';
-import { fuentesDe } from '../ui/fuentes';
+import { agruparFuentes } from '../ui/fuentes';
+import { condicionesFuentes } from '../ui/licencias';
 import type { LaboratorioEstado } from '../ui/useLaboratorio';
 
 export function MetodoFuentes({ estado }: { estado: LaboratorioEstado }) {
@@ -12,6 +13,7 @@ export function MetodoFuentes({ estado }: { estado: LaboratorioEstado }) {
     { nombre: 'Calendario local', documento: datos.calendario, estado: datos.calendario ? 'Referencia local' : 'Sin calendario local' },
     { nombre: 'Próxima temporada', documento: datos.capa, estado: datos.capa?.estado ?? 'NO_EVALUABLE' },
   ] : [];
+  const grupos = agruparFuentes(bloques.map((b) => b.documento));
   return <div className="ui-flow">
     <PageHeading step="05" title="Método, fuentes y límites">Revisa de dónde salen los datos de esta sesión y qué puede evaluarse antes de tomar una decisión.</PageHeading>
     <ActionLink href="#/laboratorio" secondary>Volver al laboratorio</ActionLink>
@@ -32,12 +34,14 @@ export function MetodoFuentes({ estado }: { estado: LaboratorioEstado }) {
       {datos.suelo?.advertencias?.map((a, i) => <p key={i}>{a.mensaje}</p>)}
       {datos.parcela.advertencias?.map((a, i) => <p key={i}>{a.mensaje}</p>)}
     </Card>}
-    {bloques.map((b) => <Card title={b.nombre} eyebrow={b.estado} key={b.nombre}>
-      {fuentesDe(b.documento).length === 0 ? <p>No hay una fuente disponible para este bloque; no se completa con valores supuestos.</p> : <ul className="source-list">{fuentesDe(b.documento).map((f, i) => <li key={i}>
+    <Card title="Licencias, términos y atribución"><p>Resumen de las fuentes del proyecto. La revisión humana de licencias sigue pendiente; los puntos sin confirmar no se convierten en permisos.</p><p><a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">Texto de CC BY 4.0</a></p><ul className="source-list">{condicionesFuentes.map((c) => <li key={c.id}><h3>{c.nombre}</h3><p>{c.texto}</p><a href={c.url} target="_blank" rel="noreferrer">Consultar condiciones de {c.nombre}</a></li>)}</ul></Card>
+    {grupos.map((g) => <Card title={g.nombre} key={g.id}>
+      <p className="quiet-note">{condicionesFuentes.find((c) => c.id === g.id)?.texto ?? 'Licencia específica no verificada para esta referencia. Se conserva la cita original; no se deducen permisos de reutilización.'}</p>
+      <details><summary>Ver {g.referencias.length} referencias y metadatos de esta fuente</summary><ul className="source-list">{g.referencias.map((f, i) => <li key={i}>
         <p>{f.url ? <a href={f.url} target="_blank" rel="noreferrer">{f.nombre}</a> : f.nombre}</p>
         {f.cita && <p>{f.cita}</p>}{f.periodo && <p>Período: {f.periodo.desde} a {f.periodo.hasta}.</p>}{f.coordenada && <p>Coordenada de la fuente: {f.coordenada.join(', ')}.</p>}
         {f.resolucion && <p>Resolución: {f.resolucion}.</p>}{f.unidades && <p>Unidades: {f.unidades}.</p>}{f.consultado && <p>Consulta: {f.consultado}.</p>}{f.nota && <p>{f.nota}</p>}
-      </li>)}</ul>}
+      </li>)}</ul></details>
     </Card>)}
   </div>;
 }

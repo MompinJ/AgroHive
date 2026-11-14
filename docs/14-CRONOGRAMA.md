@@ -163,7 +163,13 @@ Compuerta **C4** al terminar A4.6.
 | A5.8 `[HECHO]` demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
 | A5.9 | Envío final según reglas oficiales | R4 | XS | Haiku | A5.7 | Entrega confirmada (C6) |
 
-Video y presentación se definen al final, cuando el front esté conforme: quedan fuera del tablero y no se asignan ahora `[DECIDIDO]` (Mompin, 14/11; ver 13).
+Video y presentación se definen al final, cuando el front esté conforme: quedan fuera del tablero, sin asignar y fuera del reparto y de los porcentajes `[DECIDIDO]` (Mompin, 14/11; ver 13). No están canceladas. Esto no cambia los requisitos externos del evento.
+
+## Fuera del tablero hasta el final
+
+| ID | Actividad | Estado | Nota |
+| --- | --- | --- | --- |
+| A5.6 | Guion, video, presentación y ensayo | Se define al final | Cuando el front esté conforme (Mompin, 14/11); sin asignar y fuera del reparto y de los porcentajes |
 
 ## Camino crítico
 

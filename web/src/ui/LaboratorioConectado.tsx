@@ -5,6 +5,7 @@ import { armarPlan, explicarFecha, nombresCultivos, referenciaSiembra } from './
 import { conLimite, type LaboratorioEstado } from './useLaboratorio';
 import './laboratorio.css';
 import { TarjetasRotacion } from './TarjetasRotacion';
+import { ordenarRotaciones } from './ordenRotaciones';
 
 const Escena = lazy(() => import('../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
 const DashboardBalance = lazy(() => import('./DashboardBalance'));
@@ -38,6 +39,7 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
   if (!estado.datos || !plan) return <><PageHeading step="03" title="Prepara tu comparación">Cargamos los datos para tu parcela.</PageHeading><DataState state={estado.error ? 'error' : 'loading'}>{estado.error || 'Preparando clima, suelo y cultivos.'}</DataState>{estado.error && <button className="ui-action" onClick={estado.reintentar}>Reintentar carga</button>}</>;
   const datos = estado.datos;
   const ranking = estado.calculo?.ranking;
+  const rotacionesOrdenadas = ordenarRotaciones(ranking?.rotaciones ?? []);
   const resultado = ranking?.rotaciones.find((r) => r.rotacionId === plan.rotacionId);
   const metricas = resultado?.porEscenario[escenario];
   function editar(index: number, cambio: Partial<Ciclo>) {
@@ -73,7 +75,7 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
         <p role="status">{plan.rotacionId} · Ciclo {visible?.ciclo} · {nombresCultivos[visible?.cultivo ?? ''] ?? visible?.cultivo} · {escenario} {metricas?.anioReal ?? 'sin año evaluable'}</p>
         <label htmlFor="fecha-observacion">Fecha que muestra la escena</label><input id="fecha-observacion" type="date" value={fecha} onChange={(e) => { if (e.target.value) setFecha({ clave: claveFecha, fecha: e.target.value }); }} />
         {errorCeldas && <DataState state="error">{errorCeldas} Cambia la fecha o reintenta el cálculo.</DataState>}
-        <Suspense fallback={<DataState state="loading">Cargando escena 3D.</DataState>}><Escena parcela={datos.parcela} suelo={datos.suelo} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} /></Suspense>
+        <Suspense fallback={<DataState state="loading">Cargando escena 3D.</DataState>}><Escena parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} /></Suspense>
       </Card>
       <Card title="Lee el escenario" eyebrow="03 / Observa">
         <fieldset className="choice-group"><legend>Escenario histórico</legend><div className="ui-actions">{escenarios.map((e) => <label key={e}><input type="radio" name="escenario-real" value={e} checked={e === escenario} onChange={() => setEscenario(e)} /> {e}</label>)}</div></fieldset>
@@ -88,8 +90,8 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
     {!estado.calculo && !estado.error && <DataState state="loading">Calculando planes en el motor. Los resultados anteriores están invalidados.</DataState>}
     {ranking && <Card title="Comparación por robustez" eyebrow="Resultados del motor">
       <p>{ranking.mensaje ?? `${ranking.criterio?.startsWith('B') ? 'Criterio B: menor arrepentimiento máximo entre escenarios' : ranking.criterio ? 'Criterio A: menor déficit en el peor escenario' : 'Sin ranking evaluable'}. Los pesos se declaran ${ranking.ponderacion?.etiqueta ?? 'sin ponderación'}.`}</p>
-      <p className="quiet-note">{ranking.ponderacion?.nota}</p>
-      <div className="ui-table-wrap" role="region" aria-label="Resultados de las rotaciones" tabIndex={0}><table><caption>Peor caso por rotación; sin posición cuando no es evaluable</caption><thead><tr><th>Rotación</th><th>Estado</th><th>Posición</th><th>Peor escenario</th></tr></thead><tbody>{ranking.rotaciones.map((r) => <tr key={r.rotacionId}><th scope="row">{r.rotacionId}</th><td>{r.estado}</td><td>{r.ranking?.posicion ?? 'Sin ranking'}</td><td>{r.peorCaso?.escenario ?? 'NO_EVALUABLE'}</td></tr>)}</tbody></table></div>
+      <p className="quiet-note ranking-method">{ranking.ponderacion?.nota}</p>
+      <div className="ui-table-wrap" role="region" aria-label="Resultados de las rotaciones" tabIndex={0}><table><caption>Peor caso por rotación; sin posición cuando no es evaluable</caption><thead><tr><th>Rotación</th><th>Estado</th><th>Posición</th><th>Peor escenario</th></tr></thead><tbody>{rotacionesOrdenadas.map((r) => <tr key={r.rotacionId}><th scope="row">{r.rotacionId}</th><td>{r.estado}</td><td>{r.ranking?.posicion ?? 'Sin ranking'}</td><td>{r.peorCaso?.escenario ?? 'NO_EVALUABLE'}</td></tr>)}</tbody></table></div>
       <p>Un pilar entra solo si todas las rotaciones comparadas tienen datos para evaluarlo.</p>
       <ul>{Object.entries(ranking.ponderacion?.pesos ?? {}).map(([id, peso]) => <li key={id}>{pilares[id] ?? id}: incluido, peso {numero(peso)}.</li>)}{ranking.ponderacion?.pilaresExcluidos.map((id) => {
         const motivos = [...new Set(ranking.rotaciones.flatMap((r) => escenarios.map((e) => r.porEscenario[e].pilares[id]?.motivo).filter((m): m is string => !!m)))];
@@ -101,7 +103,7 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
     </Card>}
     <button className="ui-action" aria-expanded={mostrarDashboard} onClick={() => setMostrarDashboard((v) => !v)}>{mostrarDashboard ? 'Ocultar gráficas de agua' : 'Mostrar gráficas de agua'}</button>
     {mostrarDashboard && estado.calculo && <Suspense fallback={<DataState state="loading">Cargando dashboard.</DataState>}><DashboardBalance cliente={estado.calculo.cliente} revision={estado.calculo.clave} rotacion={plan.rotacionId} escenario={escenario} /></Suspense>}
-    {ranking && <TarjetasRotacion rotaciones={ranking.rotaciones} />}
+    {ranking && <TarjetasRotacion rotaciones={rotacionesOrdenadas} />}
     <Card title="Próxima temporada aproximada" eyebrow="Exploratorio">
       <label><input type="checkbox" checked={mostrarBanda} onChange={(e) => setMostrarBanda(e.target.checked)} /> Mostrar banda de incertidumbre</label>
       <p>No es una predicción de cosecha ni de una temporada exacta.</p>
