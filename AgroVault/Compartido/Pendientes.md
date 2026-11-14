@@ -13,6 +13,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 | ID | Estado | Nota |
 | --- | --- | --- |
 | A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.5.0 en `contratos/`: 12 schemas (más `comun`), ejemplos, `npm test` (52/52) y tipos TS. Ver [[Contratos]] |
+| A3.1, A3.2 | **`[EN CURSO]`** (Mompin, rama `Mompin-escena`) | `web/src/escena/`: adaptador puro parcela + `resultado-celda` a bloques (sin elevación o sin resultado = hueco `NO_EVALUABLE`, nunca cero; tope 1600 celdas), tabla de estilo por estado para A3.3 y lector de `.bbmodel` con geometría unida por cultivo + etapa. Falta el render con three (dependencia por aprobar) |
 | A1.5, A1.6 | Hechas (Mafer) | `datos/catalogos/`: milpa (maiz, frijol, calabaza) desde FAO-56 y EcoCrop, y TAW por textura (FAO-56 Tabla 19), validados contra contratos 0.3.0 (`cultivo` y `tabla-suelos`); `python datos/catalogos/generar.py` y `node datos/catalogos/validar.mjs`. La lluvia de EcoCrop va en `lluviaAnual*`; `lluviaCiclo*`, umbral de calor y ventanas de siembra siguen `NO_EVALUABLE` |
 
 El resto del reparto y su estado está en el tablero de `docs/14` (al final).

@@ -117,8 +117,8 @@ Compuerta **C2** al terminar A2.1, A2.6 y A2.7.
 
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
-| A3.1 | Escena 3D con relieve (altura por bloque, `InstancedMesh`) | R1 | **L** | Fable | A2.3, A2.9 | Terreno 3D navegable (C3) |
-| A3.2 | Cargador de `.bbmodel` con instancing por cultivo y etapa | R1 | **L** | Opus | A2.11 | Modelos del motor visibles en celdas |
+| A3.1 `[EN CURSO]` | Escena 3D con relieve (altura por bloque, `InstancedMesh`) | R1 | **L** | Fable | A2.3, A2.9 | Terreno 3D navegable (C3) |
+| A3.2 `[EN CURSO]` | Cargador de `.bbmodel` con instancing por cultivo y etapa | R1 | **L** | Opus | A2.11 | Modelos del motor visibles en celdas |
 | A3.3 | Estados visuales: color + icono + patrón, leyenda | R1 | M | Sonnet | A3.2 | Legible con daltonismo |
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | R1 | M | Sonnet | A2.7 | Cambiar cultivo invalida y recalcula; cada fecha sugerida explica por qué y de dónde sale (calendario local o "sin calendario"); cultivo no registrado en el lugar con aviso |
 | A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | R1 + R2 | S | Sonnet | A3.4 | Prueba manual documentada |
