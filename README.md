@@ -23,7 +23,7 @@ AgroHive es un **simulador visual "what if"** que compara **rotaciones de cultiv
 | `datos/` | Catálogos (cultivos, suelos, calendario local) y paquete de demo precargado |
 | `modelos/` | Modelos 3D `.bbmodel` (cultivos, losas de suelo y mascota) generados con el agente `modelador-voxel` |
 | `docs/` | Documentación vigente |
-| `herramientas/` | `voxelkit.py`, `buzon/` (mensajes entre sesiones de IA por la red local) y utilidades |
+| `herramientas/` | `voxelkit.py`, `buzon/` (mensajes entre sesiones de IA por la red local), `prueba-movimiento/` (prueba de accesibilidad de la escena en Chrome) y utilidades |
 
 Ramas: `main` (estable), `balam`, `Mompin`, `Mafer`, `Eduardo`. Se trabaja en la rama propia y se integra a `main`; un archivo, un responsable.
 
