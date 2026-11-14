@@ -39,6 +39,20 @@ const EscenaParcela = lazy(() => import('../escena/EscenaParcela').then((m) => (
 - **Con motor (A2.7) y selector (A3.4):** el `ResultadoCeldas` de la rotación, el escenario y el ciclo seleccionados (`SELECT_CYCLE` muestra el cultivo de ese ciclo, doc 06). Prueba crítica A3.5: R1, ciclo 2, seco muestra frijol con su etapa y estado.
 - **Con polígono (A2.9, A2.10):** la parcela que arma la cuadrícula, con elevación y pendiente de `POST /api/elevacion` (las celdas que vuelvan en `null` se dibujan como hueco `NO_EVALUABLE`).
 
+## Requisito en `vite.config.ts` (modo desarrollo)
+
+Los `.bbmodel` viven en `modelos/`, fuera de `web/`. `vite build` los empaqueta sin problema, pero `npm run dev` solo sirve archivos dentro de `web/` y los devuelve sin transformar: la escena cae a la planta provisional y avisa `MODELO_ILEGIBLE`. Hace falta una línea en `web/vite.config.ts` (archivo de balam, por eso no lo toqué):
+
+```ts
+export default defineConfig({
+  plugins: [react()],
+  base: './',
+  server: { fs: { allow: ['..'] } }, // raiz del repo: modelos/, contratos/ y datos/ (solo afecta a npm run dev)
+});
+```
+
+Probado con un servidor temporal con esa opción: los cinco `maiz_*.bbmodel` cargan y se ven en la escena.
+
 ## Vista previa sin tocar la app
 
-`npm run dev` en `web/` y abrir `http://127.0.0.1:5173/escena.html`. Es solo de desarrollo: `vite build` no la incluye (no se tocó `vite.config.ts`).
+`npm run dev` en `web/` y abrir `http://127.0.0.1:5173/escena.html` (con la línea de arriba para ver los modelos). Por defecto usa el **motor real** en su Web Worker (`crearClienteMotor`) con el paquete de demo sin internet (`datos/demo/respuestas/`: clima de NASA POWER y terreno de Terrarium) y un plan de prueba R1 (maíz, frijol, maíz); se elige suelo (mapa, hoy `NO_EVALUABLE` hasta A2.16, o selector manual franco `SUPUESTO`), escenario y fecha del plan. También puede mostrar el ejemplo de `contratos/`. Las entradas están en `escena/demo-motor.ts`. Es solo de desarrollo: `vite build` no la incluye.

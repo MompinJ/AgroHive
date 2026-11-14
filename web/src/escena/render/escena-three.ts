@@ -142,7 +142,8 @@ export class EscenaThree {
   actualizar(modelo: EscenaModelo) {
     const version = ++this.version;
     this.limpiar();
-    this.extension = Math.max(modelo.filas, modelo.columnas, 2) * 0.85 + 1;
+    // Media altura visible: la parcela mas margen para las plantas altas.
+    this.extension = Math.max(modelo.filas, modelo.columnas, 2) * 0.7 + 0.8;
     this.construirTerreno(modelo);
     this.ajustarTamano();
     this.restablecerVista();
@@ -301,19 +302,19 @@ export class EscenaThree {
     const q = new THREE.Quaternion();
     const eje = new THREE.Vector3(0, 1, 0);
     for (const grupo of grupos) {
-      let tipo = grupo.resolucion.tipo;
       let geo: THREE.BufferGeometry;
+      let aviso: [string, string] | null = null;
+      if (grupo.resolucion.tipo === 'respaldo') {
+        aviso = ['MODELO_PROVISIONAL', `Sin modelo ${grupo.clave}.bbmodel: se dibuja una planta provisional.`];
+      }
       try {
-        geo = await this.geometriaDe(grupo.clave, tipo);
+        geo = await this.geometriaDe(grupo.clave, grupo.resolucion.tipo);
       } catch (e) {
-        this.opciones.onAviso?.('MODELO_ILEGIBLE', `${grupo.clave}.bbmodel no se pudo leer (${(e as Error).message}); se usa la planta provisional.`);
-        tipo = 'respaldo';
+        aviso = ['MODELO_ILEGIBLE', `${grupo.clave}.bbmodel no se pudo leer (${(e as Error).message}); se dibuja una planta provisional.`];
         geo = await this.geometriaDe(grupo.clave, 'respaldo');
       }
       if (version !== this.version) return; // llego otra actualizacion mientras cargaba
-      if (tipo === 'respaldo') {
-        this.opciones.onAviso?.('MODELO_PROVISIONAL', `Sin modelo ${grupo.clave}.bbmodel: se dibuja una planta provisional.`);
-      }
+      if (aviso) this.opciones.onAviso?.(aviso[0], aviso[1]);
       const plantas = new THREE.InstancedMesh(geo, mat, grupo.bloques.length);
       grupo.bloques.forEach((b, k) => {
         const s = escalaPorAvance(b.avanceEtapa);
