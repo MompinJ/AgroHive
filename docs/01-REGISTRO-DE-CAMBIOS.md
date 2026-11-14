@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Placa de estado más chica en la escena `[DECIDIDO]` (Mompin)
+
+- **Archivos:** `web/src/escena/render/escena-three.ts`, `docs/06`.
+- **Cambio:** la placa pasa de 0.82 a 0.6 del lado de la celda para que se vea la losa de suelo (A2.12) y su humedad. La textura es la misma (contraste WCAG y mínimos de `daltonismo.ts`).
+- **Decisiones afectadas:** decidido por Mompin el 14/11.
+
 ### 2026-11-14 — A4.3: tarjetas de rotación, parte lógica (Mompin, rama `Mompin-motor`)
 
 - **Archivos:** `web/src/motor/tarjetas.ts` (nuevo), `protocolo.ts` (`rankear` devuelve las rotaciones con su tarjeta), `index.ts`; pruebas `tarjetas.test.ts` y la regresión (`regresion/demo-isla.json` suma el ranking R1 a R4 y las tarjetas de R4 y R2; los números anteriores no cambian); `docs/05` (paso 8), `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault/Compartido/Pendientes.md`.

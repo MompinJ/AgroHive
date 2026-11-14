@@ -49,7 +49,12 @@ const TOPE_HUECO = -GROSOR_BASE * 0.6;
 const CUERPO_LOSA = 2 / 16;
 const DETALLE_LOSA = 1 / 16;
 const LADO_BLOQUE = 0.96;
-const LADO_PLACA_ESCENA = 0.82;
+/**
+ * Lado de la placa de estado en celdas `[DECIDIDO]` (Mompin, 14/11): 0.6 para que alrededor
+ * se vea la losa de suelo y su humedad. La textura no cambia (mismos iconos y patrones, con
+ * los minimos de daltonismo.ts y el contraste verificado); solo ocupa menos de la cara.
+ */
+const LADO_PLACA_ESCENA = 0.6;
 
 function texturaDe(estilo: Parameters<typeof rgbaPlaca>[0]): THREE.DataTexture {
   const img = rgbaPlaca(estilo);
