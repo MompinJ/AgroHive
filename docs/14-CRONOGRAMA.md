@@ -111,7 +111,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.15 | Cliente OpenLandMap y comparación con ISRIC en `GET /api/suelo` (V-23: ambos servicios) | R3 | S | Sonnet | A2.14 | `GET /api/suelo` devuelve `estimaciones` de ISRIC y OpenLandMap con fuente y `estimacionUsada` |
 | A2.16 (Mafer) | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | R3 / Mafer | M | Opus | A2.14, A1.6 | `agua.tawMmPorM` con `metodoTaw` y `retencion` (θsat, θFC, θWP), citado y `SUPUESTO`; prueba contra valores publicados del artículo |
 
-Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 hechas; el motor devuelve resultados por celda con la serie real de POWER y pasa las pruebas 1 a 5 de doc 05 (rama `Mompin-motor`); C2 se cruza al integrarse a `main`.
+Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 hechas; el motor devuelve resultados por celda con el paquete de demo real (A2.4: POWER, SoilGrids y Terrarium de Isla; suelo franco del selector manual mientras el TAW de Isla es `NO_EVALUABLE`) y pasa las pruebas 1 a 5 de doc 05 (`web/src/motor/pruebas/c2.test.ts`); C2 se cruza al integrarse a `main`.
 
 ## F3 · Escena y selector
 
@@ -134,7 +134,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
 | A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | R1 | M | Sonnet | A2.7 | Gráficas reales del escenario |
-| A4.2 | Ranking de rotaciones por robustez: criterio B `[DECIDIDO]` (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | R2 | M | Opus | A2.7 (y A3.7 para B) | Tabla ordenada con 3 o más rotaciones; pesos y criterio declarados |
+| A4.2 `[HECHO]` 14/11 (B listo; corre A de respaldo hasta que A3.7 dé los pilares 2 y 3) | Ranking de rotaciones por robustez: criterio B `[DECIDIDO]` (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | R2 | M | Opus | A2.7 (y A3.7 para B) | Tabla ordenada con 3 o más rotaciones; pesos y criterio declarados |
 | A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | R2 | S | Sonnet | A4.3 | Con respaldo en plantilla |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |
@@ -192,7 +192,7 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 
 | Responsable | Rama | Herramientas de IA | Actividades | Primera tarea |
 | --- | --- | --- | --- | --- |
-| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1, A3.2, A4.2, A4.6, A2.13 (parte del motor), A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
+| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1, A3.2, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor), A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.7, A4.8, A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
 | **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16, A2.11, A2.12, A3.3, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A3.8, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |

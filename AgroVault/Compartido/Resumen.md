@@ -60,7 +60,7 @@ Elevación: Terrarium por defecto y Open-Meteo Elevation de respaldo (V-08, deci
 
 Otros datasets NASA (GPM, SMAP, MODIS, Landsat, ECOSTRESS, GRACE) son extra. Solo entran si se integran de verdad. SMAP, GPM y MODIS van por `earthaccess` en Python, por eso el backend es FastAPI.
 
-Escenarios (`[DECIDIDO]` 14/11, A2.5 hecha): el año agrícola real más cercano a p10, p50 y p90 de la lluvia de las temporadas de siembra PV y OI de SIAP (OI oct *t*-1 a mar *t*, PV abr a sep *t*), no del año calendario; empate: el más antiguo. Mostrar el año. Con POWER de la celda demo: 2023 seco, 2016 habitual, 2024 lluvioso. Detalle en `docs/05`, paso 1. `[DEPENDE-DATOS]` si la robustez se calcula sobre todo el histórico o solo sobre esos tres años.
+Escenarios (`[DECIDIDO]` 14/11, A2.5 hecha): el año agrícola real más cercano a p10, p50 y p90 de la lluvia de las temporadas de siembra PV y OI de SIAP (OI oct *t*-1 a mar *t*, PV abr a sep *t*), no del año calendario; empate: el más antiguo. Mostrar el año. Con el paquete de demo (POWER, 2005-10 a 2025): 2023 seco, 2008 habitual (empata con 2016 en el p50; gana el más antiguo), 2024 lluvioso. Detalle en `docs/05`, paso 1. `[DEPENDE-DATOS]` si la robustez se calcula sobre todo el histórico o solo sobre esos tres años.
 
 Motor, independiente del render (`docs/05`):
 
@@ -70,7 +70,7 @@ Motor, independiente del render (`docs/05`):
 4. Balance de cubeta por bloque (FAO-56 cap. 8, hecho en A2.6): lluvia entra, lo que no cabe es exceso (percolación), ETc sale, lo que no se cubre es déficit. TAW según suelo; arranque a capacidad de campo como supuesto declarado hasta A2.16. Pendiente: sin escurrimiento hasta tener coeficiente con fuente (A3.7).
 5. Estrés hídrico, estrés por calor y avance fenológico. Salida cualitativa para el render.
 6. Pilares: déficit (núcleo), compatibilidad de ciclo, erosión relativa (no toneladas, inspirada en USLE/RUSLE). Los dos últimos se recortan si faltan datos.
-7. Ranking: el criterio principal es el peor caso. `[DECIDIDO]` el 14/11: opción B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio). Pesos con fuente o, si no hay, iguales y declarados `SUPUESTO`. Si los pilares 2 y 3 (A3.7) no llegan, respaldo con la opción A (menor déficit en el peor caso). Si nada es evaluable, decirlo.
+7. Ranking (A4.2 hecha, `ranking.ts`): el criterio principal es el peor caso. `[DECIDIDO]` el 14/11: opción B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio). Pesos con fuente o, si no hay, iguales y declarados `SUPUESTO`. Si los pilares 2 y 3 (A3.7) no llegan, respaldo con la opción A (menor déficit en el peor caso). Si nada es evaluable, decirlo.
 8. Tarjeta de explicación con plantilla. Un LLM, si se usa, solo redacta números ya calculados.
 
 Estados: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS`, `RESPALDO_HISTORICO`.

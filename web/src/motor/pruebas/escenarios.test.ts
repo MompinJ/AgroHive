@@ -27,21 +27,33 @@ describe('lluvia por anio agricola SIAP', () => {
   });
 });
 
-describe('A2.5 con la serie real de NASA POWER de la celda demo (2006 a 2025)', () => {
+describe('A2.5 con la serie real de NASA POWER del paquete de demo (2005-10-01 a 2025-12-31)', () => {
   const sel = seleccionarEscenarios(seriePowerIsla());
 
-  it('elige anios reales reproducibles: 2023 seco, 2016 habitual, 2024 lluvioso', () => {
+  it('elige anios reales reproducibles: 2023 seco, 2008 habitual, 2024 lluvioso', () => {
     expect(sel.estado).toBe('EVALUABLE');
     expect(sel.escenarios.seco?.anioReal).toBe(2023);
-    expect(sel.escenarios.habitual?.anioReal).toBe(2016);
+    expect(sel.escenarios.habitual?.anioReal).toBe(2008);
     expect(sel.escenarios.lluvioso?.anioReal).toBe(2024);
-    // 2006 no es candidato: su OI empieza en octubre de 2005, fuera de la serie.
-    expect(sel.anios.find((a) => a.anio === 2006)?.temporadasMm).toBeNull();
-    expect(sel.anios.filter((a) => a.temporadasMm !== null)).toHaveLength(19);
+    // 20 anios agricolas completos (2006 a 2025); 2005 no, su OI empieza en octubre de 2004.
+    expect(sel.anios.filter((a) => a.temporadasMm !== null)).toHaveLength(20);
+    expect(sel.anios.find((a) => a.anio === 2005)?.temporadasMm).toBeNull();
+  });
+
+  it('con 20 anios el p50 es el punto medio de los dos anios centrales: empatan 2008 y 2016 y gana el mas antiguo', () => {
+    expect(sel.percentiles.habitual).toBeCloseTo((1912.0 + 1932.1) / 2, 0);
+    const adv = sel.escenarios.habitual?.advertencias?.find((a) => a.codigo === 'ANIO_CERCANO');
+    expect(adv?.mensaje).toContain('2016');
   });
 
   it('es determinista', () => {
     expect(seleccionarEscenarios(seriePowerIsla())).toEqual(sel);
+  });
+
+  it('guarda la lluvia por temporada del anio elegido (seco 2023: total 1523.4 mm)', () => {
+    const t = sel.escenarios.seco?.seleccion.lluviaTemporadasMm;
+    expect(t?.total).toBe(1523.4);
+    expect((t?.pv as number) + (t?.oi as number)).toBeCloseTo(1523.4, 0);
   });
 
   it('declara el anio cercano (2025 esta a 2 mm de 2024 en el p90)', () => {
@@ -57,6 +69,7 @@ describe('A2.5 con la serie real de NASA POWER de la celda demo (2006 a 2025)', 
       expect(esc.diario[0]?.fecha).toBe(`${t - 1}-10-01`);
       expect(esc.diario[esc.diario.length - 1]?.fecha).toBe(`${t + 1}-03-31`);
       expect(esc.seleccion.criterio).toContain('PV + OI');
+      expect(esc.seleccion.lluviaTemporadasMm?.fuente.nombre).toContain('SIAP');
     }
   });
 });

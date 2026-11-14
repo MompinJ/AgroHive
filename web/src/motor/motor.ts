@@ -86,8 +86,16 @@ export interface SimulacionEscenario {
   metodoEt0: Record<MetodoEt0, number> & { sinDato: number };
 }
 
+/** Exceso de agua (percolacion) por escenario, promedio de la parcela. Fuera del ranking por ahora (decision pendiente). */
+export interface ExcesoEscenario {
+  mm: number;
+  dias: number;
+}
+
 export interface ResultadoMotor {
   rotacion: ResultadoRotacion;
+  /** null si el escenario no es evaluable. Los mm tambien estan en el pilar (excesoTotalMm); los dias no tienen campo en el contrato. */
+  exceso: Record<Escenario, ExcesoEscenario | null>;
   simulaciones: Record<Escenario, SimulacionEscenario>;
   /** Ciclos de cada celda (generales con los reemplazos de porCelda). */
   ciclosPorCelda: Map<string, CicloPlan[]>;
@@ -304,6 +312,23 @@ function simularEscenario(
   return res;
 }
 
+function excesoEscenario(sim: SimulacionEscenario, celdas: Parcela['celdas'], ciclosPorCelda: Map<string, CicloPlan[]>): ExcesoEscenario | null {
+  if (sinNumeros(sim.estado)) return null;
+  let w = 0;
+  let mm = 0;
+  let dias = 0;
+  for (const celda of celdas) {
+    const peso = celda.fraccionDentro ?? 1;
+    w += peso;
+    for (const c of ciclosPorCelda.get(celda.id) ?? []) {
+      const b = sim.ciclos.get(clave(c.ciclo, c.cultivo))?.balance as BalanceCiclo;
+      mm += peso * b.excesoTotalMm;
+      dias += peso * b.diasExceso;
+    }
+  }
+  return { mm: r(mm / w, 1), dias: Math.round(dias / w) };
+}
+
 function pilarHidrico(sim: SimulacionEscenario, celdas: Parcela['celdas'], ciclosPorCelda: Map<string, CicloPlan[]>): PilarDeficitHidrico {
   if (sinNumeros(sim.estado)) {
     return {
@@ -431,6 +456,11 @@ export function simularRotacion(e: EntradasMotor): ResultadoMotor {
   const esEjemplo =
     e.plan.meta.esEjemplo || e.parcela.meta.esEjemplo || ESCENARIOS.some((x) => e.escenarios[x]?.meta.esEjemplo === true);
   const advertencias = construirAdvertencias(e, simulaciones, taw, erroresPlan, avisosCultivo, noRecomendados, estado);
+  const exceso = {
+    seco: excesoEscenario(simulaciones.seco, e.parcela.celdas, ciclosPorCelda),
+    habitual: excesoEscenario(simulaciones.habitual, e.parcela.celdas, ciclosPorCelda),
+    lluvioso: excesoEscenario(simulaciones.lluvioso, e.parcela.celdas, ciclosPorCelda),
+  };
   const rotacion: ResultadoRotacion = {
     meta: esEjemplo
       ? { versionContrato: VERSION_CONTRATO, esEjemplo: true, aviso: 'Calculado con entradas de ejemplo o sinteticas: no son datos reales.' }
@@ -444,10 +474,10 @@ export function simularRotacion(e: EntradasMotor): ResultadoMotor {
     ponderacion: null,
     ranking: null,
     advertencias,
-    explicacion: explicacion(e, simulaciones, porEscenario, taw),
+    explicacion: explicacion(e, simulaciones, porEscenario, taw, exceso),
   };
   if (noRecomendados.length > 0) rotacion.cultivosNoRecomendados = noRecomendados;
-  return { rotacion, simulaciones, ciclosPorCelda, parcela: e.parcela, plan: e.plan, noRecomendados, esEjemplo };
+  return { rotacion, exceso, simulaciones, ciclosPorCelda, parcela: e.parcela, plan: e.plan, noRecomendados, esEjemplo };
 }
 
 function construirAdvertencias(
@@ -530,6 +560,7 @@ function explicacion(
   sims: Record<Escenario, SimulacionEscenario>,
   porEscenario: Record<Escenario, MetricasEscenario>,
   taw: ResultadoTaw,
+  exceso: Record<Escenario, ExcesoEscenario | null>,
 ): ResultadoRotacion['explicacion'] {
   const evidencia: Evidencia[] = [];
   for (const x of ESCENARIOS) {
@@ -542,6 +573,15 @@ function explicacion(
       unidad: 'fraccion de la demanda',
       fuente: s.clima.fuente,
     });
+    const ex = exceso[x];
+    if (ex) {
+      evidencia.push({
+        texto: `Escenario ${x} (anio agricola ${s.anioReal}): ${ex.dias} dias con exceso de agua (lluvia que no cabe en el suelo y drena), ${ex.mm} mm en total.`,
+        valor: ex.dias,
+        unidad: 'dias con exceso',
+        fuente: s.clima.fuente,
+      });
+    }
   }
   const huecos = [
     'Suelo estimado por textura (SUPUESTO), no medido en la parcela.',
@@ -622,8 +662,7 @@ function registroCelda(res: ResultadoMotor, sim: SimulacionEscenario, celdaId: s
       motivo: sc?.motivo ?? sim.motivo ?? 'Sin resultado para este ciclo.',
       ciclo: actual.ciclo,
       cultivo: actual.cultivo,
-      // El contrato exige una etapa: sin parametros del cultivo solo se sabe que el ciclo ya se sembro.
-      etapa: ev?.etapa ?? 'siembra',
+      etapa: ev?.etapa ?? null,
       ...nulos,
       ...extra,
     };
