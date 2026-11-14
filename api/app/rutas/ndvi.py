@@ -7,12 +7,12 @@ from ..modelos import ErrorDatos
 from ..modelos_ndvi import Ndvi
 
 router = APIRouter(prefix="/api", tags=["ndvi"])
-MAX_DIAS = 400  # unas 3 ventanas (6 llamadas a ORNL); un anio agricola cabe
+MAX_DIAS = 400  # un anio agricola cabe; la serie larga del paquete de demo se arma fuera de esta ruta
 
 
 @router.get("/ndvi", response_model=Ndvi, responses={503: {"model": ErrorDatos}, 422: {"description": "Periodo invalido"}})
 async def obtener_ndvi(lat: float = Query(ge=-90, le=90), lon: float = Query(ge=-180, le=180), desde: date = Query(), hasta: date = Query()):
-    """NDVI de MODIS MOD13Q1 (250 m, 16 dias) en el punto, de ORNL DAAC. **Evidencia**: no entra al ranking. Maximo 400 dias por consulta."""
+    """NDVI de MODIS MOD13Q1 V061 (250 m, 16 dias) en el punto, leido de Planetary Computer. **Evidencia**: no entra al ranking. Maximo 400 dias por consulta."""
     if hasta < desde:
         raise HTTPException(status_code=422, detail="hasta debe ser igual o posterior a desde")
     if hasta > date.today():

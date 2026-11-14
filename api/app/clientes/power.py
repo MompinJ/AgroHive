@@ -11,7 +11,13 @@ INICIO_MINIMO = date(1981, 1, 1)
 # Lluvia por satelite GPM IMERG dentro de POWER (A4.10, probado el 14/11): sin cuenta Earthdata. Solo la entrega en UTC; en hora
 # solar local (el valor por defecto) POWER responde -999 en todo. Celda de 0.1 grados, distinta de la de MERRA-2 (0.5 x 0.625).
 IMERG_VARIABLE = "IMERG_PRECTOT"
-INICIO_IMERG = date(1998, 6, 1)  # POWER: "IMERG Precipitation, 0.1 grados, diario UTC, inicio June 1, 1998" (power.larc.nasa.gov/docs/methodology/)
+# Inicio real de IMERG_PRECTOT en POWER con time-standard=UTC, parcela demo (18.03, -95.53).
+# Llamada del 14/11/2026, repetida en esta sesion del 1997-12-28 al 1998-01-05: ultimo -999 el 1997-12-31,
+# primer valor el 1998-01-01 (0.0). Igual que la cobertura CMR de GPM_3IMERGDF V07 y que la medicion de Mafer.
+# La metodologia de POWER sigue diciendo 1 jun 1998 y el espejo de UCAR 2000-06-01; no recortan la serie.
+# Del 25 al 31 de mayo de 1998 POWER devolvio 0.0, no -999 (Mompin, Mafer, y otra llamada en esta sesion). Es lluvia cero, no relleno.
+# El relleno sigue siendo el fill_value (-999) y sale como null. La demo (2005-10-01 en adelante) no cambia.
+INICIO_IMERG = date(1998, 1, 1)
 NOMBRE_IMERG = "NASA POWER (GPM IMERG, IMERG_PRECTOT, hora UTC)"
 RESOLUCION_IMERG = "GPM IMERG, celda de 0.1 grados"
 NOMBRE = "NASA POWER (diario, comunidad AG)"
