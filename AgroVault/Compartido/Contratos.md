@@ -2,109 +2,62 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: docs/08, corregido por docs/13
+fuente: contratos/*.schema.json (v0.2.0, A1.1)
 ---
 
 # Contratos
 
-Nombres sacados de `docs/08`. Coordenadas y ceros de esos ejemplos son ilustrativos. Los `null` se llenan con cálculo, no con números inventados. Si el equipo cambia un campo, se cambia aquí y en `contratos/` el mismo día, y se anota en `docs/01`.
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.2.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
-`docs/08` todavía propone `POST /api/simular` y `POST /api/rotaciones`. Eso quedó atrás: el motor corre en el Web Worker. El backend no rankea ni calcula el balance.
+- Detalle y reglas: `contratos/README.md`
+- Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`
+- Tipos TypeScript generados: `contratos/tipos/contratos.d.ts` (`npm run tipos`; no se editan a mano)
+- Validación: `cd contratos && npm install && npm test`
+- Solo los edita Mompin. Si necesitas un campo, pídelo; no lo agregues por tu cuenta.
 
-## Endpoints que sí corresponden al stack del 14/11
+## Mapa de contratos
 
-| Método y ruta | Función |
-| --- | --- |
-| `GET /health` | Vida del API |
-| `GET /api/clima?lat=&lon=&desde=&hasta=` | Serie diaria, caché, POWER con respaldo Open-Meteo |
-| `GET /api/elevacion` | Elevación del polígono o de la demo |
-| `GET /api/cultivos` | Catálogo JSON |
-| `GET /api/suelo` | Textura y pH de zona, etiqueta `SUPUESTO`, más el respaldo manual |
+| Schema | Qué describe | Lo produce |
+| --- | --- | --- |
+| `comun.schema.json` | Estados de `docs/04`, `meta`, `fuente`, `valorCitado`, `lonLat`, ids | — |
+| `parcela.schema.json` | Polígono, cuadrícula y celdas con `elevacionM` y `pendientePct`; enlaza el suelo con `sueloId` | Front (polígono) + API (elevación) |
+| `suelo.schema.json` | Textura (USDA y grupo del selector) y pH estimados, siempre `SUPUESTO` | API `GET /api/suelo` (A2.14) |
+| `cultivo.schema.json` | Catálogo: ciclo, etapas y Kc de FAO-56, umbrales de EcoCrop, ventanas de siembra | `datos/catalogos/` (A1.5) |
+| `clima-escenario.schema.json` | Serie diaria de un año real (seco, habitual, lluvioso) y cómo se eligió | API `GET /api/clima` + motor (A2.5) |
+| `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo bandas por mes | API + motor (A2.13) |
+| `plan-siembra.schema.json` | Rotación del selector: cultivo por ciclo y, si se pinta por bloques, por celda | Front (selector) |
+| `resultado-celda.schema.json` | Salida del motor por celda y fecha | Motor |
+| `resultado-rotacion.schema.json` | Pilares por escenario, peor caso, ranking (B principal, A de respaldo), pesos declarados y explicación | Motor |
 
-Caché en archivo. Clave: coordenada redondeada a la celda del dataset + variable + periodo. La carpeta `datos/cache/` está en `.gitignore`.
+## Lo que más se confunde
 
-## Parcela
+- `estado` es **siempre** el estado de evaluación de `docs/04`: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS`, `RESPALDO_HISTORICO`. El estado visual de la planta (`normal`, `estresada`, `marchita`, `podrida`) se llama `estadoPlanta`. En `docs/08` ambos se llamaban `estado`.
+- Todo documento lleva `meta.versionContrato`. Los ejemplos llevan además `meta.esEjemplo: true` y `meta.aviso`.
+- Un parámetro del catálogo o del suelo es `{estado: "EVALUABLE", valor, unidad, fuente}` o `{estado: "NO_EVALUABLE", motivo}`. Un número suelto se rechaza.
+- `NO_EVALUABLE` o `ERROR_DATOS` en una celda ⇒ todos sus indicadores en `null`, nunca en 0. Si el estado no es `EVALUABLE`, el registro lleva `motivo`.
+- El suelo ya no va dentro de la parcela: es su propio documento y la parcela lo enlaza con `sueloId`.
+- `fuente` es un objeto (nombre, url, coordenada, periodo, unidades, consultado), no un texto. La radiación diaria se llama `radiacionMjM2Dia`.
+- Próxima temporada: `esPrediccion` es siempre `false`, el `aviso` es obligatorio y cada mes trae bandas `{inferior, superior}` sin cifra única.
+- Ranking: el criterio principal es B (`B_minimax_arrepentimiento`; `[DECIDIDO]` el 14/11). Con B, el resultado lleva `puntaje` por escenario, `arrepentimiento` y `ponderacion` (pesos, etiqueta `SUPUESTO`/`USUARIO`/`FUENTE`, pilares excluidos). A (`A_exposicion_hidrica_peor_caso`) queda de respaldo si A3.7 no llega; con A, `puntaje`, `arrepentimiento` y `ponderacion` van en `null`. Ejemplo del respaldo: `contratos/ejemplos/resultado-rotacion.respaldo-a.ejemplo.json`.
+- `plan-siembra.asignacionClima` queda en `null` hasta que se decida A2.8 (`mismo_anio`, `ventanas_consecutivas`, `temporada_tipica`).
 
-```json
-{
-  "id": "parcela-demo-isla",
-  "poligono": [[-95.5, 18.0]],
-  "areaHa": 2.0,
-  "centroide": [-95.5, 18.0],
-  "tamanoCeldaM": 0,
-  "suelo": {"tipo": "franco", "etiqueta": "SUPUESTO"},
-  "celdas": [{"id": "c-0-0", "i": 0, "j": 0, "elevacionM": 0, "pendientePct": 0}]
-}
-```
+Lo que el schema no puede comprobar (ciclos en orden cronológico, polígono cerrado, cultivos del plan presentes en el catálogo) lo valida el motor.
 
-Esas coordenadas no son la ubicación real de Isla. Hay que sustituirlas cuando A0.6 confirme la zona.
+## Endpoints del stack del 14/11
 
-## Clima del escenario
+El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simular` y `POST /api/rotaciones` de `docs/08` quedan superados.
 
-```json
-{
-  "escenario": "seco",
-  "anioReal": 0,
-  "fuente": "NASA POWER",
-  "coordenada": [0, 0],
-  "consultado": "YYYY-MM-DD",
-  "respaldo": false,
-  "diario": [{"fecha": "YYYY-MM-DD", "lluviaMm": 0, "tMaxC": 0, "tMinC": 0, "radiacion": 0}]
-}
-```
+| Método y ruta | Función | Contrato de la respuesta |
+| --- | --- | --- |
+| `GET /health` | Vida del API | — |
+| `GET /api/clima?lat=&lon=&desde=&hasta=` | Serie diaria del periodo con caché, POWER con respaldo Open-Meteo. **No elige escenarios** (A2.5, motor). Implementado | `SerieClima`: mismo `dia` que `clima-escenario`; el motor corta los años. `SerieClima` aún no está en `contratos/` (se pide a Mompin) |
+| `POST /api/elevacion` | Recibe la cuadrícula ya generada por el front (`tamanoCeldaM` y `celdas` con id, i, j y centro; tope 1600) y devuelve elevación y pendiente por celda. Implementado | Campos `elevacionM`, `pendientePct` y `terreno` de `parcela` |
+| `GET /api/cultivos` | Catálogo JSON de `datos/catalogos/cultivos.json`; sin catálogo responde `NO_EVALUABLE`. Implementado | `cultivo` |
+| `GET /api/proxima-temporada?lat=&lon=` | Banda p10 a p90 por mes, 7 meses, sin cifra única; no es predicción. Implementado (A2.13, parte del backend) | `proxima-temporada` |
+| `GET /api/suelo?lat=&lon=` | Textura y pH de 0 a 30 cm (ISRIC WCS), siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
 
-## Plan de siembra
+Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 con `{estado: ERROR_DATOS, motivo}`. Detalle y cómo correr la API en `api/README.md`.
 
-```json
-{
-  "rotacionId": "R1",
-  "ciclos": [
-    {"ciclo": 1, "cultivo": "maiz", "siembra": "YYYY-MM-DD"},
-    {"ciclo": 2, "cultivo": "frijol", "siembra": "YYYY-MM-DD"},
-    {"ciclo": 3, "cultivo": "maiz", "siembra": "YYYY-MM-DD"}
-  ],
-  "porCelda": null
-}
-```
+Caché en archivo. Clave: coordenada redondeada a la celda del dataset + variable + periodo. `datos/cache/` está en `.gitignore`.
 
-`porCelda` solo si se aprueba pintar por bloques.
-
-## Resultado por celda
-
-```json
-{
-  "celdaId": "c-0-0",
-  "fecha": "YYYY-MM-DD",
-  "ciclo": 2,
-  "cultivo": "frijol",
-  "etapa": "brote",
-  "avanceEtapa": 0.0,
-  "estado": "normal",
-  "humedad": 0.0,
-  "deficitMm": 0,
-  "excesoMm": 0,
-  "riesgoErosion": null
-}
-```
-
-`estado` visual: `normal`, `estresada`, `marchita`, `podrida`. `riesgoErosion` queda `null` hasta que exista el pilar.
-
-## Resultado por rotación
-
-```json
-{
-  "rotacionId": "R1",
-  "estado": "EVALUABLE",
-  "porEscenario": {"seco": {}, "habitual": {}, "lluvioso": {}},
-  "peorCaso": null,
-  "arrepentimiento": null,
-  "advertencias": [],
-  "explicacion": {"porQue": "", "beneficios": [], "huecos": [], "riesgos": []}
-}
-```
-
-`arrepentimiento` solo si se elige el ranking B. Mientras V-19 siga abierto, no inventes ponderaciones.
-
-## Catálogo de cultivo
-
-Cada valor lleva fuente. Hueco ⇒ el cultivo puede existir en la lista, pero el motor lo marca `NO_EVALUABLE` en lo que dependa de ese hueco. Campos mínimos: id, nombre, ciclo en días, etapas con duración y Kc, umbral de calor, fuente por campo.
+Pendiente de acordar: cómo se alinean los tipos generados desde OpenAPI (decisión del 14/11) con los generados desde estos schemas. Ver [[Pendientes]].

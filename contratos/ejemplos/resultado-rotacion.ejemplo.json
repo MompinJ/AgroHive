@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.1.0",
+    "versionContrato": "0.2.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -42,7 +42,7 @@
           "especiesDistintas": 2
         }
       },
-      "puntaje": null
+      "puntaje": 0.52
     },
     "habitual": {
       "anioReal": 2012,
@@ -78,7 +78,7 @@
           "especiesDistintas": 2
         }
       },
-      "puntaje": null
+      "puntaje": 0.71
     },
     "lluvioso": {
       "anioReal": 2010,
@@ -114,21 +114,32 @@
           "especiesDistintas": 2
         }
       },
-      "puntaje": null
+      "puntaje": 0.63
     }
   },
   "peorCaso": {
     "escenario": "seco",
-    "criterio": "A_exposicion_hidrica_peor_caso",
-    "metrica": "deficitHidrico.proporcionDemandaNoCubierta",
-    "valor": 0.38
+    "criterio": "B_minimax_arrepentimiento",
+    "metrica": "puntaje",
+    "valor": 0.52
   },
-  "arrepentimiento": null,
+  "arrepentimiento": 0.06,
+  "ponderacion": {
+    "pesos": {
+      "deficitHidrico": 0.5,
+      "proteccionSuelo": 0.5
+    },
+    "etiqueta": "SUPUESTO",
+    "pilaresExcluidos": [
+      "compatibilidadCiclo"
+    ],
+    "nota": "EJEMPLO: pesos iguales entre los pilares evaluables, declarados como supuesto; compatibilidad de ciclo excluida por NO_EVALUABLE. Riesgo por calor y aporte indirecto se muestran aparte, no entran al puntaje en este ejemplo."
+  },
   "ranking": {
     "posicion": 1,
     "de": 3,
-    "criterio": "A_exposicion_hidrica_peor_caso",
-    "desempate": "mediana de deficit (ejemplo)"
+    "criterio": "B_minimax_arrepentimiento",
+    "desempate": "promedio de puntajes entre escenarios"
   },
   "advertencias": [
     {
@@ -143,12 +154,12 @@
     }
   ],
   "explicacion": {
-    "porQue": "EJEMPLO: en el escenario seco esta rotacion deja la menor proporcion de demanda de agua sin cubrir de las tres comparadas.",
+    "porQue": "EJEMPLO: tiene el menor arrepentimiento maximo de las tres rotaciones comparadas; su peor escenario es el seco.",
     "evidencia": [
       {
-        "texto": "EJEMPLO: 38 % de la demanda sin cubrir en el anio seco ilustrativo.",
-        "valor": 0.38,
-        "unidad": "fraccion",
+        "texto": "EJEMPLO: puntaje 0.52 en el anio seco ilustrativo, con 38 % de la demanda de agua sin cubrir.",
+        "valor": 0.52,
+        "unidad": "puntaje 0 a 1",
         "fuente": {
           "nombre": "EJEMPLO - valores ficticios",
           "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
@@ -161,7 +172,8 @@
     "huecos": [
       "Suelo supuesto",
       "Resolucion climatica gruesa (una celda de clima para toda la parcela)",
-      "Sin calendario de siembra verificado"
+      "Sin calendario de siembra verificado",
+      "Pesos de los pilares supuestos (iguales), no validados"
     ],
     "riesgos": [
       "Deficit en etapas sensibles en el anio seco (valor de ejemplo)."
