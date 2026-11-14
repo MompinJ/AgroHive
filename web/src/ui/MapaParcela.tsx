@@ -28,11 +28,12 @@ export default function MapaParcela({ puntos, bordes, onPunto }: { puntos: LonLa
     const grupo = capas.current;
     if (!grupo) return;
     grupo.clearLayers();
+    const tinta = getComputedStyle(document.documentElement).getPropertyValue('--color-text').trim();
     const latlng = (p: LonLat): L.LatLngTuple => [p[1], p[0]];
-    bordes.forEach((b) => L.polygon(b.map(latlng), { color: '#28644f', weight: 1, fillOpacity: 0.05, interactive: false }).addTo(grupo));
-    if (puntos.length >= 3) L.polygon(puntos.map(latlng), { color: '#171d18', fillOpacity: 0.12, interactive: false }).addTo(grupo);
-    else if (puntos.length) L.polyline(puntos.map(latlng), { color: '#171d18', interactive: false }).addTo(grupo);
-    puntos.forEach((p) => L.circleMarker(latlng(p), { radius: 5, color: '#171d18', fillOpacity: 1, interactive: false }).addTo(grupo));
+    bordes.forEach((b) => L.polygon(b.map(latlng), { color: tinta, weight: 1, fillOpacity: 0.05, interactive: false }).addTo(grupo));
+    if (puntos.length >= 3) L.polygon(puntos.map(latlng), { color: tinta, fillOpacity: 0.12, interactive: false }).addTo(grupo);
+    else if (puntos.length) L.polyline(puntos.map(latlng), { color: tinta, interactive: false }).addTo(grupo);
+    puntos.forEach((p) => L.circleMarker(latlng(p), { radius: 5, color: tinta, fillOpacity: 1, interactive: false }).addTo(grupo));
   }, [puntos, bordes]);
   return <><div ref={contenedor} className="parcel-map" aria-label="Mapa para dibujar el contorno de la parcela" /><button disabled={!puntos.length} onClick={() => {
     mapaRef.current?.fitBounds(L.latLngBounds(puntos.map(([lon, lat]) => [lat, lon] as L.LatLngTuple)), { padding: [24, 24], maxZoom: 18 });

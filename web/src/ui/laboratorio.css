@@ -1,0 +1,18 @@
+.lab-connected { grid-template-columns: minmax(240px, .85fr) minmax(0, 1.6fr) minmax(220px, .8fr); align-items: start; }
+.lab-connected .card { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+.lab-connected .card > * { min-width: 0; }
+.plan-cycle { border: 0; border-top: 1px solid var(--color-border); padding: var(--space-6) 0 0; margin: var(--space-4) 0 0; display: grid; gap: var(--space-3); min-width: 0; }
+.plan-cycle legend { padding-inline: var(--space-2); font-weight: 500; }
+.plan-cycle { grid-template-columns: minmax(0, 1fr); max-width: 100%; }
+.plan-cycle > * { min-width: 0; overflow-wrap: anywhere; }
+.plan-cycle select, .plan-cycle input { width: 100%; min-width: 0; }
+.lab-connected .escena { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+.lab-connected .escena > * { min-width: 0; max-width: 100%; }
+.lab-connected .ui-warning { min-width: 0; overflow-wrap: anywhere; }
+.lab-connected .quiet-note { overflow-wrap: anywhere; }
+.lab-connected .escena button { font-family: var(--font-ui); }
+.ui-action[aria-pressed="true"] { background: var(--color-action); color: var(--color-on-action); }
+.ui-flow > .card { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+.ui-flow summary { min-height: 44px; padding-block: var(--space-3); }
+@media (max-width: 1150px) { .lab-connected { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); } .lab-connected > :last-child { grid-column: 1 / -1; } }
+@media (max-width: 700px) { .lab-connected { grid-template-columns: minmax(0, 1fr); } .lab-connected .card { padding: var(--space-4); } .ui-table-wrap th, .ui-table-wrap td { padding: 8px; font-size: var(--text-caption); } }
