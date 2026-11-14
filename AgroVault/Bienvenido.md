@@ -26,6 +26,7 @@ Las tres leen el mismo núcleo:
 - [[Compartido/Lectura]] — qué documento de `docs/` abrir según la tarea
 - [[Compartido/APIs]] — APIs candidatas, endpoints, límites y documentación oficial
 - [[Compartido/Servidor]] — droplet, URL pública y cómo se despliega
+- [[Compartido/Comunicacion]] — buzón del equipo, prompt para tu sesión y reglas cuando una persona tiene dos sesiones
 - [[Compartido/Cronograma]] — avance por persona: qué está hecho, en curso y bloqueado (generada desde `docs/14`)
 - [[Compartido/Pendientes]] — lo que sigue abierto; no lo cierres tú
 

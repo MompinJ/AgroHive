@@ -63,6 +63,8 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 | `GET /api/cultivos` | Catálogo JSON de `datos/catalogos/cultivos.json`; sin catálogo responde `NO_EVALUABLE`. Implementado | `cultivo` |
 | `GET /api/proxima-temporada?lat=&lon=` | Banda p10 a p90 por mes, 7 meses, sin cifra única; no es predicción. Implementado (A2.13, parte del backend) | `proxima-temporada` |
 | `GET /api/suelo?lat=&lon=` | Textura y pH de 0 a 30 cm (ISRIC WCS), siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
+| `GET /api/smap?lon=&lat=&desde=&hasta=` | Humedad del suelo superficial de SMAP L3 (36 km) por día y pase AM/PM, con la bandera de calidad sin interpretar. Máximo 10 días, hasta hoy menos 3. Contraste: `SUPUESTO`, fuera del ranking y del balance. Sin `EARTHDATA_TOKEN` responde 503 con motivo. Implementado (A4.8, rama `Eduardo-C`) | `smap` |
+| `GET /api/ndvi?lat=&lon=&desde=&hasta=` | NDVI de MODIS MOD13Q1 (250 m, 16 días) por punto, ORNL DAAC sin cuenta, con `calidad` sin interpretar. Máximo 400 días; el servicio es lento, así que se sirve de caché o del paquete de demo. Evidencia, fuera del ranking. Implementado (A4.11, rama `Eduardo-C`) | `ndvi` |
 
 Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 con `{estado: ERROR_DATOS, motivo}`. Detalle y cómo correr la API en `api/README.md`.
 

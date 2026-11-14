@@ -34,6 +34,10 @@ Convivencia con `mediworks` (V-16): comparte nginx, certbot y el droplet. Usa `m
 3. El front (`web/`) se sirve desde el mismo origen que la API (opción 2 de `docs/13`, sin CORS ni mixed content). Para actualizarlo: `SERVIDOR=root@64.23.143.102 sh api/despliegue/desplegar-front.sh`. Hoy es el esqueleto de balam (A1.2), sin llamadas a la API.
 4. Comprobar `https://64-23-143-102.sslip.io/health` (trae `commit` y `versionContrato`: ahi se ve que version corre), `/api/cultivos` y `https://mediworks.mx/` (debe seguir en 200).
 
+Atajo: `bash /opt/agrohive/repo/api/despliegue/actualizar-servidor.sh`, corrido en el droplet como root, hace el pull a `origin/main`, el `pip install`, el reinicio con la prueba de `/health` y el front. **Una sola sesión despliega y lo anuncia antes por el buzón** (ver [[Comunicacion]]); Mompin avisa cuándo `main` está listo.
+
+`EARTHDATA_TOKEN` (A4.8, `/api/smap`) va solo en el entorno del servicio (`EnvironmentFile` con permisos 600 del usuario `agrohive` o un drop-in de systemd), nunca en el repo, en logs ni en el buzón. Mompin dio su OK por el buzón (#115 y #125); ponerlo es parte del despliegue de la sesión A. Sin él, `/api/smap` responde 503 con motivo.
+
 Logs: `journalctl -u agrohive-api`.
 
 ## Riesgos del droplet que ya existían (decide Eduardo)

@@ -16,8 +16,8 @@
 | **NASA POWER** | Lluvia, temperatura, radiación, humedad relativa, viento, humedad del suelo modelada | Decenas de km | API REST sin llave; diario y mensual; máx. 20 parámetros por llamada | **Base del MVP** | Estructura y límite verificados |
 | **SRTM** | Elevación para el relieve | 30 m | OpenTopography, AppEEARS o tiles de terreno | **Alta** (relieve decidido) | `[VERIFICAR]` |
 | **GPM IMERG** | Lluvia por satélite | ~10 km (0.1°); diario vía POWER, 30 min solo con Earthdata | **NASA POWER** `IMERG_PRECTOT` con `time-standard=UTC`, sin llave (en hora local responde `-999`); media hora con Earthdata + `earthaccess` | Alta como evidencia (A4.10) | Probado 14/11 (`features/imerg/`) |
-| **SMAP** | Humedad del suelo | 9 a 36 km | Earthdata | Media | `[VERIFICAR]` |
-| **MODIS** | NDVI | 250 m, 16 días | REST de ORNL DAAC sin llave (`modis.ornl.gov/rst/api/v1/MOD13Q1/subset`, cita `doi:10.3334/ORNLDAAC/1600`); AppEEARS o Earth Engine | Evidencia (A4.11) | Probado 14/11 |
+| **SMAP** | Humedad del suelo | 36 km (L3 `SPL3SMP`); 9 km en el producto enriquecido | `earthaccess` con cuenta Earthdata (token por `EARTHDATA_TOKEN`); el granulo de ~30 MB se lee por rangos HTTP | Contraste (A4.8) | Probado 14/11: Isla es la celda (140, 226); ~20 s por día |
+| **MODIS** | NDVI | 250 m, 16 días | REST de ORNL DAAC sin llave (`modis.ornl.gov/rst/api/v1/MOD13Q1/subset`, cita `doi:10.3334/ORNLDAAC/1600`); AppEEARS o Earth Engine | Evidencia (A4.11) | Probado 14/11: lento (8 a 13 s por fecha), máximo 10 fechas por petición, con banda de calidad aparte |
 | **Landsat / HLS** | NDVI y reflectancia | 30 m | AppEEARS o Earth Engine | Baja | `[VERIFICAR]` |
 | **ECOSTRESS** | Temperatura de superficie | ~70 m, irregular | AppEEARS | Baja | `[VERIFICAR]` |
 | **GRACE / GRACE-FO** | Agua almacenada | Cientos de km | Solo contexto regional | Baja | `[VERIFICAR]` |

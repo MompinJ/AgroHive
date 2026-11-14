@@ -5,7 +5,7 @@ Paquete de demo sin internet (A2.4, base de A5.8). Tiene dos formas del mismo co
 | Carpeta | Para que sirve |
 | --- | --- |
 | `cache/` | La **cache de la API**. Cuando a la API le falta su cache local, la lee (`AGROHIVE_DEMO_DIR`): con eso `GET /api/clima`, `POST /api/elevacion`, `GET /api/suelo` y `GET /api/proxima-temporada` responden sin red para la parcela demo. No hay que cambiar nada en el front |
-| `respuestas/` | El **cuerpo de cada respuesta tal cual** (`serie-clima.json`, `suelo.json`, `terreno.json`, `proxima-temporada.json`), validado contra `contratos/`. El motor puede leerlos directo, sin la API |
+| `respuestas/` | El **cuerpo de cada respuesta tal cual** (`serie-clima.json`, `suelo.json`, `terreno.json`, `proxima-temporada.json`, y `ndvi-seco.json`, `ndvi-habitual.json` y `ndvi-lluvioso.json`), validado contra `contratos/`. El motor puede leerlos directo, sin la API |
 
 `manifiesto.json` dice cuando se genero, para que punto, con que version del contrato y que archivos trae.
 
@@ -16,7 +16,7 @@ api/.venv/bin/python datos/demo/generar.py                       # usa contratos
 api/.venv/bin/python datos/demo/generar.py --parcela ruta.json   # parcela con id, centroide, poligono y celdas
 ```
 
-El script llama a la API por dentro, valida las 4 respuestas contra los schemas y **no escribe nada** si alguna no cumple o si una fuente cayo al respaldo. `api/tests/` vigila que el paquete committeado siga cumpliendo los contratos.
+El script llama a la API por dentro, valida las 4 respuestas y el NDVI de los 3 anios de escenario contra los schemas y **no escribe nada** si alguna no cumple o si una fuente cayo al respaldo. `api/tests/` vigila que el paquete committeado siga cumpliendo los contratos.
 
 ## Lo que hay que saber
 
@@ -24,5 +24,6 @@ El script llama a la API por dentro, valida las 4 respuestas contra los schemas 
 - **La zona es Isla (INEGI 30/077, A0.6) y la parcela es ficticia**: 2 ha de `contratos/ejemplos/parcela.ejemplo.json`, cuyo centroide `(-95.53, 18.03)` coincide con la localidad de Isla (`VERIFICAR` con INEGI o un mapa). Los datos son reales para esa coordenada.
 - **Terreno:** `terreno.json` trae solo las 4 celdas de la parcela de ejemplo; la cache trae los tiles de elevacion de toda la zona y su margen, asi que el front puede mandar su propia cuadricula.
 - **El pronostico estacional envejece.** Conserva la fecha en que se consulto: si pasa de 24 h y no hay red, la API lo sirve con la advertencia `ESTACIONAL_EN_CACHE` y `emitido` con esa fecha real.
-- **El TAW del suelo de Isla es `NO_EVALUABLE`** (franco arcillo arenoso no tiene fila en FAO-56 Tabla 19) hasta que Mafer termine A2.16.
+- **El TAW del suelo de Isla sale de Saxton y Rawls (2006), A2.16** (el franco arcillo arenoso no tiene fila en FAO-56 Tabla 19): 122.3 mm/m, `SUPUESTO`.
+- **NDVI de MODIS (A4.11)** de los tres anios de escenario (seco 2023, habitual 2016, lluvioso 2024; anio agricola de 1 de octubre a 30 de septiembre), como evidencia: no entra al ranking. El servicio de ORNL es lento (8 a 13 s por fecha) e inestable: el generador reintenta cada anio hasta 3 veces y no escribe nada si queda una serie con huecos. Si el motor elige otros anios de escenario, hay que regenerar. Compuestos con dato: [por confirmar al terminar el generador].
 - Pesa unos 3 MB. Mientras el paquete este en `main`, el droplet lo usa al hacer `git pull`.
