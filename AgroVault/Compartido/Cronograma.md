@@ -37,7 +37,7 @@ Proyecto completo: **46 de 60** actividades hechas (77 %), 3 en curso, 2 bloquea
 - [x] **A3.8** Tooltips y valores por bloque `HECHO` — con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
 - [x] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `HECHO` — usarDatosParcela y flujo con FastAPI local verificados; despliegue en A4.7
-- [x] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) `HECHO` — con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento
+- [x] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) `HECHO` — con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento. Además (Mompin): lluvia del día desde `serieBalance`, con mm y fuente
 - [x] **A5.5** Pruebas de regresión del motor y de contratos `HECHO` — 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`)
 
 ## Eduardo

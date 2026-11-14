@@ -93,6 +93,8 @@ Código en `web/src/escena/` (componente `EscenaParcela`; punto de integración 
 - **Slider de meses** `[EN EVENTO]`: al reproducir, fluido; al arrastrar, saltar al estado correcto sin acumular animaciones.
 - Duraciones cortas; opción de **reducir movimiento**.
 
+**Lluvia del día (Mompin, 14/11):** si el día que muestra la escena tuvo lluvia según la serie del motor (`serieBalance`, columna `lluviaMm` del clima del escenario, con su día real de clima y su fuente), se dibuja lluvia con gotas proporcionales a los mm. Es un solo `LineSegments` con shader: un draw call, y solo se anima con la escena a la vista y la pestaña visible. Cortes `[PROPUESTA]` en mm/día: menos de 0.1 sin lluvia; llovizna hasta 5; moderada hasta 20; fuerte desde 20; la intensidad se llena en 50 mm. Un indicador fijo siempre visible dice los mm, la clase, la fecha del plan, el día real del clima y la fuente (por ejemplo "Lluvia: 43.8 mm, lluvia fuerte, el 2016-06-16 (clima real del 2024-06-16). Fuente: NASA POWER"). Día sin lluvia: nada y el indicador lo dice. Dato faltante o fecha fuera de los ciclos: sin lluvia y `NO_EVALUABLE` con motivo. Con reducir movimiento: solo el indicador, sin animación. Prop `serieBalance` de `EscenaParcela` (la misma rotación y escenario que `resultado`).
+
 ## Modo 2D ligero
 Mapa o cuadrícula 2D coloreada con los **mismos** valores del motor. Es el respaldo si el 3D no está listo y la opción para equipos modestos (una computadora de campo puede tener 4 GB de RAM). **Medir requisitos mínimos** y tener la cifra para los jueces.
 

@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Lluvia del día en la escena con datos reales (Mompin)
+
+- **Archivos:** `web/src/escena/lluvia.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (prop `serieBalance`), `escena.css`, `vista-previa.tsx`, prueba `lluvia.test.ts`; `docs/06`, `docs/14` (nota en A5.1), `INTEGRACION.md`.
+- **Cambio:** lluvia animada proporcional a los mm del día, tomados de la serie del motor (`serieBalance.lluviaMm`). La escena no inventa ni recalcula nada. Hay un indicador fijo con mm, clase, día real del clima y fuente. Sin dato: sin lluvia y `NO_EVALUABLE`. Con reducir movimiento solo queda el indicador. Cortes `[PROPUESTA]`.
+- **Fuente / evidencia:** prueba contra la serie real del motor con el paquete de demo; headless: 43.8 mm el 2024-06-16 (igual a `serie-clima.json`), 1 576 gotas y unos 31 cuadros por segundo; día seco y reducir movimiento: 0 gotas y 0 cuadros en reposo; 400 px sin desborde; cero errores.
+
 ### 2026-11-14 — A5.1 animaciones de la escena y lugar de la mascota (Mompin, con Mafer)
 
 - **Archivos:** `web/src/escena/animacion.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (control "Viento leve", prop `mascota`), `voxel/fuente-modelos.ts` (también `modelos/props/`), prueba `animacion.test.ts`; `docs/06`, `docs/14` (A5.1 pasa a Mompin, con Mafer).
