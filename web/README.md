@@ -82,3 +82,18 @@ El criterio funcional de las cuatro vistas ejecutables está cubierto. El Worker
 
 ## Cierre A1.2
 La UI inicializa el cliente existente de Mompin mediante useMotor, comprueba su respuesta con olvidar en la sesion vacia y termina el Worker al desmontarse. Muestra disponibilidad o error con un limite de espera de 10 segundos. Esta seccion sustituye las notas anteriores de Worker pendiente; las simulaciones desde los controles siguen en A3.4/A4.6.
+
+## Terreno — rediseño P1
+
+Composición basada en la captura de Terreno aportada por Balam: encabezado con navegación, aviso de demostración, título y acciones a la izquierda, paisaje con recorte orgánico a la derecha y dos bloques inferiores para la parcela demo y el terreno propio. Se conserva el estado del Worker incorporado en A1.2.
+
+Los colores se toman de `DESIGN.md` de Duna, compartido por el usuario: canvas Linen `#f7f7f5`, tarjetas Paper `#ffffff`, etiquetas Bone `#edece7`, texto Aubergine Ink `#1b0624` y botones Espresso `#160f0c`. No se copian el fondo beige ni los botones verdes de la captura. Tipografía sans serif del sistema (Arial/Helvetica), sin importar GT America ni otra fuente remota.
+
+- Archivos: `src/paginas/Terreno.tsx`, `src/ui/terreno.css` y selección del contenedor P1 en `src/App.tsx`. Se retiran de `styles.css` las reglas del Terreno anterior que ya no tienen consumidores.
+- Los tokens viven en `.app-shell-terrain`: la cabecera, el aviso, las acciones y el pie de esta vista usan el mismo sistema, sin extender la paleta a P0/P2/P3.
+- Diseño adaptable: hero en dos columnas en escritorio; bloques inferiores apilados por debajo de 960 px, hero apilado por debajo de 700 px y miniaturas con ancho completo por debajo de 440 px. Los textos y botones permanecen elementos HTML reales; las imágenes no contienen texto de interfaz.
+- Imágenes nuevas generadas con la herramienta integrada `image_gen` (skill imagegen), sin CLI ni API key: `src/ui/assets/terreno-hero-v1.png`, `terreno-demo-v1.png` y `terreno-poligono-v1.png`. [Prompts finales y archivos](src/ui/assets/terreno-prompts.md). Son ilustraciones ficticias, no mapas, mediciones ni evidencia científica.
+- El acceso al laboratorio conserva `onSelectDemo`. La entrada de polígono conserva `?modo=poligono` y su aviso de integración pendiente de A2.10; el dibujo de la imagen no es una herramienta de edición.
+- No se agregan dependencias ni llamadas a servicios externos. La imagen de inicio no se reemplaza.
+
+Verificación de esta entrega: `npm run build` (incluye TypeScript estricto) y `git diff --check`. No se hace QA visual de la interfaz ni se generan capturas de navegador, por instrucción de Balam; esa revisión queda a su cargo. Las capturas anteriores de P1 son del esqueleto inicial.

@@ -15,6 +15,7 @@ export default function App() {
   const estadoMotor = useMotor();
   const { path, mode } = usePage();
   const isHome = path === '/';
+  const isTerrain = path === '/terreno';
   const [rotation, setRotation] = useState<RotationId>('R1');
   const [cycle, setCycle] = useState<Cycle>(1);
   const [scenario, setScenario] = useState<Scenario>('Habitual');
@@ -51,14 +52,14 @@ export default function App() {
     default: content = <><PageHeading step="—" title="Esta página no existe.">Puedes volver al inicio para continuar explorando.</PageHeading><ActionLink href="#/">Volver al inicio</ActionLink></>;
   }
 
-  return <div className={isHome ? 'app-shell app-shell-home' : 'app-shell'}>
+  return <div className={`app-shell${isHome ? ' app-shell-home' : isTerrain ? ' app-shell-terrain' : ''}`}>
     <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
     {isHome ? <InicioHeader /> : <>
       <header className="site-header"><div className="header-inner"><Brand /><Navigation path={path} /><span className="prototype-badge"><span aria-hidden="true" />Prototipo A1.2</span></div></header>
       <div className="prototype-strip"><div className="wrap"><strong>Interfaz de demostración</strong><span role="status">{estadoMotor}. Las selecciones todavía no ejecutan simulaciones.</span><span>{demo.notice}</span></div></div>
     </>}
-    <main id="contenido" className={isHome ? 'landing-main' : 'wrap main-content'} tabIndex={-1}>{content}{!isHome && <MethodNotes />}</main>
+    <main id="contenido" className={isHome ? 'landing-main' : isTerrain ? 'terrain-main' : 'wrap main-content'} tabIndex={-1}>{content}{!isHome && <MethodNotes />}</main>
     <div className="sr-only" role="status">{announcement}</div>
-    {!isHome && <footer className="site-footer wrap"><p>AgroHive <span aria-hidden="true">/</span> Code Hive · NASA Space Apps 2026</p><p>Apoya la decisión del agricultor. No reemplaza asesoría agronómica.</p></footer>}
+    {isTerrain ? <footer className="terrain-footer"><p>Apoya la decisión del agricultor. No reemplaza asesoría agronómica.</p></footer> : !isHome && <footer className="site-footer wrap"><p>AgroHive <span aria-hidden="true">/</span> Code Hive · NASA Space Apps 2026</p><p>Apoya la decisión del agricultor. No reemplaza asesoría agronómica.</p></footer>}
   </div>;
 }
