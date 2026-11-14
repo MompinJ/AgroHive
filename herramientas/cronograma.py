@@ -1,8 +1,9 @@
-"""Genera, desde docs/14-CRONOGRAMA.md, tres vistas del cronograma por persona:
+"""Genera, desde docs/14-CRONOGRAMA.md, cuatro vistas del cronograma por persona:
 
   1. la seccion "Estado por persona" de docs/14 (entre marcadores),
   2. docs/cronograma.html (pagina para abrir en el navegador),
-  3. AgroVault/Compartido/Cronograma.md (nota de Obsidian).
+  3. AgroVault/Compartido/Cronograma.md (nota de Obsidian),
+  4. el "Marcador de chamba" al inicio de herramientas/quejas-ia/QUEJAS.md (entre marcadores).
 
 La unica fuente de estados son las marcas `[HECHO]`, `[EN CURSO]` y `[BLOQUEADO]` de las tablas de fase de docs/14 y el
 reparto del "Tablero de reparto". Edita docs/14, no las vistas, y vuelve a correr:
@@ -21,6 +22,9 @@ RAIZ = Path(__file__).resolve().parents[1]
 DOC14 = RAIZ / "docs" / "14-CRONOGRAMA.md"
 HTML = RAIZ / "docs" / "cronograma.html"
 NOTA = RAIZ / "AgroVault" / "Compartido" / "Cronograma.md"
+QUEJAS = RAIZ / "herramientas" / "quejas-ia" / "QUEJAS.md"
+INI_CH, FIN_CH = "<!-- marcador-chamba:inicio -->", "<!-- marcador-chamba:fin -->"
+PESOS = {"XS": 1, "S": 2, "M": 3, "L": 5, "XL": 8}  # un XL se divide antes de empezar (docs/14); por si acaso pesa mas que una L
 INI, FIN = "<!-- estado-por-persona:inicio -->", "<!-- estado-por-persona:fin -->"
 PERSONAS = ["Mompin", "Eduardo", "Mafer", "balam"]
 ESTADOS = ["HECHO", "EN CURSO", "BLOQUEADO", "PENDIENTE"]
@@ -256,6 +260,51 @@ def pagina_html(actividades, compuertas, mapa, hoy):
     return PLANTILLA.replace("__DATOS__", cuerpo).replace("__HOY__", html.escape(hoy))
 
 
+def avance_ponderado(ids, actividades):
+    """(porcentaje hecho ponderado por esfuerzo, peso hecho, peso total)."""
+    peso = lambda i: PESOS.get(actividades[i]["esf"], 3)  # noqa: E731
+    total = sum(peso(i) for i in ids)
+    hecho = sum(peso(i) for i in ids if actividades[i]["estado"] == "HECHO")
+    return (round(100 * hecho / total) if total else 0), hecho, total
+
+
+ROAST = [  # segun el lugar; solo usan numeros reales del tablero (regla 3 de la casa: no inventar hechos), sobre el trabajo y no sobre la persona
+    "{p} lidera con {pct} %: {hechas} hechas, y el cronograma le da la razon.",
+    "{p} va segundo con {pct} %: cerca del podio, lejos de la gloria.",
+    "{p} va tercero con {pct} %: {hechas} hechas y {pend} esperando turno.",
+    "{p} cierra con {pct} %: {pend} actividades pendientes lo miran con carino.",
+]
+
+
+def marcador_chamba(actividades, mapa):
+    filas = []
+    for p in PERSONAS:
+        pct, hecho, total = avance_ponderado(mapa[p], actividades)
+        c, n, _ = resumen(mapa[p], actividades)
+        filas.append({"p": p, "pct": pct, "hecho": hecho, "total": total, "hechas": c["HECHO"], "curso": c["EN CURSO"],
+                      "pend": c["PENDIENTE"] + c["BLOQUEADO"], "n": n})
+    filas.sort(key=lambda f: (-f["pct"], -f["hecho"], f["p"]))
+    s = [INI_CH, "", "## Marcador de chamba", "",
+         "Generado por `herramientas/cronograma.py` desde `docs/14`; se actualiza cada vez que se regenera, no se edita a mano. "
+         "El porcentaje pesa cada actividad por su esfuerzo de IA (XS=1, S=2, M=3, L=5) para que una XS no cuente igual que una L. "
+         "Las actividades compartidas cuentan para cada quien. Pendientes incluye las bloqueadas.", "",
+         "| Lugar | Persona | Hecho (ponderado) | Hechas | En curso | Pendientes |", "| --- | --- | --- | --- | --- | --- |"]
+    for k, f in enumerate(filas, 1):
+        s.append(f"| {k} | **{f['p']}** | {f['pct']} % ({f['hecho']} de {f['total']} puntos) | {f['hechas']} | {f['curso']} | {f['pend']} |")
+    s.append("")
+    s += [f"{k}. " + ROAST[min(k - 1, len(ROAST) - 1)].format(**f) for k, f in enumerate(filas, 1)]
+    s += ["", FIN_CH]
+    return "\n".join(s)
+
+
+def aplicar_marcador(texto, bloque):
+    if INI_CH in texto and FIN_CH in texto:
+        a, b = texto.index(INI_CH), texto.index(FIN_CH) + len(FIN_CH)
+        return texto[:a] + bloque + texto[b:]
+    ancla = "\n## Queja 1"
+    return texto.replace(ancla, "\n" + bloque + "\n" + ancla, 1) if ancla in texto else texto.rstrip("\n") + "\n\n" + bloque + "\n"
+
+
 def main():
     texto = DOC14.read_text(encoding="utf-8")
     actividades, compuertas, reparto = leer_doc14(texto)
@@ -264,6 +313,8 @@ def main():
     nuevo14 = aplicar_seccion(texto, seccion_doc14(actividades, mapa, sin_dueno))
     salidas = {DOC14: nuevo14, HTML: pagina_html(actividades, compuertas, mapa, hoy),
                NOTA: nota_obsidian(actividades, compuertas, mapa, sin_dueno, hoy)}
+    if QUEJAS.exists():
+        salidas[QUEJAS] = aplicar_marcador(QUEJAS.read_text(encoding="utf-8"), marcador_chamba(actividades, mapa))
     if "--revisar" in sys.argv:
         # La fecha de generacion no cuenta como desfase: se compara con la del archivo actual.
         desfasadas = []
@@ -272,7 +323,7 @@ def main():
             normal = lambda t: re.sub(r"(actualizado: |Generado el )\d{4}-\d{2}-\d{2}", r"\1X", t)
             if normal(actual) != normal(contenido):
                 desfasadas.append(str(ruta.relative_to(RAIZ)))
-        print("desfasadas: " + ", ".join(desfasadas) if desfasadas else "las tres vistas estan al dia")
+        print("desfasadas: " + ", ".join(desfasadas) if desfasadas else "las vistas estan al dia")
         sys.exit(1 if desfasadas else 0)
     for ruta, contenido in salidas.items():
         ruta.parent.mkdir(parents=True, exist_ok=True)
