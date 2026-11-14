@@ -1,0 +1,73 @@
+# AgroHive 2.0 — LEER PRIMERO
+
+> **Documentación vigente del equipo Code Hive — 13/11/2026.** Esta carpeta consolida en una sola fuente las dos carpetas anteriores y las decisiones que el equipo tomó el 13/11/2026. Las carpetas anteriores **se conservan intactas** como historial (ver al final). **El hackathon inició oficialmente el 14/11/2026**: ya se puede escribir código. Las decisiones tomadas ese día están en [13 · Decisiones del hackathon](13-DECISIONES-HACKATHON.md) y el plan de trabajo en [14 · Cronograma](14-CRONOGRAMA.md); donde contradigan a 03, 08 o 09, mandan 13 y 14.
+
+## En dos minutos: ¿qué estamos construyendo?
+
+**AgroHive** es un **simulador visual tipo "what if"** para que un agricultor compare **rotaciones de cultivos** frente a la historia climática real de **NASA**, para el reto *Field Shift: Adapting Farms with NASA Data* (NASA Space Apps Challenge 2026, sede Boca del Río, Veracruz).
+
+- **Idea central:** no buscamos la rotación de mayor rendimiento, buscamos **la más robusta**: la que no colapsa en el peor escenario histórico, aunque no sea la más rentable en un año ideal.
+- **Cómo se ve:** escena **3D low-poly estilo voxel** (tipo juego de granja) con **relieve**, con **modo 2D ligero** de respaldo.
+- **Cómo se usa:** el usuario elige cultivos con un **selector** ("¿y si siembro esto?"), cambia de escenario (seco / habitual / lluvioso) y ve cómo reacciona su campo, con valores, evidencia y riesgos. La decisión final siempre es del agricultor.
+- **Qué NO hace:** no predice el clima, no predice cosechas ni ingresos, no mide pH ni fertilidad, no reemplaza a un agrónomo.
+
+## Índice
+
+| Doc | Contenido |
+| --- | --- |
+| [01 · Registro de cambios](01-REGISTRO-DE-CAMBIOS.md) | Qué cambió, cuándo y por qué. |
+| [02 · Evento y reto](02-EVENTO-Y-RETO.md) | Fechas, sede, reglas, qué pide el reto oficial. |
+| [03 · Producto y alcance](03-PRODUCTO-Y-ALCANCE.md) | Problema, concepto "what if", funciones, MVP y extras. |
+| [04 · Datos y método científico](04-DATOS-Y-METODO.md) | Fuentes NASA y externas, escenarios, resolución, caché. |
+| [05 · Motor de simulación](05-MOTOR-SIMULACION.md) | Balance de agua, pilares de la prueba de estrés, robustez. |
+| [06 · Experiencia 2D/3D](06-EXPERIENCIA-2D-3D.md) | Tres paneles, flujo de pantallas, reglas de interacción. |
+| [07 · Modelos 3D y agente](07-MODELOS-3D-Y-AGENTE.md) | Pipeline de modelos con el agente `modelador-voxel`. |
+| [08 · Arquitectura](08-ARQUITECTURA.md) | Stack propuesto, contratos de datos, rendimiento. |
+| [09 · Equipo y plan](09-EQUIPO-Y-PLAN.md) | 4 integrantes, roles, cronograma, puntos de corte. |
+| [10 · Pitch y límites](10-PITCH-Y-LIMITES.md) | Narrativa, límites científicos, preguntas de jueces. |
+| [11 · Decisiones, pendientes y riesgos](11-DECISIONES-PENDIENTES-Y-RIESGOS.md) | Qué está decidido, qué se decide en el evento, riesgos. |
+| [12 · Guía para agentes y colaboradores](12-GUIA-PARA-AGENTES.md) | Cómo leer y editar esta carpeta (Claude, ChatGPT, Cursor). |
+| [`agente-modelador-voxel/`](agente-modelador-voxel/) | El agente que crea los modelos 3D, su librería y un ejemplo. |
+
+## Orden de lectura sugerido
+
+- **Todos:** 00 → 03 → 11.
+- **Interfaz / 3D:** + 06 → 07 → 08.
+- **Motor científico:** + 04 → 05 → 08.
+- **Datos:** + 04 → 05 → 11.
+- **Integración / pitch:** + 02 → 09 → 10.
+
+## Etiquetas de estado
+
+| Etiqueta | Significado |
+| --- | --- |
+| **`[DECIDIDO]`** | Confirmado por el equipo. |
+| **`[EN EVENTO]`** | Se decide el día del evento, con el equipo junto. |
+| **`[DEPENDE-DATOS]`** | Lo ideal es incluirlo; entra o se descarta según los datos que realmente consigamos. |
+| **`[PROPUESTA]`** | Sugerencia documentada, falta confirmarla. |
+| **`[MEJORA]`** | Idea valiosa que se puede tomar en cuenta si hay tiempo. |
+| **`[EXTRA]`** | Fuera del MVP (fase 1 o fase 2). |
+| **`[VERIFICAR]`** | Dato, regla o API que falta comprobar con fuente. |
+
+## Qué NO afirmar nunca
+
+- «NASA mide la humedad de cada cuadrito de la parcela» → **falso**: el clima de NASA POWER es regional (decenas de km); toda la parcela comparte la misma serie climática.
+- «Los escenarios predicen los próximos años» → **falso**: son períodos históricos reales de referencia.
+- «El modelo predice toneladas, ganancias o fertilidad» → **fuera de alcance**.
+- «El 3D muestra la altura real de la planta» → **falso**: las etapas y estados son cualitativos, derivados del motor.
+- «Ya funciona» o «está validado» → no hasta que haya pruebas, commits o video.
+
+## Cómo editar sin perder trabajo
+
+1. Por ahora la documentación vive en **Google Drive**, editada vía **rclone** o **MCP**; en el evento se puede pasar a **GitHub** u otra herramienta. `[DECIDIDO]`
+2. Leer el documento que se va a tocar y el **11** antes de cambiar el alcance.
+3. Evitar que dos personas o agentes editen **el mismo archivo** al mismo tiempo.
+4. Registrar cada cambio en **01** (fecha, archivo, qué y por qué).
+5. **No escribir código del proyecto antes del inicio oficial del hackathon.**
+
+## Carpetas anteriores (historial, no editar)
+
+- **`docs/`** — documentación v0.2 de Mompin (10/11/2026) y la transcripción del audio de la reunión.
+- **`00 — AGROHIVE DOCUMENTACIÓN CONSOLIDADA v1.2/`** — consolidación del 11/11/2026 (basada en Notion v1.2).
+
+Si algo de esas carpetas contradice esta, **manda esta** (v2.0). Si se quiere rescatar una idea anterior, se registra en 01.
