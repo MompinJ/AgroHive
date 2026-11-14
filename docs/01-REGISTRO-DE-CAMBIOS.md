@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A4.3: tarjetas de rotación, parte lógica (Mompin, rama `Mompin-motor`)
+
+- **Archivos:** `web/src/motor/tarjetas.ts` (nuevo), `protocolo.ts` (`rankear` devuelve las rotaciones con su tarjeta), `index.ts`; pruebas `tarjetas.test.ts` y la regresión (`regresion/demo-isla.json` suma el ranking R1 a R4 y las tarjetas de R4 y R2; los números anteriores no cambian); `docs/05` (paso 8), `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** plantilla sin LLM que llena `explicacion` de `resultado-rotacion` (no hizo falta un contrato nuevo): por qué, evidencia con fuente por cifra, beneficios medidos, huecos y riesgos, en español para un agricultor. Nada sin número o fuente: no se habla de plagas, nitrógeno, rendimiento ni precios, y una rotación `NO_EVALUABLE` solo dice su motivo.
+- **Decisión `[DECIDIDO]` (Mompin):** la demo compara R1 a R4 con R4 (milpa en ventana de INIFAP) como sugerida; con el suelo real el ranking la pone primera por sí solo (arrepentimiento 0).
+- **Fuente / evidencia:** `cd web && npm test` (303 pruebas).
+
 ### 2026-11-14 — Losas de suelo de A2.12 en la escena (Mompin, rama `Mompin-escena`)
 
 - **Archivos:** `web/src/escena/suelo.ts`, `adaptador.ts`, `modelo.ts`, `render/escena-three.ts`, `voxel/fuente-modelos.ts`, `EscenaParcela.tsx` (nueva prop `suelo`), `vista-previa.tsx`, prueba `suelo-escena.test.ts`; `docs/06`, `INTEGRACION.md`.
@@ -210,6 +217,22 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — Borrador del README para A5.7
+
+- **Archivos:** nuevo `docs/README-borrador.md` (no se tocó `README.md`).
+- **Cambio y motivo:** pedido de Mompin. Es un borrador para Mafer (dueña de A5.7) con qué es AgroHive, cómo correr la web, la API y la demo sin internet, el método (escenarios, balance FAO-56, pilares, ranking B, próxima temporada), las fuentes NASA y no NASA con licencias, los límites y supuestos, y una declaración de uso de IA marcada `[VERIFICAR]` hasta conocer las reglas oficiales (V-03, V-04). Cada punto remite a `docs/` o `contratos/`. Las licencias que no constan en el repo quedan `[VERIFICAR]`. La IP del servidor no se repite (hallazgo de la revisión de merges).
+- **Fuente / evidencia:** `docs/00`, `04`, `05`, `10`, `11`, `13`, `14`; `api/README.md`, `web/README.md`, `datos/demo/LEEME.md`, `datos/catalogos/README.md`, `AgroVault/Compartido/APIs.md`.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Orientación de la cuadrícula y rotaciones de la demo `[DECIDIDO]`
+
+- **Archivos:** `contratos/parcela.schema.json` (descripción de `celda`, `i` y `j`), `contratos/ejemplos/parcela.ejemplo.json` y los dos inválidos de parcela, tipos; `13`.
+- **Cambio y motivo:** Mompin decidió dos cosas.
+  1. **Cuadrícula:** `i` se cuenta desde el sur (0 = fila más al sur, crece hacia el norte) y `j` desde el oeste (crece hacia el este), igual que `web/src/ui/cuadricula.ts` de balam (verificado: `y = sur + i * lado`, `x = oeste + j * lado`). El ejemplo tenía `i = 0` al norte; se corrigieron los centros. Solo cambian la descripción y el ejemplo, así que es compatible.
+  2. **Demo:** compara R1 a R4 y muestra como sugerida R4 (milpa dentro de las ventanas de INIFAP).
+- **Fuente / evidencia:** decisión transmitida por la sesión maestra; `web/src/ui/cuadricula.ts`; doc 05, paso 7. `npm test` 82/82.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — A1.7: contratos 0.10.0 para el alcance mundial (compatible)
 
@@ -544,3 +567,12 @@ Primera documentación por tema a partir del video del compañero, el audio de l
 - Se incorpora sin cambios el cliente API de Eduardo (`2e517c6`). La UI confirma antes de POST /api/elevacion, muestra fuente, estado y advertencias; permite reintentar o guardar sin relieve. App conserva la parcela durante la navegación; recargar inicia otra sesión.
 - Verificación: geometría y schema compartido, build/TypeScript; navegador a 1440/390/320 px, error 503 y éxito con respuestas sintéticas declaradas, persistencia y guardado sin elevación. No se afirma validación agronómica ni disponibilidad del servicio público.
 - Sin cambios de alcance; límites técnicos documentados en `web/src/ui/TERRENO-PLAN.md`. El selector y la simulación desde las páginas siguen pendientes.
+
+### 2026-11-14 — Sistema visual global y A3.4 A3.5 A4.9 de Balam
+- Autorización: Balam aprobó en el chat el laboratorio de tres paneles, fechas con fuentes y banda opcional; pidió usar su DESIGN.md Duna y las habilidades better-interface/better-ui.
+- DESIGN.md incorpora la referencia recibida y documenta las adaptaciones a AgroHive. Tokens en ui/tokens.css y reglas en ui/system.css se comparten entre Inicio, Terreno y laboratorio/comparación. Se conservan estados semánticos de la escena. No se añadió fuente licenciada ni remota.
+- El laboratorio usa planes R1 a R4 derivados de los casos de regresión del motor, con fechas de plan editables 2026/2027; la comparación no fija posiciones en la UI. Calendario de Isla solo en la demo. dentroDeVentana se valida con el helper ya existente del motor; porQue y fuente acompañan la fecha. Cultivos no recomendados se identifican con motivo y fuente.
+- ui/useLaboratorio.ts reutiliza el cargador API de Eduardo para parcelas propias y el paquete precargado para la demo. Cambiar plan invalida resultados y reemplaza el Worker. Escenario/ciclo/fecha y visibilidad de banda no vuelven a simular ni descargar datos. Planes y selecciones sobreviven a la navegación durante la sesión.
+- La escena se monta con carga diferida y la parcela guardada en App, resultados y fecha; se habilitan modelos fuera de web en desarrollo. A4.9 muestra la banda mensual y los años análogos del motor con estados, motivos, fuentes y aviso de no predicción.
+- Verificación: JSON Schema de planes, R1 ciclo 2 seco muestra frijol/2023 y estado del motor; pruebas, build y TypeScript. Chromium a 1440/1024/768/390/320, navegación P2/P3, mensajes del Worker, error API/reintento simulado, teclado y movimiento reducido. Axe sin incidencias automáticas en los estados revisados de P2/P3. Evidencia y límites en web/evidencia/revision-sistema.md.
+- La plantilla documental System Design no pudo renderizarse por falta de LibreOffice; no se entrega un documento sin verificar. La funcionalidad y revisión web sí se completan. A4.6 continúa en curso: no se declara validada la disponibilidad pública ni todas las combinaciones de carga en vivo.

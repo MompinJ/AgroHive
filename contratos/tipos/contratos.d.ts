@@ -544,14 +544,17 @@ export interface Terreno {
   estado: EstadoEvaluacion;
   fuente: Fuente;
 }
+/**
+ * Celda de la cuadricula. Orientacion (decidida el 14/11, igual que web/src/ui/cuadricula.ts): i es la fila y se cuenta desde el SUR (i = 0 es la fila mas al sur y crece hacia el norte); j es la columna y se cuenta desde el OESTE (j = 0 es la columna mas al oeste y crece hacia el este). El id es c-<i>-<j>.
+ */
 export interface Celda {
   id: IdCelda;
   /**
-   * Fila.
+   * Fila, desde el sur: 0 es la fila mas al sur; crece hacia el norte.
    */
   i: number;
   /**
-   * Columna.
+   * Columna, desde el oeste: 0 es la columna mas al oeste; crece hacia el este.
    */
   j: number;
   centro: LonLat;

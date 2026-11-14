@@ -121,8 +121,8 @@ Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 
 | A3.1 `[HECHO]` | Escena 3D con relieve (altura por bloque, `InstancedMesh`) | R1 | **L** | Fable | A2.3, A2.9 | Terreno 3D navegable (C3) |
 | A3.2 `[HECHO]` | Cargador de `.bbmodel` con instancing por cultivo y etapa | R1 | **L** | Opus | A2.11 | Modelos del motor visibles en celdas |
 | A3.3 `[HECHO]` | Estados visuales: color + icono + patrón, leyenda | R1 | M | Sonnet | A3.2 | Legible con daltonismo |
-| A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | R1 | M | Sonnet | A2.7 | Cambiar cultivo invalida y recalcula; cada fecha sugerida explica por qué y de dónde sale (calendario local o "sin calendario"); cultivo no registrado en el lugar con aviso |
-| A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | R1 + R2 | S | Sonnet | A3.4 | Prueba manual documentada |
+| A3.4 `[HECHO]` | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | R1 | M | Sonnet | A2.7 | Cambiar cultivo invalida y recalcula; cada fecha sugerida explica por qué y de dónde sale (calendario local o "sin calendario"); cultivo no registrado en el lugar con aviso |
+| A3.5 `[HECHO]` | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | R1 + R2 | S | Sonnet | A3.4 | Prueba manual documentada |
 | A3.6 | Modo 2D ligero con los mismos valores del motor | R1 | M | Sonnet | A2.7 | Alternar 2D/3D no cambia métricas |
 | A3.7 `[HECHO]` 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente) | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | R2 | **L** | Opus | A2.7 | Entran solo si los datos alcanzan |
 | A3.8 | Tooltips y valores por bloque | R1 | S | Sonnet | A3.4 | Toque o hover muestra humedad, déficit, pendiente |
@@ -136,13 +136,13 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | --- | --- | --- | --- | --- | --- | --- |
 | A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | R1 | M | Sonnet | A2.7 | Gráficas reales del escenario |
 | A4.2 `[HECHO]` 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3) | Ranking de rotaciones por robustez: criterio B `[DECIDIDO]` (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | R2 | M | Opus | A2.7 (y A3.7 para B) | Tabla ordenada con 3 o más rotaciones; pesos y criterio declarados |
-| A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
+| A4.3 `[EN CURSO]` parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam) | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | R2 | S | Sonnet | A4.3 | Con respaldo en plantilla |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |
 | A4.6 `[EN CURSO]` cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor | Conectar front y API (cliente generado, estados de carga y error) | R1 + R3 | M | Opus | A2.1, A3.4 | Flujo P0 a P3 con datos reales |
 | A4.7 `[EN CURSO]` front servido en el droplet; falta la demo real (A4.6) | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
 | A4.8 `[EN CURSO]` `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN` | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
-| A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | Sonnet | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
+| A4.9 `[HECHO]` | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | Sonnet | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
 | A4.10 | Lluvia GPM IMERG vía NASA POWER (`IMERG_PRECTOT` con `time-standard=UTC`, sin cuenta Earthdata) en `GET /api/clima` y en el paquete de demo, como **evidencia**: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en `features/imerg/` y `features/encargos/eduardo-datos-globales.md` | R3 | S | Sonnet | A2.1, A1.7 | Serie IMERG con fuente y estándar de hora; `-999` como `null`; prueba con respuesta guardada; paquete de demo regenerado |
 | A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking | R3 | S | Sonnet | A1.3, A1.7 | `GET /api/ndvi` con caché, cita `doi:10.3334/ORNLDAAC/1600` y el límite del píxel (250 m, más grande que la parcela) declarado |
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | R3 | **L** | Opus | A4.6 | Parcela de prueba en EE. UU. con su rotación real de CDL, con fuente |
@@ -216,7 +216,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
 | **Eduardo** | 10 | 3 | 2 | 3 | 56 % de 18 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
-| **balam** | 3 | 0 | 0 | 13 | 19 % de 16 |
+| **balam** | 6 | 1 | 0 | 9 | 38 % de 16 |
 
 ### Mompin
 
@@ -286,15 +286,15 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A1.2 | Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | HECHO | rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados |
 | A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | HECHO |  |
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | HECHO |  |
-| A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | PENDIENTE |  |
-| A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | PENDIENTE |  |
+| A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | HECHO |  |
+| A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | HECHO |  |
 | A3.6 | Modo 2D ligero con los mismos valores del motor | PENDIENTE |  |
 | A3.8 | Tooltips y valores por bloque | PENDIENTE |  |
 | A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | PENDIENTE |  |
-| A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | PENDIENTE |  |
+| A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | EN CURSO | parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam) |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | PENDIENTE |  |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | PENDIENTE |  |
-| A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | PENDIENTE |  |
+| A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | HECHO |  |
 | A5.2 | Slider de meses | PENDIENTE |  |
 | A5.3 | Móvil y accesibilidad (táctil, teclado) | PENDIENTE |  |
 | A5.9 | Envío final según reglas oficiales | PENDIENTE |  |

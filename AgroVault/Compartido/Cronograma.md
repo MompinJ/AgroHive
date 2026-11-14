@@ -16,9 +16,9 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
 | **Eduardo** | 10 | 3 | 2 | 3 | 56 % de 18 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
-| **balam** | 3 | 0 | 0 | 13 | 19 % de 16 |
+| **balam** | 6 | 1 | 0 | 9 | 38 % de 16 |
 
-Proyecto completo: **34 de 60** actividades hechas (57 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **37 de 60** actividades hechas (62 %), 5 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -80,15 +80,15 @@ Proyecto completo: **34 de 60** actividades hechas (57 %), 4 en curso, 2 bloquea
 - [x] **A1.2** Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías `HECHO` — rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados
 - [x] **A2.9** Cuadrícula desde polígono (Turf.js) con tope de celdas `HECHO`
 - [x] **A2.10** Mapa y dibujo de polígono libre (Leaflet) `HECHO`
-- [ ] **A3.4** Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario
-- [ ] **A3.5** Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado
+- [x] **A3.4** Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario `HECHO`
+- [x] **A3.5** Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado `HECHO`
 - [ ] **A3.6** Modo 2D ligero con los mismos valores del motor
 - [ ] **A3.8** Tooltips y valores por bloque
 - [ ] **A4.1** Dashboard: gráficas de lluvia, demanda y balance (Recharts)
-- [ ] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos
+- [/] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos `EN CURSO` — parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam)
 - [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)
 - [ ] **A4.5** Pantalla de método, fuentes y advertencias (A1, A3)
-- [ ] **A4.9** Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción
+- [x] **A4.9** Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción `HECHO`
 - [ ] **A5.2** Slider de meses
 - [ ] **A5.3** Móvil y accesibilidad (táctil, teclado)
 - [ ] **A5.9** Envío final según reglas oficiales

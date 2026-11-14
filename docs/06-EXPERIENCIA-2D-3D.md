@@ -110,3 +110,17 @@ Mapa o cuadrícula 2D coloreada con los **mismos** valores del motor. Es el resp
 - **UI propia** (colores, botones, tipografía definidos por el equipo), sin plantillas genéricas, para que no se vea "hecho con IA".
 - Siempre visible: la herramienta apoya, no reemplaza, la decisión del agricultor.
 - Referencia visual: vista isométrica de bloques con etiquetas flotantes.
+
+### Sistema visual compartido y laboratorio conectado — 14/11
+
+Balam aprobó usar `DESIGN.md` (referencia Duna) para toda la interfaz y el diseño de A3.4/A4.9 en el chat. `ui/tokens.css` contiene colores, tipografía, espaciado y radios; `ui/system.css` define controles, superficies, foco, tablas y estados comunes. Inicio y Terreno consumen sus roles mediante alias. La paleta semántica de las placas 3D se conserva; su contenedor y controles usan la capa global. GT America no está disponible y no se añadió una fuente remota.
+
+`ui/useLaboratorio.ts` conserva planes y selecciones al navegar. La demo carga el paquete precargado de Isla; para una parcela propia usa el cargador `api/datosParcela.ts` de Eduardo con centroide y ventana estándar. El calendario de Isla solo se usa en la demo; otros contornos muestran sin calendario local. Fallas obligatorias ofrecen reintentar; próxima temporada es opcional.
+
+`ui/LaboratorioConectado.tsx` se usa en P2 y P3. Los cultivos y fechas editables forman planes tipados con `temporada_tipica`, `porQue` y referencia de calendario. No se ofrece NO_EVALUABLE como cultivo. Los planes iniciales R1 a R4 siguen los casos de regresión del motor, trasladados a 2026/2027 como fechas del plan. R4 usa fechas dentro de ventana para comparar; no es una recomendación agrícola. La UI muestra el motivo y fuente de cultivos no recomendados y los motivos de exclusión de pilares devueltos por el motor.
+
+Cambiar un plan invalida de inmediato el cálculo visible y crea una nueva sesión del Worker. Las respuestas antiguas se ignoran. Escenario, ciclo y fecha solo consultan celdas del resultado almacenado. Navegar entre P2/P3 reutiliza datos y planes; la banda se apaga sin descargar ni recalcular. La escena se carga diferida y recibe `parcela`, `resultado` y `fecha`; los .bbmodel se sirven en desarrollo mediante server.fs.allow.
+
+A4.9 muestra rangos mensuales y resultados de años análogos del motor, estados EXPLORATORIO/NO_EVALUABLE, fuentes, ciclos fuera del horizonte y advertencia de que no es predicción. No se suman los extremos mensuales ni se inventan valores para datos faltantes.
+
+Revisión de diseño: better-interface y sus seis áreas, better-ui, con el stack existente (React/Vite/TS y CSS). La plantilla System Design fue localizada y su flujo documental leído; su render falló por falta de LibreOffice/soffice.exe, por lo que no se entrega un DOCX sin verificar ni se sustituyó su plantilla. Esto no afecta al sistema web. Evidencia de interfaz y comprobaciones en web/README.md y web/evidencia.
