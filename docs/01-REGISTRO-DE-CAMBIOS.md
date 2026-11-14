@@ -20,6 +20,15 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Los 20 modelos de bloque con las reglas nuevas de Mompin (Mafer)
+
+- **Archivos:** `modelos/cultivos/bloques/bloques.py` y los 20 `<cultivo>_<etapa>_bloque.bbmodel` (maíz, frijol, calabaza y chile × 5 etapas; los 2 de maíz ya existentes se rehacen), `visor_bloques.html`; `web/src/escena/pruebas/bloques.test.ts`.
+- **Cambio:** por la decisión `[DECIDIDO]` de Mompin (buzón #211): tope de 24 cubos por bloque, 9 plantas de 1 o 2 cubos más 3 lomos de 1 unidad, y sin cara inferior (`texture` null en `down`) en todos los cubos. Trazado: 3 surcos y 3 plantas por surco con la misma separación (16/3), continuo entre bloques vecinos. Sin colores nuevos en la paleta; huella x/z de -8 a 8 y base en y=0. Variación determinista (semilla fija por modelo).
+- **Medido:** siembra 15 cubos (450 vértices); resto 21 cubos (630 vértices) cada uno, contra 1 980 del maíz detallado en madurez. Los triángulos y cuadros por segundo en la escena los mide la sesión de Mompin; aquí no se midieron.
+- **Pruebas:** `bloques.test.ts` pide los 20 archivos, tope de 24, sin cara inferior, 3 lomos, huella y menos vértices que el detallado (141 pruebas del archivo en verde; `web` completo 511 en verde, `tsc` y `build` bien, `contratos` 92, catálogos en verde; pytest de `api` no corre en esta máquina).
+- **Pendiente:** el visto bueno visual de la sesión de escena sobre los 18 nuevos; `docs/06` (de Mompin/balam) todavía dice 55 cubos en la línea del manchón de plantas.
+- **Decisiones afectadas:** ninguna nueva.
+
 ### 2026-11-14 — Herramienta de medición de la escena para A5.4 (Mompin)
 
 - **Archivos:** `web/medir.html` y `web/src/escena/medir/medir.tsx` (nuevos), `herramientas/medir-escena/` (`medir.mjs` y `README.md`), `render/escena-three.ts` y `EscenaParcela.tsx` (recuperación ante pérdida del contexto WebGL); `docs/06`, `docs/14` (nota en A5.4).
@@ -234,6 +243,14 @@ Decisiones afectadas:
 - **Efecto:** con déficit y exceso hay dos pilares con número y el ranking pasa del respaldo A al criterio B. Con el paquete de demo (suelo franco del selector): 1.º frijol-frijol (arrepentimiento máximo 0.007), 2.º milpa (0.051), 3.º maíz-maíz (0.064); para las tres el peor escenario es el lluvioso (2024). Con A el orden era el inverso.
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
+
+### 2026-11-14 — Visores de modelos: el aviso de "no llegó a cargar" se quedaba visible (Mafer)
+
+- **Archivos:** `herramientas/voxelkit.py` (una línea de la plantilla) y los 8 visores generados: `modelos/cultivos/visor_{maiz,frijol,calabaza,chile,milpa}.html`, `modelos/suelos/visor_suelos.html`, `modelos/props/visor_mascota.html` y `modelos/cultivos/bloques/visor_bloques.html`.
+- **El error (mío):** el aviso que agregué en A2.12 se muestra a los 4 s si el visor no marcó que cargó, y **nunca se ocultaba**: si Three.js tardaba más de 4 s en bajar del CDN, el aviso quedaba encima de un visor que sí funcionaba. Lo detectó el agente de modelado en Chrome sin pantalla y se reprodujo (captura con el aviso sobre los modelos ya dibujados).
+- **Cambio:** al terminar de cargar, el visor oculta el aviso. Cada visor cambió exactamente una línea (el texto insertado es `document.getElementById('aviso').hidden=true;`); los 8 se regeneraron desde su propia lista de modelos, en su orden, con el mismo número de cubos que antes.
+- **Verificación (Chrome, DOM final):** con carga normal el aviso queda `hidden` y el visor muestra "Todos"; con el CDN de Three.js bloqueado el aviso **sigue visible** y el visor no carga, así que no se perdió su función. Nota: la primera prueba sin internet falló por un error de mi comando (la regla del resolvedor lleva espacios y hay que entrecomillarla), no del visor.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 — Modelos ligeros de bloque: los dos primeros, de maíz (Mafer)
 
