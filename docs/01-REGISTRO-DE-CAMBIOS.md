@@ -188,6 +188,13 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — Despliegue unico de main cd3fed2 y API a contratos 0.9.0 (Eduardo)
+
+- **Despliegue (pedido de Mompin #36 y #46):** el droplet corre `main` en `cd3fed2`: API con OpenLandMap, Saxton-Rawls y el paquete de demo; front con la escena 3D y el Worker del motor, construido en el propio droplet (`npm ci` + `npm run build`, node 20.20.1) y copiado a `/var/www/agrohive-web` con respaldo del anterior; `rasterio` 1.5.2 instalado sin problemas (probado antes en un entorno temporal). nginx sin cambios.
+- **Verificado desde fuera:** `/` 200 con el bundle nuevo, `/health` trae `commit: cd3fed2`, `/api/suelo` de Isla da TAW 122.3 mm/m por Saxton-Rawls con ISRIC y OpenLandMap, `/api/proxima-temporada` da 6 meses, `mediworks.mx` sigue en 200.
+- **Cambio en la API:** `VERSION_CONTRATO` pasa a 0.9.0 (el contrato actual; `/health` del servidor dice 0.7.0 hasta que este cambio llegue a `main`).
+- **Incidente:** la segunda sesion de Eduardo anuncio un despliegue paralelo cuando el mio ya iba a la mitad; se avisó por el buzon y el servidor quedo sin cambios de ella. Regla para la proxima: una sola sesion despliega y anuncia antes por el buzon.
+
 ### 2026-11-14 (noche) — API a contratos 0.8.0 y cronograma al dia (Eduardo)
 
 - **Archivos:** `api/app/config.py`, `api/tests/test_basico.py`, `docs/14`, vistas del cronograma.
