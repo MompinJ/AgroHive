@@ -92,7 +92,8 @@ Navegador
 FastAPI (api/)
   /health
   proxy y caché: POWER, Open-Meteo, elevación, suelo
-  OpenAPI → cliente TypeScript
+  OpenAPI → cliente TypeScript de las llamadas HTTP
+  modelos que respetan contratos/*.schema.json (con prueba)
   earthaccess solo para extras
         |
         v

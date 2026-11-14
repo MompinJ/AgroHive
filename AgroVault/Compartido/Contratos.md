@@ -57,4 +57,4 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 
 Caché en archivo. Clave: coordenada redondeada a la celda del dataset + variable + periodo. `datos/cache/` está en `.gitignore`.
 
-Pendiente de acordar: cómo se alinean los tipos generados desde OpenAPI (decisión del 14/11) con los generados desde estos schemas. Ver [[Pendientes]].
+Tipos `[DECIDIDO]` 14/11: Los JSON Schema de `contratos/` son la fuente de verdad de los datos: los tipos TS salen de ahí (`contratos/tipos/`) y los modelos de FastAPI deben respetarlos, con una prueba que lo verifique. El cliente generado desde OpenAPI solo cubre las llamadas HTTP.

@@ -1,6 +1,8 @@
 # contratos/
 
-Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un ejemplo por contrato y tipos TypeScript generados. **Solo los edita Mompin**: si necesitas un campo nuevo, pídelo.
+Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un ejemplo por contrato y tipos TypeScript generados.
+
+**Fuente de verdad `[DECIDIDO]` 14/11:** estos schemas mandan sobre los datos. El motor y el front usan `tipos/contratos.d.ts`; los modelos de FastAPI (`api/`) deben respetar estos schemas, con una prueba que lo verifique (por ejemplo, validar las respuestas o los ejemplos contra el schema); el cliente generado desde OpenAPI solo cubre las llamadas HTTP. **Solo los edita Mompin**: si necesitas un campo nuevo, pídelo.
 
 ## Contratos
 
