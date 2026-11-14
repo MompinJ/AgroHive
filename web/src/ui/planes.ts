@@ -29,7 +29,6 @@ export function planesIniciales(parcela: Parcela, calendario: CalendarioLocal | 
   const definiciones: Record<string, [string, string, Ciclo['temporada']][]> = {
     R1: [['maiz', '2026-06-15', 'PV'], ['frijol', '2026-11-01', 'OI'], ['maiz', '2027-06-15', 'PV']],
     R2: [['maiz', '2026-06-15', 'PV'], ['maiz', '2027-06-15', 'PV']],
-    R3: [['frijol', '2026-06-15', 'PV'], ['frijol', '2026-11-01', 'OI']],
     R4: [['maiz', '2026-06-01', 'PV'], ['frijol', '2026-10-10', 'OI'], ['maiz', '2027-06-01', 'PV']],
   };
   return Object.entries(definiciones).map(([id, lista]) => armarPlan(id, parcela, lista.map(([cultivo, siembra, temporada], i) => ({ ciclo: i + 1, cultivo, siembra, temporada, porQue: 'Plan de demostración editable, no recomendación.' })), calendario));
