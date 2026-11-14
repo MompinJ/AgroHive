@@ -123,7 +123,15 @@
           ]
         },
         "etapa": {
-          "$ref": "#/$defs/etapaVisual"
+          "description": "Etapa visual; null si no hay parametros del cultivo para saberla (entonces el registro no es EVALUABLE y explica el motivo).",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/etapaVisual"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "avanceEtapa": {
           "description": "Avance dentro de la etapa visual (0 a 1), para interpolar escala en el render.",
@@ -284,6 +292,28 @@
               "motivo",
               "fuenteMotivo"
             ],
+            "properties": {
+              "estado": {
+                "not": {
+                  "const": "EVALUABLE"
+                }
+              }
+            }
+          }
+        },
+        {
+          "description": "Sin etapa (null) el registro no puede ser EVALUABLE.",
+          "if": {
+            "properties": {
+              "etapa": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "etapa"
+            ]
+          },
+          "then": {
             "properties": {
               "estado": {
                 "not": {

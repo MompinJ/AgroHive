@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.5.0",
+    "versionContrato": "0.6.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -23,6 +23,15 @@
     },
     "percentilObjetivo": 10,
     "lluviaAnualMm": null,
+    "lluviaTemporadasMm": {
+      "pv": null,
+      "oi": null,
+      "total": null,
+      "fuente": {
+        "nombre": "EJEMPLO - estructura de las ventanas PV y OI de SIAP, valores ficticios",
+        "nota": "No proviene de ninguna consulta real."
+      }
+    },
     "criterio": "EJEMPLO: el anio 2015 es ilustrativo y NO es el resultado de seleccionar el p10; la seleccion real la hace A2.5."
   },
   "diario": [
