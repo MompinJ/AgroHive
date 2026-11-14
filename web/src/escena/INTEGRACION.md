@@ -32,11 +32,8 @@ const EscenaParcela = lazy(() => import('../escena/EscenaParcela').then((m) => (
 
 ## Qué datos pasarle
 
-- **Ahora (sin motor):** la parcela de `contratos/ejemplos/parcela.ejemplo.json`. Para `resultado`, dos opciones:
-  1. `null`: la escena muestra el relieve y todas las celdas como "Sin resultado". Es coherente con lo que hoy promete `ui/demo.ts` (no importa mediciones ficticias).
-  2. `resultado-celda.ejemplo.json`: muestra estados, pero es un único resultado (R1, seco, 2015-12-01) que **no cambia** con la rotación, el ciclo ni el escenario elegidos. La escena avisa "Datos de ejemplo", pero la página tendría que decir que la selección todavía no cambia la escena.
-  Recomiendo la opción 1 en Laboratorio y dejar la 2 solo en la vista previa (`/escena.html`).
-- **Con motor (A2.7) y selector (A3.4):** el `ResultadoCeldas` de la rotación, el escenario y el ciclo seleccionados (`SELECT_CYCLE` muestra el cultivo de ese ciclo, doc 06). Prueba crítica A3.5: R1, ciclo 2, seco muestra frijol con su etapa y estado.
+- **Mientras el selector (A3.4) no arme planes reales:** `resultado={null}`. La escena muestra el relieve y todas las celdas como "Sin resultado", coherente con lo que hoy promete `ui/demo.ts` (no importa mediciones ficticias). El resultado de `contratos/ejemplos/` es uno solo (R1, seco, 2015-12-01) y **no cambia** con lo elegido: déjalo solo en la vista previa.
+- **Con el selector (A3.4):** el motor ya está en `main` (`crearClienteMotor()` en `web/src/motor/`). Flujo: `escenarios(serie)` una vez, `simular({ plan, parcela, suelo, tablaSuelos, catalogo, escenarios })` cuando cambia el plan, y `celdas(rotacionId, escenario, fecha)` cuando cambian el escenario o la fecha; el `ResultadoCeldas` que devuelve va directo a `resultado`. `SELECT_CYCLE` es elegir una `fecha` dentro de ese ciclo (doc 06). Prueba crítica A3.5: R1, ciclo 2, seco muestra frijol con su etapa y estado. `escena/demo-motor.ts` y `escena/vista-previa.tsx` tienen un ejemplo completo.
 - **Con polígono (A2.9, A2.10):** la parcela que arma la cuadrícula, con elevación y pendiente de `POST /api/elevacion` (las celdas que vuelvan en `null` se dibujan como hueco `NO_EVALUABLE`).
 
 ## Requisito en `vite.config.ts` (modo desarrollo)

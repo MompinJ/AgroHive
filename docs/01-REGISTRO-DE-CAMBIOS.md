@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A3.1 y A3.2: escena 3D con relieve y cargador de `.bbmodel` (Mompin, rama `Mompin-escena`)
+
+- **Archivos:** `web/src/escena/` (nuevo), `web/escena.html`, `web/package.json` (three 0.187.0, @types/three 0.187.0, vitest 5.1.0), `docs/06`, `docs/07`, `docs/14`, `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** escena 3D en Three.js sin React Three Fiber `[DECIDIDO]` (Mompin): relieve por bloque desde `elevacionM`, un `InstancedMesh` por tipo, placas de estado con color + patrón + icono (base de A3.3), suelo según la humedad del motor, plantas desde los `.bbmodel` de Mafer. Lo que falta se muestra como `NO_EVALUABLE` o "Sin resultado", nunca como cero. Exageración vertical ×10 por defecto `[PROPUESTA]`.
+- **Fuente / evidencia:** 76 pruebas en `web/src/escena/pruebas/`, incluida la escena con el motor real y el paquete de demo (con el suelo del mapa todo `NO_EVALUABLE`; con el selector manual, el maíz con sus modelos). Vista previa revisada en Chrome headless (perfil temporal): relieve, modelos, selección por clic y caso `NO_EVALUABLE`.
+- **Pendiente:** montarla en Laboratorio (balam, propuesta en `web/src/escena/INTEGRACION.md`), una línea `server.fs.allow` en `web/vite.config.ts` para ver los modelos en `npm run dev`, modelos de frijol y calabaza (A2.11) y el ajuste fino de estados (A3.3, Mafer).
+
 ### 2026-11-14 — A4.2 ranking, contratos 0.6.0 en el motor y escenarios con el paquete de demo (Mompin)
 
 - **Archivos:** `web/src/motor/ranking.ts` (nuevo), `motor.ts`, `balance.ts`, `escenarios.ts`, `protocolo.ts`, `cliente.ts`, `index.ts`, `tipos.ts`; pruebas `ranking.test.ts` y `c2.test.ts`; se borra el fixture propio `web/src/motor/pruebas/datos/power-isla-2006-2025.json` (las pruebas usan `datos/demo/respuestas/`); `docs/05`, `docs/13`, `docs/14`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.

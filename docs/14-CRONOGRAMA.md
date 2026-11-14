@@ -117,8 +117,8 @@ Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 
 
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
-| A3.1 `[EN CURSO]` | Escena 3D con relieve (altura por bloque, `InstancedMesh`) | R1 | **L** | Fable | A2.3, A2.9 | Terreno 3D navegable (C3) |
-| A3.2 `[EN CURSO]` | Cargador de `.bbmodel` con instancing por cultivo y etapa | R1 | **L** | Opus | A2.11 | Modelos del motor visibles en celdas |
+| A3.1 `[HECHO]` | Escena 3D con relieve (altura por bloque, `InstancedMesh`) | R1 | **L** | Fable | A2.3, A2.9 | Terreno 3D navegable (C3) |
+| A3.2 `[HECHO]` | Cargador de `.bbmodel` con instancing por cultivo y etapa | R1 | **L** | Opus | A2.11 | Modelos del motor visibles en celdas |
 | A3.3 | Estados visuales: color + icono + patrón, leyenda | R1 | M | Sonnet | A3.2 | Legible con daltonismo |
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | R1 | M | Sonnet | A2.7 | Cambiar cultivo invalida y recalcula; cada fecha sugerida explica por qué y de dónde sale (calendario local o "sin calendario"); cultivo no registrado en el lugar con aviso |
 | A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | R1 + R2 | S | Sonnet | A3.4 | Prueba manual documentada |
@@ -192,7 +192,7 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 
 | Responsable | Rama | Herramientas de IA | Actividades | Primera tarea |
 | --- | --- | --- | --- | --- |
-| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1, A3.2, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor), A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
+| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor), A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.7, A4.8, A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
 | **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16, A2.11, A2.12, A3.3, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A3.8, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
@@ -209,7 +209,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 8 | 1 | 0 | 5 | 57 % de 14 |
+| **Mompin** | 10 | 1 | 0 | 3 | 71 % de 14 |
 | **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
 | **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
@@ -226,8 +226,8 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.7 | Pilar de déficit hídrico y estados de evaluabilidad | HECHO | 14/11 |
 | A2.8 | Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) | HECHO | (c) `temporada_tipica`, 14/11 |
 | A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | EN CURSO | backend hecho; falta la parte del motor (Mompin) |
-| A3.1 | Escena 3D con relieve (altura por bloque, InstancedMesh) | PENDIENTE |  |
-| A3.2 | Cargador de .bbmodel con instancing por cultivo y etapa | PENDIENTE |  |
+| A3.1 | Escena 3D con relieve (altura por bloque, InstancedMesh) | HECHO |  |
+| A3.2 | Cargador de .bbmodel con instancing por cultivo y etapa | HECHO |  |
 | A3.7 | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | PENDIENTE |  |
 | A4.2 | Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | HECHO | 14/11 (B listo; corre A de respaldo hasta que A3.7 dé los pilares 2 y 3) |
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | PENDIENTE |  |

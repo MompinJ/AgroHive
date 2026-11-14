@@ -68,6 +68,7 @@ Todas las etapas comparten el mismo punto de anclaje para poder interpolar escal
 - glTF/GLB es **opcional**: se exporta desde Blockbench (File > Export) si algún día hiciera falta.
 - **Rendimiento en escena grande:** el visor de ejemplo crea una malla por cubo, lo que está bien para unos pocos modelos. Para una parcela con cientos de celdas, unir los cubos de cada modelo en una geometría y usar **`InstancedMesh` por combinación cultivo + etapa**, con variación por celda (rotación en pasos de 90°, ligera escala). Fijar un tope de celdas (propuesta: ~1 600).
 - **Respaldo:** si un modelo se atrasa, plantas procedurales con cajas en código para no bloquear el MVP.
+- **Implementado (A3.2, 14/11):** `web/src/escena/voxel/` lee cualquier `<cultivo>_<etapa>.bbmodel` que esté en `modelos/cultivos/` (sin tocar código), toma los colores de la paleta incrustada (coinciden con `modelos/paleta.md`, verificado en pruebas) y rechaza con error visible los que no siguen estas convenciones. Faltan los modelos de frijol y calabaza (A2.11): mientras tanto se ve la planta provisional.
 
 ## Flujo de trabajo de arte
 
