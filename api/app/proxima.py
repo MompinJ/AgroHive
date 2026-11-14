@@ -15,6 +15,7 @@ from . import cache, http, servicios
 from .clientes import openmeteo
 
 P_INF, P_SUP = 10.0, 90.0
+HORIZONTE_MESES = 6  # V-21, decidido el 14/11: se habla en semestres aunque SEAS5 de 7 meses
 MIN_ANIOS = 10
 VENTANA = (date(2006, 1, 1), date(2025, 12, 31))
 TTL_ESTACIONAL_S = 24 * 3600
@@ -100,7 +101,7 @@ async def proxima_temporada(lat: float, lon: float) -> dict:
                 advertencias.append({"codigo": "ESTACIONAL_NO_DISPONIBLE", "mensaje": f"El pronostico estacional no respondio ({e}); se muestra solo el rango historico.", "severidad": "aviso"})
 
     if anomalias:
-        meses = sorted(anomalias)
+        meses = sorted(anomalias)[:HORIZONTE_MESES]
         metodo = "anomalia_estacional"
         fuentes.append({"nombre": openmeteo.NOMBRE_ESTACIONAL, "url": openmeteo.URL_ESTACIONAL, "consultado": hoy.isoformat(), "resolucion": "36 km",
                         "unidades": "mm (lluvia), K (temperatura)",
@@ -110,11 +111,11 @@ async def proxima_temporada(lat: float, lon: float) -> dict:
         advertencias.append({"codigo": "ANCHO_DE_BANDA_HISTORICO", "mensaje": "El ancho de la banda sale de la variabilidad historica de cada mes, no de la dispersion del pronostico.", "severidad": "info"})
         advertencias.append({"codigo": "ANOMALIA_SOBRE_OTRA_CLIMATOLOGIA", "mensaje": "La anomalia es respecto de ECMWF y se suma a la climatologia de NASA POWER; las dos no coinciden en magnitud.", "severidad": "info"})
     else:
-        meses = _siguientes_meses(hoy, 7)
+        meses = _siguientes_meses(hoy, HORIZONTE_MESES)
         metodo = "respaldo_estadistico"
     return {
         "meta": servicios._meta(), "esPrediccion": False, "estado": "EXPLORATORIO", "aviso": AVISO, "metodo": metodo,
-        "coordenada": (lon, lat), "emitido": hoy, "horizonteMeses": len(meses),
+        "coordenada": (lon, lat), "emitido": hoy, "horizonteMeses": HORIZONTE_MESES,
         "climatologia": {"desde": VENTANA[0], "hasta": VENTANA[1]},
         "banda": {"percentilInferior": P_INF, "percentilSuperior": P_SUP},
         "fuentes": fuentes, "meses": construir_meses(clim, anomalias, meses), "advertencias": advertencias,
