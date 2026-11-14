@@ -29,6 +29,8 @@ Estas decisiones se tomaron al iniciar el evento y **prevalecen** sobre las prop
 | Humedad de suelo de POWER (V-06) | La humedad de suelo de POWER (`GWETROOT`, MERRA-2) entra al balance como **condición inicial** de la cubeta al sembrar y como **comparación** contra la humedad simulada, con su resolución gruesa declarada. Es **fracción de saturación** (0 a 1, primeros ~100 cm), no fracción de TAW: se convierte con θsat, θFC y θWP del suelo (Saxton y Rawls) antes de usarla; sin esos valores, la condición inicial queda `NO_EVALUABLE` | "No usar humedad de POWER en el balance" |
 | Próxima temporada (V-21, A2.13) | Horizonte de **6 meses** (se habla en semestres), aunque el servicio dé 7. Método aprobado: distribución histórica de cada mes (20 años de POWER) desplazada por la anomalía de SEAS5, percentiles como banda, **sin tendencia** y con advertencia | Horizonte 7 o 9 meses; "percentiles y tendencia" |
 | Servidor (V-15 a V-17) | Droplet de Eduardo con `sslip.io` y certificado Let's Encrypt. Cerrado | Opciones de "Servidor sin dominio" |
+| Calendario de siembra (A0.6, V-20) | Las ventanas de siembra **dependen del lugar, no del cultivo**: salen del catálogo y van en el contrato `calendario-local` (municipio con clave INEGI, cultivo, temporada PV/OI, ventana con fuente SIAP o INIFAP; sin dato, `NO_EVALUABLE`). La fecha de siembra de cada ciclo la elige el usuario; el plan guarda el calendario usado y un `porQue`. Un cultivo que la fuente no registra en el lugar se muestra, pero no se recomienda (caso: calabaza en Isla, SIAP 2021-2025). Mafer revisa si SIAP tiene API o datos abiertos de siembras | Ventanas por cultivo en el catálogo |
+| Clima por ciclo (A2.8) | Opción (c) `temporada_tipica`: cada ciclo en su temporada típica (PV u OI) dentro del año del escenario | Opciones a/b/c abiertas en 05 |
 
 ## Consecuencias técnicas
 
@@ -58,7 +60,7 @@ Reglas para el servidor compartido: AgroHive va en su propio `server` block de n
 | V-17 | ~~Hostname y certificado~~ Cerrado: `sslip.io` + Let's Encrypt | Eduardo |
 | V-18 | ~~Roles por nombre~~ Reemplazado: reparto por actividad en 14 | Equipo |
 | V-19 | ~~Ranking A o B~~ Decidido: criterio B (ver tabla de arriba). Pintura por bloques sigue `[EN EVENTO]`; cultivos: milpa decidida, falta confirmar parámetros | Equipo |
-| V-20 | Cultivos y calendario del municipio en SIAP; confirmar la zona demo | Quien tome A0.6 |
+| V-20 | Cultivos y calendario del municipio en SIAP: forma decidida (contrato `calendario-local`); falta cargar los datos reales de Isla con fuente | Mafer (A0.6) |
 | V-21 | ~~Horizonte del pronóstico estacional~~ Decidido: 6 meses (ver tabla de arriba) | — |
 | V-22 | Si NASA POWER permite llamadas desde el navegador (CORS); por defecto todo pasa por el backend | Quien tome A0.7 |
 | V-23 | ~~Qué servicio de suelo~~ Decidido: ambos, ISRIC WCS y OpenLandMap (ver tabla de arriba) | — |

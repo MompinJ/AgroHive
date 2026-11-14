@@ -20,13 +20,15 @@ Fórmulas y parámetros son **propuestas** a validar con fuentes citables. Qué 
 3. Guardar su serie diaria como "escenario"; mostrar siempre el año real.
 4. `[MEJORA]` Ajustes "qué pasa si" (lluvia × factor, temperatura + n °C).
 
-## Paso 2: ciclos y clima — investigación abierta `[DEPENDE-DATOS]`
-No está resuelto cómo se asigna una serie climática a cada uno de los ciclos de una rotación. Factores a investigar en el evento:
+## Paso 2: ciclos y clima `[DECIDIDO]` 14/11: opción (c), `temporada_tipica`
+**Decisión (A2.8):** cada ciclo se simula con su **temporada típica (PV u OI) dentro del año real del escenario**. El plan la fija en `asignacionClima: "temporada_tipica"` (`contratos/plan-siembra.schema.json`). La **fecha de siembra de cada ciclo la elige el usuario**; el selector la sugiere desde el calendario local (`contratos/calendario-local.schema.json`: ventana por municipio, cultivo y temporada, con fuente SIAP o INIFAP) y el plan guarda qué calendario usó (o que no había) y un `porQue` que explica la fecha en la interfaz. Las ventanas dependen del lugar, no del cultivo: no están en el catálogo. Si la fuente local no registra un cultivo en el lugar (por ejemplo, calabaza en Isla, que SIAP 2021-2025 no registra), el cultivo se puede mostrar pero no se recomienda: la rotación lo lista en `cultivosNoRecomendados` con motivo y fuente y queda `EXPLORATORIO`.
+
+Antecedente (factores que se evaluaron):
 - Cuántos ciclos al año caben según calendario local (en Veracruz puede haber primavera-verano y otoño-invierno, así que **3 ciclos no equivalen necesariamente a 3 años**).
 - Qué entregan las APIs (diario, mensual, período disponible).
 - Duración del ciclo de cada cultivo elegido.
 
-Opciones a evaluar: (a) los tres ciclos dentro del mismo año/escenario; (b) ventanas consecutivas reales del histórico; (c) cada ciclo con su temporada típica en el año del escenario. Documentar la elegida en 01.
+Opciones que se evaluaron: (a) los tres ciclos dentro del mismo año/escenario; (b) ventanas consecutivas reales del histórico; **(c) cada ciclo con su temporada típica en el año del escenario (elegida)**.
 
 ## Paso 3: demanda de agua
 - ET0 diaria: Open-Meteo, o calculada (Hargreaves-Samani simple; Penman-Monteith FAO-56 si hay humedad y viento). Si falta alguna entrada, usar alternativa documentada e indicar menor precisión.
