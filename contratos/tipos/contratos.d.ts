@@ -711,6 +711,7 @@ export interface ResultadoRotacion {
    * Posicion en el ranking de robustez; null si la rotacion no es evaluable o no se ha ordenado.
    */
   ranking: Ranking | null;
+  proximaTemporada?: ProximaTemporadaRotacion;
   advertencias: Advertencia[];
   explicacion: Explicacion;
 }
@@ -851,6 +852,57 @@ export interface Ranking {
   de: number;
   criterio: CriterioRanking;
   desempate?: string;
+}
+/**
+ * Como le iria a la rotacion en la proxima temporada, evaluada con anios historicos reales analogos al pronostico estacional. Solo rangos entre analogos, nunca una cifra: no es una prediccion.
+ */
+export interface ProximaTemporadaRotacion {
+  estado: "EXPLORATORIO" | "NO_EVALUABLE" | "ERROR_DATOS";
+  motivo?: string;
+  esPrediccion: false;
+  aviso: string;
+  emitido: Fecha;
+  horizonte: HorizonteMeses;
+  /**
+   * Como se eligieron los anios analogos.
+   */
+  criterioAnalogos: string;
+  ciclosEvaluados: number[];
+  /**
+   * Ciclos del plan que caen fuera del horizonte, con motivo.
+   */
+  ciclosFuera?: CicloFuera[];
+  aniosAnalogos: AnioAnalogo[];
+  rango: RangoProximaTemporada;
+  /**
+   * @minItems 1
+   */
+  fuentes: [Fuente, ...Fuente[]];
+}
+export interface HorizonteMeses {
+  desde: string;
+  hasta: string;
+}
+export interface CicloFuera {
+  ciclo: number;
+  motivo: string;
+}
+export interface AnioAnalogo {
+  anioReal: number;
+  mesesDentro: number;
+  deMeses: number;
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  deficitHidrico: PilarDeficitHidrico;
+  excesoHidrico: PilarExcesoHidrico;
+}
+/**
+ * Rango entre los anios analogos (inferior, superior) de cada metrica.
+ */
+export interface RangoProximaTemporada {
+  proporcionDemandaNoCubierta: RangoIncertidumbre;
+  fraccionLluviaPercolada: RangoIncertidumbre;
+  excesoTotalMm: RangoIncertidumbre;
 }
 /**
  * Tarjeta de la rotacion (doc 05, paso 8). Si la redacta un LLM, solo usa numeros ya calculados; siempre hay plantilla de respaldo.
