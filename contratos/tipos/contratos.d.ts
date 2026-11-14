@@ -258,13 +258,32 @@ export interface SeleccionEscenario {
    */
   percentilObjetivo: number;
   /**
-   * Lluvia anual total del anio elegido (suma de diarios).
+   * Lluvia del anio calendario del anio elegido (suma de diarios), solo como referencia. La cantidad con la que se elige el escenario va en lluviaTemporadasMm.
    */
   lluviaAnualMm: number | null;
+  lluviaTemporadasMm?: LluviaTemporadas;
   /**
    * Descripcion breve del criterio, por ejemplo 'anio mas cercano al p10 de lluvia anual'.
    */
   criterio: string;
+}
+/**
+ * Lluvia del anio agricola elegido por temporada (mm): ventanas de siembra PV y OI segun SIAP, y su suma (la cantidad sobre la que se calcula el percentil, doc 05 paso 1). null en un campo si falta algun dia. Opcional (agregado en 0.6.0).
+ */
+export interface LluviaTemporadas {
+  /**
+   * Lluvia de la ventana PV (mm).
+   */
+  pv: number | null;
+  /**
+   * Lluvia de la ventana OI (mm).
+   */
+  oi: number | null;
+  /**
+   * pv + oi (mm).
+   */
+  total: number | null;
+  fuente: Fuente;
 }
 /**
  * Un dia de la serie. Los valores faltantes van en null (se muestran, no se rellenan).
@@ -624,7 +643,10 @@ export interface RegistroCelda {
    * Cultivo en la celda; null si esta en suelo desnudo.
    */
   cultivo: IdCultivo | null;
-  etapa: EtapaVisual;
+  /**
+   * Etapa visual; null si no hay parametros del cultivo para saberla (entonces el registro no es EVALUABLE y explica el motivo).
+   */
+  etapa: EtapaVisual | null;
   /**
    * Avance dentro de la etapa visual (0 a 1), para interpolar escala en el render.
    */

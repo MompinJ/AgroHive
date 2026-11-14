@@ -1,8 +1,8 @@
 """Modelos de respuesta. Reflejan los contratos de contratos/ (solo los edita Mompin); si un campo no coincide, se pide el cambio."""
 from datetime import date, datetime
-from typing import Literal
+from typing import Any, Literal
 
-from pydantic import BaseModel, Field, model_serializer
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 Estado = Literal["EVALUABLE", "NO_EVALUABLE", "EXPLORATORIO", "ERROR_DATOS", "RESPALDO_HISTORICO"]
 LonLat = tuple[float, float]
@@ -18,7 +18,7 @@ class SinNulos(BaseModel):
 
 class Meta(SinNulos):
     versionContrato: str
-    esEjemplo: bool = False
+    esEjemplo: bool
     generado: datetime | None = None
 
 
@@ -55,9 +55,19 @@ class DiaClima(BaseModel):
     humedadRelativaPct: float | None = None
     vientoMS: float | None = None
     et0Mm: float | None = None
+    humedadRaizFraccionSat: float | None = Field(default=None, ge=0, le=1)
 
 
-class SerieClima(BaseModel):
+class HumedadSuelo(SinNulos):
+    """De donde sale humedadRaizFraccionSat y para que se usa (V-06)."""
+    variable: Literal["GWETROOT"]
+    definicion: str
+    profundidadCm: float | None = Field(default=None, gt=0)
+    fuente: "Fuente"
+    uso: list[Literal["condicion_inicial", "comparacion"]] = Field(min_length=1)
+
+
+class SerieClima(SinNulos):
     """Serie diaria de un periodo, sin elegir escenario. El motor (A2.5) corta los anios de cada escenario."""
     meta: Meta
     estado: Estado
@@ -65,6 +75,7 @@ class SerieClima(BaseModel):
     coordenada: LonLat
     fuente: Fuente
     diario: list[DiaClima]
+    humedadSuelo: HumedadSuelo | None = None
     advertencias: list[Advertencia] = []
 
 
@@ -121,10 +132,13 @@ class FraccionesTextura(BaseModel):
     arcilla: float = Field(ge=0, le=100)
 
 
+ClaseTextura = Literal["arena", "arena_franca", "franco_arenoso", "franco", "franco_limoso", "limo", "franco_arcillo_arenoso", "franco_arcilloso", "franco_arcillo_limoso", "arcillo_arenoso", "arcillo_limoso", "arcilla"]
+
+
 class Textura(SinNulos):
     estado: Estado
-    etiqueta: Literal["SUPUESTO"] = "SUPUESTO"
-    clase: str | None = None
+    etiqueta: Literal["SUPUESTO"]
+    clase: ClaseTextura | None = None
     grupo: Literal["arenoso", "franco", "arcilloso"]
     fraccionesPct: FraccionesTextura | None = None
     fuente: Fuente | None = None
@@ -132,7 +146,7 @@ class Textura(SinNulos):
 
 class PhEstimado(SinNulos):
     estado: Literal["EVALUABLE", "EXPLORATORIO", "RESPALDO_HISTORICO"]
-    etiqueta: Literal["SUPUESTO"] = "SUPUESTO"
+    etiqueta: Literal["SUPUESTO"]
     valor: float = Field(ge=0, le=14)
     fuente: Fuente
 
@@ -155,17 +169,37 @@ class AguaSuelo(SinNulos):
     metodoTaw: MetodoTaw | None = None  # obligatorio en el contrato si el TAW es EVALUABLE
 
 
+class TexturaEstimada(BaseModel):
+    clase: ClaseTextura | None
+    fraccionesPct: FraccionesTextura
+
+
+class EstimacionSuelo(SinNulos):
+    """Lo que devolvio un servicio de suelo para la coordenada (para comparar ISRIC y OpenLandMap, V-23)."""
+    id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]*$")
+    servicio: Literal["isric_soilgrids_wcs", "openlandmap"]
+    estado: Estado
+    fuente: Fuente
+    profundidad: ProfundidadCm | None = None
+    textura: TexturaEstimada
+    ph: float | None = Field(ge=0, le=14)
+    carbonoOrganicoGKg: float | None = Field(default=None, ge=0)
+    motivo: str | None = None
+
+
 class Suelo(SinNulos):
     """Textura y pH estimados con un mapa global. Siempre SUPUESTO: no es una medicion de la parcela."""
     meta: Meta
     id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]*$")
-    etiqueta: Literal["SUPUESTO"] = "SUPUESTO"
+    etiqueta: Literal["SUPUESTO"]
     origen: Literal["mapa_global", "selector_manual"]
     aviso: str
     coordenada: LonLat | None = None
     profundidad: ProfundidadCm | None = None
     textura: Textura
     ph: PhEstimado | ValorNoEvaluable
+    estimaciones: list[EstimacionSuelo] | None = None
+    estimacionUsada: str | None = None
     agua: AguaSuelo | None = None
     advertencias: list[Advertencia] = []
 
@@ -205,3 +239,11 @@ class ProximaTemporada(BaseModel):
     fuentes: list[Fuente] = Field(min_length=1)
     meses: list[MesAproximado]
     advertencias: list[Advertencia] = []
+
+
+class CatalogoCultivos(BaseModel):
+    """Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, NO_EVALUABLE."""
+    model_config = ConfigDict(extra="allow")  # meta y versionCatalogo del archivo pasan tal cual
+    estado: Literal["NO_EVALUABLE"] | None = None
+    motivo: str | None = None
+    cultivos: list[dict[str, Any]]

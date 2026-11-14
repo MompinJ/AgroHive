@@ -28,8 +28,9 @@ def decodificar(rgb: tuple[int, int, int]) -> float:
 
 async def _tile(cliente: httpx.AsyncClient, z: int, x: int, y: int, sem: asyncio.Semaphore) -> Image.Image | None:
     ruta = config.CACHE_DIR / "terrarium" / str(z) / str(x) / f"{y}.png"
-    if ruta.exists():
-        datos = ruta.read_bytes()
+    en_demo = config.DEMO_DIR / "terrarium" / str(z) / str(x) / f"{y}.png"  # paquete de demo (A2.4)
+    if ruta.exists() or en_demo.exists():
+        datos = (ruta if ruta.exists() else en_demo).read_bytes()
     else:
         async with sem:
             try:

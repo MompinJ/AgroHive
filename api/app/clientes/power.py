@@ -6,11 +6,17 @@ import httpx
 from .. import http
 
 URL = "https://power.larc.nasa.gov/api/temporal/daily/point"
-PARAMETROS = "PRECTOTCORR,T2M,T2M_MAX,T2M_MIN,ALLSKY_SFC_SW_DWN,RH2M,WS2M"
+PARAMETROS = "PRECTOTCORR,T2M,T2M_MAX,T2M_MIN,ALLSKY_SFC_SW_DWN,RH2M,WS2M,GWETROOT"
 INICIO_MINIMO = date(1981, 1, 1)
 NOMBRE = "NASA POWER (diario, comunidad AG)"
 RESOLUCION = "MERRA-2, celda de 0.5 x 0.625 grados"
-UNIDADES = "mm/dia, C, MJ/m2/dia, %, m/s"
+UNIDADES = "mm/dia, C, MJ/m2/dia, %, m/s, fraccion 0 a 1 (GWETROOT)"
+HUMEDAD_SUELO = {  # metadato que acompana a humedadRaizFraccionSat (contrato clima-escenario, humedadSuelo)
+    "variable": "GWETROOT",
+    "definicion": "Humedad de la zona de raices de NASA POWER (MERRA-2): fraccion de saturacion de 0 a 1, regional (0.5 x 0.625 grados). No es fraccion de TAW: para usarla en la cubeta hay que convertirla con la retencion del suelo.",
+    "profundidadCm": 100,
+    "uso": ["condicion_inicial", "comparacion"],
+}
 
 
 def centro_celda(lat: float, lon: float) -> tuple[float, float]:
@@ -40,6 +46,8 @@ def parsear(cuerpo: dict) -> list[dict]:
             "humedadRelativaPct": _valor(parametros["RH2M"], f, relleno),
             "vientoMS": _valor(parametros["WS2M"], f, relleno),
             "et0Mm": None,
+            # GWETROOT: fraccion de SATURACION (0 a 1) de la zona de raices, sin convertir (V-06, decidido el 14/11)
+            "humedadRaizFraccionSat": _valor(parametros.get("GWETROOT", {}), f, relleno),
         })
     return dias
 

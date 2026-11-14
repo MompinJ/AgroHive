@@ -46,7 +46,7 @@ def q(**kw):
 
 
 POWER = "https://power.larc.nasa.gov/api/temporal/daily/point?"
-PARAMS = "PRECTOTCORR,T2M,T2M_MAX,T2M_MIN,ALLSKY_SFC_SW_DWN,RH2M,WS2M"
+PARAMS = "PRECTOTCORR,T2M,T2M_MAX,T2M_MIN,ALLSKY_SFC_SW_DWN,RH2M,WS2M,GWETROOT"
 base = dict(latitude=LAT, longitude=LON, format="json")
 
 print(f"Consulta del {date.today()} en ({LAT}, {LON})")

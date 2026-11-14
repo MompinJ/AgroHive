@@ -29,6 +29,7 @@ def parsear(cuerpo: dict) -> list[dict]:
             "humedadRelativaPct": None,
             "vientoMS": None,
             "et0Mm": d["et0_fao_evapotranspiration"][i],
+            "humedadRaizFraccionSat": None,
         })
     return dias
 

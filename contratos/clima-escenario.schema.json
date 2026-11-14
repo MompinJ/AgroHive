@@ -72,12 +72,54 @@
           "maximum": 100
         },
         "lluviaAnualMm": {
-          "description": "Lluvia anual total del anio elegido (suma de diarios).",
+          "description": "Lluvia del anio calendario del anio elegido (suma de diarios), solo como referencia. La cantidad con la que se elige el escenario va en lluviaTemporadasMm.",
           "type": [
             "number",
             "null"
           ],
           "minimum": 0
+        },
+        "lluviaTemporadasMm": {
+          "title": "LluviaTemporadas",
+          "description": "Lluvia del anio agricola elegido por temporada (mm): ventanas de siembra PV y OI segun SIAP, y su suma (la cantidad sobre la que se calcula el percentil, doc 05 paso 1). null en un campo si falta algun dia. Opcional (agregado en 0.6.0).",
+          "type": "object",
+          "required": [
+            "pv",
+            "oi",
+            "total",
+            "fuente"
+          ],
+          "properties": {
+            "pv": {
+              "description": "Lluvia de la ventana PV (mm).",
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "oi": {
+              "description": "Lluvia de la ventana OI (mm).",
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "total": {
+              "description": "pv + oi (mm).",
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "fuente": {
+              "description": "Fuente de las ventanas PV y OI (SIAP).",
+              "$ref": "comun.schema.json#/$defs/fuente"
+            }
+          },
+          "additionalProperties": false
         },
         "criterio": {
           "description": "Descripcion breve del criterio, por ejemplo 'anio mas cercano al p10 de lluvia anual'.",
