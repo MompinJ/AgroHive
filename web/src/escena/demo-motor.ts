@@ -171,18 +171,15 @@ export function entradasCarga(modo: ModoSuelo): Omit<EntradasMotor, 'escenarios'
 
 /**
  * Vista previa con la cuadricula de balam (web/src/ui/cuadricula.ts, A2.9): un
- * poligono en L de unas 5 ha junto a la parcela demo, con la elevacion que
+ * poligono en L de 4.8 ha (518 celdas) junto a la parcela demo, con la elevacion que
  * responda POST /api/elevacion (en desarrollo, la API local con el paquete de
  * demo: VITE_API_URL). Si la API falla, las celdas quedan sin elevacion (huecos).
  */
 export async function parcelaCuadriculaBalam(): Promise<{ parcela: Parcela; nota: string }> {
   const { generarCuadricula } = await import('../ui/cuadricula');
   const { obtenerTerreno } = await import('../api/cliente');
-  const [lon0, lat0] = parcelaConTerrenoDemo().centroide;
-  const mLat = 1 / 111195;
-  const mLon = 1 / (111195 * Math.cos((lat0 * Math.PI) / 180));
-  const L: [number, number][] = [[-150, -150], [150, -150], [150, -50], [-50, -50], [-50, 150], [-150, 150]];
-  const { parcela } = generarCuadricula(L.map(([x, y]) => [lon0 + x * mLon, lat0 + y * mLat]));
+  // El mismo poligono de las revisiones de punta a punta: 4.8 ha y 518 celdas de 10 m.
+  const { parcela } = generarCuadricula([[-95.526, 18.028], [-95.5236, 18.028], [-95.5236, 18.0302], [-95.5248, 18.0302], [-95.5248, 18.0292], [-95.526, 18.0292]]);
   const r = await obtenerTerreno({ tamanoCeldaM: parcela.tamanoCeldaM, celdas: parcela.celdas.map(({ id, i, j, centro }) => ({ id, i, j, centro })) });
   if (!r.ok) return { parcela, nota: `Sin elevacion: ${r.error.motivo}` };
   const alturas = new Map(r.datos.celdas.map((c) => [c.id, c]));

@@ -13,6 +13,7 @@ import { colorSuelo } from '../suelo';
 import type { ModeloVoxel, Vec3 } from '../voxel/bbmodel';
 import { AMPLITUD_VIENTO, DURACION_TRANSICION_MS, escalaInicial, interpolar, saleEncogiendo, type PlantaPrevia } from '../animacion';
 import { agruparPorModelo, claveModelo, escalaPorAvance, giroCelda, modeloRespaldo } from '../voxel/catalogo';
+import { bloqueProvisional, claveBloque } from '../voxel/bloque';
 import { cargarModelo, MODELOS_DISPONIBLES } from '../voxel/fuente-modelos';
 import { unirCubos } from '../voxel/geometria';
 import { decodificarPaletaPng, type ColorPaleta } from '../voxel/paleta-png';
@@ -96,6 +97,8 @@ function soportaWebGL(): boolean {
 
 interface MetaPlantas {
   clave: string;
+  /** Modelo detallado que se muestra en la celda elegida. */
+  tipoDetallado: 'bbmodel' | 'respaldo';
   celdas: string[];
   pos: THREE.Vector3[];
   rot: THREE.Quaternion[];
@@ -219,9 +222,10 @@ function geometriaBanderin(): THREE.BufferGeometry {
 }
 
 /** Marco cuadrado de seleccion: anillo exterior negro y anillo interior blanco (se ve sobre cualquier suelo). */
-function crearMarco([negro, blanco]: THREE.MeshBasicMaterial[]): THREE.Group {
-  const g = new THREE.Group();
-  const anillo = (lado: number, grosor: number, alto: number, mat: THREE.Material) => {
+function crearMarco([material]: THREE.MeshBasicMaterial[]): THREE.Group {
+  // Las 8 cajas de los dos anillos van unidas en una geometria: un solo draw call.
+  const cubos: ModeloVoxel['cubos'] = [];
+  const anillo = (lado: number, grosor: number, alto: number, color: number) => {
     const m = lado / 2;
     for (const [x, z, ancho, fondo] of [
       [0, -m + grosor / 2, lado, grosor],
@@ -229,13 +233,19 @@ function crearMarco([negro, blanco]: THREE.MeshBasicMaterial[]): THREE.Group {
       [-m + grosor / 2, 0, grosor, lado - 2 * grosor],
       [m - grosor / 2, 0, grosor, lado - 2 * grosor],
     ] as const) {
-      const caja = new THREE.Mesh(new THREE.BoxGeometry(ancho, alto, fondo), mat);
-      caja.position.set(x, alto / 2, z);
-      g.add(caja);
+      const caras = { north: color, south: color, east: color, west: color, up: color, down: null };
+      cubos.push({ nombre: 'marco', desde: [x - ancho / 2, 0, z - fondo / 2], hasta: [x + ancho / 2, alto, z + fondo / 2], origen: [0, 0, 0], rotacion: [0, 0, 0], caras });
     }
   };
-  anillo(1.04, 0.07, 0.05, negro!);
-  anillo(0.92, 0.05, 0.06, blanco!);
+  anillo(1.04, 0.07, 0.05, 0);
+  anillo(0.92, 0.05, 0.06, 1);
+  const unida = unirCubos({ nombre: 'marco', textura: { ancho: 16, alto: 16, fuente: '' }, cubos }, (i) => (i === 0 ? [0, 0, 0] : [1, 1, 1]), 1);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(unida.posiciones, 3));
+  geo.setAttribute('normal', new THREE.BufferAttribute(unida.normales, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(unida.colores, 3));
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(geo, material));
   g.visible = false;
   g.renderOrder = 2;
   return g;
@@ -263,7 +273,7 @@ export class EscenaThree {
   private seleccionId: string | null = null;
   private ultimoPuntero: { x: number; y: number } | null = null;
   private cuadroHover = 0;
-  private readonly materialesMarco = [new THREE.MeshBasicMaterial({ color: '#000000' }), new THREE.MeshBasicMaterial({ color: '#ffffff' })];
+  private readonly materialesMarco = [new THREE.MeshBasicMaterial({ vertexColors: true })];
   private readonly marco = crearMarco(this.materialesMarco);
   // A5.1: material de plantas que vive toda la escena (las plantas que salen lo siguen usando)
   // y lleva el viento en el shader; transiciones en curso y escala actual por celda.
@@ -275,6 +285,9 @@ export class EscenaThree {
   private readonly metaPlantas = new Map<THREE.InstancedMesh, MetaPlantas>();
   private plantasActuales = new Map<string, PlantaPrevia>();
   private claveVista = '';
+  private detalle: THREE.Mesh | null = null;
+  private oculta: { mesh: THREE.InstancedMesh; k: number; meta: MetaPlantas } | null = null;
+  private tokenDetalle = 0;
   private modeloActual: EscenaModelo | null = null;
   private enPantalla = true;
   private readonly observadorVisible: IntersectionObserver | null = null;
@@ -395,6 +408,8 @@ export class EscenaThree {
     // nuevas parten de la escala que habia. Lo que estaba animandose se corta aqui.
     const previas = this.prepararSalida(modelo, animar);
     this.limpiar();
+    this.detalle = null;
+    this.oculta = null;
     this.modeloActual = modelo;
     // Media altura visible: la parcela mas margen para las plantas altas.
     this.extension = Math.max(modelo.filas, modelo.columnas, 2) * 0.6 + 0.6;
@@ -425,6 +440,53 @@ export class EscenaThree {
     if (bloque) {
       const y = this.topeDe(bloque) + (this.losaDe(bloque) ? DETALLE_LOSA : 0) + 0.004;
       this.marco.position.set(bloque.x, y, bloque.z);
+    }
+    void this.aplicarDetalle();
+    this.pedirCuadro();
+  }
+
+  /**
+   * Celda elegida: oculta su manchon y pone en su lugar el modelo detallado de esa planta
+   * (misma posicion, giro y escala). Al cambiar la seleccion, el manchon vuelve.
+   */
+  private async aplicarDetalle() {
+    const token = ++this.tokenDetalle;
+    // Devolver el manchon que estaba oculto.
+    if (this.oculta && this.oculta.mesh.parent) {
+      const { mesh, k, meta } = this.oculta;
+      const e = this.plantasActuales.get(meta.celdas[k]!)?.escala ?? 1;
+      mesh.setMatrixAt(k, new THREE.Matrix4().compose(meta.pos[k]!, meta.rot[k]!, new THREE.Vector3(e, e, e)));
+      mesh.instanceMatrix.needsUpdate = true;
+    }
+    this.oculta = null;
+    this.detalle?.removeFromParent();
+    this.detalle = null;
+    const id = this.seleccionId;
+    if (!id) return this.pedirCuadro();
+    for (const hijo of this.raiz.children) {
+      const meta = hijo instanceof THREE.InstancedMesh ? this.metaPlantas.get(hijo) : undefined;
+      const k = meta ? meta.celdas.indexOf(id) : -1;
+      if (!meta || k < 0) continue;
+      const mesh = hijo as THREE.InstancedMesh;
+      mesh.setMatrixAt(k, new THREE.Matrix4().compose(meta.pos[k]!, meta.rot[k]!, new THREE.Vector3(0, 0, 0)));
+      mesh.instanceMatrix.needsUpdate = true;
+      this.oculta = { mesh, k, meta };
+      let geo: THREE.BufferGeometry;
+      try {
+        geo = await this.geometriaDe(meta.clave, meta.tipoDetallado);
+      } catch {
+        geo = await this.geometriaDe(meta.clave, 'respaldo');
+      }
+      if (token !== this.tokenDetalle) return; // la seleccion cambio mientras cargaba
+      const detalle = new THREE.Mesh(geo, this.materialMascota);
+      const e = this.plantasActuales.get(id)?.escala ?? 1;
+      detalle.position.copy(meta.pos[k]!);
+      detalle.quaternion.copy(meta.rot[k]!);
+      detalle.scale.setScalar(e);
+      detalle.name = 'detalle';
+      this.raiz.add(detalle);
+      this.detalle = detalle;
+      break;
     }
     this.pedirCuadro();
   }
@@ -616,19 +678,36 @@ export class EscenaThree {
     return this.paleta;
   }
 
-  private geometriaDe(clave: string, tipo: 'bbmodel' | 'respaldo'): Promise<THREE.BufferGeometry> {
-    const llave = `${tipo}:${clave}`;
+  /**
+   * Geometria unida de un modelo. 'bloque': el manchon de plantas de la celda; usa
+   * <clave>_bloque.bbmodel si existe y si no, uno provisional hecho del detallado.
+   */
+  private geometriaDe(clave: string, tipo: 'bbmodel' | 'respaldo' | 'bloque', detalladoTipo: 'bbmodel' | 'respaldo' = 'bbmodel'): Promise<THREE.BufferGeometry> {
+    const llave = `${tipo}:${detalladoTipo}:${clave}`;
     let g = this.cacheGeometria.get(llave);
     if (!g) {
       g = (async () => {
         let modelo: ModeloVoxel;
         let paleta: ColorPaleta[] | null;
-        if (tipo === 'bbmodel') {
-          modelo = await cargarModelo(clave);
-          paleta = await decodificarPaletaPng(modelo.textura.fuente);
+        const detallado = async (t: 'bbmodel' | 'respaldo') => {
+          if (t === 'bbmodel') {
+            const m = await cargarModelo(clave);
+            return { modelo: m, paleta: await decodificarPaletaPng(m.textura.fuente) };
+          }
+          return { modelo: modeloRespaldo(clave, { ancho: 16, alto: 16, fuente: '' }), paleta: await this.obtenerPaleta() };
+        };
+        if (tipo === 'bloque') {
+          if (MODELOS_DISPONIBLES.has(claveBloque(clave))) {
+            modelo = await cargarModelo(claveBloque(clave));
+            paleta = await decodificarPaletaPng(modelo.textura.fuente);
+          } else {
+            const d = await detallado(detalladoTipo);
+            modelo = bloqueProvisional(d.modelo);
+            paleta = d.paleta;
+            this.opciones.onAviso?.('BLOQUE_PROVISIONAL', 'Manchones de plantas provisionales (hechos en código) mientras llegan los modelos de bloque de modelos/cultivos/bloques/.');
+          }
         } else {
-          paleta = await this.obtenerPaleta();
-          modelo = modeloRespaldo(clave, { ancho: 16, alto: 16, fuente: '' });
+          ({ modelo, paleta } = await detallado(tipo));
         }
         const c = new THREE.Color();
         const unida = unirCubos(modelo, (i) => {
@@ -660,17 +739,20 @@ export class EscenaThree {
       if (grupo.resolucion.tipo === 'respaldo') {
         aviso = ['MODELO_PROVISIONAL', `Sin modelo ${grupo.clave}.bbmodel: se dibuja una planta provisional.`];
       }
+      // Cada celda lleva el manchon de plantas (bloque); el detallado va solo en la celda elegida.
+      let tipoDetallado: 'bbmodel' | 'respaldo' = grupo.resolucion.tipo;
       try {
-        geo = await this.geometriaDe(grupo.clave, grupo.resolucion.tipo);
+        geo = await this.geometriaDe(grupo.clave, 'bloque', tipoDetallado);
       } catch (e) {
         aviso = ['MODELO_ILEGIBLE', `${grupo.clave}.bbmodel no se pudo leer (${(e as Error).message}); se dibuja una planta provisional.`];
-        geo = await this.geometriaDe(grupo.clave, 'respaldo');
+        tipoDetallado = 'respaldo';
+        geo = await this.geometriaDe(grupo.clave, 'bloque', 'respaldo');
       }
       if (version !== this.version) return; // llego otra actualizacion mientras cargaba
       if (aviso) this.opciones.onAviso?.(aviso[0], aviso[1]);
       const plantas = new THREE.InstancedMesh(geo, this.materialPlantas, grupo.bloques.length);
       plantas.frustumCulled = false; // su tamano cambia durante la transicion
-      const meta: MetaPlantas = { clave: grupo.clave, celdas: [], pos: [], rot: [] };
+      const meta: MetaPlantas = { clave: grupo.clave, tipoDetallado, celdas: [], pos: [], rot: [] };
       const desde: number[] = [];
       const hasta: number[] = [];
       grupo.bloques.forEach((b, k) => {
@@ -696,6 +778,7 @@ export class EscenaThree {
       if (desde.some((d, k) => d !== hasta[k])) {
         this.transiciones.push({ mesh: plantas, meta, desde, hasta, inicio: performance.now(), sale: false });
       }
+      if (this.seleccionId && meta.celdas.includes(this.seleccionId)) void this.aplicarDetalle();
       this.pedirCuadro();
     }
   }
@@ -747,7 +830,9 @@ export class EscenaThree {
     const m = new THREE.Matrix4();
     t.desde.forEach((d, k) => {
       const e = interpolar(d, t.hasta[k]!, avance);
-      m.compose(t.meta.pos[k]!, t.meta.rot[k]!, new THREE.Vector3(e, e, e));
+      // La celda elegida muestra el detallado: su manchon queda oculto.
+      const v = !t.sale && t.meta.celdas[k] === this.seleccionId ? 0 : e;
+      m.compose(t.meta.pos[k]!, t.meta.rot[k]!, new THREE.Vector3(v, v, v));
       t.mesh.setMatrixAt(k, m);
       if (!t.sale) this.plantasActuales.set(t.meta.celdas[k]!, { clave: t.meta.clave, escala: e });
     });

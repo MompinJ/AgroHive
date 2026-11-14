@@ -1,0 +1,35 @@
+{
+ "nota": "Pixel de Isla (-95.53, 18.03) leido el 2026-11-14 de los COG de Planetary Computer por GET /api/ndvi en vivo. Formato: A<anio><dia> -> [NDVI crudo, calidad cruda]. Cuatro de estos valores coinciden con los de ORNL DAAC (ornl_ndvi_2023.json y ornl_calidad_2023.json).",
+ "A2023129": [
+  3150,
+  1
+ ],
+ "A2023145": [
+  3279,
+  1
+ ],
+ "A2023161": [
+  3378,
+  0
+ ],
+ "A2023177": [
+  4053,
+  3
+ ],
+ "A2023193": [
+  3921,
+  3
+ ],
+ "A2023209": [
+  3730,
+  0
+ ],
+ "A2023225": [
+  4227,
+  3
+ ],
+ "A2023241": [
+  3488,
+  0
+ ]
+}

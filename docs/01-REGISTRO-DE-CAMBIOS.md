@@ -12,6 +12,19 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Manchón de plantas por celda en la escena (Mompin; idea de balam, modelos de Mafer)
+
+- **Archivos:** `web/src/escena/voxel/bloque.ts` (nuevo), `render/escena-three.ts` (bloque por celda, detallado en la celda elegida, marco unido en una malla), `voxel/fuente-modelos.ts` (`modelos/cultivos/bloques/`), `EscenaParcela.tsx` (nota en la leyenda), `demo-motor.ts` (la vista previa usa el polígono de 518 celdas), prueba `bloque.test.ts`; `docs/06`.
+- **Cambio:** cada celda lleva el modelo ligero de bloque y la celda elegida el detallado. Si falta el bloque, se usa uno provisional en código (21 cubos, tope de 55 y lomo por surco `[DECIDIDO]` por Mompin con Mafer). La leyenda dice que la densidad es visual, no a escala.
+- **Fuente / evidencia:** con 518 celdas, maíz en madurez pasa de 449 380 a 216 280 triángulos y de 3.2 a 5.0 cuadros/s (SwiftShader); 6 draw calls antes y después. Pendiente: medir con los bloques de Mafer (`maiz_siembra` y `maiz_madurez` primero).
+
+### 2026-11-14 — A3.6: vista 2D con el mismo resultado del motor (balam)
+
+- **Archivos:** `web/src/ui/Parcela2D.tsx`, `parcela2d.css`, `Parcela2D.test.tsx`, `LaboratorioConectado.tsx`, `useLaboratorio.ts`; `docs/06`, `docs/14`, vistas generadas del tablero y `web/README.md`.
+- **Cambio:** selector 2D/3D conservado al navegar. La cuadrícula reutiliza el adaptador, las placas SVG, la leyenda y la ficha del 3D, sin importar Three.js, sin recalcular indicadores y sin consultas nuevas al alternar. Controles táctiles de 48 px, flechas, Inicio/Fin y lista de celdas; huecos y motivos NO_EVALUABLE explícitos. Fallback inicial automático si no hay WebGL2. A5.4 deja de estar bloqueada por A3.6; la medición de hardware sigue pendiente con Eduardo.
+- **Fuente / evidencia:** pruebas de contrato de ejemplo, 1600 celdas y orientación; navegador con R1/ciclo 2/seco muestra frijol, métricas idénticas y cero mensajes/peticiones nuevos al alternar. Sin WebGL: cero canvas y sin descargar el módulo 3D. 320 px sin desborde y axe sin incidencias en los criterios revisados. Capturas `web/evidencia/a3-6-*`.
+- **Decisiones afectadas:** se ejecuta el alcance 2D/3D aprobado de doc 06; no cambia el contrato ni el motor. Para el trabajo de Balam, video y presentación siguen cancelados por su petición expresa. La sincronización conserva también la decisión del equipo registrada por Mompin de definirlos al final; no reactiva trabajo de Balam.
+
 ### 2026-11-14 — Corrección: video y presentación se definen al final, no están canceladas (Mompin, sesión features)
 
 - **Archivos:** `docs/13` (fila "Video y presentación"), `docs/14` (línea bajo F5 y sección "Actividades canceladas" renombrada a "Fuera del tablero hasta el final", A5.6 como "Se define al final"; vistas regeneradas), `docs/guion-video-borrador.md` (encabezado) y `AgroVault/Compartido/Resumen.md`.
@@ -311,6 +324,13 @@ Decisiones afectadas:
 - **Cambio:** se anotan los resultados de llamadas reales a NASA POWER, Open-Meteo (archivo, elevación, estacional) y Terrarium. Se cambian varios `[VERIFICAR]` de 04 por el resultado probado.
 - **Fuente / evidencia:** `datos/pruebas-apis/LEEME.md` y `respuestas/`, consulta del 2026-11-14, coordenada de prueba 18.03, -95.53 (no es la parcela demo).
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
+
+### 2026-11-14 — Marcas de Eduardo en el cronograma
+
+- **Archivos:** `docs/14-CRONOGRAMA.md` y las vistas que regenera `herramientas/cronograma.py`.
+- **Cambio:** revisión de `api/` y `datos/demo/` en la rama `Eduardo`. A4.11 pasa a `[HECHO]`: `GET /api/ndvi` con caché y el paquete `datos/demo/respuestas/ndvi.json` completo. ORNL DAAC no respondió; la serie es MOD13Q1 V061 vía Microsoft Planetary Computer, cita doi:10.5067/MODIS/MOD13Q1.061. A4.6, A4.7 y A4.8 siguen abiertas, con la nota puesta al día (el código del laboratorio ya llama al Worker; el droplet sigue en `d182af4`; SMAP no está en la interfaz ni tiene token en el servidor).
+- **Fuente / evidencia:** `datos/demo/respuestas/ndvi.json` (estado `EXPLORATORIO`, límites del píxel), `api/app/rutas/ndvi.py`, `https://64-23-143-102.sslip.io/health` (`commit: d182af4`).
+- **Decisiones afectadas:** ninguna.
 
 ## Historial
 

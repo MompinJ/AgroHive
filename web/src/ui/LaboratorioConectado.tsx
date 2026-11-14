@@ -8,6 +8,7 @@ import { TarjetasRotacion } from './TarjetasRotacion';
 import { ordenarRotaciones } from './ordenRotaciones';
 
 const Escena = lazy(() => import('../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
+const Parcela2D = lazy(() => import('./Parcela2D').then((m) => ({ default: m.Parcela2D })));
 const DashboardBalance = lazy(() => import('./DashboardBalance'));
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 const pilares: Record<string, string> = { deficitHidrico: 'Déficit hídrico', excesoHidrico: 'Exceso de agua', compatibilidadCiclo: 'Compatibilidad de fechas', proteccionSuelo: 'Protección del suelo', riesgoCalor: 'Riesgo por calor', aporteIndirecto: 'Aporte indirecto' };
@@ -17,8 +18,20 @@ export function FuenteVisible({ fuente }: { fuente: Fuente }) {
 const numero = (n: number | null | undefined, unidad = '') => n == null ? 'NO_EVALUABLE' : `${n.toLocaleString('es-MX', { maximumFractionDigits: 2 })}${unidad}`;
 const porcentaje = (n: number | null | undefined) => n == null ? 'NO_EVALUABLE' : new Intl.NumberFormat('es-MX', { style: 'percent', maximumFractionDigits: 1 }).format(n);
 
+function puedeUsarWebGL(): boolean {
+  if (typeof document === 'undefined') return true;
+  try {
+    const contexto = document.createElement('canvas').getContext('webgl2');
+    if (!contexto) return false;
+    contexto.getExtension('WEBGL_lose_context')?.loseContext();
+    return true;
+  } catch { return false; }
+}
+
 export function LaboratorioConectado({ estado, comparacion = false }: { estado: LaboratorioEstado; comparacion?: boolean }) {
-  const { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda } = estado.seleccion;
+  const { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda, vista, setVista } = estado.seleccion;
+  const [webglDisponible] = useState(puedeUsarWebGL);
+  const vistaVisible = webglDisponible ? vista : '2d';
   const [celdas, setCeldas] = useState<{ clave: string; valor: ResultadoCeldas } | null>(null);
   const [errorCeldas, setErrorCeldas] = useState('');
   const [mostrarDashboard, setMostrarDashboard] = useState(false);
@@ -73,9 +86,13 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
         <p className="quiet-note numeric">{numero(datos.parcela.areaHa, ' ha')} · {datos.parcela.celdas.length} celdas · relieve {datos.parcela.terreno.estado}</p>
         <div className="ui-actions">{plan.ciclos.map((c) => <button className="ui-action" key={c.ciclo} aria-pressed={visible?.ciclo === c.ciclo} onClick={() => setCiclo(c.ciclo)}>Ciclo {c.ciclo}</button>)}</div>
         <p role="status">{plan.rotacionId} · Ciclo {visible?.ciclo} · {nombresCultivos[visible?.cultivo ?? ''] ?? visible?.cultivo} · {escenario} {metricas?.anioReal ?? 'sin año evaluable'}</p>
-        <label htmlFor="fecha-observacion">Fecha que muestra la escena</label><input id="fecha-observacion" type="date" value={fecha} onChange={(e) => { if (e.target.value) setFecha({ clave: claveFecha, fecha: e.target.value }); }} />
+        <label htmlFor="fecha-observacion">Fecha que muestra la parcela</label><input id="fecha-observacion" type="date" value={fecha} onChange={(e) => { if (e.target.value) setFecha({ clave: claveFecha, fecha: e.target.value }); }} />
+        <fieldset className="choice-group"><legend>Vista de la parcela</legend><div className="ui-actions"><label><input type="radio" name="vista-parcela" checked={vistaVisible === '2d'} onChange={() => setVista('2d')} /> 2D ligera</label><label><input type="radio" name="vista-parcela" checked={vistaVisible === '3d'} disabled={!webglDisponible} onChange={() => setVista('3d')} /> 3D con relieve</label></div></fieldset>
+        {!webglDisponible && <p className="ui-warning" role="status">WebGL no está disponible. Mostramos la vista 2D con los mismos resultados del motor.</p>}
         {errorCeldas && <DataState state="error">{errorCeldas} Cambia la fecha o reintenta el cálculo.</DataState>}
-        <Suspense fallback={<DataState state="loading">Cargando escena 3D.</DataState>}><Escena parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} /></Suspense>
+        <Suspense fallback={<DataState state="loading">Cargando vista {vistaVisible.toUpperCase()}.</DataState>}>{vistaVisible === '2d'
+          ? <Parcela2D parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} />
+          : <Escena parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} />}</Suspense>
       </Card>
       <Card title="Lee el escenario" eyebrow="03 / Observa">
         <fieldset className="choice-group"><legend>Escenario histórico</legend><div className="ui-actions">{escenarios.map((e) => <label key={e}><input type="radio" name="escenario-real" value={e} checked={e === escenario} onChange={() => setEscenario(e)} /> {e}</label>)}</div></fieldset>
