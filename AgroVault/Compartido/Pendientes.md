@@ -12,7 +12,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 
 | ID | Estado | Nota |
 | --- | --- | --- |
-| A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.1.0 en `contratos/`: 9 schemas, ejemplos, `npm test` (22/22) y tipos TS. Ver [[Contratos]] |
+| A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.2.0 en `contratos/`: 9 schemas, ejemplos, `npm test` (25/25) y tipos TS. Ver [[Contratos]] |
 
 El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 
@@ -20,7 +20,7 @@ El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 
 | ID | Tema | Mientras tanto |
 | --- | --- | --- |
-| V-19 | Ranking A o B (sigue `[EN EVENTO]`), y si se pinta por bloques | El contrato admite los dos criterios y cada resultado declara cuál usó. Default provisional para avanzar: A (menor exposición hídrica en el peor caso), sin ponderaciones; `arrepentimiento` y `puntaje` en `null`. `porCelda` queda `null` |
+| V-19 | Ranking: **B elegido por Mompin el 14/11**, falta que el equipo lo ratifique. Pintura por bloques sigue `[EN EVENTO]` | B: puntaje compuesto por escenario, arrepentimiento minimax, desempate por promedio. Sin pesos con fuente, pesos iguales declarados `SUPUESTO` en `ponderacion`; no inventes pesos. Riesgo: B necesita los pilares 2 y 3 (A3.7); si no llegan, respaldo A (solo pilar hídrico), declarado en el resultado. `porCelda` queda `null` |
 | A2.8 | Cómo se asigna el clima a cada ciclo (`docs/05`, paso 2) | Opciones: (a) los tres ciclos dentro del mismo año del escenario (`mismo_anio`); (b) ventanas consecutivas reales del histórico (`ventanas_consecutivas`); (c) cada ciclo en su temporada típica dentro del año del escenario (`temporada_tipica`). `plan-siembra.asignacionClima` queda en `null` hasta decidir. No asumas "un ciclo = un año". Se registra en `docs/01` |
 | Tipos | Dos generadores de tipos: el cliente del API desde OpenAPI (decisión del 14/11) y `contratos/tipos/` desde los JSON Schema | Por decidir (Mompin y Eduardo): que FastAPI exponga los mismos schemas o que el cliente OpenAPI se use solo para las rutas. No dupliques tipos a mano |
 | V-20 | Cultivos y calendario de Isla en SIAP | Milpa como núcleo; no inventes fechas de siembra. Las ventanas del catálogo quedan `NO_EVALUABLE` |
@@ -41,7 +41,7 @@ El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 
 ## Decidido el 14/11 (no lo reabras)
 
-Detalle en `docs/13`. Motor en TypeScript dentro de un Web Worker; backend FastAPI solo proxy, caché y extras de Earthdata; polígono libre dentro del MVP; servidor en el droplet de Eduardo, sin dominio; documentación en `docs/` del repo; cronograma por esfuerzo de IA; capa "próxima temporada" como banda de incertidumbre, después del motor; pH y textura estimados con etiqueta `SUPUESTO`; catálogo propio de cultivos en JSON (EcoCrop y FAO-56); zona demo en Isla con la milpa como núcleo; reparto por actividad, no por rol.
+Detalle en `docs/13`. Ranking con el criterio B (decisión de Mompin, por ratificar; ver V-19 arriba). Motor en TypeScript dentro de un Web Worker; backend FastAPI solo proxy, caché y extras de Earthdata; polígono libre dentro del MVP; servidor en el droplet de Eduardo, sin dominio; documentación en `docs/` del repo; cronograma por esfuerzo de IA; capa "próxima temporada" como banda de incertidumbre, después del motor; pH y textura estimados con etiqueta `SUPUESTO`; catálogo propio de cultivos en JSON (EcoCrop y FAO-56); zona demo en Isla con la milpa como núcleo; reparto por actividad, no por rol.
 
 ## Siguen en evento o en datos, aunque 13 haya cerrado otras cosas
 

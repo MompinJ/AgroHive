@@ -68,7 +68,7 @@ Motor, independiente del render (`docs/05`):
 4. Balance de cubeta por bloque: lluvia entra, lo que no cabe es exceso, ETc sale, lo que falta es déficit. TAW según suelo. Pendiente alta puede reducir infiltración; hay que justificarlo.
 5. Estrés hídrico, estrés por calor y avance fenológico. Salida cualitativa para el render.
 6. Pilares: déficit (núcleo), compatibilidad de ciclo, erosión relativa (no toneladas, inspirada en USLE/RUSLE). Los dos últimos se recortan si faltan datos.
-7. Ranking: el criterio principal es el peor caso. Opción A (menor déficit en el peor caso, sin puntaje inventado) u opción B (puntaje compuesto y arrepentimiento) siguen `[EN EVENTO]` (V-19). Si nada es evaluable, decirlo.
+7. Ranking: el criterio principal es el peor caso. Mompin eligió el 14/11 la opción B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio); falta que el equipo lo ratifique (V-19). Pesos con fuente o, si no hay, iguales y declarados `SUPUESTO`. Si los pilares 2 y 3 (A3.7) no llegan, respaldo con la opción A (menor déficit en el peor caso). Si nada es evaluable, decirlo.
 8. Tarjeta de explicación con plantilla. Un LLM, si se usa, solo redacta números ya calculados.
 
 Estados: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS`, `RESPALDO_HISTORICO`.
@@ -135,7 +135,7 @@ Eduardo toma el servidor (A0.4, A4.7).
 
 ## Estado del repo (14/11, noche)
 
-Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.1.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
+Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.2.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
 
 ## Límites para el pitch
 

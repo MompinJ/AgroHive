@@ -2,12 +2,12 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: contratos/*.schema.json (v0.1.0, A1.1)
+fuente: contratos/*.schema.json (v0.2.0, A1.1)
 ---
 
 # Contratos
 
-La fuente de verdad son los JSON Schema de `contratos/` (versión `0.1.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.2.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
 - Detalle y reglas: `contratos/README.md`
 - Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`
@@ -27,7 +27,7 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.1.0`, activ
 | `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo bandas por mes | API + motor (A2.13) |
 | `plan-siembra.schema.json` | Rotación del selector: cultivo por ciclo y, si se pinta por bloques, por celda | Front (selector) |
 | `resultado-celda.schema.json` | Salida del motor por celda y fecha | Motor |
-| `resultado-rotacion.schema.json` | Pilares por escenario, peor caso, ranking y explicación | Motor |
+| `resultado-rotacion.schema.json` | Pilares por escenario, peor caso, ranking (B principal, A de respaldo), pesos declarados y explicación | Motor |
 
 ## Lo que más se confunde
 
@@ -38,7 +38,7 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.1.0`, activ
 - El suelo ya no va dentro de la parcela: es su propio documento y la parcela lo enlaza con `sueloId`.
 - `fuente` es un objeto (nombre, url, coordenada, periodo, unidades, consultado), no un texto. La radiación diaria se llama `radiacionMjM2Dia`.
 - Próxima temporada: `esPrediccion` es siempre `false`, el `aviso` es obligatorio y cada mes trae bandas `{inferior, superior}` sin cifra única.
-- Ranking: `resultado-rotacion` admite el criterio A (`A_exposicion_hidrica_peor_caso`) y el B (`B_minimax_arrepentimiento`). `arrepentimiento` y `puntaje` quedan en `null` con el A.
+- Ranking: el criterio principal es B (`B_minimax_arrepentimiento`; decisión de Mompin del 14/11, por ratificar). Con B, el resultado lleva `puntaje` por escenario, `arrepentimiento` y `ponderacion` (pesos, etiqueta `SUPUESTO`/`USUARIO`/`FUENTE`, pilares excluidos). A (`A_exposicion_hidrica_peor_caso`) queda de respaldo si A3.7 no llega; con A, `puntaje`, `arrepentimiento` y `ponderacion` van en `null`. Ejemplo del respaldo: `contratos/ejemplos/resultado-rotacion.respaldo-a.ejemplo.json`.
 - `plan-siembra.asignacionClima` queda en `null` hasta que se decida A2.8 (`mismo_anio`, `ventanas_consecutivas`, `temporada_tipica`).
 
 Lo que el schema no puede comprobar (ciclos en orden cronológico, polígono cerrado, cultivos del plan presentes en el catálogo) lo valida el motor.

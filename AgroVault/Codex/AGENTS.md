@@ -16,7 +16,7 @@ Para que Codex te cargue solo, esta ficha tiene que estar en la raíz del repo c
 
 Simulador "what if" de rotaciones de cultivos contra años reales de NASA POWER. Se busca la rotación que no colapsa en el peor año, no la de mayor rendimiento. Hackathon NASA Space Apps 2026, reto Field Shift, sede Boca del Río. Equipo de 4. Ramas: `main`, `balam`, `Mompin`, `Mafer`, `Eduardo`.
 
-El 14/11/2026 el hackathon ya empezó. Se puede escribir código. `contratos/` ya existe (A1.1, v0.1.0, falta la revisión de los 4); `web/` y `api/` todavía no tienen código. No inventes que ya compilan.
+El 14/11/2026 el hackathon ya empezó. Se puede escribir código. `contratos/` ya existe (A1.1, v0.2.0, falta la revisión de los 4); `web/` y `api/` todavía no tienen código. No inventes que ya compilan.
 
 ## Stack
 
@@ -74,7 +74,7 @@ Requiere Python 3 y Pillow. La zanahoria de ejemplo no es un cultivo del proyect
 - Cada número citado sale de una fuente que puedas señalar.
 - El front no recalcula déficit, ETc ni ranking. 2D y 3D leen la misma salida. Cambiar de vista no llama a NASA.
 - El 3D no decide etapa ni estrés.
-- No fijes filas `[EN EVENTO]` ni `[DEPENDE-DATOS]`. Ranking A/B es V-19: mientras siga abierto, ordena por menor déficit en el peor caso (criterio A, declarado en el resultado) y deja `arrepentimiento` en null. Fechas de siembra de Isla son V-20: no las inventes.
+- No fijes filas `[EN EVENTO]` ni `[DEPENDE-DATOS]`. Ranking (V-19): Mompin eligió B el 14/11, falta ratificarlo. Usa puntaje compuesto y arrepentimiento minimax con pesos declarados en `ponderacion` (iguales y `SUPUESTO` si no hay fuente; no inventes pesos). Si los pilares 2 y 3 no existen, usa el criterio A de respaldo y decláralo. Fechas de siembra de Isla son V-20: no las inventes.
 - No toques nginx, systemd ni puertos de `mediworks` en el droplet.
 - No edites el mismo archivo que otra rama tenga en curso. Un archivo, un responsable.
 - Modelos voxel: sigue `.claude/agents/modelador-voxel.md` y `docs/07`. Paleta: colores nuevos al final. Escala: 1 celda = 16 unidades.
