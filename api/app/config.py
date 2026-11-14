@@ -9,7 +9,7 @@ CATALOGOS_DIR = Path(os.environ.get("AGROHIVE_CATALOGOS_DIR", RAIZ / "datos" / "
 CALENDARIO_DIR = Path(os.environ.get("AGROHIVE_CALENDARIO_DIR", RAIZ / "datos" / "calendario"))
 CORS_ORIGENES = [o.strip() for o in os.environ.get("AGROHIVE_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173").split(",") if o.strip()]
 VERSION_API = "0.1.0"
-VERSION_CONTRATO = "0.12.1"  # debe coincidir con contratos/package.json; la prueba de /health lo exige
+VERSION_CONTRATO = "0.12.2"  # debe coincidir con contratos/package.json; la prueba de /health lo exige
 
 
 def commit() -> str | None:
