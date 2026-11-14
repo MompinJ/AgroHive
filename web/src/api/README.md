@@ -6,7 +6,9 @@ Cliente de la API de AgroHive para el front (A4.6, Eduardo con balam). **No reca
 | --- | --- |
 | `cliente.ts` | Funciones `obtenerClima`, `obtenerClimaEstandar`, `obtenerSuelo`, `obtenerProximaTemporada`, `obtenerCultivos`, `obtenerTerreno` y `obtenerSalud`. Cada una devuelve `Resultado<T>`: `{ ok: true, datos }` o `{ ok: false, error: { estado: 'ERROR_DATOS', motivo, codigo? } }`. Nunca lanza |
 | `usarApi.ts` | Hook de React: `usarApi(consulta, clave)` devuelve `{ state: 'loading' | 'ready' | 'error', datos?, error?, reintentar }`. Los estados `loading` y `error` son los de `<DataState>` |
-| `cliente.test.ts` | 10 pruebas con `fetch` simulado: exito, 503, 422, red caida, cuerpo que no es JSON, tiempo agotado, cancelacion y POST de terreno |
+| `datosParcela.ts` | `cargarDatosParcela([lon, lat])` pide en paralelo clima (ventana estandar), suelo, cultivos y proxima temporada; `fallaObligatoria(d)` dice cual dato obligatorio fallo (clima, suelo o cultivos); `avisosDe(d)` junta las advertencias de cada respuesta, el estado de respaldo del clima y si la proxima temporada no cargo (lo que la interfaz debe mostrar siempre) |
+| `usarDatosParcela.ts` | Hook sobre lo anterior: `usarDatosParcela(centroide)` devuelve `{ state: 'loading' \| 'ready' \| 'error', ... }`; en `ready` trae `datos` y `avisos`; en `error` trae `falla` y `error`. `centroide` null espera |
+| `cliente.test.ts`, `datosParcela.test.ts` | 15 pruebas en total con `fetch` simulado: exito, 503, 422, red caida, cuerpo que no es JSON, tiempo agotado, cancelacion y POST de terreno |
 
 ## Reglas
 
@@ -16,7 +18,16 @@ Cliente de la API de AgroHive para el front (A4.6, Eduardo con balam). **No reca
 - **URL:** en produccion el front y la API comparten origen (`''`). En desarrollo (`npm run dev`) usa `https://64-23-143-102.sslip.io`, que acepta `localhost` y `127.0.0.1:5173`. `VITE_API_URL` lo cambia (por ejemplo `http://127.0.0.1:8010` con la API local y el paquete de demo).
 - **Tiempo:** 90 s por llamada (la primera consulta de suelo en frio tarda unos 12 s). Cambiar de pantalla cancela la consulta.
 
-## Ejemplo
+## Ejemplo (una sola llamada para el laboratorio)
+
+```tsx
+const d = usarDatosParcela(parcela?.centroide ?? null);
+if (d.state === 'loading') return <DataState state="loading" />;
+if (d.state === 'error') return <DataState state="error">{`${d.falla}: ${d.error.motivo}`}</DataState>;
+// d.datos.clima / suelo / cultivos / proximaTemporada son Resultado<...>; d.avisos se muestran siempre
+```
+
+## Ejemplo (una respuesta suelta)
 
 ```tsx
 const clima = usarApi((senal) => obtenerClimaEstandar(lon, lat, { senal }), `${lon},${lat}`);

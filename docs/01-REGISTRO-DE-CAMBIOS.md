@@ -227,6 +227,14 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A4.6: cargador de datos de la parcela (Eduardo)
+
+- **Archivos:** `web/src/api/datosParcela.ts`, `usarDatosParcela.ts`, `datosParcela.test.ts` y el README de esa carpeta. No se tocan `ui`, `paginas`, `motor` ni `escena`.
+- **Hallazgo:** el **terreno ya estaba conectado** por balam (`DibujarParcela` y `escena/demo-motor` llaman a `obtenerTerreno` con la cuadricula). Lo que falta para cerrar A4.6 es que `Laboratorio` y `Comparacion` (que siguen diciendo "faltan los datos") carguen clima, suelo y cultivos.
+- **Cambio:** `cargarDatosParcela([lon, lat])` trae en paralelo clima de la ventana estandar, suelo, cultivos y proxima temporada; `fallaObligatoria` nombra el dato obligatorio que fallo; `avisosDe` junta las advertencias y el respaldo (que siempre debe verse, docs/04); `usarDatosParcela` lo expone como un solo estado `loading | ready | error`. La proxima temporada es opcional y no bloquea.
+- **Evidencia:** 15 pruebas de `web/src/api` (5 nuevas: exito, falla obligatoria, capa opcional, avisos de respaldo, sin red); typecheck en verde.
+- **Falta (de otros):** que balam use el hook en `Laboratorio`/`Comparacion` y que Mompin pase `datos.clima`, `datos.suelo` y `datos.cultivos` al motor (`crearClienteMotor`). Con eso A4.6 y A4.7 se cierran.
+
 ### 2026-11-14 (noche) — A4.8 desbloqueada (Eduardo)
 
 - **Cambio:** A4.8 pasa de `[BLOQUEADO]` a `[EN CURSO]`: el usuario entrego un token de Earthdata a la segunda sesion, que confirmo en un directorio temporal el login, la descarga de un granulo SMAP L3 (31.7 MB) y la lectura de humedad en Isla. Corrige mi marca anterior (2f78bd1), que se basaba en que no habia cuenta.
