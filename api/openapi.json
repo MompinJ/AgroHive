@@ -302,6 +302,85 @@
         }
       }
     },
+    "/api/ndvi": {
+      "get": {
+        "tags": [
+          "ndvi"
+        ],
+        "summary": "Obtener Ndvi",
+        "description": "NDVI de MODIS MOD13Q1 (250 m, 16 dias) en el punto, de ORNL DAAC. **Evidencia**: no entra al ranking. Maximo 400 dias por consulta.",
+        "operationId": "obtener_ndvi_api_ndvi_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Desde"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Hasta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ndvi"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDatos"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Periodo invalido"
+          }
+        }
+      }
+    },
     "/api/smap": {
       "get": {
         "tags": [
@@ -625,6 +704,70 @@
         ],
         "title": "CeldaTerreno"
       },
+      "DatoNdvi": {
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha"
+          },
+          "ndvi": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": -1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ndvi"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "calidad": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calidad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fecha",
+          "ndvi",
+          "estado"
+        ],
+        "title": "DatoNdvi",
+        "description": "Un compuesto de 16 dias. `ndvi` null (sin dato) siempre se envia; `motivo` y `calidad` se omiten si estan vacios."
+      },
       "DefinicionBanda": {
         "properties": {
           "percentilInferior": {
@@ -760,6 +903,34 @@
           "tMinC"
         ],
         "title": "DiaClima"
+      },
+      "DiaLluviaSatelital": {
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha"
+          },
+          "lluviaMm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lluviamm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fecha",
+          "lluviaMm"
+        ],
+        "title": "DiaLluviaSatelital",
+        "description": "Un dia de IMERG. `lluviaMm` null = sin dato (relleno de POWER); el campo siempre se envia."
       },
       "DiaSmap": {
         "properties": {
@@ -1191,6 +1362,39 @@
         "title": "HumedadSuelo",
         "description": "De donde sale humedadRaizFraccionSat y para que se usa (V-06)."
       },
+      "LluviaSatelital": {
+        "properties": {
+          "variable": {
+            "type": "string",
+            "const": "IMERG_PRECTOT",
+            "title": "Variable"
+          },
+          "estandarHora": {
+            "type": "string",
+            "const": "UTC",
+            "title": "Estandarhora"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "dias": {
+            "items": {
+              "$ref": "#/components/schemas/DiaLluviaSatelital"
+            },
+            "type": "array",
+            "title": "Dias"
+          }
+        },
+        "type": "object",
+        "required": [
+          "variable",
+          "estandarHora",
+          "fuente",
+          "dias"
+        ],
+        "title": "LluviaSatelital",
+        "description": "Lluvia GPM IMERG via POWER: EVIDENCIA, no entra al balance ni a la eleccion de escenarios (contrato clima-escenario, 0.10.0)."
+      },
       "MesAproximado": {
         "properties": {
           "mes": {
@@ -1308,6 +1512,106 @@
         ],
         "title": "MetodoTaw"
       },
+      "Ndvi": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "aviso": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Aviso"
+          },
+          "coordenada": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Coordenada"
+          },
+          "periodo": {
+            "$ref": "#/components/schemas/Periodo"
+          },
+          "producto": {
+            "$ref": "#/components/schemas/ProductoNdvi"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "limites": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "PIXEL_MAYOR_QUE_PARCELA",
+                "NO_MUESTRA_CULTIVO_DEL_USUARIO",
+                "NO_ENTRA_AL_RANKING"
+              ]
+            },
+            "type": "array",
+            "minItems": 3,
+            "title": "Limites"
+          },
+          "serie": {
+            "items": {
+              "$ref": "#/components/schemas/DatoNdvi"
+            },
+            "type": "array",
+            "title": "Serie"
+          },
+          "advertencias": {
+            "items": {
+              "$ref": "#/components/schemas/Advertencia"
+            },
+            "type": "array",
+            "title": "Advertencias",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "estado",
+          "aviso",
+          "coordenada",
+          "periodo",
+          "producto",
+          "fuente",
+          "limites",
+          "serie"
+        ],
+        "title": "Ndvi",
+        "description": "NDVI de MODIS en un punto: EVIDENCIA de los anios de escenario, no entra al ranking."
+      },
       "PaseSmap": {
         "properties": {
           "pase": {
@@ -1403,6 +1707,44 @@
           "fuente"
         ],
         "title": "PhEstimado"
+      },
+      "ProductoNdvi": {
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "const": "MOD13Q1",
+            "title": "Nombre",
+            "default": "MOD13Q1"
+          },
+          "banda": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Banda"
+          },
+          "pixelM": {
+            "type": "integer",
+            "const": 250,
+            "title": "Pixelm",
+            "default": 250
+          },
+          "compuestoDias": {
+            "type": "integer",
+            "const": 16,
+            "title": "Compuestodias",
+            "default": 16
+          },
+          "escala": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Escala"
+          }
+        },
+        "type": "object",
+        "required": [
+          "banda",
+          "escala"
+        ],
+        "title": "ProductoNdvi"
       },
       "ProfundidadCm": {
         "properties": {
@@ -1657,6 +1999,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/HumedadSuelo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lluviaSatelital": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LluviaSatelital"
               },
               {
                 "type": "null"

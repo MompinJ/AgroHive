@@ -14,9 +14,23 @@ URL publica: https://64-23-143-102.sslip.io (ver `AgroVault/Compartido/Servidor.
 | `GET /api/suelo?lat&lon` | Textura (clase USDA y fracciones) y pH estimados de 0 a 30 cm con ISRIC SoilGrids por WCS. Siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual | `EVALUABLE` o `EXPLORATORIO` (si el dato viene de píxeles a más de 1 km); 503 con `ERROR_DATOS`. Devuelve `agua` con el TAW y la `retencion` (thetaSat, thetaFC, thetaWP) por Saxton y Rawls (2006), y `estimaciones` (ISRIC a 250 m y OpenLandMap a 30 m, para compararlas) y `estimacionUsada` (ISRIC; OpenLandMap si ISRIC falla), con carbono orgánico |
 | `GET /api/proxima-temporada?lat&lon` | Capa opcional (A2.13, parte del backend): banda p10 a p90 por mes para 6 meses (horizonte fijo del contrato, V-21). **No es una prediccion** y no trae cifra unica | `EXPLORATORIO`; 503 si no hay clima historico |
 | `GET /api/smap?lon&lat&desde&hasta` | **Contraste informativo** (A4.8): humedad del suelo superficial (~5 cm) de NASA SMAP L3 a 36 km, por dia y por pase AM/PM, con la bandera de calidad tal cual. Maximo 10 dias, hasta hoy menos 3. **No entra al ranking ni al balance.** Necesita el token `EARTHDATA_TOKEN` (variable de entorno, nunca en el repo); sin el responde 503 `ERROR_DATOS` visible. ~20 s por dia (lectura por rangos HTTP), con cache por celda y dia | `EVALUABLE` o `NO_EVALUABLE`; 503 |
+| `GET /api/ndvi?lat&lon&desde&hasta` | **Evidencia** (A4.11): NDVI de MODIS MOD13Q1 (pixel de 250 m, compuesto de 16 dias) por punto, del servicio REST de ORNL DAAC (sin cuenta). Maximo 400 dias. **No entra al ranking ni al balance.** Trae los tres limites que la interfaz debe mostrar (el pixel es mayor que la parcela, no muestra el cultivo del usuario, no entra al ranking) | `EXPLORATORIO` o `NO_EVALUABLE`; 503 |
 | `GET /api/cultivos` | Catalogo de `datos/catalogos/cultivos.json`; sin catalogo responde `NO_EVALUABLE` | |
 
 Documentacion interactiva en `/docs` y esquema en `/openapi.json`.
+
+### NDVI de MODIS (A4.11)
+
+> **Estado (14/11): bloqueado por el servicio.** ORNL DAAC no respondio de forma usable durante la sesion (502, 503 y llamadas de 40 s sin un byte). La ruta y el cliente estan escritos y probados con respuestas reales guardadas, pero **no se usan**: el paquete de demo no incluye NDVI (`datos/demo/generar.py --con-ndvi` lo agrega cuando el servicio responda) y el front no debe llamarla. Si ORNL no responde, `GET /api/ndvi` contesta 503 `ERROR_DATOS` visible, con un tiempo limite de 20 s por llamada.
+
+`GET /api/ndvi` usa el servicio REST de ORNL DAAC (`modis.ornl.gov/rst/api/v1/MOD13Q1/subset`, cita `doi:10.3334/ORNLDAAC/1600`). Verificado el 14/11 contra el propio servicio:
+
+- **Maximo 10 fechas por llamada** (la 11.a da 400, "exceeds maximum subset tiles support of 10"). Se piden ventanas alineadas de 144 dias (9 a 10 compuestos) y una consulta de un anio son 3 ventanas, cada una con dos llamadas (NDVI y calidad).
+- **Relleno y rango** (de `/MOD13Q1/bands`): NDVI valido de -2000 a 10000, **relleno -3000**, escala 0.0001; calidad valida de 0 a 3, relleno -1. El relleno y todo valor fuera de rango salen como `null` con estado `NO_EVALUABLE` y motivo: **nunca 0, y nunca un NDVI negativo inventado** (-3000 escalado seria -0.3).
+- **La calidad** (`pixel reliability`) se entrega tal cual, sin interpretarla.
+- **El servicio es intermitente** (502 y 503): se reintenta hasta 3 veces; un tramo que no responde se dice (`NDVI_TRAMOS_SIN_LEER`) y no se rellena; si no responde nada, 503 `ERROR_DATOS`.
+- **Cache por punto exacto y ventana**: dos puntos cercanos pueden caer en pixeles distintos. Una ventana sin calidad no se fija en cache.
+- **Limites** (los tres, siempre): el pixel de 250 m es mayor que la parcela de 2 ha, no muestra el cultivo del usuario y no entra al ranking (no hay relacion publicada entre NDVI y los pilares del motor).
 
 ### Errores
 

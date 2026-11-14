@@ -24,6 +24,8 @@ RANGO_NDVI = (-2000, 10000)
 RELLENO_CALIDAD = -1
 # Ventanas de 144 dias (9 compuestos, hasta 10 con el cambio de anio): debajo del limite de 10 fechas por llamada. Estan alineadas a una
 # rejilla fija desde 2000-01-01 para que cualquier consulta reutilice las mismas ventanas en cache.
+# ORNL a veces se cuelga sin responder (visto el 14/11: 40 s sin un byte): tiempo limite corto por llamada, para no dejar la consulta minutos.
+TIEMPO_LIMITE_S = 20
 VENTANA_DIAS = 144
 EPOCA = date(2000, 1, 1)
 

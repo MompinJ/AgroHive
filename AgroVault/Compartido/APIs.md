@@ -127,6 +127,10 @@ Atribución obligatoria (CC BY 4.0). Gratis solo no comercial, sin garantía de 
 
 **Probado el 14/11:** `IMERG_PRECTOT` (mm/día, GPM IMERG, 0.1°) sale de la misma API diaria de POWER, **sin cuenta Earthdata**, pero solo con `time-standard=UTC` (en hora local devuelve `-999` en todo). Cada celda de 0.1° tiene su propia serie (a diferencia de MERRA-2, de 0.5° × 0.625°). Los últimos ~2 meses vienen en `-999` (→ `null`). Implementado en `api/app/clientes/power.py` y expuesto como `lluviaSatelital` en `GET /api/clima`. Evidencia, no entra al balance. Prototipo y hallazgos en `features/imerg/`.
 
+### NDVI de MODIS por ORNL DAAC (A4.11)
+
+**Probado el 14/11:** `https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=&longitude=&band=250m_16_days_NDVI&startDate=A<año><día juliano>&endDate=...&kmAboveBelow=0&kmLeftRight=0`, sin cuenta ni llave. **Máximo 10 fechas por llamada.** `/MOD13Q1/bands` da el relleno (-3000), el rango válido (-2000 a 10000) y la escala (0.0001); la banda `250m_16_days_pixel_reliability` da la calidad (0 a 3, relleno -1). El servicio responde 502 y 503 a ratos: hay que reintentar. Cita: doi:10.3334/ORNLDAAC/1600. Implementado en `api/app/clientes/ornl.py` y `api/app/ndvi.py`; evidencia, no entra al ranking.
+
 ### OpenLandMap
 
 **Probado el 14/11 (A2.15):** el catálogo STAC es estático en `https://s3.eu-central-1.wasabisys.com/stac/openlandmap/catalog.json` (la web `stac.openlandmap.org` es solo un navegador). Las capas `clay.tot_iso.11277.2020.wpct`, `sand.tot_iso.11277.2020.wpct`, `silt.tot_iso.11277.2020.wpct`, `ph.h2o_iso.10390.2021.index` y `oc_iso.10694.1995.wpml` (OpenLandMap-soildb, 30 m, 0-30 cm, 2020-2022, CC-BY-4.0, DOI de cada capa 2020-2022 en Zenodo: arcilla 15528401, arena 15528413, limo 15528425, pH 15471105 y carbono 15535759 y 15535761 (el `doi` de la colección STAC apunta al período 2000-2005: no usarlo)) son COG de decenas de GB en `s3.opengeohub.org`; `rasterio` lee solo la ventana del punto por rangos HTTP (3 a 5 s por capa). Unidades: arcilla, arena y limo en % (escala 1, nodata 255), pH ×0.1 y carbono en g/kg ×0.1. Implementado en `api/app/clientes/openlandmap.py`.

@@ -383,6 +383,14 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A4.11: NDVI de MODIS escrito pero BLOQUEADO por ORNL DAAC; DOI de OpenLandMap corregidos (Eduardo)
+
+- **Archivos:** `api/app/clientes/ornl.py`, `api/app/ndvi.py`, `api/app/modelos_ndvi.py`, `api/app/rutas/ndvi.py`, `api/app/http.py`, `api/tests/test_ndvi.py`, `datos/demo/generar.py`, `datos/pruebas-apis/respuestas/ornl_*.json`, `api/README.md`, `AgroVault/Compartido/APIs.md`, `docs/14`.
+- **A4.11 `[BLOQUEADO]`:** el servicio REST de ORNL DAAC no respondio de forma usable (502, 503 y una llamada de 40 s sin recibir un byte). **Decision del usuario: no usar ORNL.** El cliente y `GET /api/ndvi` quedaron escritos y con 15 pruebas con respuestas reales guardadas (valores, relleno, rango, calidad, ventanas, cache, fallos parciales, contrato `ndvi`), pero **no entran al paquete de demo** (`generar.py` solo los incluye con `--con-ndvi`) y el front no debe llamarlos.
+- **Lo verificado contra el propio servicio antes de que cayera:** maximo **10 fechas por llamada**; NDVI valido de -2000 a 10000, **relleno -3000** (escalado seria -0.3, por eso se descarta explicitamente), escala 0.0001; calidad valida 0 a 3, relleno -1. Tiempo limite de 20 s por llamada a ORNL para que una consulta no se cuelgue minutos.
+- **Correccion de cita (aviso de Mafer #130, verificada en Zenodo):** `OpenLandMap` citaba `doi:10.5281/zenodo.15528399`, que es la **arcilla 2000-2005**, porque lo tome del campo `doi` de la coleccion STAC (que apunta al primer periodo). Las capas que se leen son 2020-2022: arcilla `15528401`, arena `15528413`, limo `15528425`, pH `15471105` y carbono organico `15535759` y `15535761` (el conjunto esta partido en dos mitades en Zenodo). Todas CC BY 4.0. Corregido en `openlandmap.py`, en `suelo.json` del paquete y en `APIs.md`; la prueba ahora exige cada DOI correcto y rechaza el viejo.
+- **Verificaciones:** api 98, contratos 82/82, catalogos y unittest; el paquete salio igual salvo la fecha de generacion.
+
 ### 2026-11-14 (noche) — A4.10: lluvia satelital IMERG en /api/clima y paquete de demo regenerado (Eduardo)
 
 - **Archivos:** `api/app/clientes/power.py`, `api/app/servicios.py`, `api/app/modelos.py`, `api/tests/` (test_clima, test_proxima, test_contratos_api), `datos/demo/` (regenerado), `datos/pruebas-apis/respuestas/power_imerg_*.json`, `api/README.md`, `AgroVault/Compartido/APIs.md`, `docs/14`.
