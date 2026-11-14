@@ -25,6 +25,13 @@ Decisiones afectadas:
 - **Cambio:** la escena carga las 9 losas de Mafer (`modelos/suelos/`) y pinta la columna con el tono del tipo de suelo. La losa sale de `textura.grupo` del contrato `suelo` y de la `humedad` del motor, con cortes en tercios de TAW `[PROPUESTA]`. Si falta el tipo o la humedad no hay losa, y sin humedad la columna va en gris.
 - **Fuente / evidencia:** tonos tomados de `modelos/paleta.md` (verificado en prueba); 159 pruebas de escena; headless con el motor real: suelo del mapa de Isla (arcilloso) y selector manual (franco).
 
+### 2026-11-14 — Calendario y aptitud fuera de México: GGCMI fase 3 y GAEZ v4 (Mompin, sesión features)
+
+- **Archivos:** `docs/13` (fila "Calendario y aptitud fuera de México" `[DECIDIDO]`), `docs/11` (tabla de recursos y riesgo del calendario), `docs/14` (A4.13 y tablero de Eduardo; vistas regeneradas).
+- **Decisión (Mompin):** GGCMI fase 3 (CC BY 4.0, 0.5°) es el respaldo del calendario de siembra fuera de México, a cargo de Eduardo después de C4 (A4.13). GAEZ v4 entra solo como evidencia por su licencia CC BY-NC-SA 4.0 (no comercial).
+- **Fuente / evidencia:** investigación del 14/11 (sesión features). GAEZ: servicio `gaez-services.fao.org/server/rest/services/res05` probado por punto y licencia leída en el catálogo de FAO (`data.apps.fao.org`). GGCMI fase 3: doi:10.5281/zenodo.5062513. GEOGLAM, SAGE y FAO Crop Calendar se evaluaron y quedaron como alternativas (11).
+- **Decisiones afectadas:** "Alcance geográfico" (13); pilar de compatibilidad fuera de México; calabaza y chile `NO_EVALUABLE` fuera de México.
+
 ### 2026-11-14 — Alcance mundial, recursos del reto evaluados e IMERG vía POWER (Mompin, sesión features)
 
 - **Archivos:** `docs/13` (fila "Alcance geográfico" `[DECIDIDO]`), `docs/11` (recursos del reto evaluados y tres riesgos), `docs/14` (A1.7, A4.10, A4.11, A4.12; plan de recorte; tablero), `docs/04` (filas de GPM IMERG y MODIS), `docs/03` (extra de fase 2), `AgroVault/Compartido/APIs.md`; prototipo en `features/imerg/` y encargo en `features/encargos/eduardo-datos-globales.md`.
@@ -92,6 +99,15 @@ Decisiones afectadas:
 - **Efecto:** con déficit y exceso hay dos pilares con número y el ranking pasa del respaldo A al criterio B. Con el paquete de demo (suelo franco del selector): 1.º frijol-frijol (arrepentimiento máximo 0.007), 2.º milpa (0.051), 3.º maíz-maíz (0.064); para las tres el peor escenario es el lluvioso (2024). Con A el orden era el inverso.
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
+
+### 2026-11-14 — A3.9 (parte mascota): elote con cara feliz (Mafer)
+
+- **Archivos:** nuevos `modelos/props/` (`mascota.py`, `mascota_feliz.bbmodel`, `visor_mascota.html`) y `web/src/escena/pruebas/props.test.ts`; `modelos/paleta.py` y `paleta.md` (1 color, índice 85); los 29 `.bbmodel` de plantas y suelos (solo cambia la textura incrustada); `docs/07`, Pendientes.
+- **Cambio:** la mascota básica del doc 03 ("verdura con cara feliz") como un elote con cara feliz, de 66 cubos. **La verdura la eligió A3.9, no el equipo**: los docs no la fijan. Va en `modelos/props/` porque no es una planta ni va en una celda.
+- **Props:** pozo, casa, árboles y pájaro **no se hacen**; son extras de fase 2 y de lo primero que cae en el plan de recorte. Mompin está de acuerdo (mensaje #112).
+- **Verificación:** los 29 modelos existentes se compararon con `HEAD`: solo cambia `textures`. `cd web && npm test`: 292 pruebas (4 nuevas); `tsc` sin errores. Render con Chrome headless; la cara se lee feliz de frente, de 3/4 y a 64 px de alto.
+- **Pendiente:** la escena aún no la muestra (Mompin reservará un lugar opcional). Una persona debe abrir `visor_mascota.html` y decidir si la verdura y la cara convencen. Colores y formas a ojo.
+- **Decisiones afectadas:** A3.9 (chile y mascota hechos; props descartados).
 
 ### 2026-11-14 — A3.9 (parte chile): cuarto cultivo en catalogo y en voxel (Mafer)
 
@@ -208,6 +224,18 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — Guion base del video de demo (A5.6)
+
+- **Archivos:** nuevo `docs/guion-video-borrador.md`.
+- **Cambio y motivo:** pedido de Mafer (dueña de A5.6) a través de la sesión maestra. Son 10 escenas, unos 2:55 en total, con lo que se ve, el texto de la voz y la duración de cada una. La duración y el formato quedan `[VERIFICAR]` (V-03, V-04).
+- **Cifras:** salen de `web/src/motor/pruebas/regresion/demo-isla.json`:
+  - Escenarios: 2023 seco, 2016 habitual y 2024 lluvioso.
+  - TAW: 122.3 mm/m.
+  - Ranking B con R1, R2 y R4: R4, R2, R1, con arrepentimientos 0, 0.077 y 0.099.
+  - Próxima temporada: los tres escenarios caen dentro de la banda en 5 de 6 meses, con 6 años análogos y un déficit de 0 % a 10.6 %.
+  El orden R4, R2, R1 es el de comparar esas tres; si en pantalla se comparan las cuatro, se lee de la interfaz. Lo que todavía no está en la interfaz (A4.3, A4.8, A4.10, A4.11) queda marcado para revisar antes de grabar.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — Borrador del README para A5.7
 
