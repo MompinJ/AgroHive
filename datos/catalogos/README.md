@@ -9,7 +9,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 
 | Archivo | Contrato | Contenido |
 | --- | --- | --- |
-| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa: maiz, frijol, calabaza |
+| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa (maiz, frijol, calabaza) y chile (cultivo extra de la demo) |
 | `suelos.json` | `contratos/tabla-suelos.schema.json` | TAW por clase USDA, FAO-56 Tabla 19 |
 | `calendario-isla.json` | `contratos/calendario-local.schema.json` | Ventanas de siembra y presencia en SIAP de Isla, por cultivo y temporada |
 | `saxton_rawls.py` | `agua` de `contratos/suelo.schema.json` | TAW y retencion (θsat, θFC, θWP) por pedotransferencia de Saxton y Rawls (2006) para cualquier textura; pruebas contra la Tabla 3 del articulo con `python -m unittest discover -s datos/catalogos` |
@@ -35,6 +35,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 | Kc end del maiz | 0.35 (de 0.60-0.35) | Cosecha tras secado en campo (nota 11) |
 | Profundidad de raiz (Zr) | **Siempre el maximo del rango** de Tabla 22 (maiz 1.7 de 1.0-1.7; frijol 0.9 de 0.6-0.9; calabaza 1.5 de 1.0-1.5) | Tabla 22 nota 1: los valores mayores son para temporal o para modelar estres hidrico |
 | TAW | Punto medio del rango (thetaFC - thetaWP) x 1000 | La tabla da rangos; se guarda el rango completo |
+| **Chile = pimiento dulce** | Todos los parametros del chile salen del **pimiento dulce** (FAO-56 `Sweet peppers (bell)`, EcoCrop `Sweet pepper`, *Capsicum annuum*): 125 d (30/35/40/20, Tabla 11 abril/junio; la etapa inicial se imprime `25/30` y el total solo cuadra con 30), Kc 0.6/1.05/0.90, raiz 1.0 m, p 0.30, temperaturas 8/17/30/35 C | FAO-56 y EcoCrop no traen chile verde. Es una **equivalencia de la misma especie, no un dato medido en chile serrano o jalapeno: una persona debe revisarla**. `Hot pepper` de EcoCrop es otra especie (*C. frutescens*) y no se uso |
 | Regimen de las ventanas OI | `temporal` (la agenda dice "riego y humedad residual") | SIAP clasifica el maiz y frijol OI de Isla como temporal, sin riego |
 | Grupos del selector | arenoso = arena franca, franco = franco, arcilloso = arcilla | Eleccion del equipo, no de FAO |
 

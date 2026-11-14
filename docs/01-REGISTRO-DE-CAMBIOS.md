@@ -72,6 +72,17 @@ Decisiones afectadas:
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
 
+### 2026-11-14 — A3.9 (parte chile): cuarto cultivo en catalogo y en voxel (Mafer)
+
+- **Archivos:** `datos/catalogos/` (`generar.py`, `cultivos.json`, `validar.mjs`, `README.md`); nuevos `modelos/cultivos/chile.py`, 5 `chile_*.bbmodel` y `visor_chile.html`; `visor_milpa.html` (ahora 20 modelos); `modelos/paleta.py` y `paleta.md` (7 colores, indices 78 a 84); los 24 `.bbmodel` de plantas y suelos (solo cambia la textura incrustada); `web/src/motor/pruebas/motor.test.ts` y `ranking.test.ts` (una linea cada una); `docs/14`, Pendientes.
+- **Cambio:** el chile entra al catalogo con ciclo y etapas (FAO-56 Tabla 11), Kc (Tabla 12), raiz y p (Tabla 22) y temperaturas y lluvia anual (EcoCrop), cada valor con su fuente. Sus 5 etapas en voxel (siembra, brote, crecimiento, madurez, podrida).
+- **Equivalencia, para revisar:** FAO-56 y EcoCrop no traen "chile verde"; todos los parametros salen del **pimiento dulce** (*Capsicum annuum*, la misma especie). No son datos medidos en chile serrano o jalapeno. `Hot pepper` de EcoCrop es otra especie (*C. frutescens*) y no se uso. La etapa inicial de Tabla 11 se imprime `25/30` y el total 125 solo cuadra con 30.
+- **Pruebas de Mompin tocadas:** usaban `chile` como ejemplo de cultivo que no esta en el catalogo (Prueba 5 del motor y la rotacion R5 del ranking). Al tener parametros dejo de serlo y fallaban 5 pruebas; se cambia el id por `cultivo_sin_parametros`, que restablece exactamente lo que probaban. Segun la regla de `main` en verde, el arreglo va en el mismo cambio y se avisa al dueno.
+- **Fuera de esta entrega:** la mascota y los props (pozo, casa, arboles, pajaro) de A3.9 son extras de fase 1 y 2 y no se hicieron. La lista de cultivos de la interfaz (`web/src/ui/demo.ts`) todavia no incluye el chile.
+- **Fuente / evidencia:** FAO-56 (Allen et al. 1998), Tablas 11, 12 y 22 (HTML original); EcoCrop (copia de Recocrop, fila `Sweet pepper`). `cd web && npm test`: 278 pruebas; `tsc` sin errores; catalogos y contratos en verde. Los 24 modelos regenerados se compararon con `HEAD`: solo cambia `textures`.
+- **Pendiente:** una persona debe revisar la equivalencia del chile y abrir `visor_chile.html`. Colores y formas a ojo.
+- **Decisiones afectadas:** A3.9 (parcial).
+
 ### 2026-11-14 — A2.12: losas de suelo por tipo y humedad; visor corregido (Mafer)
 
 - **Archivos:** nuevos `modelos/suelos/` (`suelos.py`, 9 `.bbmodel` y `visor_suelos.html`) y `web/src/escena/pruebas/suelos.test.ts`; `modelos/paleta.py` y `paleta.md` (18 colores nuevos, índices 60 a 77); los 15 `.bbmodel` de `modelos/cultivos/` (solo cambia la textura incrustada); `herramientas/voxelkit.py` (plantilla del visor); `docs/07`, `docs/14`, Pendientes.

@@ -55,7 +55,7 @@ const R1 = simular(plan('R1', [['maiz', '2016-06-15', 'PV'], ['frijol', '2016-11
 const R2 = simular(plan('R2', [['maiz', '2016-06-15', 'PV'], ['maiz', '2017-06-15', 'PV']]));
 const R3 = simular(plan('R3', [['frijol', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]));
 const R4 = simular(plan('R4', [['calabaza', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']], true));
-const R5 = simular(plan('R5', [['chile', '2016-06-15', 'PV']]));
+const R5 = simular(plan('R5', [['cultivo_sin_parametros', '2016-06-15', 'PV']]));
 
 type ConExceso = { excesoHidrico?: { fraccionLluviaPercolada: number | null } };
 const sinExceso = (x: RotacionParaRanking): RotacionParaRanking => {
