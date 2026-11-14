@@ -26,7 +26,7 @@ El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 | V-20 | Cultivos y calendario de Isla en SIAP | Milpa como núcleo; no inventes fechas de siembra. Las ventanas del catálogo quedan `NO_EVALUABLE` |
 | V-21 | Horizonte del pronóstico estacional de Open-Meteo | Evidencia A0.7 (14/11): 7 meses con `forecast_days=210` (máximo 217); por defecto 6. El 9 de terceros no se sostiene. Falta que el equipo lo cierre. No bloquea el MVP |
 | V-22 | CORS de NASA POWER | Evidencia A0.7: el GET simple trae `access-control-allow-origin: *`, el preflight da 404. Todo el clima sigue pasando por el backend |
-| V-23 | Qué servicio de suelo responde (ISRIC WCS u OpenLandMap) | Selector manual FAO-56 con etiqueta `SUPUESTO` |
+| V-23 | Qué servicio de suelo responde (ISRIC WCS u OpenLandMap) | Evidencia A2.14 (14/11): el WCS de ISRIC responde y `GET /api/suelo` ya lo usa (ver [[APIs]]). El selector manual FAO-56 con etiqueta `SUPUESTO` sigue de respaldo. Falta que el equipo lo cierre |
 | V-06 | `GWETROOT` y unidades de radiación de POWER | Evidencia A0.7: `GWETROOT` está en AG (fracción sin unidad) y la radiación ya viene en MJ/m²/día (no hace falta convertir). Falta decidir si la humedad de POWER entra al balance |
 | V-08 | Elevación: Open-Meteo Elevation, Terrarium o SRTM | Evidencia A0.7 y A2.3: Terrarium z14 (interpolado) es el cliente por defecto de `POST /api/elevacion` y Open-Meteo (90 m) el respaldo, porque con celdas de ~20 m un DEM de 90 m da un plano. Falta que el equipo lo confirme |
 | V-09 | Kc, ciclos, umbrales | Solo valores con cita. Si no hay cita, `NO_EVALUABLE` (el schema del catálogo lo obliga) |

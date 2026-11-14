@@ -64,6 +64,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/suelo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Suelo
+         * @description Textura y pH estimados de la zona (SoilGrids). Siempre SUPUESTO. Si no hay dato, 503: el front usa el selector manual.
+         */
+        get: operations["suelo_api_suelo_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -96,6 +116,10 @@ export interface components {
              * @enum {string}
              */
             severidad: "info" | "aviso" | "critico";
+        };
+        /** AguaSuelo */
+        AguaSuelo: {
+            tawMmPorM: components["schemas"]["ValorNoEvaluable"];
         };
         /** CeldaEntrada */
         CeldaEntrada: {
@@ -155,6 +179,15 @@ export interface components {
             /** Motivo */
             motivo: string;
         };
+        /** FraccionesTextura */
+        FraccionesTextura: {
+            /** Arena */
+            arena: number;
+            /** Limo */
+            limo: number;
+            /** Arcilla */
+            arcilla: number;
+        };
         /** Fuente */
         Fuente: {
             /** Nombre */
@@ -206,6 +239,30 @@ export interface components {
              */
             hasta: string;
         };
+        /** PhEstimado */
+        PhEstimado: {
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "EXPLORATORIO" | "RESPALDO_HISTORICO";
+            /**
+             * Etiqueta
+             * @default SUPUESTO
+             * @constant
+             */
+            etiqueta: "SUPUESTO";
+            /** Valor */
+            valor: number;
+            fuente: components["schemas"]["Fuente"];
+        };
+        /** ProfundidadCm */
+        ProfundidadCm: {
+            /** Desdecm */
+            desdeCm: number;
+            /** Hastacm */
+            hastaCm: number;
+        };
         /**
          * SerieClima
          * @description Serie diaria de un periodo, sin elegir escenario. El motor (A2.5) corta los anios de cada escenario.
@@ -227,6 +284,43 @@ export interface components {
             fuente: components["schemas"]["Fuente"];
             /** Diario */
             diario: components["schemas"]["DiaClima"][];
+            /**
+             * Advertencias
+             * @default []
+             */
+            advertencias: components["schemas"]["Advertencia"][];
+        };
+        /**
+         * Suelo
+         * @description Textura y pH estimados con un mapa global. Siempre SUPUESTO: no es una medicion de la parcela.
+         */
+        Suelo: {
+            meta: components["schemas"]["Meta"];
+            /** Id */
+            id: string;
+            /**
+             * Etiqueta
+             * @default SUPUESTO
+             * @constant
+             */
+            etiqueta: "SUPUESTO";
+            /**
+             * Origen
+             * @enum {string}
+             */
+            origen: "mapa_global" | "selector_manual";
+            /** Aviso */
+            aviso: string;
+            /** Coordenada */
+            coordenada?: [
+                number,
+                number
+            ] | null;
+            profundidad?: components["schemas"]["ProfundidadCm"] | null;
+            textura: components["schemas"]["Textura"];
+            /** Ph */
+            ph: components["schemas"]["PhEstimado"] | components["schemas"]["ValorNoEvaluable"];
+            agua?: components["schemas"]["AguaSuelo"] | null;
             /**
              * Advertencias
              * @default []
@@ -261,6 +355,29 @@ export interface components {
              */
             advertencias: components["schemas"]["Advertencia"][];
         };
+        /** Textura */
+        Textura: {
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+            /**
+             * Etiqueta
+             * @default SUPUESTO
+             * @constant
+             */
+            etiqueta: "SUPUESTO";
+            /** Clase */
+            clase?: string | null;
+            /**
+             * Grupo
+             * @enum {string}
+             */
+            grupo: "arenoso" | "franco" | "arcilloso";
+            fraccionesPct?: components["schemas"]["FraccionesTextura"] | null;
+            fuente?: components["schemas"]["Fuente"] | null;
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -273,6 +390,17 @@ export interface components {
             input?: unknown;
             /** Context */
             ctx?: Record<string, never>;
+        };
+        /** ValorNoEvaluable */
+        ValorNoEvaluable: {
+            /**
+             * Estado
+             * @default NO_EVALUABLE
+             * @constant
+             */
+            estado: "NO_EVALUABLE";
+            /** Motivo */
+            motivo: string;
         };
     };
     responses: never;
@@ -386,6 +514,47 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+        };
+    };
+    suelo_api_suelo_get: {
+        parameters: {
+            query: {
+                lat: number;
+                lon: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Suelo"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDatos"];
                 };
             };
         };

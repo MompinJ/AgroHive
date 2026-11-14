@@ -4,7 +4,8 @@ import math
 from datetime import date, datetime, timedelta, timezone
 
 from . import cache, config, http
-from .clientes import openmeteo, power, terrarium
+from . import textura as clasificacion
+from .clientes import isric, openmeteo, power, terrarium
 from .modelos import CeldaEntrada
 
 _candados: dict[str, asyncio.Lock] = {}
@@ -147,5 +148,73 @@ async def terreno(celdas: list[CeldaEntrada], lado_m: float) -> dict:
         "terreno": {"estado": estado, "fuente": {"nombre": nombre, "resolucion": resolucion, "unidades": "m (elevacion), % (pendiente)",
                                                   "consultado": date.today().isoformat(), "nota": nota}},
         "celdas": [{"id": c.id, "elevacionM": elev[(c.i, c.j)], "pendientePct": None if pend[c.id] is None else round(pend[c.id], 2)} for c in celdas],
+        "advertencias": advertencias,
+    }
+
+
+# ---------------------------------------------------------------- suelo
+
+async def _propiedad(cliente, sem, prop: str, lon: float, lat: float) -> dict | None:
+    """Media ponderada por espesor de las capas 0-5, 5-15 y 15-30 cm (0 a 30 cm). None si ninguna capa tiene dato."""
+    async def una(capa, espesor):
+        async with sem:
+            return espesor, await isric.valor(cliente, prop, capa, lon, lat)
+    partes = [(e, r) for e, r in await asyncio.gather(*[una(c, e) for c, e in isric.PROFUNDIDADES]) if r is not None]
+    if not partes:
+        return None
+    peso = sum(e for e, _ in partes)
+    return {"valor": sum(e * r[0] for e, r in partes) / peso, "capas": len(partes), "radioM": max(r[2] for _, r in partes)}
+
+
+def _id_suelo(lat: float, lon: float) -> str:
+    return f"suelo-{round(abs(lat) * 1000)}{'n' if lat >= 0 else 's'}-{round(abs(lon) * 1000)}{'e' if lon >= 0 else 'w'}"
+
+
+async def suelo(lat: float, lon: float) -> dict:
+    clave = f"suelo_isric_{round(lat / 0.0025)}_{round(lon / 0.0025)}"
+    async with _candado(clave):
+        en_cache = cache.leer(clave)
+        if en_cache:
+            registro = en_cache[0]
+        else:
+            try:
+                sem = asyncio.Semaphore(4)
+                async with http.crear_cliente() as c:
+                    props = dict(zip(("clay", "sand", "silt", "phh2o"),
+                                     await asyncio.gather(*[_propiedad(c, sem, p, lon, lat) for p in ("clay", "sand", "silt", "phh2o")])))
+            except http.ErrorFuente as e:
+                raise SinDatos(f"SoilGrids no respondio ({e}); use el selector manual de suelo") from e
+            registro = {"consultado": date.today().isoformat(), "props": props}
+            if all(props[k] for k in ("clay", "sand", "silt")):
+                cache.escribir(clave, registro)  # solo se guarda lo completo: un hueco no debe quedar fijo
+    props = registro["props"]
+    if not all(props.get(k) for k in ("clay", "sand", "silt")):
+        raise SinDatos("SoilGrids no tiene dato de textura en esta zona; use el selector manual de suelo")
+    arena, limo, arcilla = props["sand"]["valor"], props["silt"]["valor"], props["clay"]["valor"]
+    total = arena + limo + arcilla
+    arena, limo, arcilla = (100 * v / total for v in (arena, limo, arcilla))
+    clase = clasificacion.clasificar(arena, limo, arcilla)
+    radio = max(p["radioM"] for p in props.values() if p)
+    fuente = {"nombre": isric.NOMBRE, "url": "https://maps.isric.org", "coordenada": (lon, lat), "unidades": "% (arena, limo, arcilla), pH en agua",
+              "consultado": registro["consultado"], "resolucion": "250 m",
+              "nota": f"Media de 0 a 30 cm ponderada por espesor de capa; mediana de los pixeles con dato a menos de {radio} m del punto. "
+                      "Fracciones normalizadas a 100. El grupo del selector es una propuesta pendiente de A1.6 (VERIFICAR)."}
+    advertencias = [{"codigo": "SUELO_SUPUESTO", "mensaje": "pH y textura estimados por un modelo global de 250 m; no son una medicion de su parcela.", "severidad": "aviso"}]
+    if radio > 1000:
+        advertencias.append({"codigo": "SUELO_SIN_DATO_CERCANO", "mensaje": "El mapa no tiene dato cerca del punto; el valor viene de pixeles a mas de 1 km.", "severidad": "aviso"})
+    if any(p and p["capas"] < len(isric.PROFUNDIDADES) for p in props.values()):
+        advertencias.append({"codigo": "SUELO_CAPAS_INCOMPLETAS", "mensaje": "Alguna capa de profundidad no tiene dato; la media usa las capas disponibles.", "severidad": "info"})
+    ph = props.get("phh2o")
+    fuente_ph = {**fuente, "unidades": "pH en agua (adimensional)",
+                 "nota": f"Media de 0 a 30 cm ponderada por espesor de capa; mediana de los pixeles con dato a menos de {radio} m del punto."}
+    return {
+        "meta": _meta(), "id": _id_suelo(lat, lon), "etiqueta": "SUPUESTO", "origen": "mapa_global",
+        "aviso": "pH y textura estimados por un modelo global (SoilGrids, 250 m); no son una medicion de la parcela.",
+        "coordenada": (lon, lat), "profundidad": {"desdeCm": 0, "hastaCm": 30},
+        "textura": {"estado": "EVALUABLE", "etiqueta": "SUPUESTO", "clase": clase, "grupo": clasificacion.GRUPO[clase],
+                    "fraccionesPct": {"arena": round(arena, 1), "limo": round(limo, 1), "arcilla": round(arcilla, 1)}, "fuente": fuente},
+        "ph": ({"estado": "EVALUABLE", "etiqueta": "SUPUESTO", "valor": round(ph["valor"], 1), "fuente": fuente_ph} if ph
+               else {"estado": "NO_EVALUABLE", "motivo": "SoilGrids no tiene dato de pH en esta zona."}),
+        "agua": {"tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": "Pendiente de la tabla de suelos A1.6 (FAO-56) con fuente."}},
         "advertencias": advertencias,
     }

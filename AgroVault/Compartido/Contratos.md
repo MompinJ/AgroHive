@@ -50,10 +50,12 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 | Método y ruta | Función | Contrato de la respuesta |
 | --- | --- | --- |
 | `GET /health` | Vida del API | — |
-| `GET /api/clima?lat=&lon=&desde=&hasta=` | Serie diaria con caché, POWER con respaldo Open-Meteo | `clima-escenario` (por escenario) |
-| `GET /api/elevacion` | Elevación del polígono o de la demo | Campos `elevacionM` y `pendientePct` de `parcela` |
-| `GET /api/cultivos` | Catálogo JSON | `cultivo` |
-| `GET /api/suelo` | Textura y pH de la zona, `SUPUESTO`, más el respaldo manual | `suelo` |
+| `GET /api/clima?lat=&lon=&desde=&hasta=` | Serie diaria del periodo con caché, POWER con respaldo Open-Meteo. **No elige escenarios** (A2.5, motor). Implementado | `SerieClima`: mismo `dia` que `clima-escenario`; el motor corta los años. `SerieClima` aún no está en `contratos/` (se pide a Mompin) |
+| `POST /api/elevacion` | Recibe la cuadrícula ya generada por el front (`tamanoCeldaM` y `celdas` con id, i, j y centro; tope 1600) y devuelve elevación y pendiente por celda. Implementado | Campos `elevacionM`, `pendientePct` y `terreno` de `parcela` |
+| `GET /api/cultivos` | Catálogo JSON de `datos/catalogos/cultivos.json`; sin catálogo responde `NO_EVALUABLE`. Implementado | `cultivo` |
+| `GET /api/suelo?lat=&lon=` | Textura y pH de 0 a 30 cm (ISRIC WCS), siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
+
+Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 con `{estado: ERROR_DATOS, motivo}`. Detalle y cómo correr la API en `api/README.md`.
 
 Caché en archivo. Clave: coordenada redondeada a la celda del dataset + variable + periodo. `datos/cache/` está en `.gitignore`.
 

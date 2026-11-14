@@ -100,3 +100,56 @@ class TerrenoRespuesta(BaseModel):
 class ErrorDatos(BaseModel):
     estado: Literal["ERROR_DATOS"] = "ERROR_DATOS"
     motivo: str
+
+
+# ---------------------------------------------------------------- suelo (contrato suelo)
+
+class ValorNoEvaluable(BaseModel):
+    estado: Literal["NO_EVALUABLE"] = "NO_EVALUABLE"
+    motivo: str
+
+
+class ProfundidadCm(BaseModel):
+    desdeCm: float
+    hastaCm: float
+
+
+class FraccionesTextura(BaseModel):
+    arena: float = Field(ge=0, le=100)
+    limo: float = Field(ge=0, le=100)
+    arcilla: float = Field(ge=0, le=100)
+
+
+class Textura(SinNulos):
+    estado: Estado
+    etiqueta: Literal["SUPUESTO"] = "SUPUESTO"
+    clase: str | None = None
+    grupo: Literal["arenoso", "franco", "arcilloso"]
+    fraccionesPct: FraccionesTextura | None = None
+    fuente: Fuente | None = None
+
+
+class PhEstimado(SinNulos):
+    estado: Literal["EVALUABLE", "EXPLORATORIO", "RESPALDO_HISTORICO"]
+    etiqueta: Literal["SUPUESTO"] = "SUPUESTO"
+    valor: float = Field(ge=0, le=14)
+    fuente: Fuente
+
+
+class AguaSuelo(BaseModel):
+    tawMmPorM: ValorNoEvaluable
+
+
+class Suelo(SinNulos):
+    """Textura y pH estimados con un mapa global. Siempre SUPUESTO: no es una medicion de la parcela."""
+    meta: Meta
+    id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]*$")
+    etiqueta: Literal["SUPUESTO"] = "SUPUESTO"
+    origen: Literal["mapa_global", "selector_manual"]
+    aviso: str
+    coordenada: LonLat | None = None
+    profundidad: ProfundidadCm | None = None
+    textura: Textura
+    ph: PhEstimado | ValorNoEvaluable
+    agua: AguaSuelo | None = None
+    advertencias: list[Advertencia] = []

@@ -168,6 +168,72 @@
         }
       }
     },
+    "/api/suelo": {
+      "get": {
+        "tags": [
+          "suelo"
+        ],
+        "summary": "Suelo",
+        "description": "Textura y pH estimados de la zona (SoilGrids). Siempre SUPUESTO. Si no hay dato, 503: el front usa el selector manual.",
+        "operationId": "suelo_api_suelo_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Suelo"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDatos"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -218,6 +284,18 @@
           "severidad"
         ],
         "title": "Advertencia"
+      },
+      "AguaSuelo": {
+        "properties": {
+          "tawMmPorM": {
+            "$ref": "#/components/schemas/ValorNoEvaluable"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tawMmPorM"
+        ],
+        "title": "AguaSuelo"
       },
       "CeldaEntrada": {
         "properties": {
@@ -421,6 +499,35 @@
         ],
         "title": "ErrorDatos"
       },
+      "FraccionesTextura": {
+        "properties": {
+          "arena": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Arena"
+          },
+          "limo": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Limo"
+          },
+          "arcilla": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Arcilla"
+          }
+        },
+        "type": "object",
+        "required": [
+          "arena",
+          "limo",
+          "arcilla"
+        ],
+        "title": "FraccionesTextura"
+      },
       "Fuente": {
         "properties": {
           "nombre": {
@@ -584,6 +691,59 @@
         ],
         "title": "Periodo"
       },
+      "PhEstimado": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "EXPLORATORIO",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "etiqueta": {
+            "type": "string",
+            "const": "SUPUESTO",
+            "title": "Etiqueta",
+            "default": "SUPUESTO"
+          },
+          "valor": {
+            "type": "number",
+            "maximum": 14.0,
+            "minimum": 0.0,
+            "title": "Valor"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estado",
+          "valor",
+          "fuente"
+        ],
+        "title": "PhEstimado"
+      },
+      "ProfundidadCm": {
+        "properties": {
+          "desdeCm": {
+            "type": "number",
+            "title": "Desdecm"
+          },
+          "hastaCm": {
+            "type": "number",
+            "title": "Hastacm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "desdeCm",
+          "hastaCm"
+        ],
+        "title": "ProfundidadCm"
+      },
       "SerieClima": {
         "properties": {
           "meta": {
@@ -648,6 +808,110 @@
         ],
         "title": "SerieClima",
         "description": "Serie diaria de un periodo, sin elegir escenario. El motor (A2.5) corta los anios de cada escenario."
+      },
+      "Suelo": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "title": "Id"
+          },
+          "etiqueta": {
+            "type": "string",
+            "const": "SUPUESTO",
+            "title": "Etiqueta",
+            "default": "SUPUESTO"
+          },
+          "origen": {
+            "type": "string",
+            "enum": [
+              "mapa_global",
+              "selector_manual"
+            ],
+            "title": "Origen"
+          },
+          "aviso": {
+            "type": "string",
+            "title": "Aviso"
+          },
+          "coordenada": {
+            "anyOf": [
+              {
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coordenada"
+          },
+          "profundidad": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProfundidadCm"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "textura": {
+            "$ref": "#/components/schemas/Textura"
+          },
+          "ph": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PhEstimado"
+              },
+              {
+                "$ref": "#/components/schemas/ValorNoEvaluable"
+              }
+            ],
+            "title": "Ph"
+          },
+          "agua": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AguaSuelo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advertencias": {
+            "items": {
+              "$ref": "#/components/schemas/Advertencia"
+            },
+            "type": "array",
+            "title": "Advertencias",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "id",
+          "origen",
+          "aviso",
+          "textura",
+          "ph"
+        ],
+        "title": "Suelo",
+        "description": "Textura y pH estimados con un mapa global. Siempre SUPUESTO: no es una medicion de la parcela."
       },
       "Terreno": {
         "properties": {
@@ -729,6 +993,73 @@
         ],
         "title": "TerrenoRespuesta"
       },
+      "Textura": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "etiqueta": {
+            "type": "string",
+            "const": "SUPUESTO",
+            "title": "Etiqueta",
+            "default": "SUPUESTO"
+          },
+          "clase": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clase"
+          },
+          "grupo": {
+            "type": "string",
+            "enum": [
+              "arenoso",
+              "franco",
+              "arcilloso"
+            ],
+            "title": "Grupo"
+          },
+          "fraccionesPct": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FraccionesTextura"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fuente": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Fuente"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "estado",
+          "grupo"
+        ],
+        "title": "Textura"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -768,6 +1099,25 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "ValorNoEvaluable": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "const": "NO_EVALUABLE",
+            "title": "Estado",
+            "default": "NO_EVALUABLE"
+          },
+          "motivo": {
+            "type": "string",
+            "title": "Motivo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "title": "ValorNoEvaluable"
       }
     }
   }

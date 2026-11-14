@@ -17,7 +17,7 @@ def crear_cliente() -> httpx.AsyncClient:
     return httpx.AsyncClient(timeout=60, headers={"User-Agent": config.USER_AGENT}, follow_redirects=True)
 
 
-async def get(cliente: httpx.AsyncClient, url: str, params: dict | None = None, reintentos: int = 3) -> httpx.Response:
+async def get(cliente: httpx.AsyncClient, url: str, params: dict | list | None = None, reintentos: int = 3) -> httpx.Response:
     ultimo = "sin respuesta"
     for intento in range(reintentos):
         try:

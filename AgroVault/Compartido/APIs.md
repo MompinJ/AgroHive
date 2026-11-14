@@ -97,6 +97,7 @@ Atribución obligatoria (CC BY 4.0). Gratis solo no comercial, sin garantía de 
 
 [Acceso y FAQ](https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_02.html) (actualizada 27/01/2026), [WCS](https://docs.isric.org/globaldata/soilgrids/wcs.html) (04/12/2025).
 
+- **Probado el 14/11 (A2.14):** el WCS responde para `clay`, `sand`, `silt` y `phh2o` (30 coberturas por mapa, p. ej. `clay_0-5cm_mean`). La reproyección a EPSG:4326 del servidor deja ceros en ventanas chicas: se pide en el CRS nativo (Homolosine, `+proj=igh`) y se convierte la coordenada con `pyproj`. Un 0 es "sin dato" (hay una franja de ~500 m sin dato junto a la parcela de prueba). Conversión: arena y arcilla g/kg ÷ 10 = %, pH ×10 ÷ 10 ([FAQ de ISRIC](https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html)). Implementado en `api/app/clientes/isric.py`.
 - La API REST sigue anunciada como **pausada** por problemas, sin fecha de regreso, y su política de uso es de 5 llamadas por minuto. No depender de ella. `VERIFICAR` si volvió desde enero.
 - WCS: un servicio por propiedad, `https://maps.isric.org/mapserv?map=/map/<propiedad>.map`. Ejemplos documentados con `nitrogen.map`; `clay.map` y `sand.map` siguen el mismo patrón y `phh2o.map` se confirma con GetCapabilities.
 - Cada servicio expone 24 coberturas (6 profundidades x 4 cuantiles). Patrón de ID: `<propiedad>_<profundidad>_<cuantil>`, por ejemplo `nitrogen_5-15cm_Q0.5`. `VERIFICAR` con GetCapabilities el ID exacto de la capa superficial y la media.
