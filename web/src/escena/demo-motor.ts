@@ -3,7 +3,7 @@
 // calculo lo hace el motor y la escena solo lo representa.
 // - Parcela: la de contratos/ejemplos (poligono ficticio de 2 ha, por eso sigue
 //   marcada como ejemplo) con la elevacion y pendiente reales de terreno.json.
-// - Suelo: el del mapa (suelo.json, su TAW hoy es NO_EVALUABLE hasta A2.16) o el
+// - Suelo: el del mapa (suelo.json, TAW por Saxton y Rawls 2006, A2.16) o el
 //   selector manual de respaldo "franco", declarado SUPUESTO (doc 04, igual que
 //   la evidencia de C2 en web/src/motor/pruebas/c2.test.ts).
 // - Plan: R1 milpa de prueba (maiz PV, frijol OI, maiz PV), sin calendario local.
@@ -105,4 +105,52 @@ export function fechasPlan(): string[] {
   const fin = Date.UTC(2017, 11, 31);
   for (let t = inicio; t <= fin; t += 15 * 86400000) fechas.push(new Date(t).toISOString().slice(0, 10));
   return fechas;
+}
+
+/**
+ * PRUEBA DE CARGA, no son datos: la parcela de ejemplo partida en el tope de
+ * 1600 celdas (40 x 40) con un relieve sintetico suave, solo para medir el
+ * rendimiento de la escena y del motor (A5.4). Va marcada como ejemplo y con
+ * el terreno EXPLORATORIO; nunca se usa en la demo.
+ */
+export function parcelaCargaSintetica(lado = 40): Parcela {
+  const base = parcelaConTerrenoDemo();
+  const ladoM = Math.sqrt((base.areaHa * 10000) / (lado * lado));
+  const [lon0, lat0] = base.centroide;
+  const celdas = [] as unknown as Parcela['celdas'];
+  for (let i = 0; i < lado; i++) {
+    for (let j = 0; j < lado; j++) {
+      celdas.push({
+        id: `c-${i}-${j}`,
+        i,
+        j,
+        centro: [lon0 + (j - lado / 2) * 0.00003, lat0 - (i - lado / 2) * 0.00003],
+        fraccionDentro: 1,
+        elevacionM: Math.round((62 + Math.sin(i / 6) + Math.cos(j / 7)) * 10) / 10,
+        pendientePct: null,
+      });
+    }
+  }
+  return {
+    ...base,
+    id: 'parcela-prueba-carga',
+    nombre: 'Prueba de carga (sintetica)',
+    tamanoCeldaM: Math.round(ladoM * 100) / 100,
+    celdas,
+    terreno: {
+      estado: 'EXPLORATORIO',
+      fuente: { nombre: 'SINTETICO - prueba de carga, no es terreno real', nota: 'Relieve generado para medir rendimiento.' },
+    },
+    meta: {
+      ...base.meta,
+      esEjemplo: true,
+      aviso: `PRUEBA DE CARGA, NO SON DATOS: ${lado * lado} celdas con relieve sintetico para medir rendimiento. No es una parcela ni un terreno real.`,
+    },
+    advertencias: [],
+  };
+}
+
+export function entradasCarga(modo: ModoSuelo): Omit<EntradasMotor, 'escenarios'> {
+  const parcela = parcelaCargaSintetica();
+  return { ...entradasDemo(modo), parcela, plan: planPrueba(parcela.id) };
 }

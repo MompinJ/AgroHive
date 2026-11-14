@@ -375,6 +375,16 @@
                 "type": "null"
               }
             ]
+          },
+          "retencion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RetencionAgua"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -638,6 +648,57 @@
           "tMinC"
         ],
         "title": "DiaClima"
+      },
+      "EntradasPedotransferencia": {
+        "properties": {
+          "estimacionId": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Estimacionid"
+          },
+          "arenaPct": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ValorEvaluable"
+              },
+              {
+                "$ref": "#/components/schemas/ValorNoEvaluable"
+              }
+            ],
+            "title": "Arenapct"
+          },
+          "arcillaPct": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ValorEvaluable"
+              },
+              {
+                "$ref": "#/components/schemas/ValorNoEvaluable"
+              }
+            ],
+            "title": "Arcillapct"
+          },
+          "materiaOrganicaPct": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ValorEvaluable"
+              },
+              {
+                "$ref": "#/components/schemas/ValorNoEvaluable"
+              }
+            ],
+            "title": "Materiaorganicapct"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estimacionId",
+          "arenaPct",
+          "arcillaPct",
+          "materiaOrganicaPct"
+        ],
+        "title": "EntradasPedotransferencia",
+        "description": "Entradas de Saxton y Rawls (2006) y de que estimacion salen; cada una con su fuente."
       },
       "ErrorDatos": {
         "properties": {
@@ -1037,6 +1098,28 @@
           },
           "fuente": {
             "$ref": "#/components/schemas/Fuente"
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "SUPUESTO"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Etiqueta"
+          },
+          "entradas": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EntradasPedotransferencia"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -1260,6 +1343,51 @@
           "superior"
         ],
         "title": "Rango"
+      },
+      "RetencionAgua": {
+        "properties": {
+          "thetaSatM3M3": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ValorEvaluable"
+              },
+              {
+                "$ref": "#/components/schemas/ValorNoEvaluable"
+              }
+            ],
+            "title": "Thetasatm3M3"
+          },
+          "thetaFcM3M3": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ValorEvaluable"
+              },
+              {
+                "$ref": "#/components/schemas/ValorNoEvaluable"
+              }
+            ],
+            "title": "Thetafcm3M3"
+          },
+          "thetaWpM3M3": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ValorEvaluable"
+              },
+              {
+                "$ref": "#/components/schemas/ValorNoEvaluable"
+              }
+            ],
+            "title": "Thetawpm3M3"
+          }
+        },
+        "type": "object",
+        "required": [
+          "thetaSatM3M3",
+          "thetaFcM3M3",
+          "thetaWpM3M3"
+        ],
+        "title": "RetencionAgua",
+        "description": "Contenidos de agua (m3/m3); sirven para pasar la humedad de POWER (fraccion de saturacion) a fraccion de TAW."
       },
       "SerieClima": {
         "properties": {

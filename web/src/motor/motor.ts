@@ -31,6 +31,8 @@ import {
   type PilarDeficitHidrico,
   type PilarExcesoHidrico,
   type PilaresMotor,
+  type ProximaTemporadaAproximada,
+  type SerieClima,
   type PlanSiembra,
   type RegistroCelda,
   type ResultadoCeldas,
@@ -51,6 +53,8 @@ export interface EntradasMotor {
   calendario?: CalendarioLocal | null;
   /** Salida de seleccionarEscenarios (A2.5). Un escenario ausente es NO_EVALUABLE. */
   escenarios: Partial<Record<Escenario, ClimaEscenario>>;
+  /** Opcional (A2.13): capa de GET /api/proxima-temporada y la serie completa de GET /api/clima para los anios analogos. */
+  proximaTemporada?: { capa: ProximaTemporadaAproximada | null; serie: SerieClima | null };
 }
 
 interface CicloPlan {
@@ -77,12 +81,15 @@ export interface CicloSimulado {
   condicionInicial: 'gwetroot' | 'capacidad_de_campo' | null;
 }
 
+/** Lo que la simulacion necesita del clima: un clima-escenario o un anio analogo (proxima temporada). */
+export type ClimaParaSimular = Pick<ClimaEscenario, 'meta' | 'anioReal' | 'estado' | 'respaldo' | 'fuente' | 'diario'>;
+
 export interface SimulacionEscenario {
-  escenario: Escenario;
+  escenario: Escenario | 'proxima_temporada';
   anioReal: number | null;
   estado: EstadoEvaluacion;
   motivo?: string;
-  clima: ClimaEscenario | null;
+  clima: ClimaParaSimular | null;
   /** Clave `${ciclo}|${cultivo}`: las celdas con el mismo cultivo en el mismo ciclo comparten resultado. */
   ciclos: Map<string, CicloSimulado>;
   metodoEt0: Record<MetodoEt0, number> & { sinDato: number };
@@ -214,8 +221,8 @@ function cultivosNoRecomendados(plan: PlanSiembra, calendario: CalendarioLocal |
 }
 
 function simularEscenario(
-  escenario: Escenario,
-  clima: ClimaEscenario | undefined,
+  escenario: Escenario | 'proxima_temporada',
+  clima: ClimaParaSimular | undefined,
   e: EntradasMotor,
   taw: ResultadoTaw,
   clavesCiclo: Map<string, CicloPlan>,
@@ -424,8 +431,18 @@ function metricas(
   return { anioReal: sim.anioReal, estado: hidrico.estado, pilares, puntaje: null };
 }
 
-/** Simula la rotacion del plan en los tres escenarios. */
-export function simularRotacion(e: EntradasMotor): ResultadoMotor {
+interface Preparacion {
+  catalogo: Map<string, Cultivo>;
+  ciclosPorCelda: Map<string, CicloPlan[]>;
+  parametros: Map<string, ParametrosCultivo | null>;
+  motivosCultivo: Map<string, string>;
+  avisosCultivo: string[];
+  clavesCiclo: Map<string, CicloPlan>;
+  erroresPlan: string[];
+  taw: ResultadoTaw;
+}
+
+function preparar(e: EntradasMotor): Preparacion {
   const catalogo = new Map(e.catalogo.cultivos.map((c) => [c.id, c]));
   const ciclosPorCelda = ciclosDeCeldas(e.plan, e.parcela);
   const parametros = new Map<string, ParametrosCultivo | null>();
@@ -450,6 +467,30 @@ export function simularRotacion(e: EntradasMotor): ResultadoMotor {
   }
   const erroresPlan = validarPlan(e.plan, e.parcela, ciclosPorCelda, parametros);
   const taw = resolverTaw(e.suelo, e.tablaSuelos);
+  return { catalogo, ciclosPorCelda, parametros, motivosCultivo, avisosCultivo, clavesCiclo, erroresPlan, taw };
+}
+
+/**
+ * Pilares de agua (deficit y exceso) del plan en un clima cualquiera: lo usa la proxima temporada para los anios
+ * analogos. Mismas reglas y estados que los escenarios.
+ */
+export function pilaresAguaEnClima(
+  e: EntradasMotor,
+  clima: ClimaParaSimular,
+): { estado: EstadoEvaluacion; motivo?: string; deficitHidrico: PilarDeficitHidrico; exceso: ExcesoEscenario | null } {
+  const pr = preparar(e);
+  const sim = simularEscenario('proxima_temporada', clima, e, pr.taw, pr.clavesCiclo, pr.parametros, pr.motivosCultivo, pr.erroresPlan);
+  const salida = {
+    estado: sim.estado,
+    deficitHidrico: pilarHidrico(sim, e.parcela.celdas, pr.ciclosPorCelda),
+    exceso: excesoEscenario(sim, e.parcela.celdas, pr.ciclosPorCelda),
+  };
+  return sim.motivo ? { ...salida, motivo: sim.motivo } : salida;
+}
+
+/** Simula la rotacion del plan en los tres escenarios. */
+export function simularRotacion(e: EntradasMotor): ResultadoMotor {
+  const { catalogo, ciclosPorCelda, parametros, motivosCultivo, avisosCultivo, clavesCiclo, erroresPlan, taw } = preparar(e);
   const noRecomendados = cultivosNoRecomendados(e.plan, e.calendario, ciclosPorCelda);
   const simulaciones = {} as Record<Escenario, SimulacionEscenario>;
   for (const esc of ESCENARIOS) {

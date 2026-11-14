@@ -58,11 +58,27 @@ const entradas = (p: PlanSiembra, suelo: Suelo): EntradasMotor => ({
   escenarios: sel.escenarios,
 });
 
-describe('C2 con el paquete de demo (POWER, SoilGrids y Terrarium reales de Isla)', () => {
-  it('con el suelo del mapa (franco arcillo arenoso) el TAW es NO_EVALUABLE hasta A2.16: nada se inventa', () => {
+describe('C2 con el paquete de demo (POWER, SoilGrids con Saxton y Rawls y Terrarium reales de Isla)', () => {
+  it('con el suelo real de Isla (Saxton y Rawls, A2.16): EVALUABLE y arranque con la humedad de POWER', () => {
     const r = simularRotacion(entradas(milpa, sueloIsla));
+    expect(r.rotacion.estado).toBe('EVALUABLE');
+    expect(r.rotacion.advertencias.some((a) => a.codigo === 'CONDICION_INICIAL_GWETROOT')).toBe(true);
+    for (const c of r.simulaciones.seco.ciclos.values()) expect(c.condicionInicial).toBe('gwetroot');
+    const seco = r.rotacion.porEscenario.seco.pilares;
+    expect(seco.deficitHidrico).toMatchObject({ estado: 'EVALUABLE', diasDeficit: 46, deficitTotalMm: 25.3, excesoTotalMm: 1052.8 });
+    expect(seco.deficitHidrico.proporcionDemandaNoCubierta).toBeCloseTo(0.0238, 4);
+    expect(validadorContrato('resultado-rotacion')(r.rotacion)).toEqual([]);
+    const validarCeldas = validadorContrato('resultado-celda');
+    for (const esc of ['seco', 'habitual', 'lluvioso'] as const) {
+      for (let d = 0; d < 400; d += 30) expect(validarCeldas(resultadoCeldas(r, esc, sumarDias('2016-06-15', d)))).toEqual([]);
+    }
+  });
+
+  it('un suelo sin TAW sigue siendo NO_EVALUABLE: nada se inventa', () => {
+    const sinTaw: Suelo = { ...sueloIsla, agua: { tawMmPorM: { estado: 'NO_EVALUABLE', motivo: 'Sin TAW (prueba).' } } };
+    const r = simularRotacion(entradas(milpa, sinTaw));
     expect(r.rotacion.estado).toBe('NO_EVALUABLE');
-    expect(r.rotacion.porEscenario.seco.pilares.deficitHidrico.motivo).toMatch(/franco_arcillo_arenoso.*A2.16/);
+    expect(r.rotacion.porEscenario.seco.pilares.deficitHidrico.motivo).toMatch(/franco_arcillo_arenoso/);
     const celdas = resultadoCeldas(r, 'seco', '2016-08-01')!;
     expect(celdas.registros.every((x) => x.estado === 'NO_EVALUABLE' && x.humedad === null)).toBe(true);
     expect(validadorContrato('resultado-celda')(celdas)).toEqual([]);
@@ -85,17 +101,31 @@ describe('C2 con el paquete de demo (POWER, SoilGrids y Terrarium reales de Isla
     expect(r.exceso.lluvioso!.mm).toBeGreaterThan(r.exceso.seco!.mm);
   });
 
-  it('ranking de tres rotaciones con los mismos anios: criterio B con deficit y exceso de agua', () => {
+  it('ranking de tres rotaciones con el suelo real: criterio B con deficit y exceso de agua', () => {
     const planes = [
       milpa,
       plan('R2', [['maiz', '2016-06-15', 'PV'], ['maiz', '2017-06-15', 'PV']]),
       plan('R3', [['frijol', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]),
     ];
-    const res = rankear(planes.map((p) => ({ rotacion: simularRotacion(entradas(p, sueloManual)).rotacion, numeroSiembras: p.ciclos.length })));
+    const res = rankear(planes.map((p) => ({ rotacion: simularRotacion(entradas(p, sueloIsla)).rotacion, numeroSiembras: p.ciclos.length })));
     expect(res.criterio).toBe('B_minimax_arrepentimiento');
     expect(res.ponderacion?.pesos).toEqual({ deficitHidrico: 0.5, excesoHidrico: 0.5 });
-    expect(res.orden).toHaveLength(3);
+    expect(res.orden.map((f) => [f.rotacionId, f.arrepentimiento])).toEqual([['R2', 0.0065], ['R1', 0.013], ['R3', 0.0601]]);
     for (const r of res.rotaciones) expect(validadorContrato('resultado-rotacion')(r)).toEqual([]);
+  });
+
+  it('robustez: el orden no cambia con el TAW de la sensibilidad del factor de materia organica (1.724 / 2.0 / 2.5)', () => {
+    const planes = [
+      milpa,
+      plan('R2', [['maiz', '2016-06-15', 'PV'], ['maiz', '2017-06-15', 'PV']]),
+      plan('R3', [['frijol', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]),
+    ];
+    for (const taw of [122.3, 124.1, 127.4]) {
+      const suelo = structuredClone(sueloIsla);
+      (suelo.agua!.tawMmPorM as { valor: number }).valor = taw;
+      const res = rankear(planes.map((p) => ({ rotacion: simularRotacion(entradas(p, suelo)).rotacion, numeroSiembras: p.ciclos.length })));
+      expect(res.orden.map((f) => f.rotacionId)).toEqual(['R2', 'R1', 'R3']);
+    }
   });
 
   it('con el calendario real de Isla (A0.6): la calabaza, que SIAP no registra, se muestra pero no se ordena', () => {

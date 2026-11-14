@@ -32,7 +32,7 @@ Convivencia con `mediworks` (V-16): comparte nginx, certbot y el droplet. Usa `m
 1. Lo que entra a `main` en GitHub no llega solo al servidor: Eduardo lo despliega.
 2. En el droplet: `sudo -u agrohive git -C /opt/agrohive/repo pull`, luego `sudo -u agrohive /opt/agrohive/venv/bin/pip install -r /opt/agrohive/repo/api/requirements.txt` y `systemctl restart agrohive-api`.
 3. El front (`web/`) se sirve desde el mismo origen que la API (opción 2 de `docs/13`, sin CORS ni mixed content). Para actualizarlo: `SERVIDOR=root@64.23.143.102 sh api/despliegue/desplegar-front.sh`. Hoy es el esqueleto de balam (A1.2), sin llamadas a la API.
-4. Comprobar `https://64-23-143-102.sslip.io/health`, `/api/cultivos` y `https://mediworks.mx/` (debe seguir en 200).
+4. Comprobar `https://64-23-143-102.sslip.io/health` (trae `commit` y `versionContrato`: ahi se ve que version corre), `/api/cultivos` y `https://mediworks.mx/` (debe seguir en 200).
 
 Logs: `journalctl -u agrohive-api`.
 

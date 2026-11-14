@@ -8,7 +8,8 @@
 // (los 18 meses del anio agricola de SIAP) para que quepan los ciclos que se cosechan despues de septiembre.
 // Solo son candidatos los anios con las dos ventanas completas (sin dias faltantes: no se rellenan).
 // Percentil: definicion 7 de Hyndman y Fan. Anio elegido: el de lluvia mas cercana al percentil; si dos quedan a
-// la misma distancia (diferencia menor a 0.05 mm, la mitad de la precision mostrada), gana el anio mas antiguo.
+// la misma distancia (diferencia menor a 0.05 mm, la mitad de la precision mostrada), gana el anio mas reciente
+// ([DECIDIDO] por Mompin el 14/11; con un numero par de anios el p50 siempre empata entre los dos centrales).
 // Siempre se declara el segundo anio mas cercano para que un empate practico sea visible.
 
 import { peorEstado } from './estados';
@@ -148,7 +149,7 @@ export function seleccionarEscenarios(serie: SerieClima): SeleccionEscenarios {
       const da = Math.abs(a.temporadasMm - objetivo);
       const db = Math.abs(b.temporadasMm - objetivo);
       if (Math.abs(da - db) >= TOLERANCIA_EMPATE_MM) return da - db;
-      return a.anio - b.anio;
+      return b.anio - a.anio; // empate: el mas reciente
     });
     const elegido = orden[0] as (typeof candidatos)[number];
     const segundo = orden[1];
@@ -213,7 +214,7 @@ export function seleccionarEscenarios(serie: SerieClima): SeleccionEscenarios {
         criterio:
           `Anio agricola SIAP con la lluvia de temporadas PV + OI (1 oct ${t - 1} a 30 sep ${t}) mas cercana al p${p} ` +
           `(${HYNDMAN_FAN.nombre}, ${HYNDMAN_FAN.cita}) de ${candidatos.length} anios completos de ${ventana.desde} a ${ventana.hasta}; ` +
-          `empate a menos de ${TOLERANCIA_EMPATE_MM} mm: el anio mas antiguo. Ventanas de siembra en lluviaTemporadasMm.fuente.`,
+          `empate a menos de ${TOLERANCIA_EMPATE_MM} mm: el anio mas reciente. Ventanas de siembra en lluviaTemporadasMm.fuente.`,
       },
       diario,
       advertencias,
