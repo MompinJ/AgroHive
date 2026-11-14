@@ -17,7 +17,7 @@ from .. import http
 URL = "https://maps.isric.org/mapserv"
 HOMOLOSINE = "+proj=igh +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
 CRS_NATIVO = "http://www.opengis.net/def/crs/EPSG/0/152160"
-FACTOR_CONVERSION = {"clay": 10, "sand": 10, "silt": 10, "phh2o": 10}  # FAQ de ISRIC: g/kg a %, pH x 10 a pH
+FACTOR_CONVERSION = {"clay": 10, "sand": 10, "silt": 10, "phh2o": 10, "soc": 10}  # FAQ de ISRIC: g/kg a %, pH x 10 a pH, dg/kg a g/kg
 PROFUNDIDADES = [("0-5cm", 5), ("5-15cm", 10), ("15-30cm", 15)]  # (capa, espesor cm); 0 a 30 cm
 SEMILADO_M = 3000
 RADIOS_M = (1000, 3000)  # primero pixeles a menos de 1 km; si no hay, a menos de 3 km

@@ -16,7 +16,7 @@ Orden fijo antes de una tarea que toque alcance: `docs/00-LEEME-PRIMERO.md`, `do
 | Pantallas, selector, 2D/3D | `docs/06` |
 | Modelar un cultivo | `docs/07` y `.claude/agents/modelador-voxel.md` |
 | API, contratos, rendimiento | `docs/08` más [[Contratos]] (el motor ya no vive en el servidor) |
-| Repartir trabajo | `docs/14` (el tablero al final). `docs/09` conserva prioridades y el pitch logístico; su cronograma por horas quedó sustituido |
+| Repartir trabajo | `docs/14` (el tablero al final) y [[Cronograma]] (estado por persona). `docs/09` conserva prioridades y el pitch logístico; su cronograma por horas quedó sustituido |
 | Pitch, jueces, límites | `docs/10` |
 | Saber qué sigue abierto | `docs/11` y [[Pendientes]] |
 | Anotar un cambio | `docs/01-REGISTRO-DE-CAMBIOS.md` |

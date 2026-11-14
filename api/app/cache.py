@@ -14,13 +14,19 @@ def _ruta(clave: str):
 
 
 def leer(clave: str) -> tuple[Any, float] | None:
-    """Devuelve (valor, edad en segundos) o None si no existe o esta danado."""
-    ruta = _ruta(clave)
-    try:
-        contenido = json.loads(ruta.read_text(encoding="utf-8"))
-        return contenido["valor"], time.time() - contenido["guardado"]
-    except (OSError, ValueError, KeyError):
-        return None
+    """Devuelve (valor, edad en segundos) o None si no existe o esta danado.
+
+    Busca primero en la cache local y despues en el paquete de demo (config.DEMO_DIR, A2.4). La edad es la real:
+    una entrada del paquete conserva su fecha de generacion, asi que no se hace pasar por reciente.
+    """
+    nombre = _ruta(clave).name
+    for base in (config.CACHE_DIR, config.DEMO_DIR):
+        try:
+            contenido = json.loads((base / nombre).read_text(encoding="utf-8"))
+            return contenido["valor"], time.time() - contenido["guardado"]
+        except (OSError, ValueError, KeyError):
+            continue
+    return None
 
 
 def escribir(clave: str, valor: Any) -> None:
