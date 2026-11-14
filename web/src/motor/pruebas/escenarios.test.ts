@@ -30,20 +30,20 @@ describe('lluvia por anio agricola SIAP', () => {
 describe('A2.5 con la serie real de NASA POWER del paquete de demo (2005-10-01 a 2025-12-31)', () => {
   const sel = seleccionarEscenarios(seriePowerIsla());
 
-  it('elige anios reales reproducibles: 2023 seco, 2008 habitual, 2024 lluvioso', () => {
+  it('elige anios reales reproducibles: 2023 seco, 2016 habitual, 2024 lluvioso', () => {
     expect(sel.estado).toBe('EVALUABLE');
     expect(sel.escenarios.seco?.anioReal).toBe(2023);
-    expect(sel.escenarios.habitual?.anioReal).toBe(2008);
+    expect(sel.escenarios.habitual?.anioReal).toBe(2016);
     expect(sel.escenarios.lluvioso?.anioReal).toBe(2024);
     // 20 anios agricolas completos (2006 a 2025); 2005 no, su OI empieza en octubre de 2004.
     expect(sel.anios.filter((a) => a.temporadasMm !== null)).toHaveLength(20);
     expect(sel.anios.find((a) => a.anio === 2005)?.temporadasMm).toBeNull();
   });
 
-  it('con 20 anios el p50 es el punto medio de los dos anios centrales: empatan 2008 y 2016 y gana el mas antiguo', () => {
+  it('con 20 anios el p50 es el punto medio de los dos anios centrales: empatan 2008 y 2016 y gana el mas reciente', () => {
     expect(sel.percentiles.habitual).toBeCloseTo((1912.0 + 1932.1) / 2, 0);
     const adv = sel.escenarios.habitual?.advertencias?.find((a) => a.codigo === 'ANIO_CERCANO');
-    expect(adv?.mensaje).toContain('2016');
+    expect(adv?.mensaje).toContain('2008');
   });
 
   it('es determinista', () => {
@@ -99,10 +99,10 @@ describe('estados de la seleccion', () => {
     expect(sel.escenarios.seco?.respaldo).toBe(true);
   });
 
-  it('empate exacto => gana el anio mas antiguo', () => {
-    // Misma lluvia diaria todos los dias: los anios agricolas no bisiestos empatan; gana el mas antiguo.
+  it('empate exacto => gana el anio mas reciente', () => {
+    // Misma lluvia diaria todos los dias: los anios agricolas no bisiestos (730 mm) empatan; gana el mas reciente.
     const serie = serieSintetica('2000-01-01', '2020-12-31', () => 2);
     const sel = seleccionarEscenarios(serie);
-    expect(sel.escenarios.habitual?.anioReal).toBe(2001);
+    expect(sel.escenarios.habitual?.anioReal).toBe(2019);
   });
 });

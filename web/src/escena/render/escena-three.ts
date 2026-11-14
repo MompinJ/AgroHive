@@ -30,6 +30,19 @@ export interface OpcionesRender {
   onAviso?: (codigo: string, mensaje: string) => void;
 }
 
+export interface EstadisticasRender {
+  /** Draw calls del ultimo cuadro (uno por InstancedMesh visible). */
+  drawCalls: number;
+  triangulos: number;
+  mallas: number;
+  instancias: number;
+  /** Cuadros dibujados desde que se creo la escena (render bajo demanda: no crece en reposo). */
+  cuadros: number;
+  ultimoCuadroMs: number;
+  /** false con "reducir movimiento": la camara no sigue moviendose al soltar. */
+  inercia: boolean;
+}
+
 /** Hueco de una celda sin elevacion: por debajo del punto mas bajo, nunca "a nivel cero". */
 const TOPE_HUECO = -GROSOR_BASE * 0.6;
 const LADO_BLOQUE = 0.96;
@@ -77,6 +90,8 @@ export class EscenaThree {
   private extension = 4;
   private opciones: OpcionesRender;
   private inicioPuntero: { x: number; y: number } | null = null;
+  private ultimoCuadroMs = 0;
+  private cuadros = 0;
 
   constructor(private readonly lienzo: HTMLCanvasElement, opciones: OpcionesRender) {
     if (!soportaWebGL()) throw new ErrorWebGL();
@@ -115,6 +130,26 @@ export class EscenaThree {
     this.observador = new ResizeObserver(() => this.ajustarTamano());
     this.observador.observe(lienzo);
     this.ajustarTamano();
+  }
+
+  /** Medicion de rendimiento (A5.4) y verificacion de reducir movimiento. */
+  estadisticas(): EstadisticasRender {
+    const info = this.renderer.info.render;
+    let instancias = 0;
+    let mallas = 0;
+    for (const m of this.bloquesPorMalla.keys()) {
+      mallas++;
+      instancias += m.count;
+    }
+    return {
+      drawCalls: info.calls,
+      triangulos: info.triangles,
+      mallas,
+      instancias,
+      cuadros: this.cuadros,
+      ultimoCuadroMs: this.ultimoCuadroMs,
+      inercia: this.controles.enableDamping,
+    };
   }
 
   setOpciones(opciones: OpcionesRender) {
@@ -353,7 +388,10 @@ export class EscenaThree {
       this.cuadroPendiente = 0;
       // Con inercia, update() devuelve true mientras la camara se sigue moviendo.
       const siguioMoviendo = this.controles.enableDamping && this.controles.update();
+      const t0 = performance.now();
       this.renderer.render(this.scene, this.camara);
+      this.ultimoCuadroMs = performance.now() - t0;
+      this.cuadros++;
       if (siguioMoviendo) this.pedirCuadro();
     });
   }
