@@ -1,18 +1,20 @@
 import { demo } from '../ui/demo';
+import type { Parcela } from '../../../contratos/tipos/contratos';
+import { DibujarParcela } from '../ui/DibujarParcela';
 import hero from '../ui/assets/terreno-hero-v1.png';
 import field from '../ui/assets/terreno-demo-v1.png';
 import polygon from '../ui/assets/terreno-poligono-v1.png';
 import '../ui/terreno.css';
 
-export function Terreno({ polygonMode, onSelectDemo }: { polygonMode: boolean; onSelectDemo: () => void }) {
+export function Terreno({ polygonMode, onSelectDemo, parcela, onGuardar }: { polygonMode: boolean; onSelectDemo: () => void; parcela: Parcela | null; onGuardar: (p: Parcela) => void }) {
   return <div className="terrain-page">
     <section className="terrain-hero" aria-labelledby="terreno-titulo">
       <div className="terrain-copy">
         <h1 id="terreno-titulo" tabIndex={-1}>Empieza por<br />un terreno.</h1>
-        <p className="terrain-intro">Explora el caso de ejemplo mientras preparamos la conexión con mapas y datos reales.</p>
+        <p className="terrain-intro">Explora el caso de ejemplo o dibuja el contorno de tu parcela para consultar su relieve.</p>
         <div className="terrain-actions">
           <a className="terrain-button" href="#/laboratorio" onClick={onSelectDemo}>Abrir laboratorio demo</a>
-          <a className="terrain-button terrain-button-secondary" href="#/terreno?modo=poligono" aria-current={polygonMode ? 'location' : undefined}>Ver entrada de polígono</a>
+          <a className="terrain-button terrain-button-secondary" href="#/terreno?modo=poligono" aria-current={polygonMode ? 'location' : undefined}>Dibujar mi parcela</a>
         </div>
       </div>
       <div className="terrain-art" aria-hidden="true">
@@ -37,11 +39,11 @@ export function Terreno({ polygonMode, onSelectDemo }: { polygonMode: boolean; o
         <div className="terrain-option-copy">
           <p className="terrain-eyebrow">Polígono personalizado</p>
           <h2 id="poligono-titulo">Tu propio terreno</h2>
-          <span className="terrain-status">Integración pendiente · A2.10</span>
-          <p>El mapa y la herramienta para dibujar el contorno se incorporarán en otra actividad. En esta versión todavía no puedes guardar ni evaluar un polígono.</p>
-          {polygonMode && <p className="terrain-polygon-notice">Elegiste dibujar un terreno. Por ahora puedes recorrer el laboratorio con la parcela de ejemplo.</p>}
+          <span className="terrain-status">Contorno y cuadrícula</span>
+          <p>Dibuja los límites, revisa la cuadrícula y consulta la elevación. El relieve faltante se muestra como no evaluable.</p>
         </div>
       </section>
     </div>
+    {polygonMode && <DibujarParcela onGuardar={onGuardar} guardada={parcela} />}
   </div>;
 }
