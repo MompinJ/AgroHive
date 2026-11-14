@@ -1,0 +1,64 @@
+# Paleta compartida de AgroHive
+
+Fuente de verdad: `modelos/paleta.py` (`PALETA_AGROHIVE`). Todos los generadores la importan.
+
+Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en cada `.bbmodel`, y cada cara apunta a ese pixel. Por eso **el indice es el contrato** con los modelos ya generados.
+
+## Reglas
+
+1. **Nunca reordenar, renombrar ni borrar** colores. Si un color ya no se usa, se queda.
+2. **Colores nuevos siempre al final** (siguiente indice libre), y se documentan en esta tabla.
+3. Maximo 256 colores.
+4. Por material, 3 tonos (oscuro, base, claro). Lo claro va en tapas y puntas; lo oscuro en bajos, nudos y arrugas.
+5. Los indices 0-15 son `PALETA_BASE` de `herramientas/voxelkit.py`, en el mismo orden.
+
+## Colores (44)
+
+| Indice | Nombre | Hex | Uso |
+| --- | --- | --- | --- |
+| 0 | soil | #6b4a2f | Suelo base, lomo del surco |
+| 1 | soil_dark | #53371f | Terrones, sombra de suelo |
+| 2 | soil_light | #8a6240 | Tapa del lomo, suelo con luz |
+| 3 | leaf | #4aa33a | Follaje generico |
+| 4 | leaf_dark | #2f7a2c | Follaje generico oscuro |
+| 5 | leaf_light | #86cf4f | Follaje generico claro |
+| 6 | wood | #8a5a2e | Madera |
+| 7 | wood_dark | #5e3c1c | Madera oscura |
+| 8 | stone | #8d8d86 | Piedra |
+| 9 | white | #ececec | Blanco |
+| 10 | black | #17140f | Negro (moscas, detalles) |
+| 11 | red | #c8302c | Rojo |
+| 12 | yellow | #f2c230 | Amarillo generico |
+| 13 | orange | #ee7d1f | Naranja |
+| 14 | blue | #2a5d9f | Azul |
+| 15 | water | #2d6f9e | Agua |
+| 16 | suelo_seco | #9b7a55 | Suelo seco / sequia |
+| 17 | suelo_humedo | #3f2b19 | Suelo humedo, hoyo de siembra |
+| 18 | suelo_grieta | #2a1c10 | Grietas de suelo seco |
+| 19 | maiz_tallo_dark | #3e6a26 | Nudos y raices de soporte del maiz |
+| 20 | maiz_tallo | #5c9134 | Tallo de maiz |
+| 21 | maiz_tallo_light | #8cbf4c | Tallo tierno (brote) |
+| 22 | maiz_hoja_dark | #2e6b2b | Hojas bajas de maiz |
+| 23 | maiz_hoja | #45993b | Hoja de maiz base |
+| 24 | maiz_hoja_light | #79c25a | Puntas de hoja, cogollo |
+| 25 | hoja_marchita | #a39a45 | Hoja amarillenta / marchita |
+| 26 | hoja_seca_dark | #7d5f34 | Hoja o tallo seco en sombra |
+| 27 | hoja_seca | #b08c55 | Hoja seca base |
+| 28 | hoja_seca_light | #d6bd85 | Hoja seca con luz |
+| 29 | espiga_dark | #9c8642 | Ramas de la espiga |
+| 30 | espiga | #d1bc66 | Espiga (panoja) |
+| 31 | grano_dark | #c4921f | Grano / semilla en sombra |
+| 32 | grano | #efc63a | Grano de mazorca amarillo |
+| 33 | grano_light | #f8e17c | Punta de la mazorca, brillo |
+| 34 | totomoxtle_dark | #6b9644 | Base del totomoxtle, pedunculo |
+| 35 | totomoxtle | #9cc46a | Hojas de la mazorca (verde) |
+| 36 | totomoxtle_seco | #dac690 | Totomoxtle seco |
+| 37 | cabello | #b86f34 | Cabello de elote |
+| 38 | cabello_light | #e2b65f | Puntas del cabello |
+| 39 | podrido_dark | #3a281a | Tejido podrido, quiebres |
+| 40 | podrido | #5a4330 | Podrido base |
+| 41 | moho_dark | #55604b | Moho en sombra |
+| 42 | moho | #7d8b6c | Moho gris verdoso |
+| 43 | moho_light | #aab69c | Moho con luz, alas de mosca |
+
+Los hex son elegidos a ojo para el estilo voxel (no medidos de fotos).
