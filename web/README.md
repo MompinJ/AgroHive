@@ -79,3 +79,6 @@ Fuentes técnicas: [Vite](https://vite.dev/guide/) y [React useEffect](https://r
 - Capturas en `evidencia/`: [P0](evidencia/P0.png), [P1](evidencia/P1.png), [P2](evidencia/P2.png), [P3](evidencia/P3.png) y [laboratorio a 320 px](evidencia/P2-mobile-320.png).
 
 El criterio funcional de las cuatro vistas ejecutables está cubierto. El Worker sigue pendiente de coordinación con Mompin; no se marca como entregado ni se modifica el tablero compartido desde esta actividad.
+
+## Cierre A1.2
+La UI inicializa el cliente existente de Mompin mediante useMotor, comprueba su respuesta con olvidar en la sesion vacia y termina el Worker al desmontarse. Muestra disponibilidad o error con un limite de espera de 10 segundos. Esta seccion sustituye las notas anteriores de Worker pendiente; las simulaciones desde los controles siguen en A3.4/A4.6.

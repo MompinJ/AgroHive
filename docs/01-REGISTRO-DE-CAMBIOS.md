@@ -334,3 +334,6 @@ Consolidación basada en Notion v1.2 y en `docs/`. Ver `00 — AGROHIVE DOCUMENT
 ### 2026-11-10 — v0.2 de Mompin (carpeta `docs/`)
 
 Primera documentación por tema a partir del video del compañero, el audio de la reunión y la verificación de APIs. Ver `docs/DOCUMENTACION_MAESTRA.md`.
+
+### 2026-11-14 — Cierre A1.2
+- App.tsx y ui/useMotor.ts inicializan el Worker existente sin modificar motor ni contratos. Confirmacion mediante olvidar, timeout y limpieza al desmontar. Se actualiza el tablero y README. Sin cambio de alcance cientifico.

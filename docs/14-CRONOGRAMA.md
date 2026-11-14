@@ -84,7 +84,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
 | A1.1 `[HECHO]` | Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS | R2 + R3 | M | Opus | A0.3 | `contratos/` revisado por los 4 |
-| A1.2 `[EN CURSO]` rutas P0 a P3 y build verificados; falta el Worker del motor (coordinar con Mompin) | Esqueleto `web/`: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | R1 | S | Sonnet | A1.1 | `npm run dev` abre las pantallas |
+| A1.2 `[HECHO]` rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados | Esqueleto `web/`: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | R1 | S | Sonnet | A1.1 | `npm run dev` abre las pantallas |
 | A1.3 `[HECHO]` | Esqueleto `api/`: FastAPI, `/health`, OpenAPI, generación del cliente TS de las llamadas HTTP | R3 | S | Sonnet | A1.1 | Cliente TS generado compila; prueba de que los modelos de FastAPI respetan `contratos/` |
 | A1.4 `[HECHO]` | Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) | R4 | M | Sonnet | A0.3 | `.bbmodel` abre en Blockbench |
 | A1.5 `[HECHO]` | Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente | R3 | M | Opus | A0.3 | JSON con citas; vacíos como `NO_EVALUABLE` |
@@ -212,7 +212,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | **Mompin** | 10 | 1 | 0 | 3 | 71 % de 14 |
 | **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
 | **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
-| **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
+| **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
 
 ### Mompin
 
@@ -274,7 +274,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | ID | Actividad | Estado | Nota |
 | --- | --- | --- | --- |
 | A0.5 | Verificar reglas de entrega, IA y video (V-03, V-04) | PENDIENTE |  |
-| A1.2 | Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | EN CURSO | rutas P0 a P3 y build verificados; falta el Worker del motor (coordinar con Mompin) |
+| A1.2 | Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | HECHO | rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados |
 | A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | PENDIENTE |  |
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | PENDIENTE |  |
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | PENDIENTE |  |
