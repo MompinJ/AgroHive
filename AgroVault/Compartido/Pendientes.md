@@ -13,6 +13,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 | ID | Estado | Nota |
 | --- | --- | --- |
 | A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.2.0 en `contratos/`: 9 schemas, ejemplos, `npm test` (25/25) y tipos TS. Ver [[Contratos]] |
+| A1.5, A1.6 | Hechas (Mafer) | `datos/catalogos/`: milpa (maiz, frijol, calabaza) desde FAO-56 y EcoCrop, y TAW por textura (FAO-56 Tabla 19); `python datos/catalogos/generar.py` y `node datos/catalogos/validar.mjs`. Pendiente: cuando Mompin agregue al contrato el campo de lluvia anual y mueva `suelos.schema.json` a `contratos/`, pasar ahi la lluvia anual de EcoCrop (hoy en el `motivo` de `lluviaCiclo*`). Umbral de calor y ventanas de siembra siguen `NO_EVALUABLE` |
 
 El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 
