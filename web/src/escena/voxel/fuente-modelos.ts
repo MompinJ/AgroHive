@@ -4,12 +4,20 @@
 
 import { leerBbmodel, type ModeloVoxel } from './bbmodel';
 
-// Plantas (modelos/cultivos/), losas de suelo (modelos/suelos/, A2.12) y props como la mascota
+// Plantas (modelos/cultivos/ y sus manchones en modelos/cultivos/bloques/), losas de suelo (modelos/suelos/, A2.12) y props como la mascota
 // (modelos/props/); los nombres no se repiten.
-const archivos = import.meta.glob(['../../../../modelos/cultivos/*.bbmodel', '../../../../modelos/suelos/*.bbmodel', '../../../../modelos/props/*.bbmodel'], {
-  query: '?raw',
-  import: 'default',
-}) as Record<string, () => Promise<string>>;
+const archivos = import.meta.glob(
+  [
+    '../../../../modelos/cultivos/*.bbmodel',
+    '../../../../modelos/cultivos/bloques/*.bbmodel',
+    '../../../../modelos/suelos/*.bbmodel',
+    '../../../../modelos/props/*.bbmodel',
+  ],
+  {
+    query: '?raw',
+    import: 'default',
+  },
+) as Record<string, () => Promise<string>>;
 
 function claveDeRuta(ruta: string): string {
   const nombre = ruta.slice(ruta.lastIndexOf('/') + 1);

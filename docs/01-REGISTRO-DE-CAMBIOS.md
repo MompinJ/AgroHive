@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Manchón de plantas por celda en la escena (Mompin; idea de balam, modelos de Mafer)
+
+- **Archivos:** `web/src/escena/voxel/bloque.ts` (nuevo), `render/escena-three.ts` (bloque por celda, detallado en la celda elegida, marco unido en una malla), `voxel/fuente-modelos.ts` (`modelos/cultivos/bloques/`), `EscenaParcela.tsx` (nota en la leyenda), `demo-motor.ts` (la vista previa usa el polígono de 518 celdas), prueba `bloque.test.ts`; `docs/06`.
+- **Cambio:** cada celda lleva el modelo ligero de bloque y la celda elegida el detallado. Si falta el bloque, se usa uno provisional en código (21 cubos, tope de 55 y lomo por surco `[DECIDIDO]` por Mompin con Mafer). La leyenda dice que la densidad es visual, no a escala.
+- **Fuente / evidencia:** con 518 celdas, maíz en madurez pasa de 449 380 a 216 280 triángulos y de 3.2 a 5.0 cuadros/s (SwiftShader); 6 draw calls antes y después. Pendiente: medir con los bloques de Mafer (`maiz_siembra` y `maiz_madurez` primero).
+
 ### 2026-11-14 — A3.6: vista 2D con el mismo resultado del motor (balam)
 
 - **Archivos:** `web/src/ui/Parcela2D.tsx`, `parcela2d.css`, `Parcela2D.test.tsx`, `LaboratorioConectado.tsx`, `useLaboratorio.ts`; `docs/06`, `docs/14`, vistas generadas del tablero y `web/README.md`.
