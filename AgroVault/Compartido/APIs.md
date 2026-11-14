@@ -144,6 +144,15 @@ Regla: cualquiera de las dos queda `SUPUESTO`; el selector manual FAO-56 sigue d
 - **AppEEARS** ([API](https://appeears.earthdatacloud.nasa.gov/api/)): inicio de sesión `POST /api/login` (Basic con Earthdata, devuelve token Bearer de unas 48 h); muestras puntuales con `POST /api/task` (`task_type: "point"`, `params.dates`, `params.layers`, `params.coordinates` en EPSG:4326). Respuesta 202 con `task_id`; consultar `GET /api/task/{id}`. Para NDVI MODIS, `MOD13Q1.061` con capa `_250m_16_days_NDVI` (`VERIFICAR`: el nombre de capa vino de un resumen, no del texto literal). Es asíncrono; no sirve para el flujo en vivo del polígono.
 - **GIBS / Worldview**: capas WMTS sin llave, ejemplo `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/{fecha}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`. Hubo un reporte de tiles negros en la capa de color verdadero. `VERIFICAR` el ID de la capa de precipitación en el documento de capacidades. Decoración de mapa solamente; no alimenta el motor.
 
+## SMAP verificado (A4.8, 14/11)
+
+- Cuenta Earthdata: token por la variable de entorno `EARTHDATA_TOKEN` (`earthaccess.login(strategy="environment")`). Nunca en el repo, la caché ni el buzón. La búsqueda de granulos funciona sin login; la lectura exige token.
+- `short_name`: `SPL3SMP` (36 km, diario, versión 009), `SPL3SMP_E` (9 km), `GPM_3IMERGDF` y `MOD13Q1` devuelven granulos sobre Isla. Solo `SPL3SMP` está integrado.
+- Un granulo diario pesa unos 30 MB. Se lee por rangos HTTP con la sesión de `earthaccess.get_requests_https_session()` (206 Partial Content) y `h5py`; `earthaccess.open` falló (FileNotFound) con el token. Bloques alineados de 4 MiB: unas 9 peticiones, **unos 20 s por día** (latencia, no ancho de banda).
+- Rejilla EASE-Grid 2.0 global de 36 km (EPSG:6933, 406 filas x 964 columnas, píxel 36 032.22 m): la celda se calcula con `pyproj` y se comprobó contra `latitude_pm` y `EASE_row_index_pm`. Isla (-95.53, 18.03) es la celda (140, 226), con centro en (-95.415, 17.937).
+- Variables por pase: `soil_moisture` (AM) y `soil_moisture_pm` (PM) en cm3/cm3, `valid_min` 0.02 y `valid_max` 0.5, relleno -9999; `retrieval_qual_flag` con bits `Retrieval_recommended`, `Retrieval_attempted`, `Retrieval_success`, `FT_retrieval_success`. La API entrega la bandera tal cual, **sin interpretarla** (`VERIFICAR` su polaridad antes de filtrar por calidad).
+- Ejemplo real: 2025-06-15, pase PM 0.1754 m3/m3 (bandera 8); el pase AM no cubrió la celda ese día. Es una sola fecha: no se comparó con `GWETROOT`.
+
 ## Orden sugerido de pruebas (los pasos 1, 2, 3 y 5 ya se hicieron en A0.7, ver `datos/pruebas-apis/LEEME.md`; quedan el 4 y el 6)
 
 1. POWER diario puntual con los 7 parámetros de arriba: unidades reales, `GWETROOT` en AG, un navegador con `fetch` para CORS.
