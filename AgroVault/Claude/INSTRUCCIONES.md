@@ -50,6 +50,7 @@ Si el preview falla o no abriste Blockbench, dilo. No escribas que el modelo se 
 
 ## Manera de editar
 
+- Antes y después de trabajar, verifica los cambios (`git fetch`, revisa lo que subieron otros, corre las pruebas) y actualiza la documentación existente que tu cambio afecte (`docs/`, `AgroVault/`, README, `AGENTS.md`) en vez de dejarla desfasada o crear duplicados.
 - Un archivo a la vez si otra persona puede estar en el repo. Rama propia. Pull request hacia `main`.
 - No reescribas de un jalón `docs/00` a `docs/14`. Localiza el párrafo y registra el cambio en `docs/01`.
 - No modifiques carpetas de historial fuera de `docs/` vigente.

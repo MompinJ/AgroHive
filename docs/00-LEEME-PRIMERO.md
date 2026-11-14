@@ -27,11 +27,16 @@
 | [10 · Pitch y límites](10-PITCH-Y-LIMITES.md) | Narrativa, límites científicos, preguntas de jueces. |
 | [11 · Decisiones, pendientes y riesgos](11-DECISIONES-PENDIENTES-Y-RIESGOS.md) | Qué está decidido, qué se decide en el evento, riesgos. |
 | [12 · Guía para agentes y colaboradores](12-GUIA-PARA-AGENTES.md) | Cómo leer y editar esta carpeta (Claude, ChatGPT, Cursor). |
-| [`agente-modelador-voxel/`](agente-modelador-voxel/) | El agente que crea los modelos 3D, su librería y un ejemplo. |
+| [13 · Decisiones del hackathon](13-DECISIONES-HACKATHON.md) | Decisiones del 14/11: stack, servidor, pronóstico, suelo, cultivos, ranking. Mandan sobre 03, 08 y 09. |
+| [14 · Cronograma](14-CRONOGRAMA.md) | Actividades por esfuerzo de IA, compuertas, recorte y tablero de reparto. |
+| [15 · Prompts de arranque](15-PROMPTS-DE-ARRANQUE.md) | Prompt inicial para la IA de cada integrante. |
+| [Agente `modelador-voxel`](agente-modelador-voxel-README.md) | Cómo funciona el agente de modelos 3D (definición en `.claude/agents/`, librería en `herramientas/voxelkit.py`). |
+| [`AgroVault/`](../AgroVault/Bienvenido.md) | Vault de Obsidian: resumen para Claude, Codex y Cursor, APIs investigadas y pendientes. Resume `docs/` y `contratos/`, no decide. |
+| [`contratos/`](../contratos/README.md) | Contratos de datos (JSON Schema), ejemplos y tipos TS. Fuente de verdad de los formatos. |
 
 ## Orden de lectura sugerido
 
-- **Todos:** 00 → 03 → 11.
+- **Todos:** 00 → 13 → 14 → 03 → 11.
 - **Interfaz / 3D:** + 06 → 07 → 08.
 - **Motor científico:** + 04 → 05 → 08.
 - **Datos:** + 04 → 05 → 11.
@@ -59,15 +64,15 @@
 
 ## Cómo editar sin perder trabajo
 
-1. Por ahora la documentación vive en **Google Drive**, editada vía **rclone** o **MCP**; en el evento se puede pasar a **GitHub** u otra herramienta. `[DECIDIDO]`
+1. La documentación vive en el **repositorio** (`docs/`, ramas por integrante y pull request a `main`). Google Drive queda solo como respaldo del historial. `[DECIDIDO]` (13)
 2. Leer el documento que se va a tocar y el **11** antes de cambiar el alcance.
 3. Evitar que dos personas o agentes editen **el mismo archivo** al mismo tiempo.
 4. Registrar cada cambio en **01** (fecha, archivo, qué y por qué).
-5. **No escribir código del proyecto antes del inicio oficial del hackathon.**
+5. El hackathon ya inició (14/11): se puede escribir código. Antes y después de trabajar: `git fetch`, revisar lo que subieron otros, correr las pruebas y actualizar la documentación afectada (`docs/`, `AgroVault/`, README, `AGENTS.md`) sin dejarla desfasada ni duplicarla.
 
-## Carpetas anteriores (historial, no editar)
+## Carpetas anteriores (historial en Google Drive, no editar)
 
-- **`docs/`** — documentación v0.2 de Mompin (10/11/2026) y la transcripción del audio de la reunión.
+- **`docs/` de Drive** (no esta carpeta del repo) — documentación v0.2 de Mompin (10/11/2026) y la transcripción del audio de la reunión.
 - **`00 — AGROHIVE DOCUMENTACIÓN CONSOLIDADA v1.2/`** — consolidación del 11/11/2026 (basada en Notion v1.2).
 
 Si algo de esas carpetas contradice esta, **manda esta** (v2.0). Si se quiere rescatar una idea anterior, se registra en 01.

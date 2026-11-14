@@ -61,6 +61,8 @@ Reglas que no cambian:
 
 Definirlos en las primeras horas para trabajar en paralelo y que no choquen convenciones (preocupación de la reunión). Nombres sugeridos.
 
+> **Actualización 14/11:** los contratos vigentes son los JSON Schema de `contratos/` (v0.1.0, A1.1); mandan sobre los ejemplos de abajo, que quedan como antecedente. Cambios principales: el estado visual de la planta se llama `estadoPlanta` (`estado` es siempre el de doc 04), el suelo es su propio contrato (`parcela.sueloId`), `fuente` es un objeto y hay un contrato nuevo `proxima-temporada`. Resumen en `AgroVault/Compartido/Contratos.md`.
+
 ### Parcela
 ```json
 {
@@ -126,6 +128,8 @@ Coordenadas ilustrativas, no la ubicación real de la parcela.
 Los `null` son huecos que se llenan con valores calculados; nunca con números inventados.
 
 ## Endpoints sugeridos (si hay backend)
+
+> **Actualización 14/11:** con el motor en el Web Worker (doc 13), `POST /api/simular` y `POST /api/rotaciones` quedan superados: el backend no simula ni rankea. Se suman `GET /health` y `GET /api/suelo` (textura y pH `SUPUESTO`, A2.14). Tabla vigente en `AgroVault/Compartido/Contratos.md`.
 
 | Método y ruta | Función |
 | --- | --- |

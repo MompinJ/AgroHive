@@ -54,7 +54,7 @@ Columna vertebral: **NASA POWER** diario, sin llave. Comunidad `AG`. Parámetros
 
 Respaldo climático: Open-Meteo (archivo histórico). Si POWER cae, el estado es `RESPALDO_HISTORICO` o `ERROR_DATOS`, visible.
 
-Elevación: SRTM o tiles Terrarium. Es lo que hace distinto a cada bloque. `[VERIFICAR]` acceso (V-08).
+Elevación: Open-Meteo Elevation (GLO-90), tiles Terrarium o SRTM; ver [[APIs]]. Es lo que hace distinto a cada bloque. `[VERIFICAR]` acceso (V-08).
 
 Otros datasets NASA (GPM, SMAP, MODIS, Landsat, ECOSTRESS, GRACE) son extra. Solo entran si se integran de verdad. SMAP, GPM y MODIS van por `earthaccess` en Python, por eso el backend es FastAPI.
 
@@ -68,7 +68,7 @@ Motor, independiente del render (`docs/05`):
 4. Balance de cubeta por bloque: lluvia entra, lo que no cabe es exceso, ETc sale, lo que falta es déficit. TAW según suelo. Pendiente alta puede reducir infiltración; hay que justificarlo.
 5. Estrés hídrico, estrés por calor y avance fenológico. Salida cualitativa para el render.
 6. Pilares: déficit (núcleo), compatibilidad de ciclo, erosión relativa (no toneladas, inspirada en USLE/RUSLE). Los dos últimos se recortan si faltan datos.
-7. Ranking: el criterio principal es el peor caso. Opción A (menor déficit en el peor caso, sin puntaje inventado) u opción B (puntaje compuesto y arrepentimiento) siguen `[EN EVENTO]` (V-19). Si nada es evaluable, decirlo.
+7. Ranking: el criterio principal es el peor caso. `[DECIDIDO]` el 14/11: opción B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio). Pesos con fuente o, si no hay, iguales y declarados `SUPUESTO`. Si los pilares 2 y 3 (A3.7) no llegan, respaldo con la opción A (menor déficit en el peor caso). Si nada es evaluable, decirlo.
 8. Tarjeta de explicación con plantilla. Un LLM, si se usa, solo redacta números ya calculados.
 
 Estados: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS`, `RESPALDO_HISTORICO`.
@@ -133,9 +133,9 @@ Si hay que cortar, en este orden se caen: extras NASA y props, slider de meses, 
 
 Eduardo toma el servidor (A0.4, A4.7).
 
-## Estado del repo al armar este vault
+## Estado del repo (14/11, noche)
 
-Hay documentación (`docs/`), `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, `CLAUDE.md`, `README.md` y este vault. No hay todavía `web/`, `api/`, `contratos/` ni `datos/` con catálogo. El README describe la estructura objetivo, no código ya escrito.
+Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.2.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
 
 ## Límites para el pitch
 

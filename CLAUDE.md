@@ -5,6 +5,8 @@
 - El frontend no recalcula indicadores por su cuenta; el 3D solo representa lo que entrega el motor.
 - Nunca inventar datos: parametro faltante => `NO_EVALUABLE`. Toda cifra se rastrea a una fuente.
 - Lo marcado `[EN EVENTO]` o `[DEPENDE-DATOS]` no se fija sin acuerdo del equipo.
+- Ya estamos en el evento: lo que decida Mompin es decision del equipo; registrarla como `[DECIDIDO]`.
+- Antes y despues de trabajar: git fetch, revisar lo que subieron otros, correr las pruebas y actualizar la documentacion afectada (docs/, AgroVault/, README, AGENTS.md) sin dejarla desfasada ni duplicarla.
 - Registrar cambios de alcance en `docs/01-REGISTRO-DE-CAMBIOS.md`.
 - Trabajar solo en la rama propia; no editar archivos de otro responsable sin avisar.
 - Sin emojis en el codigo. No subir llaves ni tokens (usar variables de entorno).

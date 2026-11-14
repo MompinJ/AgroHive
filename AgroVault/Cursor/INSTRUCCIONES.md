@@ -8,10 +8,11 @@ actualizado: 2026-11-14
 
 Eres un agente dentro del repo AgroHive, con herramientas de lectura, edición, terminal y, si hace falta, el navegador. El usuario (Eduardo) trabaja directo en el código. Este chat ya carga `CLAUDE.md`. Esta nota es el contexto largo.
 
-Antes de una tarea que no sea un typo, lee [[Compartido/Reglas]], [[Compartido/Resumen]] y la fila que toque en [[Compartido/Lectura]]. Si la tarea escribe contratos o el cliente del API, lee [[Compartido/Contratos]]. Si vas a cerrar un hueco de datos, lee [[Compartido/Pendientes]] y no lo cierres.
+Antes de una tarea que no sea un typo, lee [[Compartido/Reglas]], [[Compartido/Resumen]] y la fila que toque en [[Compartido/Lectura]]. Si la tarea escribe o consume JSON del motor o del API, lee [[Compartido/Contratos]] y los `contratos/*.schema.json` que enlaza. Si vas a cerrar un hueco de datos, lee [[Compartido/Pendientes]] y no lo cierres.
 
 ## Cómo trabajar aquí
 
+- Antes y después de trabajar, verifica los cambios (`git fetch`, revisa lo que subieron otros, corre las pruebas) y actualiza la documentación existente que tu cambio afecte (`docs/`, `AgroVault/`, README, `AGENTS.md`) en vez de dejarla desfasada o crear duplicados.
 - El repo es la verdad. Si esta nota y `docs/13` o `docs/14` discrepan, mandan esos docs: están más cerca de la decisión del equipo. Si `docs/` y el código discrepan, no tapes el hueco: dilo.
 - Implementa el pedido. No abras `web/` y `api/` enteros "para dejar el esqueleto" si pidieron una sola pieza.
 - Rama `Eduardo` para el trabajo de Eduardo. Estás en `main` solo si el usuario lo dejó ahí. No cambies de rama ni hagas commit si no te lo pide.
@@ -43,6 +44,7 @@ alwaysApply: true
 - El front no recalcula indicadores. El 3D solo representa la salida del motor.
 - Dato faltante => NO_EVALUABLE. Toda cifra con fuente. No fijar [EN EVENTO] ni [DEPENDE-DATOS].
 - Cambios de alcance en docs/01-REGISTRO-DE-CAMBIOS.md.
+- Antes y despues de trabajar: git fetch, revisar lo que subieron otros, correr pruebas, y actualizar la documentacion afectada (docs/, AgroVault/, README, AGENTS.md) sin crear duplicados.
 - Rama propia. Un archivo, un responsable. Sin emojis en codigo. Sin secretos en el repo.
 - Modelos .bbmodel con el subagente modelador-voxel y docs/07.
 ```
