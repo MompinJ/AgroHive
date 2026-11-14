@@ -59,6 +59,30 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — A1.1 `[HECHO]`; A2.16 asignada a Mafer
+
+- **Archivos:** `14` (fila de A1.1, fila de A2.16 y tablero), `AgroVault/Compartido/{Pendientes,Resumen}.md`.
+- **Cambio y motivo:** decisiones de Mompin. A1.1 pasa a `[HECHO]` porque `main` está en verde y el equipo revisó los contratos en persona. A2.16 (TAW por pedotransferencia de Saxton y Rawls, 2006) la hace Mafer. Se actualizó además el estado del repo en `Resumen.md`, que todavía decía que no había código en `web/` ni en `api/`.
+- **Fuente / evidencia:** decisión del evento transmitida por la sesión maestra.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — `main` de vuelta en verde tras contratos 0.4.0 y 0.5.0; regla de cambios de contrato
+
+- **Archivos:** `api/app/{proxima,modelos,servicios}.py`, `api/tests/test_proxima.py`, `api/openapi.json`, `api/cliente/api.d.ts` (Eduardo); `web/src/ui/demo.ts` (balam); `datos/catalogos/{generar.py,cultivos.json,README.md}` (Mafer); `AGENTS.md`, `AgroVault/Compartido/Reglas.md`.
+- **Cambio y motivo:** `main` (3a9a697) quedó en rojo porque los contratos 0.4.0 y 0.5.0 entraron sin ajustar lo que dependía de ellos. Con autorización de Mompin y aviso a cada dueño, se hicieron cambios mínimos:
+  - **API (Eduardo):** la próxima temporada se recorta a 6 meses (`HORIZONTE_MESES`), `/api/suelo` agrega `agua.metodoTaw` (`tabla_fao56` con la fuente de la tabla) cuando el TAW es evaluable, y dos aserciones de prueba pasan de 7 a 6 meses. Se regeneraron el OpenAPI y el cliente.
+  - **Web (balam):** el tipo de los ciclos del ejemplo en `demo.ts`.
+  - **Catálogos (Mafer):** sin `ventanasSiembra`. Las tres ventanas estaban en `NO_EVALUABLE`, así que no se perdió ningún dato; queda anotado en el README.
+  - **Regla nueva:** ningún cambio de contrato que rompa algo entra a `main` sin las cuatro verificaciones en verde.
+- **Fuente / evidencia:** `npm test` en `contratos/` 52/52; `pytest` en `api/` 39 pruebas; `validar.mjs` de los catálogos y `tsc --noEmit` en `web/`, en verde.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — `.vscode/` fuera del repo `[DECIDIDO]`
+
+- **Archivos:** `.gitignore`; se dejan de versionar `.vscode/tasks.json`, `.vscode/settings.json`, `.vscode/agrohive.code-snippets` y `.vscode/mascota/clawd.py`.
+- **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
+- **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
+
 ### 2026-11-14 (noche) — Cronograma por persona y marcas al dia (Eduardo)
 
 - **Archivos:** `herramientas/cronograma.py` (nuevo), `docs/14-CRONOGRAMA.md`, `docs/cronograma.html` (regenerado), `AgroVault/Compartido/Cronograma.md` (nueva), `AgroVault/Bienvenido.md`, `AgroVault/Compartido/Lectura.md`.
@@ -81,6 +105,33 @@ Decisiones afectadas:
 - **Cambio:** `https://64-23-143-102.sslip.io/` sirve el build de `web/` (esqueleto de balam, A1.2) y la API sigue en `/api/`, `/health` y `/docs` del mismo origen. No hace falta CORS para esa ruta.
 - **Verificacion:** `/` 200 html, asset 200, `/health` y `/api/cultivos` 200, `mediworks.mx` sigue en 200; `nginx -t` antes de recargar y respaldo del bloque anterior en el droplet.
 - **Pendiente:** la demo real depende de que el front llame a la API (A4.6, balam y Eduardo).
+
+### 2026-11-14 (noche) — Calendario local, fecha elegida por el usuario y A2.8 `[DECIDIDO]`; contratos 0.5.0
+
+- **Archivos:** `03`, `05` (paso 2), `06` (selector), `08`, `13`, `14` (A0.6, A2.8, A3.4); `contratos/` 0.5.0 (`cultivo`, nuevo `calendario-local`, `plan-siembra`, `resultado-rotacion`, `resultado-celda`, `comun.temporada`); vault.
+- **Cambio y motivo:** decisiones de Mompin.
+  1. Las ventanas de siembra dependen del lugar: salen del catálogo de cultivos y pasan a `calendario-local` (municipio con clave INEGI, cultivo, temporada PV/OI, ventana con fuente y presencia del cultivo en el lugar).
+  2. La fecha de siembra la elige el usuario. El plan guarda el calendario usado (o "sin calendario local") y un `porQue` por ciclo para la interfaz.
+  3. Un cultivo se puede mostrar sin recomendarlo en el lugar (caso: calabaza en Isla, que SIAP 2021-2025 no registra). Va en `cultivosNoRecomendados` en la rotación y en `noRecomendadoEnLugar` en la celda, con motivo y fuente; con eso la rotación no puede ser `EVALUABLE`. Los estados actuales no bastaban porque no llevan cultivo ni fuente.
+  4. A2.8: opción (c) `temporada_tipica`, fija en el plan.
+- **Fuente / evidencia:** decisión del evento transmitida por la sesión maestra. El caso de calabaza en Isla es un dato de SIAP que reportó el equipo; en los ejemplos aparece como ficticio. `npm test` pasa 52/52.
+- **Decisiones afectadas:** A2.8 y V-20 (forma). **Cambio incompatible:** `datos/catalogos/cultivos.json` deja de validar hasta que se quite `ventanasSiembra`.
+
+### 2026-11-14 (noche) — Decisiones de suelo, clima, pronóstico y servidor `[DECIDIDO]`; contratos 0.4.0
+
+- **Archivos:** `11`, `13`, `14` (A2.13 y nuevas A2.15 y A2.16); `contratos/` 0.4.0 (`suelo`, `clima-escenario`, `proxima-temporada` y nuevo `serie-clima`); `AgroVault/Compartido/{Pendientes,Resumen,APIs,Contratos}.md`.
+- **Cambio y motivo:** decisiones de Mompin en el evento.
+  1. **TAW:** se calcula con la pedotransferencia de Saxton y Rawls (2006) para cualquier textura, incluidas las tres clases sin fila en FAO-56 Tabla 19, desde arena, arcilla y materia orgánica de SoilGrids, como `SUPUESTO`. Mientras no esté, la demo usa el selector manual. El contrato `suelo` declara `metodoTaw` con su fuente y la retención θsat, θFC y θWP.
+  2. **`serie-clima`:** nuevo contrato para la respuesta de `GET /api/clima`, tomado de `SerieClima` en `api/app/modelos.py`.
+  3. **A2.13:** queda aprobado el método de Eduardo (distribución histórica por mes desplazada por la anomalía de SEAS5, sin tendencia y con advertencia).
+  4. **V-21:** horizonte de 6 meses; `horizonteMeses` pasa a ser fijo en 6.
+  5. **V-23:** se usan ISRIC y OpenLandMap; `suelo.estimaciones` y `estimacionUsada`.
+  6. **V-08:** Terrarium por defecto y Open-Meteo de respaldo.
+  7. **V-06:** `GWETROOT` entra como condición inicial y como comparación (`humedadRaizFraccionSat` y `humedadSuelo`).
+  8. **V-15 a V-17:** cerrados con `sslip.io` y Let's Encrypt.
+- **Riesgo registrado:** `GWETROOT` es fracción de saturación (MERRA-2, ~100 cm; el metadato de POWER que dice 200 cm es un error reportado), no fracción de TAW. Se convierte con θsat, θFC y θWP; sin ellos, `NO_EVALUABLE`.
+- **Fuente / evidencia:** Saxton, K. E. y Rawls, W. J. (2006), Soil Sci. Soc. Am. J. 70(5): 1569-1578, doi:10.2136/sssaj2005.0117 (registro bibliográfico verificado; tabla y ecuaciones `[VERIFICAR]` contra el artículo). Foro de Earthdata sobre las unidades y la profundidad de `GWETROOT`. `npm test` en `contratos/` pasa 42/42.
+- **Decisiones afectadas:** V-06, V-08, V-15, V-16, V-17, V-21 y V-23 quedan cerradas. A2.13 queda con el método aprobado.
 
 ### 2026-11-14 (noche) — Integracion de Mafer, balam y Eduardo en main (Eduardo)
 

@@ -249,10 +249,6 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
-      "ventanasSiembra": {
-        "estado": "NO_EVALUABLE",
-        "motivo": "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)."
-      },
       "modelo3d": {
         "prefijo": "maiz"
       },
@@ -501,10 +497,6 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
-      "ventanasSiembra": {
-        "estado": "NO_EVALUABLE",
-        "motivo": "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)."
-      },
       "modelo3d": {
         "prefijo": "frijol"
       },
@@ -752,10 +744,6 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
-      },
-      "ventanasSiembra": {
-        "estado": "NO_EVALUABLE",
-        "motivo": "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)."
       },
       "modelo3d": {
         "prefijo": "calabaza"

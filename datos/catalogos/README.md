@@ -34,6 +34,6 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 
 - **Lluvia por ciclo**: sin fuente. La lluvia de EcoCrop es **anual** y va en `lluviaAnualMinMm/MaxMm` (rango absoluto RMIN-RMAX; el optimo queda en la nota de la fuente). No se convierte a lluvia del ciclo.
 - **Umbral de estres por calor**: sin fuente verificada (EcoCrop solo da medias mensuales).
-- **Ventanas de siembra**: pendiente de A0.6 (calendario SIAP/INIFAP del municipio).
+- **Ventanas de siembra**: ya no van en `cultivos.json` (contratos 0.5.0): dependen del lugar y van en `contratos/calendario-local.schema.json`. Antes de quitarlas, las tres (maíz, frijol, calabaza) estaban en `NO_EVALUABLE` con el motivo "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)", así que no se perdió ningún dato con fuente. Falta cargar el calendario de Isla (municipio 30/077, DDR San Andrés Tuxtla) en un archivo con la forma de `calendario-local` (A0.6).
 - **Etapas sensibles**: pendiente de fuente (FAO-33, Ky); el campo se omite.
 - **Suelos sin fila en Tabla 19**: franco arcillo arenoso, franco arcilloso, arcillo arenoso.

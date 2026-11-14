@@ -1,12 +1,26 @@
 {
   "meta": {
-    "versionContrato": "0.3.0",
+    "versionContrato": "0.5.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
   "rotacionId": "R1",
   "estado": "EXPLORATORIO",
   "filtroClima": null,
+  "cultivosNoRecomendados": [
+    {
+      "cultivo": "calabaza",
+      "ciclos": [
+        2
+      ],
+      "motivo": "EJEMPLO: la fuente no registra calabaza en el municipio (2021-2025); se muestra, no se recomienda.",
+      "fuente": {
+        "nombre": "EJEMPLO - valores ficticios (forma de SIAP)",
+        "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+      },
+      "calendarioId": "calendario-demo-isla"
+    }
+  ],
   "porEscenario": {
     "seco": {
       "anioReal": 2015,

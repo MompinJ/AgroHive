@@ -60,7 +60,7 @@ MOTIVO_LLUVIA_CICLO = (
     "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm "
     "y no se convierte a lluvia del ciclo."
 )
-MOTIVO_VENTANAS = "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)."
+# Las ventanas de siembra no van en el catalogo (contratos 0.5.0): dependen del lugar y viven en contratos/calendario-local.
 
 # Cada cultivo: fila de FAO-56 Tabla 11 (dias por etapa), Tabla 12 (Kc), Tabla 22 (Zr, p) y fila de EcoCrop.
 CULTIVOS = [
@@ -177,7 +177,6 @@ def cultivo(c):
             "lluviaAnualMaxMm": eco_val("RMAX", eco["rmax"], "mm/anio", "mm por anio", nota_lluvia),
             "tEstresCalorC": no_evaluable(MOTIVO_CALOR),
         },
-        "ventanasSiembra": no_evaluable(MOTIVO_VENTANAS),
         "modelo3d": {"prefijo": c["modelo3d"]},
         "notas": (
             f"Ciclo y etapas de FAO-56 Tabla 11 (total {t11['total']} dias). EcoCrop da un ciclo de "

@@ -66,7 +66,7 @@ def test_banda_con_anomalia_valida_el_contrato(simular, validar):
     c = r.json()
     validar(c, "proxima-temporada#")
     assert c["esPrediccion"] is False and c["estado"] == "EXPLORATORIO" and c["metodo"] == "anomalia_estacional"
-    assert [m["mes"] for m in c["meses"]] == ["2026-11", "2026-12", "2027-01", "2027-02", "2027-03", "2027-04", "2027-05"]
+    assert [m["mes"] for m in c["meses"]] == ["2026-11", "2026-12", "2027-01", "2027-02", "2027-03", "2027-04"]  # V-21: 6 meses aunque SEAS5 de 7
     dic = next(m for m in c["meses"] if m["mes"] == "2026-12")
     q = statistics.quantiles([t - 8.4 for t in totales_diciembre()], n=10, method="inclusive")  # anomalia de diciembre: -8.4 mm
     assert abs(dic["lluviaMm"]["inferior"] - q[0]) < 0.06 and abs(dic["lluviaMm"]["superior"] - q[8]) < 0.06
@@ -88,7 +88,7 @@ def test_sin_pronostico_cae_al_respaldo_estadistico(simular, validar):
     simular(responder(estacional=False))
     c = cliente.get(URL).json()
     validar(c, "proxima-temporada#")
-    assert c["metodo"] == "respaldo_estadistico" and c["horizonteMeses"] == 7
+    assert c["metodo"] == "respaldo_estadistico" and c["horizonteMeses"] == 6
     assert "ESTACIONAL_NO_DISPONIBLE" in {a["codigo"] for a in c["advertencias"]}
     dic = next(m for m in c["meses"] if m["mes"].endswith("-12"))
     q = statistics.quantiles(totales_diciembre(), n=10, method="inclusive")

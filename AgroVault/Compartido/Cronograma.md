@@ -13,23 +13,23 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 2 | 2 | 0 | 10 | 14 % de 14 |
-| **Eduardo** | 6 | 4 | 2 | 1 | 46 % de 13 |
-| **Mafer** | 3 | 0 | 0 | 8 | 27 % de 11 |
+| **Mompin** | 4 | 1 | 0 | 9 | 29 % de 14 |
+| **Eduardo** | 6 | 4 | 2 | 2 | 43 % de 14 |
+| **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **11 de 54** actividades hechas (20 %), 6 en curso, 2 bloqueadas.
+Proyecto completo: **13 de 56** actividades hechas (23 %), 5 en curso, 2 bloqueadas.
 
 ## Mompin
 
 - [x] **A0.1** Repo Git con 5 ramas y estructura de carpetas `HECHO`
 - [x] **A0.2** Documentación consolidada en docs/ `HECHO`
-- [/] **A1.1** Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS ([[Contratos]]) `EN CURSO`
+- [x] **A1.1** Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS ([[Contratos]]) `HECHO`
 - [ ] **A2.5** Selección de escenarios seco / habitual / lluvioso (p10, p50, p90)
 - [ ] **A2.6** ET0, ETc y balance de agua por bloque (cubeta)
 - [ ] **A2.7** Pilar de déficit hídrico y estados de evaluabilidad
-- [ ] **A2.8** Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2)
-- [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles y tendencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; falta la parte del motor (Mompin)
+- [x] **A2.8** Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) `HECHO` — (c) `temporada_tipica`, 14/11
+- [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; falta la parte del motor (Mompin)
 - [ ] **A3.1** Escena 3D con relieve (altura por bloque, InstancedMesh)
 - [ ] **A3.2** Cargador de .bbmodel con instancing por cultivo y etapa
 - [ ] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa)
@@ -46,8 +46,9 @@ Proyecto completo: **11 de 54** actividades hechas (20 %), 6 en curso, 2 bloquea
 - [x] **A2.2** Respaldo Open-Meteo y estados RESPALDO_HISTORICO / ERROR_DATOS `HECHO`
 - [x] **A2.3** Elevación por celda (tiles Terrarium o SRTM) y pendiente ([[APIs]]) `HECHO`
 - [/] **A2.4** Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) `EN CURSO` — mecanismo y paquete hechos con la parcela de ejemplo; falta regenerarlo con la zona real (A0.6)
-- [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles y tendencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; falta la parte del motor (Mompin)
+- [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; falta la parte del motor (Mompin)
 - [x] **A2.14** Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché ([[APIs]]) `HECHO`
+- [ ] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios)
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)
 - [ ] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan)
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
@@ -61,6 +62,7 @@ Proyecto completo: **11 de 54** actividades hechas (20 %), 6 en curso, 2 bloquea
 - [x] **A1.6** Tabla de suelos (TAW por textura, FAO-56) `HECHO`
 - [ ] **A2.11** Cultivos 1 a 3 completos, todas las etapas y estados de estrés
 - [ ] **A2.12** Bloques de suelo por tipo y humedad
+- [ ] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica — (Mafer)
 - [ ] **A3.3** Estados visuales: color + icono + patrón, leyenda
 - [ ] **A3.9** Cultivos 4 en adelante, props y mascota
 - [ ] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento)

@@ -17,6 +17,7 @@ Contexto resumido por herramienta: `AgroVault/` (Codex: `AgroVault/Codex/AGENTS.
 - `modelos/`: modelos 3D `.bbmodel`, generados con el agente `modelador-voxel` (`.claude/agents/`) y `herramientas/voxelkit.py`.
 
 ## Reglas
+- Ningun cambio de contrato que rompa algo entra a `main` hasta que todo lo que depende de el este en verde (API, catalogos, web): se arregla en el mismo cambio avisando al dueno, o el contrato acepta la version anterior durante la transicion. Antes de subir a `main`: `npm test` en `contratos/`, `pytest` en `api/`, `node datos/catalogos/validar.mjs` y `npx tsc --noEmit -p web`.
 - Antes y despues de trabajar, verifica los cambios (`git fetch`, revisa lo que subieron otros, corre las pruebas) y actualiza la documentacion existente que tu cambio afecte (`docs/`, `AgroVault/`, README, `AGENTS.md`) en vez de dejarla desfasada o crear duplicados.
 - Trabaja solo en tu rama y en las carpetas de tu carril. No edites archivos de otro responsable sin avisar.
 - Commits pequenos y frecuentes. Nunca hagas push a `main`: abre un pull request cuando cierres una actividad con su entregable verificable. Mompin integra.

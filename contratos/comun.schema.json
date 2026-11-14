@@ -8,7 +8,10 @@
       "title": "Meta",
       "description": "Cabecera de todo documento de contrato. Si esEjemplo es true, aviso es obligatorio y los valores no son datos reales.",
       "type": "object",
-      "required": ["versionContrato", "esEjemplo"],
+      "required": [
+        "versionContrato",
+        "esEjemplo"
+      ],
       "properties": {
         "versionContrato": {
           "description": "Version semantica del contrato con la que se genero el documento.",
@@ -32,28 +35,52 @@
       },
       "additionalProperties": false,
       "if": {
-        "properties": { "esEjemplo": { "const": true } },
-        "required": ["esEjemplo"]
+        "properties": {
+          "esEjemplo": {
+            "const": true
+          }
+        },
+        "required": [
+          "esEjemplo"
+        ]
       },
-      "then": { "required": ["aviso"] }
+      "then": {
+        "required": [
+          "aviso"
+        ]
+      }
     },
     "estado": {
       "title": "EstadoEvaluacion",
       "description": "Estados de respuesta de doc 04. EVALUABLE: parametros y fechas justificados. NO_EVALUABLE: falta un parametro, calendario o entrada esencial (nunca se sustituye por cero). EXPLORATORIO: ilustracion limitada y etiquetada, no es recomendacion. ERROR_DATOS: fallo de la API sin respaldo. RESPALDO_HISTORICO: se uso respaldo (Open-Meteo o cache); siempre visible.",
       "type": "string",
-      "enum": ["EVALUABLE", "NO_EVALUABLE", "EXPLORATORIO", "ERROR_DATOS", "RESPALDO_HISTORICO"]
+      "enum": [
+        "EVALUABLE",
+        "NO_EVALUABLE",
+        "EXPLORATORIO",
+        "ERROR_DATOS",
+        "RESPALDO_HISTORICO"
+      ]
     },
     "etiquetaProcedencia": {
       "title": "EtiquetaProcedencia",
       "description": "De donde sale un valor. FUENTE: tomado de una fuente citada (API o tabla publicada). SUPUESTO: estimado por un modelo global o elegido por defecto, no medido en la parcela. USUARIO: lo capturo el usuario.",
       "type": "string",
-      "enum": ["FUENTE", "SUPUESTO", "USUARIO"]
+      "enum": [
+        "FUENTE",
+        "SUPUESTO",
+        "USUARIO"
+      ]
     },
     "escenario": {
       "title": "Escenario",
       "description": "Escenario climatico historico (doc 04): anio real cercano a p10 (seco), p50 (habitual) o p90 (lluvioso).",
       "type": "string",
-      "enum": ["seco", "habitual", "lluvioso"]
+      "enum": [
+        "seco",
+        "habitual",
+        "lluvioso"
+      ]
     },
     "fecha": {
       "title": "Fecha",
@@ -65,8 +92,16 @@
       "description": "Coordenada [longitud, latitud] en grados WGS84 (orden GeoJSON).",
       "type": "array",
       "prefixItems": [
-        { "type": "number", "minimum": -180, "maximum": 180 },
-        { "type": "number", "minimum": -90, "maximum": 90 }
+        {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        }
       ],
       "minItems": 2,
       "maxItems": 2,
@@ -75,10 +110,17 @@
     "periodo": {
       "title": "Periodo",
       "type": "object",
-      "required": ["desde", "hasta"],
+      "required": [
+        "desde",
+        "hasta"
+      ],
       "properties": {
-        "desde": { "$ref": "#/$defs/fecha" },
-        "hasta": { "$ref": "#/$defs/fecha" }
+        "desde": {
+          "$ref": "#/$defs/fecha"
+        },
+        "hasta": {
+          "$ref": "#/$defs/fecha"
+        }
       },
       "additionalProperties": false
     },
@@ -86,21 +128,32 @@
       "title": "Fuente",
       "description": "Trazabilidad de un valor (doc 04, principio 5): fuente, coordenada, periodo, unidades y fecha de consulta.",
       "type": "object",
-      "required": ["nombre"],
+      "required": [
+        "nombre"
+      ],
       "properties": {
         "nombre": {
           "description": "Nombre de la fuente, por ejemplo 'NASA POWER (diario, comunidad AG)' o 'FAO-56 Tabla 12'.",
           "type": "string",
           "minLength": 1
         },
-        "url": { "type": "string", "format": "uri" },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
         "cita": {
           "description": "Referencia bibliografica, tabla o pagina.",
           "type": "string"
         },
-        "coordenada": { "$ref": "#/$defs/lonLat" },
-        "periodo": { "$ref": "#/$defs/periodo" },
-        "unidades": { "type": "string" },
+        "coordenada": {
+          "$ref": "#/$defs/lonLat"
+        },
+        "periodo": {
+          "$ref": "#/$defs/periodo"
+        },
+        "unidades": {
+          "type": "string"
+        },
         "consultado": {
           "description": "Fecha en que se consulto la fuente.",
           "$ref": "#/$defs/fecha"
@@ -109,7 +162,9 @@
           "description": "Resolucion espacial o temporal del dato (por ejemplo '0.5 x 0.625 grados' o '250 m').",
           "type": "string"
         },
-        "nota": { "type": "string" }
+        "nota": {
+          "type": "string"
+        }
       },
       "additionalProperties": false
     },
@@ -120,25 +175,48 @@
         {
           "title": "ValorEvaluable",
           "type": "object",
-          "required": ["estado", "valor", "unidad", "fuente"],
+          "required": [
+            "estado",
+            "valor",
+            "unidad",
+            "fuente"
+          ],
           "properties": {
-            "estado": { "const": "EVALUABLE" },
-            "valor": { "type": "number" },
-            "unidad": { "type": "string", "minLength": 1 },
-            "fuente": { "$ref": "#/$defs/fuente" },
-            "etiqueta": { "$ref": "#/$defs/etiquetaProcedencia" }
+            "estado": {
+              "const": "EVALUABLE"
+            },
+            "valor": {
+              "type": "number"
+            },
+            "unidad": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fuente": {
+              "$ref": "#/$defs/fuente"
+            },
+            "etiqueta": {
+              "$ref": "#/$defs/etiquetaProcedencia"
+            }
           },
           "additionalProperties": false
         },
-        { "$ref": "#/$defs/valorNoEvaluable" }
+        {
+          "$ref": "#/$defs/valorNoEvaluable"
+        }
       ]
     },
     "valorNoEvaluable": {
       "title": "ValorNoEvaluable",
       "type": "object",
-      "required": ["estado", "motivo"],
+      "required": [
+        "estado",
+        "motivo"
+      ],
       "properties": {
-        "estado": { "const": "NO_EVALUABLE" },
+        "estado": {
+          "const": "NO_EVALUABLE"
+        },
         "motivo": {
           "description": "Por que falta el valor (parametro sin fuente, dato no disponible, etc.).",
           "type": "string",
@@ -150,15 +228,29 @@
     "advertencia": {
       "title": "Advertencia",
       "type": "object",
-      "required": ["codigo", "mensaje", "severidad"],
+      "required": [
+        "codigo",
+        "mensaje",
+        "severidad"
+      ],
       "properties": {
         "codigo": {
           "description": "Identificador estable en MAYUSCULAS, por ejemplo SUELO_SUPUESTO o RESOLUCION_GRUESA.",
           "type": "string",
           "pattern": "^[A-Z][A-Z0-9_]*$"
         },
-        "mensaje": { "type": "string", "minLength": 1 },
-        "severidad": { "type": "string", "enum": ["info", "aviso", "critico"] }
+        "mensaje": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severidad": {
+          "type": "string",
+          "enum": [
+            "info",
+            "aviso",
+            "critico"
+          ]
+        }
       },
       "additionalProperties": false
     },
@@ -179,6 +271,15 @@
       "description": "Identificador de rotacion, por ejemplo R0, R1, R2.",
       "type": "string",
       "pattern": "^R\\d+$"
+    },
+    "temporada": {
+      "title": "Temporada",
+      "description": "Ciclo agricola: PV (primavera-verano) u OI (otono-invierno), como los publica SIAP.",
+      "type": "string",
+      "enum": [
+        "PV",
+        "OI"
+      ]
     }
   }
 }

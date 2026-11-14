@@ -221,6 +221,7 @@ async def suelo(lat: float, lon: float) -> dict:
                     "fraccionesPct": {"arena": round(arena, 1), "limo": round(limo, 1), "arcilla": round(arcilla, 1)}, "fuente": fuente},
         "ph": ({"estado": "EVALUABLE", "etiqueta": "SUPUESTO", "valor": round(ph["valor"], 1), "fuente": fuente_ph} if ph
                else {"estado": "NO_EVALUABLE", "motivo": "SoilGrids no tiene dato de pH en esta zona."}),
-        "agua": {"tawMmPorM": taw},
+        "agua": ({"tawMmPorM": taw, "metodoTaw": {"metodo": "tabla_fao56", "fuente": taw["fuente"]}} if taw.get("estado") == "EVALUABLE"
+                 else {"tawMmPorM": taw}),
         "advertencias": advertencias,
     }
