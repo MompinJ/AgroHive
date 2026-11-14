@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A3.1 y A3.2: escena 3D con relieve y cargador de `.bbmodel` (Mompin, rama `Mompin-escena`)
+
+- **Archivos:** `web/src/escena/` (nuevo), `web/escena.html`, `web/package.json` (three 0.187.0, @types/three 0.187.0, vitest 5.1.0), `docs/06`, `docs/07`, `docs/14`, `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** escena 3D en Three.js sin React Three Fiber `[DECIDIDO]` (Mompin): relieve por bloque desde `elevacionM`, un `InstancedMesh` por tipo, placas de estado con color + patrón + icono (base de A3.3), suelo según la humedad del motor, plantas desde los `.bbmodel` de Mafer. Lo que falta se muestra como `NO_EVALUABLE` o "Sin resultado", nunca como cero. Exageración vertical ×10 por defecto `[PROPUESTA]`.
+- **Fuente / evidencia:** 76 pruebas en `web/src/escena/pruebas/`, incluida la escena con el motor real y el paquete de demo (con el suelo del mapa todo `NO_EVALUABLE`; con el selector manual, el maíz con sus modelos). Vista previa revisada en Chrome headless (perfil temporal): relieve, modelos, selección por clic y caso `NO_EVALUABLE`.
+- **Pendiente:** montarla en Laboratorio (balam, propuesta en `web/src/escena/INTEGRACION.md`), una línea `server.fs.allow` en `web/vite.config.ts` para ver los modelos en `npm run dev`, modelos de frijol y calabaza (A2.11) y el ajuste fino de estados (A3.3, Mafer).
+
 ### 2026-11-14 — Pilar de exceso de agua en el ranking B y capa de próxima temporada en el motor (Mompin)
 
 - **Archivos:** `web/src/motor/` (`balance.ts`, `motor.ts`, `ranking.ts`, `tipos.ts`, `proxima.ts` nuevo, `protocolo.ts`, `cliente.ts`, `index.ts`; pruebas `ranking.test.ts`, `c2.test.ts`, `proxima.test.ts`), `docs/05`, `docs/13`, `docs/14` (con las vistas de `herramientas/cronograma.py` regeneradas), `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
@@ -104,6 +111,13 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — Escenario "próxima temporada" por rotación `[DECIDIDO]`; contratos 0.8.0 (compatible)
+
+- **Archivos:** `contratos/resultado-rotacion.schema.json`, ejemplo, 5 casos inválidos, tipos, README; `13`; vault.
+- **Cambio y motivo:** Mompin decidió evaluar cada rotación en una "próxima temporada" con años análogos reales, como `EXPLORATORIO` y sin ranking. Se agrega `proximaTemporada` (opcional) con la propuesta del motor: estado (`EXPLORATORIO`, `NO_EVALUABLE` o `ERROR_DATOS`), `esPrediccion: false`, aviso, horizonte, criterio de análogos, ciclos evaluados y fuera, años análogos con sus pilares de déficit y exceso, rango entre análogos y fuentes. En `NO_EVALUABLE` o `ERROR_DATOS` el motivo es obligatorio, no hay análogos y el rango va en `null`.
+- **Fuente / evidencia:** propuesta del motor transmitida por la sesión maestra. `npm test` 63/63.
+- **Decisiones afectadas:** ninguna cambia; el ranking B sigue usando solo los tres escenarios históricos.
 
 ### 2026-11-14 (noche) — Pilar de exceso de agua `[DECIDIDO]`; contratos 0.7.0 (compatible)
 
