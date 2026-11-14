@@ -2,18 +2,22 @@
 // Cambiar el plan de una rotacion reemplaza su resultado guardado: lo anterior queda invalidado hasta recalcular.
 import { seleccionarEscenarios, type SeleccionEscenarios } from './escenarios';
 import { resultadoCeldas, simularRotacion, type EntradasMotor, type ResultadoMotor } from './motor';
+import { rankear, type OpcionesRanking, type ResultadoRanking } from './ranking';
 import type { Escenario, ResultadoCeldas, ResultadoRotacion, SerieClima } from './tipos';
 
 export type Peticion =
   | { id: number; tipo: 'escenarios'; serie: SerieClima }
   | { id: number; tipo: 'simular'; entradas: EntradasMotor }
   | { id: number; tipo: 'celdas'; rotacionId: string; escenario: Escenario; fecha: string }
+  /** A4.2: ordena las rotaciones ya simuladas (todas, o las de rotacionIds). Se vuelve a pedir tras cada 'simular'. */
+  | { id: number; tipo: 'rankear'; rotacionIds?: string[]; opciones?: OpcionesRanking }
   | { id: number; tipo: 'olvidar'; rotacionId?: string };
 
 export interface Resultados {
   escenarios: SeleccionEscenarios;
   simular: ResultadoRotacion;
   celdas: ResultadoCeldas;
+  rankear: ResultadoRanking;
   olvidar: null;
 }
 
@@ -38,6 +42,16 @@ export class EstadoMotor {
           const c = resultadoCeldas(r, p.escenario, p.fecha);
           if (!c) return { id: p.id, ok: false, error: `El escenario ${p.escenario} no tiene anio real: no hay resultado por celda.` };
           return { id: p.id, ok: true, resultado: c };
+        }
+        case 'rankear': {
+          const ids = p.rotacionIds ?? [...this.rotaciones.keys()].sort();
+          const faltan = ids.filter((i) => !this.rotaciones.has(i));
+          if (faltan.length > 0) return { id: p.id, ok: false, error: `Rotaciones sin calcular: ${faltan.join(', ')}.` };
+          const entrada = ids.map((i) => {
+            const r = this.rotaciones.get(i) as ResultadoMotor;
+            return { rotacion: r.rotacion, numeroSiembras: r.plan.ciclos.length };
+          });
+          return { id: p.id, ok: true, resultado: rankear(entrada, p.opciones ?? {}) };
         }
         case 'olvidar':
           if (p.rotacionId) this.rotaciones.delete(p.rotacionId);
