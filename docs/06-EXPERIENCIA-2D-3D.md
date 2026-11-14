@@ -86,6 +86,16 @@ Código en `web/src/escena/` (componente `EscenaParcela`; punto de integración 
 
 ## Animaciones (según tiempo)
 
+### Plan de ejecución A5.2 / A5.3 (balam, 14/11)
+
+Alcance autorizado en el chat al continuar con las tareas siguientes: control temporal común para 2D/3D, reproducción manual y revisión móvil/accesibilidad sobre el sistema global de `DESIGN.md`.
+
+- [ ] A5.2: probar primero fechas UTC, fin de mes, años bisiestos, límites y ciclos sin serie. Crear `ui/tiempo.ts` y `tiempo.test.ts`; las fechas disponibles salen de `SerieBalance.ciclos[].desde` y la longitud de sus columnas, sin asumir la duración de un cultivo.
+- [ ] Crear `ui/ControlTiempo.tsx`: rango diario, fecha exacta, paso mensual y reproducir/pausar. No inicia solo; un único temporizador espera el resultado de celdas antes de avanzar. Se cancela al desmontar/cambiar contexto, ocultar la pestaña o activar movimiento reducido. Reutilizar controles y tokens globales; sin nuevas bibliotecas.
+- [ ] Extraer la consulta compartida a `ui/useSerieBalance.ts`; `LaboratorioConectado`, `DashboardBalance` y la lluvia 3D consumen la misma respuesta guardada. Fecha y vista no invalidan simulación ni descargan clima. Consultas de celdas al arrastrar se agrupan con un retardo corto; respuestas antiguas se descartan.
+- [ ] A5.3: recorrer Inicio, Terreno, Laboratorio, Comparación y Método con teclado, 320 px, escritorio, zoom/texto ampliado y movimiento reducido. Corregir en `ui/system.css` y componentes de UI/páginas los problemas demostrados de foco, tamaño táctil, legibilidad o desborde. No cambiar motor, contratos ni escena.
+- [ ] Verificar pruebas, build, flujos reales y axe; pedir revisión independiente, documentar evidencia y actualizar `docs/14` y sus vistas generadas. Commit y push a `balam`, aviso a Mompin y sin push a `main`.
+
 **Implementado (A5.1, con Mafer, 14/11):** al cambiar de etapa, la planta vieja se encoge mientras la nueva crece (450 ms `[PROPUESTA]`). Dentro de la misma etapa, la escala pasa suave al nuevo `avanceEtapa`. Hay viento leve en el shader, apagado por defecto y activable en la escena. Con "reducir movimiento" (control de la escena o `prefers-reduced-motion`, también si cambia con la escena abierta) no hay transiciones, viento ni inercia. Un cambio nuevo corta la transición en curso, sin acumular. Se dibuja solo mientras algo se mueve. La cámara ya no vuelve a la vista inicial al cambiar fecha o escenario, solo al cambiar de parcela. La mascota de Mafer (`modelos/props/mascota_feliz.bbmodel`) va fuera de la parcela, en la esquina noreste, al 60 %; prop `mascota` de `EscenaParcela`, y si no hay modelo no aparece.
 
 
