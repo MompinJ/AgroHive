@@ -15,10 +15,10 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 15 | 1 | 0 | 0 | 94 % de 16 |
 | **Eduardo** | 11 | 3 | 2 | 3 | 58 % de 19 |
-| **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
+| **Mafer** | 8 | 2 | 0 | 2 | 67 % de 12 |
 | **balam** | 6 | 1 | 0 | 8 | 40 % de 15 |
 
-Proyecto completo: **39 de 61** actividades hechas (64 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **39 de 61** actividades hechas (64 %), 6 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -74,7 +74,7 @@ Proyecto completo: **39 de 61** actividades hechas (64 %), 5 en curso, 2 bloquea
 - [/] **A3.9** Cultivos 4 en adelante, props y mascota `EN CURSO`
 - [ ] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento)
 - [ ] **A5.6** Guion, video de demo y ensayo
-- [ ] **A5.7** README con método, fuentes, límites, licencias y declaración de IA
+- [/] **A5.7** README con método, fuentes, límites, licencias y declaración de IA `EN CURSO`
 
 ## balam
 
