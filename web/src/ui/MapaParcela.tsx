@@ -17,7 +17,7 @@ export default function MapaParcela({ puntos, bordes, onPunto }: { puntos: LonLa
     const mapa = L.map(contenedor.current).setView([18.03, -95.53], 16);
     mapaRef.current = mapa;
     const calles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>', maxZoom: 19,
     });
     const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Imágenes: <a href="https://goto.arcgisonline.com/maps/World_Imagery">Esri</a>, Vantor, Earthstar Geographics y GIS User Community', maxZoom: 19,
