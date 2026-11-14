@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 10 | 2 | 0 | 2 | 71 % de 14 |
-| **Eduardo** | 9 | 3 | 2 | 1 | 60 % de 15 |
+| **Eduardo** | 9 | 4 | 2 | 0 | 60 % de 15 |
 | **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **22 de 56** actividades hechas (39 %), 6 en curso, 2 bloqueadas.
+Proyecto completo: **22 de 56** actividades hechas (39 %), 7 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -51,7 +51,7 @@ Proyecto completo: **22 de 56** actividades hechas (39 %), 6 en curso, 2 bloquea
 - [x] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) `HECHO`
 - [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)
-- [ ] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan)
+- [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — sondeo de viabilidad (viable o no, cuenta Earthdata, peso y tiempo por punto); sin tocar el repo todavia
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
 - [-] **A5.8** Respaldo local sin internet y capturas `BLOQUEADO` — espera A2.4 con la zona real y el front conectado (A4.6)
 

@@ -157,6 +157,13 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — API a contratos 0.8.0 y cronograma al dia (Eduardo)
+
+- **Archivos:** `api/app/config.py`, `api/tests/test_basico.py`, `docs/14`, vistas del cronograma.
+- **Cambio:** `VERSION_CONTRATO` de la API pasa a 0.8.0. Los schemas que usa la API (`serie-clima`, `suelo`, `proxima-temporada`, `cultivo`, `parcela`) no cambiaron en 0.8.0 (cambia `resultado-rotacion`, del motor), asi que no hay otro ajuste.
+- **Cronograma:** A4.8 pasa a `[EN CURSO]` (sondeo de viabilidad de SMAP/GPM por la segunda sesion de Eduardo, sin tocar el repo). Estado: 22 de 56 hechas (39 %); Eduardo 9 de 15, Mompin 10 de 14, Mafer 3 de 12, balam 0 de 16.
+- **Verificaciones:** api 60, contratos 63/63, catalogos y unittest de Mafer, build de web ok. `npm test` de web falla 2 pruebas del motor y la escena que afirman `NO_EVALUABLE` para el suelo de Isla: las actualiza Mompin en el merge atomico con mi `suelo.json`.
+
 ### 2026-11-14 (noche) — A4.6: cliente de la API para el front (Eduardo, con balam)
 
 - **Archivos:** `web/src/api/` (`cliente.ts`, `usarApi.ts`, `cliente.test.ts`, `README.md`), `docs/14`. Carpeta nueva, sin tocar `web/src/ui`, `paginas`, `motor` ni `escena`.
