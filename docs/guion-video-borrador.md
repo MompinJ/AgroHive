@@ -48,16 +48,16 @@
 
 ### 5. P2: escena 3D y selector (0:25)
 
-- **En pantalla:** P2 con la escena 3D con relieve (A3.1 hecha) y el selector (A3.4 hecho). Se elige una rotación (R1 milpa, R2 maíz-maíz, R3 frijol-frijol, R4 milpa en ventanas de INIFAP) y se cambia el escenario seco, habitual o lluvioso. Las plantas cambian de etapa y de estado.
-- **Voz:** "Probamos rotaciones: milpa, maíz tras maíz, frijol tras frijol y la milpa sembrada en las fechas que recomienda INIFAP. Cada una se pone contra tres años reales: el seco fue 2023, el habitual 2016 y el lluvioso 2024. Lo que ves en 3D lo calcula el motor: la escena solo lo muestra."
+- **En pantalla:** P2 con la escena 3D con relieve (A3.1 hecha) y el selector (A3.4 hecho). Se elige una rotación de la comparación por defecto (R1 milpa, R2 maíz-maíz, R4 milpa en ventanas de INIFAP; R3 frijol-frijol también está en el selector) y se cambia el escenario seco, habitual o lluvioso. Las plantas cambian de etapa y de estado.
+- **Voz:** "Probamos rotaciones: la milpa, maíz tras maíz y la milpa sembrada en las fechas que recomienda INIFAP. Cada una se pone contra tres años reales: el seco fue 2023, el habitual 2016 y el lluvioso 2024. Lo que ves en 3D lo calcula el motor: la escena solo lo muestra."
 - **Cifras:** seco 2023 (1 523.4 mm en las temporadas PV y OI), habitual 2016 (1 912 mm), lluvioso 2024 (2 083.5 mm), con lluvia de POWER y temporadas de SIAP (`demo-isla.json`, `escenarios`).
 
 ### 6. P3: ranking y por qué (0:25)
 
-- **En pantalla:** P3 con la tabla de rotaciones y el criterio B. R4 aparece arriba como sugerida, con su explicación `[VERIFICAR]` (A4.3, tarjetas, está pendiente en `docs/14`).
+- **En pantalla:** P3 con la tabla de la comparación por defecto (R1, R2 y R4) y el criterio B. R4 aparece arriba como sugerida, con su explicación (A4.3; tarjetas de rotación integradas en `Mompin`, `[VERIFICAR]` que se vean en la versión que se graba).
 - **Voz:** "AgroHive ordena las rotaciones por su peor año y por cuánto te arrepentirías de elegirlas. Comparando la milpa, el maíz tras maíz y la milpa en fechas de INIFAP, gana esta última. La milpa común baja porque siembra el frijol fuera de su ventana. Para las tres, el peor año es el lluvioso, el 2024."
-- **Cifras:** con R1, R2 y R4 y cuatro pilares con pesos iguales `SUPUESTO`, el orden es R4 (arrepentimiento 0), R2 (0.077) y R1 (0.099), y el peor escenario es el lluvioso para todas (`demo-isla.json`, `rankingCuatroPilares`; `docs/05` paso 7).
-- **Ojo:** ese orden es el de comparar R1, R2 y R4. Si en pantalla se comparan las cuatro, el orden lo da el motor y hay que leerlo de la interfaz `[VERIFICAR]`. No decir que R4 "da más cosecha": el ranking mide agua y suelo, no rendimiento.
+- **Cifras:** en la comparación por defecto (R1, R2 y R4) entran los cuatro pilares, con pesos iguales `SUPUESTO`. El orden es R4 (arrepentimiento 0), R2 (0.077) y R1 (0.099), y el peor escenario es el lluvioso para todas (`demo-isla.json`, `rankingCuatroPilares`; `docs/05` paso 7; `docs/13`).
+- **Ojo:** no decir que R4 "da más cosecha": el ranking mide agua y suelo, no rendimiento.
 
 ### 7. Próxima temporada: no es una predicción (0:15)
 
@@ -89,4 +89,5 @@
 - [ ] Confirmar formato, duración y reglas de IA, marca e imágenes (V-03, V-04).
 - [ ] Regenerar o revisar el paquete de demo y volver a leer las cifras de `demo-isla.json`.
 - [ ] Revisar qué piezas están en la interfaz (A4.3 tarjetas, A4.10 IMERG, A4.11 NDVI, A4.8 SMAP) y quitar del guion lo que no se vea.
+- [ ] Grabar con la comparación por defecto (R1, R2 y R4).
 - [ ] Grabar un respaldo sin internet (A5.8).

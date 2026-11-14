@@ -121,6 +121,10 @@ Atribución obligatoria (CC BY 4.0). Gratis solo no comercial, sin garantía de 
 - Alternativa offline: VRT por WebDAV en `https://files.isric.org/soilgrids/latest/data/` (cada mapa pesa unos 5 GB; no para el hackathon).
 - Licencia CC BY 4.0.
 
+### Lluvia GPM IMERG por POWER (A4.10)
+
+**Probado el 14/11:** `IMERG_PRECTOT` (mm/día, GPM IMERG, 0.1°) sale de la misma API diaria de POWER, **sin cuenta Earthdata**, pero solo con `time-standard=UTC` (en hora local devuelve `-999` en todo). Cada celda de 0.1° tiene su propia serie (a diferencia de MERRA-2, de 0.5° × 0.625°). Los últimos ~2 meses vienen en `-999` (→ `null`). Implementado en `api/app/clientes/power.py` y expuesto como `lluviaSatelital` en `GET /api/clima`. Evidencia, no entra al balance. Prototipo y hallazgos en `features/imerg/`.
+
 ### OpenLandMap
 
 **Probado el 14/11 (A2.15):** el catálogo STAC es estático en `https://s3.eu-central-1.wasabisys.com/stac/openlandmap/catalog.json` (la web `stac.openlandmap.org` es solo un navegador). Las capas `clay.tot_iso.11277.2020.wpct`, `sand.tot_iso.11277.2020.wpct`, `silt.tot_iso.11277.2020.wpct`, `ph.h2o_iso.10390.2021.index` y `oc_iso.10694.1995.wpml` (OpenLandMap-soildb, 30 m, 0-30 cm, 2020-2022, CC-BY-4.0, DOI zenodo 15528399) son COG de decenas de GB en `s3.opengeohub.org`; `rasterio` lee solo la ventana del punto por rangos HTTP (3 a 5 s por capa). Unidades: arcilla, arena y limo en % (escala 1, nodata 255), pH ×0.1 y carbono en g/kg ×0.1. Implementado en `api/app/clientes/openlandmap.py`.

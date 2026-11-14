@@ -14,7 +14,11 @@ const escenarios = seleccionarEscenarios(structuredClone(serieDemo) as unknown a
 describe('vista previa con el motor real', () => {
   it('la parcela usa el terreno real del paquete y sigue marcada como ejemplo', () => {
     const p = parcelaConTerrenoDemo();
-    expect(p.celdas.map((c) => c.elevacionM)).toEqual([63.1, 62.6, 62.0, 63.3]);
+    // i = 0 es la fila sur (contratos y paquete de demo regenerado): c-1-0 es la esquina noroeste.
+    expect(p.celdas.map((c) => c.elevacionM)).toEqual([62.0, 63.3, 63.1, 62.6]);
+    const noroeste = p.celdas.reduce((a, c) => (c.centro[1] - c.centro[0] > a.centro[1] - a.centro[0] ? c : a));
+    expect(noroeste.id).toBe('c-1-0');
+    expect(noroeste.elevacionM).toBe(63.1);
     expect(p.terreno.fuente.nombre).toMatch(/Terrarium/);
     expect(p.meta.esEjemplo).toBe(true);
     const e = construirEscena(p, null);

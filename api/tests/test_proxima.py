@@ -15,6 +15,8 @@ URL = "/api/proxima-temporada?lat=18.03&lon=-95.53"
 def power_sintetico(request: httpx.Request):
     """POWER falso y determinista: lluvia diaria 1.0 + 0.1 por anio desde 2006, temperatura 24 + 0.05 por anio."""
     q = request.url.params
+    if q.get("parameters") == "IMERG_PRECTOT":
+        return httpx.Response(200, json={"properties": {"parameter": {"IMERG_PRECTOT": {}}}, "header": {"fill_value": -999.0}})
     ini = date(int(q["start"][:4]), int(q["start"][4:6]), int(q["start"][6:]))
     fin = date(int(q["end"][:4]), int(q["end"][4:6]), int(q["end"][6:]))
     llu, tmed, tmax, tmin, rad, rh, ws = ({} for _ in range(7))

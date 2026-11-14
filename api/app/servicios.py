@@ -44,16 +44,59 @@ async def serie_clima(lat: float, lon: float, desde: date, hasta: date) -> dict:
     async with _candado(clave):
         en_cache = cache.leer(clave)
         if en_cache and _vigente(en_cache[1], hasta):
-            return _respuesta_power(en_cache[0], coord, desde, hasta, [])
+            return await _con_lluvia_satelital(_respuesta_power(en_cache[0], coord, desde, hasta, []), lat, lon, desde, hasta)
         try:
             async with http.crear_cliente() as c:
                 dias = await power.serie_diaria(c, clat, clon, desde, hasta)
             registro = {"consultado": date.today().isoformat(), "celda": [clon, clat], "diario": dias}
             cache.escribir(clave, registro)
-            return _respuesta_power(registro, coord, desde, hasta, [])
+            return await _con_lluvia_satelital(_respuesta_power(registro, coord, desde, hasta, []), lat, lon, desde, hasta)
         except http.ErrorFuente as e:
             motivo_power = str(e)
     return await _respaldo_clima(lat, lon, desde, hasta, clave, en_cache, motivo_power)
+
+
+async def _con_lluvia_satelital(respuesta: dict, lat: float, lon: float, desde: date, hasta: date) -> dict:
+    """Agrega `lluviaSatelital` (IMERG via POWER, A4.10) a una respuesta de POWER. Es evidencia opcional: si falla, la respuesta del
+    clima sale igual, sin el bloque y con una advertencia (nunca se inventa ni se rellena con ceros). No la usa el balance ni los escenarios."""
+    clat, clon = power.centro_celda_imerg(lat, lon)
+    clave = f"imerg_v1_{clat:.2f}_{clon:.2f}_{desde:%Y%m%d}_{hasta:%Y%m%d}"
+    async with _candado(clave):
+        en_cache = cache.leer(clave)
+        registro, aviso = None, None
+        if en_cache and _vigente(en_cache[1], hasta):
+            registro = en_cache[0]
+        else:
+            try:
+                async with http.crear_cliente() as c:
+                    dias = await power.serie_imerg(c, clat, clon, desde, hasta)
+                registro = {"consultado": date.today().isoformat(), "dias": dias}
+                cache.escribir(clave, registro)
+            except http.ErrorFuente as e:
+                if en_cache:
+                    registro = en_cache[0]
+                    aviso = {"codigo": "IMERG_EN_CACHE", "mensaje": f"La lluvia satelital (IMERG) no respondio ({e}); se usa la guardada el {registro['consultado']}.", "severidad": "info"}
+                else:
+                    aviso = {"codigo": "IMERG_NO_DISPONIBLE", "mensaje": f"La lluvia satelital (IMERG) no respondio ({e}); el clima sale sin ella.", "severidad": "info"}
+    if registro is None:
+        respuesta["advertencias"] = [*respuesta["advertencias"], aviso]
+        return respuesta
+    dias = registro["dias"]
+    con_dato = [d["fecha"] for d in dias if d["lluviaMm"] is not None]
+    adv = [{"codigo": "LLUVIA_SATELITAL_EVIDENCIA", "mensaje": "La lluvia satelital (GPM IMERG) es evidencia para contrastar con la lluvia de MERRA-2: no entra al balance de agua ni cambia los escenarios.", "severidad": "info"}]
+    if aviso:
+        adv.append(aviso)
+    faltan = len(dias) - len(con_dato)
+    if faltan:
+        ultimo = f"; el ultimo dia con dato es {max(con_dato)}" if con_dato else ""
+        adv.append({"codigo": "IMERG_DIAS_SIN_DATO", "mensaje": f"IMERG no tiene dato en {faltan} de {len(dias)} dias (los ultimos meses aun no se publican){ultimo}. Quedan en null, nunca en 0.", "severidad": "info"})
+    respuesta["lluviaSatelital"] = {
+        "variable": power.IMERG_VARIABLE, "estandarHora": "UTC", "dias": dias,
+        "fuente": _fuente_clima(power.NOMBRE_IMERG, power.URL, power.RESOLUCION_IMERG, "mm/dia", (clon, clat), max(desde, power.INICIO_IMERG), hasta,
+                                registro["consultado"], "Pedida con time-standard=UTC (en hora solar local POWER no la entrega). Valor por celda de 0.1 grados, no por parcela. Referencia: https://power.larc.nasa.gov/docs/referencing/"),
+    }
+    respuesta["advertencias"] = [*respuesta["advertencias"], *adv]
+    return respuesta
 
 
 def _respuesta_power(registro: dict, coord, desde, hasta, advertencias, estado="EVALUABLE") -> dict:
