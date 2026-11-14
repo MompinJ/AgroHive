@@ -1,7 +1,8 @@
 // Protocolo de mensajes del Web Worker del motor. La logica vive aqui (pura y probada); worker.ts solo la conecta.
 // Cambiar el plan de una rotacion reemplaza su resultado guardado: lo anterior queda invalidado hasta recalcular.
 import { seleccionarEscenarios, type SeleccionEscenarios } from './escenarios';
-import { resultadoCeldas, simularRotacion, type EntradasMotor, type ResultadoMotor } from './motor';
+import { simularRotacionCompleta } from './analogos';
+import { resultadoCeldas, type EntradasMotor, type ResultadoMotor } from './motor';
 import { vistaProximaTemporada, type VistaProximaTemporada } from './proxima';
 import { rankear, type OpcionesRanking, type ResultadoRanking } from './ranking';
 import type { ProximaTemporadaAproximada } from '../../../contratos/tipos/contratos';
@@ -37,7 +38,7 @@ export class EstadoMotor {
         case 'escenarios':
           return { id: p.id, ok: true, resultado: seleccionarEscenarios(p.serie) };
         case 'simular': {
-          const r = simularRotacion(p.entradas);
+          const r = simularRotacionCompleta(p.entradas);
           this.rotaciones.set(p.entradas.plan.rotacionId, r);
           return { id: p.id, ok: true, resultado: r.rotacion };
         }

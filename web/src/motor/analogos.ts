@@ -8,10 +8,9 @@
 // El resultado es un rango (minimo y maximo entre los anios analogos), nunca una cifra.
 import { peorEstado, sinNumeros } from './estados';
 import { mesDe } from './fechas';
-import { pilaresAguaEnClima, type ClimaParaSimular, type EntradasMotor } from './motor';
+import { pilaresAguaEnClima, simularRotacion, type ClimaParaSimular, type EntradasMotor, type ResultadoMotor } from './motor';
 import { lluviaMensual, mesEnEscenario, vistaProximaTemporada } from './proxima';
-import type { ProximaTemporadaAproximada } from '../../../contratos/tipos/contratos';
-import { VERSION_CONTRATO, type DiaClima, type ProximaTemporadaRotacion, type SerieClima } from './tipos';
+import { VERSION_CONTRATO, type DiaClima, type ProximaTemporadaAproximada, type ProximaTemporadaRotacion, type SerieClima } from './tipos';
 
 export const AVISO_ANALOGOS = 'Anios parecidos a lo que se espera para los proximos meses; no es una prediccion.';
 
@@ -62,40 +61,45 @@ function climaDeAnio(serie: SerieClima, t: number): ClimaParaSimular {
 
 const vacio = { inferior: null, superior: null };
 
+// Solo se llama con una capa que trae meses: emitido y horizonte salen de ella, nunca de un valor por defecto.
 function sinResultado(
   estado: 'NO_EVALUABLE' | 'ERROR_DATOS',
   motivo: string,
-  capa: ProximaTemporadaAproximada | null,
+  capa: ProximaTemporadaAproximada,
   extra: Partial<ProximaTemporadaRotacion> = {},
 ): ProximaTemporadaRotacion {
-  const meses = capa?.meses ?? [];
+  const meses = capa.meses as { mes: string }[];
   return {
     estado,
     motivo,
     esPrediccion: false,
     aviso: AVISO_ANALOGOS,
-    emitido: capa?.emitido ?? '1970-01-01',
-    horizonte: { desde: meses[0]?.mes ?? '1970-01', hasta: meses[meses.length - 1]?.mes ?? '1970-01' },
+    emitido: capa.emitido,
+    horizonte: { desde: (meses[0] as { mes: string }).mes, hasta: (meses[meses.length - 1] as { mes: string }).mes },
     criterioAnalogos: 'Sin anios analogos.',
     ciclosEvaluados: [],
     aniosAnalogos: [],
     rango: { proporcionDemandaNoCubierta: vacio, fraccionLluviaPercolada: vacio, excesoTotalMm: vacio },
-    fuentes: capa?.fuentes ?? [{ nombre: 'Sin capa de proxima temporada' }],
+    fuentes: capa.fuentes,
     ...extra,
   };
 }
 
 const rango = (xs: number[]) => (xs.length === 0 ? vacio : { inferior: Math.min(...xs), superior: Math.max(...xs) });
 
-/** Bloque proximaTemporada de una rotacion: anios analogos, sus pilares de agua y el rango entre ellos. */
+/**
+ * Bloque proximaTemporada de una rotacion: anios analogos, sus pilares de agua y el rango entre ellos. null si no hay
+ * una capa con meses: sin ella no hay fecha de emision ni horizonte que declarar, y el bloque es opcional.
+ */
 export function proximaTemporadaRotacion(
   e: EntradasMotor,
   capa: ProximaTemporadaAproximada | null | undefined,
   serie: SerieClima | null | undefined,
-): ProximaTemporadaRotacion {
+): ProximaTemporadaRotacion | null {
+  if (!capa || capa.meses.length === 0) return null;
   const vista = vistaProximaTemporada(capa, {});
-  if (!capa || vista.estado !== 'EXPLORATORIO') {
-    return sinResultado(vista.estado === 'ERROR_DATOS' ? 'ERROR_DATOS' : 'NO_EVALUABLE', vista.motivo ?? 'Sin capa de proxima temporada.', capa ?? null);
+  if (vista.estado !== 'EXPLORATORIO') {
+    return sinResultado(vista.estado === 'ERROR_DATOS' ? 'ERROR_DATOS' : 'NO_EVALUABLE', vista.motivo ?? 'La capa de proxima temporada no es valida.', capa);
   }
   if (!serie || sinNumeros(serie.estado)) {
     return sinResultado(serie?.estado === 'ERROR_DATOS' ? 'ERROR_DATOS' : 'NO_EVALUABLE', 'Sin la serie historica completa para buscar anios analogos.', capa);
@@ -183,6 +187,31 @@ export function proximaTemporadaRotacion(
       fraccionLluviaPercolada: rango(conNumeros.map((a) => a.excesoHidrico.fraccionLluviaPercolada).filter((x): x is number => x !== null)),
       excesoTotalMm: rango(conNumeros.map((a) => a.excesoHidrico.excesoTotalMm).filter((x): x is number => x !== null)),
     },
-    fuentes: [...capa.fuentes, serie.fuente],
+    fuentes: [...capa.fuentes, serie.fuente] as ProximaTemporadaRotacion['fuentes'],
   };
+}
+
+/**
+ * simularRotacion mas el bloque proximaTemporada cuando las entradas traen la capa y la serie completa. El bloque no
+ * cambia el estado ni el ranking de la rotacion: es EXPLORATORIO y va aparte.
+ */
+export function simularRotacionCompleta(e: EntradasMotor): ResultadoMotor {
+  const r = simularRotacion(e);
+  if (e.proximaTemporada) {
+    const bloque = proximaTemporadaRotacion(e, e.proximaTemporada.capa, e.proximaTemporada.serie);
+    if (!bloque) {
+      r.rotacion.advertencias.push({ codigo: 'PROXIMA_TEMPORADA_NO_DISPONIBLE', mensaje: 'No llego la capa de proxima temporada: no hay anios analogos.', severidad: 'info' });
+      return r;
+    }
+    r.rotacion.proximaTemporada = bloque;
+    r.rotacion.advertencias.push({
+      codigo: 'PROXIMA_TEMPORADA_EXPLORATORIA',
+      mensaje:
+        bloque.estado === 'EXPLORATORIO'
+          ? `${AVISO_ANALOGOS} ${bloque.aniosAnalogos.length} anios analogos (${bloque.aniosAnalogos.map((a) => a.anioReal).join(', ')}); no entran al ranking.`
+          : `Proxima temporada: ${bloque.motivo ?? bloque.estado}`,
+      severidad: 'info',
+    });
+  }
+  return r;
 }

@@ -31,6 +31,8 @@ import {
   type PilarDeficitHidrico,
   type PilarExcesoHidrico,
   type PilaresMotor,
+  type ProximaTemporadaAproximada,
+  type SerieClima,
   type PlanSiembra,
   type RegistroCelda,
   type ResultadoCeldas,
@@ -51,6 +53,8 @@ export interface EntradasMotor {
   calendario?: CalendarioLocal | null;
   /** Salida de seleccionarEscenarios (A2.5). Un escenario ausente es NO_EVALUABLE. */
   escenarios: Partial<Record<Escenario, ClimaEscenario>>;
+  /** Opcional (A2.13): capa de GET /api/proxima-temporada y la serie completa de GET /api/clima para los anios analogos. */
+  proximaTemporada?: { capa: ProximaTemporadaAproximada | null; serie: SerieClima | null };
 }
 
 interface CicloPlan {
