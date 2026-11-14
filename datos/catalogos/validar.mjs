@@ -1,6 +1,7 @@
 // Valida los catalogos de datos/catalogos/ contra los contratos.
 // - cultivos.json contra contratos/cultivo.schema.json
 // - suelos.json contra contratos/tabla-suelos.schema.json
+// - calendario-isla.json contra contratos/calendario-local.schema.json
 // Ademas comprueba reglas que el schema no ve: etapas suman el ciclo, clases sin repetir,
 // cada grupo del selector apunta a una clase EVALUABLE.
 // Uso (desde la raiz): node datos/catalogos/validar.mjs   (requiere `npm install` en contratos/)
@@ -64,6 +65,18 @@ for (const [grupo, clase] of Object.entries(suelos.representanteGrupo)) {
   const t = suelos.texturas.find((x) => x.clase === clase);
   if (!t || t.tawMmPorM.estado !== "EVALUABLE") fallar(`suelos.json: el grupo ${grupo} apunta a ${clase}, que no es EVALUABLE`);
   else if (t.grupo !== grupo) fallar(`suelos.json: ${clase} es del grupo ${t.grupo}, no ${grupo}`);
+}
+
+const calendario = validarContra("calendario-isla.json", "https://agrohive.example/contratos/calendario-local.schema.json");
+const claves = calendario.entradas.map((e) => `${e.cultivo}/${e.temporada}`);
+if (new Set(claves).size !== claves.length) fallar("calendario-isla.json: entradas repetidas");
+for (const e of calendario.entradas) {
+  if (e.ventana.estado === "EVALUABLE" && e.presencia.estado !== "registrado") {
+    fallar(`calendario-isla.json: ${e.cultivo}/${e.temporada} tiene ventana pero el cultivo no esta registrado en el lugar`);
+  }
+  if (!cultivos.cultivos.some((c) => c.id === e.cultivo) && e.cultivo !== "chile") {
+    fallar(`calendario-isla.json: ${e.cultivo} no esta en el catalogo`);
+  }
 }
 
 console.log(fallos === 0 ? "\nCatalogos en verde" : `\n${fallos} fallas`);

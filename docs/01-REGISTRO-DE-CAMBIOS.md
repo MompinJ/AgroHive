@@ -12,13 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
-### 2026-11-14 — A0.6: zona demo y calendario verificados en SIAP e INIFAP (Mafer)
+### 2026-11-14 — A0.6: calendario de Isla cargado desde SIAP e INIFAP (Mafer)
 
-- **Archivos:** `datos/catalogos/generar.py`, `cultivos.json`, `README.md`, nuevo `datos/catalogos/fuentes/siap_isla_2021_2025.csv`; `docs/13` (zona y V-20), `docs/14` (tablero), `AgroVault/Compartido/Pendientes.md`.
-- **Cambio:** ventanas de siembra con fuente en el catálogo: maíz PV 1 jun-15 jul (INIFAP, C. E. Cotaxtla, 2022, DDR San Andrés Tuxtla), maíz OI nov-dic y frijol OI 20 sep-20 oct (Agenda Técnica Agrícola de Veracruz, INIFAP 2015).
-- **Hallazgo para el equipo:** SIAP 2021-2025 confirma Isla (municipio 77) como zona de temporal con maíz en PV y OI, frijol sobre todo en OI y chile verde, pero **no registra calabaza**. Sus ventanas quedan `NO_EVALUABLE`; falta decidir cómo se presenta la calabaza en la demo.
-- **Fuente / evidencia:** CSV de cierre agrícola municipal de SIAP (2021-2025) y los PDF de INIFAP citados en `datos/catalogos/README.md`.
-- **Decisiones afectadas:** zona demo de 13 pasa a verificada; V-20 cerrado salvo la calabaza.
+- **Archivos:** nuevos `datos/catalogos/calendario-isla.json` y `datos/catalogos/fuentes/siap_isla_2021_2025.csv`; `generar.py` y `validar.mjs` (valida el calendario); `README.md` de catálogos; `docs/04` (SIAP), `docs/13` y `AgroVault/Compartido/Pendientes.md` (V-20).
+- **Cambio:** el calendario va en un archivo con la forma del contrato `calendario-local` (0.5.0), no en el catálogo de cultivos. Por cultivo y temporada, la ventana con fuente y la presencia en SIAP 2021-2025 (calculada desde el CSV). Con ventana: maíz PV (1 jun-15 jul, INIFAP, DDR San Andrés Tuxtla), maíz OI (nov-dic) y frijol OI (20 sep-20 oct), estos dos de la Agenda Técnica de Veracruz (recomendación estatal). Sin ventana, `NO_EVALUABLE` con motivo: frijol PV, chile y calabaza.
+- **Hallazgo:** SIAP no registra calabaza en Isla (`no_registrado`); se muestra en la demo como no recomendable (decisión de Mompin). SIAP no tiene API: es un CSV por año, anotado en `docs/04`.
+- **Fuente / evidencia:** CSV de cierre agrícola municipal de SIAP y los PDF de INIFAP citados en `datos/catalogos/README.md`; consultado el 14/11/2026.
+- **Decisiones afectadas:** V-20 cerrado (calendario cargado); la zona demo de 13 pasa a verificada.
 
 ### 2026-11-14 — API: suelo con la tabla de A1.6 y CORS para el front (Eduardo)
 
@@ -66,6 +66,17 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — `main` de vuelta en verde tras contratos 0.4.0 y 0.5.0; regla de cambios de contrato
+
+- **Archivos:** `api/app/{proxima,modelos,servicios}.py`, `api/tests/test_proxima.py`, `api/openapi.json`, `api/cliente/api.d.ts` (Eduardo); `web/src/ui/demo.ts` (balam); `datos/catalogos/{generar.py,cultivos.json,README.md}` (Mafer); `AGENTS.md`, `AgroVault/Compartido/Reglas.md`.
+- **Cambio y motivo:** `main` (3a9a697) quedó en rojo porque los contratos 0.4.0 y 0.5.0 entraron sin ajustar lo que dependía de ellos. Con autorización de Mompin y aviso a cada dueño, se hicieron cambios mínimos:
+  - **API (Eduardo):** la próxima temporada se recorta a 6 meses (`HORIZONTE_MESES`), `/api/suelo` agrega `agua.metodoTaw` (`tabla_fao56` con la fuente de la tabla) cuando el TAW es evaluable, y dos aserciones de prueba pasan de 7 a 6 meses. Se regeneraron el OpenAPI y el cliente.
+  - **Web (balam):** el tipo de los ciclos del ejemplo en `demo.ts`.
+  - **Catálogos (Mafer):** sin `ventanasSiembra`. Las tres ventanas estaban en `NO_EVALUABLE`, así que no se perdió ningún dato; queda anotado en el README.
+  - **Regla nueva:** ningún cambio de contrato que rompa algo entra a `main` sin las cuatro verificaciones en verde.
+- **Fuente / evidencia:** `npm test` en `contratos/` 52/52; `pytest` en `api/` 39 pruebas; `validar.mjs` de los catálogos y `tsc --noEmit` en `web/`, en verde.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — `.vscode/` fuera del repo `[DECIDIDO]`
 

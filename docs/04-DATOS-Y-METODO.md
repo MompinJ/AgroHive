@@ -45,7 +45,8 @@
 | **OpenTopography** | DEM SRTM y Copernicus | Llave gratuita | `[VERIFICAR]` |
 | **FAO-56 (Allen et al., 1998)** | Kc por etapa, ET0, agua del suelo por textura | Tablas públicas, se cargan a mano | Conocido |
 | **FAO EcoCrop** | Rangos de temperatura, lluvia y ciclo por cultivo | Base pública | `[VERIFICAR]` |
-| **INIFAP / SIAP** | Calendarios y producción por municipio | Datos abiertos | `[VERIFICAR]` |
+| **SIAP, cierre agrícola municipal** | Superficie sembrada, cosechada y producción por municipio, cultivo, ciclo (PV u OI) y modalidad (riego o temporal); 2003 a 2025 | Datos abiertos en CSV, **sin API**: una URL por año (cambia solo `ANIO`) desde la [página de datos abiertos](https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php); ~5 MB por año, codificación ISO-8859 | Presencia por lugar; **no trae meses de siembra** | Consultado el 14/11/2026 (2021-2025); extracto de Isla en `datos/catalogos/fuentes/` |
+| **INIFAP** (calendarios) | Épocas de siembra por cultivo y región, en PDF | Agenda Técnica Agrícola de Veracruz y guías por cultivo; ver `datos/catalogos/README.md` | Ventanas de siembra | Texto en PDF, sin datos estructurados |
 | **INEGI edafología** | Contexto de suelo | Escala gruesa | `[VERIFICAR]` |
 | **SoilGrids (ISRIC)** | Textura y materia orgánica | **API REST pausada**; no depender de ella | Verificado (pausada) |
 

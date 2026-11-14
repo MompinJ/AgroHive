@@ -60,7 +60,7 @@ Reglas para el servidor compartido: AgroHive va en su propio `server` block de n
 | V-17 | ~~Hostname y certificado~~ Cerrado: `sslip.io` + Let's Encrypt | Eduardo |
 | V-18 | ~~Roles por nombre~~ Reemplazado: reparto por actividad en 14 | Equipo |
 | V-19 | ~~Ranking A o B~~ Decidido: criterio B (ver tabla de arriba). Pintura por bloques sigue `[EN EVENTO]`; cultivos: milpa decidida, falta confirmar parámetros | Equipo |
-| V-20 | Cultivos y calendario del municipio en SIAP: forma decidida (contrato `calendario-local`); falta cargar los datos reales de Isla con fuente | Mafer (A0.6) |
+| V-20 | ~~Cultivos y calendario del municipio en SIAP~~ Hecho (A0.6, Mafer). SIAP 2021-2025, Isla = INEGI 30/077, DDR San Andrés Tuxtla: maíz grano de temporal en PV (~4,100 ha/año) y OI (~4,480 ha/año), frijol de temporal sobre todo en OI (~195 ha/año), chile verde (OI ~234 ha/año; PV 2022-2024); **no hay calabaza registrada**. Calendario cargado en `datos/catalogos/calendario-isla.json` (contrato `calendario-local`): maíz PV 1 jun-15 jul (INIFAP, cubre el DDR), maíz OI nov-dic y frijol OI 20 sep-20 oct (Agenda Técnica de Veracruz, recomendación estatal); frijol PV, chile y calabaza sin ventana (`NO_EVALUABLE` con motivo) | Mafer |
 | V-21 | ~~Horizonte del pronóstico estacional~~ Decidido: 6 meses (ver tabla de arriba) | — |
 | V-22 | Si NASA POWER permite llamadas desde el navegador (CORS); por defecto todo pasa por el backend | Quien tome A0.7 |
 | V-23 | ~~Qué servicio de suelo~~ Decidido: ambos, ISRIC WCS y OpenLandMap (ver tabla de arriba) | — |

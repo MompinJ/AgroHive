@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.3.0",
+    "versionContrato": "0.5.0",
     "esEjemplo": false,
     "aviso": "Valores tipicos por textura (FAO-56 Tabla 19), no medidos en la parcela. El suelo de la parcela siempre es SUPUESTO."
   },

@@ -11,6 +11,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 | --- | --- | --- |
 | `cultivos.json` | `contratos/cultivo.schema.json` | Milpa: maiz, frijol, calabaza |
 | `suelos.json` | `contratos/tabla-suelos.schema.json` | TAW por clase USDA, FAO-56 Tabla 19 |
+| `calendario-isla.json` | `contratos/calendario-local.schema.json` | Ventanas de siembra y presencia en SIAP de Isla, por cultivo y temporada |
 
 ## Fuentes (consultadas el 14/11/2026)
 
@@ -40,6 +41,6 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 
 - **Lluvia por ciclo**: sin fuente. La lluvia de EcoCrop es **anual** y va en `lluviaAnualMinMm/MaxMm` (rango absoluto RMIN-RMAX; el optimo queda en la nota de la fuente). No se convierte a lluvia del ciclo.
 - **Umbral de estres por calor**: sin fuente verificada (EcoCrop solo da medias mensuales).
-- **Ventanas de siembra de la calabaza**: SIAP no registra calabaza en Isla (2021-2025) y la agenda INIFAP de Veracruz no da su calendario.
+- **Ventanas de siembra**: no van en `cultivos.json` (contratos 0.5.0): dependen del lugar y viven en `calendario-isla.json` (contrato `calendario-local`). Maiz PV y OI y frijol OI tienen ventana con fuente; frijol PV y chile no la tienen y la calabaza no esta registrada en Isla segun SIAP.
 - **Etapas sensibles**: pendiente de fuente (FAO-33, Ky); el campo se omite.
 - **Suelos sin fila en Tabla 19**: franco arcillo arenoso, franco arcilloso, arcillo arenoso.

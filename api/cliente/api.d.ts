@@ -141,6 +141,7 @@ export interface components {
         AguaSuelo: {
             /** Tawmmporm */
             tawMmPorM: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
+            metodoTaw?: components["schemas"]["MetodoTaw"] | null;
         };
         /** CeldaEntrada */
         CeldaEntrada: {
@@ -266,6 +267,15 @@ export interface components {
             esEjemplo: boolean;
             /** Generado */
             generado?: string | null;
+        };
+        /** MetodoTaw */
+        MetodoTaw: {
+            /**
+             * Metodo
+             * @enum {string}
+             */
+            metodo: "tabla_fao56" | "pedotransferencia_saxton_rawls_2006";
+            fuente: components["schemas"]["Fuente"];
         };
         /** Periodo */
         Periodo: {

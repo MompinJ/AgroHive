@@ -1,8 +1,8 @@
 """Genera los catalogos de AgroHive (A1.5 cultivos, A1.6 suelos) desde fuentes citadas.
 
 Uso (desde la raiz del repo):  python datos/catalogos/generar.py
-Salidas: datos/catalogos/cultivos.json (contrato cultivo.schema.json) y datos/catalogos/suelos.json
-(contrato tabla-suelos.schema.json).
+Salidas: cultivos.json (contrato cultivo), suelos.json (contrato tabla-suelos) y calendario-isla.json
+(contrato calendario-local), todas en datos/catalogos/.
 Validacion: node datos/catalogos/validar.mjs
 
 Reglas: cada cifra viene copiada de una tabla publicada y lleva su fuente. Si no hay fuente
@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
-VERSION_CONTRATO = "0.3.0"
+VERSION_CONTRATO = "0.5.0"
 VERSION_CATALOGO = "0.1.0"
 CONSULTADO = "2026-11-14"
 
@@ -60,52 +60,115 @@ MOTIVO_LLUVIA_CICLO = (
     "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm "
     "y no se convierte a lluvia del ciclo."
 )
-# ---------------------------------------------------------------- ventanas de siembra (A0.6, V-20)
-# Isla, Veracruz = municipio 77, DDR 175 San Andres Tuxtla (SIAP). El contrato guarda meses enteros:
-# el dia exacto de la fuente se conserva en la nota.
+# ---------------------------------------------------------------- calendario local de Isla (A0.6, V-20)
+# Las ventanas de siembra no van en el catalogo (contratos 0.5.0): dependen del lugar y viven en un archivo con la
+# forma de contratos/calendario-local.schema.json. Isla, Veracruz = INEGI 30/077, DDR 175 San Andres Tuxtla (SIAP).
 
+URL_SIAP = "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php"
 URL_INIFAP_MAIZ_SUR = "https://www.gob.mx/cms/uploads/attachment/file/723016/Maiz_temporal_tehuantepec.pdf"
 URL_AGENDA_VER = "https://www.gob.mx/cms/uploads/attachment/file/1066118/Agenda_T_cnica_Agr_cola_-_Veracruz-compressed.pdf"
-NOTA_SIAP_ISLA = (
-    "SIAP, cierre agricola municipal 2021-2025, Isla (Veracruz): extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv."
-)
+CSV_SIAP_ISLA = AQUI / "fuentes" / "siap_isla_2021_2025.csv"
+PERIODO_SIAP = ("2021-01-01", "2025-12-31")
+CICLO_SIAP = {"PV": "Primavera-Verano", "OI": "Otoño-Invierno"}
+CULTIVO_SIAP = {"maiz": "Maíz grano", "frijol": "Frijol", "chile": "Chile verde", "calabaza": None}
 
+INIFAP_MAIZ_PV = ("INIFAP, Tecnologia de produccion de maiz de temporal en el sur de Veracruz (region del Istmo de "
+                  "Tehuantepec) para el ciclo de primavera-verano (C. A. Tinoco Alfaro, Campo Experimental Cotaxtla, 2022)")
+AGENDA_VER = "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)"
 
-def ventana(temporada, desde, hasta, nombre, url, cita, nota):
-    return {"temporada": temporada, "desdeMes": desde, "hastaMes": hasta, "regimen": "temporal",
-            "fuente": fuente(nombre, url, cita, nota=nota)}
-
-
-VENTANAS = {
-    "maiz": [
-        ventana("primavera_verano", 6, 7,
-                "INIFAP, Tecnologia de produccion de maiz de temporal en el sur de Veracruz (region del Istmo de Tehuantepec) "
-                "para el ciclo de primavera-verano (C. A. Tinoco Alfaro, Campo Experimental Cotaxtla, 2022)",
-                URL_INIFAP_MAIZ_SUR, "Seccion Siembra, 'Fecha de siembra', pag. 9",
-                "Texto: sembrar una vez establecidas las lluvias, entre el 1 de junio y el 15 de julio. La guia cubre el DDR "
-                "San Andres Tuxtla, al que pertenece Isla. SIAP: Isla siembra ~4,100 ha de maiz grano PV de temporal por anio. "
-                + NOTA_SIAP_ISLA),
-        ventana("otono_invierno", 11, 12,
-                "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
-                URL_AGENDA_VER, "Capitulo Maiz, 'Epocas de siembra', pag. 58",
-                "Texto: para siembras de riego y humedad residual se sugiere sembrar en noviembre y diciembre. Recomendacion "
-                "estatal, no especifica de Isla. Se registra como temporal porque SIAP clasifica el maiz OI de Isla "
-                "(~4,480 ha por anio) como temporal, sin riego. " + NOTA_SIAP_ISLA),
-    ],
-    "frijol": [
-        ventana("otono_invierno", 9, 10,
-                "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
-                URL_AGENDA_VER, "Capitulo Frijol, 'Epocas de siembra', pag. 40",
-                "Texto: en otono-invierno con humedad residual, sembrar del 20 de septiembre al 20 de octubre. Recomendacion "
-                "estatal. SIAP: Isla siembra ~195 ha de frijol OI de temporal por anio; la agenda describe tambien el frijol "
-                "en relevo con maiz en Los Tuxtlas. La ventana de verano de la agenda es solo para Las Altas Montanas y no "
-                "se aplica a Isla. " + NOTA_SIAP_ISLA),
-    ],
+# (cultivo, temporada) -> ventana con fuente. Lo que no esta aqui queda NO_EVALUABLE con motivo.
+VENTANAS_ISLA = {
+    ("maiz", "PV"): dict(
+        desdeMes=6, desdeDia=1, hastaMes=7, hastaDia=15,
+        fuente=fuente(INIFAP_MAIZ_PV, URL_INIFAP_MAIZ_SUR, "Seccion Siembra, 'Fecha de siembra', pag. 9", None,
+                      "Texto: sembrar una vez establecidas las lluvias, lo cual puede ocurrir entre el 1 de junio y el 15 de julio. "
+                      "La guia cubre el DDR San Andres Tuxtla, al que pertenece Isla."),
+    ),
+    ("maiz", "OI"): dict(
+        desdeMes=11, hastaMes=12,
+        fuente=fuente(AGENDA_VER, URL_AGENDA_VER, "Capitulo Maiz, 'Epocas de siembra', pag. 58", None,
+                      "Texto: para siembras de riego y humedad residual se sugiere sembrar en noviembre y diciembre. "
+                      "Recomendacion estatal, no especifica de Isla; se registra como temporal porque SIAP clasifica el maiz OI "
+                      "de Isla como temporal."),
+    ),
+    ("frijol", "OI"): dict(
+        desdeMes=9, desdeDia=20, hastaMes=10, hastaDia=20,
+        fuente=fuente(AGENDA_VER, URL_AGENDA_VER, "Capitulo Frijol, 'Epocas de siembra', pag. 40", None,
+                      "Texto: en otono-invierno con humedad residual, sembrar del 20 de septiembre al 20 de octubre. "
+                      "Recomendacion estatal, no especifica de Isla."),
+    ),
 }
-MOTIVO_VENTANAS = {
-    "calabaza": ("SIAP no registra calabaza en Isla en 2021-2025 y la Agenda Tecnica de Veracruz no da calendario de "
-                 "calabaza. Sin ventana con fuente para la zona demo (V-20)."),
+MOTIVO_SIN_VENTANA = {
+    ("frijol", "PV"): "La ventana de verano de la Agenda Tecnica de Veracruz es solo para Las Altas Montanas; no hay ventana con fuente para Isla.",
+    ("chile", "PV"): "Cultivo extra: aun no se consulta una fuente de calendario de siembra (INIFAP) para chile.",
+    ("chile", "OI"): "Cultivo extra: aun no se consulta una fuente de calendario de siembra (INIFAP) para chile.",
+    ("calabaza", "PV"): "SIAP no registra calabaza en Isla y la Agenda Tecnica de Veracruz no da calendario de calabaza.",
+    ("calabaza", "OI"): "SIAP no registra calabaza en Isla y la Agenda Tecnica de Veracruz no da calendario de calabaza.",
 }
+ORDEN_ISLA = [("maiz", "PV"), ("maiz", "OI"), ("frijol", "PV"), ("frijol", "OI"),
+              ("chile", "PV"), ("chile", "OI"), ("calabaza", "PV"), ("calabaza", "OI")]
+
+
+def superficie_siap_isla():
+    """(cultivo SIAP, ciclo SIAP) -> {anio: hectareas sembradas de temporal}, leido del extracto de SIAP."""
+    import csv
+    sup = {}
+    with open(CSV_SIAP_ISLA, encoding="utf-8", newline="") as fh:
+        for r in csv.DictReader(fh):
+            if r["Nommodalidad"] != "Temporal":
+                continue
+            clave = (r["Nomcultivo"], r["Nomcicloproductivo"])
+            sup.setdefault(clave, {})
+            sup[clave][r["Anio"]] = sup[clave].get(r["Anio"], 0.0) + float(r["Sembrada"] or 0)
+    return sup
+
+
+def presencia_isla(cultivo_id, temporada, sup):
+    fuente_siap = fuente("SIAP, cierre agricola municipal (datos abiertos)", URL_SIAP,
+                         "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+                         "hectareas sembradas (temporal)")
+    nombre = CULTIVO_SIAP[cultivo_id]
+    anios = {a: h for a, h in sup.get((nombre, CICLO_SIAP[temporada]), {}).items() if h > 0} if nombre else {}
+    if not anios:
+        return {"estado": "no_registrado", "periodo": {"desde": PERIODO_SIAP[0], "hasta": PERIODO_SIAP[1]},
+                "fuente": fuente_siap,
+                "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."}
+    a0, a1 = min(anios), max(anios)
+    lista = ", ".join(f"{a}: {anios[a]:,.0f} ha" for a in sorted(anios))
+    return {"estado": "registrado", "periodo": {"desde": f"{a0}-01-01", "hasta": f"{a1}-12-31"},
+            "fuente": fuente_siap, "nota": f"Superficie sembrada de temporal por anio: {lista}."}
+
+
+def calendario_isla():
+    sup = superficie_siap_isla()
+    entradas = []
+    for cultivo_id, temporada in ORDEN_ISLA:
+        presencia = presencia_isla(cultivo_id, temporada, sup)
+        clave = (cultivo_id, temporada)
+        entrada = {"cultivo": cultivo_id, "temporada": temporada, "regimen": "temporal"}
+        if clave in VENTANAS_ISLA:
+            entrada |= {"estado": "EVALUABLE", "ventana": {"estado": "EVALUABLE", **VENTANAS_ISLA[clave]}}
+        else:
+            motivo = MOTIVO_SIN_VENTANA[clave]
+            entrada |= {"estado": "NO_EVALUABLE", "motivo": motivo, "ventana": no_evaluable(motivo)}
+        entrada["presencia"] = presencia
+        entradas.append(entrada)
+    return {
+        "meta": {"versionContrato": VERSION_CONTRATO, "esEjemplo": False, "generado": f"{CONSULTADO}T00:00:00Z",
+                 "aviso": "Ventanas de recomendaciones regionales de INIFAP y presencia segun SIAP; no son un calendario validado "
+                          "para la parcela. Requieren validacion con un tecnico local."},
+        "id": "calendario-isla",
+        "ubicacion": {"pais": "Mexico", "claveEstadoInegi": "30", "estado": "Veracruz",
+                      "claveMunicipioInegi": "077", "municipio": "Isla", "ddr": "San Andres Tuxtla"},
+        "entradas": entradas,
+        "advertencias": [
+            {"codigo": "VENTANAS_REGIONALES", "severidad": "aviso",
+             "mensaje": "Solo el maiz de primavera-verano tiene una guia que cubre el distrito de Isla; el resto son recomendaciones "
+                        "estatales de Veracruz."},
+            {"codigo": "CALABAZA_NO_REGISTRADA", "severidad": "aviso",
+             "mensaje": "SIAP no registra calabaza en Isla entre 2021 y 2025: se muestra en la demo, pero no es recomendable alli."},
+        ],
+    }
 
 # Cada cultivo: fila de FAO-56 Tabla 11 (dias por etapa), Tabla 12 (Kc), Tabla 22 (Zr, p) y fila de EcoCrop.
 CULTIVOS = [
@@ -222,7 +285,6 @@ def cultivo(c):
             "lluviaAnualMaxMm": eco_val("RMAX", eco["rmax"], "mm/anio", "mm por anio", nota_lluvia),
             "tEstresCalorC": no_evaluable(MOTIVO_CALOR),
         },
-        "ventanasSiembra": VENTANAS.get(c["id"]) or no_evaluable(MOTIVO_VENTANAS[c["id"]]),
         "modelo3d": {"prefijo": c["modelo3d"]},
         "notas": (
             f"Ciclo y etapas de FAO-56 Tabla 11 (total {t11['total']} dias). EcoCrop da un ciclo de "
@@ -318,7 +380,7 @@ def main():
         "versionCatalogo": VERSION_CATALOGO,
         "cultivos": [cultivo(c) for c in CULTIVOS],
     }
-    for nombre, datos in (("cultivos.json", catalogo), ("suelos.json", suelos())):
+    for nombre, datos in (("cultivos.json", catalogo), ("suelos.json", suelos()), ("calendario-isla.json", calendario_isla())):
         ruta = AQUI / nombre
         ruta.write_text(json.dumps(datos, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print("escrito", ruta.relative_to(AQUI.parent.parent))
