@@ -149,6 +149,16 @@ Decisiones afectadas:
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
 
+### 2026-11-14 — Modelos ligeros de bloque: los dos primeros, de maíz (Mafer)
+
+- **Archivos:** nuevos `modelos/cultivos/bloques/` (`bloques.py`, `maiz_siembra_bloque.bbmodel`, `maiz_madurez_bloque.bbmodel` y `visor_bloques.html`) y `web/src/escena/pruebas/bloques.test.ts`. Sin cambios en la paleta ni en modelos existentes.
+- **Qué es:** encargo de Mompin (#183, idea de balam): cada bloque de la escena se ve como un manchón de varias plantas y no como una sola. Por rendimiento no se repite el modelo detallado: cada bloque usa un modelo ligero con 12 plantas simplificadas en 3 surcos. **Es una representación visual, no a escala** (el bloque de maíz maduro mide ~12.5 unidades de alto contra ~36 del detallado, a propósito).
+- **Criterios (decididos por Mompin, #187):** tope fijo de 55 cubos por bloque, comprobado también en vértices reales con `unirCubos` (36 por cubo, 1980 para el tope), y un lomo bajo por surco, de 1 unidad de alto. **Interpretación mía** de "1 cubo de alto": 1 unidad (el lomo detallado es de 2); si él quería otra cosa, es un parámetro.
+- **Resultado:** `maiz_siembra_bloque` 18 cubos (648 vértices) y `maiz_madurez_bloque` 51 cubos (1836 vértices); 12 plantas y 3 lomos cada uno. La variación de altura (±15 %), posición y giro es determinista (regenerar da los mismos bytes, comprobado con md5). Surcos en z = -5.33, 0 y 5.33 y plantas cada 4 unidades, para que los bloques vecinos continúen los surcos.
+- **Verificación:** la prueba nueva exige paleta, huella de 16 × 16, base en y = 0, tope de cubos y de vértices, mínimo de 12 cubos y al menos 3 lomos; `cd web && npm test`: 359 pruebas; `tsc` sin errores. Revisado con renders (solo, sobre la losa de suelo, junto al detallado y en una cuadrícula de 3 × 3: se lee como una parcela continua).
+- **Pendiente:** los otros 18 modelos (4 cultivos × 5 etapas) y que la escena los conecte. **Riesgo declarado:** si todos los bloques son idénticos, un campo grande puede mostrar un patrón repetido (sobre todo las mazorcas cada 16 unidades); lo más barato es girar cada bloque 180° según la celda, o hacer 2 o 3 variantes con otra semilla (no se hicieron porque la prueba fija los nombres). No se vio dentro de la escena real ni en Blockbench.
+- **Decisiones afectadas:** ninguna del equipo; amplía A3.9 (extras de modelado).
+
 ### 2026-11-14 — A5.7: correcciones de citas del README, verificadas (Mafer)
 
 - **Archivos:** `README.md`, este registro. A pedido de Mompin (#163), con hallazgos de Eduardo-B. Cada corrección se contrastó con su fuente; **quien contrastó fue una sesión de IA**.
