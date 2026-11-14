@@ -61,9 +61,9 @@
 | V-03 | Formato de entrega, video y juicio | Adaptar al formulario oficial |
 | V-04 | Reglas de IA, código previo, marca e imágenes NASA | Atribuir y declarar según reglas |
 | V-05 | Qué cuenta como "empezar" antes del evento | Preguntar al organizador |
-| V-06 | Parámetros de POWER (`GWETROOT`, radiación, unidades) | Probar la API diaria |
+| V-06 | ~~Parámetros de POWER~~ Decidido 14/11 (13): `GWETROOT` entra como condición inicial y comparación, convertida de fracción de saturación a fracción de TAW; radiación ya en MJ/m²/día | — |
 | V-07 | Parámetros de Open-Meteo | Revisar su documentación |
-| V-08 | Acceso a elevación (SRTM, tiles de terreno) | Probar; respaldo con otro proveedor |
+| V-08 | ~~Acceso a elevación~~ Decidido 14/11 (13): Terrarium por defecto, Open-Meteo de respaldo | — |
 | V-09 | Kc, ciclos, umbrales y calendarios por cultivo | Citar FAO/INIFAP; si no hay, `NO_EVALUABLE` |
 | V-10 | TAW por tipo de suelo | FAO-56 |
 | V-11 | Rendimiento del 3D en hardware real | Medir; modo 2D |
@@ -79,6 +79,8 @@
 | El 3D consume demasiado tiempo | Alto | Motor independiente, modo 2D, plantas procedurales |
 | APIs lentas o caídas en la sede | Alto | Caché, parcelas precargadas, Open-Meteo |
 | La demo falla en vivo | Alto | Video grabado, parcela probada, copia sin internet |
+| Humedad de POWER mal interpretada (fracción de saturación tomada como fracción de TAW) | Medio | Convertir con θsat, θFC y θWP de Saxton y Rawls; sin ellos, condición inicial `NO_EVALUABLE` |
+| TAW por pedotransferencia sin materia orgánica citada | Medio | Citar el factor de carbono orgánico a materia orgánica `[VERIFICAR]`; si falta, TAW `NO_EVALUABLE` y selector manual |
 | No se consiguen datos para algún pilar | Medio | Recortar por prioridad, decirlo como límite |
 | Ranking B sin pilares 2 y 3 (A3.7) o sin pesos con fuente | Medio | Pesos iguales declarados `SUPUESTO`; si A3.7 no llega, respaldo con el criterio A (solo pilar hídrico) y decirlo en la tarjeta |
 | Resolución gruesa parece debilidad | Medio | Presentarla como límite honesto; variación por relieve, suelo y cultivo |
