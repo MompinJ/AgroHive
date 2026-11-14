@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/ndvi.schema.json",
+  "title": "Ndvi",
+  "description": "Respuesta de GET /api/ndvi (A4.11): NDVI de MODIS MOD13Q1 (pixel de 250 m, compuesto de 16 dias) en un punto, por el servicio REST de ORNL DAAC. Es EVIDENCIA de los anios de escenario: el pixel es mayor que la parcela, no muestra el cultivo del usuario y no entra al ranking (no hay relacion publicada entre NDVI y los pilares).",
+  "type": "object",
+  "required": [
+    "meta",
+    "estado",
+    "aviso",
+    "coordenada",
+    "producto",
+    "fuente",
+    "limites",
+    "serie"
+  ],
+  "properties": {
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
+    "estado": {
+      "type": "string",
+      "enum": [
+        "EVALUABLE",
+        "EXPLORATORIO",
+        "NO_EVALUABLE",
+        "ERROR_DATOS",
+        "RESPALDO_HISTORICO"
+      ]
+    },
+    "motivo": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aviso": {
+      "type": "string",
+      "minLength": 1
+    },
+    "coordenada": {
+      "$ref": "comun.schema.json#/$defs/lonLat"
+    },
+    "periodo": {
+      "$ref": "comun.schema.json#/$defs/periodo"
+    },
+    "producto": {
+      "title": "ProductoNdvi",
+      "type": "object",
+      "required": [
+        "nombre",
+        "banda",
+        "pixelM",
+        "compuestoDias",
+        "escala"
+      ],
+      "properties": {
+        "nombre": {
+          "const": "MOD13Q1"
+        },
+        "version": {
+          "type": "string"
+        },
+        "banda": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pixelM": {
+          "const": 250
+        },
+        "compuestoDias": {
+          "const": 16
+        },
+        "escala": {
+          "description": "Factor que se aplica al entero del producto para obtener NDVI (el valor de ndvi en la serie ya viene escalado).",
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "fuente": {
+      "description": "ORNL DAAC MODIS (servicio REST), con la cita doi:10.3334/ORNLDAAC/1600 en cita.",
+      "$ref": "comun.schema.json#/$defs/fuente"
+    },
+    "limites": {
+      "description": "Limites que la interfaz debe mostrar. Deben estar los tres.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "PIXEL_MAYOR_QUE_PARCELA",
+          "NO_MUESTRA_CULTIVO_DEL_USUARIO",
+          "NO_ENTRA_AL_RANKING"
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "const": "PIXEL_MAYOR_QUE_PARCELA"
+          }
+        },
+        {
+          "contains": {
+            "const": "NO_MUESTRA_CULTIVO_DEL_USUARIO"
+          }
+        },
+        {
+          "contains": {
+            "const": "NO_ENTRA_AL_RANKING"
+          }
+        }
+      ]
+    },
+    "serie": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dato"
+      }
+    },
+    "advertencias": {
+      "type": "array",
+      "items": {
+        "$ref": "comun.schema.json#/$defs/advertencia"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "dato": {
+      "title": "DatoNdvi",
+      "type": "object",
+      "required": [
+        "fecha",
+        "ndvi",
+        "estado"
+      ],
+      "properties": {
+        "fecha": {
+          "description": "Fecha del compuesto.",
+          "$ref": "comun.schema.json#/$defs/fecha"
+        },
+        "ndvi": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": -1,
+          "maximum": 1
+        },
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "calidad": {
+          "description": "Confiabilidad del pixel segun el producto (pixel reliability), si viene.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "Sin dato (NO_EVALUABLE o ERROR_DATOS): ndvi en null y motivo obligatorio; nunca 0.",
+          "if": {
+            "properties": {
+              "estado": {
+                "enum": [
+                  "NO_EVALUABLE",
+                  "ERROR_DATOS"
+                ]
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "required": [
+              "motivo"
+            ],
+            "properties": {
+              "ndvi": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

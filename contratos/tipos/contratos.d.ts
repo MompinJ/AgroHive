@@ -2,6 +2,35 @@
    No editar a mano: cambiar el schema y correr `npm run tipos`. */
 
 /**
+ * Lugar del calendario. Generico (alcance mundial, 0.10.0): paisIso y unidadAdministrativa con su sistema de claves. Para Mexico siguen validas las claves INEGI (claveEstadoInegi, claveMunicipioInegi). Debe traer una de las dos formas.
+ */
+export type UbicacionCalendario = (UbicacionInegi | UbicacionGenerica) & {
+  /**
+   * Nombre del pais.
+   */
+  pais: string;
+  /**
+   * Clave INEGI de la entidad (2 digitos).
+   */
+  claveEstadoInegi?: string;
+  estado?: string;
+  /**
+   * Clave INEGI del municipio dentro de la entidad (3 digitos).
+   */
+  claveMunicipioInegi?: string;
+  municipio?: string;
+  /**
+   * Distrito de Desarrollo Rural (SIAP), si aplica.
+   */
+  ddr?: string;
+  region?: string;
+  /**
+   * Codigo ISO 3166-1 alfa-2 (por ejemplo MX, US).
+   */
+  paisIso?: string;
+  unidadAdministrativa?: UnidadAdministrativa;
+};
+/**
  * Identificador del cultivo en el catalogo (minusculas, sin acentos), por ejemplo 'maiz'. Coincide con el prefijo de los modelos .bbmodel (doc 07).
  */
 export type IdCultivo = string;
@@ -94,12 +123,14 @@ export interface ContratosAgroHive {
   "calendario-local"?: CalendarioLocal;
   "clima-escenario"?: ClimaEscenario;
   cultivo?: CatalogoCultivos;
+  ndvi?: Ndvi;
   parcela?: Parcela;
   "plan-siembra"?: PlanSiembra;
   "proxima-temporada"?: ProximaTemporadaAproximada;
   "resultado-celda"?: ResultadoCeldas;
   "resultado-rotacion"?: ResultadoRotacion;
   "serie-clima"?: SerieClima;
+  smap?: Smap;
   suelo?: Suelo;
   "tabla-suelos"?: TablaSuelos;
 }
@@ -137,23 +168,23 @@ export interface Meta {
    */
   generado?: string;
 }
-export interface UbicacionCalendario {
-  pais: string;
+export interface UbicacionInegi {
+  [k: string]: unknown;
+}
+export interface UbicacionGenerica {
+  [k: string]: unknown;
+}
+/**
+ * Region o unidad administrativa del lugar con su sistema de claves (por ejemplo INEGI en Mexico, FIPS en EE. UU., GADM global).
+ */
+export interface UnidadAdministrativa {
+  sistema: string;
+  clave: string;
+  nombre: string;
   /**
-   * Clave INEGI de la entidad (2 digitos).
+   * Nivel administrativo (por ejemplo 1 estado o provincia, 2 municipio o condado).
    */
-  claveEstadoInegi: string;
-  estado: string;
-  /**
-   * Clave INEGI del municipio dentro de la entidad (3 digitos).
-   */
-  claveMunicipioInegi: string;
-  municipio: string;
-  /**
-   * Distrito de Desarrollo Rural (SIAP), si aplica.
-   */
-  ddr?: string;
-  region?: string;
+  nivel?: number;
 }
 export interface EntradaCalendario {
   cultivo: IdCultivo;
@@ -246,6 +277,7 @@ export interface ClimaEscenario {
   seleccion: SeleccionEscenario;
   diario: DiaClima[];
   humedadSuelo?: MetadatoHumedadSuelo;
+  lluviaSatelital?: LluviaSatelital;
   advertencias?: Advertencia[];
 }
 /**
@@ -326,6 +358,19 @@ export interface MetadatoHumedadSuelo {
   uso: ["condicion_inicial" | "comparacion", ...("condicion_inicial" | "comparacion")[]];
 }
 /**
+ * Lluvia por satelite GPM IMERG via NASA POWER (IMERG_PRECTOT, en UTC; sin UTC POWER no la entrega). Es EVIDENCIA: no entra al balance ni a la eleccion de escenarios. El -999 de POWER (fill_value) se guarda como null, nunca como 0. IMERG existe desde 2000-06-01 y los ultimos meses pueden faltar. Opcional (agregado en 0.10.0).
+ */
+export interface LluviaSatelital {
+  variable: "IMERG_PRECTOT";
+  estandarHora: "UTC";
+  fuente: Fuente;
+  dias: DiaLluviaSatelital[];
+}
+export interface DiaLluviaSatelital {
+  fecha: Fecha;
+  lluviaMm: number | null;
+}
+/**
  * Catalogo propio de cultivos (decision 14/11, doc 13; actividad A1.5), sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y FAO-56 (Kc y duracion de etapas). Cada parametro lleva su fuente o es NO_EVALUABLE; un cultivo con parametros esenciales faltantes es NO_EVALUABLE para el motor. Solo lleva lo que no depende del lugar: las ventanas de siembra viven en calendario-local.
  */
 export interface CatalogoCultivos {
@@ -401,6 +446,46 @@ export interface UmbralesCultivo {
  */
 export interface Modelo3D {
   prefijo: string;
+}
+/**
+ * Respuesta de GET /api/ndvi (A4.11): NDVI de MODIS MOD13Q1 (pixel de 250 m, compuesto de 16 dias) en un punto, por el servicio REST de ORNL DAAC. Es EVIDENCIA de los anios de escenario: el pixel es mayor que la parcela, no muestra el cultivo del usuario y no entra al ranking (no hay relacion publicada entre NDVI y los pilares).
+ */
+export interface Ndvi {
+  meta: Meta;
+  estado: "EVALUABLE" | "EXPLORATORIO" | "NO_EVALUABLE" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+  motivo?: string;
+  aviso: string;
+  coordenada: LonLat;
+  periodo?: Periodo;
+  producto: ProductoNdvi;
+  fuente: Fuente;
+  /**
+   * Limites que la interfaz debe mostrar. Deben estar los tres.
+   */
+  limites: ("PIXEL_MAYOR_QUE_PARCELA" | "NO_MUESTRA_CULTIVO_DEL_USUARIO" | "NO_ENTRA_AL_RANKING")[];
+  serie: DatoNdvi[];
+  advertencias?: Advertencia[];
+}
+export interface ProductoNdvi {
+  nombre: "MOD13Q1";
+  version?: string;
+  banda: string;
+  pixelM: 250;
+  compuestoDias: 16;
+  /**
+   * Factor que se aplica al entero del producto para obtener NDVI (el valor de ndvi en la serie ya viene escalado).
+   */
+  escala: number;
+}
+export interface DatoNdvi {
+  fecha: Fecha;
+  ndvi: number | null;
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  /**
+   * Confiabilidad del pixel segun el producto (pixel reliability), si viene.
+   */
+  calidad?: number | null;
 }
 /**
  * Parcela del usuario (demo fija o poligono libre) y su cuadricula de celdas con relieve. El clima es el mismo para toda la parcela (doc 04, resolucion); las celdas difieren por cultivo, suelo y relieve.
@@ -943,7 +1028,57 @@ export interface SerieClima {
   fuente: Fuente;
   diario: DiaClima[];
   humedadSuelo?: MetadatoHumedadSuelo;
+  lluviaSatelital?: LluviaSatelital;
   advertencias?: Advertencia[];
+}
+/**
+ * Respuesta de GET /api/smap (A4.8): humedad del suelo superficial de SMAP L3 en la celda del punto (36 km; 9 km en el producto enriquecido), por dia y por pase. Profundidad declarada de unos 0 a 5 cm, unidad m3/m3. Es CONTRASTE con la humedad de raiz del motor: nunca es una medicion de la parcela y no entra al ranking ni al balance. Forma tomada de api/app/modelos_smap.py (Eduardo).
+ */
+export interface Smap {
+  meta: Meta;
+  estado: "EVALUABLE" | "EXPLORATORIO" | "NO_EVALUABLE" | "ERROR_DATOS";
+  etiqueta: "SUPUESTO";
+  aviso: string;
+  coordenada: LonLat;
+  producto?: ProductoSmap;
+  celda?: CeldaSmap;
+  fuente: Fuente;
+  dias: DiaSmap[];
+  advertencias?: Advertencia[];
+}
+export interface ProductoSmap {
+  /**
+   * Por ejemplo SPL3SMP (36 km) o SPL3SMP_E (9 km enriquecido).
+   */
+  nombre: string;
+  resolucionKm: 36 | 9;
+  profundidadCm?: ProfundidadSmap;
+  unidad?: "m3/m3";
+}
+export interface ProfundidadSmap {
+  desde: number;
+  hasta: number;
+}
+export interface CeldaSmap {
+  fila: number;
+  columna: number;
+  centro: LonLat;
+}
+export interface DiaSmap {
+  fecha: Fecha;
+  estado: "EVALUABLE" | "EXPLORATORIO" | "NO_EVALUABLE" | "ERROR_DATOS";
+  motivo?: string;
+  granulo?: string;
+  pases?: PaseSmap[];
+  /**
+   * Media de los pases con dato (m3/m3); ausente o null si ninguno.
+   */
+  humedadM3M3?: number | null;
+}
+export interface PaseSmap {
+  pase: "AM" | "PM";
+  humedadM3M3?: number | null;
+  banderaCalidad?: number | null;
 }
 /**
  * Suelo de la parcela (decisiones del 14/11, doc 13): textura y pH estimados por zona con mapas globales o elegidos en el selector manual de respaldo. Se consultan AMBOS servicios (ISRIC SoilGrids por WCS y OpenLandMap) para compararlos: cada uno va en 'estimaciones' y 'estimacionUsada' dice cual alimenta textura, pH y agua. El TAW sale de la tabla FAO-56 (A1.6) o de la pedotransferencia de Saxton y Rawls (2006). Siempre etiqueta SUPUESTO: no se mide en la parcela.

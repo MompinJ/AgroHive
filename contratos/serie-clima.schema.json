@@ -43,6 +43,9 @@
     "humedadSuelo": {
       "$ref": "clima-escenario.schema.json#/$defs/humedadSuelo"
     },
+    "lluviaSatelital": {
+      "$ref": "clima-escenario.schema.json#/$defs/lluviaSatelital"
+    },
     "advertencias": {
       "type": "array",
       "items": {

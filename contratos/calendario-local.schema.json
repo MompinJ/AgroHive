@@ -22,14 +22,11 @@
       "title": "UbicacionCalendario",
       "type": "object",
       "required": [
-        "pais",
-        "claveEstadoInegi",
-        "estado",
-        "claveMunicipioInegi",
-        "municipio"
+        "pais"
       ],
       "properties": {
         "pais": {
+          "description": "Nombre del pais.",
           "type": "string",
           "minLength": 1
         },
@@ -57,9 +54,63 @@
         },
         "region": {
           "type": "string"
+        },
+        "paisIso": {
+          "description": "Codigo ISO 3166-1 alfa-2 (por ejemplo MX, US).",
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "unidadAdministrativa": {
+          "title": "UnidadAdministrativa",
+          "description": "Region o unidad administrativa del lugar con su sistema de claves (por ejemplo INEGI en Mexico, FIPS en EE. UU., GADM global).",
+          "type": "object",
+          "required": [
+            "sistema",
+            "clave",
+            "nombre"
+          ],
+          "properties": {
+            "sistema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "clave": {
+              "type": "string",
+              "minLength": 1
+            },
+            "nombre": {
+              "type": "string",
+              "minLength": 1
+            },
+            "nivel": {
+              "description": "Nivel administrativo (por ejemplo 1 estado o provincia, 2 municipio o condado).",
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "Lugar del calendario. Generico (alcance mundial, 0.10.0): paisIso y unidadAdministrativa con su sistema de claves. Para Mexico siguen validas las claves INEGI (claveEstadoInegi, claveMunicipioInegi). Debe traer una de las dos formas.",
+      "anyOf": [
+        {
+          "title": "UbicacionInegi",
+          "required": [
+            "claveEstadoInegi",
+            "estado",
+            "claveMunicipioInegi",
+            "municipio"
+          ]
+        },
+        {
+          "title": "UbicacionGenerica",
+          "required": [
+            "paisIso",
+            "unidadAdministrativa"
+          ]
+        }
+      ]
     },
     "entradas": {
       "type": "array",

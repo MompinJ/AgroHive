@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.9.0",
+    "versionContrato": "0.10.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -72,6 +72,38 @@
     "uso": [
       "condicion_inicial",
       "comparacion"
+    ]
+  },
+  "lluviaSatelital": {
+    "variable": "IMERG_PRECTOT",
+    "estandarHora": "UTC",
+    "fuente": {
+      "nombre": "EJEMPLO - valores ficticios (forma de NASA POWER, GPM IMERG, 0.1 grados)",
+      "nota": "No proviene de ninguna consulta real.",
+      "resolucion": "0.1 grados",
+      "consultado": "2026-11-14"
+    },
+    "dias": [
+      {
+        "fecha": "2015-06-01",
+        "lluviaMm": 0.0
+      },
+      {
+        "fecha": "2015-06-02",
+        "lluviaMm": 18.6
+      },
+      {
+        "fecha": "2015-06-03",
+        "lluviaMm": 2.1
+      },
+      {
+        "fecha": "2015-06-04",
+        "lluviaMm": null
+      },
+      {
+        "fecha": "2015-06-05",
+        "lluviaMm": 0.4
+      }
     ]
   },
   "advertencias": [
