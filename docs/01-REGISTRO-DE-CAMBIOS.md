@@ -59,6 +59,17 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — `main` de vuelta en verde tras contratos 0.4.0 y 0.5.0; regla de cambios de contrato
+
+- **Archivos:** `api/app/{proxima,modelos,servicios}.py`, `api/tests/test_proxima.py`, `api/openapi.json`, `api/cliente/api.d.ts` (Eduardo); `web/src/ui/demo.ts` (balam); `datos/catalogos/{generar.py,cultivos.json,README.md}` (Mafer); `AGENTS.md`, `AgroVault/Compartido/Reglas.md`.
+- **Cambio y motivo:** `main` (3a9a697) quedó en rojo porque los contratos 0.4.0 y 0.5.0 entraron sin ajustar lo que dependía de ellos. Con autorización de Mompin y aviso a cada dueño, se hicieron cambios mínimos:
+  - **API (Eduardo):** la próxima temporada se recorta a 6 meses (`HORIZONTE_MESES`), `/api/suelo` agrega `agua.metodoTaw` (`tabla_fao56` con la fuente de la tabla) cuando el TAW es evaluable, y dos aserciones de prueba pasan de 7 a 6 meses. Se regeneraron el OpenAPI y el cliente.
+  - **Web (balam):** el tipo de los ciclos del ejemplo en `demo.ts`.
+  - **Catálogos (Mafer):** sin `ventanasSiembra`. Las tres ventanas estaban en `NO_EVALUABLE`, así que no se perdió ningún dato; queda anotado en el README.
+  - **Regla nueva:** ningún cambio de contrato que rompa algo entra a `main` sin las cuatro verificaciones en verde.
+- **Fuente / evidencia:** `npm test` en `contratos/` 52/52; `pytest` en `api/` 39 pruebas; `validar.mjs` de los catálogos y `tsc --noEmit` en `web/`, en verde.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — `.vscode/` fuera del repo `[DECIDIDO]`
 
 - **Archivos:** `.gitignore`; se dejan de versionar `.vscode/tasks.json`, `.vscode/settings.json`, `.vscode/agrohive.code-snippets` y `.vscode/mascota/clawd.py`.
