@@ -159,14 +159,32 @@ class ValorEvaluable(SinNulos):
     etiqueta: Literal["FUENTE", "SUPUESTO", "USUARIO"] | None = None
 
 
-class MetodoTaw(BaseModel):
+class EntradasPedotransferencia(BaseModel):
+    """Entradas de Saxton y Rawls (2006) y de que estimacion salen; cada una con su fuente."""
+    estimacionId: str = Field(min_length=1)
+    arenaPct: "ValorEvaluable | ValorNoEvaluable"
+    arcillaPct: "ValorEvaluable | ValorNoEvaluable"
+    materiaOrganicaPct: "ValorEvaluable | ValorNoEvaluable"
+
+
+class MetodoTaw(SinNulos):
     metodo: Literal["tabla_fao56", "pedotransferencia_saxton_rawls_2006"]
     fuente: Fuente
+    etiqueta: Literal["SUPUESTO"] | None = None  # obligatoria en el contrato si el metodo es la pedotransferencia
+    entradas: EntradasPedotransferencia | None = None
+
+
+class RetencionAgua(BaseModel):
+    """Contenidos de agua (m3/m3); sirven para pasar la humedad de POWER (fraccion de saturacion) a fraccion de TAW."""
+    thetaSatM3M3: "ValorEvaluable | ValorNoEvaluable"
+    thetaFcM3M3: "ValorEvaluable | ValorNoEvaluable"
+    thetaWpM3M3: "ValorEvaluable | ValorNoEvaluable"
 
 
 class AguaSuelo(SinNulos):
     tawMmPorM: ValorEvaluable | ValorNoEvaluable
     metodoTaw: MetodoTaw | None = None  # obligatorio en el contrato si el TAW es EVALUABLE
+    retencion: RetencionAgua | None = None
 
 
 class TexturaEstimada(BaseModel):

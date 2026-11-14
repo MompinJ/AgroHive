@@ -1,7 +1,7 @@
 // La escena con el motor real y el paquete de demo (A2.4): el motor calcula, la escena solo representa.
 import { describe, expect, it } from 'vitest';
 import serieDemo from '../../../../datos/demo/respuestas/serie-clima.json';
-import type { SerieClima } from '../../../../contratos/tipos/contratos';
+import type { SerieClima, Suelo } from '../../../../contratos/tipos/contratos';
 import { seleccionarEscenarios } from '../../motor/escenarios';
 import { resultadoCeldas, simularRotacion } from '../../motor/motor';
 import { construirEscena } from '../adaptador';
@@ -22,11 +22,23 @@ describe('vista previa con el motor real', () => {
     expect(e.elevacionBaseM).toBe(62);
   });
 
-  it('con el suelo del mapa (TAW NO_EVALUABLE) toda la escena es NO_EVALUABLE: nada se inventa', () => {
+  it('con el suelo del mapa (TAW de Saxton y Rawls, A2.16) la escena tiene resultado del motor', () => {
     const r = simularRotacion({ ...entradasDemo('mapa'), escenarios });
     const celdas = resultadoCeldas(r, 'seco', '2016-08-01');
     expect(celdas).not.toBeNull();
     const e = construirEscena(parcelaConTerrenoDemo(), celdas);
+    expect(e.bloques.every((b) => b.cultivo === 'maiz')).toBe(true);
+    expect(e.bloques.every((b) => typeof b.registro?.humedad === 'number')).toBe(true);
+    expect(e.bloques.every((b) => !['NO_EVALUABLE', 'ERROR_DATOS', 'sin_resultado'].includes(b.estadoVisual))).toBe(true);
+  });
+
+  it('si el TAW del suelo es NO_EVALUABLE, toda la escena es NO_EVALUABLE y sin humedad: nada se inventa', () => {
+    const entradas = entradasDemo('mapa');
+    const suelo = structuredClone(entradas.suelo!) as Suelo;
+    if (!suelo.agua) throw new Error('el suelo del paquete de demo deberia traer agua.tawMmPorM');
+    suelo.agua.tawMmPorM = { estado: 'NO_EVALUABLE', motivo: 'Prueba: TAW sin fuente.' };
+    const r = simularRotacion({ ...entradas, suelo, escenarios });
+    const e = construirEscena(parcelaConTerrenoDemo(), resultadoCeldas(r, 'seco', '2016-08-01'));
     expect(e.bloques.every((b) => b.estadoVisual === 'NO_EVALUABLE')).toBe(true);
     expect(e.bloques.every((b) => b.registro?.humedad === null)).toBe(true);
   });

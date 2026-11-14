@@ -120,7 +120,7 @@ function VistaPrevia() {
                 Suelo{' '}
                 <select value={suelo} onChange={(e) => setSuelo(e.target.value as ModoSuelo)}>
                   <option value="manual_franco">Selector manual: franco (SUPUESTO)</option>
-                  <option value="mapa">Del mapa (TAW NO_EVALUABLE hasta A2.16)</option>
+                  <option value="mapa">Del mapa (TAW de Saxton y Rawls, SUPUESTO)</option>
                 </select>
               </label>
               <label>

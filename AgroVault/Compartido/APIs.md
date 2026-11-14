@@ -123,6 +123,8 @@ Atribución obligatoria (CC BY 4.0). Gratis solo no comercial, sin garantía de 
 
 ### OpenLandMap
 
+**Probado el 14/11 (A2.15):** el catálogo STAC es estático en `https://s3.eu-central-1.wasabisys.com/stac/openlandmap/catalog.json` (la web `stac.openlandmap.org` es solo un navegador). Las capas `clay.tot_iso.11277.2020.wpct`, `sand.tot_iso.11277.2020.wpct`, `silt.tot_iso.11277.2020.wpct`, `ph.h2o_iso.10390.2021.index` y `oc_iso.10694.1995.wpml` (OpenLandMap-soildb, 30 m, 0-30 cm, 2020-2022, CC-BY-4.0, DOI zenodo 15528399) son COG de decenas de GB en `s3.opengeohub.org`; `rasterio` lee solo la ventana del punto por rangos HTTP (3 a 5 s por capa). Unidades: arcilla, arena y limo en % (escala 1, nodata 255), pH ×0.1 y carbono en g/kg ×0.1. Implementado en `api/app/clientes/openlandmap.py`.
+
 El 250 m (v02) está en Google Earth Engine como clase de textura USDA y pH en agua a seis profundidades. El 30 m (OpenLandMap-soildb) tiene pH, carbono orgánico, densidad aparente y arcilla, arena y limo en 0-30, 30-60 y 60-100 cm, como COG, publicado en el catálogo STAC `stac.openlandmap.org` ([Zenodo](https://zenodo.org/records/15470432), [paper ESSD 2026](https://essd.copernicus.org/articles/18/989/2026/)). `VERIFICAR` colección STAC, ruta del COG y resolución real (las fuentes dan 0.00025° y 0.00075°). Los COG permiten leer solo la ventana de la parcela con `rasterio`.
 
 Regla: cualquiera de las dos queda `SUPUESTO`; el selector manual FAO-56 sigue de respaldo.

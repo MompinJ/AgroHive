@@ -3,7 +3,7 @@
 // calculo lo hace el motor y la escena solo lo representa.
 // - Parcela: la de contratos/ejemplos (poligono ficticio de 2 ha, por eso sigue
 //   marcada como ejemplo) con la elevacion y pendiente reales de terreno.json.
-// - Suelo: el del mapa (suelo.json, su TAW hoy es NO_EVALUABLE hasta A2.16) o el
+// - Suelo: el del mapa (suelo.json, TAW por Saxton y Rawls 2006, A2.16) o el
 //   selector manual de respaldo "franco", declarado SUPUESTO (doc 04, igual que
 //   la evidencia de C2 en web/src/motor/pruebas/c2.test.ts).
 // - Plan: R1 milpa de prueba (maiz PV, frijol OI, maiz PV), sin calendario local.

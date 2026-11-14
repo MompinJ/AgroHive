@@ -142,6 +142,7 @@ export interface components {
             /** Tawmmporm */
             tawMmPorM: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
             metodoTaw?: components["schemas"]["MetodoTaw"] | null;
+            retencion?: components["schemas"]["RetencionAgua"] | null;
         };
         /**
          * CatalogoCultivos
@@ -214,6 +215,20 @@ export interface components {
             et0Mm?: number | null;
             /** Humedadraizfraccionsat */
             humedadRaizFraccionSat?: number | null;
+        };
+        /**
+         * EntradasPedotransferencia
+         * @description Entradas de Saxton y Rawls (2006) y de que estimacion salen; cada una con su fuente.
+         */
+        EntradasPedotransferencia: {
+            /** Estimacionid */
+            estimacionId: string;
+            /** Arenapct */
+            arenaPct: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
+            /** Arcillapct */
+            arcillaPct: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
+            /** Materiaorganicapct */
+            materiaOrganicaPct: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
         };
         /** ErrorDatos */
         ErrorDatos: {
@@ -336,6 +351,9 @@ export interface components {
              */
             metodo: "tabla_fao56" | "pedotransferencia_saxton_rawls_2006";
             fuente: components["schemas"]["Fuente"];
+            /** Etiqueta */
+            etiqueta?: "SUPUESTO" | null;
+            entradas?: components["schemas"]["EntradasPedotransferencia"] | null;
         };
         /** Periodo */
         Periodo: {
@@ -427,6 +445,18 @@ export interface components {
             inferior: number | null;
             /** Superior */
             superior: number | null;
+        };
+        /**
+         * RetencionAgua
+         * @description Contenidos de agua (m3/m3); sirven para pasar la humedad de POWER (fraccion de saturacion) a fraccion de TAW.
+         */
+        RetencionAgua: {
+            /** Thetasatm3M3 */
+            thetaSatM3M3: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
+            /** Thetafcm3M3 */
+            thetaFcM3M3: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
+            /** Thetawpm3M3 */
+            thetaWpM3M3: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
         };
         /**
          * SerieClima

@@ -23,7 +23,7 @@ app.include_router(proxima.router)
 
 @app.get("/health", tags=["salud"])
 def health():
-    return {"status": "ok", "servicio": "agrohive-api", "version": config.VERSION_API}
+    return {"status": "ok", "servicio": "agrohive-api", "version": config.VERSION_API, "versionContrato": config.VERSION_CONTRATO, "commit": config.COMMIT}
 
 
 @app.exception_handler(servicios.SinDatos)
