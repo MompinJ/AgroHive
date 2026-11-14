@@ -75,7 +75,8 @@ def test_el_paquete_de_demo_committeado_cumple_los_contratos(validar):
     validar(cargar("proxima-temporada"), "proxima-temporada#")
     ndvi = cargar("ndvi")
     validar(ndvi, "ndvi#")
-    assert ndvi["producto"]["nombre"] == "MOD13Q1" and ndvi["producto"]["version"] == "061" and "Planetary Computer" in ndvi["fuente"]["nombre"]
+    from app.clientes.planetary import CITA
+    assert ndvi["producto"]["nombre"] == "MOD13Q1" and ndvi["producto"]["version"] == "061" and ndvi["fuente"]["cita"] == CITA
     fechas = [d["fecha"] for d in ndvi["serie"]]
     assert fechas == sorted(set(fechas)) and fechas[0] <= "2005-12-31" and fechas[-1] >= "2025-12-01", "debe cubrir la ventana estandar sin repetir fechas"
     assert len(fechas) > 440, "unos 23 compuestos de Terra por anio durante 20 anios"

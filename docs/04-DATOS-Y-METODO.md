@@ -15,9 +15,9 @@
 | --- | --- | --- | --- | --- | --- |
 | **NASA POWER** | Lluvia, temperatura, radiación, humedad relativa, viento, humedad del suelo modelada | Decenas de km | API REST sin llave; diario y mensual; máx. 20 parámetros por llamada | **Base del MVP** | Estructura y límite verificados |
 | **SRTM** | Elevación para el relieve | 30 m | OpenTopography, AppEEARS o tiles de terreno | **Alta** (relieve decidido) | `[VERIFICAR]` |
-| **GPM IMERG** | Lluvia por satélite | ~10 km (0.1°); diario vía POWER, 30 min solo con Earthdata | **NASA POWER** `IMERG_PRECTOT` con `time-standard=UTC`, sin llave (en hora local responde `-999`); media hora con Earthdata + `earthaccess` | Alta como evidencia (A4.10) | Probado 14/11 (`features/imerg/`) |
+| **GPM IMERG** | Lluvia por satélite | ~10 km (0.1°); diario vía POWER desde 1998-01-01, 30 min solo con Earthdata | **NASA POWER** `IMERG_PRECTOT` con `time-standard=UTC`, sin llave (en hora local responde `-999`). Inicio usado: 1998-01-01 (POWER y CMR). La metodología dice 1998-06-01 y UCAR 2000-06-01. Los 0.0 del 25 al 31 de mayo de 1998 se conservan | Alta como evidencia (A4.10) | Probado 14/11 (`features/imerg/`); llamada de confirmación el mismo día |
 | **SMAP** | Humedad del suelo | 9 a 36 km | Earthdata | Media | `[VERIFICAR]` |
-| **MODIS** | NDVI | 250 m, 16 días | REST de ORNL DAAC sin llave (`modis.ornl.gov/rst/api/v1/MOD13Q1/subset`, cita `doi:10.3334/ORNLDAAC/1600`); AppEEARS o Earth Engine | Evidencia (A4.11) | Probado 14/11 |
+| **MODIS** | NDVI | 250 m, 16 días | MOD13Q1 V061 por Microsoft Planetary Computer si no está en caché o en el paquete. Cita: Didan, K. (2021). MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061. NASA EOSDIS Land Processes DAAC. doi:10.5067/MODIS/MOD13Q1.061. Datos servidos por Microsoft Planetary Computer. ORNL DAAC no respondió el 14/11 (502, 503); quedó como validación cruzada de 4 fechas, no como respaldo en vivo. `[VERIFICAR]` https://planetarycomputer.microsoft.com/terms antes de la entrega final | Evidencia (A4.11) | Probado 14/11 |
 | **Landsat / HLS** | NDVI y reflectancia | 30 m | AppEEARS o Earth Engine | Baja | `[VERIFICAR]` |
 | **ECOSTRESS** | Temperatura de superficie | ~70 m, irregular | AppEEARS | Baja | `[VERIFICAR]` |
 | **GRACE / GRACE-FO** | Agua almacenada | Cientos de km | Solo contexto regional | Baja | `[VERIFICAR]` |
@@ -47,6 +47,7 @@
 | **FAO EcoCrop** | Rangos de temperatura, lluvia y ciclo por cultivo | Base pública | `[VERIFICAR]` |
 | **SIAP, cierre agrícola municipal** | Superficie sembrada, cosechada y producción por municipio, cultivo, ciclo (PV u OI) y modalidad (riego o temporal); 2003 a 2025 | Datos abiertos en CSV, **sin API**: una URL por año (cambia solo `ANIO`) desde la [página de datos abiertos](https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php); ~5 MB por año, codificación ISO-8859 | Presencia por lugar; **no trae meses de siembra** | Consultado el 14/11/2026 (2021-2025); extracto de Isla en `datos/catalogos/fuentes/` |
 | **INIFAP** (calendarios) | Épocas de siembra por cultivo y región, en PDF | Agenda Técnica Agrícola de Veracruz y guías por cultivo; ver `datos/catalogos/README.md` | Ventanas de siembra | Texto en PDF, sin datos estructurados |
+| **GGCMI fase 3** | Siembra y madurez de temporal fuera de México, 0.5° | CC BY 4.0, doi:10.5281/zenodo.5062513. Un día y un solo ciclo por celda (`mai_rf`). `bea_rf` no se usa: el archivo no dice que sea frijol | `GET /api/calendario` (A4.13). En México sigue SIAP/INIFAP | Leído el 14/11. Isla no cambia |
 | **INEGI edafología** | Contexto de suelo | Escala gruesa | `[VERIFICAR]` |
 | **SoilGrids (ISRIC)** | Textura y materia orgánica | **API REST pausada**; no depender de ella | Verificado (pausada) |
 

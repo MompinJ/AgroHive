@@ -28,8 +28,8 @@ VERSION = "061"
 BANDA_NDVI = "250m_16_days_NDVI"
 BANDA_CALIDAD = "250m_16_days_pixel_reliability"
 NOMBRE = "NASA LP DAAC MOD13Q1 V061 (NDVI de MODIS/Terra) via Microsoft Planetary Computer"
-CITA = ("NASA LP DAAC. MOD13Q1 v061, MODIS Vegetation Indices 16-Day L3 Global 250 m (Terra). doi:10.5067/MODIS/MOD13Q1.061 "
-        "(el DOI resuelve a la ficha de NASA Earthdata); alojado por Microsoft en la coleccion modis-13Q1-061 de Planetary Computer")
+CITA = ("Didan, K. (2021). MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061. "
+        "NASA EOSDIS Land Processes DAAC. doi:10.5067/MODIS/MOD13Q1.061. Datos servidos por Microsoft Planetary Computer.")
 RESOLUCION = "250 m (rejilla sinusoidal), compuesto de 16 dias"
 ESCALA = 0.0001
 RANGO_NDVI = (-2000, 10000)  # rango valido del producto (verificado en /MOD13Q1/bands de ORNL el 14/11)

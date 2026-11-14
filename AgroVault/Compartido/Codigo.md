@@ -41,7 +41,7 @@ Comandos: `cd web && npm test`, `npm run dev`, `npx tsc --noEmit`. La última co
 
 ## `api/`
 
-FastAPI. Rutas en `app/rutas/`: `clima`, `suelo`, `cultivos`, `proxima`, `terreno` (`POST /api/elevacion`), `smap`. No hay ruta NDVI (A4.11).
+FastAPI. Rutas en `app/rutas/`: `clima`, `suelo`, `cultivos`, `proxima`, `terreno` (`POST /api/elevacion`), `smap`, `ndvi` (`GET /api/ndvi`, A4.11, Planetary Computer), `calendario` (`GET /api/calendario`, A4.13). `versionContrato` de `/health` sigue a `contratos/package.json` (0.12.1).
 
 | Pieza | Archivo |
 | --- | --- |
@@ -73,7 +73,7 @@ FastAPI. Rutas en `app/rutas/`: `clima`, `suelo`, `cultivos`, `proxima`, `terren
 
 ## `contratos/`
 
-Versión `0.10.0`. Schemas, ejemplos, inválidos y `tipos/contratos.d.ts`. Resumen en [[Contratos]]. `cd contratos && npm test`.
+Versión `0.12.1` (`contratos/package.json`). Schemas, ejemplos, inválidos y `tipos/contratos.d.ts`. Resumen en [[Contratos]]. `cd contratos && npm test`.
 
 ## `modelos/` y `features/`
 

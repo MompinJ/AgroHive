@@ -67,7 +67,8 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 | `GET /api/proxima-temporada?lat=&lon=` | Banda p10 a p90 por mes, **6 meses**, sin cifra única; no es predicción. Implementado | `proxima-temporada` |
 | `GET /api/suelo?lat=&lon=` | Textura, pH y TAW (Saxton y Rawls si hay carbono) de 0 a 30 cm. ISRIC es `estimacionUsada`; OpenLandMap va en `estimaciones` y sustituye si ISRIC falla. Siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
 | `GET /api/smap?lon=&lat=&desde=&hasta=` | Humedad superficial SMAP L3, contraste, máximo 10 días. Sin `EARTHDATA_TOKEN`: 503. Implementado. No entra al balance | `smap` |
-| `GET /api/ndvi` | Contrato listo. La ruta no existe (A4.11) | `ndvi` |
+| `GET /api/ndvi?lat=&lon=&desde=&hasta=` | NDVI MOD13Q1 V061 por Planetary Computer, evidencia, máximo 400 días. No entra al ranking. Implementado (A4.11). La descripción del schema todavía nombra a ORNL: pedido a Mompin | `ndvi` |
+| `GET /api/calendario?lat=&lon=` | En Isla, el calendario SIAP/INIFAP. Fuera de México, maíz de temporal de GGCMI (un día, madurez en la nota). Frijol, calabaza y chile: `NO_EVALUABLE`. Implementado (A4.13) | `calendario-local` |
 
 Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 con `{estado: ERROR_DATOS, motivo}`. Detalle y cómo correr la API en `api/README.md`.
 

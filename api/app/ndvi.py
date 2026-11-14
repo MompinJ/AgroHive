@@ -29,6 +29,7 @@ async def _una(sem: asyncio.Semaphore, lat: float, lon: float, ini: date, fin: d
             return str(e)[:160]
     consultado = date.today().isoformat()
     if calidad_ok:  # una ventana sin calidad no se fija en cache: se vuelve a pedir
+        # Solo el NDVI ya convertido. El token SAS y la URL firmada del COG no se escriben.
         cache.escribir(clave, {"consultado": consultado, "datos": datos, "escala": escala, "calidadOk": True})
     return datos, escala, calidad_ok, consultado
 
