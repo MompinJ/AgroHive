@@ -16,9 +16,9 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | **Mompin** | 11 | 0 | 0 | 3 | 79 % de 14 |
 | **Eduardo** | 9 | 1 | 2 | 2 | 64 % de 14 |
 | **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
-| **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
+| **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
 
-Proyecto completo: **22 de 56** actividades hechas (39 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **23 de 56** actividades hechas (41 %), 3 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -72,7 +72,7 @@ Proyecto completo: **22 de 56** actividades hechas (39 %), 4 en curso, 2 bloquea
 ## balam
 
 - [ ] **A0.5** Verificar reglas de entrega, IA y video (V-03, V-04)
-- [/] **A1.2** Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías `EN CURSO` — rutas P0 a P3 y build verificados; falta el Worker del motor (coordinar con Mompin)
+- [x] **A1.2** Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías `HECHO` — rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados
 - [ ] **A2.9** Cuadrícula desde polígono (Turf.js) con tope de celdas
 - [ ] **A2.10** Mapa y dibujo de polígono libre (Leaflet)
 - [ ] **A3.4** Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario
