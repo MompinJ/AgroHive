@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Losas de suelo de A2.12 en la escena (Mompin, rama `Mompin-escena`)
+
+- **Archivos:** `web/src/escena/suelo.ts`, `adaptador.ts`, `modelo.ts`, `render/escena-three.ts`, `voxel/fuente-modelos.ts`, `EscenaParcela.tsx` (nueva prop `suelo`), `vista-previa.tsx`, prueba `suelo-escena.test.ts`; `docs/06`, `INTEGRACION.md`.
+- **Cambio:** la escena carga las 9 losas de Mafer (`modelos/suelos/`) y pinta la columna con el tono del tipo de suelo. La losa sale de `textura.grupo` del contrato `suelo` y de la `humedad` del motor, con cortes en tercios de TAW `[PROPUESTA]`. Si falta el tipo o la humedad no hay losa, y sin humedad la columna va en gris.
+- **Fuente / evidencia:** tonos tomados de `modelos/paleta.md` (verificado en prueba); 159 pruebas de escena; headless con el motor real: suelo del mapa de Isla (arcilloso) y selector manual (franco).
+
 ### 2026-11-14 — Escena con la cuadrícula de balam (A2.9) y revisión de A3.3/A2.11 (Mompin, rama `Mompin-escena`)
 
 - **Archivos:** `web/src/escena/adaptador.ts`, `placa.ts`, `demo-motor.ts`, `vista-previa.tsx`, `INTEGRACION.md`, pruebas `cuadricula-balam.test.ts` y `estados.test.ts`; `docs/06`.

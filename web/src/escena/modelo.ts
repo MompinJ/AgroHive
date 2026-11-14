@@ -5,6 +5,7 @@
 
 import type {
   Advertencia,
+  GrupoSuelo,
   EstadoEvaluacion,
   EstadoPlanta,
   EtapaVisual,
@@ -70,6 +71,8 @@ export interface BloqueEscena {
   etapa: EtapaVisual | null;
   avanceEtapa: number | null;
   noRecomendadoEnLugar: boolean;
+  /** Losa de modelos/suelos/ (suelo_<tipo>_<humedad>) o null si falta el tipo o la humedad (A2.12). */
+  losa: string | null;
   /** Registro original del motor, para tooltips (A3.8). */
   registro: RegistroCelda | null;
 }
@@ -83,6 +86,8 @@ export interface EscenaModelo {
   /** Fecha de los registros representados; null si no hay resultado. */
   fecha: string | null;
   exageracionVertical: number;
+  /** Tipo de suelo (contrato suelo, textura.grupo); null si no se conoce. */
+  grupoSuelo: GrupoSuelo | null;
   /** Elevacion de referencia (minimo medido); null si ninguna celda tiene elevacion. */
   elevacionBaseM: number | null;
   tamanoCeldaM: number;
