@@ -1,0 +1,25 @@
+HTTP/2 200 
+content-type: application/json
+content-length: 2157
+x-amz-cf-pop: QRO50-P1
+date: Sat, 14 Nov 2026 19:13:38 GMT
+x-amzn-trace-id: Root=1-6af8b2e2-381a29446636199d7f3e6165;Parent=273ef9318ec53b4f;Sampled=0;Lineage=1:de7b4c15:0
+x-amzn-requestid: f13cdb8a-8695-4d8d-bb59-bb5534bc5627
+x-process-time: 0.02
+content-disposition: inline; filename=POWER_Point_Daily_20240101_20240110_018d03N_095d53W_LST.json
+access-control-allow-origin: *
+x-amzn-remapped-content-length: 2157
+x-data-sources: merra2,syn1deg,power
+content-language: en-US
+x-app-name: daily
+x-archive-time: 0.466
+x-amz-apigw-id: G2DjbGMJPHcEg-A=
+vary: Origin
+x-app-version: v2.10.3
+x-service-time: 0.492
+x-objects-time: 0.004
+via: 1.1 23329077b69a3672b790475a1e1bc122.cloudfront.net (CloudFront), 1.1 15fe22943ed7eb6872acafeef3fd3826.cloudfront.net (CloudFront)
+x-cache: Miss from cloudfront
+x-amz-cf-pop: QRO53-P1
+x-amz-cf-id: dlHBLE92gbWYSok-6-DOsbaFgEOMXdUUj8NVomhWqGpIYtvsuSZw5g==
+
