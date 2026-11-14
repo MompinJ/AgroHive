@@ -273,6 +273,14 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — Cronograma al dia tras mezclar main ce58cc4 (Eduardo)
+
+- **Archivos:** `docs/14`, `docs/cronograma.html`, `AgroVault/Compartido/Cronograma.md`, `herramientas/quejas-ia/QUEJAS.md` (regenerados), `api/app/config.py`, `api/tests/test_basico.py`, `datos/demo/` (regenerado).
+- **Estado:** 34 de 60 actividades hechas (57 %): Mompin 14 de 15, Mafer 8 de 12, Eduardo 10 de 18, balam 3 de 16. Entraron 4 actividades nuevas al reparto (A1.7 hecha por Mompin; A4.10, A4.11 y A4.12, del alcance mundial, en mi fila).
+- **Marcas que NO cambian, verificadas:** A3.6 (modo 2D) sigue pendiente, asi que A5.4 sigue bloqueada; ninguna pagina usa aun `usarDatosParcela`, asi que A4.6 y A4.7 siguen en curso; A5.8 sigue bloqueada por A4.6.
+- **API:** `VERSION_CONTRATO` pasa a 0.10.0 (el contrato vigente) y se regenero el paquete de demo.
+- **Pendiente mio:** A4.10 (lluvia IMERG por POWER) y A4.11 (NDVI de MODIS por ORNL DAAC), segun el encargo de Mompin (#91, `features/encargos/eduardo-datos-globales.md`).
+
 ### 2026-11-14 (noche) — A4.8: GET /api/smap (SMAP L3 36 km), contraste informativo (Eduardo, sesion B)
 
 - **Archivos:** `api/app/clientes/earthdata.py`, `api/app/rutas/smap.py`, `api/app/modelos_smap.py`, `api/tests/test_smap.py`, `api/app/main.py`, `api/requirements.txt` (earthaccess y h5py), OpenAPI y cliente regenerados, `api/README.md`, `docs/14`. Hecho en la rama `Eduardo-B` y mezclado en `Eduardo` por la sesion A tras revisarlo.
