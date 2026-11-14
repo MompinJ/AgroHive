@@ -76,3 +76,31 @@ def test_el_paquete_de_demo_committeado_cumple_los_contratos(validar):
     terreno = cargar("terreno")
     validar(terreno["terreno"], "parcela#/properties/terreno")
     assert len(terreno["celdas"]) == 4
+
+
+def test_el_terreno_del_paquete_corresponde_a_la_orientacion_de_las_celdas(monkeypatch):
+    """Recalcula la elevacion de cada celda desde los tiles guardados en el paquete y la compara con terreno.json. Las pruebas de forma no
+    ven una fila cruzada: asi si (c-0-0 es el sur, contratos/parcela.schema.json). Offline: los tiles estan en datos/demo/cache."""
+    import asyncio
+
+    import httpx
+
+    from app.clientes import terrarium
+
+    monkeypatch.setattr(config, "DEMO_DIR", RAIZ / "datos" / "demo" / "cache")
+    parcela = json.loads((RAIZ / "contratos" / "ejemplos" / "parcela.ejemplo.json").read_text(encoding="utf-8"))
+    celdas = parcela["celdas"]
+    for c in celdas:  # la convencion que el generador exige: i crece al norte, j crece al este
+        for o in celdas:
+            if o["i"] > c["i"] and o["j"] == c["j"]:
+                assert o["centro"][1] > c["centro"][1], f"{c['id']} y {o['id']}: i no crece hacia el norte"
+            if o["j"] > c["j"] and o["i"] == c["i"]:
+                assert o["centro"][0] > c["centro"][0], f"{c['id']} y {o['id']}: j no crece hacia el este"
+
+    async def recalcular():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(lambda r: httpx.Response(500))) as nada:  # sin red: si falta un tile, falla
+            return await terrarium.elevaciones(nada, [tuple(c["centro"]) for c in celdas])
+
+    esperadas = {c["id"]: round(v, 1) for c, v in zip(celdas, asyncio.run(recalcular()))}
+    guardado = {c["id"]: c["elevacionM"] for c in json.loads((RAIZ / "datos" / "demo" / "respuestas" / "terreno.json").read_text(encoding="utf-8"))["celdas"]}
+    assert guardado == esperadas

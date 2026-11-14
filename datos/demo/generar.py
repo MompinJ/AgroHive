@@ -94,6 +94,14 @@ aux = cliente.post("/api/elevacion", json={"tamanoCeldaM": LADO_CALENTAMIENTO_M,
 if aux.status_code != 200 or aux.json()["terreno"]["estado"] != "EVALUABLE":
     raise SystemExit(f"elevacion: la API respondio {aux.status_code}")
 celdas = [{k: c[k] for k in ("id", "i", "j", "centro")} for c in parcela["celdas"]]
+# Orientacion (contratos/parcela.schema.json, 14/11): i=0 es la fila mas al SUR y j=0 la columna mas al OESTE. Si el centro de las celdas
+# no la cumple, las elevaciones quedarian cruzadas y las pruebas de forma no lo verian: se aborta antes de escribir nada.
+for c in celdas:
+    for otra in celdas:
+        if otra["i"] > c["i"] and otra["j"] == c["j"] and not otra["centro"][1] > c["centro"][1]:
+            raise SystemExit(f"la parcela no cumple 'i crece hacia el norte': {c['id']} y {otra['id']}")
+        if otra["j"] > c["j"] and otra["i"] == c["i"] and not otra["centro"][0] > c["centro"][0]:
+            raise SystemExit(f"la parcela no cumple 'j crece hacia el este': {c['id']} y {otra['id']}")
 r = cliente.post("/api/elevacion", json={"tamanoCeldaM": parcela["tamanoCeldaM"], "celdas": celdas})
 if r.status_code != 200:
     raise SystemExit(f"elevacion: la API respondio {r.status_code}")

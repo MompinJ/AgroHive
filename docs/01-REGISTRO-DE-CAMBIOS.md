@@ -324,6 +324,33 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A4.10: lluvia satelital IMERG en /api/clima y paquete de demo regenerado (Eduardo)
+
+- **Archivos:** `api/app/clientes/power.py`, `api/app/servicios.py`, `api/app/modelos.py`, `api/tests/` (test_clima, test_proxima, test_contratos_api), `datos/demo/` (regenerado), `datos/pruebas-apis/respuestas/power_imerg_*.json`, `api/README.md`, `AgroVault/Compartido/APIs.md`, `docs/14`.
+- **Cambio:** `GET /api/clima` devuelve `lluviaSatelital` (contrato 0.10.0 ya en `main`, A1.7) con `IMERG_PRECTOT` de POWER pedida en UTC. **Evidencia**: no entra al balance ni a los escenarios. `-999` es `null`, nunca 0. Si IMERG falla, el clima sale igual sin el bloque (`IMERG_NO_DISPONIBLE`).
+- **Hallazgo nuevo, no estaba en el encargo:** la celda de IMERG es de **0.1 grados**, no la de MERRA-2 (0.5 x 0.625): cuatro celdas vecinas dieron cuatro series distintas (por ejemplo, 57.67, 55.83, 77.51 y 67.38 mm el mismo dia). Por eso se pide el centro de la celda de 0.1 y la cache va por esa celda, no por la de POWER.
+- **Paquete de demo regenerado** (lo pidio Mompin, #110): trae IMERG (7 397 dias, ninguno en -999 porque 2025 ya esta publicado) y el `terreno.json` **corregido a la orientacion nueva** (i=0 al sur): antes `c-0-0` valia 63.1 m y ahora 62.0 m (filas norte y sur cruzadas). El generador ahora aborta si las celdas no cumplen "i crece al norte, j al este" y una prueba nueva recalcula cada elevacion desde los tiles guardados y falla si el terreno esta cruzado (verificado cruzandolo a proposito).
+- **Evidencia:** 83 pruebas de la API (10 nuevas de IMERG y 1 de orientacion), con respuestas reales de POWER (incluida una con `-999`); el bloque valida contra `serie-clima.schema.json`.
+- **Efecto en el front, a avisar:** `serie-clima-*.js` pasa de 1.27 a **1.55 MB** (224 KB comprimido) por llevar IMERG dentro del bundle. Y **una prueba de la escena de Mompin falla** (`web/src/escena/pruebas/demo-motor.test.ts`, "la parcela usa el terreno real del paquete"): tiene escritas las elevaciones viejas `[63.1, 62.6, 62, 63.3]`; con el paquete corregido son `[62, 63.3, 63.1, 62.6]`. El archivo es de Mompin: debe actualizarlo en el mismo merge (cambio atomico).
+- **Pendiente mio:** A4.11 (NDVI de MODIS por ORNL DAAC), que ademas necesita su contrato.
+
+### 2026-11-14 (noche) — Tercer despliegue: main d182af4 con la escena montada (Eduardo, aviso de Mompin #102)
+
+- **Despliegue:** el droplet corre `main` en `d182af4`: escena 3D montada en el Laboratorio, selector A3.4 conectado al motor, banda A4.9, sistema visual de balam, chile de Mafer y `GET /api/smap`. Anunciado antes por el buzon; una sola sesion desplego. Front construido en el droplet y publicado con respaldo del anterior.
+- **Pregunta de Mompin respondida:** los `.bbmodel` **no hay que copiarlos**: `import.meta.glob(..., { query: '?raw' })` los empaqueta como trozos de JS (31 archivos `maiz_*`, `frijol_*`, `calabaza_*`, `chile_*` y `suelo_*`), verificado en el `dist` local y en produccion (por ejemplo `chile_madurez-*.js` y `frijol_madurez-*.js` responden 200). `fs.allow` de `vite.config.ts` solo aplica a `npm run dev`.
+- **Verificado desde fuera:** `/` 200 con el bundle nuevo; `EscenaParcela` y `serie-clima` 200; `/health` trae `commit: d182af4`; `/api/suelo` de Isla da TAW 122.3 mm/m con ISRIC y OpenLandMap; `mediworks.mx` sigue en 200. `/api/smap` sin token responde 503 visible. `earthaccess` 0.19.0, `h5py` 3.16.0 y `rasterio` 1.5.2 instalados.
+- **Sin cambiar:** no hay `EARTHDATA_TOKEN` en el servidor (falta el OK explicito del usuario); `nginx` sin cambios.
+- **Dato nuevo:** el bundle trae el paquete de clima completo en `serie-clima-*.js` (1.27 MB, 190 KB comprimido), la pantalla inicial baja eso aunque no lo use todavia.
+- **Nota:** `/health` dice `versionContrato 0.9.0` porque ese es el valor en `main`; mi rama ya trae 0.10.0 y llegara en el proximo deploy.
+
+### 2026-11-14 (noche) — Cronograma al dia tras mezclar main ce58cc4 (Eduardo)
+
+- **Archivos:** `docs/14`, `docs/cronograma.html`, `AgroVault/Compartido/Cronograma.md`, `herramientas/quejas-ia/QUEJAS.md` (regenerados), `api/app/config.py`, `api/tests/test_basico.py`, `datos/demo/` (regenerado).
+- **Estado:** 34 de 60 actividades hechas (57 %): Mompin 14 de 15, Mafer 8 de 12, Eduardo 10 de 18, balam 3 de 16. Entraron 4 actividades nuevas al reparto (A1.7 hecha por Mompin; A4.10, A4.11 y A4.12, del alcance mundial, en mi fila).
+- **Marcas que NO cambian, verificadas:** A3.6 (modo 2D) sigue pendiente, asi que A5.4 sigue bloqueada; ninguna pagina usa aun `usarDatosParcela`, asi que A4.6 y A4.7 siguen en curso; A5.8 sigue bloqueada por A4.6.
+- **API:** `VERSION_CONTRATO` pasa a 0.10.0 (el contrato vigente) y se regenero el paquete de demo.
+- **Pendiente mio:** A4.10 (lluvia IMERG por POWER) y A4.11 (NDVI de MODIS por ORNL DAAC), segun el encargo de Mompin (#91, `features/encargos/eduardo-datos-globales.md`).
+
 ### 2026-11-14 (noche) — A4.8: GET /api/smap (SMAP L3 36 km), contraste informativo (Eduardo, sesion B)
 
 - **Archivos:** `api/app/clientes/earthdata.py`, `api/app/rutas/smap.py`, `api/app/modelos_smap.py`, `api/tests/test_smap.py`, `api/app/main.py`, `api/requirements.txt` (earthaccess y h5py), OpenAPI y cliente regenerados, `api/README.md`, `docs/14`. Hecho en la rama `Eduardo-B` y mezclado en `Eduardo` por la sesion A tras revisarlo.
