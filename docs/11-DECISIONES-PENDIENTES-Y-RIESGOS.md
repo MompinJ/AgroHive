@@ -54,7 +54,7 @@ Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Al
 
 | Recurso | Veredicto | Por qué |
 | --- | --- | --- |
-| GPM IMERG | **Sí**, A4.10 | Viene dentro de NASA POWER (`IMERG_PRECTOT`, `time-standard=UTC`, sin cuenta; probado). 0.1°, desde 1998-06-01 según POWER (inicio `VERIFICAR` contra GES DISC). Ve tormentas que MERRA-2 aplana; es evidencia y no cambia los escenarios (ver riesgos) |
+| GPM IMERG | **Sí**, A4.10 | Viene dentro de NASA POWER (`IMERG_PRECTOT`, `time-standard=UTC`, sin cuenta; probado). 0.1°, desde 1998-01-01 (primer dato en POWER, igual que el catálogo CMR). Ve tormentas que MERRA-2 aplana; es evidencia y no cambia los escenarios (ver riesgos) |
 | MODIS NDVI | **Después**, A4.11 | REST de ORNL DAAC sin cuenta (probado). Evidencia visual; píxel de 250 m, no entra al ranking |
 | SRTM, ERA5 | Ya integrados | Terrarium (elevación compuesta de SRTM y otras fuentes) y respaldo Open-Meteo (ERA5) |
 | SMAP | Después (A4.8) | 9 a 36 km, cuenta Earthdata, capa superficial; cubre los tres años de escenario (desde 2015), útil para contrastar la humedad |

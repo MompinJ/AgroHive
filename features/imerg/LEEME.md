@@ -4,10 +4,10 @@ Rama `Mompin-features`. **No es contrato ni salida del motor**: es la evidencia 
 
 ## Qué se encontró al probar POWER (14/11/2026)
 
-- POWER entrega la lluvia de GPM IMERG (0.1°; el inicio difiere según la fuente: POWER 1998-06-01, catálogo de NASA 1998-01-01 y espejo de UCAR 2000-06-01; `VERIFICAR` contra GES DISC) como `IMERG_PRECTOT` (mm/día) **sin cuenta Earthdata**, en la misma API diaria que ya usamos (`api/app/clientes/power.py`).
+- POWER entrega la lluvia de GPM IMERG (0.1°, desde el **1998-01-01**: en POWER (`time-standard=UTC`, punto de la demo, llamada real del 14/11) el último `-999` es el 1997-12-31 y el primer dato el 1998-01-01, igual que el catálogo CMR de NASA) como `IMERG_PRECTOT` (mm/día) **sin cuenta Earthdata**, en la misma API diaria que ya usamos (`api/app/clientes/power.py`).
 - **Hay que pedirla con `time-standard=UTC`.** En hora solar local (el valor por defecto) POWER responde `-999` y el mensaje "The IMERG Source Data is not available at the Local Solar Time (LST) standard". El día UTC va unas 6 h corrido respecto al día local de Veracruz.
 - `-999` es relleno: se guarda como `null`, nunca como 0.
-- Ojo: el 14/11 POWER devolvió `0.0` (no `-999`) para el 25 al 31 de mayo de 1998, antes del 1998-06-01 que da su propia metodología. Esos ceros pueden ser relleno: no usar días anteriores al 1998-06-01 (la API ya recorta ahí, `INICIO_IMERG` en `api/app/clientes/power.py`).
+- Los `0.0` del 25 al 31 de mayo de 1998 son lluvia cero, no relleno: una nota anterior de este archivo decía lo contrario y quedó corregida. La API recorta en 1998-01-01 (`INICIO_IMERG` en `api/app/clientes/power.py`).
 
 ## Cómo correrlo
 
