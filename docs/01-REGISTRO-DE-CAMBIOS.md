@@ -59,6 +59,13 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — A1.1 `[HECHO]`; A2.16 asignada a Mafer
+
+- **Archivos:** `14` (fila de A1.1, fila de A2.16 y tablero), `AgroVault/Compartido/{Pendientes,Resumen}.md`.
+- **Cambio y motivo:** decisiones de Mompin. A1.1 pasa a `[HECHO]` porque `main` está en verde y el equipo revisó los contratos en persona. A2.16 (TAW por pedotransferencia de Saxton y Rawls, 2006) la hace Mafer. Se actualizó además el estado del repo en `Resumen.md`, que todavía decía que no había código en `web/` ni en `api/`.
+- **Fuente / evidencia:** decisión del evento transmitida por la sesión maestra.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — `main` de vuelta en verde tras contratos 0.4.0 y 0.5.0; regla de cambios de contrato
 
 - **Archivos:** `api/app/{proxima,modelos,servicios}.py`, `api/tests/test_proxima.py`, `api/openapi.json`, `api/cliente/api.d.ts` (Eduardo); `web/src/ui/demo.ts` (balam); `datos/catalogos/{generar.py,cultivos.json,README.md}` (Mafer); `AGENTS.md`, `AgroVault/Compartido/Reglas.md`.
