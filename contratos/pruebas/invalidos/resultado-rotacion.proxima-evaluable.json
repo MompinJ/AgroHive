@@ -1,0 +1,306 @@
+{
+  "meta": {
+    "versionContrato": "0.8.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "rotacionId": "R1",
+  "estado": "EXPLORATORIO",
+  "filtroClima": null,
+  "cultivosNoRecomendados": [
+    {
+      "cultivo": "calabaza",
+      "ciclos": [
+        2
+      ],
+      "motivo": "EJEMPLO: la fuente no registra calabaza en el municipio (2021-2025); se muestra, no se recomienda.",
+      "fuente": {
+        "nombre": "EJEMPLO - valores ficticios (forma de SIAP)",
+        "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+      },
+      "calendarioId": "calendario-demo-isla"
+    }
+  ],
+  "porEscenario": {
+    "seco": {
+      "anioReal": 2015,
+      "estado": "EXPLORATORIO",
+      "pilares": {
+        "deficitHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "proporcionDemandaNoCubierta": 0.38,
+          "diasDeficit": 41,
+          "diasDeficitEtapasSensibles": 12
+        },
+        "compatibilidadCiclo": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin calendario de siembra con fuente (V-20).",
+          "siembrasFueraDeVentana": null
+        },
+        "proteccionSuelo": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "indiceErosionRelativo": 0.2,
+          "diasSueloDesnudo": 35
+        },
+        "riesgoCalor": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "diasEstresCalor": 9
+        },
+        "aporteIndirecto": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Regla simple: la rotacion incluye frijol.",
+          "incluyeLeguminosa": true,
+          "especiesDistintas": 2
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 12.0,
+          "diasExceso": 3,
+          "fraccionLluviaPercolada": 0.04
+        }
+      },
+      "puntaje": 0.52
+    },
+    "habitual": {
+      "anioReal": 2012,
+      "estado": "EXPLORATORIO",
+      "pilares": {
+        "deficitHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "proporcionDemandaNoCubierta": 0.15,
+          "diasDeficit": 18,
+          "diasDeficitEtapasSensibles": 3
+        },
+        "compatibilidadCiclo": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin calendario de siembra con fuente (V-20).",
+          "siembrasFueraDeVentana": null
+        },
+        "proteccionSuelo": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "indiceErosionRelativo": 0.4,
+          "diasSueloDesnudo": 35
+        },
+        "riesgoCalor": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "diasEstresCalor": 4
+        },
+        "aporteIndirecto": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Regla simple: la rotacion incluye frijol.",
+          "incluyeLeguminosa": true,
+          "especiesDistintas": 2
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 85.0,
+          "diasExceso": 11,
+          "fraccionLluviaPercolada": 0.18
+        }
+      },
+      "puntaje": 0.71
+    },
+    "lluvioso": {
+      "anioReal": 2010,
+      "estado": "EXPLORATORIO",
+      "pilares": {
+        "deficitHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "proporcionDemandaNoCubierta": 0.05,
+          "diasDeficit": 6,
+          "diasDeficitEtapasSensibles": 0
+        },
+        "compatibilidadCiclo": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin calendario de siembra con fuente (V-20).",
+          "siembrasFueraDeVentana": null
+        },
+        "proteccionSuelo": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "indiceErosionRelativo": 0.7,
+          "diasSueloDesnudo": 35
+        },
+        "riesgoCalor": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "diasEstresCalor": 2
+        },
+        "aporteIndirecto": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Regla simple: la rotacion incluye frijol.",
+          "incluyeLeguminosa": true,
+          "especiesDistintas": 2
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 240.0,
+          "diasExceso": 27,
+          "fraccionLluviaPercolada": 0.37
+        }
+      },
+      "puntaje": 0.63
+    }
+  },
+  "peorCaso": {
+    "escenario": "seco",
+    "criterio": "B_minimax_arrepentimiento",
+    "metrica": "puntaje",
+    "valor": 0.52
+  },
+  "arrepentimiento": 0.06,
+  "ponderacion": {
+    "pesos": {
+      "deficitHidrico": 0.3333,
+      "proteccionSuelo": 0.3333,
+      "excesoHidrico": 0.3333
+    },
+    "etiqueta": "SUPUESTO",
+    "pilaresExcluidos": [
+      "compatibilidadCiclo"
+    ],
+    "nota": "EJEMPLO: pesos iguales entre los pilares evaluables (deficit, proteccion del suelo y exceso de agua), declarados como supuesto; compatibilidad de ciclo excluida por NO_EVALUABLE. El exceso se normaliza como 1 - fraccionLluviaPercolada (SUPUESTO)."
+  },
+  "ranking": {
+    "posicion": 1,
+    "de": 3,
+    "criterio": "B_minimax_arrepentimiento",
+    "desempate": "promedio de puntajes entre escenarios"
+  },
+  "proximaTemporada": {
+    "estado": "EVALUABLE",
+    "esPrediccion": false,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Rango entre anios analogos ficticios; no es una prediccion de la proxima temporada.",
+    "emitido": "2026-11-14",
+    "horizonte": {
+      "desde": "2026-12",
+      "hasta": "2027-05"
+    },
+    "criterioAnalogos": "EJEMPLO: anios del historico cuya anomalia de lluvia de dic a may tiene el mismo signo que la anomalia SEAS5 del horizonte.",
+    "ciclosEvaluados": [
+      2
+    ],
+    "ciclosFuera": [
+      {
+        "ciclo": 1,
+        "motivo": "Se siembra antes del horizonte (PV)."
+      },
+      {
+        "ciclo": 3,
+        "motivo": "Se siembra despues del horizonte de 6 meses."
+      }
+    ],
+    "aniosAnalogos": [
+      {
+        "anioReal": 2012,
+        "mesesDentro": 6,
+        "deMeses": 6,
+        "estado": "EXPLORATORIO",
+        "deficitHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "proporcionDemandaNoCubierta": 0.22,
+          "diasDeficit": 20,
+          "diasDeficitEtapasSensibles": 5
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 30.0,
+          "diasExceso": 4,
+          "fraccionLluviaPercolada": 0.08
+        }
+      },
+      {
+        "anioReal": 2019,
+        "mesesDentro": 6,
+        "deMeses": 6,
+        "estado": "EXPLORATORIO",
+        "deficitHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "proporcionDemandaNoCubierta": 0.41,
+          "diasDeficit": 35,
+          "diasDeficitEtapasSensibles": 11
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 5.0,
+          "diasExceso": 1,
+          "fraccionLluviaPercolada": 0.02
+        }
+      }
+    ],
+    "rango": {
+      "proporcionDemandaNoCubierta": {
+        "inferior": 0.22,
+        "superior": 0.41
+      },
+      "fraccionLluviaPercolada": {
+        "inferior": 0.02,
+        "superior": 0.08
+      },
+      "excesoTotalMm": {
+        "inferior": 5.0,
+        "superior": 30.0
+      }
+    },
+    "fuentes": [
+      {
+        "nombre": "EJEMPLO - valores ficticios (forma de NASA POWER y del pronostico estacional SEAS5)",
+        "nota": "No proviene de ninguna consulta real."
+      }
+    ]
+  },
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    },
+    {
+      "codigo": "SUELO_SUPUESTO",
+      "mensaje": "Textura y pH estimados por modelo global, no medidos.",
+      "severidad": "aviso"
+    }
+  ],
+  "explicacion": {
+    "porQue": "EJEMPLO: tiene el menor arrepentimiento maximo de las tres rotaciones comparadas; su peor escenario es el seco.",
+    "evidencia": [
+      {
+        "texto": "EJEMPLO: puntaje 0.52 en el anio seco ilustrativo, con 38 % de la demanda de agua sin cubrir.",
+        "valor": 0.52,
+        "unidad": "puntaje 0 a 1",
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios",
+          "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+        }
+      }
+    ],
+    "beneficios": [
+      "Incluye una leguminosa (frijol) en el ciclo 2."
+    ],
+    "huecos": [
+      "Suelo supuesto",
+      "Resolucion climatica gruesa (una celda de clima para toda la parcela)",
+      "Sin calendario de siembra verificado",
+      "Pesos de los pilares supuestos (iguales), no validados"
+    ],
+    "riesgos": [
+      "Deficit en etapas sensibles en el anio seco (valor de ejemplo)."
+    ],
+    "avisoExperto": "Validar con un agronomo o tecnico local antes de decidir.",
+    "redactadaPor": "plantilla"
+  }
+}
