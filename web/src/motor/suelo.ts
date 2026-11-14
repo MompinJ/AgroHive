@@ -5,7 +5,8 @@ import { fao56 } from './fuentes';
 import type { Fuente, Suelo, TablaSuelos } from './tipos';
 
 export type ResultadoTaw =
-  | { ok: true; tawMmPorM: number; fuente: Fuente; descripcion: string }
+  /** desdeSuelo: el TAW viene del propio documento de suelo (misma retencion que la condicion inicial con GWETROOT). */
+  | { ok: true; tawMmPorM: number; fuente: Fuente; descripcion: string; desdeSuelo: boolean }
   | { ok: false; motivo: string };
 
 export function resolverTaw(suelo: Suelo | null | undefined, tabla: TablaSuelos): ResultadoTaw {
@@ -13,7 +14,7 @@ export function resolverTaw(suelo: Suelo | null | undefined, tabla: TablaSuelos)
   const agua = suelo.agua?.tawMmPorM;
   if (agua && agua.estado === 'EVALUABLE') {
     const metodo = suelo.agua?.metodoTaw?.metodo ?? 'sin metodo declarado';
-    return { ok: true, tawMmPorM: agua.valor, fuente: agua.fuente, descripcion: `TAW del suelo ${suelo.id} (${metodo})` };
+    return { ok: true, tawMmPorM: agua.valor, fuente: agua.fuente, descripcion: `TAW del suelo ${suelo.id} (${metodo})`, desdeSuelo: true };
   }
   const clase = suelo.textura.clase ?? (suelo.origen === 'selector_manual' ? tabla.representanteGrupo[suelo.textura.grupo] : null);
   if (!clase) {
@@ -27,7 +28,7 @@ export function resolverTaw(suelo: Suelo | null | undefined, tabla: TablaSuelos)
       motivo: `TAW de la clase ${clase} NO_EVALUABLE: ${fila.tawMmPorM.motivo} (se calculara con Saxton y Rawls en A2.16; mientras, usar el selector manual).`,
     };
   }
-  return { ok: true, tawMmPorM: fila.tawMmPorM.valor, fuente: fila.tawMmPorM.fuente, descripcion: `Tabla de suelos, clase ${clase}` };
+  return { ok: true, tawMmPorM: fila.tawMmPorM.valor, fuente: fila.tawMmPorM.fuente, descripcion: `Tabla de suelos, clase ${clase}`, desdeSuelo: false };
 }
 
 export type ResultadoCondicionInicial =

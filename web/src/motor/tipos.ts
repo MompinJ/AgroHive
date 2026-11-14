@@ -3,6 +3,7 @@ export type {
   Advertencia,
   CalendarioLocal,
   CatalogoCultivos,
+  ClaseTextura,
   Celda,
   ClimaEscenario,
   Cultivo,

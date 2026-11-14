@@ -11,6 +11,7 @@
 // la misma distancia (diferencia menor a 0.05 mm, la mitad de la precision mostrada), gana el anio mas antiguo.
 // Siempre se declara el segundo anio mas cercano para que un empate practico sea visible.
 
+import { peorEstado } from './estados';
 import { anioDe, rangoFechas } from './fechas';
 import { HYNDMAN_FAN, SIAP_CICLOS } from './fuentes';
 import {
@@ -104,8 +105,9 @@ export function lluviaPorAnioAgricola(diario: readonly DiaClima[]): LluviaAnioAg
 
 const r1 = (x: number) => Math.round(x * 10) / 10;
 
+/** Una serie de ejemplo o sintetica es, como mucho, EXPLORATORIO (contrato clima-escenario). */
 function estadoDeSerie(serie: SerieClima): EstadoEvaluacion {
-  return serie.estado;
+  return serie.meta.esEjemplo ? peorEstado(serie.estado, 'EXPLORATORIO') : serie.estado;
 }
 
 /** Elige los anios reales de cada escenario desde la serie diaria de GET /api/clima. Determinista. */

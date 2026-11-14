@@ -69,6 +69,11 @@ describe('estados de la seleccion', () => {
     expect(sel.escenarios).toEqual({});
   });
 
+  it('serie de ejemplo o sintetica => EXPLORATORIO', () => {
+    const sel = seleccionarEscenarios(serieSintetica('2000-01-01', '2020-12-31', () => 3));
+    expect(sel.escenarios.seco?.estado).toBe('EXPLORATORIO');
+  });
+
   it('serie ERROR_DATOS => ERROR_DATOS', () => {
     const serie = { ...serieSintetica('2000-01-01', '2020-12-31', () => 3), estado: 'ERROR_DATOS' as const };
     expect(seleccionarEscenarios(serie).estado).toBe('ERROR_DATOS');
@@ -76,7 +81,7 @@ describe('estados de la seleccion', () => {
 
   it('respaldo de Open-Meteo => los escenarios quedan RESPALDO_HISTORICO', () => {
     const base = serieSintetica('2000-01-01', '2020-12-31', (f) => (anioDe(f) % 7) + 1);
-    const sel = seleccionarEscenarios({ ...base, estado: 'RESPALDO_HISTORICO', respaldo: true });
+    const sel = seleccionarEscenarios({ ...base, meta: { versionContrato: '0.5.0', esEjemplo: false }, estado: 'RESPALDO_HISTORICO', respaldo: true });
     expect(sel.escenarios.seco?.estado).toBe('RESPALDO_HISTORICO');
     expect(sel.escenarios.seco?.respaldo).toBe(true);
   });
