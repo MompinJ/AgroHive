@@ -4,6 +4,7 @@ import math
 from datetime import date, datetime, timedelta, timezone
 
 from . import cache, config, http
+from . import pedotransferencia
 from . import textura as clasificacion
 from .clientes import isric, openlandmap, openmeteo, power, terrarium
 from .modelos import CeldaEntrada
@@ -217,13 +218,15 @@ async def _suelo_isric(lat: float, lon: float) -> dict:
     ph = props.get("phh2o")
     soc = props.get("soc")
     estado_ph = "EXPLORATORIO" if ph and ph["radioM"] > 1000 else "EVALUABLE"
-    tabla = clasificacion.cargar_catalogo_suelos().get(clase)
-    grupo = tabla["grupo"] if tabla else clasificacion.GRUPO[clase]
-    if tabla:
-        taw = tabla["tawMmPorM"]
-    else:
-        taw = {"estado": "NO_EVALUABLE", "motivo": "La tabla de suelos (A1.6, datos/catalogos/suelos.json) no esta disponible en este servidor."}
+    grupo = _grupo(clase)
     fracciones = {"arena": round(arena, 1), "limo": round(limo, 1), "arcilla": round(arcilla, 1)}
+    estimacion = {
+        "id": ID_ISRIC, "servicio": "isric_soilgrids_wcs", "estado": estado_textura, "fuente": fuente,
+        "profundidad": {"desdeCm": 0, "hastaCm": 30},
+        "textura": {"clase": clase, "fraccionesPct": fracciones},
+        "ph": round(ph["valor"], 1) if ph else None,
+        "carbonoOrganicoGKg": round(soc["valor"], 1) if soc else None,
+    }
     fuente_ph = {**fuente, "unidades": "pH en agua (adimensional)",
                  "nota": f"Media de 0 a 30 cm ponderada por espesor de capa; mediana de los pixeles con dato a menos de {radio} m del punto."}
     return {
@@ -234,16 +237,9 @@ async def _suelo_isric(lat: float, lon: float) -> dict:
                     "fraccionesPct": fracciones, "fuente": fuente},
         "ph": ({"estado": estado_ph, "etiqueta": "SUPUESTO", "valor": round(ph["valor"], 1), "fuente": fuente_ph} if ph
                else {"estado": "NO_EVALUABLE", "motivo": "SoilGrids no tiene dato de pH en esta zona."}),
-        "estimaciones": [{
-            "id": ID_ISRIC, "servicio": "isric_soilgrids_wcs", "estado": estado_textura, "fuente": fuente,
-            "profundidad": {"desdeCm": 0, "hastaCm": 30},
-            "textura": {"clase": clase, "fraccionesPct": fracciones},
-            "ph": round(ph["valor"], 1) if ph else None,
-            "carbonoOrganicoGKg": round(soc["valor"], 1) if soc else None,
-        }],
+        "estimaciones": [estimacion],
         "estimacionUsada": ID_ISRIC,
-        "agua": ({"tawMmPorM": taw, "metodoTaw": {"metodo": "tabla_fao56", "fuente": taw["fuente"]}} if taw.get("estado") == "EVALUABLE"
-                 else {"tawMmPorM": taw}),
+        "agua": _agua(clase, estimacion),
         "advertencias": advertencias,
     }
 
@@ -253,13 +249,28 @@ async def _suelo_isric(lat: float, lon: float) -> dict:
 ID_OLM = "openlandmap-soildb"
 
 
-def _grupo_y_agua(clase: str):
-    """Grupo del selector y TAW de la tabla de A1.6 para una clase USDA (NO_EVALUABLE si la tabla no tiene fila o no esta)."""
+def _grupo(clase: str) -> str:
+    """Grupo del selector manual para una clase USDA, segun la tabla de suelos de A1.6 (copia de respaldo si falta el archivo)."""
     tabla = clasificacion.cargar_catalogo_suelos().get(clase)
-    grupo = tabla["grupo"] if tabla else clasificacion.GRUPO[clase]
-    taw = tabla["tawMmPorM"] if tabla else {"estado": "NO_EVALUABLE", "motivo": "La tabla de suelos (A1.6, datos/catalogos/suelos.json) no esta disponible en este servidor."}
-    agua = {"tawMmPorM": taw, "metodoTaw": {"metodo": "tabla_fao56", "fuente": taw["fuente"]}} if taw.get("estado") == "EVALUABLE" else {"tawMmPorM": taw}
-    return grupo, agua
+    return tabla["grupo"] if tabla else clasificacion.GRUPO[clase]
+
+
+def _agua(clase: str, estimacion: dict) -> dict:
+    """Agua del suelo: Saxton y Rawls (2006) primero, porque da el TAW **y** la retencion (thetaSat, thetaFC, thetaWP) que el motor
+    necesita para convertir GWETROOT (fraccion de saturacion) a fraccion de TAW; la tabla FAO-56 queda de respaldo (solo TAW);
+    sin ninguna de las dos, NO_EVALUABLE con motivo. Nunca se toma el valor de una clase vecina."""
+    ped = pedotransferencia.agua(estimacion)
+    if ped is not None and ped["tawMmPorM"].get("estado") == "EVALUABLE":
+        return ped
+    tabla = clasificacion.cargar_catalogo_suelos().get(clase)
+    if tabla and tabla["tawMmPorM"].get("estado") == "EVALUABLE":
+        taw = tabla["tawMmPorM"]
+        return {"tawMmPorM": taw, "metodoTaw": {"metodo": "tabla_fao56", "fuente": taw["fuente"]}}
+    if ped is not None:
+        return ped  # NO_EVALUABLE con el motivo de Saxton y Rawls
+    if tabla:
+        return {"tawMmPorM": tabla["tawMmPorM"]}
+    return {"tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": "No hay tabla de suelos ni pedotransferencia disponibles en este servidor."}}
 
 
 async def _estimacion_openlandmap(lat: float, lon: float) -> tuple[dict | None, dict | None]:
@@ -302,7 +313,7 @@ async def _estimacion_openlandmap(lat: float, lon: float) -> tuple[dict | None, 
 def _respuesta_desde_estimacion(est: dict, lat: float, lon: float, advertencias: list[dict]) -> dict:
     """Respuesta de /api/suelo cuando la estimacion usada es la de OpenLandMap (ISRIC no respondio)."""
     clase = est["textura"]["clase"]
-    grupo, agua = _grupo_y_agua(clase)
+    grupo = _grupo(clase)
     fuente_ph = {**est["fuente"], "unidades": "pH en agua (adimensional)"}
     return {
         "meta": _meta(), "id": _id_suelo(lat, lon), "etiqueta": "SUPUESTO", "origen": "mapa_global",
@@ -311,7 +322,7 @@ def _respuesta_desde_estimacion(est: dict, lat: float, lon: float, advertencias:
         "textura": {"estado": est["estado"], "etiqueta": "SUPUESTO", "clase": clase, "grupo": grupo, "fraccionesPct": est["textura"]["fraccionesPct"], "fuente": est["fuente"]},
         "ph": ({"estado": est["estado"], "etiqueta": "SUPUESTO", "valor": est["ph"], "fuente": fuente_ph} if est["ph"] is not None
                else {"estado": "NO_EVALUABLE", "motivo": "OpenLandMap no tiene dato de pH en este punto."}),
-        "estimaciones": [est], "estimacionUsada": est["id"], "agua": agua,
+        "estimaciones": [est], "estimacionUsada": est["id"], "agua": _agua(clase, est),
         "advertencias": [{"codigo": "SUELO_SUPUESTO", "mensaje": "pH y textura estimados por un modelo global; no son una medicion de su parcela.", "severidad": "aviso"}, *advertencias],
     }
 

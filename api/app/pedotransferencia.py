@@ -40,7 +40,7 @@ def agua(estimacion: dict) -> dict | None:
     """Objeto `agua` del contrato suelo por Saxton y Rawls desde una estimacion de /api/suelo; None si el modulo no esta.
 
     Solo se calcula con estimaciones EVALUABLE: con pixeles a mas de 1 km (EXPLORATORIO) la textura es una extrapolacion y el
-    TAW queda NO_EVALUABLE con motivo, igual que sin carbono organico.
+    TAW queda NO_EVALUABLE con su motivo exacto, igual que sin carbono organico.
     """
     mod = modulo()
     if mod is None:
@@ -48,15 +48,11 @@ def agua(estimacion: dict) -> dict | None:
     fuente = estimacion["fuente"]
     frac = estimacion["textura"]["fraccionesPct"]
     if estimacion["estado"] != "EVALUABLE":
-        sin = {"estado": "NO_EVALUABLE", "motivo": "La estimacion de suelo es EXPLORATORIA (viene de pixeles lejanos del punto)."}
-        arena = arcilla = mo = sin
-    else:
-        arena, arcilla = _evaluable(frac["arena"], fuente), _evaluable(frac["arcilla"], fuente)
-        oc = estimacion.get("carbonoOrganicoGKg")
-        if oc is None:
-            mo = {"estado": "NO_EVALUABLE", "motivo": "El servicio de suelo no entrego carbono organico para estimar la materia organica."}
-        else:
-            fuente_mo = {**fuente, "nombre": f"{fuente['nombre']} (carbono organico convertido a materia organica)", "cita": CITA_FACTOR,
-                         "unidades": "% de materia organica", "consultado": fuente.get("consultado") or date.today()}
-            mo = _evaluable(materia_organica_pct(oc), fuente_mo)
-    return mod.agua_pedotransferencia(estimacion["id"], arena, arcilla, mo)
+        return {"tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": "La estimacion de suelo es EXPLORATORIA (viene de pixeles lejanos del punto): no se calcula el TAW por pedotransferencia."}}
+    oc = estimacion.get("carbonoOrganicoGKg")
+    if oc is None:
+        return {"tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": "El servicio de suelo no entrego carbono organico para estimar la materia organica que pide Saxton y Rawls."}}
+    arena, arcilla = _evaluable(frac["arena"], fuente), _evaluable(frac["arcilla"], fuente)
+    fuente_mo = {**fuente, "nombre": f"{fuente['nombre']} (carbono organico convertido a materia organica)", "cita": CITA_FACTOR,
+                 "unidades": "% de materia organica", "consultado": fuente.get("consultado") or date.today()}
+    return mod.agua_pedotransferencia(estimacion["id"], arena, arcilla, _evaluable(materia_organica_pct(oc), fuente_mo))
