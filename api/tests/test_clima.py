@@ -13,9 +13,16 @@ cliente = TestClient(app)
 PARAMS = "lat=18.03&lon=-95.53&desde=2024-01-01&hasta=2024-01-10"
 
 
-def responder(power_ok=True, om_ok=True):
+def es_imerg(request: httpx.Request) -> bool:
+    return request.url.params.get("parameters") == "IMERG_PRECTOT"
+
+
+def responder(power_ok=True, om_ok=True, imerg="2024_01"):
+    """POWER simulado con respuestas reales. `imerg`: nombre de la respuesta real de IMERG, o None para que IMERG falle (503)."""
     def handler(request: httpx.Request):
         if "power.larc" in request.url.host:
+            if es_imerg(request):
+                return httpx.Response(200, content=real(f"power_imerg_{imerg}.json")) if imerg else httpx.Response(503)
             return httpx.Response(200, content=real("power_ag.json")) if power_ok else httpx.Response(503)
         if "archive-api" in request.url.host:
             return httpx.Response(200, content=real("om_archive.json")) if om_ok else httpx.Response(503)
@@ -57,15 +64,19 @@ def test_serie_de_power_usa_cache(simular, validar):
         validar(d, "clima-escenario#/$defs/dia")
     n = len(llamadas)
     assert cliente.get(f"/api/clima?{PARAMS}").json()["diario"] == cuerpo["diario"]
-    assert len(llamadas) == n, "la segunda consulta debe salir de la cache"
+    assert len(llamadas) == n, "la segunda consulta debe salir de la cache (POWER e IMERG)"
 
 
 def test_misma_celda_comparte_cache(simular):
+    """Clima: dos puntos de la misma celda de MERRA-2 comparten cache. IMERG: la celda es de 0.1 grados, asi que (18.2, -95.4) pide la suya."""
     llamadas = simular(responder())
     cliente.get(f"/api/clima?{PARAMS}")
-    n = len(llamadas)
+    n_power = sum("IMERG" not in u for u in llamadas)
     cliente.get("/api/clima?lat=18.2&lon=-95.4&desde=2024-01-01&hasta=2024-01-10")
-    assert len(llamadas) == n
+    assert sum("IMERG" not in u for u in llamadas) == n_power, "POWER (MERRA-2) no debe repetirse"
+    assert sum("IMERG" in u for u in llamadas) == 2, "IMERG si: otra celda de 0.1 grados"
+    cliente.get("/api/clima?lat=18.04&lon=-95.54&desde=2024-01-01&hasta=2024-01-10")  # misma celda de IMERG que la primera consulta
+    assert sum("IMERG" in u for u in llamadas) == 2
 
 
 def test_respaldo_open_meteo_se_ve(simular, validar):
@@ -110,3 +121,79 @@ def test_cache_atomica_y_dañada(tmp_path):
     assert cache.leer("x/y")[0] == {"a": 1}
     cache._ruta("x/y").write_text("{roto", encoding="utf-8")
     assert cache.leer("x/y") is None
+
+
+# ------------------------------------------------------------------ A4.10: lluvia satelital GPM IMERG via POWER
+
+def test_imerg_centro_de_celda_de_0_1_grados():
+    assert power.centro_celda_imerg(18.03, -95.53) == (18.05, -95.55)
+    assert power.centro_celda_imerg(18.099, -95.501) == (18.05, -95.55)
+    assert power.centro_celda_imerg(-33.87, 151.21) == (-33.85, 151.25)  # hemisferio sur y este: el suelo (floor) no se corre
+
+
+def test_imerg_se_pide_en_utc_y_en_el_centro_de_la_celda(simular):
+    llamadas = simular(responder())
+    cliente.get(f"/api/clima?{PARAMS}")
+    u = next(x for x in llamadas if "IMERG" in x)
+    assert "time-standard=utc" in u and "parameters=IMERG_PRECTOT" in u and "latitude=18.05" in u and "longitude=-95.55" in u
+
+
+def test_imerg_bloque_cumple_el_contrato_y_es_evidencia(simular, validar):
+    simular(responder())
+    c = cliente.get(f"/api/clima?{PARAMS}").json()
+    validar(c, "serie-clima#")
+    ls = c["lluviaSatelital"]
+    assert ls["variable"] == "IMERG_PRECTOT" and ls["estandarHora"] == "UTC" and len(ls["dias"]) == 10
+    assert ls["dias"][6] == {"fecha": "2024-01-07", "lluviaMm": 0.03}
+    assert ls["fuente"]["coordenada"] == [-95.55, 18.05] and ls["fuente"]["unidades"] == "mm/dia" and "UTC" in ls["fuente"]["nota"]
+    assert "LLUVIA_SATELITAL_EVIDENCIA" in {a["codigo"] for a in c["advertencias"]}
+    assert [d["lluviaMm"] for d in c["diario"]] == [d["lluviaMm"] for d in cliente.get(f"/api/clima?{PARAMS}").json()["diario"]]  # la lluvia del motor no cambia
+
+
+def test_imerg_menos_999_es_null_y_no_cero(simular, validar):
+    simular(responder(imerg="recientes"))
+    c = cliente.get(f"/api/clima?{PARAMS}").json()
+    validar(c, "serie-clima#")
+    dias = c["lluviaSatelital"]["dias"]
+    assert [d["lluviaMm"] for d in dias[:7]] == [0.0, 3.94, 1.76, 0.1, 0.0, 20.51, 13.06]  # un cero real sigue siendo 0
+    assert all(d["lluviaMm"] is None for d in dias[7:]) and len(dias[7:]) == 8
+    aviso = next(a for a in c["advertencias"] if a["codigo"] == "IMERG_DIAS_SIN_DATO")
+    assert "8 de 15" in aviso["mensaje"] and "2026-09-14" in aviso["mensaje"]
+
+
+def test_imerg_cuerpo_con_faltantes_no_se_rellena():
+    cuerpo = {"properties": {"parameter": {"IMERG_PRECTOT": {"20260914": 13.06, "20260915": -999.0}}}, "header": {"fill_value": -999.0}}
+    assert power.parsear_imerg(cuerpo) == [{"fecha": "2026-09-14", "lluviaMm": 13.06}, {"fecha": "2026-09-15", "lluviaMm": None}]
+
+
+def test_si_imerg_falla_el_clima_sale_igual_sin_inventar(simular, validar):
+    simular(responder(imerg=None))
+    r = cliente.get(f"/api/clima?{PARAMS}")
+    assert r.status_code == 200
+    c = r.json()
+    validar(c, "serie-clima#")
+    assert c["estado"] == "EVALUABLE" and "lluviaSatelital" not in c and len(c["diario"]) == 10
+    assert "IMERG_NO_DISPONIBLE" in {a["codigo"] for a in c["advertencias"]}
+
+
+def test_imerg_vencido_se_reusa_si_falla_y_lo_dice(simular, monkeypatch):
+    simular(responder())
+    cliente.get(f"/api/clima?{PARAMS}")
+    simular(responder(imerg=None))
+    monkeypatch.setattr(servicios, "_vigente", lambda edad, hasta: False)
+    c = cliente.get(f"/api/clima?{PARAMS}").json()
+    assert len(c["lluviaSatelital"]["dias"]) == 10 and "IMERG_EN_CACHE" in {a["codigo"] for a in c["advertencias"]}
+
+
+def test_imerg_no_se_pide_si_el_clima_cae_al_respaldo(simular):
+    llamadas = simular(responder(power_ok=False))
+    c = cliente.get(f"/api/clima?{PARAMS}").json()
+    assert c["estado"] == "RESPALDO_HISTORICO" and "lluviaSatelital" not in c
+    assert not any("IMERG" in u for u in llamadas), "con POWER caido no se insiste con una segunda llamada a POWER"
+
+
+def test_imerg_anterior_a_su_inicio_se_recorta_a_2000_06_01(simular):
+    llamadas = simular(responder())
+    cliente.get("/api/clima?lat=18.03&lon=-95.53&desde=1999-01-01&hasta=2000-06-10")
+    u = next(x for x in llamadas if "IMERG" in x)
+    assert "start=20000601" in u
