@@ -78,6 +78,20 @@ En la escena, el suelo es una columna procedural que se estira hasta la altura d
 
 **Pendiente (A3, fuera de `modelos/`):** la escena todavía no las carga; hoy colorea la columna con una sola escala sin distinguir el tipo de suelo. Para usarlas hay que elegir la losa con el tipo de `suelo` y la humedad del registro, y pintar la columna con el tono del tipo (hoy solo el franco coincide). Una prueba (`web/src/escena/pruebas/suelos.test.ts`) verifica nombres, paleta y medidas.
 
+## Mascota (A3.9) — `modelos/props/`
+
+La mascota es un **elote con cara feliz** (la "verdura con cara feliz" del doc 03). La verdura la eligió A3.9 porque los docs no la fijan; al generarse por código, cambiarla es barato (`modelos/props/mascota.py`).
+
+| Tema | Convención |
+| --- | --- |
+| Archivo | `modelos/props/mascota_feliz.bbmodel` (solo la expresión feliz; sin variantes) |
+| Forma | Mazorca vertical como cuerpo, totomoxtle como falda, cabello arriba, ojos con brillo, sonrisa en U y mejillas rosadas; dos pies y un brazo saludando. 66 cubos, 28 unidades de alto, huella de 14 × 13 |
+| Anclaje | Origen al centro de la base, y = 0 es el suelo, +Y arriba, +Z al frente. No lleva lomo de surco: **no va en una celda**, es un personaje independiente |
+| Color | Reutiliza la paleta (grano, totomoxtle, cabello, negro y blanco) y agrega un solo color, `mascota_mejilla` (índice 85, a ojo) |
+| Visor | `modelos/props/visor_mascota.html`. Carga Three.js desde internet; si sale en blanco, sírvelo con `python -m http.server` |
+
+**Pendiente (fuera de `modelos/`):** la escena todavía no la muestra. Mompin dejó dicho que va a reservar un lugar opcional para ella. Una prueba (`web/src/escena/pruebas/props.test.ts`) verifica paleta, huella y que se apoye en el suelo.
+
 ## Carga en la web
 
 - El proyecto **carga el `.bbmodel` directo en Three.js**, sin pasar a glTF. El visor de ejemplo lo hace en pocas líneas: lee cada elemento (`from`, `to`, `origin`, `rotation`) y su color de la paleta, y crea una caja.

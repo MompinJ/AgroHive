@@ -12,7 +12,7 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 4. Por material, 3 tonos (oscuro, base, claro). Lo claro va en tapas y puntas; lo oscuro en bajos, nudos y arrugas.
 5. Los indices 0-15 son `PALETA_BASE` de `herramientas/voxelkit.py`, en el mismo orden.
 
-## Colores (85)
+## Colores (86)
 
 | Indice | Nombre | Hex | Uso |
 | --- | --- | --- | --- |
@@ -101,9 +101,12 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 | 82 | chile_verde | #53a028 | Cuerpo del chile verde (serrano / jalapeno) |
 | 83 | chile_rojo_dark | #86160f | Punta del chile rojo maduro (el cuerpo usa `red`, 11) |
 | 84 | chile_semilla | #ecdca2 | Semilla de chile, plana y amarillo palido |
+| 85 | mascota_mejilla | #f0857f | Mejillas rosadas de la mascota (elote feliz, `props/mascota_feliz`) |
 
 Los hex son elegidos a ojo para el estilo voxel (no medidos de fotos). Las manchas plateadas de la hoja de calabaza y el fruto verde de C. moschata se tomaron de descripciones varietales (no de una variedad concreta).
 
 Los tonos de suelo arenoso (60-68) y arcilloso (69-77) son cualitativos, elegidos a ojo (arena mas clara y amarilla, arcilla mas rojiza y oscura); no estan medidos. El suelo franco usa los colores ya existentes (16 suelo_seco, 0 soil, 17 suelo_humedo) para coincidir con la escala de humedad de `web/src/escena/suelo.ts`.
 
 Los tonos de chile (78-84) son cualitativos, elegidos a ojo: hoja verde oscuro brillante (mas oscura que el frijol y menos azulada que la calabaza), fruto verde mas claro que la hoja para que resalte, y rojo de madurez apoyado en `red` (11). No estan medidos de fotos.
+
+La mascota (`modelos/props/mascota_feliz`) reutiliza grano (31-33), totomoxtle (34-36), cabello (37-38), `black` (10) para ojos y boca y `white` (9) para el brillo de los ojos; solo agrega el rosa de las mejillas (85), elegido a ojo.
