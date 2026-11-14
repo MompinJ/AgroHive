@@ -59,6 +59,14 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Cronograma por persona y marcas al dia (Eduardo)
+
+- **Archivos:** `herramientas/cronograma.py` (nuevo), `docs/14-CRONOGRAMA.md`, `docs/cronograma.html` (regenerado), `AgroVault/Compartido/Cronograma.md` (nueva), `AgroVault/Bienvenido.md`, `AgroVault/Compartido/Lectura.md`.
+- **Cambio:** el cronograma ahora se ve por persona (Mompin, Eduardo, Mafer, balam) con estado por actividad, en tres vistas generadas desde las marcas de `docs/14`: una seccion nueva "Estado por persona", la pagina `docs/cronograma.html` (ya no filtra por R1 a R4 ni guarda marcas en el navegador) y una nota de Obsidian. El HTML dejo de tener datos propios: no se desfasa de `docs/14`.
+- **Marcas puestas (verificadas):** A0.1 y A0.2 hechas (repo con `main` y 4 ramas; `docs/` en el repo); A1.4, A1.5 y A1.6 ya estaban marcadas por Mafer solo en el tablero y se copiaron a sus filas; A1.2 `[EN CURSO]` (build y rutas P0 a P3 verificados, falta el Worker del motor segun el README de balam); A5.4 y A5.8 `[BLOQUEADO]`.
+- **Estado:** 11 de 54 hechas (20 %): Mompin 2, Eduardo 6, Mafer 3, balam 0. A0.3 queda sin responsable unico.
+- **Pendiente de otros:** balam debe confirmar si A1.2 pasa a hecha cuando exista el Worker; Mafer, que `[HECHO]` de A1.4 a A1.6 ahora tambien esta en sus filas.
+
 ### 2026-11-14 (noche) — A2.4: paquete de demo sin internet (Eduardo)
 
 - **Archivos:** `datos/demo/` (generador, manifiesto, cache y LEEME), `api/app/cache.py`, `api/app/clientes/terrarium.py`, `api/app/proxima.py`, `api/app/config.py`, pruebas, `api/README.md`, `docs/14`.
