@@ -103,7 +103,7 @@ def test_ruta_cumple_el_contrato_y_es_evidencia(simular, validar, monkeypatch):
     assert n["estado"] == "EXPLORATORIO"
     assert n["producto"] == {"nombre": "MOD13Q1", "version": "061", "banda": "250m_16_days_NDVI", "pixelM": 250, "compuestoDias": 16, "escala": 0.0001}
     assert set(n["limites"]) == {"PIXEL_MAYOR_QUE_PARCELA", "NO_MUESTRA_CULTIVO_DEL_USUARIO", "NO_ENTRA_AL_RANKING"}
-    assert "doi:10.5067/MODIS/MOD13Q1.061" in n["fuente"]["cita"] and "Planetary Computer" in n["fuente"]["nombre"]
+    assert n["fuente"]["cita"] == planetary.CITA and "Planetary Computer" in n["fuente"]["nombre"]
     assert [(d["fecha"], d["ndvi"], d["calidad"]) for d in n["serie"][:3]] == [("2023-05-09", 0.315, 1), ("2023-05-25", 0.3279, 1), ("2023-06-10", 0.3378, 0)]
     assert len(n["serie"]) == 8 and "NDVI_EVIDENCIA" in {a["codigo"] for a in n["advertencias"]}
 
@@ -289,4 +289,27 @@ def test_el_token_nunca_se_guarda_en_disco(simular, monkeypatch, tmp_path):
     cliente.get(URL)
     for f in list(config.CACHE_DIR.rglob("*")) + list(tmp_path.rglob("*")):
         if f.is_file():
-            assert "FIRMA-SECRETA" not in f.read_text(encoding="utf-8", errors="ignore"), f
+            texto = f.read_text(encoding="utf-8", errors="ignore")
+            assert "FIRMA-SECRETA" not in texto and "blob.core.windows.net" not in texto, f
+
+
+def test_la_ventana_del_paquete_no_pide_catalogo_ni_token(simular, monkeypatch, tmp_path):
+    """Respaldo de la demo: si la ventana historica esta en el paquete, no se llama a Planetary Computer."""
+    import json
+    import time
+
+    from app import config
+
+    llamadas = simular(pc_simulado(busqueda_ok=False, token_ok=False))
+    monkeypatch.setattr(config, "DEMO_DIR", tmp_path)
+    for ini, fin in planetary.ventanas(date(2023, 5, 1), date(2023, 8, 31)):
+        nombre = f"ndvi_v1_18.03000_-95.53000_{ini:%Y%m%d}_{fin:%Y%m%d}.json"
+        (tmp_path / nombre).write_text(json.dumps({
+            "guardado": time.time(),
+            "valor": {"consultado": "2026-11-14", "escala": 0.0001, "calidadOk": True,
+                      "datos": [{"fecha": "2023-05-25", "ndvi": 0.3279, "estado": "EXPLORATORIO", "calidad": 1}]},
+        }), encoding="utf-8")
+    n = cliente.get(URL).json()
+    assert n["estado"] == "EXPLORATORIO" and n["fuente"]["cita"] == planetary.CITA
+    assert n["serie"] == [{"fecha": "2023-05-25", "ndvi": 0.3279, "estado": "EXPLORATORIO", "calidad": 1}]
+    assert llamadas == []

@@ -16,7 +16,7 @@ Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo,
 
 | ID | La marca dice | El código, el 14/11 por la noche |
 | --- | --- | --- |
-| A4.6 | Falta conectar las páginas | `useLaboratorio.ts` carga el paquete de demo o `cargarDatosParcela` y llama al Worker. Sigue `[EN CURSO]` hasta que el equipo la cierre: no se declara la demo pública ni el modo sin red de punta a punta |
+| A4.6 | Falta conectar las páginas | `[HECHO]` el 14/11 noche: P0 a P3 de la demo de Isla y la API local sin red. La URL pública sigue en `d182af4` (A4.7) |
 | A4.9 | A2.13 aún dice "falta la interfaz" | A4.9 está `[HECHO]`: la banda se muestra y se apaga |
 | A4.8 | Falta el schema `smap` | `contratos/smap.schema.json` existe desde 0.10.0. Sigue abierto el token en el droplet y el uso en la interfaz |
 | A2.12 / A3.1 | La escena no carga losas o no está en el Laboratorio | La escena carga las 9 losas y el Laboratorio la monta en diferido |
@@ -44,24 +44,22 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 
 | ID | Qué falta |
 | --- | --- |
-| A3.6 | Modo 2D con los mismos números. Bloquea A5.4 |
+| A3.6 | Hecho en `origin/main` (`58fab7a`). Esta rama todavía no lo tiene, así que A5.4 sigue bloqueada aquí |
 | A3.8 | Tooltip o toque: humedad, déficit, pendiente |
 | A3.9 | Chile y mascota hechos. Falta revisión humana del visor y de la equivalencia pimiento dulce. La escena no muestra la mascota. Props descartados |
 | A4.1 | Gráficas de lluvia, demanda y balance (balam). El motor ya entrega las series: `cliente.serieBalance(rotacionId, escenario)` con lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo (contrato `serie-balance` 0.11.0). La interfaz no recalcula |
 | A4.3 | Pintar `explicacion` en la comparación. La plantilla ya sale de `rankear` |
 | A4.4 | Redacción con LLM, opcional, solo sobre números ya calculados |
 | A4.5 | Pantalla de método, fuentes y advertencias |
-| A4.6 | Cerrar el flujo con datos vivos y sin red. Ver la fila de arriba |
-| A4.7 | El droplet sirve front y API. La demo "real" espera el cierre de A4.6. Último despliegue anotado en `docs/01`: `main` `d182af4` |
-| A4.8 | `/api/smap` existe. Sin `EARTHDATA_TOKEN` en el servidor responde 503. Hace falta el OK explícito para poner el token. No entra al ranking |
-| A4.11 | `GET /api/ndvi` (MOD13Q1). El contrato ya existe. No entra al ranking |
-| A4.12 | CDL y SSURGO, después de C5, solo en EE. UU. |
-| A4.13 | Calendario GGCMI fuera de México, después de C4. En México siguen SIAP e INIFAP |
+| A4.7 | La URL pública responde, pero el droplet sigue en `d182af4` (contrato 0.9.0). Esta sesión no pudo entrar por SSH |
+| A4.8 | `/api/smap` existe y sin token responde 503. Hace falta el OK explícito para `EARTHDATA_TOKEN` en el droplet. No está en la interfaz ni entra al ranking |
+| A4.12 | CDL y SSURGO, después de C5. C5 no está cruzada |
+| A4.13 | Hecha en la API: `GET /api/calendario`. El front sigue leyendo solo `calendario-isla.json` (balam) |
 | A5.1 | Animación mínima al cambiar de etapa |
 | A5.2 | Slider de meses |
 | A5.3 | Móvil y teclado de punta a punta |
 | A5.7 | `[EN CURSO]` (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |
-| A5.8 | Capturas y demo con la red apagada. Bloqueada por A4.6 |
+| A5.8 | Hecha en local con la salida bloqueada (no con el wifi apagado). Ver `docs/demo-sin-red.md` |
 | A5.9 | Envío |
 | A0.3 | Sigue sin marca. El ranking y los cultivos ya se decidieron en `docs/13` |
 | A0.5 | Reglas oficiales de entrega e IA |
@@ -78,7 +76,7 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 - Sin escurrimiento por pendiente.
 - Frijol PV, chile y calabaza en Isla: sin ventana de siembra.
 - Calabaza en Isla: se muestra y no se recomienda.
-- Fuera de México: sin calendario hasta A4.13.
+- Fuera de México: la API ya devuelve el maíz de GGCMI (`GET /api/calendario`). El front todavía no la llama.
 - Kc sin ajuste por altura del cultivo.
 - Normalización del exceso (1 − fracción percolada) es `SUPUESTO`.
 

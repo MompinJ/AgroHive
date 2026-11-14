@@ -112,13 +112,15 @@ export function entradasDemo(modo: ModoSuelo, rotacion: RotacionPrueba = 'R1'): 
   };
 }
 
-/** Fechas del plan para recorrer la rotacion (cada 15 dias, del 1 de junio de 2016 al 31 de diciembre de 2017). */
+/** Fechas del plan para recorrer la rotacion (cada 15 dias, del 1 de junio de 2016 al 31 de diciembre de 2017, mas los dias de siembra). */
 export function fechasPlan(): string[] {
   const fechas: string[] = [];
   const inicio = Date.UTC(2016, 5, 1);
   const fin = Date.UTC(2017, 11, 31);
   for (let t = inicio; t <= fin; t += 15 * 86400000) fechas.push(new Date(t).toISOString().slice(0, 10));
-  return fechas;
+  // Tambien los dias de siembra de las rotaciones de prueba (etapa siembra visible).
+  for (const ciclos of Object.values(ROTACIONES_PRUEBA)) for (const [, siembra] of ciclos) fechas.push(siembra);
+  return [...new Set(fechas)].sort();
 }
 
 /**

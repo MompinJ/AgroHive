@@ -192,15 +192,40 @@ def test_imerg_no_se_pide_si_el_clima_cae_al_respaldo(simular):
     assert not any("IMERG" in u for u in llamadas), "con POWER caido no se insiste con una segunda llamada a POWER"
 
 
-def test_imerg_anterior_a_su_inicio_se_recorta_a_1998_06_01(simular):
+def test_imerg_anterior_a_su_inicio_se_recorta_a_1998_01_01(simular):
+    """Llamada real a POWER (time-standard=utc, parcela demo, 14/11/2026): ultimo -999 el 1997-12-31, primer dato el 1998-01-01.
+    Igual que el catalogo CMR. No se usa el 1998-06-01 de la metodologia ni el 2000-06-01 del espejo de UCAR."""
     llamadas = simular(responder())
     cliente.get("/api/clima?lat=18.03&lon=-95.53&desde=1990-01-01&hasta=1998-07-10")
     u = next(x for x in llamadas if "IMERG" in x)
-    assert "start=19980601" in u
+    assert "start=19980101" in u
+    assert "start=19980601" not in u and "start=20000601" not in u
+
+
+def test_imerg_de_mayo_1998_no_se_recorta(simular):
+    """POWER devolvio 0.0 (no -999) del 25 al 31 de mayo de 1998. Esos dias van en la serie: 0 es lluvia cero, no relleno."""
+    llamadas = simular(responder())
+    cliente.get("/api/clima?lat=18.03&lon=-95.53&desde=1998-05-25&hasta=1998-06-05")
+    u = next(x for x in llamadas if "IMERG" in x)
+    assert "start=19980525" in u
+
+
+def test_imerg_conserva_cero_real_y_el_relleno_sigue_en_null():
+    """0.0 se conserva. Solo el fill_value (-999) pasa a null. Cubre el caso de finales de mayo de 1998."""
+    cuerpo = {"properties": {"parameter": {"IMERG_PRECTOT": {
+        "19971231": -999.0, "19980101": 0.0, "19980525": 0.0, "19980531": 0.0, "19980601": 4.2,
+    }}}, "header": {"fill_value": -999.0}}
+    assert power.parsear_imerg(cuerpo) == [
+        {"fecha": "1997-12-31", "lluviaMm": None},
+        {"fecha": "1998-01-01", "lluviaMm": 0.0},
+        {"fecha": "1998-05-25", "lluviaMm": 0.0},
+        {"fecha": "1998-05-31", "lluviaMm": 0.0},
+        {"fecha": "1998-06-01", "lluviaMm": 4.2},
+    ]
 
 
 def test_imerg_de_1999_no_se_recorta(simular):
-    """Antes se recortaba a 2000-06-01 y se perdian dos anios de datos validos de IMERG V07 (verificado contra la metodologia de POWER)."""
+    """Antes se recortaba a 2000-06-01 y luego a 1998-06-01. 1999 queda entero."""
     llamadas = simular(responder())
     cliente.get("/api/clima?lat=18.03&lon=-95.53&desde=1999-01-01&hasta=1999-01-10")
     u = next(x for x in llamadas if "IMERG" in x)

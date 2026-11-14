@@ -62,6 +62,14 @@ export function giroCelda(celdaId: string): 0 | 1 | 2 | 3 {
 }
 
 /**
+ * Giro de los manchones de plantas: solo 0 o 180 grados, para que los surcos de celdas
+ * vecinas queden paralelos (como en un campo) sin que el bloque se repita igual.
+ */
+export function giroSurcos(celdaId: string): 0 | 2 {
+  return giroCelda(celdaId) % 2 === 0 ? 0 : 2;
+}
+
+/**
  * Escala por avance dentro de la etapa (doc 06: ~85 % a 100 %), tal como lo
  * entrega el motor en avanceEtapa. Sin avance (null), tamano completo de la etapa.
  */
