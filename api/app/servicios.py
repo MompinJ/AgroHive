@@ -40,6 +40,7 @@ async def _lluvia_satelital(lat: float, lon: float, desde: date, hasta: date) ->
     """Lluvia IMERG (evidencia) de la celda de 0.1 grados, con cache. Nunca tumba /api/clima: si falla, devuelve None y un aviso."""
     clat, clon = power.centro_celda_imerg(lat, lon)
     clave = f"power_imerg_v1_{clat:.3f}_{clon:.3f}_{desde:%Y%m%d}_{hasta:%Y%m%d}"
+    avisos: list[dict] = []
     async with _candado(clave):
         en_cache = cache.leer(clave)
         if en_cache and _vigente(en_cache[1], hasta):
@@ -54,6 +55,7 @@ async def _lluvia_satelital(lat: float, lon: float, desde: date, hasta: date) ->
                 if not en_cache:
                     return None, [{"codigo": "LLUVIA_SATELITAL_NO_DISPONIBLE", "mensaje": f"No se pudo leer la lluvia IMERG de NASA POWER ({str(e)[:160]}); la serie de lluvia del motor no cambia.", "severidad": "aviso"}]
                 registro = en_cache[0]
+                avisos = [{"codigo": "CACHE_VENCIDA", "mensaje": "La lluvia IMERG viene de datos guardados antes (NASA POWER no respondio); puede estar desactualizada.", "severidad": "aviso"}]
     nota = ("Evidencia: no entra al balance de agua ni cambia los escenarios. IMERG ve tormentas que MERRA-2 aplana y en anios recientes suma menos "
             "que PRECTOTCORR. Dia en hora UTC, unas 6 h corrido respecto al dia local de la serie principal. Los dias sin dato (relleno -999 de POWER, "
             f"meses aun sin publicar o anteriores a {power.INICIO_IMERG.isoformat()}) van en null, nunca en 0.")
@@ -61,7 +63,7 @@ async def _lluvia_satelital(lat: float, lon: float, desde: date, hasta: date) ->
               "fuente": _fuente_clima(power.NOMBRE_IMERG, power.URL, power.RESOLUCION_IMERG, power.UNIDADES_IMERG, tuple(registro["celda"]),
                                       desde, hasta, registro["consultado"], nota),
               "dias": registro["dias"]}
-    return lluvia, []
+    return lluvia, avisos
 
 
 async def serie_clima(lat: float, lon: float, desde: date, hasta: date) -> dict:

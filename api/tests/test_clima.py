@@ -134,6 +134,17 @@ def test_si_imerg_falla_el_clima_sigue_y_avisa(simular, validar):
     validar(cuerpo, "serie-clima")
 
 
+def test_imerg_con_cache_vencida_avisa_y_conserva_los_datos(simular, monkeypatch, validar):
+    simular(responder())
+    primero = cliente.get(f"/api/clima?{PARAMS}").json()
+    simular(responder(imerg_ok=False))
+    monkeypatch.setattr(servicios, "_vigente", lambda edad, hasta: False)
+    cuerpo = cliente.get(f"/api/clima?{PARAMS}").json()
+    assert cuerpo["lluviaSatelital"]["dias"] == primero["lluviaSatelital"]["dias"]
+    assert "CACHE_VENCIDA" in {a["codigo"] for a in cuerpo["advertencias"]}
+    validar(cuerpo, "serie-clima")
+
+
 def test_respuesta_inesperada_de_imerg_no_tumba_el_clima(simular):
     def handler(request: httpx.Request):
         if request.url.params.get("parameters") == "IMERG_PRECTOT":
