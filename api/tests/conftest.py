@@ -18,6 +18,7 @@ BASE = "https://agrohive.example/contratos/"
 def entorno(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "CACHE_DIR", tmp_path / "cache")
     monkeypatch.setattr(config, "CATALOGOS_DIR", tmp_path / "catalogos")
+    monkeypatch.setattr(config, "DEMO_DIR", tmp_path / "sin_paquete")  # las pruebas no leen el paquete de demo real
     monkeypatch.setattr(http, "ESPERA_BASE_S", 0)
 
 

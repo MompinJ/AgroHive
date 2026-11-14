@@ -63,7 +63,7 @@ def test_respaldo_de_elevacion_open_meteo(simular):
 def test_sin_fuentes_de_elevacion_es_error_datos(simular):
     simular(lambda r: httpx.Response(500))
     r = cliente.post("/api/elevacion", json={"tamanoCeldaM": 30, "celdas": malla(2)})
-    assert r.status_code == 503 and r.json()["detail"]["estado"] == "ERROR_DATOS"
+    assert r.status_code == 503 and r.json()["estado"] == "ERROR_DATOS"
 
 
 def test_tope_de_celdas_y_forma():

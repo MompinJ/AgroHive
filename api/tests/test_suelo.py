@@ -58,16 +58,16 @@ def test_suelo_con_geotiff_reales(simular, validar):
     assert s["profundidad"] == {"desdeCm": 0, "hastaCm": 30}
     assert s["agua"]["tawMmPorM"]["estado"] == "NO_EVALUABLE"  # sin tabla de suelos en este checkout: no se inventa
     assert "SUELO_SUPUESTO" in {a["codigo"] for a in s["advertencias"]}
-    assert len(llamadas) == 12  # 4 propiedades x 3 capas
+    assert len(llamadas) == 15  # 5 propiedades (arcilla, arena, limo, pH, carbono) x 3 capas
     cliente.get(URL)
-    assert len(llamadas) == 12, "la segunda consulta sale de la cache"
+    assert len(llamadas) == 15, "la segunda consulta sale de la cache"
 
 
 def test_suelo_sin_servicio_es_error_datos_para_usar_el_selector(simular):
     simular(lambda r: httpx.Response(503))
     r = cliente.get(URL)
     assert r.status_code == 503
-    d = r.json()["detail"]
+    d = r.json()
     assert d["estado"] == "ERROR_DATOS" and "selector manual" in d["motivo"]
 
 
@@ -76,13 +76,13 @@ def test_suelo_sin_dato_en_la_zona_no_se_inventa(simular, monkeypatch):
     monkeypatch.setattr(isric, "pixeles_validos", lambda tiff: [])
     r = cliente.get(URL)
     assert r.status_code == 503
-    assert "no tiene dato de textura" in r.json()["detail"]["motivo"]
+    assert "no tiene dato de textura" in r.json()["motivo"]
 
 
 def test_geotiff_ilegible_es_error_de_fuente(simular):
     simular(lambda r: httpx.Response(200, content=b"no es un tiff"))
     r = cliente.get(URL)
-    assert r.status_code == 503 and r.json()["detail"]["estado"] == "ERROR_DATOS"
+    assert r.status_code == 503 and r.json()["estado"] == "ERROR_DATOS"
 
 
 def test_suelo_valida_coordenadas():
@@ -127,3 +127,25 @@ def test_catalogo_de_suelos_roto_no_tumba_la_api(simular):
     config.CATALOGOS_DIR.mkdir(parents=True, exist_ok=True)
     (config.CATALOGOS_DIR / "suelos.json").write_text("{roto", encoding="utf-8")
     assert cliente.get(URL).status_code == 200
+
+
+def test_estimaciones_y_carbono_organico_cumplen_el_contrato(simular, validar):
+    simular(isric_real)
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    (e,) = s["estimaciones"]
+    assert s["estimacionUsada"] == e["id"] == "isric-soilgrids-wcs" and e["servicio"] == "isric_soilgrids_wcs"
+    assert e["textura"]["clase"] == s["textura"]["clase"] and e["ph"] == s["ph"]["valor"]
+    assert 20 <= e["carbonoOrganicoGKg"] <= 32  # SoilGrids soc 0-30 cm, dg/kg / 10 (FAQ de ISRIC)
+    assert s["textura"]["estado"] == "EVALUABLE"  # pixeles a menos de 1 km
+
+
+def test_pixeles_lejanos_son_exploratorios_y_se_dice(simular, validar, monkeypatch):
+    simular(isric_real)
+    original = isric.estimar
+    monkeypatch.setattr(isric, "estimar", lambda pix, x, y, f: (lambda r: None if r is None else (r[0], r[1], 3000))(original(pix, x, y, f)))
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    assert s["textura"]["estado"] == "EXPLORATORIO" and s["ph"]["estado"] == "EXPLORATORIO"
+    assert s["estimaciones"][0]["estado"] == "EXPLORATORIO"
+    assert "SUELO_SIN_DATO_CERCANO" in {a["codigo"] for a in s["advertencias"]}
