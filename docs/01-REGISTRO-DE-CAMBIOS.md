@@ -94,6 +94,12 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — Marcador de chamba en el buzon de quejas (Eduardo, pedido de Mompin #28)
+
+- **Archivos:** `herramientas/cronograma.py`, `herramientas/quejas-ia/QUEJAS.md` (bloque entre marcadores) y `README.md`.
+- **Cambio:** `cronograma.py` ahora tambien escribe, al inicio de `QUEJAS.md`, un "Marcador de chamba": avance por persona ponderado por esfuerzo (XS=1, S=2, M=3, L=5), hechas, en curso y pendientes, ordenado de mas a menos, con una linea por lugar. Reutiliza el parser de `docs/14`; corre cada vez que se regenera el cronograma y `--revisar` tambien lo vigila.
+- **Regla de la casa:** las lineas solo usan numeros reales del tablero y hablan del trabajo, no de la persona.
+
 ### 2026-11-14 (noche) — A2.4: paquete de demo conforme a contratos (Eduardo)
 
 - **Archivos:** `datos/demo/` (generador, cache, `respuestas/`, manifiesto y LEEME), `api/app/servicios.py`, `api/app/proxima.py`, pruebas, `api/README.md`, `docs/14`.

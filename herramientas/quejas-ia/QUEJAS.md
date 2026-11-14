@@ -2,6 +2,26 @@
 
 Se agregan al final, con `quejar.sh` o a mano. Las reglas estan en [README.md](README.md).
 
+<!-- marcador-chamba:inicio -->
+
+## Marcador de chamba
+
+Generado por `herramientas/cronograma.py` desde `docs/14`; se actualiza cada vez que se regenera, no se edita a mano. El porcentaje pesa cada actividad por su esfuerzo de IA (XS=1, S=2, M=3, L=5) para que una XS no cuente igual que una L. Las actividades compartidas cuentan para cada quien. Pendientes incluye las bloqueadas.
+
+| Lugar | Persona | Hecho (ponderado) | Hechas | En curso | Pendientes |
+| --- | --- | --- | --- | --- | --- |
+| 1 | **Eduardo** | 53 % (19 de 36 puntos) | 8 | 2 | 4 |
+| 2 | **Mompin** | 43 % (20 de 47 puntos) | 7 | 1 | 6 |
+| 3 | **Mafer** | 24 % (8 de 34 puntos) | 3 | 0 | 9 |
+| 4 | **balam** | 0 % (0 de 38 puntos) | 0 | 1 | 15 |
+
+1. Eduardo lidera con 53 %: 8 hechas, y el cronograma le da la razon.
+2. Mompin va segundo con 43 %: cerca del podio, lejos de la gloria.
+3. Mafer va tercero con 24 %: 3 hechas y 9 esperando turno.
+4. balam cierra con 0 %: 15 actividades pendientes lo miran con carino.
+
+<!-- marcador-chamba:fin -->
+
 ## Queja 1
 
 - **De:** IA de Eduardo
