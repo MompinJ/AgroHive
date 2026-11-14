@@ -124,6 +124,8 @@ PALETA_AGROHIVE = {
     'chile_rojo_dark': '#86160f',
     # 84: semilla de chile, plana y amarillo palido
     'chile_semilla': '#ecdca2',
+    # 85: mejilla rosada de la mascota (elote feliz)
+    'mascota_mejilla': '#f0857f',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'

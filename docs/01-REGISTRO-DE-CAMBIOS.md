@@ -86,6 +86,15 @@ Decisiones afectadas:
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
 
+### 2026-11-14 — A3.9 (parte mascota): elote con cara feliz (Mafer)
+
+- **Archivos:** nuevos `modelos/props/` (`mascota.py`, `mascota_feliz.bbmodel`, `visor_mascota.html`) y `web/src/escena/pruebas/props.test.ts`; `modelos/paleta.py` y `paleta.md` (1 color, índice 85); los 29 `.bbmodel` de plantas y suelos (solo cambia la textura incrustada); `docs/07`, Pendientes.
+- **Cambio:** la mascota básica del doc 03 ("verdura con cara feliz") como un elote con cara feliz, de 66 cubos. **La verdura la eligió A3.9, no el equipo**: los docs no la fijan. Va en `modelos/props/` porque no es una planta ni va en una celda.
+- **Props:** pozo, casa, árboles y pájaro **no se hacen**; son extras de fase 2 y de lo primero que cae en el plan de recorte. Mompin está de acuerdo (mensaje #112).
+- **Verificación:** los 29 modelos existentes se compararon con `HEAD`: solo cambia `textures`. `cd web && npm test`: 292 pruebas (4 nuevas); `tsc` sin errores. Render con Chrome headless; la cara se lee feliz de frente, de 3/4 y a 64 px de alto.
+- **Pendiente:** la escena aún no la muestra (Mompin reservará un lugar opcional). Una persona debe abrir `visor_mascota.html` y decidir si la verdura y la cara convencen. Colores y formas a ojo.
+- **Decisiones afectadas:** A3.9 (chile y mascota hechos; props descartados).
+
 ### 2026-11-14 — A3.9 (parte chile): cuarto cultivo en catalogo y en voxel (Mafer)
 
 - **Archivos:** `datos/catalogos/` (`generar.py`, `cultivos.json`, `validar.mjs`, `README.md`); nuevos `modelos/cultivos/chile.py`, 5 `chile_*.bbmodel` y `visor_chile.html`; `visor_milpa.html` (ahora 20 modelos); `modelos/paleta.py` y `paleta.md` (7 colores, indices 78 a 84); los 24 `.bbmodel` de plantas y suelos (solo cambia la textura incrustada); `web/src/motor/pruebas/motor.test.ts` y `ranking.test.ts` (una linea cada una); `docs/14`, Pendientes.
