@@ -143,3 +143,11 @@ Referencias oficiales: [Recharts ResponsiveContainer](https://recharts.github.io
 Por decisión de Balam, el mapa abre en Satélite (Esri World Imagery). El selector Vista del mapa permite volver a calles de OpenStreetMap sin borrar geometría. El fondo no alimenta el motor. Se muestra que no son imágenes en vivo, y se conserva la atribución de la capa activa. No hay fecha de captura local verificada, por lo que no se anuncia una.
 
 Se comprobaron imágenes reales, alternancia con cuadrícula/vértices conservados, cero consultas de datos adicionales y recuperación de un fallo satelital al cambiar a calles. Captura: `evidencia/mapa-satelital.png`. Fuente y crédito del servicio: [World Imagery](https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer?f=pjson).
+
+## Ajustes de la revisión del equipo
+
+La escena recibe `avisosDatos` estructurados: directamente del hook para parcelas propias y mediante `avisosDe` para la demo. Se conservan código, origen y severidad; el indicador Suelo SUPUESTO se muestra en su franja. Tabla y tarjetas se ordenan por la posición del motor, sin imponer un orden fijo.
+
+Método agrupa las referencias por publicación sin eliminar citas/metadatos. `ui/licencias.ts` reúne condiciones y enlaces de los proveedores del README, con Esri y OpenStreetMap; permisos sin confirmar siguen visibles como no verificados. Los datos originales no se reescriben y las referencias del paquete se conservan en el detalle. Captura: `evidencia/metodo-licencias-320.png`. Revisión humana de licencias pendiente; no se declara una certificación legal.
+
+Video y presentación quedan canceladas por Balam y fuera de este flujo de implementación; el estado se conserva en docs/13 y docs/14.
