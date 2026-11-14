@@ -18,6 +18,14 @@ Decisiones afectadas:
 - **Cambio:** la escena carga las 9 losas de Mafer (`modelos/suelos/`) y pinta la columna con el tono del tipo de suelo. La losa sale de `textura.grupo` del contrato `suelo` y de la `humedad` del motor, con cortes en tercios de TAW `[PROPUESTA]`. Si falta el tipo o la humedad no hay losa, y sin humedad la columna va en gris.
 - **Fuente / evidencia:** tonos tomados de `modelos/paleta.md` (verificado en prueba); 159 pruebas de escena; headless con el motor real: suelo del mapa de Isla (arcilloso) y selector manual (franco).
 
+### 2026-11-14 — Alcance mundial, recursos del reto evaluados e IMERG vía POWER (Mompin, sesión features)
+
+- **Archivos:** `docs/13` (fila "Alcance geográfico" `[DECIDIDO]`), `docs/11` (recursos del reto evaluados y tres riesgos), `docs/14` (A1.7, A4.10, A4.11, A4.12; plan de recorte; tablero), `docs/04` (filas de GPM IMERG y MODIS), `docs/03` (extra de fase 2), `AgroVault/Compartido/APIs.md`; prototipo en `features/imerg/` y encargo en `features/encargos/eduardo-datos-globales.md`.
+- **Decisión (Mompin):** arquitectura mundial con fuentes globales y demo validada en Isla; las fuentes de cada país se suman encima. Los recursos del reto que solo cubren EE. UU. pasan a extra de fase 2 (A4.12, Eduardo). IMERG vía POWER (A4.10) y NDVI de MODIS (A4.11) para Eduardo; contratos para el alcance mundial (A1.7) para Mompin.
+- **Hallazgo:** NASA POWER entrega GPM IMERG (`IMERG_PRECTOT`, 0.1°) sin cuenta Earthdata si se pide con `time-standard=UTC`; en hora local responde `-999`. Con 20 años agrícolas en Isla, IMERG tiene máximos diarios de hasta 241.5 mm (`PRECTOTCORR`: 125.4 mm como máximo) y correlación mensual de 0.923, pero elegiría otros años de escenario (2019, 2024 y 2017). No se cambia la fuente de los escenarios; queda como riesgo en 11.
+- **Fuente / evidencia:** `python3 features/imerg/comparar_imerg.py` (respuesta cruda de POWER guardada, consultada el 14/11/2026) y `python3 -m unittest discover -s features/imerg`.
+- **Decisiones afectadas:** 05 paso 1 (sin cambio, riesgo declarado), A4.8 (IMERG vía POWER es la ruta barata), V-09 y calendario fuera de México (`NO_EVALUABLE`).
+
 ### 2026-11-14 — Escena con la cuadrícula de balam (A2.9) y revisión de A3.3/A2.11 (Mompin, rama `Mompin-escena`)
 
 - **Archivos:** `web/src/escena/adaptador.ts`, `placa.ts`, `demo-motor.ts`, `vista-previa.tsx`, `INTEGRACION.md`, pruebas `cuadricula-balam.test.ts` y `estados.test.ts`; `docs/06`.
