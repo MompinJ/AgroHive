@@ -750,6 +750,7 @@ export interface Pilares {
   proteccionSuelo?: PilarProteccionSuelo;
   riesgoCalor?: PilarRiesgoCalor;
   aporteIndirecto?: PilarAporteIndirecto;
+  excesoHidrico?: PilarExcesoHidrico;
 }
 /**
  * Pilar 1 (nucleo).
@@ -794,6 +795,25 @@ export interface PilarAporteIndirecto {
   incluyeLeguminosa: boolean | null;
   especiesDistintas: number | null;
 }
+/**
+ * Pilar de exceso de agua (decidido por Mompin el 14/11): percolacion por debajo de la raiz, FAO-56 ec. 88 (DP = (P - RO) + I - ETc - Dr,i-1 >= 0, cap. 8, 'Soil water balance'). fraccionLluviaPercolada = percolacion / lluvia de los dias de ciclo. Normalizacion del ranking: 1 - fraccionLluviaPercolada, declarada SUPUESTO (sin umbral publicado de encharcamiento por cultivo). Opcional (agregado en 0.7.0).
+ */
+export interface PilarExcesoHidrico {
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  /**
+   * Percolacion profunda acumulada en los dias de ciclo (mm).
+   */
+  excesoTotalMm: number | null;
+  /**
+   * Dias de ciclo con percolacion profunda mayor que cero.
+   */
+  diasExceso: number | null;
+  /**
+   * Percolacion / lluvia de los dias de ciclo (0 a 1).
+   */
+  fraccionLluviaPercolada: number | null;
+}
 export interface PeorCaso {
   escenario: Escenario;
   criterio: CriterioRanking;
@@ -808,7 +828,7 @@ export interface Ponderacion {
   etiqueta: EtiquetaProcedencia;
   fuente?: Fuente;
   pilaresExcluidos: (
-    "deficitHidrico" | "compatibilidadCiclo" | "proteccionSuelo" | "riesgoCalor" | "aporteIndirecto"
+    "deficitHidrico" | "compatibilidadCiclo" | "proteccionSuelo" | "riesgoCalor" | "aporteIndirecto" | "excesoHidrico"
   )[];
   nota: string;
 }
@@ -821,6 +841,7 @@ export interface PesosPilares {
   proteccionSuelo?: number;
   riesgoCalor?: number;
   aporteIndirecto?: number;
+  excesoHidrico?: number;
 }
 export interface Ranking {
   posicion: number;

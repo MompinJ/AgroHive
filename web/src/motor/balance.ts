@@ -35,6 +35,8 @@ export interface BalanceCiclo {
   tawMm: number;
   dias: DiaBalance[];
   etcTotalMm: number;
+  /** Lluvia de los dias del ciclo (mm): la base de la fraccion percolada del pilar de exceso. */
+  lluviaTotalMm: number;
   deficitTotalMm: number;
   excesoTotalMm: number;
   diasDeficit: number;
@@ -68,6 +70,7 @@ export function balanceCiclo(e: EntradaBalance): BalanceCiclo {
   let dr = Math.min(Math.max(0, e.drInicialMm), taw);
   const dias: DiaBalance[] = [];
   let etcTotal = 0;
+  let lluviaTotal = 0;
   let deficitTotal = 0;
   let exceso = 0;
   let diasDeficit = 0;
@@ -85,6 +88,7 @@ export function balanceCiclo(e: EntradaBalance): BalanceCiclo {
     const deficit = etc - etcAj;
     const etapa = etapaFao(c, i);
     etcTotal += etc;
+    lluviaTotal += lluvia;
     deficitTotal += deficit;
     exceso += dp;
     if (dp > 0) diasExceso++;
@@ -109,6 +113,7 @@ export function balanceCiclo(e: EntradaBalance): BalanceCiclo {
     tawMm: taw,
     dias,
     etcTotalMm: etcTotal,
+    lluviaTotalMm: lluviaTotal,
     deficitTotalMm: deficitTotal,
     excesoTotalMm: exceso,
     diasDeficit,

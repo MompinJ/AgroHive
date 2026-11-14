@@ -69,8 +69,8 @@ Motor, independiente del render (`docs/05`):
 3. ET0 (la de Open-Meteo si viene; si no, Penman-Monteith FAO-56 con POWER; Hargreaves si faltan humedad, viento o radiación) y ETc = Kc de la etapa × ET0 (curva FAO-56 ec. 66). Duraciones de etapa publicadas. Hecho (A2.6, `web/src/motor/`).
 4. Balance de cubeta por bloque (FAO-56 cap. 8, hecho en A2.6): lluvia entra, lo que no cabe es exceso (percolación), ETc sale, lo que no se cubre es déficit. TAW según suelo; arranque a capacidad de campo como supuesto declarado hasta A2.16. Pendiente: sin escurrimiento hasta tener coeficiente con fuente (A3.7).
 5. Estrés hídrico, estrés por calor y avance fenológico. Salida cualitativa para el render.
-6. Pilares: déficit (núcleo), compatibilidad de ciclo, erosión relativa (no toneladas, inspirada en USLE/RUSLE). Los dos últimos se recortan si faltan datos.
-7. Ranking (A4.2 hecha, `ranking.ts`): el criterio principal es el peor caso. `[DECIDIDO]` el 14/11: opción B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio). Pesos con fuente o, si no hay, iguales y declarados `SUPUESTO`. Si los pilares 2 y 3 (A3.7) no llegan, respaldo con la opción A (menor déficit en el peor caso). Si nada es evaluable, decirlo.
+6. Pilares: déficit (núcleo), exceso de agua (percolación profunda, FAO-56 ec. 88; decidido el 14/11 para el ranking B), compatibilidad de ciclo, erosión relativa (no toneladas, inspirada en USLE/RUSLE). Los dos últimos se recortan si faltan datos.
+7. Ranking (A4.2 hecha, `ranking.ts`; hoy B con déficit y exceso de agua, `[DECIDIDO]` 14/11): el criterio principal es el peor caso. `[DECIDIDO]` el 14/11: opción B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio). Pesos con fuente o, si no hay, iguales y declarados `SUPUESTO`. Si los pilares 2 y 3 (A3.7) no llegan, respaldo con la opción A (menor déficit en el peor caso). Si nada es evaluable, decirlo.
 8. Tarjeta de explicación con plantilla. Un LLM, si se usa, solo redacta números ya calculados.
 
 Estados: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS`, `RESPALDO_HISTORICO`.
@@ -138,7 +138,7 @@ Eduardo toma el servidor (A0.4, A4.7).
 
 ## Estado del repo (14/11, noche)
 
-Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1 `[HECHO]` el 14/11: JSON Schema v0.6.0, ejemplos ficticios, `npm test` y tipos TS; ver [[Contratos]]). También hay código: `api/` (FastAPI de Eduardo, con pruebas), `web/` (esqueleto de balam) y `datos/catalogos/` (cultivos y suelos de Mafer). Antes de subir a `main` se corren las cuatro verificaciones (ver [[Reglas]]). A2.16 (TAW por Saxton y Rawls) la hace Mafer.
+Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1 `[HECHO]` el 14/11: JSON Schema v0.7.0, ejemplos ficticios, `npm test` y tipos TS; ver [[Contratos]]). También hay código: `api/` (FastAPI de Eduardo, con pruebas), `web/` (esqueleto de balam) y `datos/catalogos/` (cultivos y suelos de Mafer). Antes de subir a `main` se corren las cuatro verificaciones (ver [[Reglas]]). A2.16 (TAW por Saxton y Rawls) la hace Mafer.
 
 ## Límites para el pitch
 
