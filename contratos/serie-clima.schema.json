@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/serie-clima.schema.json",
+  "title": "SerieClima",
+  "description": "Respuesta de GET /api/clima: serie diaria de un periodo, sin elegir escenario (modelo SerieClima de api/app/modelos.py). El motor (A2.5) corta de aqui los anios de cada escenario y arma clima-escenario. Usa el mismo dia que clima-escenario.",
+  "type": "object",
+  "required": [
+    "meta",
+    "estado",
+    "respaldo",
+    "coordenada",
+    "fuente",
+    "diario"
+  ],
+  "properties": {
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
+    "estado": {
+      "description": "EVALUABLE con POWER; RESPALDO_HISTORICO si se uso Open-Meteo o cache; ERROR_DATOS si no hay serie.",
+      "$ref": "comun.schema.json#/$defs/estado"
+    },
+    "respaldo": {
+      "description": "true si los datos no vienen de NASA POWER.",
+      "type": "boolean"
+    },
+    "coordenada": {
+      "$ref": "comun.schema.json#/$defs/lonLat"
+    },
+    "periodo": {
+      "description": "Periodo pedido (opcional).",
+      "$ref": "comun.schema.json#/$defs/periodo"
+    },
+    "fuente": {
+      "$ref": "comun.schema.json#/$defs/fuente"
+    },
+    "diario": {
+      "type": "array",
+      "items": {
+        "$ref": "clima-escenario.schema.json#/$defs/dia"
+      }
+    },
+    "humedadSuelo": {
+      "$ref": "clima-escenario.schema.json#/$defs/humedadSuelo"
+    },
+    "advertencias": {
+      "type": "array",
+      "items": {
+        "$ref": "comun.schema.json#/$defs/advertencia"
+      }
+    }
+  },
+  "additionalProperties": false
+}

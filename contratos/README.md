@@ -10,18 +10,21 @@ Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un e
 | --- | --- | --- |
 | `comun.schema.json` | Definiciones compartidas: estados de doc 04, `fuente`, `valorCitado`, `meta`, coordenadas, ids | — |
 | `parcela.schema.json` | Polígono, cuadrícula y celdas con elevación y pendiente | Front (polígono) + API (elevación) |
-| `suelo.schema.json` | Textura y pH estimados, siempre `SUPUESTO`; respaldo de selector manual | API (`/api/suelo`, A2.14) |
-| `cultivo.schema.json` | Catálogo propio de cultivos: ciclo, etapas FAO-56, Kc, umbrales EcoCrop (lluvia del ciclo y lluvia anual por separado), ventanas de siembra | `datos/catalogos/` (A1.5) |
+| `suelo.schema.json` | Textura y pH estimados, siempre `SUPUESTO`; estimaciones de ISRIC y OpenLandMap para compararlas y cuál se usa; TAW con su método (tabla FAO-56 o pedotransferencia de Saxton y Rawls 2006); respaldo de selector manual | API (`/api/suelo`, A2.14) |
+| `cultivo.schema.json` | Catálogo propio de cultivos, solo lo que no depende del lugar: ciclo, etapas FAO-56, Kc, umbrales EcoCrop (lluvia del ciclo y lluvia anual por separado) | `datos/catalogos/` (A1.5) |
+| `calendario-local.schema.json` | Calendario de un municipio (clave INEGI): por cultivo y temporada (PV, OI), ventana de siembra con fuente (SIAP, INIFAP) y si la fuente registra el cultivo en el lugar | `datos/` (A0.6, V-20) |
 | `tabla-suelos.schema.json` | Tabla por clase textural: rangos de FAO-56 Tabla 19 y TAW por metro (`mm/m`), con fuente o `NO_EVALUABLE` | `datos/catalogos/` (A1.6) |
-| `clima-escenario.schema.json` | Serie diaria de un año real del histórico (seco, habitual, lluvioso) | API (`/api/clima`) + motor (A2.5) |
-| `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo banda de incertidumbre por mes | API + motor (A2.13) |
-| `plan-siembra.schema.json` | Rotación del selector: cultivo por ciclo y, si se pinta por bloques, por celda | Front (selector) |
+| `serie-clima.schema.json` | Respuesta de `GET /api/clima`: serie diaria de un periodo, sin escenario (mismo día que `clima-escenario`) | API (`/api/clima`) |
+| `clima-escenario.schema.json` | Serie diaria de un año real del histórico (seco, habitual, lluvioso), con humedad de suelo de POWER (GWETROOT, fracción de saturación) opcional | Motor (A2.5), desde `serie-clima` |
+| `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo banda de incertidumbre por mes, horizonte fijo de 6 meses | API + motor (A2.13) |
+| `plan-siembra.schema.json` | Rotación del selector: cultivo, temporada y fecha elegida por el usuario por ciclo, con su `porQue`; calendario local usado; `asignacionClima` fija en `temporada_tipica` | Front (selector) |
 | `resultado-celda.schema.json` | Salida del motor por celda y fecha (etapa, estado visual, humedad, déficit) | Motor |
 | `resultado-rotacion.schema.json` | Pilares por escenario, peor caso, ranking (criterio B principal; A de respaldo), pesos declarados y explicación | Motor |
 
 ## Reglas que el schema obliga a cumplir
 
 - Un parámetro numérico del catálogo o del suelo es `{estado: "EVALUABLE", valor, unidad, fuente}` o `{estado: "NO_EVALUABLE", motivo}`. Un número suelto o sin fuente se rechaza.
+- Un cultivo que la fuente local no registra se puede mostrar, pero no recomendar: la rotación lo lista en `cultivosNoRecomendados` (con motivo y fuente) y no puede ser `EVALUABLE`; en la celda, `noRecomendadoEnLugar` con `motivo` y `fuenteMotivo`.
 - Un registro `NO_EVALUABLE` o `ERROR_DATOS` lleva todos sus indicadores en `null`, nunca en cero. Si el estado no es `EVALUABLE`, debe incluir un `motivo`.
 - Suelo, textura y pH llevan siempre la etiqueta `SUPUESTO`.
 - La próxima temporada tiene `esPrediccion: false`, un `aviso` obligatorio y bandas `{inferior, superior}` sin cifra única.
@@ -44,4 +47,4 @@ npm test        # valida cada ejemplo y comprueba que los casos de pruebas/inval
 npm run tipos   # regenera tipos/contratos.d.ts (no editar a mano)
 ```
 
-Versión del contrato: `0.3.0`. Historial: 0.2.0 agrega `ponderacion` y deja B como criterio principal; 0.3.0 agrega la lluvia anual al catálogo de cultivos (`umbrales.lluviaAnualMinMm` y `lluviaAnualMaxMm`, distinta de la lluvia del ciclo) y el contrato `tabla-suelos`. Si un cambio rompe la compatibilidad, se sube la versión y se anota en `docs/01-REGISTRO-DE-CAMBIOS.md`.
+Versión del contrato: `0.5.0`. Historial: 0.2.0 agrega `ponderacion` y deja B como criterio principal; 0.3.0 agrega la lluvia anual al catálogo de cultivos (`umbrales.lluviaAnualMinMm` y `lluviaAnualMaxMm`, distinta de la lluvia del ciclo) y el contrato `tabla-suelos`; 0.4.0 agrega `serie-clima`, la humedad de suelo de POWER (`humedadRaizFraccionSat` y `humedadSuelo`), en `suelo` el método del TAW, la retención de agua y las estimaciones por servicio, y fija `horizonteMeses` en 6; 0.5.0 (incompatible) saca las ventanas de siembra del catálogo y crea `calendario-local`, deja la fecha de siembra y su `porQue` en el plan, fija `asignacionClima` en `temporada_tipica` y permite marcar cultivos que se muestran pero no se recomiendan (`cultivosNoRecomendados`, `noRecomendadoEnLugar`). Si un cambio rompe la compatibilidad, se sube la versión y se anota en `docs/01-REGISTRO-DE-CAMBIOS.md`.

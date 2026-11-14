@@ -10,3 +10,4 @@ datos/cache/
 *.log
 .DS_Store
 herramientas/buzon/mensajes.jsonl
+.vscode/

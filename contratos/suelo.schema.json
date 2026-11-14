@@ -2,11 +2,21 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://agrohive.example/contratos/suelo.schema.json",
   "title": "Suelo",
-  "description": "Suelo de la parcela (decision 14/11, doc 13): textura y pH estimados por zona con mapas globales (ISRIC WCS u OpenLandMap) o elegidos en el selector manual de respaldo. Siempre etiqueta SUPUESTO: no se mide en la parcela.",
+  "description": "Suelo de la parcela (decisiones del 14/11, doc 13): textura y pH estimados por zona con mapas globales o elegidos en el selector manual de respaldo. Se consultan AMBOS servicios (ISRIC SoilGrids por WCS y OpenLandMap) para compararlos: cada uno va en 'estimaciones' y 'estimacionUsada' dice cual alimenta textura, pH y agua. El TAW sale de la tabla FAO-56 (A1.6) o de la pedotransferencia de Saxton y Rawls (2006). Siempre etiqueta SUPUESTO: no se mide en la parcela.",
   "type": "object",
-  "required": ["meta", "id", "etiqueta", "origen", "aviso", "textura", "ph"],
+  "required": [
+    "meta",
+    "id",
+    "etiqueta",
+    "origen",
+    "aviso",
+    "textura",
+    "ph"
+  ],
   "properties": {
-    "meta": { "$ref": "comun.schema.json#/$defs/meta" },
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]*$"
@@ -18,7 +28,10 @@
     "origen": {
       "description": "mapa_global: estimado por script desde ISRIC u OpenLandMap y servido desde cache. selector_manual: el usuario eligio el tipo de suelo.",
       "type": "string",
-      "enum": ["mapa_global", "selector_manual"]
+      "enum": [
+        "mapa_global",
+        "selector_manual"
+      ]
     },
     "aviso": {
       "description": "Texto visible para el usuario, por ejemplo 'pH y textura estimados por un modelo global; no son una medicion de su parcela'.",
@@ -30,39 +43,45 @@
       "$ref": "comun.schema.json#/$defs/lonLat"
     },
     "profundidad": {
-      "title": "ProfundidadCm",
-      "description": "Intervalo de profundidad de la estimacion en cm (por ejemplo 0 a 30).",
-      "type": "object",
-      "required": ["desdeCm", "hastaCm"],
-      "properties": {
-        "desdeCm": { "type": "number", "minimum": 0 },
-        "hastaCm": { "type": "number", "exclusiveMinimum": 0 }
-      },
-      "additionalProperties": false
+      "$ref": "#/$defs/profundidadCm"
     },
-    "textura": { "$ref": "#/$defs/textura" },
+    "textura": {
+      "$ref": "#/$defs/textura"
+    },
     "ph": {
       "description": "pH estimado o NO_EVALUABLE si el servicio no respondio y no hay respaldo.",
       "oneOf": [
-        { "$ref": "#/$defs/phEstimado" },
-        { "$ref": "comun.schema.json#/$defs/valorNoEvaluable" }
+        {
+          "$ref": "#/$defs/phEstimado"
+        },
+        {
+          "$ref": "comun.schema.json#/$defs/valorNoEvaluable"
+        }
+      ]
+    },
+    "estimaciones": {
+      "description": "Estimaciones por servicio, para comparar ISRIC y OpenLandMap. Opcional; si existe, estimacionUsada es obligatoria.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/estimacion"
+      }
+    },
+    "estimacionUsada": {
+      "description": "id de la estimacion que alimenta textura, pH y agua; null si se uso el selector manual.",
+      "type": [
+        "string",
+        "null"
       ]
     },
     "agua": {
-      "title": "AguaSuelo",
-      "description": "Parametros de agua derivados de la textura con la tabla de A1.6 (FAO-56).",
-      "type": "object",
-      "properties": {
-        "tawMmPorM": {
-          "description": "Agua total disponible por metro de suelo (mm/m).",
-          "$ref": "comun.schema.json#/$defs/valorCitado"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/$defs/agua"
     },
     "advertencias": {
       "type": "array",
-      "items": { "$ref": "comun.schema.json#/$defs/advertencia" }
+      "items": {
+        "$ref": "comun.schema.json#/$defs/advertencia"
+      }
     }
   },
   "additionalProperties": false,
@@ -90,52 +109,357 @@
       "title": "GrupoSuelo",
       "description": "Grupo simplificado del selector manual del MVP (doc 04).",
       "type": "string",
-      "enum": ["arenoso", "franco", "arcilloso"]
+      "enum": [
+        "arenoso",
+        "franco",
+        "arcilloso"
+      ]
     },
     "textura": {
       "title": "Textura",
       "type": "object",
-      "required": ["estado", "etiqueta", "grupo"],
+      "required": [
+        "estado",
+        "etiqueta",
+        "grupo"
+      ],
       "properties": {
-        "estado": { "$ref": "comun.schema.json#/$defs/estado" },
-        "etiqueta": { "const": "SUPUESTO" },
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "etiqueta": {
+          "const": "SUPUESTO"
+        },
         "clase": {
           "description": "Clase USDA si viene del mapa global; null si solo se conoce el grupo del selector.",
-          "oneOf": [{ "$ref": "#/$defs/claseTextura" }, { "type": "null" }]
+          "oneOf": [
+            {
+              "$ref": "#/$defs/claseTextura"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
-        "grupo": { "$ref": "#/$defs/grupoSelector" },
+        "grupo": {
+          "$ref": "#/$defs/grupoSelector"
+        },
         "fraccionesPct": {
-          "title": "FraccionesTextura",
-          "description": "Porcentajes de arena, limo y arcilla del mapa global. null si no se tienen.",
-          "type": ["object", "null"],
-          "required": ["arena", "limo", "arcilla"],
-          "properties": {
-            "arena": { "type": "number", "minimum": 0, "maximum": 100 },
-            "limo": { "type": "number", "minimum": 0, "maximum": 100 },
-            "arcilla": { "type": "number", "minimum": 0, "maximum": 100 }
-          },
-          "additionalProperties": false
+          "$ref": "#/$defs/fracciones"
         },
-        "fuente": { "$ref": "comun.schema.json#/$defs/fuente" }
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        }
       },
       "additionalProperties": false
     },
     "phEstimado": {
       "title": "PhEstimado",
       "type": "object",
-      "required": ["estado", "etiqueta", "valor", "fuente"],
+      "required": [
+        "estado",
+        "etiqueta",
+        "valor",
+        "fuente"
+      ],
       "properties": {
-        "estado": { "type": "string", "enum": ["EVALUABLE", "EXPLORATORIO", "RESPALDO_HISTORICO"] },
-        "etiqueta": { "const": "SUPUESTO" },
+        "estado": {
+          "type": "string",
+          "enum": [
+            "EVALUABLE",
+            "EXPLORATORIO",
+            "RESPALDO_HISTORICO"
+          ]
+        },
+        "etiqueta": {
+          "const": "SUPUESTO"
+        },
         "valor": {
           "description": "pH en agua estimado por el modelo global.",
           "type": "number",
           "minimum": 0,
           "maximum": 14
         },
-        "fuente": { "$ref": "comun.schema.json#/$defs/fuente" }
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        }
+      },
+      "additionalProperties": false
+    },
+    "agua": {
+      "title": "AguaSuelo",
+      "description": "Agua disponible del suelo y como se obtuvo. Si el TAW es EVALUABLE, metodoTaw es obligatorio.",
+      "type": "object",
+      "required": [
+        "tawMmPorM"
+      ],
+      "properties": {
+        "tawMmPorM": {
+          "description": "Agua total disponible por metro de suelo (mm/m).",
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        },
+        "metodoTaw": {
+          "$ref": "#/$defs/metodoTaw"
+        },
+        "retencion": {
+          "$ref": "#/$defs/retencion"
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "properties": {
+          "tawMmPorM": {
+            "type": "object",
+            "required": [
+              "estado"
+            ],
+            "properties": {
+              "estado": {
+                "const": "EVALUABLE"
+              }
+            }
+          }
+        },
+        "required": [
+          "tawMmPorM"
+        ]
+      },
+      "then": {
+        "required": [
+          "metodoTaw"
+        ]
+      }
+    },
+    "metodoTaw": {
+      "title": "MetodoTaw",
+      "type": "object",
+      "required": [
+        "metodo",
+        "fuente"
+      ],
+      "properties": {
+        "metodo": {
+          "description": "tabla_fao56: TAW por clase textural de contratos/tabla-suelos (FAO-56 Tabla 19). pedotransferencia_saxton_rawls_2006: calculado desde arena, arcilla y materia organica (aplica a cualquier textura, incluidas las que no estan en la tabla).",
+          "type": "string",
+          "enum": [
+            "tabla_fao56",
+            "pedotransferencia_saxton_rawls_2006"
+          ]
+        },
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        },
+        "etiqueta": {
+          "const": "SUPUESTO"
+        },
+        "entradas": {
+          "$ref": "#/$defs/entradasPedotransferencia"
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "properties": {
+          "metodo": {
+            "const": "pedotransferencia_saxton_rawls_2006"
+          }
+        },
+        "required": [
+          "metodo"
+        ]
+      },
+      "then": {
+        "required": [
+          "etiqueta",
+          "entradas"
+        ]
+      }
+    },
+    "entradasPedotransferencia": {
+      "title": "EntradasPedotransferencia",
+      "description": "Entradas de Saxton y Rawls (2006) y de que estimacion salen.",
+      "type": "object",
+      "required": [
+        "estimacionId",
+        "arenaPct",
+        "arcillaPct",
+        "materiaOrganicaPct"
+      ],
+      "properties": {
+        "estimacionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "arenaPct": {
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        },
+        "arcillaPct": {
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        },
+        "materiaOrganicaPct": {
+          "description": "Materia organica en %. Si viene de carbono organico, la fuente debe citar el factor de conversion.",
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        }
+      },
+      "additionalProperties": false
+    },
+    "retencion": {
+      "title": "RetencionAgua",
+      "description": "Contenidos de agua (m3/m3) a saturacion, capacidad de campo y punto de marchitez. Hacen falta, por ejemplo, para pasar la humedad de POWER (fraccion de saturacion) a fraccion de TAW.",
+      "type": "object",
+      "required": [
+        "thetaSatM3M3",
+        "thetaFcM3M3",
+        "thetaWpM3M3"
+      ],
+      "properties": {
+        "thetaSatM3M3": {
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        },
+        "thetaFcM3M3": {
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        },
+        "thetaWpM3M3": {
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        }
+      },
+      "additionalProperties": false
+    },
+    "estimacion": {
+      "title": "EstimacionSuelo",
+      "description": "Lo que devolvio un servicio de suelo para la coordenada.",
+      "type": "object",
+      "required": [
+        "id",
+        "servicio",
+        "estado",
+        "fuente",
+        "textura",
+        "ph"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "servicio": {
+          "type": "string",
+          "enum": [
+            "isric_soilgrids_wcs",
+            "openlandmap"
+          ]
+        },
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        },
+        "profundidad": {
+          "$ref": "#/$defs/profundidadCm"
+        },
+        "textura": {
+          "title": "TexturaEstimada",
+          "type": "object",
+          "required": [
+            "clase",
+            "fraccionesPct"
+          ],
+          "properties": {
+            "clase": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/claseTextura"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "fraccionesPct": {
+              "$ref": "#/$defs/fracciones"
+            }
+          },
+          "additionalProperties": false
+        },
+        "ph": {
+          "description": "pH en agua; null si el servicio no lo dio.",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 14
+        },
+        "carbonoOrganicoGKg": {
+          "description": "Carbono organico del suelo (g/kg); null si no se dio.",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "profundidadCm": {
+      "title": "ProfundidadCm",
+      "description": "Intervalo de profundidad de la estimacion en cm (por ejemplo 0 a 30).",
+      "type": "object",
+      "required": [
+        "desdeCm",
+        "hastaCm"
+      ],
+      "properties": {
+        "desdeCm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "hastaCm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "fracciones": {
+      "title": "FraccionesTextura",
+      "description": "Porcentajes de arena, limo y arcilla del mapa global. null si no se tienen.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "arena",
+        "limo",
+        "arcilla"
+      ],
+      "properties": {
+        "arena": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "limo": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "arcilla": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
       },
       "additionalProperties": false
     }
+  },
+  "dependentRequired": {
+    "estimaciones": [
+      "estimacionUsada"
+    ]
   }
 }

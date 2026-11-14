@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "versionContrato": "0.5.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "id": "calendario-demo-isla",
+  "ubicacion": {
+    "pais": "Mexico",
+    "claveEstadoInegi": "30",
+    "estado": "Veracruz",
+    "claveMunicipioInegi": "077",
+    "municipio": "Isla",
+    "ddr": "San Andres Tuxtla"
+  },
+  "entradas": [
+    {
+      "cultivo": "maiz",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "EXPLORATORIO",
+      "motivo": "Ventana ficticia de ejemplo.",
+      "ventana": {
+        "estado": "EVALUABLE",
+        "desdeMes": 6,
+        "hastaMes": 7,
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (forma de un calendario de SIAP o INIFAP)",
+          "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+        }
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (forma de la produccion por municipio de SIAP)",
+          "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+        }
+      }
+    },
+    {
+      "cultivo": "frijol",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "EXPLORATORIO",
+      "motivo": "Ventana ficticia de ejemplo.",
+      "ventana": {
+        "estado": "EVALUABLE",
+        "desdeMes": 10,
+        "hastaMes": 11,
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (forma de un calendario de SIAP o INIFAP)",
+          "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+        }
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (forma de la produccion por municipio de SIAP)",
+          "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+        }
+      }
+    },
+    {
+      "cultivo": "calabaza",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "EJEMPLO: la fuente no registra el cultivo en el municipio en el periodo consultado.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "EJEMPLO: sin calendario de siembra para este cultivo en el municipio."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (forma de la produccion por municipio de SIAP)",
+          "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+        }
+      }
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    }
+  ]
+}
