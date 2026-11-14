@@ -63,19 +63,31 @@ const sinExceso = (x: RotacionParaRanking): RotacionParaRanking => {
   for (const e of ESC) delete (r.porEscenario[e].pilares as ConExceso).excesoHidrico;
   return { rotacion: r, numeroSiembras: x.numeroSiembras };
 };
+/** Solo el pilar de deficit con numero (para el respaldo A). */
+const soloDeficit = (x: RotacionParaRanking): RotacionParaRanking => {
+  const r = sinExceso(x).rotacion;
+  for (const e of ESC) r.porEscenario[e].pilares.proteccionSuelo = { estado: 'NO_EVALUABLE', motivo: 'Prueba.', indiceErosionRelativo: null, diasSueloDesnudo: null };
+  return { rotacion: r, numeroSiembras: x.numeroSiembras };
+};
+const diasAnio = (t: number) => (Date.UTC(t, 8, 30) - Date.UTC(t - 1, 9, 1)) / 86400000 + 1;
 
-describe('A4.2 con los pilares de hoy: B con deficit y exceso de agua ([DECIDIDO] 14/11)', () => {
+describe('A4.2 con los pilares de hoy: B con deficit, exceso y proteccion del suelo (A3.7)', () => {
   const res = rankear([R1, R2, R3, R4, R5]);
-  it('entra al criterio B con pesos iguales SUPUESTO entre deficit y exceso', () => {
+  it('entra al criterio B con pesos iguales SUPUESTO; sin calendario la compatibilidad queda fuera', () => {
     expect(res.criterio).toBe('B_minimax_arrepentimiento');
-    expect(res.ponderacion).toMatchObject({ etiqueta: 'SUPUESTO', pesos: { deficitHidrico: 0.5, excesoHidrico: 0.5 } });
-    expect(res.ponderacion?.pilaresExcluidos).toEqual(['compatibilidadCiclo', 'proteccionSuelo', 'riesgoCalor', 'aporteIndirecto']);
+    expect(res.ponderacion).toMatchObject({ etiqueta: 'SUPUESTO', pesos: { deficitHidrico: 0.3333, excesoHidrico: 0.3333, proteccionSuelo: 0.3333 } });
+    expect(res.ponderacion?.pilaresExcluidos).toEqual(['compatibilidadCiclo', 'riesgoCalor', 'aporteIndirecto']);
     expect(res.ponderacion?.nota).toMatch(/SUPUESTO/);
   });
   it('orden por minimax de arrepentimiento, calculado a mano desde los pilares', () => {
     const punt = (x: RotacionParaRanking, e: Escenario) => {
       const p = x.rotacion.porEscenario[e].pilares;
-      return 0.5 * (1 - p.deficitHidrico.proporcionDemandaNoCubierta!) + 0.5 * (1 - (p as ConExceso).excesoHidrico!.fraccionLluviaPercolada!);
+      const t = x.rotacion.porEscenario[e].anioReal!;
+      return (
+        (1 - p.deficitHidrico.proporcionDemandaNoCubierta!) +
+        (1 - (p as ConExceso).excesoHidrico!.fraccionLluviaPercolada!) +
+        (1 - p.proteccionSuelo!.diasSueloDesnudo! / diasAnio(t))
+      ) / 3;
     };
     const ord = [R1, R2, R3];
     const mejor = Object.fromEntries(ESC.map((e) => [e, Math.max(...ord.map((x) => punt(x, e)))])) as Record<Escenario, number>;
@@ -113,7 +125,7 @@ describe('A4.2 con los pilares de hoy: B con deficit y exceso de agua ([DECIDIDO
 });
 
 describe('A4.2 respaldo A: solo el pilar de deficit tiene numero', () => {
-  const res = rankear([R1, R2, R3].map(sinExceso));
+  const res = rankear([R1, R2, R3].map(soloDeficit));
   it('ordena por menor demanda no cubierta en el peor escenario, sin puntaje ni pesos', () => {
     expect(res.criterio).toBe('A_exposicion_hidrica_peor_caso');
     expect(res.ponderacion).toBeNull();
