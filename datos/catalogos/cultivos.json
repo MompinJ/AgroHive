@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.3.0",
+    "versionContrato": "0.6.0",
     "esEjemplo": false,
     "aviso": "Parametros de tablas generales (FAO-56, FAO EcoCrop), no calibrados para Isla, Veracruz. Requieren validacion agronomica local."
   },

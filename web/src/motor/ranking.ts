@@ -5,6 +5,9 @@
 //                       de la demanda del cultivo que el agua del suelo cubrio). No es rendimiento.
 //   compatibilidadCiclo 1 - siembrasFueraDeVentana / numero de siembras del plan (fraccion de siembras en ventana).
 //   proteccionSuelo     1 - indiceErosionRelativo (el indice ya va de 0 a 1; su construccion la fija A3.7).
+//   excesoHidrico       1 - fraccionLluviaPercolada = fraccion de la lluvia de los dias de ciclo que el suelo retuvo
+//                       (percolacion de FAO-56 ec. 88). Pilar [DECIDIDO] por Mompin el 14/11; la normalizacion es
+//                       SUPUESTO: no hay umbral publicado de encharcamiento por cultivo en FAO-56 ni en el catalogo.
 //   riesgoCalor y aporteIndirecto son complementarios en doc 05 (tabla del paso 6): se muestran, no entran al puntaje.
 // Pesos: los de la fuente o del usuario (F8) si se pasan; si no, iguales entre los pilares que entran, declarados
 // SUPUESTO. Un pilar entra solo si tiene numero en todos los escenarios de todas las rotaciones comparadas.
@@ -12,7 +15,7 @@
 // B: puntaje por escenario = suma de pesos x subpuntajes; robustez = peor puntaje (peorCaso); arrepentimiento del
 //    escenario = mejor puntaje del escenario entre las rotaciones comparadas - puntaje de la rotacion; se ordena por
 //    menor arrepentimiento maximo, desempate por mayor puntaje promedio y despues por rotacionId.
-// A (respaldo, si los pilares 2 y 3 no tienen numero: con un solo pilar B no aporta nada sobre A): se ordena por menor
+// A (respaldo, si solo el pilar de deficit tiene numero: con un solo pilar B no aporta nada sobre A): se ordena por menor
 //    proporcion de demanda no cubierta en el peor escenario, desempate por menor promedio y despues por rotacionId.
 // Solo se ordenan las rotaciones EVALUABLE o RESPALDO_HISTORICO. Una EXPLORATORIO (cultivo no registrado en el
 // lugar) recibe sus metricas y peor caso, pero no posicion: se ilustra, no se recomienda.
@@ -24,13 +27,14 @@ import {
   type Escenario,
   type Fuente,
   type MetricasEscenario,
-  type PesosPilares,
+  type PesosMotor,
+  type PilaresMotor,
   type Ponderacion,
   type ResultadoRotacion,
 } from './tipos';
 
-export type PilarPuntaje = keyof PesosPilares;
-const PILARES: readonly PilarPuntaje[] = ['deficitHidrico', 'compatibilidadCiclo', 'proteccionSuelo', 'riesgoCalor', 'aporteIndirecto'];
+export type PilarPuntaje = keyof PesosMotor;
+const PILARES: readonly PilarPuntaje[] = ['deficitHidrico', 'excesoHidrico', 'compatibilidadCiclo', 'proteccionSuelo', 'riesgoCalor', 'aporteIndirecto'];
 const COMPLEMENTARIOS: readonly PilarPuntaje[] = ['riesgoCalor', 'aporteIndirecto'];
 const TOL = 1e-9;
 export const SIN_OPCION_ROBUSTA = 'No podemos determinar una opcion mas robusta con estos datos.';
@@ -43,7 +47,7 @@ export interface RotacionParaRanking {
 
 export interface OpcionesRanking {
   /** Pesos dados por el usuario (F8) o con fuente. Se renormalizan entre los pilares que entran al puntaje. */
-  pesos?: PesosPilares;
+  pesos?: PesosMotor;
   etiquetaPesos?: 'USUARIO' | 'FUENTE';
   fuentePesos?: Fuente;
   /** Fuerza un criterio; por defecto B si entran al menos dos pilares, si no A. */
@@ -75,10 +79,14 @@ export interface ResultadoRanking {
 const r4 = (x: number) => Math.round(x * 1e4) / 1e4;
 
 function subpuntaje(p: PilarPuntaje, m: MetricasEscenario, siembras: number): number | null {
-  const x = m.pilares;
+  const x: PilaresMotor = m.pilares;
   switch (p) {
     case 'deficitHidrico':
       return x.deficitHidrico.proporcionDemandaNoCubierta === null ? null : 1 - x.deficitHidrico.proporcionDemandaNoCubierta;
+    case 'excesoHidrico': {
+      const f = x.excesoHidrico?.fraccionLluviaPercolada;
+      return f === null || f === undefined ? null : 1 - f;
+    }
     case 'compatibilidadCiclo': {
       const f = x.compatibilidadCiclo?.siembrasFueraDeVentana;
       return f === null || f === undefined || siembras <= 0 ? null : 1 - Math.min(f, siembras) / siembras;
@@ -159,8 +167,8 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
     const suma = base.reduce((s, [, w]) => s + w, 0);
     const usarIguales = !dados || suma <= 0;
     // Se calcula con los pesos exactos; en ponderacion se publican redondeados.
-    const exactos: PesosPilares = {};
-    const pesos: PesosPilares = {};
+    const exactos: PesosMotor = {};
+    const pesos: PesosMotor = {};
     for (const [p, w] of base) {
       exactos[p] = usarIguales ? 1 / entran.length : w / suma;
       pesos[p] = r4(exactos[p] as number);
@@ -175,7 +183,7 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
         (usarIguales
           ? `Pesos iguales entre los ${entran.length} pilares con numero (sin pesos con fuente ni del usuario): es un supuesto, no un dato.`
           : `Pesos ${etiqueta === 'FUENTE' ? 'con fuente' : 'del usuario'}, renormalizados entre los pilares con numero.`) +
-        ' Subpuntajes de 0 a 1: deficit hidrico = fraccion de la demanda cubierta; compatibilidad = fraccion de siembras en ventana; proteccion del suelo = 1 - indice de erosion.' +
+        ' Subpuntajes de 0 a 1: deficit hidrico = fraccion de la demanda cubierta; exceso = fraccion de la lluvia de los ciclos que el suelo retuvo (1 - percolacion / lluvia; normalizacion SUPUESTO, sin umbral publicado de encharcamiento por cultivo); compatibilidad = fraccion de siembras en ventana; proteccion del suelo = 1 - indice de erosion.' +
         ' Calor y aporte indirecto son complementarios y no entran.' +
         (ignorados.length > 0 ? ` Pesos ignorados (pilar sin numero o complementario): ${ignorados.join(', ')}.` : ''),
     };
