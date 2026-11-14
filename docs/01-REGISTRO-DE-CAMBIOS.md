@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Prueba de los dos primeros bloques de Mafer en la escena (Mompin)
+
+- **Archivos:** `web/src/escena/voxel/catalogo.ts` (`giroSurcos`), `render/escena-three.ts` (altura del detallado elegido), `demo-motor.ts` (días de siembra en la vista previa); `docs/06`.
+- **Medido:** 518 celdas con maíz en madurez: bloque de Mafer 424 516 triángulos y 3.3 cuadros/s; detallado 449 380 y 3.2; provisional (21 cubos) 216 280 y 4.8. Vértices por modelo: madurez detallado 1 980, bloque 1 836 (1 530 sin caras de abajo), provisional 630.
+- **Cambio:** surcos paralelos (giro 0° o 180°) y detallado de la celda elegida a lo sumo 1.6 veces el manchón.
+- **Pendiente (decisión de Mompin con Mafer):** el tope de 55 cubos no aligera la escena; se propone bajarlo y quitar las caras de abajo antes de hacer los otros 18 bloques.
+
 ### 2026-11-14 — Manchón de plantas por celda en la escena (Mompin; idea de balam, modelos de Mafer)
 
 - **Archivos:** `web/src/escena/voxel/bloque.ts` (nuevo), `render/escena-three.ts` (bloque por celda, detallado en la celda elegida, marco unido en una malla), `voxel/fuente-modelos.ts` (`modelos/cultivos/bloques/`), `EscenaParcela.tsx` (nota en la leyenda), `demo-motor.ts` (la vista previa usa el polígono de 518 celdas), prueba `bloque.test.ts`; `docs/06`.
