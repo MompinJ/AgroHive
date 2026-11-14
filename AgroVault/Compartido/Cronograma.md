@@ -16,9 +16,9 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | **Mompin** | 13 | 1 | 0 | 0 | 93 % de 14 |
 | **Eduardo** | 10 | 3 | 2 | 0 | 67 % de 15 |
 | **Mafer** | 4 | 3 | 0 | 5 | 33 % de 12 |
-| **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
+| **balam** | 3 | 0 | 0 | 13 | 19 % de 16 |
 
-Proyecto completo: **27 de 56** actividades hechas (48 %), 6 en curso, 2 bloqueadas.
+Proyecto completo: **29 de 56** actividades hechas (52 %), 6 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -74,8 +74,8 @@ Proyecto completo: **27 de 56** actividades hechas (48 %), 6 en curso, 2 bloquea
 
 - [ ] **A0.5** Verificar reglas de entrega, IA y video (V-03, V-04)
 - [x] **A1.2** Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías `HECHO` — rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados
-- [ ] **A2.9** Cuadrícula desde polígono (Turf.js) con tope de celdas
-- [ ] **A2.10** Mapa y dibujo de polígono libre (Leaflet)
+- [x] **A2.9** Cuadrícula desde polígono (Turf.js) con tope de celdas `HECHO`
+- [x] **A2.10** Mapa y dibujo de polígono libre (Leaflet) `HECHO`
 - [ ] **A3.4** Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario
 - [ ] **A3.5** Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado
 - [ ] **A3.6** Modo 2D ligero con los mismos valores del motor
