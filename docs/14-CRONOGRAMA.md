@@ -163,13 +163,13 @@ Compuerta **C4** al terminar A4.6.
 | A5.8 `[HECHO]` demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
 | A5.9 | Envío final según reglas oficiales | R4 | XS | Haiku | A5.7 | Entrega confirmada (C6) |
 
-Video y presentación quedan CANCELADAS como tareas del proyecto por indicación expresa de Balam (14/11/2026). A5.6 no se asigna, no cuenta como pendiente ni como actividad hecha. Los borradores se conservan como historial. Esta cancelación de trabajo no modifica los requisitos externos del evento. `[DECIDIDO]` (ver 13).
+Video y presentación se definen al final, cuando el front esté conforme: quedan fuera del tablero, sin asignar y fuera del reparto y de los porcentajes `[DECIDIDO]` (Mompin, 14/11; ver 13). No están canceladas para el equipo. En el carril de Balam permanecen canceladas por su petición expresa; no se retoman sin una nueva indicación suya. Esto no cambia los requisitos externos del evento.
 
-## Actividades canceladas
+## Fuera del tablero hasta el final
 
-| ID | Actividad | Estado | Motivo |
+| ID | Actividad | Estado | Nota |
 | --- | --- | --- | --- |
-| A5.6 | Guion, video, presentación y ensayo | CANCELADA | Petición expresa de Balam el 14/11/2026; fuera del reparto y de los porcentajes |
+| A5.6 | Guion, video, presentación y ensayo | Se define al final | Cuando el front esté conforme (Mompin, 14/11); sin asignar y fuera del reparto y de los porcentajes |
 
 ## Camino crítico
 
