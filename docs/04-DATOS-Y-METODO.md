@@ -27,16 +27,21 @@
 - Usar el **endpoint diario** y agregar nosotros por mes: da control sobre percentiles y eventos extremos.
 - Parámetros candidatos: `PRECTOTCORR` (lluvia), `T2M`, `T2M_MIN`, `T2M_MAX`, y para ET0 `ALLSKY_SFC_SW_DWN`, humedad y viento.
 - `PRECTOTCORR` mensual viene en **mm/día promedio**: para el total mensual multiplicar por los días del mes. (Verificado)
-- Humedad del suelo (`GWETROOT`, `GWETTOP`, `GWETPROF`): confirmar en qué endpoint está. `[VERIFICAR]`
-- Unidades de `ALLSKY_SFC_SW_DWN` (MJ/m²/día o kWh/m²/día) según versión. `[VERIFICAR]`
+- Humedad del suelo (`GWETROOT`, `GWETTOP`, `GWETPROF`): probado el 14/11 (A0.7), están en el endpoint **diario**, comunidades AG y SB, sin unidad (fracción). Si entran al balance sigue abierto (V-06). La comunidad `HY` no existe en el diario (422).
+- `ALLSKY_SFC_SW_DWN` viene en **MJ/m²/día**; `PRECTOTCORR` mm/día, `T2M*` °C, `RH2M` %, `WS2M` m/s (probado el 14/11).
+- CORS (V-22): un GET simple trae `access-control-allow-origin: *`, el preflight `OPTIONS` da 404. Se mantiene todo por el backend.
+- Una llamada diaria de 2006 a 2025 devuelve 7 305 días (~850 KB, ~2 s). Valor de relleno `-999` (0 faltantes en la prueba).
+- Evidencia y script en `datos/pruebas-apis/` (coordenada de prueba, no la parcela demo).
 - Comunidad `AG` para variables agrícolas estándar. (Verificado)
 
 ## Fuentes externas (no NASA)
 
 | Fuente | Para qué | Nota | Estado |
 | --- | --- | --- | --- |
-| **Open-Meteo, archivo histórico** | Clima desde 1940 (ERA5), humedad del suelo, ET0 | Sin llave, uso no comercial gratis. **Respaldo** si POWER falla | Acceso verificado; nombres de parámetros `[VERIFICAR]` |
-| **AWS Terrain Tiles** | Elevación (Terrarium) para el relieve | Sin llave | `[VERIFICAR]` |
+| **Open-Meteo, archivo histórico** | Clima desde 1940 (ERA5), humedad del suelo, ET0 | Sin llave, uso no comercial gratis. **Respaldo** si POWER falla | Probado el 14/11: `precipitation_sum`, `temperature_2m_max/min`, `shortwave_radiation_sum`, `et0_fao_evapotranspiration` con `models=era5`; humedad de suelo `soil_moisture_0_to_7cm_mean` (y 7-28, 28-100) con `models=era5_land`. Lluvia de ERA5 y POWER coinciden en años extremos pero no en magnitud (no intercambiables) |
+| **AWS Terrain Tiles** | Elevación (Terrarium) para el relieve | Sin llave | Probado el 14/11: z12 y z15 responden, z16 da 404 en la zona de prueba |
+| **Open-Meteo Elevation** | Elevación puntual (Copernicus GLO-90, 90 m, 100 puntos por llamada) | Sin llave; acreditar a Copernicus y Open-Meteo | Probado el 14/11. Propuesta de cliente por defecto, falta decidir (V-08) |
+| **Open-Meteo estacional** | Anomalías mensuales de ECMWF SEAS5/EC46 (36 km) | Sin llave | Probado el 14/11: 6 meses por defecto, 7 con `forecast_days=210` (máx. 217). V-21 |
 | **OpenTopography** | DEM SRTM y Copernicus | Llave gratuita | `[VERIFICAR]` |
 | **FAO-56 (Allen et al., 1998)** | Kc por etapa, ET0, agua del suelo por textura | Tablas públicas, se cargan a mano | Conocido |
 | **FAO EcoCrop** | Rangos de temperatura, lluvia y ciclo por cultivo | Base pública | `[VERIFICAR]` |
@@ -49,7 +54,7 @@
 ### Suelo: la fuente más débil
 El MVP usa un **selector manual de tipo de suelo** (arcilloso, franco, arenoso) con valores de retención de agua de FAO-56, siempre etiquetado `SUPUESTO`. Alternativas posteriores: GeoTIFF de SoilGrids, Earth Engine, mapas de INEGI.
 
-**Decisión 14/11 (ver 13):** además se estima **textura y pH** de la zona con mapas globales descargados por script (WCS de ISRIC u OpenLandMap, 250 m; OpenLandMap-soildb a 30 m si es viable), servidos desde caché y siempre etiquetados `SUPUESTO`. El selector manual queda como respaldo. `[VERIFICAR]` qué servicio responde hoy: ISRIC indica API REST pausada, pero una FAQ reciente la describe como beta con límite de 5 llamadas por minuto.
+**Decisión 14/11 (ver 13):** además se estima **textura y pH** de la zona con mapas globales descargados por script (WCS de ISRIC u OpenLandMap, 250 m; OpenLandMap-soildb a 30 m si es viable), servidos desde caché y siempre etiquetados `SUPUESTO`. El selector manual queda como respaldo. Probado el 14/11 (A2.14, V-23): el **WCS de ISRIC responde** (`maps.isric.org/mapserv?map=/map/<propiedad>.map`, coberturas `<propiedad>_<capa>_mean`); la REST sigue anunciada como pausada. Se pide en el CRS nativo (Homolosine); la reproyección a 4326 del servidor deja ceros. Conversión de unidades según la FAQ de ISRIC: arena y arcilla g/kg ÷ 10 = %, pH × 10 ÷ 10. Implementado en `GET /api/suelo` (media 0-30 cm). Evidencia en `datos/pruebas-apis/respuestas/`.
 
 ## Período histórico y escenarios
 

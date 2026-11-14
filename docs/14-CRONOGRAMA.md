@@ -74,10 +74,10 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A0.1 | Repo Git con 5 ramas y estructura de carpetas | Mompin | XS | Haiku | — | Repo remoto con `main` y 4 ramas |
 | A0.2 | Documentación consolidada en `docs/` | Mompin | S | Haiku | — | `docs/` al día, registro en 01 |
 | A0.3 | Acordar roles, cultivos iniciales y criterio de ranking (V-18, V-19) | Todos | XS | Haiku | — | Acta breve en 11 |
-| A0.4 | Acceso SSH, firewall y hostname del servidor (V-15 a V-17) | R3 / Eduardo | S | Sonnet | — | `https://<host>/health` responde |
+| A0.4 `[HECHO]` | Acceso SSH, firewall y hostname del servidor (V-15 a V-17) | R3 / Eduardo | S | Sonnet | — | `https://<host>/health` responde |
 | A0.5 | Verificar reglas de entrega, IA y video (V-03, V-04) | R4 | XS | Haiku | — | Notas en 11 |
 | A0.6 | Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) | R3 | S | Sonnet | — | Zona y cultivos confirmados en 13 |
-| A0.7 | Verificar Open-Meteo estacional, CORS de POWER y acceso a elevación (V-21, V-22) | R3 | S | Sonnet | — | Parámetros probados con una llamada real, anotados en 04 |
+| A0.7 `[HECHO]` | Verificar Open-Meteo estacional, CORS de POWER y acceso a elevación (V-21, V-22) | R3 | S | Sonnet | — | Parámetros probados con una llamada real, anotados en 04 |
 
 ## F1 · Contratos y esqueleto
 
@@ -85,7 +85,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | --- | --- | --- | --- | --- | --- | --- |
 | A1.1 [EN CURSO] | Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS | R2 + R3 | M | Opus | A0.3 | `contratos/` revisado por los 4 |
 | A1.2 | Esqueleto `web/`: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | R1 | S | Sonnet | A1.1 | `npm run dev` abre las pantallas |
-| A1.3 | Esqueleto `api/`: FastAPI, `/health`, OpenAPI, generación del cliente TS de las llamadas HTTP | R3 | S | Sonnet | A1.1 | Cliente TS generado compila; prueba de que los modelos de FastAPI respetan `contratos/` |
+| A1.3 `[EN CURSO]` | Esqueleto `api/`: FastAPI, `/health`, OpenAPI, generación del cliente TS de las llamadas HTTP | R3 | S | Sonnet | A1.1 | Cliente TS generado compila; prueba de que los modelos de FastAPI respetan `contratos/` |
 | A1.4 | Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) | R4 | M | Sonnet | A0.3 | `.bbmodel` abre en Blockbench |
 | A1.5 | Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente | R3 | M | Opus | A0.3 | JSON con citas; vacíos como `NO_EVALUABLE` |
 | A1.6 | Tabla de suelos (TAW por textura, FAO-56) | R3 | S | Sonnet | — | JSON con fuente |
@@ -94,9 +94,9 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
-| A2.1 | Cliente NASA POWER diario con caché y reintentos | R3 | M | Sonnet | A1.3 | `GET /api/clima` devuelve serie real (C1) |
-| A2.2 | Respaldo Open-Meteo y estados `RESPALDO_HISTORICO` / `ERROR_DATOS` | R3 | S | Sonnet | A2.1 | Se activa al apagar POWER |
-| A2.3 | Elevación por celda (tiles Terrarium o SRTM) y pendiente | R3 | M | Sonnet | A1.3 | `GET /api/elevacion` por polígono |
+| A2.1 `[HECHO]` | Cliente NASA POWER diario con caché y reintentos | R3 | M | Sonnet | A1.3 | `GET /api/clima` devuelve serie real (C1) |
+| A2.2 `[HECHO]` | Respaldo Open-Meteo y estados `RESPALDO_HISTORICO` / `ERROR_DATOS` | R3 | S | Sonnet | A2.1 | Se activa al apagar POWER |
+| A2.3 `[HECHO]` | Elevación por celda (tiles Terrarium o SRTM) y pendiente | R3 | M | Sonnet | A1.3 | `GET /api/elevacion` por polígono |
 | A2.4 | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | R3 | S | Sonnet | A2.1, A2.3 | Demo funciona sin internet |
 | A2.5 | Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) | R2 | M | Opus | A1.1 | Años reales visibles y reproducibles |
 | A2.6 | ET0, ETc y balance de agua por bloque (cubeta) | R2 | **L** | Fable | A1.1, A1.5, A1.6 | Pruebas 1 a 5 de doc 05 en verde |
@@ -106,8 +106,8 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | R1 | M | Sonnet | A1.2 | El usuario dibuja y ve su parcela (P1) |
 | A2.11 | Cultivos 1 a 3 completos, todas las etapas y estados de estrés | R4 | **L** | Opus | A1.4 | Modelos probados en la escena real (V-14) |
 | A2.12 | Bloques de suelo por tipo y humedad | R4 | S | Sonnet | A1.4 | Variantes en `modelos/` |
-| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles y tendencia); salida como banda de incertidumbre | R2 + R3 | M | Opus | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, etiquetado como aproximado. Después del motor; no bloquea el MVP |
-| A2.14 | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | R3 | M | Sonnet | A1.3, A0.7 | `GET /api/suelo` devuelve textura y pH con etiqueta `SUPUESTO`; respaldo manual (V-23) |
+| A2.13 `[EN CURSO]` backend hecho; falta la parte del motor (Mompin) | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles y tendencia); salida como banda de incertidumbre | R2 + R3 | M | Opus | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, etiquetado como aproximado. Después del motor; no bloquea el MVP |
+| A2.14 `[HECHO]` | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | R3 | M | Sonnet | A1.3, A0.7 | `GET /api/suelo` devuelve textura y pH con etiqueta `SUPUESTO`; respaldo manual (V-23) |
 
 Compuerta **C2** al terminar A2.1, A2.6 y A2.7.
 
@@ -192,7 +192,7 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 | --- | --- | --- | --- | --- |
 | **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1, A2.5, A2.6, A2.7, A2.8, A3.1, A3.2, A4.2, A4.6, A2.13 (parte del motor), A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.13 (parte del backend), A4.7, A4.8, A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
-| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6, A1.4 `[HECHO]`, A1.5, A1.6, A2.11, A2.12, A3.3, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
+| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.11, A2.12, A3.3, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A3.8, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
 
 Cada actividad se marca en este documento con su estado (`EN CURSO`, `BLOQUEADO`, `HECHO`) al lado del ID. Si alguien termina, toma la siguiente actividad libre del camino crítico antes que un extra.

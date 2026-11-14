@@ -13,6 +13,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 | ID | Estado | Nota |
 | --- | --- | --- |
 | A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.3.0 en `contratos/`: 10 schemas (más `comun`), ejemplos, `npm test` (32/32) y tipos TS. Ver [[Contratos]] |
+| A1.5, A1.6 | Hechas (Mafer) | `datos/catalogos/`: milpa (maiz, frijol, calabaza) desde FAO-56 y EcoCrop, y TAW por textura (FAO-56 Tabla 19), validados contra contratos 0.3.0 (`cultivo` y `tabla-suelos`); `python datos/catalogos/generar.py` y `node datos/catalogos/validar.mjs`. La lluvia de EcoCrop va en `lluviaAnual*`; `lluviaCiclo*`, umbral de calor y ventanas de siembra siguen `NO_EVALUABLE` |
 
 El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 
@@ -23,20 +24,21 @@ El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 | V-19 | Ranking: **B `[DECIDIDO]` el 14/11**. Lo abierto es si se pinta por bloques (`[EN EVENTO]`) | B: puntaje compuesto por escenario, arrepentimiento minimax, desempate por promedio. Sin pesos con fuente, pesos iguales declarados `SUPUESTO` en `ponderacion`; no inventes pesos. Riesgo: B necesita los pilares 2 y 3 (A3.7); si no llegan, respaldo A (solo pilar hídrico), declarado en el resultado. `porCelda` queda `null` |
 | A2.8 | Cómo se asigna el clima a cada ciclo (`docs/05`, paso 2) | Opciones: (a) los tres ciclos dentro del mismo año del escenario (`mismo_anio`); (b) ventanas consecutivas reales del histórico (`ventanas_consecutivas`); (c) cada ciclo en su temporada típica dentro del año del escenario (`temporada_tipica`). `plan-siembra.asignacionClima` queda en `null` hasta decidir. No asumas "un ciclo = un año". Se registra en `docs/01` |
 | V-20 | Cultivos y calendario de Isla en SIAP | Milpa como núcleo; no inventes fechas de siembra. Las ventanas del catálogo quedan `NO_EVALUABLE` |
-| V-21 | Horizonte del pronóstico estacional de Open-Meteo | La página oficial dice 7 meses (6 por defecto); el 9 viene de terceros (ver [[APIs]]). Confirmar con una llamada. No bloquea el MVP |
-| V-22 | CORS de NASA POWER | Todo el clima pasa por el backend |
-| V-23 | Qué servicio de suelo responde (ISRIC WCS u OpenLandMap) | Selector manual FAO-56 con etiqueta `SUPUESTO` |
-| V-06 | `GWETROOT` y unidades de radiación de POWER | No uses la humedad de suelo de POWER en el balance hasta probar el endpoint. El contrato espera `radiacionMjM2Dia`; el backend convierte |
-| V-08 | Elevación: Open-Meteo Elevation, Terrarium o SRTM | El relieve es del MVP, pero el proveedor se prueba antes de fijar el cliente |
+| V-21 | Horizonte del pronóstico estacional de Open-Meteo | Evidencia A0.7 (14/11): 7 meses con `forecast_days=210` (máximo 217); por defecto 6. El 9 de terceros no se sostiene. Falta que el equipo lo cierre. No bloquea el MVP |
+| V-22 | CORS de NASA POWER | Evidencia A0.7: el GET simple trae `access-control-allow-origin: *`, el preflight da 404. Todo el clima sigue pasando por el backend |
+| Suelo | **TAW del suelo del mapa global.** Con SoilGrids, la zona de prueba de Isla sale `franco_arcillo_arenoso`, clase **sin fila** en FAO-56 Tabla 19 (igual `franco_arcilloso` y `arcillo_arenoso`), así que `agua.tawMmPorM` es `NO_EVALUABLE` y el motor no tendría balance con el suelo del mapa | Decide el equipo (Mafer y Mompin): (a) buscar otra fuente citada con TAW para esas 3 clases, (b) usar solo el selector manual en la demo, o (c) otra regla explícita. No uses el TAW de un grupo vecino: sería inventarlo |
+| V-23 | Qué servicio de suelo responde (ISRIC WCS u OpenLandMap) | Evidencia A2.14 (14/11): el WCS de ISRIC responde y `GET /api/suelo` ya lo usa (ver [[APIs]]). El selector manual FAO-56 con etiqueta `SUPUESTO` sigue de respaldo. Falta que el equipo lo cierre |
+| V-06 | `GWETROOT` y unidades de radiación de POWER | Evidencia A0.7: `GWETROOT` está en AG (fracción sin unidad) y la radiación ya viene en MJ/m²/día (no hace falta convertir). Falta decidir si la humedad de POWER entra al balance |
+| V-08 | Elevación: Open-Meteo Elevation, Terrarium o SRTM | Evidencia A0.7 y A2.3: Terrarium z14 (interpolado) es el cliente por defecto de `POST /api/elevacion` y Open-Meteo (90 m) el respaldo, porque con celdas de ~20 m un DEM de 90 m da un plano. Falta que el equipo lo confirme |
 | V-09 | Kc, ciclos, umbrales | Solo valores con cita. Si no hay cita, `NO_EVALUABLE` (el schema del catálogo lo obliga) |
 
 ## Servidor (Eduardo)
 
 | ID | Tema |
 | --- | --- |
-| V-15 | SSH, usuario y firewall del droplet |
-| V-16 | Puertos y servicios que ya usa `mediworks` |
-| V-17 | Hostname (`sslip.io` u otro) y certificado |
+| V-15 | SSH, usuario y firewall del droplet (evidencia A0.4, ver [[Servidor]]) |
+| V-16 | Puertos y servicios que ya usa `mediworks` (evidencia A0.4, ver [[Servidor]]) |
+| V-17 | Hostname (`sslip.io` u otro) y certificado (evidencia A0.4, ver [[Servidor]]) |
 
 ## Decidido el 14/11 (no lo reabras)
 

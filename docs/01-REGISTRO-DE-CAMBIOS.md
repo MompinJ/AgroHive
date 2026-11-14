@@ -12,7 +12,60 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — API: suelo con la tabla de A1.6 y CORS para el front (Eduardo)
+
+- **Archivos:** `api/app/textura.py`, `api/app/servicios.py`, `api/app/modelos.py`, `api/app/config.py`, pruebas, `api/README.md`, `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** `GET /api/suelo` toma el grupo y el TAW de `datos/catalogos/suelos.json` (Mafer, A1.6) cuando el archivo esta presente, en vez de mi propuesta de agrupamiento (que difería: ahora `franco_arenoso` es `franco` y `franco_arcillo_arenoso` es `arcilloso`). CORS acepta `127.0.0.1:5173` ademas de `localhost`, porque `npm run dev` de balam sirve en `127.0.0.1`.
+- **Hallazgo para el equipo:** el suelo de la zona de prueba de Isla (franco arcillo arenoso) y otras zonas medias caen en clases **sin fila en FAO-56 Tabla 19**, asi que su TAW es `NO_EVALUABLE`. Sin TAW el motor no puede hacer el balance de agua con el suelo del mapa; solo con el selector manual (arena franca, franco, arcilla). No lo resolvi: es una decision agronomica (ver Pendientes).
+- **Fuente / evidencia:** probado con el `suelos.json` real de la rama `Mafer`; 39 pruebas.
+
+### 2026-11-14 — A2.13 proxima temporada aproximada, parte del backend (Eduardo)
+
+- **Archivos:** `api/app/proxima.py`, `api/app/rutas/proxima.py`, cliente estacional en `api/app/clientes/openmeteo.py`, pruebas, `docs/14`.
+- **Cambio:** `GET /api/proxima-temporada?lat&lon` entrega el contrato `proxima-temporada`: banda p10 a p90 por mes, 7 meses, `esPrediccion: false`, sin cifra unica.
+- **Metodo (decision mia, a confirmar por el equipo):** el pronostico estacional de Open-Meteo no entrega miembros ni dispersion en las variables probadas, asi que no se usa el ensamble para el ancho. La banda es la distribucion historica de cada mes (20 anios de POWER) desplazada por la anomalia mensual de SEAS5. Respaldo: la misma distribucion sin desplazar. No incluye tendencia (advertencia `SIN_TENDENCIA`). La anomalia es respecto de ECMWF y se suma a la climatologia de POWER, que no coinciden en magnitud (advertencia).
+- **Fuente / evidencia:** `monthly=precipitation_anomaly,temperature_2m_anomaly&forecast_days=210&models=ecmwf_seas5` probado en vivo (7 meses); 36 pruebas, el documento completo se valida contra `contratos/proxima-temporada.schema.json`.
+- **Pendiente:** la parte del motor (A2.13, Mompin) y la interfaz (A4.9, balam). V-21 queda con evidencia: 7 meses.
+
+### 2026-11-14 — A2.14 textura y pH estimados (Eduardo)
+
+- **Archivos:** `api/app/clientes/isric.py`, `api/app/textura.py`, `api/app/rutas/suelo.py`, pruebas, `docs/04` y `docs/14`.
+- **Cambio:** `GET /api/suelo?lat&lon` devuelve el contrato `suelo` con textura (clase USDA y fracciones) y pH de 0 a 30 cm desde SoilGrids por WCS, siempre `SUPUESTO`. `agua.tawMmPorM` queda `NO_EVALUABLE` hasta la tabla de A1.6. Sin dato responde 503 y el front usa el selector manual.
+- **Fuente / evidencia:** WCS de ISRIC probado en vivo (Isla: franco arcillo arenoso, pH 5.4; datos reales guardados en `datos/pruebas-apis/respuestas/`); conversion de unidades de la FAQ de ISRIC; clase textural con el triangulo USDA (probado sobre las 5 151 combinaciones posibles).
+- **Pendiente de otros:** el grupo arenoso/franco/arcilloso del selector es una propuesta mia y debe coincidir con la tabla de suelos de Mafer (A1.6).
+- **Decisiones afectadas:** V-23 (el WCS de ISRIC responde; OpenLandMap queda de respaldo sin implementar).
+
+### 2026-11-14 — A1.3, A2.1, A2.2 y A2.3: API FastAPI (Eduardo)
+
+- **Archivos:** `api/` (app, tests, README, cliente TypeScript generado), `docs/14-CRONOGRAMA.md` (marcas).
+- **Cambio:** `GET /health`, `GET /api/clima` (NASA POWER con cache y respaldo Open-Meteo), `POST /api/elevacion` (Terrarium con respaldo Open-Meteo y pendiente por celda), `GET /api/cultivos` (lee `datos/catalogos/cultivos.json`). OpenAPI exportado y tipos TS generados en `api/cliente/`.
+- **Decisiones tomadas dentro de mi carril, a confirmar por el equipo:** (1) la cache usa el centro de la celda MERRA-2 como clave (verificado: puntos de la misma celda dan la misma serie); (2) `/api/clima` devuelve la serie del periodo y **no** elige escenarios (eso es A2.5, del motor); (3) la elevacion sale de Terrarium z14 y no de Open-Meteo (90 m), porque con celdas de unos 20 m el DEM de 90 m daria un plano; el respaldo es Open-Meteo; (4) la respuesta de clima es una `SerieClima` con el mismo `dia` que `clima-escenario`, pero no esta en `contratos/`: se pide a Mompin si debe entrar.
+- **Fuente / evidencia:** 21 pruebas en `api/tests/` (respuestas reales de A0.7, validadas contra los schemas de `contratos/`) y una corrida en vivo: 20 anios de POWER en 1.8 s, 18 ms desde cache.
+- **Decisiones afectadas:** V-08 (propuesta: Terrarium por defecto), V-22 (el clima pasa por el backend).
+
+### 2026-11-14 — A0.4 servidor en el droplet (Eduardo)
+
+- **Archivos:** `AgroVault/Compartido/Servidor.md`, `docs/14-CRONOGRAMA.md` (marca A0.4). Cambios en el droplet, no en el repo.
+- **Cambio:** usuario `agrohive`, clon del repo en `/opt/agrohive/repo`, servicio `agrohive-api` (uvicorn en `127.0.0.1:8010`), server block de nginx propio y certificado de Let's Encrypt para `64-23-143-102.sslip.io`. Solo hay un `/health` provisional hasta A1.3.
+- **Fuente / evidencia:** `https://64-23-143-102.sslip.io/health` responde 200; `mediworks.mx` sigue respondiendo 200.
+- **Decisiones afectadas:** V-15, V-16, V-17 (opción 1 de `docs/13`, `sslip.io`, funciona). Siguen abiertas hasta que el equipo las cierre.
+
+### 2026-11-14 — A0.7 pruebas reales de APIs (Eduardo)
+
+- **Archivos:** `docs/04-DATOS-Y-METODO.md`, `docs/14-CRONOGRAMA.md` (marca A0.7), `datos/pruebas-apis/`, `AgroVault/Compartido/APIs.md` y `Pendientes.md`. Editado con aviso a Mafer (dueña de `docs/`).
+- **Cambio:** se anotan los resultados de llamadas reales a NASA POWER, Open-Meteo (archivo, elevación, estacional) y Terrarium. Se cambian varios `[VERIFICAR]` de 04 por el resultado probado.
+- **Fuente / evidencia:** `datos/pruebas-apis/LEEME.md` y `respuestas/`, consulta del 2026-11-14, coordenada de prueba 18.03, -95.53 (no es la parcela demo).
+- **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
+
 ## Historial
+
+### 2026-11-14 (noche) — Integracion de Mafer, balam y Eduardo en main (Eduardo)
+
+- **Archivos:** toda la mezcla (merges `0e4411f`, `aa4d059`, `a57b98c`), `AgroVault/Compartido/Servidor.md`.
+- **Cambio:** a pedido de Eduardo se mezclaron las ramas `Mafer`, `balam` y `Eduardo` en `main` con push directo, **sin pasar por la revision de Mompin** que piden `AGENTS.md` y el tablero. `Mompin` ya estaba al dia. El PR #2 quedo cerrado como mezclado.
+- **Verificacion antes del push:** mezcla de prueba sin conflictos; 39 pruebas de la API, 32/32 de contratos, catalogos validados y typecheck de `web/` en verde.
+- **Pendiente:** Mompin debe revisar lo integrado (A1.1 seguia `[EN CURSO]` a la espera de la revision de los 4). Todos deben hacer `git merge origin/main` en su rama.
+- **Servidor:** el droplet pasa de la rama `Eduardo` a `main`.
 
 ### 2026-11-14 (noche) — Buzón del equipo por la red local `[DECIDIDO]`
 

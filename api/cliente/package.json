@@ -1,0 +1,15 @@
+{
+  "name": "agrohive-cliente-api",
+  "private": true,
+  "type": "module",
+  "description": "Tipos TypeScript generados desde el OpenAPI de la API (no editar api.d.ts a mano).",
+  "scripts": {
+    "generar": "openapi-typescript ../openapi.json -o api.d.ts",
+    "compilar": "tsc --noEmit -p .",
+    "todo": "npm run generar && npm run compilar"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.4.0",
+    "typescript": "^5.6.0"
+  }
+}

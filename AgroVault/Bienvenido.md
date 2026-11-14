@@ -25,6 +25,7 @@ Las tres leen el mismo núcleo:
 - [[Compartido/Contratos]] — resumen de `contratos/*.schema.json` (la fuente de verdad)
 - [[Compartido/Lectura]] — qué documento de `docs/` abrir según la tarea
 - [[Compartido/APIs]] — APIs candidatas, endpoints, límites y documentación oficial
+- [[Compartido/Servidor]] — droplet, URL pública y cómo se despliega
 - [[Compartido/Pendientes]] — lo que sigue abierto; no lo cierres tú
 
 ## Qué no es este vault
