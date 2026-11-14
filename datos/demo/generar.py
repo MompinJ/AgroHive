@@ -21,7 +21,7 @@ import os
 import shutil
 import sys
 import tempfile
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[2]
@@ -119,21 +119,28 @@ if r.status_code != 200 or r.json()["metodo"] != "anomalia_estacional":
 respuestas["proxima-temporada"] = r.json()
 validar(respuestas["proxima-temporada"], "proxima-temporada#", f"proxima temporada ({respuestas['proxima-temporada']['horizonteMeses']} meses)")
 
-# NDVI de MODIS (A4.11, evidencia): OPCIONAL. ORNL DAAC fue inestable el 14/11 (502, 503 y llamadas de 40 s sin respuesta), asi que el paquete
-# de demo no depende de el: solo se incluye con --con-ndvi, cuando el servicio responda. Sin la bandera el paquete sale igual que antes.
+# NDVI de MODIS (A4.11, evidencia) de los tres anios de escenario: OPCIONAL (--con-ndvi). Fuente principal: Microsoft Planetary Computer (MOD13Q1 v061 de
+# NASA LP DAAC, sin cuenta; unos 12 s por anio agricola). ORNL DAAC es el respaldo en la API, pero el paquete debe salir de Planetary Computer.
+# Anio agricola t = 1 de octubre de t-1 al 30 de septiembre de t. Si el motor elige otros anios de escenario (docs/05, paso 1), hay que regenerar.
+ANIOS_NDVI = {"seco": 2023, "habitual": 2016, "lluvioso": 2024}
 if args.con_ndvi:
     from app import ndvi as modulo_ndvi  # noqa: E402
     from app.modelos_ndvi import Ndvi  # noqa: E402
 
-    # Se llama a la orquestacion y no a la ruta porque la ruta limita a 400 dias por consulta; pasa por el mismo modelo Ndvi.
-    try:
-        respuestas["ndvi"] = Ndvi.model_validate(asyncio.run(modulo_ndvi.serie(lon, lat, desde, hasta))).model_dump(mode="json")
-    except servicios.SinDatos as e:
-        raise SystemExit(f"NDVI de MODIS (ORNL DAAC): {e}. El servicio es intermitente: reintenta o genera sin --con-ndvi.")
-    if respuestas["ndvi"]["estado"] != "EXPLORATORIO" or any(
-            x["codigo"] in ("NDVI_TRAMOS_SIN_LEER", "NDVI_CALIDAD_NO_DISPONIBLE") for x in respuestas["ndvi"]["advertencias"]):
-        raise SystemExit("el NDVI del paquete debe salir completo (todos los tramos y con calidad); reintenta cuando ORNL responda")
-    validar(respuestas["ndvi"], "ndvi#", f"NDVI MODIS ({len(respuestas['ndvi']['serie'])} compuestos)")
+    for escenario, anio in ANIOS_NDVI.items():
+        ini, fin = date(anio - 1, 10, 1), date(anio, 9, 30)
+        # Se llama a la orquestacion y no a la ruta porque asi no depende del limite de dias de la ruta; pasa por el mismo modelo Ndvi.
+        try:
+            n = Ndvi.model_validate(asyncio.run(modulo_ndvi.serie(lon, lat, ini, fin))).model_dump(mode="json")
+        except servicios.SinDatos as e:
+            raise SystemExit(f"NDVI de MODIS {escenario} {anio}: {e}. Reintenta o genera sin --con-ndvi.")
+        codigos = {x["codigo"] for x in n["advertencias"]}
+        if n["estado"] != "EXPLORATORIO" or codigos & {"NDVI_COMPUESTOS_SIN_LEER", "NDVI_TRAMOS_SIN_LEER", "NDVI_CALIDAD_NO_DISPONIBLE"}:
+            raise SystemExit(f"el NDVI {escenario} {anio} debe salir completo (todos los compuestos y con calidad); reintenta")
+        if "NDVI_FUENTE_RESPALDO" in codigos or "Planetary Computer" not in n["fuente"]["nombre"]:
+            raise SystemExit(f"el NDVI {escenario} {anio} salio del respaldo (ORNL), no de Planetary Computer; el paquete no se escribe")
+        respuestas[f"ndvi-{escenario}"] = n
+        validar(n, "ndvi#", f"NDVI MODIS {escenario} {anio} ({sum(1 for d in n['serie'] if d['ndvi'] is not None)} de {len(n['serie'])} compuestos con dato)")
 
 # Todo cumple: ahora si se escribe el paquete.
 for carpeta in (DEMO / "cache", DEMO / "respuestas"):
@@ -152,8 +159,9 @@ manifiesto = {
     "coordenadasIlustrativas": bool(parcela.get("coordenadasIlustrativas")),
     "ventanaClima": [desde.isoformat(), hasta.isoformat()],
     "versionContrato": respuestas["serie-clima"]["meta"]["versionContrato"],
-    "validadoContra": ["serie-clima", "suelo", "parcela (terreno y celdas)", "proxima-temporada"] + (["ndvi"] if args.con_ndvi else []),
+    "validadoContra": ["serie-clima", "suelo", "parcela (terreno y celdas)", "proxima-temporada"] + (["ndvi (3 anios de escenario)"] if args.con_ndvi else []),
     "entradas": entradas,
+    **({"ndviAnios": ANIOS_NDVI} if args.con_ndvi else {}),
 }
 (DEMO / "manifiesto.json").write_text(json.dumps(manifiesto, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 peso = sum(p.stat().st_size for p in DEMO.rglob("*") if p.is_file())

@@ -1,0 +1,14 @@
+{
+  "_procedencia": "Lectura REAL del 2026-11-14 de los COG de MOD13Q1 v061 en Microsoft Planetary Computer (URL firmada con /api/sas/v1/sign), con rasterio, ventana de 1 x 1 pixel en fila 945, columna 4397 del tile h08v07 (punto lon -95.53, lat 18.03, Isla, Veracruz). Valor crudo (int16) de 250m_16_days_NDVI y de 250m_16_days_pixel_reliability; relleno del archivo: -3000. Corresponde a la busqueda guardada en modis_stac_isla_2023.json. Contraste: Mompin midio 0.33 a 0.41 para mayo a julio de 2023 en el mismo pixel por el servicio REST de ORNL DAAC.",
+  "punto": [-95.53, 18.03],
+  "tile": "h08v07",
+  "fila": 945,
+  "columna": 4397,
+  "compuestos": {
+    "2023129": {"ndviCrudo": 3150, "calidad": 1},
+    "2023145": {"ndviCrudo": 3279, "calidad": 1},
+    "2023161": {"ndviCrudo": 3378, "calidad": 0},
+    "2023177": {"ndviCrudo": 4053, "calidad": 3},
+    "2023193": {"ndviCrudo": 3921, "calidad": 3}
+  }
+}

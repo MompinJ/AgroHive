@@ -6,6 +6,9 @@ from datetime import date, timedelta
 import httpx
 from fastapi.testclient import TestClient
 
+import pytest
+
+from app import ndvi
 from app.clientes import ornl
 from app.main import app
 from tests.conftest import real_json
@@ -13,6 +16,12 @@ from tests.conftest import real_json
 cliente = TestClient(app)
 URL = "/api/ndvi?lat=18.03&lon=-95.53&desde=2023-05-01&hasta=2023-08-31"
 NDVI, CALIDAD = real_json("ornl_ndvi_2023.json"), real_json("ornl_calidad_2023.json")
+
+
+@pytest.fixture(autouse=True)
+def solo_ornl(monkeypatch):
+    """Estas pruebas son del cliente de ORNL DAAC (respaldo): Planetary Computer, la fuente principal, se prueba en test_ndvi_planetary.py."""
+    monkeypatch.setattr(ndvi, "USAR_PLANETARY", False)
 
 
 def ornl_simulado(ndvi=NDVI, calidad=CALIDAD, falla_calidad=False, falla_ndvi=lambda params: False):
