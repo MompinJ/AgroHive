@@ -102,8 +102,8 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.6 `[HECHO]` 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7) | ET0, ETc y balance de agua por bloque (cubeta) | R2 | **L** | Fable | A1.1, A1.5, A1.6 | Pruebas 1 a 5 de doc 05 en verde |
 | A2.7 `[HECHO]` 14/11 | Pilar de déficit hídrico y estados de evaluabilidad | R2 | M | Opus | A2.6 | Métricas por rotación y escenario |
 | A2.8 `[HECHO]` (c) `temporada_tipica`, 14/11 | Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) | R2 + R3 | M | Opus | A2.1, A1.5 | Opción elegida registrada en 01 |
-| A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | R1 | M | Sonnet | A1.2 | Polígono dibujado genera celdas |
-| A2.10 | Mapa y dibujo de polígono libre (Leaflet) | R1 | M | Sonnet | A1.2 | El usuario dibuja y ve su parcela (P1) |
+| A2.9 `[HECHO]` | Cuadrícula desde polígono (Turf.js) con tope de celdas | R1 | M | Sonnet | A1.2 | Polígono dibujado genera celdas |
+| A2.10 `[HECHO]` | Mapa y dibujo de polígono libre (Leaflet) | R1 | M | Sonnet | A1.2 | El usuario dibuja y ve su parcela (P1) |
 | A2.11 `[EN CURSO]` | Cultivos 1 a 3 completos, todas las etapas y estados de estrés | R4 | **L** | Opus | A1.4 | Modelos probados en la escena real (V-14) |
 | A2.12 | Bloques de suelo por tipo y humedad | R4 | S | Sonnet | A1.4 | Variantes en `modelos/` |
 | A2.13 `[HECHO]` 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9) | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | R2 + R3 | M | Opus | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, horizonte de 6 meses, etiquetado como aproximado. Después del motor; no bloquea el MVP |
@@ -212,7 +212,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | **Mompin** | 11 | 1 | 0 | 2 | 79 % de 14 |
 | **Eduardo** | 10 | 3 | 2 | 0 | 67 % de 15 |
 | **Mafer** | 4 | 3 | 0 | 5 | 33 % de 12 |
-| **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
+| **balam** | 3 | 0 | 0 | 13 | 19 % de 16 |
 
 ### Mompin
 
@@ -276,8 +276,8 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | --- | --- | --- | --- |
 | A0.5 | Verificar reglas de entrega, IA y video (V-03, V-04) | PENDIENTE |  |
 | A1.2 | Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | HECHO | rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados |
-| A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | PENDIENTE |  |
-| A2.10 | Mapa y dibujo de polígono libre (Leaflet) | PENDIENTE |  |
+| A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | HECHO |  |
+| A2.10 | Mapa y dibujo de polígono libre (Leaflet) | HECHO |  |
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | PENDIENTE |  |
 | A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | PENDIENTE |  |
 | A3.6 | Modo 2D ligero con los mismos valores del motor | PENDIENTE |  |

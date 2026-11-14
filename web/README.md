@@ -97,3 +97,13 @@ Los colores se toman de `DESIGN.md` de Duna, compartido por el usuario: canvas L
 - No se agregan dependencias ni llamadas a servicios externos. La imagen de inicio no se reemplaza.
 
 Verificación de esta entrega: `npm run build` (incluye TypeScript estricto) y `git diff --check`. No se hace QA visual de la interfaz ni se generan capturas de navegador, por instrucción de Balam; esa revisión queda a su cargo. Las capturas anteriores de P1 son del esqueleto inicial.
+
+## Terreno: A2.10 y A2.9
+
+Esta sección sustituye las referencias anteriores al mapa y la cuadrícula pendientes. En `#/terreno?modo=poligono` se dibuja el contorno en Leaflet o mediante coordenadas; hay controles para deshacer, reiniciar y centrar. La base es OpenStreetMap con atribución y requiere red; si falla, el formulario sigue disponible.
+
+La cuadrícula usa Turf para área e intersecciones, como máximo 1600 celdas y bordes parciales; el lado mínimo es una decisión técnica de visualización (10 m), no la resolución de los datos NASA. Límites y plan en `src/ui/TERRENO-PLAN.md`. El usuario confirma antes de consultar elevación con el cliente de Eduardo. Se muestran estado, fuente, advertencias y errores con reintento; también se puede guardar sin relieve (null, NO_EVALUABLE). La parcela se conserva en App al navegar, no después de recargar. La simulación y el suelo se conectarán en A3.4/A4.6.
+
+Verificado en navegador: entrada de cuatro coordenadas, generación, guardado, regreso del laboratorio y conservación del contorno; 503 con motivo y reintento exitoso mediante respuestas sintéticas, sin mediciones inventadas en el producto. Sin desbordamiento a 1440, 390 y 320 px. Captura: `evidencia/terreno-poligono-320.png`. Pruebas de cuadrícula cubren contrato JSON Schema, conservación de área, borde cóncavo, límite y contornos inválidos.
+
+Referencias técnicas: [Leaflet](https://leafletjs.com/reference.html), [Turf intersect](https://turfjs.org/docs/api/intersect). El cliente en `src/api/` conserva la implementación y documentación de Eduardo.
