@@ -12,6 +12,15 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A4.2 ranking, contratos 0.6.0 en el motor y escenarios con el paquete de demo (Mompin)
+
+- **Archivos:** `web/src/motor/ranking.ts` (nuevo), `motor.ts`, `balance.ts`, `escenarios.ts`, `protocolo.ts`, `cliente.ts`, `index.ts`, `tipos.ts`; pruebas `ranking.test.ts` y `c2.test.ts`; se borra el fixture propio `web/src/motor/pruebas/datos/power-isla-2006-2025.json` (las pruebas usan `datos/demo/respuestas/`); `docs/05`, `docs/13`, `docs/14`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
+- **A4.2:** criterio B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio) con respaldo automático A cuando solo el pilar hídrico tiene número, que es el caso hasta A3.7. Normalización definida en A4.2 (doc 05, paso 7): déficit hídrico = fracción de la demanda cubierta; compatibilidad = fracción de siembras en ventana; protección del suelo = 1 − índice de erosión; calor y aporte indirecto son complementarios y quedan fuera del puntaje. Pesos iguales `SUPUESTO` si no hay pesos del usuario ni con fuente. Las rotaciones `EXPLORATORIO` no reciben posición.
+- **Exceso de agua:** se calcula y se expone (`excesoTotalMm`, `excesoMm` por celda; los días con exceso van en la evidencia de la tarjeta y en `ResultadoMotor.exceso`, porque el contrato no tiene campo para ellos). No entra al ranking hasta que el equipo lo decida.
+- **Contratos 0.6.0:** el motor llena `seleccion.lluviaTemporadasMm` (PV, OI y total con la fuente SIAP) y deja `etapa: null` en los registros sin parámetros del cultivo.
+- **Cambio de escenario habitual:** con la ventana del paquete de demo (2005-10-01 a 2025-12-31: 20 años agrícolas) el habitual pasa de **2016 a 2008**; seco 2023 y lluvioso 2024 no cambian. Con 20 años el p50 es el punto medio de los dos años centrales (2016: 1 912.0 mm; 2008: 1 932.1 mm), que empatan, y la regla de desempate elige el más antiguo. Reemplaza el "habitual 2016" de la entrada anterior.
+- **Evidencia de C2:** con `suelo.json` del paquete (franco arcillo arenoso) la rotación es `NO_EVALUABLE` (TAW hasta A2.16); con el selector manual declarado (franco) da resultados por celda y por rotación conformes al contrato y el ranking A de tres rotaciones. 59 pruebas en verde.
+
 ### 2026-11-14 — A2.5, A2.6 y A2.7: motor de agua y escenarios (Mompin)
 
 - **Archivos:** `web/src/motor/` (escenarios, ET0, cultivo y Kc, cubeta, suelo, estados, motor, protocolo y Web Worker, cliente; pruebas en `web/src/motor/pruebas/` con un fixture real de POWER), `web/package.json` (vitest 5.1.0 y script `test`), `docs/05`, `docs/04`, `docs/13`, `docs/14`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
@@ -69,6 +78,13 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — Contratos 0.6.0 (compatible): lluvia por temporadas y etapa nula
+
+- **Archivos:** `contratos/clima-escenario.schema.json`, `contratos/resultado-celda.schema.json`, ejemplos, casos inválidos, tipos, README; versión en la vault.
+- **Cambio y motivo:** pedido del motor. (1) `seleccion.lluviaTemporadasMm` {pv, oi, total, fuente}, opcional: la lluvia del año agrícola con la que se elige el escenario (ventanas PV y OI de SIAP), separada de `lluviaAnualMm`, que sigue siendo la del año calendario. (2) `etapa` puede ser `null` cuando no hay parámetros del cultivo; en ese caso el registro no puede ser `EVALUABLE` y lleva motivo (antes el motor ponía `siembra`). Las dos cosas amplían el contrato: lo que ya validaba sigue validando.
+- **Fuente / evidencia:** `npm test` 55/55; `pytest` en `api/` 39; `validar.mjs` de los catálogos; `npm test` (45) y `npm run build` (incluye `tsc --noEmit`) en `web/`.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — A1.1 `[HECHO]`; A2.16 asignada a Mafer
 

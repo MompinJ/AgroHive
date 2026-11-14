@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.5.0",
+    "versionContrato": "0.6.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar el contrato; la tabla real (FAO-56 Tabla 19) vive en datos/catalogos/ (A1.6)."
   },
