@@ -15,10 +15,10 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
 | **Eduardo** | 10 | 3 | 2 | 3 | 56 % de 18 |
-| **Mafer** | 7 | 1 | 0 | 4 | 58 % de 12 |
+| **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
 | **balam** | 6 | 0 | 0 | 10 | 38 % de 16 |
 
-Proyecto completo: **36 de 60** actividades hechas (60 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **37 de 60** actividades hechas (62 %), 4 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -66,10 +66,10 @@ Proyecto completo: **36 de 60** actividades hechas (60 %), 4 en curso, 2 bloquea
 - [x] **A1.5** Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente `HECHO`
 - [x] **A1.6** Tabla de suelos (TAW por textura, FAO-56) `HECHO`
 - [x] **A2.11** Cultivos 1 a 3 completos, todas las etapas y estados de estrés `HECHO`
-- [/] **A2.12** Bloques de suelo por tipo y humedad `EN CURSO`
+- [x] **A2.12** Bloques de suelo por tipo y humedad `HECHO`
 - [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
 - [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
-- [ ] **A3.9** Cultivos 4 en adelante, props y mascota
+- [/] **A3.9** Cultivos 4 en adelante, props y mascota `EN CURSO`
 - [ ] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento)
 - [ ] **A5.6** Guion, video de demo y ensayo
 - [ ] **A5.7** README con método, fuentes, límites, licencias y declaración de IA

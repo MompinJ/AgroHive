@@ -49,7 +49,7 @@ def test_cultivos_del_catalogo_real_cumplen_el_contrato(validar):
     config.CATALOGOS_DIR.mkdir(parents=True)
     (config.CATALOGOS_DIR / "cultivos.json").write_bytes((RAIZ / "datos" / "catalogos" / "cultivos.json").read_bytes())
     cuerpo = cliente.get("/api/cultivos").json()
-    assert [c["id"] for c in cuerpo["cultivos"]] == ["maiz", "frijol", "calabaza"]
+    assert [c["id"] for c in cuerpo["cultivos"]] == ["maiz", "frijol", "calabaza", "chile"]
     validar(cuerpo, "cultivo#")  # el schema describe el catalogo completo (meta, versionCatalogo y cultivos)
 
 

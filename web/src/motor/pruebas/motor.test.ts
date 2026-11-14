@@ -161,7 +161,7 @@ describe('Prueba 5: cultivo sin parametros => NO_EVALUABLE, nunca cero', () => {
     expect(resultadoCeldas(r, 'seco', '2016-12-01')!.registros[0]!.humedad).not.toBeNull();
   });
   it('un cultivo que no esta en el catalogo tambien es NO_EVALUABLE', () => {
-    const r2 = simularRotacion(entradas(plan([{ cultivo: 'chile', siembra: '2016-06-15', temporada: 'PV' }]), franco));
+    const r2 = simularRotacion(entradas(plan([{ cultivo: 'cultivo_sin_parametros', siembra: '2016-06-15', temporada: 'PV' }]), franco));
     expect(r2.rotacion.estado).toBe('NO_EVALUABLE');
     expect(r2.rotacion.porEscenario.seco.pilares.deficitHidrico.motivo).toContain('no esta en el catalogo');
   });
