@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.2.0",
+    "versionContrato": "0.3.0",
     "esEjemplo": false,
     "aviso": "Parametros de tablas generales (FAO-56, FAO EcoCrop), no calibrados para Isla, Veracruz. Requieren validacion agronomica local."
   },
@@ -210,11 +210,39 @@
         },
         "lluviaCicloMinMm": {
           "estado": "NO_EVALUABLE",
-          "motivo": "EcoCrop publica lluvia ANUAL (RMIN..RMAX), no lluvia del ciclo; usarla aqui seria cambiar su significado. Valores anuales de la fuente: 400 a 1800 mm/anio (optimo 600 a 1200). Pendiente: pedir a contratos un campo de lluvia anual o una fuente de lluvia por ciclo."
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
         },
         "lluviaCicloMaxMm": {
           "estado": "NO_EVALUABLE",
-          "motivo": "EcoCrop publica lluvia ANUAL (RMIN..RMAX), no lluvia del ciclo; usarla aqui seria cambiar su significado. Valores anuales de la fuente: 400 a 1800 mm/anio (optimo 600 a 1200). Pendiente: pedir a contratos un campo de lluvia anual o una fuente de lluvia por ciclo."
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 400,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Maize' (Zea mays L. s. mays), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1200 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 1800,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Maize' (Zea mays L. s. mays), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1200 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
         },
         "tEstresCalorC": {
           "estado": "NO_EVALUABLE",
@@ -434,11 +462,39 @@
         },
         "lluviaCicloMinMm": {
           "estado": "NO_EVALUABLE",
-          "motivo": "EcoCrop publica lluvia ANUAL (RMIN..RMAX), no lluvia del ciclo; usarla aqui seria cambiar su significado. Valores anuales de la fuente: 300 a 4300 mm/anio (optimo 500 a 2000). Pendiente: pedir a contratos un campo de lluvia anual o una fuente de lluvia por ciclo."
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
         },
         "lluviaCicloMaxMm": {
           "estado": "NO_EVALUABLE",
-          "motivo": "EcoCrop publica lluvia ANUAL (RMIN..RMAX), no lluvia del ciclo; usarla aqui seria cambiar su significado. Valores anuales de la fuente: 300 a 4300 mm/anio (optimo 500 a 2000). Pendiente: pedir a contratos un campo de lluvia anual o una fuente de lluvia por ciclo."
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 300,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Bean, Common' (Phaseolus vulgaris L.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 500 a 2000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 4300,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Bean, Common' (Phaseolus vulgaris L.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 500 a 2000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
         },
         "tEstresCalorC": {
           "estado": "NO_EVALUABLE",
@@ -658,11 +714,39 @@
         },
         "lluviaCicloMinMm": {
           "estado": "NO_EVALUABLE",
-          "motivo": "EcoCrop publica lluvia ANUAL (RMIN..RMAX), no lluvia del ciclo; usarla aqui seria cambiar su significado. Valores anuales de la fuente: 300 a 2800 mm/anio (optimo 600 a 1600). Pendiente: pedir a contratos un campo de lluvia anual o una fuente de lluvia por ciclo."
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
         },
         "lluviaCicloMaxMm": {
           "estado": "NO_EVALUABLE",
-          "motivo": "EcoCrop publica lluvia ANUAL (RMIN..RMAX), no lluvia del ciclo; usarla aqui seria cambiar su significado. Valores anuales de la fuente: 300 a 2800 mm/anio (optimo 600 a 1600). Pendiente: pedir a contratos un campo de lluvia anual o una fuente de lluvia por ciclo."
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 300,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Pumpkin' (Cucurbita moschata (Duch.)), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1600 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 2800,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Pumpkin' (Cucurbita moschata (Duch.)), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1600 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
         },
         "tEstresCalorC": {
           "estado": "NO_EVALUABLE",

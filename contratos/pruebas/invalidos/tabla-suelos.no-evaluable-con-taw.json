@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "versionContrato": "0.3.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar el contrato; la tabla real (FAO-56 Tabla 19) vive en datos/catalogos/ (A1.6)."
+  },
+  "versionCatalogo": "0.0.0-ejemplo",
+  "metodoTaw": "EJEMPLO: punto medio de (thetaFC - thetaWP) x 1000.",
+  "representanteGrupo": {
+    "arenoso": "arena_franca",
+    "franco": "franco",
+    "arcilloso": "arcilla"
+  },
+  "notaRepresentanteGrupo": "EJEMPLO: eleccion del equipo, no de FAO.",
+  "texturas": [
+    {
+      "clase": "franco",
+      "grupo": "franco",
+      "estado": "EVALUABLE",
+      "filaFao": "Loam (ejemplo)",
+      "rangos": {
+        "estado": "EVALUABLE",
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (no son los de FAO-56 Tabla 19)",
+          "nota": "No proviene de ninguna fuente real; reemplazar con la tabla de A1.6."
+        },
+        "thetaFcM3M3": {
+          "min": 0.2,
+          "max": 0.3
+        },
+        "thetaWpM3M3": {
+          "min": 0.1,
+          "max": 0.15
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.1,
+          "max": 0.15
+        },
+        "rewMm": {
+          "min": 5,
+          "max": 10
+        },
+        "tewMm": {
+          "min": 15,
+          "max": 20
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 125.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (no son los de FAO-56 Tabla 19)",
+          "nota": "No proviene de ninguna fuente real; reemplazar con la tabla de A1.6."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "franco_arcilloso",
+      "grupo": "arcilloso",
+      "estado": "NO_EVALUABLE",
+      "filaFao": null,
+      "rangos": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "EJEMPLO: la tabla no tiene fila para esta clase USDA."
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (no son los de FAO-56 Tabla 19)",
+          "nota": "No proviene de ninguna fuente real; reemplazar con la tabla de A1.6."
+        }
+      }
+    }
+  ]
+}

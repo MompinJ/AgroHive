@@ -92,7 +92,8 @@ Navegador
 FastAPI (api/)
   /health
   proxy y caché: POWER, Open-Meteo, elevación, suelo
-  OpenAPI → cliente TypeScript
+  OpenAPI → cliente TypeScript de las llamadas HTTP
+  modelos que respetan contratos/*.schema.json (con prueba)
   earthaccess solo para extras
         |
         v
@@ -135,7 +136,7 @@ Eduardo toma el servidor (A0.4, A4.7).
 
 ## Estado del repo (14/11, noche)
 
-Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.2.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
+Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.3.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
 
 ## Límites para el pitch
 

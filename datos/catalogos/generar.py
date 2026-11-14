@@ -1,7 +1,8 @@
 """Genera los catalogos de AgroHive (A1.5 cultivos, A1.6 suelos) desde fuentes citadas.
 
 Uso (desde la raiz del repo):  python datos/catalogos/generar.py
-Salidas: datos/catalogos/cultivos.json (contrato cultivo.schema.json) y datos/catalogos/suelos.json.
+Salidas: datos/catalogos/cultivos.json (contrato cultivo.schema.json) y datos/catalogos/suelos.json
+(contrato tabla-suelos.schema.json).
 Validacion: node datos/catalogos/validar.mjs
 
 Reglas: cada cifra viene copiada de una tabla publicada y lleva su fuente. Si no hay fuente
@@ -12,7 +13,7 @@ import json
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
-VERSION_CONTRATO = "0.2.0"
+VERSION_CONTRATO = "0.3.0"
 VERSION_CATALOGO = "0.1.0"
 CONSULTADO = "2026-11-14"
 
@@ -55,10 +56,9 @@ MOTIVO_CALOR = (
     "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. "
     "EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
 )
-MOTIVO_LLUVIA = (
-    "EcoCrop publica lluvia ANUAL (RMIN..RMAX), no lluvia del ciclo; usarla aqui seria cambiar su significado. "
-    "Valores anuales de la fuente: {rmin} a {rmax} mm/anio (optimo {ropmn} a {ropmx}). "
-    "Pendiente: pedir a contratos un campo de lluvia anual o una fuente de lluvia por ciclo."
+MOTIVO_LLUVIA_CICLO = (
+    "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm "
+    "y no se convierte a lluvia del ciclo."
 )
 MOTIVO_VENTANAS = "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)."
 
@@ -147,13 +147,14 @@ def cultivo(c):
     f22 = lambda campo, nota: fuente(f"{FAO56}, Tabla 22", URL_FAO56_CAP8,
                                      f"Tabla 22, fila '{t22['fila']}', {campo}", nota=nota)
 
-    def eco_val(campo, valor):
-        return citado(valor, "grados C",
+    def eco_val(campo, valor, unidad="grados C", unidades="grados C (media mensual)", nota=NOTA_ECOCROP):
+        return citado(valor, unidad,
                       fuente("FAO EcoCrop", URL_ECOCROP,
-                             f"Fila '{eco['fila']}' ({eco['sci']}), campo {campo}", "grados C (media mensual)",
-                             NOTA_ECOCROP))
+                             f"Fila '{eco['fila']}' ({eco['sci']}), campo {campo}", unidades, nota))
 
-    lluvia = no_evaluable(MOTIVO_LLUVIA.format(**eco))
+    nota_lluvia = (f"Rango absoluto de lluvia anual de EcoCrop; el optimo es {eco['ropmn']} a {eco['ropmx']} mm/anio "
+                   f"(ROPMN, ROPMX). No es lluvia del ciclo. " + NOTA_ECOCROP)
+    lluvia_ciclo = no_evaluable(MOTIVO_LLUVIA_CICLO)
     return {
         "id": c["id"],
         "nombreComun": c["nombreComun"],
@@ -170,8 +171,10 @@ def cultivo(c):
             "tMaxAbsC": eco_val("TMAX", eco["tmax"]),
             "tOptMinC": eco_val("TOPMN", eco["topmn"]),
             "tOptMaxC": eco_val("TOPMX", eco["topmx"]),
-            "lluviaCicloMinMm": lluvia,
-            "lluviaCicloMaxMm": lluvia,
+            "lluviaCicloMinMm": lluvia_ciclo,
+            "lluviaCicloMaxMm": lluvia_ciclo,
+            "lluviaAnualMinMm": eco_val("RMIN", eco["rmin"], "mm/anio", "mm por anio", nota_lluvia),
+            "lluviaAnualMaxMm": eco_val("RMAX", eco["rmax"], "mm/anio", "mm por anio", nota_lluvia),
             "tEstresCalorC": no_evaluable(MOTIVO_CALOR),
         },
         "ventanasSiembra": no_evaluable(MOTIVO_VENTANAS),
@@ -227,8 +230,12 @@ def suelos():
         texturas.append({
             "clase": clase,
             "grupo": grupo,
+            "estado": "EVALUABLE",
             "filaFao": fila,
             "rangos": {
+                "estado": "EVALUABLE",
+                "fuente": fuente(f"{FAO56}, Tabla 19", URL_FAO56_CAP7, f"Tabla 19, fila '{fila}'",
+                                 "m3/m3 (theta) y mm (REW, TEW)", NOTAS_FILA.get(fila)),
                 "thetaFcM3M3": rango(fc),
                 "thetaWpM3M3": rango(wp),
                 "aguaDisponibleM3M3": rango(dif),
@@ -243,14 +250,16 @@ def suelos():
         texturas.append({
             "clase": clase,
             "grupo": grupo,
+            "estado": "NO_EVALUABLE",
             "filaFao": None,
-            "rangos": None,
+            "rangos": no_evaluable("FAO-56 Tabla 19 no tiene fila para esta clase USDA."),
             "tawMmPorM": no_evaluable("FAO-56 Tabla 19 no tiene fila para esta clase USDA; falta otra fuente citada."),
         })
     return {
         "meta": {"versionContrato": VERSION_CONTRATO, "esEjemplo": False,
                  "aviso": "Valores tipicos por textura (FAO-56 Tabla 19), no medidos en la parcela. El suelo de la parcela siempre es SUPUESTO."},
         "versionCatalogo": VERSION_CATALOGO,
+        "metodoTaw": "Punto medio del rango (thetaFC - thetaWP) de FAO-56 Tabla 19, por 1000 (FAO-56 ecuacion 82), en mm por metro de raiz.",
         "representanteGrupo": REPRESENTANTE_GRUPO,
         "notaRepresentanteGrupo": "Clase USDA que usa el selector manual (arenoso, franco, arcilloso) cuando no hay mapa global. Eleccion del equipo, no de FAO.",
         "texturas": texturas,

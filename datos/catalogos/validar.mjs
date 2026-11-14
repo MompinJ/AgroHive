@@ -1,6 +1,6 @@
 // Valida los catalogos de datos/catalogos/ contra los contratos.
 // - cultivos.json contra contratos/cultivo.schema.json
-// - suelos.json contra datos/catalogos/suelos.schema.json (que reutiliza comun y suelo)
+// - suelos.json contra contratos/tabla-suelos.schema.json
 // Ademas comprueba reglas que el schema no ve: etapas suman el ciclo, clases sin repetir,
 // cada grupo del selector apunta a una clase EVALUABLE.
 // Uso (desde la raiz): node datos/catalogos/validar.mjs   (requiere `npm install` en contratos/)
@@ -22,7 +22,6 @@ addFormats(ajv);
 for (const f of readdirSync(dirContratos).filter((f) => f.endsWith(".schema.json"))) {
   ajv.addSchema(leer(join(dirContratos, f)));
 }
-ajv.addSchema(leer(join(aqui, "suelos.schema.json")));
 
 let fallos = 0;
 const fallar = (msg) => {
@@ -58,7 +57,7 @@ for (const c of cultivos.cultivos) {
 const ids = cultivos.cultivos.map((c) => c.id);
 if (new Set(ids).size !== ids.length) fallar("cultivos.json: ids repetidos");
 
-const suelos = validarContra("suelos.json", "https://agrohive.example/datos/catalogos/suelos.schema.json");
+const suelos = validarContra("suelos.json", "https://agrohive.example/contratos/tabla-suelos.schema.json");
 const clases = suelos.texturas.map((t) => t.clase);
 if (new Set(clases).size !== clases.length) fallar("suelos.json: clases repetidas");
 for (const [grupo, clase] of Object.entries(suelos.representanteGrupo)) {

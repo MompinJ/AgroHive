@@ -11,7 +11,7 @@ Empieza por `docs/00-LEEME-PRIMERO.md`. Decisiones del hackathon en `docs/13-DEC
 | --- | --- |
 | `web/` | Frontend React + Vite + TypeScript; motor de simulacion en Web Worker |
 | `api/` | Backend FastAPI (Python): proxy y cache de NASA POWER, Open-Meteo, elevacion |
-| `contratos/` | Contratos de datos (JSON Schema / OpenAPI) compartidos |
+| `contratos/` | Contratos de datos (JSON Schema), ejemplos y tipos TS generados: fuente de verdad de los formatos |
 | `datos/` | Catalogos (cultivos, suelos) y paquete de demo precargado |
 | `modelos/` | Modelos 3D `.bbmodel` generados con el agente `modelador-voxel` |
 | `docs/` | Documentacion vigente |

@@ -61,6 +61,8 @@ Reglas que no cambian:
 
 Definirlos en las primeras horas para trabajar en paralelo y que no choquen convenciones (preocupación de la reunión). Nombres sugeridos.
 
+> **Tipos `[DECIDIDO]` 14/11:** Los JSON Schema de `contratos/` son la fuente de verdad de los datos: los tipos TS salen de ahí (`contratos/tipos/`) y los modelos de FastAPI deben respetarlos, con una prueba que lo verifique. El cliente generado desde OpenAPI solo cubre las llamadas HTTP.
+>
 > **Actualización 14/11:** los contratos vigentes son los JSON Schema de `contratos/` (v0.1.0, A1.1); mandan sobre los ejemplos de abajo, que quedan como antecedente. Cambios principales: el estado visual de la planta se llama `estadoPlanta` (`estado` es siempre el de doc 04), el suelo es su propio contrato (`parcela.sueloId`), `fuente` es un objeto y hay un contrato nuevo `proxima-temporada`. Resumen en `AgroVault/Compartido/Contratos.md`.
 
 ### Parcela

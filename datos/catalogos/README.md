@@ -10,7 +10,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 | Archivo | Contrato | Contenido |
 | --- | --- | --- |
 | `cultivos.json` | `contratos/cultivo.schema.json` | Milpa: maiz, frijol, calabaza |
-| `suelos.json` | `suelos.schema.json` (aqui) | TAW por clase USDA, FAO-56 Tabla 19 |
+| `suelos.json` | `contratos/tabla-suelos.schema.json` | TAW por clase USDA, FAO-56 Tabla 19 |
 
 ## Fuentes (consultadas el 14/11/2026)
 
@@ -32,7 +32,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 
 ## Huecos (NO_EVALUABLE)
 
-- **Lluvia por ciclo**: EcoCrop publica lluvia **anual**; el contrato pide lluvia del ciclo. Los valores anuales quedan en el `motivo`. Pedir a Mompin un campo de lluvia anual o buscar otra fuente.
+- **Lluvia por ciclo**: sin fuente. La lluvia de EcoCrop es **anual** y va en `lluviaAnualMinMm/MaxMm` (rango absoluto RMIN-RMAX; el optimo queda en la nota de la fuente). No se convierte a lluvia del ciclo.
 - **Umbral de estres por calor**: sin fuente verificada (EcoCrop solo da medias mensuales).
 - **Ventanas de siembra**: pendiente de A0.6 (calendario SIAP/INIFAP del municipio).
 - **Etapas sensibles**: pendiente de fuente (FAO-33, Ky); el campo se omite.
