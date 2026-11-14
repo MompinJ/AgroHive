@@ -12,7 +12,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 
 | ID | Estado | Nota |
 | --- | --- | --- |
-| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.7.0 en `contratos/`: 12 schemas (más `comun`), ejemplos, `npm test` (58/58) y tipos TS. Ver [[Contratos]] |
+| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.8.0 en `contratos/`: 12 schemas (más `comun`), ejemplos, `npm test` (63/63) y tipos TS. Ver [[Contratos]] |
 | A2.5, A2.6, A2.7 | Hechas (Mompin, integradas a `main`) | Motor en `web/src/motor/` (funciones puras + Web Worker; la interfaz usa `crearClienteMotor()`): escenarios por lluvia de temporadas PV+OI de SIAP, ET0 Penman-Monteith FAO-56, cubeta FAO-56 cap. 8, pilar de déficit hídrico y estados. Pruebas 1 a 5 de doc 05 en verde (`cd web && npm test`; la parte de erosión de la prueba 2 pasa a A3.7). Ver `docs/05` |
 | A4.2 | Hecha (Mompin) | Ranking B con dos pilares: déficit y exceso de agua (`excesoHidrico`, contratos 0.7.0, `[DECIDIDO]` 14/11), pesos iguales `SUPUESTO`; A3.7 agrega compatibilidad y erosión. Normalización en `docs/05`, paso 7. Pendiente de Mompin: la regla de desempate del p50 (hoy el año más antiguo) |
 | A2.16 | `[EN CURSO]` (Mafer): función y pruebas hechas en `datos/catalogos/saxton_rawls.py`; falta que Eduardo la conecte a `/api/suelo` | Verificada contra el artículo (Tabla 3, 12 clases): arena y arcilla en fracción, **materia orgánica en porcentaje**. Sin materia orgánica, o con materia orgánica > 8 % o arcilla > 60 %, el TAW queda `NO_EVALUABLE`. El carbono orgánico de SoilGrids pasa a materia orgánica con el factor 1.724 (citarlo) |
