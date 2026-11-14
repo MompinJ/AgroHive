@@ -292,6 +292,13 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Contratos 0.12.1: inicio de IMERG en 1998-01-01
+
+- **Archivos:** `contratos/clima-escenario.schema.json` (descripción de `lluviaSatelital`, que también usa `serie-clima`), versión en ejemplos e inválidos, tipos, README; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.1, en un commit aparte).
+- **Cambio y motivo:** Mafer hizo una llamada real a POWER (`time-standard=utc`) en la parcela demo: el último día con -999 es el 1997-12-31 y el primer día con dato, el 1998-01-01, igual que la cobertura del catálogo CMR. La descripción fija el inicio en 1998-01-01 según POWER y CMR, quita el 1998-06-01 y deja el 2000-06-01 como dato del espejo de UCAR. Solo cambia la descripción: es compatible.
+- **Fuente / evidencia:** llamada real de Mafer del 14/11, transmitida por la sesión maestra.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Contratos 0.12.0: correcciones de citas de IMERG, SMAP y MOD13 (compatible)
 
 - **Archivos:** `contratos/clima-escenario.schema.json` (`lluviaSatelital`, que también usa `serie-clima`), `contratos/smap.schema.json`, `contratos/ndvi.schema.json`, ejemplo de SMAP, un caso inválido, tipos, README; vault (`Contratos.md`, `Pendientes.md`); `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.0, en un commit aparte).
