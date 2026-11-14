@@ -13,8 +13,8 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 | ID | Estado | Nota |
 | --- | --- | --- |
 | A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.6.0 en `contratos/`: 12 schemas (más `comun`), ejemplos, `npm test` (55/55) y tipos TS. Ver [[Contratos]] |
-| A2.5, A2.6, A2.7 | Hechas (Mompin, rama `Mompin-motor`, falta integrar a `main`) | Motor en `web/src/motor/` (funciones puras + Web Worker; la interfaz usa `crearClienteMotor()`): escenarios por lluvia de temporadas PV+OI de SIAP, ET0 Penman-Monteith FAO-56, cubeta FAO-56 cap. 8, pilar de déficit hídrico y estados. Pruebas 1 a 5 de doc 05 en verde (`cd web && npm test`; la parte de erosión de la prueba 2 pasa a A3.7). Ver `docs/05` |
-| A2.4 | Pedido del motor (Eduardo) | Para tener 20 años agrícolas candidatos, el paquete de clima de la demo debe empezar el **2005-10-01** (el OI de 2006 empieza en octubre de 2005); con 2006-01-01 quedan 19 |
+| A2.5, A2.6, A2.7 | Hechas (Mompin, integradas a `main`) | Motor en `web/src/motor/` (funciones puras + Web Worker; la interfaz usa `crearClienteMotor()`): escenarios por lluvia de temporadas PV+OI de SIAP, ET0 Penman-Monteith FAO-56, cubeta FAO-56 cap. 8, pilar de déficit hídrico y estados. Pruebas 1 a 5 de doc 05 en verde (`cd web && npm test`; la parte de erosión de la prueba 2 pasa a A3.7). Ver `docs/05` |
+| A4.2 | Hecha (Mompin, `Mompin-motor`) | Ranking B listo (normalización en `docs/05`, paso 7); hoy corre el respaldo A porque solo el pilar hídrico tiene número. El exceso de agua se calcula y se muestra, pero no entra al ranking hasta que el equipo lo decida |
 | A1.5, A1.6 | Hechas (Mafer) | `datos/catalogos/`: milpa (maiz, frijol, calabaza) desde FAO-56 y EcoCrop, y TAW por textura (FAO-56 Tabla 19), validados contra contratos 0.3.0 (`cultivo` y `tabla-suelos`); `python datos/catalogos/generar.py` y `node datos/catalogos/validar.mjs`. La lluvia de EcoCrop va en `lluviaAnual*`; `lluviaCiclo*`, umbral de calor y ventanas de siembra siguen `NO_EVALUABLE` |
 
 El resto del reparto y su estado está en el tablero de `docs/14` (al final).
