@@ -82,27 +82,29 @@ async def proxima_temporada(lat: float, lon: float) -> dict:
         advertencias.append({"codigo": "CLIMATOLOGIA_DE_RESPALDO", "mensaje": "La climatologia viene de una fuente de respaldo (ver el estado del clima).", "severidad": "aviso"})
     fuentes = [{**serie["fuente"], "nota": f"Climatologia mensual {VENTANA[0].year} a {VENTANA[1].year}: distribucion historica de cada mes."}]
 
-    anomalias = None
+    anomalias, consultado_est = None, hoy
     clave = f"estacional_{round(lat / 0.5)}_{round(lon / 0.5)}"
     en_cache = cache.leer(clave)
+    if en_cache and not (isinstance(en_cache[0], dict) and "anomalias" in en_cache[0]):
+        en_cache = None  # formato anterior: se ignora
     if en_cache and en_cache[1] < TTL_ESTACIONAL_S:
-        anomalias = en_cache[0]
+        anomalias, consultado_est = en_cache[0]["anomalias"], date.fromisoformat(en_cache[0]["consultado"])
     else:
         try:
             async with http.crear_cliente() as c:
                 anomalias = await openmeteo.estacional(c, lat, lon)
-            cache.escribir(clave, anomalias)
+            cache.escribir(clave, {"consultado": hoy.isoformat(), "anomalias": anomalias})
         except http.ErrorFuente as e:
             if en_cache:
-                anomalias = en_cache[0]
-                advertencias.append({"codigo": "ESTACIONAL_EN_CACHE", "mensaje": "El pronostico estacional no respondio; se usa el ultimo guardado.", "severidad": "aviso"})
+                anomalias, consultado_est = en_cache[0]["anomalias"], date.fromisoformat(en_cache[0]["consultado"])
+                advertencias.append({"codigo": "ESTACIONAL_EN_CACHE", "mensaje": f"El pronostico estacional no respondio; se usa el guardado el {consultado_est.isoformat()}.", "severidad": "aviso"})
             else:
                 advertencias.append({"codigo": "ESTACIONAL_NO_DISPONIBLE", "mensaje": f"El pronostico estacional no respondio ({e}); se muestra solo el rango historico.", "severidad": "aviso"})
 
     if anomalias:
         meses = sorted(anomalias)
         metodo = "anomalia_estacional"
-        fuentes.append({"nombre": openmeteo.NOMBRE_ESTACIONAL, "url": openmeteo.URL_ESTACIONAL, "consultado": hoy.isoformat(), "resolucion": "36 km",
+        fuentes.append({"nombre": openmeteo.NOMBRE_ESTACIONAL, "url": openmeteo.URL_ESTACIONAL, "consultado": consultado_est.isoformat(), "resolucion": "36 km",
                         "unidades": "mm (lluvia), K (temperatura)",
                         "nota": "Anomalia mensual de SEAS5 respecto de la climatologia de ECMWF, aplicada a la climatologia historica de otra fuente. Sin correccion de sesgo. Atribucion: datos y productos de ECMWF."})
         if meses[0] == f"{hoy.year}-{hoy.month:02d}":
@@ -114,7 +116,7 @@ async def proxima_temporada(lat: float, lon: float) -> dict:
         metodo = "respaldo_estadistico"
     return {
         "meta": servicios._meta(), "esPrediccion": False, "estado": "EXPLORATORIO", "aviso": AVISO, "metodo": metodo,
-        "coordenada": (lon, lat), "emitido": hoy, "horizonteMeses": len(meses),
+        "coordenada": (lon, lat), "emitido": consultado_est, "horizonteMeses": len(meses),
         "climatologia": {"desde": VENTANA[0], "hasta": VENTANA[1]},
         "banda": {"percentilInferior": P_INF, "percentilSuperior": P_SUP},
         "fuentes": fuentes, "meses": construir_meses(clim, anomalias, meses), "advertencias": advertencias,

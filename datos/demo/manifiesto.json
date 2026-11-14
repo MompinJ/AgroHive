@@ -1,0 +1,19 @@
+{
+  "generado": "2026-11-14T20:16:34+00:00",
+  "parcela": "parcela-demo-isla",
+  "centroide": [
+    -95.53,
+    18.03
+  ],
+  "coordenadasIlustrativas": true,
+  "periodoClima": [
+    "2006-01-01",
+    "2025-12-31"
+  ],
+  "entradas": [
+    "estacional_36_-191.json",
+    "power_18.000_-95.625_20060101_20251231.json",
+    "suelo_isric_7212_-38212.json",
+    "terrarium/14/3844/7357.png"
+  ]
+}

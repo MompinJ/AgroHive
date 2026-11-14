@@ -97,7 +97,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.1 `[HECHO]` | Cliente NASA POWER diario con caché y reintentos | R3 | M | Sonnet | A1.3 | `GET /api/clima` devuelve serie real (C1) |
 | A2.2 `[HECHO]` | Respaldo Open-Meteo y estados `RESPALDO_HISTORICO` / `ERROR_DATOS` | R3 | S | Sonnet | A2.1 | Se activa al apagar POWER |
 | A2.3 `[HECHO]` | Elevación por celda (tiles Terrarium o SRTM) y pendiente | R3 | M | Sonnet | A1.3 | `GET /api/elevacion` por polígono |
-| A2.4 | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | R3 | S | Sonnet | A2.1, A2.3 | Demo funciona sin internet |
+| A2.4 `[EN CURSO]` mecanismo y paquete hechos con la parcela de ejemplo; falta regenerarlo con la zona real (A0.6) | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | R3 | S | Sonnet | A2.1, A2.3 | Demo funciona sin internet |
 | A2.5 | Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) | R2 | M | Opus | A1.1 | Años reales visibles y reproducibles |
 | A2.6 | ET0, ETc y balance de agua por bloque (cubeta) | R2 | **L** | Fable | A1.1, A1.5, A1.6 | Pruebas 1 a 5 de doc 05 en verde |
 | A2.7 | Pilar de déficit hídrico y estados de evaluabilidad | R2 | M | Opus | A2.6 | Métricas por rotación y escenario |

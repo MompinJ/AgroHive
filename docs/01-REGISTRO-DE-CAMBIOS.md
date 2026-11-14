@@ -59,6 +59,14 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — A2.4: paquete de demo sin internet (Eduardo)
+
+- **Archivos:** `datos/demo/` (generador, manifiesto, cache y LEEME), `api/app/cache.py`, `api/app/clientes/terrarium.py`, `api/app/proxima.py`, `api/app/config.py`, pruebas, `api/README.md`, `docs/14`.
+- **Cambio:** la API lee `datos/demo/cache/` cuando falta su cache local. Con el paquete responden sin red clima 2006-2025, elevacion, suelo y proxima temporada de la parcela demo (probado con la red forzada a fallar: 200 en milisegundos; sin paquete, 503). El pronostico estacional guarda ahora su fecha de consulta y, si esta vencido y no hay red, se sirve con la advertencia `ESTACIONAL_EN_CACHE` y su fecha real en `emitido`.
+- **Limite:** la parcela es la de `contratos/ejemplos/parcela.ejemplo.json` (coordenadas ilustrativas cerca de Isla); los datos son reales para esa coordenada. Hay que regenerar con `datos/demo/generar.py` cuando A0.6 confirme la zona.
+- **Fuente / evidencia:** 43 pruebas, incluidas las del paquete; generado el 2026-11-14 desde NASA POWER, ISRIC, Terrarium y Open-Meteo.
+- **Pendiente:** A5.8 (capturas y demo completa con la red apagada) depende de que el front llame a la API (A4.6).
+
 ### 2026-11-14 (noche) — A4.7: front servido desde el droplet (Eduardo)
 
 - **Archivos:** `api/despliegue/` (nginx, proxy y script), `AgroVault/Compartido/Servidor.md`, `docs/14`. Cambios en el droplet: `/var/www/agrohive-web`, `/etc/nginx/agrohive-proxy.conf` y el server block de AgroHive.

@@ -21,6 +21,7 @@ Documentacion interactiva en `/docs` y esquema en `/openapi.json`.
 
 - Un dato faltante es `null`, nunca cero (POWER usa -999 como relleno: se convierte a `null`).
 - La fuente de respaldo se ve siempre: `estado: RESPALDO_HISTORICO`, `respaldo: true` y una advertencia. Las series de POWER y de Open-Meteo no se mezclan: difieren en magnitud (ver `datos/pruebas-apis/LEEME.md`).
+- Paquete de demo (A2.4): si falta la cache local, la API lee `datos/demo/cache/` y responde sin red para la parcela demo; ver `datos/demo/LEEME.md`.
 - Cache en `datos/cache/` (ignorada por git). Clave: centro de la celda MERRA-2 (0.5 x 0.625 grados) + periodo. Los periodos que terminan hace mas de 90 dias no caducan; los recientes duran 24 h.
 - Las respuestas usan los nombres de `contratos/` (`meta`, `fuente`, `advertencias`, dia de `clima-escenario`). Los tests las validan contra esos schemas.
 - Proxima temporada: distribucion historica de cada mes (20 anios de POWER) desplazada por la anomalia mensual de SEAS5 (Open-Meteo, `forecast_days=210`). El ancho de la banda es la variabilidad historica, no la dispersion del ensamble: las variables verificadas del servicio no la entregan. Sin tendencia. Si el pronostico no responde, cae a `respaldo_estadistico` (percentiles sin desplazar). Con menos de 10 anios completos de un mes, la banda es `null`, no un numero.
@@ -36,7 +37,7 @@ python3.12 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 .venv/bin/python -m pytest -q          # sin red: las APIs se simulan con respuestas reales guardadas en datos/pruebas-apis/
 ```
 
-Variables de entorno (ver `.env.example`): `AGROHIVE_CACHE_DIR`, `AGROHIVE_CATALOGOS_DIR`, `AGROHIVE_CORS_ORIGINS`. No hay llaves ni tokens.
+Variables de entorno (ver `.env.example`): `AGROHIVE_CACHE_DIR`, `AGROHIVE_CATALOGOS_DIR`, `AGROHIVE_DEMO_DIR`, `AGROHIVE_CORS_ORIGINS`. No hay llaves ni tokens.
 
 ## Cliente TypeScript
 
