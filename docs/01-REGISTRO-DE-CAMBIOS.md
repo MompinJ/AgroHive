@@ -188,6 +188,13 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — Segundo despliegue de main 9ad0443 (Eduardo, aviso de Mompin #68)
+
+- **Despliegue:** el droplet corre `main` en `9ad0443` (A3.3 y A2.11 de Mafer, API 0.9.0 y cliente A4.6). Se anuncio antes por el buzon; una sola sesion desplego.
+- **Verificado desde fuera:** `/health` trae `commit: 9ad0443` y `versionContrato: 0.9.0`; `/api/suelo` de Isla da TAW 122.3 mm/m con ISRIC y OpenLandMap; `/api/clima` da 7 397 dias `EVALUABLE` con contrato 0.9.0; `mediworks.mx` sigue en 200.
+- **Front:** se construyo en el droplet y su huella es **identica** a la publicada, asi que no se copio nada: los cambios de la escena y los modelos de frijol y calabaza aun no entran al bundle de la app.
+- **Tropiezo:** el script temporal del build en `/tmp` fallo con `Permission denied` (un archivo de la vez anterior de otro usuario). Se movio a `/opt/agrohive/` y el procedimiento queda en `api/despliegue/actualizar-servidor.sh` (sin probar de punta a punta hasta el proximo despliegue).
+
 ### 2026-11-14 (noche) — A4.8: sondeo de viabilidad de los extras NASA (Eduardo)
 
 - **Archivos:** `docs/14` (A4.8). Sin cambios de codigo: el sondeo se hizo en un directorio temporal.
