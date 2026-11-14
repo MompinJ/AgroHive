@@ -73,6 +73,15 @@ def test_el_paquete_de_demo_committeado_cumple_los_contratos(validar):
     assert serie["estado"] == "EVALUABLE" and serie["diario"][0]["fecha"] == "2005-10-01" and serie["diario"][-1]["fecha"] == "2025-12-31"
     validar(cargar("suelo"), "suelo#")
     validar(cargar("proxima-temporada"), "proxima-temporada#")
+    ndvi = cargar("ndvi")
+    validar(ndvi, "ndvi#")
+    assert ndvi["producto"]["nombre"] == "MOD13Q1" and ndvi["producto"]["version"] == "061" and "Planetary Computer" in ndvi["fuente"]["nombre"]
+    fechas = [d["fecha"] for d in ndvi["serie"]]
+    assert fechas == sorted(set(fechas)) and fechas[0] <= "2005-12-31" and fechas[-1] >= "2025-12-01", "debe cubrir la ventana estandar sin repetir fechas"
+    assert len(fechas) > 440, "unos 23 compuestos de Terra por anio durante 20 anios"
+    assert all((d["ndvi"] is None) == (d["estado"] in ("NO_EVALUABLE", "ERROR_DATOS")) for d in ndvi["serie"]), "sin dato es null con estado de falta, nunca 0"
+    assert not any(d["estado"] == "ERROR_DATOS" for d in ndvi["serie"]), "el paquete no debe traer compuestos con error"
+    assert {a["codigo"] for a in ndvi["advertencias"]} == {"NDVI_EVIDENCIA"}, "sin tramos caidos ni calidad perdida"
     terreno = cargar("terreno")
     validar(terreno["terreno"], "parcela#/properties/terreno")
     assert len(terreno["celdas"]) == 4

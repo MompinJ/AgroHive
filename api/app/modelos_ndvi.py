@@ -11,6 +11,7 @@ Limite = Literal["PIXEL_MAYOR_QUE_PARCELA", "NO_MUESTRA_CULTIVO_DEL_USUARIO", "N
 
 class ProductoNdvi(SinNulos):
     nombre: Literal["MOD13Q1"] = "MOD13Q1"
+    version: str | None = None
     banda: str = Field(min_length=1)
     pixelM: Literal[250] = 250
     compuestoDias: Literal[16] = 16
