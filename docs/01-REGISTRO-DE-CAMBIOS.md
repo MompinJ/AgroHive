@@ -12,6 +12,20 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A5.5: pruebas de regresión del motor y de contratos (Mompin)
+
+- **Archivos:** `web/src/motor/pruebas/regresion.test.ts` y `web/src/motor/pruebas/regresion/demo-isla.json` (referencia); `docs/05`, `docs/14` (vistas regeneradas) y `AgroVault/Compartido/Pendientes.md`.
+- **Qué fija:** con el paquete de demo y el suelo real de Isla:
+  - escenarios seco 2023, habitual 2016 y lluvioso 2024, con su lluvia de temporadas y sus percentiles;
+  - pilares de la milpa por escenario: déficit, exceso, compatibilidad y suelo desnudo;
+  - estados y `filtroClima` de las rotaciones R1 a R4;
+  - un registro de `resultado-celda`;
+  - ranking de tres rotaciones (R1, R3, R2) y con cuatro pilares (R4, R2, R1), con su arrepentimiento;
+  - años análogos de la próxima temporada (2006, 2008, 2013, 2019, 2022, 2025) y su rango.
+- **Guardas de contrato:** `VERSION_CONTRATO` del motor = versión de `contratos/`; el plan de ejemplo de `contratos/` pasa por el motor y todas las salidas validan contra los schemas.
+- **Cómo cambiar un número a propósito:** `ACTUALIZAR_REGRESION=1 npx vitest run src/motor/pruebas/regresion.test.ts`, revisar el diff de `demo-isla.json` y anotarlo aquí en el mismo commit. Se comprobó que la prueba falla si cambia, por ejemplo, el año habitual.
+- **Fuente / evidencia:** `cd web && npm test` (224 pruebas).
+
 ### 2026-11-14 — A3.7: pilares de compatibilidad de ciclo y protección del suelo (Mompin)
 
 - **Archivos:** `web/src/motor/pilares.ts` (nuevo), `temporadas.ts` (nuevo: `siembraEnEscenario` sale de `motor.ts`), `motor.ts`, `ranking.ts`; pruebas `c2.test.ts` y `ranking.test.ts`; `docs/05`, `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault`.
