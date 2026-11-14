@@ -4,7 +4,8 @@
 //   deficitHidrico      1 - proporcionDemandaNoCubierta = ETc ajustada / ETc del periodo (FAO-56 ec. 80: la fraccion
 //                       de la demanda del cultivo que el agua del suelo cubrio). No es rendimiento.
 //   compatibilidadCiclo 1 - siembrasFueraDeVentana / numero de siembras del plan (fraccion de siembras en ventana).
-//   proteccionSuelo     1 - indiceErosionRelativo (el indice ya va de 0 a 1; su construccion la fija A3.7).
+//   proteccionSuelo     1 - indiceErosionRelativo si hay indice; sin indice (hoy: falta I30 y C/LS con fuente),
+//                       1 - diasSueloDesnudo / dias del anio agricola = fraccion del anio con cultivo (A3.7).
 //   excesoHidrico       1 - fraccionLluviaPercolada = fraccion de la lluvia de los dias de ciclo que el suelo retuvo
 //                       (percolacion de FAO-56 ec. 88). Pilar [DECIDIDO] por Mompin el 14/11; la normalizacion es
 //                       SUPUESTO: no hay umbral publicado de encharcamiento por cultivo en FAO-56 ni en el catalogo.
@@ -20,6 +21,7 @@
 // Solo se ordenan las rotaciones EVALUABLE o RESPALDO_HISTORICO. Una EXPLORATORIO (cultivo no registrado en el
 // lugar) recibe sus metricas y peor caso, pero no posicion: se ilustra, no se recomienda.
 import { juntarAdvertencias } from './estados';
+import { diasAnioAgricola } from './pilares';
 import {
   ESCENARIOS,
   type Advertencia,
@@ -93,7 +95,9 @@ function subpuntaje(p: PilarPuntaje, m: MetricasEscenario, siembras: number): nu
     }
     case 'proteccionSuelo': {
       const i = x.proteccionSuelo?.indiceErosionRelativo;
-      return i === null || i === undefined ? null : 1 - i;
+      if (i !== null && i !== undefined) return 1 - i;
+      const d = x.proteccionSuelo?.diasSueloDesnudo;
+      return d === null || d === undefined || m.anioReal === null ? null : 1 - d / diasAnioAgricola(m.anioReal);
     }
     default:
       return null;
@@ -183,7 +187,7 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
         (usarIguales
           ? `Pesos iguales entre los ${entran.length} pilares con numero (sin pesos con fuente ni del usuario): es un supuesto, no un dato.`
           : `Pesos ${etiqueta === 'FUENTE' ? 'con fuente' : 'del usuario'}, renormalizados entre los pilares con numero.`) +
-        ' Subpuntajes de 0 a 1: deficit hidrico = fraccion de la demanda cubierta; exceso = fraccion de la lluvia de los ciclos que el suelo retuvo (1 - percolacion / lluvia; normalizacion SUPUESTO, sin umbral publicado de encharcamiento por cultivo); compatibilidad = fraccion de siembras en ventana; proteccion del suelo = 1 - indice de erosion.' +
+        ' Subpuntajes de 0 a 1: deficit hidrico = fraccion de la demanda cubierta; exceso = fraccion de la lluvia de los ciclos que el suelo retuvo (1 - percolacion / lluvia; normalizacion SUPUESTO, sin umbral publicado de encharcamiento por cultivo); compatibilidad = fraccion de siembras en ventana del calendario local; proteccion del suelo = fraccion del anio agricola con cultivo (1 - dias de suelo desnudo / dias del anio; sin indice de erosion con fuente).' +
         ' Calor y aporte indirecto son complementarios y no entran.' +
         (ignorados.length > 0 ? ` Pesos ignorados (pilar sin numero o complementario): ${ignorados.join(', ')}.` : ''),
     };

@@ -6,7 +6,9 @@
 // - Suelo: el del mapa (suelo.json, TAW por Saxton y Rawls 2006, A2.16) o el
 //   selector manual de respaldo "franco", declarado SUPUESTO (doc 04, igual que
 //   la evidencia de C2 en web/src/motor/pruebas/c2.test.ts).
-// - Plan: R1 milpa de prueba (maiz PV, frijol OI, maiz PV), sin calendario local.
+// - Plan de prueba sin calendario local: R1 milpa (maiz PV, frijol OI, maiz PV) o
+//   R2 (calabaza PV, frijol OI, maiz PV). Sin calendario, el motor no marca la
+//   calabaza como no registrada en Isla: es solo para ver los tres modelos.
 
 import parcelaEjemplo from '../../../contratos/ejemplos/parcela.ejemplo.json';
 import catalogo from '../../../datos/catalogos/cultivos.json';
@@ -63,15 +65,27 @@ export const SUELO_MANUAL_FRANCO: Suelo = {
   ph: { estado: 'NO_EVALUABLE', motivo: 'Selector manual: sin pH.' },
 };
 
-export function planPrueba(parcelaId: string): PlanSiembra {
-  const ciclos: [string, string, 'PV' | 'OI'][] = [
+export type RotacionPrueba = 'R1' | 'R2';
+
+/** R1: milpa (maiz, frijol, maiz). R2: calabaza, frijol, maiz, para ver los tres cultivos. */
+export const ROTACIONES_PRUEBA: Record<RotacionPrueba, [string, string, 'PV' | 'OI'][]> = {
+  R1: [
     ['maiz', '2016-06-15', 'PV'],
     ['frijol', '2016-11-01', 'OI'],
     ['maiz', '2017-06-15', 'PV'],
-  ];
+  ],
+  R2: [
+    ['calabaza', '2016-06-15', 'PV'],
+    ['frijol', '2016-11-01', 'OI'],
+    ['maiz', '2017-06-15', 'PV'],
+  ],
+};
+
+export function planPrueba(parcelaId: string, rotacion: RotacionPrueba = 'R1'): PlanSiembra {
+  const ciclos = ROTACIONES_PRUEBA[rotacion];
   return {
     meta: { versionContrato: '0.6.0', esEjemplo: true, aviso: 'Plan de prueba de la vista previa de la escena; no es una recomendacion.' },
-    rotacionId: 'R1',
+    rotacionId: rotacion,
     parcelaId,
     calendarioLocal: { sinCalendarioLocal: true, motivo: 'Calendario de Isla pendiente (A0.6).' },
     asignacionClima: 'temporada_tipica',
@@ -87,10 +101,10 @@ export function planPrueba(parcelaId: string): PlanSiembra {
 }
 
 /** Entradas del motor sin los escenarios (los da `escenarios(serie)` del cliente del motor). */
-export function entradasDemo(modo: ModoSuelo): Omit<EntradasMotor, 'escenarios'> {
+export function entradasDemo(modo: ModoSuelo, rotacion: RotacionPrueba = 'R1'): Omit<EntradasMotor, 'escenarios'> {
   const parcela = parcelaConTerrenoDemo();
   return {
-    plan: planPrueba(parcela.id),
+    plan: planPrueba(parcela.id, rotacion),
     parcela,
     suelo: modo === 'mapa' ? (sueloDemo as unknown as Suelo) : SUELO_MANUAL_FRANCO,
     tablaSuelos: tabla as unknown as TablaSuelos,
@@ -153,4 +167,33 @@ export function parcelaCargaSintetica(lado = 40): Parcela {
 export function entradasCarga(modo: ModoSuelo): Omit<EntradasMotor, 'escenarios'> {
   const parcela = parcelaCargaSintetica();
   return { ...entradasDemo(modo), parcela, plan: planPrueba(parcela.id) };
+}
+
+/**
+ * Vista previa con la cuadricula de balam (web/src/ui/cuadricula.ts, A2.9): un
+ * poligono en L de unas 5 ha junto a la parcela demo, con la elevacion que
+ * responda POST /api/elevacion (en desarrollo, la API local con el paquete de
+ * demo: VITE_API_URL). Si la API falla, las celdas quedan sin elevacion (huecos).
+ */
+export async function parcelaCuadriculaBalam(): Promise<{ parcela: Parcela; nota: string }> {
+  const { generarCuadricula } = await import('../ui/cuadricula');
+  const { obtenerTerreno } = await import('../api/cliente');
+  const [lon0, lat0] = parcelaConTerrenoDemo().centroide;
+  const mLat = 1 / 111195;
+  const mLon = 1 / (111195 * Math.cos((lat0 * Math.PI) / 180));
+  const L: [number, number][] = [[-150, -150], [150, -150], [150, -50], [-50, -50], [-50, 150], [-150, 150]];
+  const { parcela } = generarCuadricula(L.map(([x, y]) => [lon0 + x * mLon, lat0 + y * mLat]));
+  const r = await obtenerTerreno({ tamanoCeldaM: parcela.tamanoCeldaM, celdas: parcela.celdas.map(({ id, i, j, centro }) => ({ id, i, j, centro })) });
+  if (!r.ok) return { parcela, nota: `Sin elevacion: ${r.error.motivo}` };
+  const alturas = new Map(r.datos.celdas.map((c) => [c.id, c]));
+  return {
+    nota: `Cuadricula de balam: ${parcela.celdas.length} celdas de ${parcela.tamanoCeldaM.toFixed(1)} m; elevacion de ${r.datos.terreno.fuente.nombre}.`,
+    parcela: {
+      ...parcela,
+      id: 'parcela-cuadricula-balam',
+      terreno: { estado: r.datos.terreno.estado, fuente: { nombre: r.datos.terreno.fuente.nombre } },
+      celdas: parcela.celdas.map((c) => ({ ...c, elevacionM: alturas.get(c.id)?.elevacionM ?? null, pendientePct: alturas.get(c.id)?.pendientePct ?? null })) as Parcela['celdas'],
+      advertencias: (r.datos.advertencias ?? []) as Advertencia[],
+    },
+  };
 }

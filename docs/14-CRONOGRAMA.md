@@ -102,8 +102,8 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.6 `[HECHO]` 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7) | ET0, ETc y balance de agua por bloque (cubeta) | R2 | **L** | Fable | A1.1, A1.5, A1.6 | Pruebas 1 a 5 de doc 05 en verde |
 | A2.7 `[HECHO]` 14/11 | Pilar de déficit hídrico y estados de evaluabilidad | R2 | M | Opus | A2.6 | Métricas por rotación y escenario |
 | A2.8 `[HECHO]` (c) `temporada_tipica`, 14/11 | Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) | R2 + R3 | M | Opus | A2.1, A1.5 | Opción elegida registrada en 01 |
-| A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | R1 | M | Sonnet | A1.2 | Polígono dibujado genera celdas |
-| A2.10 | Mapa y dibujo de polígono libre (Leaflet) | R1 | M | Sonnet | A1.2 | El usuario dibuja y ve su parcela (P1) |
+| A2.9 `[HECHO]` | Cuadrícula desde polígono (Turf.js) con tope de celdas | R1 | M | Sonnet | A1.2 | Polígono dibujado genera celdas |
+| A2.10 `[HECHO]` | Mapa y dibujo de polígono libre (Leaflet) | R1 | M | Sonnet | A1.2 | El usuario dibuja y ve su parcela (P1) |
 | A2.11 `[HECHO]` | Cultivos 1 a 3 completos, todas las etapas y estados de estrés | R4 | **L** | Opus | A1.4 | Modelos probados en la escena real (V-14) |
 | A2.12 `[EN CURSO]` | Bloques de suelo por tipo y humedad | R4 | S | Sonnet | A1.4 | Variantes en `modelos/` |
 | A2.13 `[HECHO]` 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9) | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | R2 + R3 | M | Opus | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, horizonte de 6 meses, etiquetado como aproximado. Después del motor; no bloquea el MVP |
@@ -123,7 +123,7 @@ Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | R1 | M | Sonnet | A2.7 | Cambiar cultivo invalida y recalcula; cada fecha sugerida explica por qué y de dónde sale (calendario local o "sin calendario"); cultivo no registrado en el lugar con aviso |
 | A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | R1 + R2 | S | Sonnet | A3.4 | Prueba manual documentada |
 | A3.6 | Modo 2D ligero con los mismos valores del motor | R1 | M | Sonnet | A2.7 | Alternar 2D/3D no cambia métricas |
-| A3.7 | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | R2 | **L** | Opus | A2.7 | Entran solo si los datos alcanzan |
+| A3.7 `[HECHO]` 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente) | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | R2 | **L** | Opus | A2.7 | Entran solo si los datos alcanzan |
 | A3.8 | Tooltips y valores por bloque | R1 | S | Sonnet | A3.4 | Toque o hover muestra humedad, déficit, pendiente |
 | A3.9 | Cultivos 4 en adelante, props y mascota | R4 | M | Sonnet | A2.11 | Extras según tiempo |
 
@@ -153,7 +153,7 @@ Compuerta **C4** al terminar A4.6.
 | A5.2 | Slider de meses | R1 | M | Sonnet | A3.4 | Reproducir y arrastrar sin acumular animaciones |
 | A5.3 | Móvil y accesibilidad (táctil, teclado) | R1 | M | Sonnet | A4.6 | Operable sin hover |
 | A5.4 `[BLOQUEADO]` espera el modo 2D (A3.6) | Medición de requisitos mínimos y fallback WebGL | R1 | S | Haiku | A3.6 | Cifra documentada para jueces |
-| A5.5 | Pruebas de regresión del motor y de contratos | R2 | M | Sonnet | A4.2 | Suite en verde |
+| A5.5 `[HECHO]` 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) | Pruebas de regresión del motor y de contratos | R2 | M | Sonnet | A4.2 | Suite en verde |
 | A5.6 | Guion, video de demo y ensayo | R4 | M | Sonnet | A4.6 | Video grabado con respaldo |
 | A5.7 | README con método, fuentes, límites, licencias y declaración de IA | R4 | S | Sonnet | A4.5 | README completo |
 | A5.8 `[BLOQUEADO]` espera A2.4 con la zona real y el front conectado (A4.6) | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
@@ -192,7 +192,7 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 
 | Responsable | Rama | Herramientas de IA | Actividades | Primera tarea |
 | --- | --- | --- | --- | --- |
-| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor) `[HECHO]`, A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
+| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor) `[HECHO]`, A3.7 `[HECHO]`, A5.5 `[HECHO]`; integra y administra `main` | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.6 (cliente de la API, con balam), A4.7, A4.8, A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
 | **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[HECHO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[HECHO]`, A2.11 `[HECHO]`, A2.12 `[EN CURSO]`, A3.3 `[HECHO]`, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A3.8, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
@@ -209,10 +209,10 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 11 | 1 | 0 | 2 | 79 % de 14 |
+| **Mompin** | 13 | 1 | 0 | 0 | 93 % de 14 |
 | **Eduardo** | 10 | 3 | 2 | 0 | 67 % de 15 |
-| **Mafer** | 7 | 0 | 0 | 5 | 58 % de 12 |
-| **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
+| **Mafer** | 7 | 1 | 0 | 4 | 58 % de 12 |
+| **balam** | 3 | 0 | 0 | 13 | 19 % de 16 |
 
 ### Mompin
 
@@ -228,10 +228,10 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | HECHO | 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9) |
 | A3.1 | Escena 3D con relieve (altura por bloque, InstancedMesh) | HECHO |  |
 | A3.2 | Cargador de .bbmodel con instancing por cultivo y etapa | HECHO |  |
-| A3.7 | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | PENDIENTE |  |
+| A3.7 | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | HECHO | 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente) |
 | A4.2 | Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | HECHO | 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3) |
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | EN CURSO | cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor |
-| A5.5 | Pruebas de regresión del motor y de contratos | PENDIENTE |  |
+| A5.5 | Pruebas de regresión del motor y de contratos | HECHO | 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) |
 
 ### Eduardo
 
@@ -276,8 +276,8 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | --- | --- | --- | --- |
 | A0.5 | Verificar reglas de entrega, IA y video (V-03, V-04) | PENDIENTE |  |
 | A1.2 | Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | HECHO | rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados |
-| A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | PENDIENTE |  |
-| A2.10 | Mapa y dibujo de polígono libre (Leaflet) | PENDIENTE |  |
+| A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | HECHO |  |
+| A2.10 | Mapa y dibujo de polígono libre (Leaflet) | HECHO |  |
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | PENDIENTE |  |
 | A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | PENDIENTE |  |
 | A3.6 | Modo 2D ligero con los mismos valores del motor | PENDIENTE |  |

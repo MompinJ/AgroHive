@@ -1,9 +1,9 @@
 // Placa de estado: la textura que va sobre la cara superior de cada bloque.
-// Patron del estado en todo el fondo y, al centro, un recuadro liso con borde y
-// el icono, para que el estado se lea sin depender del color. Puro (RGBA); la
+// Patron del estado en todo el fondo, borde doble (negro y blanco) y, al centro,
+// un recuadro liso con borde y el icono, para que el estado se lea sin depender del color. Puro (RGBA); la
 // escena 3D la vuelve DataTexture y el modo 2D puede pintarla en un canvas.
 
-import { hexARgb } from './contraste';
+import { BLANCO, hexARgb, NEGRO } from './contraste';
 import type { EstiloEstado } from './estilos-estado';
 import { LADO_PATRON, mascaraIcono, mascaraPatron } from './patrones';
 
@@ -21,6 +21,7 @@ export function rgbaPlaca(estilo: EstiloEstado): ImagenRgba {
   const datos = new Uint8Array(lado * lado * 4);
   const color = hexARgb(estilo.color);
   const tinta = hexARgb(estilo.tinta);
+  const opuesto = hexARgb(estilo.tinta === NEGRO ? BLANCO : NEGRO);
   const patron = mascaraPatron(estilo.patron, LADO_PATRON);
   const icono = mascaraIcono(estilo.icono);
   const inicioCuadro = 8;
@@ -38,9 +39,19 @@ export function rgbaPlaca(estilo: EstiloEstado): ImagenRgba {
         const enIcono = ix >= 0 && iy >= 0 && ix < icono.lado && iy < icono.lado && icono.pixeles[iy * icono.lado + ix] === 1;
         entinta = borde || enIcono;
       } else {
-        // Borde exterior de la placa en tinta para separarla del suelo (contraste con el entorno).
-        const bordeExterior = x === 0 || y === 0 || x === lado - 1 || y === lado - 1;
-        entinta = bordeExterior || patron.pixeles[(y % LADO_PATRON) * LADO_PATRON + (x % LADO_PATRON)] === 1;
+        // Borde doble para separar la placa del suelo con cualquier humedad (WCAG 1.4.11, 3:1):
+        // anillo exterior en el opuesto de la tinta y anillo interior en tinta. Uno de los dos
+        // (negro o blanco) contrasta con cualquier color de suelo (prueba en estados.test.ts).
+        const anillo = Math.min(x, y, lado - 1 - x, lado - 1 - y);
+        if (anillo === 0) {
+          const k = (y * lado + x) * 4;
+          datos[k] = opuesto[0];
+          datos[k + 1] = opuesto[1];
+          datos[k + 2] = opuesto[2];
+          datos[k + 3] = 255;
+          continue;
+        }
+        entinta = anillo === 1 || patron.pixeles[(y % LADO_PATRON) * LADO_PATRON + (x % LADO_PATRON)] === 1;
       }
       const c = entinta ? tinta : color;
       const k = (y * lado + x) * 4;

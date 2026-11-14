@@ -102,14 +102,30 @@ describe('leyenda con los ejemplos de contratos', () => {
 });
 
 describe('placa de estado y color del suelo', () => {
-  it('la placa usa solo el color del estado y su tinta', () => {
+  it('la placa usa solo el color del estado, su tinta y el opuesto de la tinta (borde)', () => {
     for (const [, e] of estilos) {
       const img = rgbaPlaca(e);
       expect(img.datos).toHaveLength(LADO_PLACA * LADO_PLACA * 4);
-      const permitidos = new Set([hexARgb(e.color).join(','), hexARgb(e.tinta).join(',')]);
+      const opuesto = e.tinta === '#000000' ? '#ffffff' : '#000000';
+      const permitidos = new Set([hexARgb(e.color).join(','), hexARgb(e.tinta).join(','), hexARgb(opuesto).join(',')]);
       for (let k = 0; k < img.datos.length; k += 4) {
         expect(permitidos.has(`${img.datos[k]},${img.datos[k + 1]},${img.datos[k + 2]}`)).toBe(true);
       }
+    }
+  });
+
+  it('la placa se distingue del suelo (3:1) con cualquier humedad, por su color o por su borde doble', () => {
+    const suelos = [SUELO_SECO, SUELO_HUMEDO, SUELO_SIN_HUMEDAD, ...[0.25, 0.5, 0.75].map((h) => '#' + colorSuelo(h).map((n) => n.toString(16).padStart(2, '0')).join(''))];
+    for (const [, e] of [...estilos, ['sin_elevacion', ESTILO_SIN_ELEVACION] as const]) {
+      for (const suelo of suelos) {
+        const mejor = Math.max(...[e.color, '#000000', '#ffffff'].map((c) => razonContraste(c, suelo)));
+        expect(mejor).toBeGreaterThanOrEqual(3);
+      }
+      const img = rgbaPlaca(e);
+      const esquina = `${img.datos[0]},${img.datos[1]},${img.datos[2]}`;
+      const segundo = (LADO_PLACA + 1) * 4;
+      const anillo1 = `${img.datos[segundo]},${img.datos[segundo + 1]},${img.datos[segundo + 2]}`;
+      expect(new Set([esquina, anillo1])).toEqual(new Set(['0,0,0', '255,255,255']));
     }
   });
 

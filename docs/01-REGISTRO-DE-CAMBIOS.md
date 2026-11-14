@@ -12,6 +12,34 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Escena con la cuadrícula de balam (A2.9) y revisión de A3.3/A2.11 (Mompin, rama `Mompin-escena`)
+
+- **Archivos:** `web/src/escena/adaptador.ts`, `placa.ts`, `demo-motor.ts`, `vista-previa.tsx`, `INTEGRACION.md`, pruebas `cuadricula-balam.test.ts` y `estados.test.ts`; `docs/06`.
+- **Cambio:** la escena orienta filas y columnas con los `centro` de las celdas: la cuadrícula de balam numera `i` desde el sur y el ejemplo de contratos desde el norte, y sin esto el relieve salía invertido norte-sur respecto al mapa. Las placas de estado llevan borde doble negro y blanco: con humedad media del suelo, Normal, Marchita y Podrida bajaban a 2.1-2.6:1 frente al suelo, por debajo del 3:1 de WCAG 1.4.11.
+- **Fuente / evidencia:** pruebas de integración con `generarCuadricula` (contrato, tope, huecos, orientación); en la vista previa en headless, polígono en L con 559 celdas, elevación de la API local con el paquete de demo y motor real.
+
+### 2026-11-14 — A5.5: pruebas de regresión del motor y de contratos (Mompin)
+
+- **Archivos:** `web/src/motor/pruebas/regresion.test.ts` y `web/src/motor/pruebas/regresion/demo-isla.json` (referencia); `docs/05`, `docs/14` (vistas regeneradas) y `AgroVault/Compartido/Pendientes.md`.
+- **Qué fija:** con el paquete de demo y el suelo real de Isla:
+  - escenarios seco 2023, habitual 2016 y lluvioso 2024, con su lluvia de temporadas y sus percentiles;
+  - pilares de la milpa por escenario: déficit, exceso, compatibilidad y suelo desnudo;
+  - estados y `filtroClima` de las rotaciones R1 a R4;
+  - un registro de `resultado-celda`;
+  - ranking de tres rotaciones (R1, R3, R2) y con cuatro pilares (R4, R2, R1), con su arrepentimiento;
+  - años análogos de la próxima temporada (2006, 2008, 2013, 2019, 2022, 2025) y su rango.
+- **Guardas de contrato:** `VERSION_CONTRATO` del motor = versión de `contratos/`; el plan de ejemplo de `contratos/` pasa por el motor y todas las salidas validan contra los schemas.
+- **Cómo cambiar un número a propósito:** `ACTUALIZAR_REGRESION=1 npx vitest run src/motor/pruebas/regresion.test.ts`, revisar el diff de `demo-isla.json` y anotarlo aquí en el mismo commit. Se comprobó que la prueba falla si cambia, por ejemplo, el año habitual.
+- **Fuente / evidencia:** `cd web && npm test` (224 pruebas).
+
+### 2026-11-14 — A3.7: pilares de compatibilidad de ciclo y protección del suelo (Mompin)
+
+- **Archivos:** `web/src/motor/pilares.ts` (nuevo), `temporadas.ts` (nuevo: `siembraEnEscenario` sale de `motor.ts`), `motor.ts`, `ranking.ts`; pruebas `c2.test.ts` y `ranking.test.ts`; `docs/05`, `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault`.
+- **Compatibilidad de ciclo:** cuenta las siembras fuera de la ventana del calendario local de Isla (INIFAP; A0.6). Si alguna siembra no tiene ventana con fuente (frijol PV, chile, calabaza), el pilar es `NO_EVALUABLE` con motivo; sin calendario, también. `filtroClima` queda lleno. Subpuntaje del ranking: fracción de siembras en ventana.
+- **Protección del suelo:** cuenta los días de suelo desnudo del año agrícola de SIAP. El índice de erosión queda en `null` porque RUSLE necesita I30 y factores C y LS con fuente, que no hay; no se inventan. Subpuntaje: fracción del año con cultivo. Riesgo por calor: el cálculo está listo, pero sigue `NO_EVALUABLE` sin umbral con fuente en el catálogo.
+- **Cómo cambia el ranking (suelo real de Isla):** antes, con déficit y exceso, el orden era maíz-maíz, milpa, frijol-frijol. Con la protección del suelo (la compatibilidad queda fuera por el frijol PV) es milpa (0), frijol-frijol (0.047), maíz-maíz (0.091): pesan los 257 días de suelo desnudo del monocultivo. Con una milpa sembrada dentro de las ventanas de INIFAP entran los cuatro pilares: milpa en ventana (0), maíz-maíz (0.077), milpa con el frijol fuera de ventana (0.099). El orden no cambia con la sensibilidad del TAW (122.3 a 127.4 mm/m).
+- **Fuente / evidencia:** `cd web && npm test` (159 pruebas).
+
 ### 2026-11-14 — A2.13: escenario de próxima temporada con años análogos y contratos 0.9.0 en el motor (Mompin)
 
 - **Archivos:** `web/src/motor/analogos.ts` (nuevo), `motor.ts` (`preparar`, `pilaresAguaEnClima`, entrada opcional `proximaTemporada`), `proxima.ts`, `protocolo.ts`, `index.ts`, `tipos.ts` (`VERSION_CONTRATO` 0.9.0); prueba `analogos.test.ts`; `docs/05`, `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault`. Se integra la rama `contratos-nulos` (0.9.0).
@@ -426,3 +454,10 @@ Primera documentación por tema a partir del video del compañero, el audio de l
 
 ### 2026-11-14 — Cierre A1.2
 - App.tsx y ui/useMotor.ts inicializan el Worker existente sin modificar motor ni contratos. Confirmacion mediante olvidar, timeout y limpieza al desmontar. Se actualiza el tablero y README. Sin cambio de alcance cientifico.
+
+### 2026-11-14 — A2.10 y A2.9: mapa y cuadrícula de Balam
+- Terreno conserva su diseño e incorpora Leaflet con mapa OpenStreetMap y atribución, dibujo por clic/toque o coordenadas, deshacer y reiniciar. La carga del mapa es diferida.
+- `ui/cuadricula.ts` valida anillos y cruces, genera cuadrados locales y recorta bordes con Turf; máximo 1600 celdas. No calcula indicadores. Elevación y pendiente faltantes quedan null.
+- Se incorpora sin cambios el cliente API de Eduardo (`2e517c6`). La UI confirma antes de POST /api/elevacion, muestra fuente, estado y advertencias; permite reintentar o guardar sin relieve. App conserva la parcela durante la navegación; recargar inicia otra sesión.
+- Verificación: geometría y schema compartido, build/TypeScript; navegador a 1440/390/320 px, error 503 y éxito con respuestas sintéticas declaradas, persistencia y guardado sin elevación. No se afirma validación agronómica ni disponibilidad del servicio público.
+- Sin cambios de alcance; límites técnicos documentados en `web/src/ui/TERRENO-PLAN.md`. El selector y la simulación desde las páginas siguen pendientes.
