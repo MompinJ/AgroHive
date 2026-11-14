@@ -1,7 +1,8 @@
 html { color: var(--color-text); background: var(--color-canvas); font-family: var(--font-ui); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 body { color: var(--color-text); background: var(--color-canvas); font-family: var(--font-ui); }
 p { text-wrap: pretty; overflow-wrap: break-word; }
-h1, h2, h3 { text-wrap: balance; font-weight: 400; }
+h1, h2, h3 { text-wrap: balance; font-weight: 400; overflow-wrap: anywhere; }
+li { overflow-wrap: anywhere; }
 h2 { font-size: 1.5rem; }
 h3 { font-size: 1.125rem; }
 input, select, textarea { font: inherit; font-size: 1rem; min-height: 44px; border: 1px solid var(--color-control-border); border-radius: var(--radius-input); background: var(--color-input); color: var(--color-text); padding: 10px 12px; max-width: 100%; }
@@ -35,6 +36,9 @@ button { font: inherit; }
 .ui-action { border: 1px solid var(--color-control-border); border-radius: var(--radius-pill); background: transparent; color: var(--color-text); padding: 10px 18px; min-height: 44px; }
 .ui-action-primary { background: var(--color-action); color: var(--color-on-action); border-color: var(--color-action); }
 .ui-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.choice-group .ui-actions > label, .choice-label { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; padding-inline: var(--space-2); cursor: pointer; }
+.choice-group .ui-actions > label input, .choice-label input { flex: 0 0 auto; accent-color: var(--color-action); }
+@media (pointer: coarse) { input, select, textarea { font-size: 1rem; } }
 .ui-flow { display: grid; gap: var(--space-6); }
 .ui-copy { max-width: 70ch; }
 .source-list { padding-inline-start: var(--space-6); margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); overflow-wrap: anywhere; }
