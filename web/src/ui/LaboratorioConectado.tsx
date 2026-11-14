@@ -12,6 +12,7 @@ export function FuenteVisible({ fuente }: { fuente: Fuente }) {
   return <span className="quiet-note">Fuente: {fuente.url ? <a href={fuente.url} target="_blank" rel="noreferrer">{fuente.nombre}</a> : fuente.nombre}{fuente.cita ? ` · ${fuente.cita}` : ''}</span>;
 }
 const numero = (n: number | null | undefined, unidad = '') => n == null ? 'NO_EVALUABLE' : `${n.toLocaleString('es-MX', { maximumFractionDigits: 2 })}${unidad}`;
+const porcentaje = (n: number | null | undefined) => n == null ? 'NO_EVALUABLE' : new Intl.NumberFormat('es-MX', { style: 'percent', maximumFractionDigits: 1 }).format(n);
 
 export function LaboratorioConectado({ estado, comparacion = false }: { estado: LaboratorioEstado; comparacion?: boolean }) {
   const { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda } = estado.seleccion;
@@ -74,7 +75,7 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
       <Card title="Lee el escenario" eyebrow="03 / Observa">
         <fieldset className="choice-group"><legend>Escenario histórico</legend><div className="ui-actions">{escenarios.map((e) => <label key={e}><input type="radio" name="escenario-real" value={e} checked={e === escenario} onChange={() => setEscenario(e)} /> {e}</label>)}</div></fieldset>
         <p className="numeric">Año real: {metricas?.anioReal ?? 'NO_EVALUABLE'} · {metricas?.estado ?? 'Calculando'}</p>
-        <dl className="metrics-list"><div><dt>Déficit acumulado</dt><dd>{numero(metricas?.pilares.deficitHidrico.deficitTotalMm, ' mm')}</dd></div><div><dt>Demanda no cubierta</dt><dd>{numero(metricas?.pilares.deficitHidrico.proporcionDemandaNoCubierta)}</dd></div><div><dt>Exceso acumulado</dt><dd>{numero(metricas?.pilares.excesoHidrico?.excesoTotalMm, ' mm')}</dd></div></dl>
+        <dl className="metrics-list"><div><dt>Déficit acumulado</dt><dd>{numero(metricas?.pilares.deficitHidrico.deficitTotalMm, ' mm')}</dd></div><div><dt>Demanda no cubierta</dt><dd>{porcentaje(metricas?.pilares.deficitHidrico.proporcionDemandaNoCubierta)}</dd></div><div><dt>Exceso acumulado</dt><dd>{numero(metricas?.pilares.excesoHidrico?.excesoTotalMm, ' mm')}</dd></div></dl>
         {metricas && Object.entries(metricas.pilares).map(([id, p]) => <p className="quiet-note" key={id}>{pilares[id] ?? id}: {p.estado}{p.motivo ? ` · ${p.motivo}` : ''}</p>)}
         {resultado?.cultivosNoRecomendados?.map((c) => <div className="ui-warning" key={c.cultivo}><strong>{nombresCultivos[c.cultivo] ?? c.cultivo}: no recomendado aquí</strong><p>{c.motivo}</p><FuenteVisible fuente={c.fuente} /></div>)}
         <ActionLink href="#/comparacion">Comparar rotaciones</ActionLink>
@@ -83,7 +84,7 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
     {estado.error && <><DataState state="error">{estado.error}</DataState><button className="ui-action" onClick={estado.reintentar}>Reintentar cálculo</button></>}
     {!estado.calculo && !estado.error && <DataState state="loading">Calculando planes en el motor. Los resultados anteriores están invalidados.</DataState>}
     {ranking && <Card title="Comparación por robustez" eyebrow="Resultados del motor">
-      <p>{ranking.mensaje ?? `Criterio ${ranking.criterio ?? 'sin ranking evaluable'}. Los pesos se declaran ${ranking.ponderacion?.etiqueta ?? 'sin ponderación'}.`}</p>
+      <p>{ranking.mensaje ?? `${ranking.criterio?.startsWith('B') ? 'Criterio B: menor arrepentimiento máximo entre escenarios' : ranking.criterio ? 'Criterio A: menor déficit en el peor escenario' : 'Sin ranking evaluable'}. Los pesos se declaran ${ranking.ponderacion?.etiqueta ?? 'sin ponderación'}.`}</p>
       <p className="quiet-note">{ranking.ponderacion?.nota}</p>
       <div className="ui-table-wrap" role="region" aria-label="Resultados de las rotaciones" tabIndex={0}><table><caption>Peor caso por rotación; sin posición cuando no es evaluable</caption><thead><tr><th>Rotación</th><th>Estado</th><th>Posición</th><th>Peor escenario</th></tr></thead><tbody>{ranking.rotaciones.map((r) => <tr key={r.rotacionId}><th scope="row">{r.rotacionId}</th><td>{r.estado}</td><td>{r.ranking?.posicion ?? 'Sin ranking'}</td><td>{r.peorCaso?.escenario ?? 'NO_EVALUABLE'}</td></tr>)}</tbody></table></div>
       <p>Un pilar entra solo si todas las rotaciones comparadas tienen datos para evaluarlo.</p>
