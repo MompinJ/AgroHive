@@ -12,6 +12,14 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Alcance mundial, recursos del reto evaluados e IMERG vía POWER (Mompin, sesión features)
+
+- **Archivos:** `docs/13` (fila "Alcance geográfico" `[DECIDIDO]`), `docs/11` (recursos del reto evaluados y tres riesgos), `docs/14` (A1.7, A4.10, A4.11, A4.12; plan de recorte; tablero), `docs/04` (filas de GPM IMERG y MODIS), `docs/03` (extra de fase 2), `AgroVault/Compartido/APIs.md`; prototipo en `features/imerg/` y encargo en `features/encargos/eduardo-datos-globales.md`.
+- **Decisión (Mompin):** arquitectura mundial con fuentes globales y demo validada en Isla; las fuentes de cada país se suman encima. Los recursos del reto que solo cubren EE. UU. pasan a extra de fase 2 (A4.12, Eduardo). IMERG vía POWER (A4.10) y NDVI de MODIS (A4.11) para Eduardo; contratos para el alcance mundial (A1.7) para Mompin.
+- **Hallazgo:** NASA POWER entrega GPM IMERG (`IMERG_PRECTOT`, 0.1°) sin cuenta Earthdata si se pide con `time-standard=UTC`; en hora local responde `-999`. Con 20 años agrícolas en Isla, IMERG tiene máximos diarios de hasta 241.5 mm (`PRECTOTCORR`: 125.4 mm como máximo) y correlación mensual de 0.923, pero elegiría otros años de escenario (2019, 2024 y 2017). No se cambia la fuente de los escenarios; queda como riesgo en 11.
+- **Fuente / evidencia:** `python3 features/imerg/comparar_imerg.py` (respuesta cruda de POWER guardada, consultada el 14/11/2026) y `python3 -m unittest discover -s features/imerg`.
+- **Decisiones afectadas:** 05 paso 1 (sin cambio, riesgo declarado), A4.8 (IMERG vía POWER es la ruta barata), V-09 y calendario fuera de México (`NO_EVALUABLE`).
+
 ### 2026-11-14 — A5.5: pruebas de regresión del motor y de contratos (Mompin)
 
 - **Archivos:** `web/src/motor/pruebas/regresion.test.ts` y `web/src/motor/pruebas/regresion/demo-isla.json` (referencia); `docs/05`, `docs/14` (vistas regeneradas) y `AgroVault/Compartido/Pendientes.md`.

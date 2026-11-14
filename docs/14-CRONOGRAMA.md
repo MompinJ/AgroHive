@@ -89,6 +89,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A1.4 `[HECHO]` | Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) | R4 | M | Sonnet | A0.3 | `.bbmodel` abre en Blockbench |
 | A1.5 `[HECHO]` | Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente | R3 | M | Opus | A0.3 | JSON con citas; vacíos como `NO_EVALUABLE` |
 | A1.6 `[HECHO]` | Tabla de suelos (TAW por textura, FAO-56) | R3 | S | Sonnet | — | JSON con fuente |
+| A1.7 | Contratos para el alcance mundial (13, "Alcance geográfico"): `calendario-local` con lugar genérico (país más id del lugar; la clave INEGI queda como un caso) y bloque opcional `lluviaSatelital` (IMERG vía POWER, en UTC) en `serie-clima` y `clima-escenario`; cambio compatible | R2 | S | Opus | A1.1 | `npm test` de `contratos/` en verde con un ejemplo fuera de México y uno con IMERG |
 
 ## F2 · Datos y motor (en paralelo)
 
@@ -142,6 +143,9 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | A4.7 `[EN CURSO]` front servido en el droplet; falta la demo real (A4.6) | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
 | A4.8 `[EN CURSO]` sondeo de viabilidad (viable o no, cuenta Earthdata, peso y tiempo por punto); sin tocar el repo todavia | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
 | A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | Sonnet | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
+| A4.10 | Lluvia GPM IMERG vía NASA POWER (`IMERG_PRECTOT` con `time-standard=UTC`, sin cuenta Earthdata) en `GET /api/clima` y en el paquete de demo, como **evidencia**: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en `features/imerg/` y `features/encargos/eduardo-datos-globales.md` | R3 | S | Sonnet | A2.1, A1.7 | Serie IMERG con fuente y estándar de hora; `-999` como `null`; prueba con respuesta guardada; paquete de demo regenerado |
+| A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking | R3 | S | Sonnet | A1.3, A1.7 | `GET /api/ndvi` con caché, cita `doi:10.3334/ORNLDAAC/1600` y el límite del píxel (250 m, más grande que la parcela) declarado |
+| A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | R3 | **L** | Opus | A4.6 | Parcela de prueba en EE. UU. con su rotación real de CDL, con fuente |
 
 Compuerta **C4** al terminar A4.6.
 
@@ -168,7 +172,7 @@ La escena 3D (`A2.9 -> A3.1 -> A3.2`) va en paralelo y también es crítica para
 ## Plan de recorte (de lo que más duele a lo que menos)
 
 1. **No sacrificar:** trazabilidad NASA, límites honestos, 3 o más rotaciones, peor caso, entrega.
-2. Quitar extras de A4.8 y A3.9, luego A5.2 (slider de meses).
+2. Quitar extras de A4.12, A4.11, A4.8 y A3.9, luego A5.2 (slider de meses).
 3. Pilares 2 y 3 (A3.7): quedarse solo con el hídrico.
 4. 3D en problemas: plan 2D y plantas procedurales con cajas.
 5. Polígono libre en problemas: parcela demo fija más el polígono como "vista previa".
@@ -192,8 +196,8 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 
 | Responsable | Rama | Herramientas de IA | Actividades | Primera tarea |
 | --- | --- | --- | --- | --- |
-| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor) `[HECHO]`, A3.7 `[HECHO]`, A5.5 `[HECHO]`; integra y administra `main` | A1.1 (contratos con ejemplos) |
-| **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.6 (cliente de la API, con balam), A4.7, A4.8, A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
+| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor) `[HECHO]`, A3.7 `[HECHO]`, A5.5 `[HECHO]`, A1.7; integra y administra `main` | A1.1 (contratos con ejemplos) |
+| **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.6 (cliente de la API, con balam), A4.7, A4.8, A4.10, A4.11, A4.12, A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
 | **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[HECHO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[EN CURSO]`, A2.11 `[EN CURSO]`, A2.12, A3.3 `[EN CURSO]`, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A3.8, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
 
@@ -209,8 +213,8 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 13 | 1 | 0 | 0 | 93 % de 14 |
-| **Eduardo** | 10 | 3 | 2 | 0 | 67 % de 15 |
+| **Mompin** | 13 | 1 | 0 | 1 | 87 % de 15 |
+| **Eduardo** | 10 | 3 | 2 | 3 | 56 % de 18 |
 | **Mafer** | 4 | 3 | 0 | 5 | 33 % de 12 |
 | **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
 
@@ -221,6 +225,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A0.1 | Repo Git con 5 ramas y estructura de carpetas | HECHO |  |
 | A0.2 | Documentación consolidada en docs/ | HECHO |  |
 | A1.1 | Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS | HECHO |  |
+| A1.7 | Contratos para el alcance mundial (13, "Alcance geográfico"): calendario-local con lugar genérico (país más id del lugar; la clave INEGI queda como un caso) y bloque opcional lluviaSatelital (IMERG vía POWER, en UTC) en serie-clima y clima-escenario; cambio compatible | PENDIENTE |  |
 | A2.5 | Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) | HECHO | 14/11 |
 | A2.6 | ET0, ETc y balance de agua por bloque (cubeta) | HECHO | 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7) |
 | A2.7 | Pilar de déficit hídrico y estados de evaluabilidad | HECHO | 14/11 |
@@ -250,6 +255,9 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | EN CURSO | cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor |
 | A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | EN CURSO | front servido en el droplet; falta la demo real (A4.6) |
 | A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | EN CURSO | sondeo de viabilidad (viable o no, cuenta Earthdata, peso y tiempo por punto); sin tocar el repo todavia |
+| A4.10 | Lluvia GPM IMERG vía NASA POWER (IMERG_PRECTOT con time-standard=UTC, sin cuenta Earthdata) en GET /api/clima y en el paquete de demo, como evidencia: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en features/imerg/ y features/encargos/eduardo-datos-globales.md | PENDIENTE |  |
+| A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking | PENDIENTE |  |
+| A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | PENDIENTE |  |
 | A5.4 | Medición de requisitos mínimos y fallback WebGL | BLOQUEADO | espera el modo 2D (A3.6) |
 | A5.8 | Respaldo local sin internet y capturas | BLOQUEADO | espera A2.4 con la zona real y el front conectado (A4.6) |
 

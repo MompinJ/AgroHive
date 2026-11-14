@@ -102,6 +102,7 @@ Con el selector, el usuario puede armar sus propias secuencias además de estas.
 - Panel de inventario y costos (agua, nutrientes, mano de obra).
 - Mini tutoriales con la mascota.
 - Datos de suelo automáticos por coordenada.
+- Fuentes regionales de EE. UU. cuando la parcela cae ahí: CDL (rotación real) y SSURGO (A4.12). La arquitectura es mundial y la demo se valida en Isla (13, "Alcance geográfico").
 - Más cultivos, props decorativos (pájaro, casa, pozo) y variantes visuales.
 - Escalabilidad y optimización avanzada.
 
