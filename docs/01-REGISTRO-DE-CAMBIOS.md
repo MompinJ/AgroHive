@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A5.1 animaciones de la escena y lugar de la mascota (Mompin, con Mafer)
+
+- **Archivos:** `web/src/escena/animacion.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (control "Viento leve", prop `mascota`), `voxel/fuente-modelos.ts` (también `modelos/props/`), prueba `animacion.test.ts`; `docs/06`, `docs/14` (A5.1 pasa a Mompin, con Mafer).
+- **Cambio:** transición suave al cambiar de etapa, escala continua al crecer y viento leve opcional (shader). Con reducir movimiento no hay ninguna animación. Las animaciones no se acumulan y la escena sigue dibujando bajo demanda. La cámara se conserva al cambiar fecha o escenario. Mascota fuera de la parcela, si existe el modelo.
+- **Fuente / evidencia:** headless: unos 12 cuadros en la transición y luego cero; 0 cuadros en reposo sin viento, unos 36 por segundo con viento; con reducir movimiento, 0 transiciones, sin viento ni inercia. Mafer revisa que respete reducir movimiento.
+
 ### 2026-11-14 — A4.1, parte del motor: series del balance de agua para el dashboard (Mompin, rama `Mompin-motor`)
 
 - **Archivos:** `web/src/motor/series.ts` (nuevo), `motor.ts` (cada ciclo guarda su lluvia y ET0 diarias), `protocolo.ts` y `cliente.ts` (operación `serieBalance`), `tipos.ts` (tipo local con la forma propuesta), `index.ts`; prueba `series.test.ts`; regresión; `docs/05` y `AgroVault/Compartido/Pendientes.md`.
@@ -124,6 +130,16 @@ Decisiones afectadas:
 - **Efecto:** con déficit y exceso hay dos pilares con número y el ranking pasa del respaldo A al criterio B. Con el paquete de demo (suelo franco del selector): 1.º frijol-frijol (arrepentimiento máximo 0.007), 2.º milpa (0.051), 3.º maíz-maíz (0.064); para las tres el peor escenario es el lluvioso (2024). Con A el orden era el inverso.
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
+
+### 2026-11-14 — A5.7: README con licencias y reglas oficiales verificadas (Mafer)
+
+- **Archivos:** `README.md` (reemplaza al anterior, a partir de `docs/README-borrador.md` de Mompin); nuevo `datos/catalogos/fuentes/LEEME.md`; `docs/02` (un enlace); `docs/14`, Pendientes. El borrador queda como historial.
+- **Cambio:** los `[VERIFICAR]` de licencias del borrador se contrastaron con las páginas oficiales, y se agregó la sección de datos NASA que pide el reto, la declaración de IA con las categorías de la guía oficial y la lista de lo no verificado. **Quien leyó las fuentes fue una sesión de IA: falta la revisión humana de licencias y de la declaración de IA.**
+- **Correcciones al borrador:** (1) **POWER no declara CC BY 4.0** en su guía de referencia: pide un texto de cita con servicio, versión y fecha (versión observada: v2.10.3); la afirmación de `AgroVault/Compartido/APIs.md` no pude confirmarla. (2) **SMAP, MODIS y IMERG** no se pueden presentar como usados: SMAP está en curso (A4.8) y no está en la demo, MODIS pendiente (A4.11); IMERG sí, vía POWER (A4.10). (3) **OpenLandMap:** el registro de Zenodo que citaba el borrador (15470432) es solo carbono orgánico 2000-2005; las capas que lee la API son de 2020-2022 (todas CC BY 4.0). (4) **Terrarium:** la atribución a Mapzen solo se exige para su servicio alojado; aplican las fuentes del DEM (para México, INEGI Relieve continental 2016). (5) El enlace del reto en `docs/02` estaba roto (404); el correcto no lleva `field-shift-`.
+- **Hallazgos para el equipo:** (a) **Reglas de entrega (leídas con Chrome; Python y curl fallan por el certificado):** la demo es un deck de 7 slides o un video de 30 segundos o menos, en inglés (un video hablado en otro idioma lleva subtítulos en inglés); el guion de ~2:55 no cabe como demo. La guía llama «Super Intelligence (SI)» a la IA: permitida, no para idear la solución, sin branding de NASA, marca de agua visible en imágenes y video, y reconocimiento en texto y metadatos para audio, código y datos. La entrega cierra el 15/11 a las 23:59 (hora local del evento). (b) Tres ilustraciones de la interfaz se generaron con IA (`web/src/ui/assets/terreno-prompts.md`) y la guía exige marca de agua visible. (c) `api/app/clientes/openlandmap.py` cita el DOI de la arcilla 2000-2005 aunque lee 2020-2022. (d) El repo no tiene archivo de licencia.
+- **Fuente / evidencia:** páginas oficiales leídas el 14/11/2026: POWER (guía de referencia), Earthdata (guía de uso de datos), catálogo CMR de NASA (SMAP SPL3SMP V009, GPM IMERG V07, MOD13Q1 V061), ISRIC, Zenodo (API), Tilezen y el registro de AWS, Open-Meteo, FAO (términos), SIAP, Recocrop (GitHub) y la guía de entrega de Space Apps. Marca `Co-Authored-By` de IA en los commits: varios la llevan y no todos (comprobado con `git log`).
+- **Pendiente:** revisión humana de licencias y de la declaración de IA; decidir la licencia del repo y la marca de agua; recortar el guion a la duración oficial; las citas incompletas (NSIDC, versión de IMERG en POWER).
+- **Decisiones afectadas:** V-03 y V-04 (reglas leídas, sin cerrar: las confirma una persona); A0.5, A5.6 y A5.7.
 
 ### 2026-11-14 — A3.9 (parte mascota): elote con cara feliz (Mafer)
 
