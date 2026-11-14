@@ -71,7 +71,7 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
         <p role="status">{plan.rotacionId} · Ciclo {visible?.ciclo} · {nombresCultivos[visible?.cultivo ?? ''] ?? visible?.cultivo} · {escenario} {metricas?.anioReal ?? 'sin año evaluable'}</p>
         <label htmlFor="fecha-observacion">Fecha que muestra la escena</label><input id="fecha-observacion" type="date" value={fecha} onChange={(e) => { if (e.target.value) setFecha({ clave: claveFecha, fecha: e.target.value }); }} />
         {errorCeldas && <DataState state="error">{errorCeldas} Cambia la fecha o reintenta el cálculo.</DataState>}
-        <Suspense fallback={<DataState state="loading">Cargando escena 3D.</DataState>}><Escena parcela={datos.parcela} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} /></Suspense>
+        <Suspense fallback={<DataState state="loading">Cargando escena 3D.</DataState>}><Escena parcela={datos.parcela} suelo={datos.suelo} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} /></Suspense>
       </Card>
       <Card title="Lee el escenario" eyebrow="03 / Observa">
         <fieldset className="choice-group"><legend>Escenario histórico</legend><div className="ui-actions">{escenarios.map((e) => <label key={e}><input type="radio" name="escenario-real" value={e} checked={e === escenario} onChange={() => setEscenario(e)} /> {e}</label>)}</div></fieldset>

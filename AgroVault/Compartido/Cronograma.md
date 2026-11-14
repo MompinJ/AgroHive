@@ -13,12 +13,12 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 15 | 1 | 0 | 0 | 94 % de 16 |
-| **Eduardo** | 11 | 3 | 2 | 3 | 58 % de 19 |
+| **Mompin** | 16 | 0 | 0 | 0 | 100 % de 16 |
+| **Eduardo** | 12 | 2 | 2 | 3 | 63 % de 19 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
-| **balam** | 6 | 1 | 0 | 8 | 40 % de 15 |
+| **balam** | 8 | 0 | 0 | 7 | 53 % de 15 |
 
-Proyecto completo: **39 de 61** actividades hechas (64 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **42 de 61** actividades hechas (69 %), 3 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -36,7 +36,7 @@ Proyecto completo: **39 de 61** actividades hechas (64 %), 5 en curso, 2 bloquea
 - [x] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) `HECHO` — 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente)
 - [x] **A3.8** Tooltips y valores por bloque `HECHO` — con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
-- [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
+- [x] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `HECHO` — usarDatosParcela y flujo con FastAPI local verificados; despliegue en A4.7
 - [x] **A5.5** Pruebas de regresión del motor y de contratos `HECHO` — 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`)
 
 ## Eduardo
@@ -51,7 +51,7 @@ Proyecto completo: **39 de 61** actividades hechas (64 %), 5 en curso, 2 bloquea
 - [x] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `HECHO` — 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9)
 - [x] **A2.14** Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché ([[APIs]]) `HECHO`
 - [x] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) `HECHO`
-- [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
+- [x] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `HECHO` — usarDatosParcela y flujo con FastAPI local verificados; despliegue en A4.7
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)
 - [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN`
 - [x] **A4.10**  `HECHO` — `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance
@@ -86,9 +86,9 @@ Proyecto completo: **39 de 61** actividades hechas (64 %), 5 en curso, 2 bloquea
 - [x] **A3.5** Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado `HECHO`
 - [ ] **A3.6** Modo 2D ligero con los mismos valores del motor
 - [ ] **A4.1** Dashboard: gráficas de lluvia, demanda y balance (Recharts)
-- [/] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos `EN CURSO` — parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam)
+- [x] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos `HECHO` — motor y tarjetas visibles en laboratorio y comparacion
 - [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)
-- [ ] **A4.5** Pantalla de método, fuentes y advertencias (A1, A3)
+- [x] **A4.5** Pantalla de método, fuentes y advertencias (A1, A3) `HECHO`
 - [x] **A4.9** Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción `HECHO`
 - [ ] **A5.2** Slider de meses
 - [ ] **A5.3** Móvil y accesibilidad (táctil, teclado)
