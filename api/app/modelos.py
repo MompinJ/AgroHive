@@ -153,3 +153,40 @@ class Suelo(SinNulos):
     ph: PhEstimado | ValorNoEvaluable
     agua: AguaSuelo | None = None
     advertencias: list[Advertencia] = []
+
+
+# ---------------------------------------------------------------- proxima temporada (contrato proxima-temporada)
+
+class Rango(BaseModel):
+    inferior: float | None
+    superior: float | None
+
+
+class MesAproximado(BaseModel):
+    mes: str = Field(pattern=r"^\d{4}-(0[1-9]|1[0-2])$")
+    lluviaMm: Rango
+    tMediaC: Rango
+    climatologiaLluviaMm: float | None = None
+    climatologiaTMediaC: float | None = None
+
+
+class DefinicionBanda(BaseModel):
+    percentilInferior: float
+    percentilSuperior: float
+
+
+class ProximaTemporada(BaseModel):
+    """Rango aproximado por mes. No hay campo de cifra unica a proposito: no es una prediccion."""
+    meta: Meta
+    esPrediccion: Literal[False] = False
+    estado: Literal["EXPLORATORIO", "ERROR_DATOS", "NO_EVALUABLE"]
+    aviso: str
+    metodo: Literal["anomalia_estacional", "respaldo_estadistico"]
+    coordenada: LonLat
+    emitido: date
+    horizonteMeses: int = Field(ge=1, le=12)
+    climatologia: Periodo | None = None
+    banda: DefinicionBanda
+    fuentes: list[Fuente] = Field(min_length=1)
+    meses: list[MesAproximado]
+    advertencias: list[Advertencia] = []

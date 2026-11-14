@@ -53,6 +53,7 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 | `GET /api/clima?lat=&lon=&desde=&hasta=` | Serie diaria del periodo con caché, POWER con respaldo Open-Meteo. **No elige escenarios** (A2.5, motor). Implementado | `SerieClima`: mismo `dia` que `clima-escenario`; el motor corta los años. `SerieClima` aún no está en `contratos/` (se pide a Mompin) |
 | `POST /api/elevacion` | Recibe la cuadrícula ya generada por el front (`tamanoCeldaM` y `celdas` con id, i, j y centro; tope 1600) y devuelve elevación y pendiente por celda. Implementado | Campos `elevacionM`, `pendientePct` y `terreno` de `parcela` |
 | `GET /api/cultivos` | Catálogo JSON de `datos/catalogos/cultivos.json`; sin catálogo responde `NO_EVALUABLE`. Implementado | `cultivo` |
+| `GET /api/proxima-temporada?lat=&lon=` | Banda p10 a p90 por mes, 7 meses, sin cifra única; no es predicción. Implementado (A2.13, parte del backend) | `proxima-temporada` |
 | `GET /api/suelo?lat=&lon=` | Textura y pH de 0 a 30 cm (ISRIC WCS), siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
 
 Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 con `{estado: ERROR_DATOS, motivo}`. Detalle y cómo correr la API en `api/README.md`.

@@ -12,6 +12,7 @@ URL publica: https://64-23-143-102.sslip.io (ver `AgroVault/Compartido/Servidor.
 | `GET /api/clima?lat&lon&desde&hasta` | Serie diaria de NASA POWER (comunidad AG), con cache. Respaldo Open-Meteo (ERA5) | `EVALUABLE`, `RESPALDO_HISTORICO`; 503 con `ERROR_DATOS` |
 | `POST /api/elevacion` | Elevacion y pendiente por celda de una cuadricula ya generada (tope 1600 celdas) | `EVALUABLE`, `RESPALDO_HISTORICO`; 503 con `ERROR_DATOS` |
 | `GET /api/suelo?lat&lon` | Textura (clase USDA y fracciones) y pH estimados de 0 a 30 cm con ISRIC SoilGrids por WCS. Siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual | `EVALUABLE`; 503 con `ERROR_DATOS` |
+| `GET /api/proxima-temporada?lat&lon` | Capa opcional (A2.13, parte del backend): banda p10 a p90 por mes para los proximos 7 meses. **No es una prediccion** y no trae cifra unica | `EXPLORATORIO`; 503 si no hay clima historico |
 | `GET /api/cultivos` | Catalogo de `datos/catalogos/cultivos.json`; sin catalogo responde `NO_EVALUABLE` | |
 
 Documentacion interactiva en `/docs` y esquema en `/openapi.json`.
@@ -22,6 +23,7 @@ Documentacion interactiva en `/docs` y esquema en `/openapi.json`.
 - La fuente de respaldo se ve siempre: `estado: RESPALDO_HISTORICO`, `respaldo: true` y una advertencia. Las series de POWER y de Open-Meteo no se mezclan: difieren en magnitud (ver `datos/pruebas-apis/LEEME.md`).
 - Cache en `datos/cache/` (ignorada por git). Clave: centro de la celda MERRA-2 (0.5 x 0.625 grados) + periodo. Los periodos que terminan hace mas de 90 dias no caducan; los recientes duran 24 h.
 - Las respuestas usan los nombres de `contratos/` (`meta`, `fuente`, `advertencias`, dia de `clima-escenario`). Los tests las validan contra esos schemas.
+- Proxima temporada: distribucion historica de cada mes (20 anios de POWER) desplazada por la anomalia mensual de SEAS5 (Open-Meteo, `forecast_days=210`). El ancho de la banda es la variabilidad historica, no la dispersion del ensamble: las variables verificadas del servicio no la entregan. Sin tendencia. Si el pronostico no responde, cae a `respaldo_estadistico` (percentiles sin desplazar). Con menos de 10 anios completos de un mes, la banda es `null`, no un numero.
 - Suelo: se pide el GeoTIFF en el CRS nativo de SoilGrids (Homolosine, via `pyproj`) porque la reproyeccion a 4326 del servidor deja ceros. En la zona de prueba hay una franja de ~500 m sin dato (el servicio la rellena con 0), asi que se usa la mediana de los pixeles con dato a menos de 1 km (3 km si no hay). El grupo arenoso/franco/arcilloso del selector es una propuesta pendiente de A1.6.
 - Terreno: Terrarium z14 con interpolacion bilineal; respaldo Open-Meteo Elevation (90 m). La pendiente se calcula con diferencias finitas sobre la cuadricula. Si las celdas miden menos que el DEM, avisa con `RESOLUCION_DEM_GRUESA`.
 

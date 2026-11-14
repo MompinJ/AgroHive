@@ -7,6 +7,8 @@ from .. import http
 
 URL_ARCHIVO = "https://archive-api.open-meteo.com/v1/archive"
 URL_ELEVACION = "https://api.open-meteo.com/v1/elevation"
+URL_ESTACIONAL = "https://seasonal-api.open-meteo.com/v1/seasonal"
+NOMBRE_ESTACIONAL = "Open-Meteo pronostico estacional (ECMWF SEAS5)"
 NOMBRE_CLIMA = "Open-Meteo archivo historico (ERA5)"
 RESOLUCION_CLIMA = "ERA5, 0.25 grados"
 LOTE_ELEVACION = 100
@@ -58,3 +60,19 @@ async def elevaciones(cliente: httpx.AsyncClient, puntos: list[tuple[float, floa
             raise http.ErrorFuente("Open-Meteo devolvio un numero distinto de elevaciones")
         salida.extend(valores)
     return salida
+
+
+async def estacional(cliente: httpx.AsyncClient, lat: float, lon: float) -> dict[str, dict]:
+    """Anomalia mensual de SEAS5 por mes ('AAAA-MM'): {'lluviaMm': mm, 'tMediaC': K}. Probado el 14/11: 7 meses con forecast_days=210.
+
+    Es una serie por mes (no trae miembros ni dispersion en las variables verificadas). La anomalia es respecto
+    de la climatologia del propio ECMWF, no de POWER.
+    """
+    params = {"latitude": lat, "longitude": lon, "monthly": "precipitation_anomaly,temperature_2m_anomaly",
+              "forecast_days": 210, "models": "ecmwf_seas5"}
+    r = await http.get(cliente, URL_ESTACIONAL, params)
+    try:
+        m = r.json()["monthly"]
+        return {t[:7]: {"lluviaMm": p, "tMediaC": a} for t, p, a in zip(m["time"], m["precipitation_anomaly"], m["temperature_2m_anomaly"])}
+    except (KeyError, ValueError, TypeError) as e:
+        raise http.ErrorFuente(f"respuesta estacional inesperada: {e!r}") from e

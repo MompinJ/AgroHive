@@ -84,6 +84,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/proxima-temporada": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Proxima Temporada
+         * @description Rango aproximado por mes (banda p10 a p90). No es una prediccion y no trae cifra unica.
+         */
+        get: operations["proxima_temporada_api_proxima_temporada_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -143,6 +163,13 @@ export interface components {
             elevacionM: number | null;
             /** Pendientepct */
             pendientePct: number | null;
+        };
+        /** DefinicionBanda */
+        DefinicionBanda: {
+            /** Percentilinferior */
+            percentilInferior: number;
+            /** Percentilsuperior */
+            percentilSuperior: number;
         };
         /** DiaClima */
         DiaClima: {
@@ -214,6 +241,17 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** MesAproximado */
+        MesAproximado: {
+            /** Mes */
+            mes: string;
+            lluviaMm: components["schemas"]["Rango"];
+            tMediaC: components["schemas"]["Rango"];
+            /** Climatologialluviamm */
+            climatologiaLluviaMm?: number | null;
+            /** Climatologiatmediac */
+            climatologiaTMediaC?: number | null;
+        };
         /** Meta */
         Meta: {
             /** Versioncontrato */
@@ -262,6 +300,61 @@ export interface components {
             desdeCm: number;
             /** Hastacm */
             hastaCm: number;
+        };
+        /**
+         * ProximaTemporada
+         * @description Rango aproximado por mes. No hay campo de cifra unica a proposito: no es una prediccion.
+         */
+        ProximaTemporada: {
+            meta: components["schemas"]["Meta"];
+            /**
+             * Esprediccion
+             * @default false
+             * @constant
+             */
+            esPrediccion: false;
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EXPLORATORIO" | "ERROR_DATOS" | "NO_EVALUABLE";
+            /** Aviso */
+            aviso: string;
+            /**
+             * Metodo
+             * @enum {string}
+             */
+            metodo: "anomalia_estacional" | "respaldo_estadistico";
+            /** Coordenada */
+            coordenada: [
+                number,
+                number
+            ];
+            /**
+             * Emitido
+             * Format: date
+             */
+            emitido: string;
+            /** Horizontemeses */
+            horizonteMeses: number;
+            climatologia?: components["schemas"]["Periodo"] | null;
+            banda: components["schemas"]["DefinicionBanda"];
+            /** Fuentes */
+            fuentes: components["schemas"]["Fuente"][];
+            /** Meses */
+            meses: components["schemas"]["MesAproximado"][];
+            /**
+             * Advertencias
+             * @default []
+             */
+            advertencias: components["schemas"]["Advertencia"][];
+        };
+        /** Rango */
+        Rango: {
+            /** Inferior */
+            inferior: number | null;
+            /** Superior */
+            superior: number | null;
         };
         /**
          * SerieClima
@@ -537,6 +630,47 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Suelo"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDatos"];
+                };
+            };
+        };
+    };
+    proxima_temporada_api_proxima_temporada_get: {
+        parameters: {
+            query: {
+                lat: number;
+                lon: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProximaTemporada"];
                 };
             };
             /** @description Validation Error */

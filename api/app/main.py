@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
 from . import config
-from .rutas import clima, cultivos, suelo, terreno
+from .rutas import clima, cultivos, proxima, suelo, terreno
 
 app = FastAPI(
     title="AgroHive API",
@@ -16,6 +16,7 @@ app.include_router(clima.router)
 app.include_router(terreno.router)
 app.include_router(cultivos.router)
 app.include_router(suelo.router)
+app.include_router(proxima.router)
 
 
 @app.get("/health", tags=["salud"])
