@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "versionContrato": "0.1.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "rotacionId": "R1",
+  "nombre": "Maiz - frijol - maiz (ejemplo)",
+  "parcelaId": "parcela-demo-isla",
+  "asignacionClima": null,
+  "ciclos": [
+    {
+      "ciclo": 1,
+      "cultivo": "maiz",
+      "siembra": "2015-06-15"
+    },
+    {
+      "ciclo": 2,
+      "cultivo": "frijol",
+      "siembra": "2015-11-01"
+    },
+    {
+      "ciclo": 3,
+      "cultivo": "maiz",
+      "siembra": "2016-06-15"
+    }
+  ],
+  "porCelda": {
+    "c-1-1": [
+      {
+        "ciclo": 2,
+        "cultivo": "calabaza"
+      }
+    ]
+  }
+}

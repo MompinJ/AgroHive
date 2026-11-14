@@ -1,0 +1,294 @@
+{
+  "meta": {
+    "versionContrato": "0.1.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "versionCatalogo": "0.0.0-ejemplo",
+  "cultivos": [
+    {
+      "id": "maiz",
+      "nombreComun": "Maiz",
+      "nombreCientifico": "Zea mays",
+      "estado": "NO_EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "desarrollo": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "media": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "final": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "media": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "final": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+      },
+      "fraccionAgotamientoP": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+      },
+      "etapasSensibles": [],
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "tMaxAbsC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "tOptMinC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "tOptMaxC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: umbral de calor con fuente."
+        }
+      },
+      "ventanasSiembra": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Pendiente de V-20: calendario del municipio en SIAP."
+      },
+      "modelo3d": {
+        "prefijo": "maiz"
+      },
+      "notas": "Ejemplo de cultivo real cuyos parametros aun no tienen fuente: todo va como NO_EVALUABLE, nunca como cero."
+    },
+    {
+      "id": "cultivo_ficticio",
+      "nombreComun": "Cultivo ficticio (ejemplo)",
+      "nombreCientifico": "No aplica (ejemplo)",
+      "estado": "EXPLORATORIO",
+      "esLeguminosa": null,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 100,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+          "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+        },
+        "etiqueta": "SUPUESTO"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.5,
+          "unidad": "adimensional"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.0,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.6,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 1.0,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+          "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+        },
+        "etiqueta": "SUPUESTO"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.5,
+        "unidad": "adimensional",
+        "fuente": {
+          "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+          "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+        },
+        "etiqueta": "SUPUESTO"
+      },
+      "etapasSensibles": [
+        "media"
+      ],
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 10,
+          "unidad": "C",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 40,
+          "unidad": "C",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "C",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "C",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 400,
+          "unidad": "mm",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 1200,
+          "unidad": "mm",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "tEstresCalorC": {
+          "estado": "EVALUABLE",
+          "valor": 35,
+          "unidad": "C",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        }
+      },
+      "ventanasSiembra": [
+        {
+          "temporada": "primavera_verano",
+          "desdeMes": 6,
+          "hastaMes": 7,
+          "regimen": "temporal",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          }
+        }
+      ],
+      "notas": "Cultivo inventado SOLO para mostrar la forma EVALUABLE de un valor citado. No usar en la demo."
+    }
+  ]
+}

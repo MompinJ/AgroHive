@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/comun.schema.json",
+  "title": "Comun",
+  "description": "Definiciones compartidas por todos los contratos de AgroHive (estados de doc 04, fuentes, coordenadas, valores citados). Este archivo no se valida solo: los demas lo referencian con $ref.",
+  "$defs": {
+    "meta": {
+      "title": "Meta",
+      "description": "Cabecera de todo documento de contrato. Si esEjemplo es true, aviso es obligatorio y los valores no son datos reales.",
+      "type": "object",
+      "required": ["versionContrato", "esEjemplo"],
+      "properties": {
+        "versionContrato": {
+          "description": "Version semantica del contrato con la que se genero el documento.",
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "esEjemplo": {
+          "description": "true si el documento es ilustrativo (contratos/ejemplos/). Un ejemplo nunca se presenta como dato real.",
+          "type": "boolean"
+        },
+        "aviso": {
+          "description": "Texto visible que explica que el documento es de ejemplo o sus limitaciones.",
+          "type": "string",
+          "minLength": 1
+        },
+        "generado": {
+          "description": "Momento en que se genero el documento (ISO 8601).",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "properties": { "esEjemplo": { "const": true } },
+        "required": ["esEjemplo"]
+      },
+      "then": { "required": ["aviso"] }
+    },
+    "estado": {
+      "title": "EstadoEvaluacion",
+      "description": "Estados de respuesta de doc 04. EVALUABLE: parametros y fechas justificados. NO_EVALUABLE: falta un parametro, calendario o entrada esencial (nunca se sustituye por cero). EXPLORATORIO: ilustracion limitada y etiquetada, no es recomendacion. ERROR_DATOS: fallo de la API sin respaldo. RESPALDO_HISTORICO: se uso respaldo (Open-Meteo o cache); siempre visible.",
+      "type": "string",
+      "enum": ["EVALUABLE", "NO_EVALUABLE", "EXPLORATORIO", "ERROR_DATOS", "RESPALDO_HISTORICO"]
+    },
+    "etiquetaProcedencia": {
+      "title": "EtiquetaProcedencia",
+      "description": "De donde sale un valor. FUENTE: tomado de una fuente citada (API o tabla publicada). SUPUESTO: estimado por un modelo global o elegido por defecto, no medido en la parcela. USUARIO: lo capturo el usuario.",
+      "type": "string",
+      "enum": ["FUENTE", "SUPUESTO", "USUARIO"]
+    },
+    "escenario": {
+      "title": "Escenario",
+      "description": "Escenario climatico historico (doc 04): anio real cercano a p10 (seco), p50 (habitual) o p90 (lluvioso).",
+      "type": "string",
+      "enum": ["seco", "habitual", "lluvioso"]
+    },
+    "fecha": {
+      "title": "Fecha",
+      "type": "string",
+      "format": "date"
+    },
+    "lonLat": {
+      "title": "LonLat",
+      "description": "Coordenada [longitud, latitud] en grados WGS84 (orden GeoJSON).",
+      "type": "array",
+      "prefixItems": [
+        { "type": "number", "minimum": -180, "maximum": 180 },
+        { "type": "number", "minimum": -90, "maximum": 90 }
+      ],
+      "minItems": 2,
+      "maxItems": 2,
+      "items": false
+    },
+    "periodo": {
+      "title": "Periodo",
+      "type": "object",
+      "required": ["desde", "hasta"],
+      "properties": {
+        "desde": { "$ref": "#/$defs/fecha" },
+        "hasta": { "$ref": "#/$defs/fecha" }
+      },
+      "additionalProperties": false
+    },
+    "fuente": {
+      "title": "Fuente",
+      "description": "Trazabilidad de un valor (doc 04, principio 5): fuente, coordenada, periodo, unidades y fecha de consulta.",
+      "type": "object",
+      "required": ["nombre"],
+      "properties": {
+        "nombre": {
+          "description": "Nombre de la fuente, por ejemplo 'NASA POWER (diario, comunidad AG)' o 'FAO-56 Tabla 12'.",
+          "type": "string",
+          "minLength": 1
+        },
+        "url": { "type": "string", "format": "uri" },
+        "cita": {
+          "description": "Referencia bibliografica, tabla o pagina.",
+          "type": "string"
+        },
+        "coordenada": { "$ref": "#/$defs/lonLat" },
+        "periodo": { "$ref": "#/$defs/periodo" },
+        "unidades": { "type": "string" },
+        "consultado": {
+          "description": "Fecha en que se consulto la fuente.",
+          "$ref": "#/$defs/fecha"
+        },
+        "resolucion": {
+          "description": "Resolucion espacial o temporal del dato (por ejemplo '0.5 x 0.625 grados' o '250 m').",
+          "type": "string"
+        },
+        "nota": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "valorCitado": {
+      "title": "ValorCitado",
+      "description": "Parametro numerico con fuente obligatoria, o NO_EVALUABLE con motivo. Nunca un numero sin fuente.",
+      "oneOf": [
+        {
+          "title": "ValorEvaluable",
+          "type": "object",
+          "required": ["estado", "valor", "unidad", "fuente"],
+          "properties": {
+            "estado": { "const": "EVALUABLE" },
+            "valor": { "type": "number" },
+            "unidad": { "type": "string", "minLength": 1 },
+            "fuente": { "$ref": "#/$defs/fuente" },
+            "etiqueta": { "$ref": "#/$defs/etiquetaProcedencia" }
+          },
+          "additionalProperties": false
+        },
+        { "$ref": "#/$defs/valorNoEvaluable" }
+      ]
+    },
+    "valorNoEvaluable": {
+      "title": "ValorNoEvaluable",
+      "type": "object",
+      "required": ["estado", "motivo"],
+      "properties": {
+        "estado": { "const": "NO_EVALUABLE" },
+        "motivo": {
+          "description": "Por que falta el valor (parametro sin fuente, dato no disponible, etc.).",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "advertencia": {
+      "title": "Advertencia",
+      "type": "object",
+      "required": ["codigo", "mensaje", "severidad"],
+      "properties": {
+        "codigo": {
+          "description": "Identificador estable en MAYUSCULAS, por ejemplo SUELO_SUPUESTO o RESOLUCION_GRUESA.",
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "mensaje": { "type": "string", "minLength": 1 },
+        "severidad": { "type": "string", "enum": ["info", "aviso", "critico"] }
+      },
+      "additionalProperties": false
+    },
+    "idCultivo": {
+      "title": "IdCultivo",
+      "description": "Identificador del cultivo en el catalogo (minusculas, sin acentos), por ejemplo 'maiz'. Coincide con el prefijo de los modelos .bbmodel (doc 07).",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "idCelda": {
+      "title": "IdCelda",
+      "description": "Identificador de celda 'c-<i>-<j>'.",
+      "type": "string",
+      "pattern": "^c-\\d+-\\d+$"
+    },
+    "idRotacion": {
+      "title": "IdRotacion",
+      "description": "Identificador de rotacion, por ejemplo R0, R1, R2.",
+      "type": "string",
+      "pattern": "^R\\d+$"
+    }
+  }
+}

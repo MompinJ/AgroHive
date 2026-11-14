@@ -1,0 +1,744 @@
+/* Generado por contratos/generar-tipos.mjs desde los JSON Schema de contratos/.
+   No editar a mano: cambiar el schema y correr `npm run tipos`. */
+
+/**
+ * Escenario climatico historico (doc 04): anio real cercano a p10 (seco), p50 (habitual) o p90 (lluvioso).
+ */
+export type Escenario = "seco" | "habitual" | "lluvioso";
+/**
+ * Coordenada [longitud, latitud] en grados WGS84 (orden GeoJSON).
+ *
+ * @minItems 2
+ * @maxItems 2
+ */
+export type LonLat = [number, number];
+export type Fecha = string;
+/**
+ * Identificador del cultivo en el catalogo (minusculas, sin acentos), por ejemplo 'maiz'. Coincide con el prefijo de los modelos .bbmodel (doc 07).
+ */
+export type IdCultivo = string;
+/**
+ * Estados de respuesta de doc 04. EVALUABLE: parametros y fechas justificados. NO_EVALUABLE: falta un parametro, calendario o entrada esencial (nunca se sustituye por cero). EXPLORATORIO: ilustracion limitada y etiquetada, no es recomendacion. ERROR_DATOS: fallo de la API sin respaldo. RESPALDO_HISTORICO: se uso respaldo (Open-Meteo o cache); siempre visible.
+ */
+export type EstadoEvaluacion = "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+/**
+ * Parametro numerico con fuente obligatoria, o NO_EVALUABLE con motivo. Nunca un numero sin fuente.
+ */
+export type ValorCitado = ValorEvaluable | ValorNoEvaluable;
+/**
+ * De donde sale un valor. FUENTE: tomado de una fuente citada (API o tabla publicada). SUPUESTO: estimado por un modelo global o elegido por defecto, no medido en la parcela. USUARIO: lo capturo el usuario.
+ */
+export type EtiquetaProcedencia = "FUENTE" | "SUPUESTO" | "USUARIO";
+/**
+ * Identificador de celda 'c-<i>-<j>'.
+ */
+export type IdCelda = string;
+/**
+ * Identificador de rotacion, por ejemplo R0, R1, R2.
+ */
+export type IdRotacion = string;
+/**
+ * Etapa cualitativa para el render (doc 07). suelo_desnudo: entre ciclos o tras la cosecha. No es altura ni biomasa real.
+ */
+export type EtapaVisual = "suelo_desnudo" | "siembra" | "brote" | "crecimiento" | "madurez";
+/**
+ * Estado visual cualitativo derivado del motor (doc 05, paso 5).
+ */
+export type EstadoPlanta = "normal" | "estresada" | "marchita" | "podrida";
+/**
+ * Paso 7.1: true si alguna siembra cae fuera de ventana viable en todos los escenarios. null si no se pudo evaluar.
+ */
+export type FiltroClima = boolean | null;
+/**
+ * A: menor exposicion hidrica en el peor caso, sin puntaje compuesto. B: puntaje por escenario, robustez = peor puntaje, minimax de arrepentimiento.
+ */
+export type CriterioRanking = "A_exposicion_hidrica_peor_caso" | "B_minimax_arrepentimiento";
+/**
+ * Clase textural USDA (12 clases).
+ */
+export type ClaseTextura =
+  | "arena"
+  | "arena_franca"
+  | "franco_arenoso"
+  | "franco"
+  | "franco_limoso"
+  | "limo"
+  | "franco_arcillo_arenoso"
+  | "franco_arcilloso"
+  | "franco_arcillo_limoso"
+  | "arcillo_arenoso"
+  | "arcillo_limoso"
+  | "arcilla";
+/**
+ * Grupo simplificado del selector manual del MVP (doc 04).
+ */
+export type GrupoSuelo = "arenoso" | "franco" | "arcilloso";
+/**
+ * Porcentajes de arena, limo y arcilla del mapa global. null si no se tienen.
+ */
+export type FraccionesTextura = {
+  arena: number;
+  limo: number;
+  arcilla: number;
+} | null;
+
+export interface ContratosAgroHive {
+  "clima-escenario"?: ClimaEscenario;
+  cultivo?: CatalogoCultivos;
+  parcela?: Parcela;
+  "plan-siembra"?: PlanSiembra;
+  "proxima-temporada"?: ProximaTemporadaAproximada;
+  "resultado-celda"?: ResultadoCeldas;
+  "resultado-rotacion"?: ResultadoRotacion;
+  suelo?: Suelo;
+}
+/**
+ * Serie climatica diaria de un escenario historico (seco, habitual, lluvioso). Es un anio real del historico, no una prediccion. La misma serie aplica a todas las celdas de la parcela.
+ */
+export interface ClimaEscenario {
+  meta: Meta;
+  escenario: Escenario;
+  /**
+   * Anio real del historico que representa el escenario. Siempre visible en la interfaz.
+   */
+  anioReal: number;
+  /**
+   * EVALUABLE con la fuente principal; RESPALDO_HISTORICO si se uso Open-Meteo o cache; EXPLORATORIO si la serie es ilustrativa o esta ajustada ('que pasa si': lluvia x factor); ERROR_DATOS si no hay serie.
+   */
+  estado: "EVALUABLE" | "RESPALDO_HISTORICO" | "EXPLORATORIO" | "ERROR_DATOS" | "NO_EVALUABLE";
+  /**
+   * true si los datos no vienen de la fuente principal (NASA POWER).
+   */
+  respaldo: boolean;
+  coordenada: LonLat;
+  fuente: Fuente;
+  seleccion: SeleccionEscenario;
+  diario: DiaClima[];
+  advertencias?: Advertencia[];
+}
+/**
+ * Cabecera de todo documento de contrato. Si esEjemplo es true, aviso es obligatorio y los valores no son datos reales.
+ */
+export interface Meta {
+  /**
+   * Version semantica del contrato con la que se genero el documento.
+   */
+  versionContrato: string;
+  /**
+   * true si el documento es ilustrativo (contratos/ejemplos/). Un ejemplo nunca se presenta como dato real.
+   */
+  esEjemplo: boolean;
+  /**
+   * Texto visible que explica que el documento es de ejemplo o sus limitaciones.
+   */
+  aviso?: string;
+  /**
+   * Momento en que se genero el documento (ISO 8601).
+   */
+  generado?: string;
+}
+/**
+ * Trazabilidad de un valor (doc 04, principio 5): fuente, coordenada, periodo, unidades y fecha de consulta.
+ */
+export interface Fuente {
+  /**
+   * Nombre de la fuente, por ejemplo 'NASA POWER (diario, comunidad AG)' o 'FAO-56 Tabla 12'.
+   */
+  nombre: string;
+  url?: string;
+  /**
+   * Referencia bibliografica, tabla o pagina.
+   */
+  cita?: string;
+  coordenada?: LonLat;
+  periodo?: Periodo;
+  unidades?: string;
+  consultado?: Fecha;
+  /**
+   * Resolucion espacial o temporal del dato (por ejemplo '0.5 x 0.625 grados' o '250 m').
+   */
+  resolucion?: string;
+  nota?: string;
+}
+export interface Periodo {
+  desde: Fecha;
+  hasta: Fecha;
+}
+/**
+ * Como se eligio el anio del escenario, para que sea reproducible (doc 04).
+ */
+export interface SeleccionEscenario {
+  ventana: Periodo;
+  /**
+   * Percentil de lluvia anual buscado (10, 50 o 90 por defecto).
+   */
+  percentilObjetivo: number;
+  /**
+   * Lluvia anual total del anio elegido (suma de diarios).
+   */
+  lluviaAnualMm: number | null;
+  /**
+   * Descripcion breve del criterio, por ejemplo 'anio mas cercano al p10 de lluvia anual'.
+   */
+  criterio: string;
+}
+/**
+ * Un dia de la serie. Los valores faltantes van en null (se muestran, no se rellenan).
+ */
+export interface DiaClima {
+  fecha: Fecha;
+  /**
+   * Lluvia del dia en mm (POWER PRECTOTCORR).
+   */
+  lluviaMm: number | null;
+  tMaxC: number | null;
+  tMinC: number | null;
+  tMediaC?: number | null;
+  /**
+   * Radiacion solar de onda corta en MJ/m2/dia (POWER ALLSKY_SFC_SW_DWN; la conversion de unidades la hace el backend, ver [VERIFICAR] en 04).
+   */
+  radiacionMjM2Dia?: number | null;
+  humedadRelativaPct?: number | null;
+  vientoMS?: number | null;
+  /**
+   * ET0 del dia si la fuente la entrega (Open-Meteo); si no, la calcula el motor.
+   */
+  et0Mm?: number | null;
+}
+export interface Advertencia {
+  /**
+   * Identificador estable en MAYUSCULAS, por ejemplo SUELO_SUPUESTO o RESOLUCION_GRUESA.
+   */
+  codigo: string;
+  mensaje: string;
+  severidad: "info" | "aviso" | "critico";
+}
+/**
+ * Catalogo propio de cultivos (decision 14/11, doc 13; actividad A1.5), sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y FAO-56 (Kc y duracion de etapas). Cada parametro lleva su fuente o es NO_EVALUABLE; un cultivo con parametros esenciales faltantes es NO_EVALUABLE para el motor.
+ */
+export interface CatalogoCultivos {
+  meta: Meta;
+  versionCatalogo: string;
+  /**
+   * @minItems 1
+   */
+  cultivos: [Cultivo, ...Cultivo[]];
+}
+export interface Cultivo {
+  id: IdCultivo;
+  nombreComun: string;
+  nombreCientifico: string;
+  estado: EstadoEvaluacion;
+  /**
+   * Para el indicador de aporte indirecto al suelo (doc 05). null si no se ha clasificado.
+   */
+  esLeguminosa?: boolean | null;
+  cicloDias: ValorCitado;
+  duracionEtapasDias: DuracionEtapas;
+  kc: CoeficientesKc;
+  profundidadRaizM?: ValorCitado;
+  fraccionAgotamientoP?: ValorCitado;
+  /**
+   * Etapas FAO-56 donde el deficit pesa mas en el pilar hidrico.
+   */
+  etapasSensibles?: ("inicial" | "desarrollo" | "media" | "final")[];
+  umbrales: UmbralesCultivo;
+  /**
+   * Ventanas de siembra locales (calendario SIAP o INIFAP, V-20). NO_EVALUABLE si no hay calendario con fuente.
+   */
+  ventanasSiembra: [VentanaSiembra, ...VentanaSiembra[]] | ValorNoEvaluable;
+  modelo3d?: Modelo3D;
+  notas?: string;
+}
+export interface ValorEvaluable {
+  estado: "EVALUABLE";
+  valor: number;
+  unidad: string;
+  fuente: Fuente;
+  etiqueta?: EtiquetaProcedencia;
+}
+export interface ValorNoEvaluable {
+  estado: "NO_EVALUABLE";
+  /**
+   * Por que falta el valor (parametro sin fuente, dato no disponible, etc.).
+   */
+  motivo: string;
+}
+/**
+ * Duracion de las cuatro etapas FAO-56 (inicial, desarrollo, media, final), en dias.
+ */
+export interface DuracionEtapas {
+  inicial: ValorCitado;
+  desarrollo: ValorCitado;
+  media: ValorCitado;
+  final: ValorCitado;
+}
+/**
+ * Coeficientes de cultivo FAO-56: Kc inicial, medio y final. En la etapa de desarrollo el motor interpola.
+ */
+export interface CoeficientesKc {
+  inicial: ValorCitado;
+  media: ValorCitado;
+  final: ValorCitado;
+}
+/**
+ * Rangos de EcoCrop y umbral de estres por calor.
+ */
+export interface UmbralesCultivo {
+  tMinAbsC: ValorCitado;
+  tMaxAbsC: ValorCitado;
+  tOptMinC: ValorCitado;
+  tOptMaxC: ValorCitado;
+  lluviaCicloMinMm: ValorCitado;
+  lluviaCicloMaxMm: ValorCitado;
+  tEstresCalorC: ValorCitado;
+}
+export interface VentanaSiembra {
+  temporada: "primavera_verano" | "otono_invierno";
+  desdeMes: number;
+  hastaMes: number;
+  regimen?: "temporal" | "riego";
+  fuente: Fuente;
+}
+/**
+ * Prefijo de los archivos .bbmodel (doc 07: <cultivo>_<etapa>.bbmodel).
+ */
+export interface Modelo3D {
+  prefijo: string;
+}
+/**
+ * Parcela del usuario (demo fija o poligono libre) y su cuadricula de celdas con relieve. El clima es el mismo para toda la parcela (doc 04, resolucion); las celdas difieren por cultivo, suelo y relieve.
+ */
+export interface Parcela {
+  meta: Meta;
+  id: string;
+  nombre?: string;
+  /**
+   * demo: parcela precargada. poligono_usuario: dibujada por el usuario en el mapa.
+   */
+  origen: "demo" | "poligono_usuario";
+  ubicacion?: Ubicacion;
+  /**
+   * Anillo exterior [lon, lat] en WGS84, cerrado (el primer punto se repite al final, como en GeoJSON). Que este cerrado lo comprueba el generador de cuadricula, no el schema.
+   *
+   * @minItems 4
+   */
+  poligono: [LonLat, LonLat, LonLat, LonLat, ...LonLat[]];
+  /**
+   * true si el poligono no corresponde a la ubicacion real de una parcela (demo).
+   */
+  coordenadasIlustrativas?: boolean;
+  areaHa: number;
+  centroide: LonLat;
+  /**
+   * Lado de la celda cuadrada en metros locales (adaptativo para respetar el tope de celdas).
+   */
+  tamanoCeldaM: number;
+  /**
+   * Id del documento de suelo (contrato suelo) que aplica a la parcela.
+   */
+  sueloId: string;
+  terreno: Terreno;
+  /**
+   * Cuadricula de la parcela. Tope propuesto de 1600 celdas (doc 08).
+   *
+   * @minItems 1
+   * @maxItems 1600
+   */
+  celdas: [Celda, ...Celda[]];
+  advertencias?: Advertencia[];
+}
+/**
+ * Referencia administrativa, solo informativa.
+ */
+export interface Ubicacion {
+  municipio?: string;
+  estado?: string;
+  pais?: string;
+}
+/**
+ * Procedencia de la elevacion y la pendiente de las celdas.
+ */
+export interface Terreno {
+  estado: EstadoEvaluacion;
+  fuente: Fuente;
+}
+export interface Celda {
+  id: IdCelda;
+  /**
+   * Fila.
+   */
+  i: number;
+  /**
+   * Columna.
+   */
+  j: number;
+  centro: LonLat;
+  /**
+   * Fraccion del area de la celda dentro del poligono (0 a 1). Las celdas de borde pueden ser parciales.
+   */
+  fraccionDentro?: number;
+  /**
+   * Elevacion en metros. null si no se obtuvo (se muestra el hueco, no se rellena).
+   */
+  elevacionM: number | null;
+  /**
+   * Pendiente en porcentaje. null si no se pudo calcular.
+   */
+  pendientePct: number | null;
+}
+/**
+ * Rotacion que arma el selector 'what if': que cultivo va en cada ciclo y, opcionalmente, en cada celda. Que los ciclos sean cronologicos y no se traslapen lo valida el motor (doc 04), no el schema.
+ */
+export interface PlanSiembra {
+  meta: Meta;
+  rotacionId: IdRotacion;
+  nombre?: string;
+  parcelaId: string;
+  /**
+   * Como se asigna clima a cada ciclo (doc 05, paso 2; decision A2.8 [EN EVENTO]). mismo_anio: todos los ciclos en el anio del escenario. ventanas_consecutivas: ventanas reales consecutivas del historico. temporada_tipica: cada ciclo en su temporada dentro del anio del escenario. null mientras no se decida.
+   */
+  asignacionClima?: "mismo_anio" | "ventanas_consecutivas" | "temporada_tipica" | null;
+  /**
+   * @minItems 1
+   */
+  ciclos: [Ciclo, ...Ciclo[]];
+  /**
+   * Solo si se pinta por bloques ([EN EVENTO]); null si toda la parcela sigue los ciclos generales. Clave: id de celda; valor: cultivos que reemplazan a los generales en esa celda.
+   */
+  porCelda: {
+    /**
+     * @minItems 1
+     */
+    [k: string]: [CicloCelda, ...CicloCelda[]];
+  } | null;
+}
+export interface Ciclo {
+  ciclo: number;
+  cultivo: IdCultivo;
+  siembra: Fecha;
+}
+export interface CicloCelda {
+  ciclo: number;
+  cultivo: IdCultivo;
+}
+/**
+ * Capa opcional 'proxima temporada (aproximada)' (decision 14/11, doc 13; A2.13). Anomalia del pronostico estacional (ECMWF via Open-Meteo) aplicada a la climatologia historica, o respaldo estadistico propio (percentiles y tendencia). Se entrega SOLO como banda de incertidumbre por mes: no hay campo de cifra unica a proposito. Es complementaria al clima del escenario y no bloquea el MVP.
+ */
+export interface ProximaTemporadaAproximada {
+  meta: Meta;
+  /**
+   * Siempre false: no predice una temporada exacta, muestra un rango plausible.
+   */
+  esPrediccion: false;
+  /**
+   * EXPLORATORIO por naturaleza; ERROR_DATOS o NO_EVALUABLE si no se pudo construir.
+   */
+  estado: "EXPLORATORIO" | "ERROR_DATOS" | "NO_EVALUABLE";
+  /**
+   * Texto visible obligatorio, por ejemplo 'Rango aproximado, no es una prediccion'.
+   */
+  aviso: string;
+  /**
+   * anomalia_estacional: anomalia del pronostico estacional sobre la climatologia. respaldo_estadistico: percentiles y tendencia del historico propio.
+   */
+  metodo: "anomalia_estacional" | "respaldo_estadistico";
+  coordenada: LonLat;
+  emitido: Fecha;
+  /**
+   * Meses cubiertos. El maximo real de Open-Meteo esta por confirmar (V-21: 7 o 9 meses).
+   */
+  horizonteMeses: number;
+  climatologia?: Periodo;
+  banda: DefinicionBanda;
+  /**
+   * @minItems 1
+   */
+  fuentes: [Fuente, ...Fuente[]];
+  meses: MesAproximado[];
+  advertencias?: Advertencia[];
+}
+/**
+ * Que percentiles delimitan la banda (por defecto 10 y 90).
+ */
+export interface DefinicionBanda {
+  percentilInferior: number;
+  percentilSuperior: number;
+}
+export interface MesAproximado {
+  /**
+   * Mes en formato AAAA-MM.
+   */
+  mes: string;
+  lluviaMm: RangoIncertidumbre;
+  tMediaC: RangoIncertidumbre;
+  /**
+   * Mediana historica de lluvia del mes, solo como referencia de comparacion.
+   */
+  climatologiaLluviaMm?: number | null;
+  /**
+   * Mediana historica de temperatura media del mes, solo como referencia.
+   */
+  climatologiaTMediaC?: number | null;
+}
+/**
+ * Banda [inferior, superior]. null en ambos extremos si no se pudo estimar.
+ */
+export interface RangoIncertidumbre {
+  inferior: number | null;
+  superior: number | null;
+}
+/**
+ * Salida del motor por celda y fecha para una rotacion y un escenario. Es lo unico que leen la escena 3D, el modo 2D y los tooltips: el render no decide etapa ni estres. Nomenclatura: 'estado' es siempre el estado de evaluacion de doc 04; el estado visual de la planta es 'estadoPlanta'.
+ */
+export interface ResultadoCeldas {
+  meta: Meta;
+  rotacionId: IdRotacion;
+  escenario: Escenario;
+  anioReal: number;
+  parcelaId: string;
+  estado: EstadoEvaluacion;
+  registros: RegistroCelda[];
+  advertencias?: Advertencia[];
+}
+export interface RegistroCelda {
+  celdaId: IdCelda;
+  fecha: Fecha;
+  estado: EstadoEvaluacion;
+  /**
+   * Obligatorio si el estado no es EVALUABLE: por que no se calculo o que limita el resultado.
+   */
+  motivo?: string;
+  /**
+   * Ciclo del plan en curso; null si la celda esta entre ciclos.
+   */
+  ciclo: number | null;
+  /**
+   * Cultivo en la celda; null si esta en suelo desnudo.
+   */
+  cultivo: IdCultivo | null;
+  etapa: EtapaVisual;
+  /**
+   * Avance dentro de la etapa visual (0 a 1), para interpolar escala en el render.
+   */
+  avanceEtapa: number | null;
+  estadoPlanta: EstadoPlanta | null;
+  /**
+   * Agua en la cubeta como fraccion de TAW (0 a 1).
+   */
+  humedad: number | null;
+  /**
+   * Deficit acumulado en el ciclo hasta la fecha (mm): ETc no cubierta.
+   */
+  deficitMm: number | null;
+  /**
+   * Exceso acumulado en el ciclo hasta la fecha (mm): escurrimiento o drenaje.
+   */
+  excesoMm: number | null;
+  /**
+   * Demanda del cultivo del dia, ETc = Kc x ET0 (mm).
+   */
+  etcMm?: number | null;
+  /**
+   * true si ese dia supero el umbral de calor del cultivo; null si no se evalua.
+   */
+  estresCalor?: boolean | null;
+  /**
+   * Indice relativo de erosion (0 a 1), inspirado en USLE/RUSLE; no son toneladas. null si el pilar no se calcula.
+   */
+  riesgoErosion: number | null;
+}
+/**
+ * Metricas de una rotacion en los tres escenarios, peor caso, ranking y explicacion (doc 05, pasos 6 a 8). Admite los dos criterios de ranking documentados (A y B) porque la eleccion sigue [EN EVENTO]. Los null son huecos que el motor llena con valores calculados, nunca con numeros inventados.
+ */
+export interface ResultadoRotacion {
+  meta: Meta;
+  rotacionId: IdRotacion;
+  estado: EstadoEvaluacion;
+  filtroClima?: FiltroClima;
+  porEscenario: MetricasPorEscenario;
+  /**
+   * Escenario en el que la rotacion sale peor segun el criterio de ranking; null si no es evaluable.
+   */
+  peorCaso: PeorCaso | null;
+  /**
+   * Solo criterio B: arrepentimiento maximo entre escenarios. null con el criterio A o si no es evaluable.
+   */
+  arrepentimiento: number | null;
+  /**
+   * Posicion en el ranking de robustez; null si la rotacion no es evaluable o no se ha ordenado.
+   */
+  ranking: Ranking | null;
+  advertencias: Advertencia[];
+  explicacion: Explicacion;
+}
+export interface MetricasPorEscenario {
+  seco: MetricasEscenario;
+  habitual: MetricasEscenario;
+  lluvioso: MetricasEscenario;
+}
+export interface MetricasEscenario {
+  /**
+   * Anio real del escenario, siempre visible.
+   */
+  anioReal: number | null;
+  estado: EstadoEvaluacion;
+  pilares: Pilares;
+  /**
+   * Solo criterio B: puntaje compuesto del escenario. null con el criterio A.
+   */
+  puntaje: number | null;
+}
+export interface Pilares {
+  deficitHidrico: PilarDeficitHidrico;
+  compatibilidadCiclo?: PilarCompatibilidadCiclo;
+  proteccionSuelo?: PilarProteccionSuelo;
+  riesgoCalor?: PilarRiesgoCalor;
+  aporteIndirecto?: PilarAporteIndirecto;
+}
+/**
+ * Pilar 1 (nucleo).
+ */
+export interface PilarDeficitHidrico {
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  proporcionDemandaNoCubierta: number | null;
+  diasDeficit: number | null;
+  diasDeficitEtapasSensibles: number | null;
+  deficitTotalMm?: number | null;
+  excesoTotalMm?: number | null;
+}
+/**
+ * Pilar 2: siembras en meses viables segun clima y calendario.
+ */
+export interface PilarCompatibilidadCiclo {
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  siembrasFueraDeVentana: number | null;
+}
+/**
+ * Pilar 3: indice relativo de erosion y periodos de suelo desnudo; no son toneladas.
+ */
+export interface PilarProteccionSuelo {
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  indiceErosionRelativo: number | null;
+  diasSueloDesnudo: number | null;
+}
+export interface PilarRiesgoCalor {
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  diasEstresCalor: number | null;
+}
+/**
+ * Reglas simples (leguminosa, cobertura, diversidad); no afirma nitrogeno medido.
+ */
+export interface PilarAporteIndirecto {
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  incluyeLeguminosa: boolean | null;
+  especiesDistintas: number | null;
+}
+export interface PeorCaso {
+  escenario: Escenario;
+  criterio: CriterioRanking;
+  /**
+   * Nombre de la metrica que define el peor caso, por ejemplo 'deficitHidrico.proporcionDemandaNoCubierta' o 'puntaje'.
+   */
+  metrica: string;
+  valor: number;
+}
+export interface Ranking {
+  posicion: number;
+  /**
+   * Total de rotaciones evaluables comparadas.
+   */
+  de: number;
+  criterio: CriterioRanking;
+  desempate?: string;
+}
+/**
+ * Tarjeta de la rotacion (doc 05, paso 8). Si la redacta un LLM, solo usa numeros ya calculados; siempre hay plantilla de respaldo.
+ */
+export interface Explicacion {
+  porQue: string;
+  evidencia: Evidencia[];
+  beneficios: string[];
+  huecos: string[];
+  riesgos: string[];
+  /**
+   * Aviso de validar con un experto local.
+   */
+  avisoExperto: string;
+  redactadaPor: "plantilla" | "llm";
+}
+/**
+ * Dato concreto que respalda la explicacion (anio real, lluvia, mes, deficit).
+ */
+export interface Evidencia {
+  texto: string;
+  valor?: number | null;
+  unidad?: string;
+  fuente: Fuente;
+}
+/**
+ * Suelo de la parcela (decision 14/11, doc 13): textura y pH estimados por zona con mapas globales (ISRIC WCS u OpenLandMap) o elegidos en el selector manual de respaldo. Siempre etiqueta SUPUESTO: no se mide en la parcela.
+ */
+export interface Suelo {
+  meta: Meta;
+  id: string;
+  /**
+   * Todo el documento es una estimacion, no una medicion.
+   */
+  etiqueta: "SUPUESTO";
+  /**
+   * mapa_global: estimado por script desde ISRIC u OpenLandMap y servido desde cache. selector_manual: el usuario eligio el tipo de suelo.
+   */
+  origen: "mapa_global" | "selector_manual";
+  /**
+   * Texto visible para el usuario, por ejemplo 'pH y textura estimados por un modelo global; no son una medicion de su parcela'.
+   */
+  aviso: string;
+  coordenada?: LonLat;
+  profundidad?: ProfundidadCm;
+  textura: Textura;
+  /**
+   * pH estimado o NO_EVALUABLE si el servicio no respondio y no hay respaldo.
+   */
+  ph: PhEstimado | ValorNoEvaluable;
+  agua?: AguaSuelo;
+  advertencias?: Advertencia[];
+}
+/**
+ * Intervalo de profundidad de la estimacion en cm (por ejemplo 0 a 30).
+ */
+export interface ProfundidadCm {
+  desdeCm: number;
+  hastaCm: number;
+}
+export interface Textura {
+  estado: EstadoEvaluacion;
+  etiqueta: "SUPUESTO";
+  /**
+   * Clase USDA si viene del mapa global; null si solo se conoce el grupo del selector.
+   */
+  clase?: ClaseTextura | null;
+  grupo: GrupoSuelo;
+  fraccionesPct?: FraccionesTextura;
+  fuente?: Fuente;
+}
+export interface PhEstimado {
+  estado: "EVALUABLE" | "EXPLORATORIO" | "RESPALDO_HISTORICO";
+  etiqueta: "SUPUESTO";
+  /**
+   * pH en agua estimado por el modelo global.
+   */
+  valor: number;
+  fuente: Fuente;
+}
+/**
+ * Parametros de agua derivados de la textura con la tabla de A1.6 (FAO-56).
+ */
+export interface AguaSuelo {
+  tawMmPorM?: ValorCitado;
+}
