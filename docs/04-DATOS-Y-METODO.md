@@ -17,7 +17,7 @@
 | **SRTM** | Elevación para el relieve | 30 m | OpenTopography, AppEEARS o tiles de terreno | **Alta** (relieve decidido) | `[VERIFICAR]` |
 | **GPM IMERG** | Lluvia por satélite | ~10 km (0.1°); diario vía POWER, 30 min solo con Earthdata | **NASA POWER** `IMERG_PRECTOT` con `time-standard=UTC`, sin llave (en hora local responde `-999`); media hora con Earthdata + `earthaccess` | Alta como evidencia (A4.10) | Probado 14/11 (`features/imerg/`) |
 | **SMAP** | Humedad del suelo | 9 a 36 km | Earthdata | Media | `[VERIFICAR]` |
-| **MODIS** | NDVI | 250 m, 16 días | REST de ORNL DAAC sin llave (`modis.ornl.gov/rst/api/v1/MOD13Q1/subset`, cita `doi:10.3334/ORNLDAAC/1600`); AppEEARS o Earth Engine | Evidencia (A4.11) | Probado 14/11 |
+| **MODIS** | NDVI | 250 m, 16 días | **Microsoft Planetary Computer**, colección `modis-13Q1-061` (MOD13Q1 V061 de NASA LP DAAC servido por Microsoft; cita Didan, K. (2021), doi:10.5067/MODIS/MOD13Q1.061). Respaldo: REST de ORNL DAAC sin llave (`modis.ornl.gov/rst/api/v1/MOD13Q1/subset`, cita `doi:10.3334/ORNLDAAC/1600`), que no se llama en vivo; la demo usa caché y paquete. AppEEARS o Earth Engine. `[VERIFICAR]` términos de Planetary Computer antes de la entrega | Evidencia (A4.11) | Probado 14/11 |
 | **Landsat / HLS** | NDVI y reflectancia | 30 m | AppEEARS o Earth Engine | Baja | `[VERIFICAR]` |
 | **ECOSTRESS** | Temperatura de superficie | ~70 m, irregular | AppEEARS | Baja | `[VERIFICAR]` |
 | **GRACE / GRACE-FO** | Agua almacenada | Cientos de km | Solo contexto regional | Baja | `[VERIFICAR]` |
