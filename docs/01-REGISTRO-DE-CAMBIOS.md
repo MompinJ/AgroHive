@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Lluvia del día en la escena con datos reales (Mompin)
+
+- **Archivos:** `web/src/escena/lluvia.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (prop `serieBalance`), `escena.css`, `vista-previa.tsx`, prueba `lluvia.test.ts`; `docs/06`, `docs/14` (nota en A5.1), `INTEGRACION.md`.
+- **Cambio:** lluvia animada proporcional a los mm del día, tomados de la serie del motor (`serieBalance.lluviaMm`). La escena no inventa ni recalcula nada. Hay un indicador fijo con mm, clase, día real del clima y fuente. Sin dato: sin lluvia y `NO_EVALUABLE`. Con reducir movimiento solo queda el indicador. Cortes `[PROPUESTA]`.
+- **Fuente / evidencia:** prueba contra la serie real del motor con el paquete de demo; headless: 43.8 mm el 2024-06-16 (igual a `serie-clima.json`), 1 576 gotas y unos 31 cuadros por segundo; día seco y reducir movimiento: 0 gotas y 0 cuadros en reposo; 400 px sin desborde; cero errores.
+
 ### 2026-11-14 — A5.1 animaciones de la escena y lugar de la mascota (Mompin, con Mafer)
 
 - **Archivos:** `web/src/escena/animacion.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (control "Viento leve", prop `mascota`), `voxel/fuente-modelos.ts` (también `modelos/props/`), prueba `animacion.test.ts`; `docs/06`, `docs/14` (A5.1 pasa a Mompin, con Mafer).
@@ -291,6 +297,13 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — Contratos 0.12.1: inicio de IMERG en 1998-01-01
+
+- **Archivos:** `contratos/clima-escenario.schema.json` (descripción de `lluviaSatelital`, que también usa `serie-clima`), versión en ejemplos e inválidos, tipos, README; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.1, en un commit aparte).
+- **Cambio y motivo:** Mafer hizo una llamada real a POWER (`time-standard=utc`) en la parcela demo: el último día con -999 es el 1997-12-31 y el primer día con dato, el 1998-01-01, igual que la cobertura del catálogo CMR. La descripción fija el inicio en 1998-01-01 según POWER y CMR, quita el 1998-06-01 y deja el 2000-06-01 como dato del espejo de UCAR. Solo cambia la descripción: es compatible.
+- **Fuente / evidencia:** llamada real de Mafer del 14/11, transmitida por la sesión maestra.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — Contratos 0.12.0: correcciones de citas de IMERG, SMAP y MOD13 (compatible)
 

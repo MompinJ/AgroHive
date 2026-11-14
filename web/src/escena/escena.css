@@ -14,6 +14,8 @@
   --escena-aviso-borde: #8a5a00;
   --escena-aviso-fondo: #fff8e6;
   --escena-info-fondo: #f1f4ee;
+  --escena-lluvia-fondo: rgb(255 255 255 / 92%);
+  --escena-lluvia-borde: #2a5d9f;
   display: grid;
   gap: 12px;
   color: var(--escena-tinta);
@@ -89,3 +91,13 @@
 .escena-etiqueta-aviso { border-style: dashed; border-color: var(--escena-aviso-borde); }
 .escena-etiqueta-critico { border-width: 2px; border-color: var(--escena-critico-borde); font-weight: 700; }
 .escena-datos ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 0.8rem; }
+.escena-lluvia {
+  position: absolute; top: 8px; left: 8px; right: 8px; z-index: 1; margin: 0; width: fit-content; max-width: calc(100% - 16px);
+  padding: 6px 10px; border: 1px solid var(--escena-linea); border-left: 4px solid var(--escena-tenue); border-radius: 6px;
+  background: var(--escena-lluvia-fondo); color: var(--escena-tinta); font-size: 0.78rem; line-height: 1.35; pointer-events: none;
+}
+/* Clase de lluvia tambien por grosor del borde, no solo por color. */
+.escena-lluvia-llovizna { border-left-color: var(--escena-lluvia-borde); }
+.escena-lluvia-moderada { border-left: 6px solid var(--escena-lluvia-borde); }
+.escena-lluvia-fuerte { border-left: 8px double var(--escena-lluvia-borde); font-weight: 600; }
+.escena-lluvia-sin_dato { border-left-style: dashed; font-style: italic; }

@@ -8,7 +8,7 @@ import { StrictMode, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import parcelaEjemplo from '../../../contratos/ejemplos/parcela.ejemplo.json';
 import resultadoEjemplo from '../../../contratos/ejemplos/resultado-celda.ejemplo.json';
-import type { CatalogoCultivos, Escenario, Parcela, ProximaTemporadaAproximada, ResultadoCeldas, SerieClima, Suelo } from '../../../contratos/tipos/contratos';
+import type { CatalogoCultivos, Escenario, Parcela, ProximaTemporadaAproximada, ResultadoCeldas, SerieBalance, SerieClima, Suelo } from '../../../contratos/tipos/contratos';
 import { crearClienteMotor, type ClienteMotor } from '../motor';
 import { avisosDe, type AvisoDatos } from '../api/datosParcela';
 import {
@@ -50,6 +50,7 @@ function VistaPrevia() {
   const [resultado, setResultado] = useState<ResultadoCeldas | null>(null);
   const [estado, setEstado] = useState('');
   const [avisosDatos, setAvisosDatos] = useState<AvisoDatos[]>([]);
+  const [serieBal, setSerieBal] = useState<SerieBalance | null>(null);
 
   // Avisos reales del paquete de demo, como los daria usarDatosParcela con la API.
   useEffect(() => {
@@ -123,6 +124,23 @@ function VistaPrevia() {
       vigente = false;
     };
   }, [cliente, fuente, conMotor, suelo, rotacion, parcelaBalam]);
+
+  // Serie del balance (lluvia del dia y demas columnas) de la rotacion y el escenario elegidos.
+  useEffect(() => {
+    if (!cliente || !listo || fuente === 'ejemplo') return;
+    let vigente = true;
+    cliente
+      .serieBalance(idRotacion, escenario)
+      .then((s) => {
+        if (vigente) setSerieBal(s);
+      })
+      .catch(() => {
+        if (vigente) setSerieBal(null);
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [cliente, listo, fuente, escenario, idRotacion]);
 
   // Pide al motor el resultado por celda de la fecha y el escenario elegidos.
   useEffect(() => {
@@ -220,6 +238,7 @@ function VistaPrevia() {
         resultado={resultado}
         suelo={sueloEscena}
         avisosDatos={fuente === 'ejemplo' ? [] : avisosDatos}
+        serieBalance={fuente === 'ejemplo' ? null : serieBal}
         onEscena={(e) => {
           window.escenaPrueba = e;
         }}

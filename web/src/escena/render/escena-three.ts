@@ -51,6 +51,9 @@ export interface EstadisticasRender {
   /** Transiciones de plantas en curso (A5.1). */
   transiciones: number;
   viento: boolean;
+  /** Lluvia animandose ahora; gotas dibujadas. */
+  lluvia: boolean;
+  gotas: number;
   mascota: boolean;
 }
 
@@ -129,6 +132,69 @@ function crearMaterialPlantas(uniformes: { uTiempo: { value: number }; uAmplitud
     );
   };
   return mat;
+}
+
+/** Gotas maximas con la lluvia mas fuerte (intensidad 1). */
+const GOTAS_MAXIMAS = 1800;
+
+/**
+ * Lluvia en un solo LineSegments: cada gota es un segmento cuya caida calcula el shader
+ * con uTiempo (sin tocar memoria en cada cuadro). La caja se ajusta a la parcela.
+ */
+function crearLluvia() {
+  const n = GOTAS_MAXIMAS;
+  const semillas = new Float32Array(n * 2 * 3);
+  const extremos = new Float32Array(n * 2);
+  let azar = 12345;
+  const aleatorio = () => ((azar = (azar * 16807) % 2147483647) / 2147483647);
+  for (let k = 0; k < n; k++) {
+    const sx = aleatorio() - 0.5;
+    const sy = aleatorio();
+    const sz = aleatorio() - 0.5;
+    for (let e = 0; e < 2; e++) {
+      semillas.set([sx, sy, sz], (k * 2 + e) * 3);
+      extremos[k * 2 + e] = e;
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 2 * 3), 3));
+  geo.setAttribute('aSemilla', new THREE.BufferAttribute(semillas, 3));
+  geo.setAttribute('aExtremo', new THREE.BufferAttribute(extremos, 1));
+  geo.setDrawRange(0, 0);
+  const uniformes = { uTiempo: { value: 0 }, uCaja: { value: new THREE.Vector3(2, 3, 2) } };
+  const mat = new THREE.ShaderMaterial({
+    uniforms: uniformes,
+    transparent: true,
+    depthWrite: false,
+    vertexShader: `
+      uniform float uTiempo;
+      uniform vec3 uCaja;
+      attribute vec3 aSemilla;
+      attribute float aExtremo;
+      void main() {
+        float largo = 0.18;
+        float y = mod(aSemilla.y * uCaja.y - uTiempo * uCaja.y * 0.9, uCaja.y);
+        vec3 p = vec3(aSemilla.x * uCaja.x + aExtremo * largo * 0.15, y + aExtremo * largo, aSemilla.z * uCaja.z);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+      }`,
+    fragmentShader: `
+      void main() { gl_FragColor = vec4(0.17, 0.36, 0.62, 0.75); }`,
+  });
+  const objeto = new THREE.LineSegments(geo, mat);
+  objeto.frustumCulled = false;
+  objeto.visible = false;
+  objeto.name = 'lluvia';
+  return {
+    objeto,
+    uniformes,
+    caja(ancho: number, alto: number, fondo: number) {
+      uniformes.uCaja.value.set(ancho, alto, fondo);
+    },
+    cantidad(intensidad: number) {
+      const gotas = intensidad > 0 ? Math.max(40, Math.round(intensidad * n)) : 0;
+      geo.setDrawRange(0, gotas * 2);
+    },
+  };
 }
 
 /** Banderin (asta negra y bandera blanca con borde negro) en unidades de .bbmodel, unido en una geometria. */
@@ -212,6 +278,9 @@ export class EscenaThree {
   private modeloActual: EscenaModelo | null = null;
   private enPantalla = true;
   private readonly observadorVisible: IntersectionObserver | null = null;
+  // Lluvia del dia (dato del motor): un solo LineSegments con shader, oculto sin lluvia.
+  private readonly lluvia = crearLluvia();
+  private intensidadLluvia = 0;
   private cuadros = 0;
 
   constructor(private readonly lienzo: HTMLCanvasElement, opciones: OpcionesRender) {
@@ -230,6 +299,7 @@ export class EscenaThree {
     this.camara = new THREE.OrthographicCamera(-1, 1, 1, -1, -100, 100);
     this.scene.add(this.raiz);
     this.scene.add(this.salida);
+    this.scene.add(this.lluvia.objeto);
     // El viento solo corre con la escena a la vista y la pestana visible.
     if (typeof IntersectionObserver !== 'undefined') {
       this.observadorVisible = new IntersectionObserver((e) => {
@@ -286,6 +356,8 @@ export class EscenaThree {
       inercia: this.controles.enableDamping,
       transiciones: this.transiciones.length,
       viento: this.vientoActivo(),
+      lluvia: this.lluviaActiva(),
+      gotas: this.lluvia.objeto.visible ? this.lluvia.objeto.geometry.drawRange.count / 2 : 0,
       mascota: !!this.raiz.getObjectByName('mascota'),
     };
   }
@@ -326,6 +398,7 @@ export class EscenaThree {
     this.modeloActual = modelo;
     // Media altura visible: la parcela mas margen para las plantas altas.
     this.extension = Math.max(modelo.filas, modelo.columnas, 2) * 0.6 + 0.6;
+    this.lluvia.caja(modelo.columnas, Math.max(modelo.filas, modelo.columnas) * 0.8 + 2, modelo.filas);
     this.construirTerreno(modelo);
     this.ajustarTamano();
     // La camara solo vuelve a la vista inicial si cambia la parcela, no al cambiar fecha o escenario.
@@ -369,6 +442,8 @@ export class EscenaThree {
     document.removeEventListener('visibilitychange', this.alCambiarVisibilidad);
     this.terminarTransiciones();
     this.materialPlantas.dispose();
+    this.lluvia.objeto.geometry.dispose();
+    (this.lluvia.objeto.material as THREE.Material).dispose();
     this.materialMascota.dispose();
     this.marco.traverse((o) => { if (o instanceof THREE.Mesh) o.geometry.dispose(); });
     this.materialesMarco.forEach((m) => m.dispose());
@@ -718,6 +793,20 @@ export class EscenaThree {
     return !!this.opciones.viento && !this.opciones.reducirMovimiento && this.enPantalla && document.visibilityState === 'visible';
   }
 
+  /**
+   * Lluvia del dia (0 = no llueve o sin dato). La cantidad de gotas es proporcional a la
+   * intensidad; con reducir movimiento no se dibuja (la escena muestra un indicador fijo).
+   */
+  setLluvia(intensidad: number) {
+    this.intensidadLluvia = Math.min(1, Math.max(0, intensidad));
+    this.lluvia.cantidad(this.intensidadLluvia);
+    this.pedirCuadro();
+  }
+
+  private lluviaActiva(): boolean {
+    return this.intensidadLluvia > 0 && !this.opciones.reducirMovimiento && this.enPantalla && document.visibilityState === 'visible';
+  }
+
   // ------------------------------------------------------------------ render y seleccion
 
   private ajustarTamano() {
@@ -745,6 +834,9 @@ export class EscenaThree {
         this.transiciones = this.transiciones.filter((t) => !this.avanzarTransicion(t, (ahora - t.inicio) / DURACION_TRANSICION_MS));
       }
       const viento = this.vientoActivo();
+      const lloviendo = this.lluviaActiva();
+      this.lluvia.objeto.visible = this.intensidadLluvia > 0 && !this.opciones.reducirMovimiento;
+      if (lloviendo) this.lluvia.uniformes.uTiempo.value = ahora / 1000;
       this.uniformesViento.uAmplitud.value = viento ? AMPLITUD_VIENTO : 0;
       if (viento) this.uniformesViento.uTiempo.value = ahora / 1000;
       const t0 = performance.now();
@@ -752,7 +844,7 @@ export class EscenaThree {
       this.ultimoCuadroMs = performance.now() - t0;
       this.cuadros++;
       // Render bajo demanda: solo se sigue dibujando mientras algo se mueve.
-      if (siguioMoviendo || this.transiciones.length > 0 || viento) this.pedirCuadro();
+      if (siguioMoviendo || this.transiciones.length > 0 || viento || lloviendo) this.pedirCuadro();
     });
   }
 
