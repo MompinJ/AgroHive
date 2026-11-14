@@ -254,9 +254,9 @@ describe('condicion inicial con GWETROOT (requiere retencion de Saxton y Rawls, 
 describe('integracion con la serie real del paquete de demo (A2.4), suelo franco del selector', () => {
   const sel = seleccionarEscenarios(seriePowerIsla());
   const r = simularRotacion(entradas(milpa, franco, { escenarios: sel.escenarios }));
-  it('evalua la milpa en 2023 / 2008 / 2024 con Penman-Monteith y salida conforme al contrato', () => {
+  it('evalua la milpa en 2023 / 2016 / 2024 con Penman-Monteith y salida conforme al contrato', () => {
     const p = r.rotacion.porEscenario;
-    expect([p.seco.anioReal, p.habitual.anioReal, p.lluvioso.anioReal]).toEqual([2023, 2008, 2024]);
+    expect([p.seco.anioReal, p.habitual.anioReal, p.lluvioso.anioReal]).toEqual([2023, 2016, 2024]);
     for (const esc of ['seco', 'habitual', 'lluvioso'] as const) {
       expect(r.simulaciones[esc].metodoEt0.penman_monteith_fao56).toBeGreaterThan(500);
       expect(r.simulaciones[esc].metodoEt0.hargreaves_fao56).toBe(0);

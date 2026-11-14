@@ -7,6 +7,7 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
 from app import config, http
+from app.clientes import openlandmap
 
 RAIZ = Path(__file__).resolve().parents[2]
 RESPUESTAS = RAIZ / "datos" / "pruebas-apis" / "respuestas"
@@ -20,6 +21,7 @@ def entorno(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "CATALOGOS_DIR", tmp_path / "catalogos")
     monkeypatch.setattr(config, "DEMO_DIR", tmp_path / "sin_paquete")  # las pruebas no leen el paquete de demo real
     monkeypatch.setattr(http, "ESPERA_BASE_S", 0)
+    monkeypatch.setattr(openlandmap, "_leer_sync", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("sin red en las pruebas")))
 
 
 @pytest.fixture
