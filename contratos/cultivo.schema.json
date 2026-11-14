@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/cultivo.schema.json",
+  "title": "CatalogoCultivos",
+  "description": "Catalogo propio de cultivos (decision 14/11, doc 13; actividad A1.5), sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y FAO-56 (Kc y duracion de etapas). Cada parametro lleva su fuente o es NO_EVALUABLE; un cultivo con parametros esenciales faltantes es NO_EVALUABLE para el motor.",
+  "type": "object",
+  "required": ["meta", "versionCatalogo", "cultivos"],
+  "properties": {
+    "meta": { "$ref": "comun.schema.json#/$defs/meta" },
+    "versionCatalogo": { "type": "string", "minLength": 1 },
+    "cultivos": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/cultivo" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "cultivo": {
+      "title": "Cultivo",
+      "type": "object",
+      "required": ["id", "nombreComun", "nombreCientifico", "estado", "cicloDias", "duracionEtapasDias", "kc", "umbrales", "ventanasSiembra"],
+      "properties": {
+        "id": { "$ref": "comun.schema.json#/$defs/idCultivo" },
+        "nombreComun": { "type": "string", "minLength": 1 },
+        "nombreCientifico": { "type": "string", "minLength": 1 },
+        "estado": {
+          "description": "EVALUABLE solo si todos los parametros esenciales (ciclo, etapas, Kc) tienen fuente.",
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "esLeguminosa": {
+          "description": "Para el indicador de aporte indirecto al suelo (doc 05). null si no se ha clasificado.",
+          "type": ["boolean", "null"]
+        },
+        "cicloDias": {
+          "description": "Duracion total del ciclo, siembra a cosecha, en dias.",
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        },
+        "duracionEtapasDias": {
+          "title": "DuracionEtapas",
+          "description": "Duracion de las cuatro etapas FAO-56 (inicial, desarrollo, media, final), en dias.",
+          "type": "object",
+          "required": ["inicial", "desarrollo", "media", "final"],
+          "properties": {
+            "inicial": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "desarrollo": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "media": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "final": { "$ref": "comun.schema.json#/$defs/valorCitado" }
+          },
+          "additionalProperties": false
+        },
+        "kc": {
+          "title": "CoeficientesKc",
+          "description": "Coeficientes de cultivo FAO-56: Kc inicial, medio y final. En la etapa de desarrollo el motor interpola.",
+          "type": "object",
+          "required": ["inicial", "media", "final"],
+          "properties": {
+            "inicial": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "media": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "final": { "$ref": "comun.schema.json#/$defs/valorCitado" }
+          },
+          "additionalProperties": false
+        },
+        "profundidadRaizM": {
+          "description": "Profundidad radicular maxima (m), para pasar de TAW por metro a TAW de la celda.",
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        },
+        "fraccionAgotamientoP": {
+          "description": "Fraccion p de agotamiento sin estres (FAO-56).",
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        },
+        "etapasSensibles": {
+          "description": "Etapas FAO-56 donde el deficit pesa mas en el pilar hidrico.",
+          "type": "array",
+          "items": { "type": "string", "enum": ["inicial", "desarrollo", "media", "final"] },
+          "uniqueItems": true
+        },
+        "umbrales": {
+          "title": "UmbralesCultivo",
+          "description": "Rangos de EcoCrop y umbral de estres por calor.",
+          "type": "object",
+          "required": ["tMinAbsC", "tMaxAbsC", "tOptMinC", "tOptMaxC", "lluviaCicloMinMm", "lluviaCicloMaxMm", "tEstresCalorC"],
+          "properties": {
+            "tMinAbsC": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "tMaxAbsC": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "tOptMinC": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "tOptMaxC": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "lluviaCicloMinMm": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "lluviaCicloMaxMm": { "$ref": "comun.schema.json#/$defs/valorCitado" },
+            "tEstresCalorC": {
+              "description": "Temperatura maxima diaria por encima de la cual se cuenta un dia de estres por calor.",
+              "$ref": "comun.schema.json#/$defs/valorCitado"
+            }
+          },
+          "additionalProperties": false
+        },
+        "ventanasSiembra": {
+          "description": "Ventanas de siembra locales (calendario SIAP o INIFAP, V-20). NO_EVALUABLE si no hay calendario con fuente.",
+          "oneOf": [
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/ventanaSiembra" }
+            },
+            { "$ref": "comun.schema.json#/$defs/valorNoEvaluable" }
+          ]
+        },
+        "modelo3d": {
+          "title": "Modelo3d",
+          "description": "Prefijo de los archivos .bbmodel (doc 07: <cultivo>_<etapa>.bbmodel).",
+          "type": "object",
+          "required": ["prefijo"],
+          "properties": {
+            "prefijo": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+          },
+          "additionalProperties": false
+        },
+        "notas": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ventanaSiembra": {
+      "title": "VentanaSiembra",
+      "type": "object",
+      "required": ["temporada", "desdeMes", "hastaMes", "fuente"],
+      "properties": {
+        "temporada": { "type": "string", "enum": ["primavera_verano", "otono_invierno"] },
+        "desdeMes": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "hastaMes": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "regimen": { "type": "string", "enum": ["temporal", "riego"] },
+        "fuente": { "$ref": "comun.schema.json#/$defs/fuente" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

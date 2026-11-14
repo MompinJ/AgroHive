@@ -1,0 +1,509 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/resultado-rotacion.schema.json",
+  "title": "ResultadoRotacion",
+  "description": "Metricas de una rotacion en los tres escenarios, peor caso, ranking y explicacion (doc 05, pasos 6 a 8). Admite los dos criterios de ranking documentados (A y B) porque la eleccion sigue [EN EVENTO]. Los null son huecos que el motor llena con valores calculados, nunca con numeros inventados.",
+  "type": "object",
+  "required": [
+    "meta",
+    "rotacionId",
+    "estado",
+    "porEscenario",
+    "peorCaso",
+    "arrepentimiento",
+    "ranking",
+    "advertencias",
+    "explicacion"
+  ],
+  "properties": {
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
+    "rotacionId": {
+      "$ref": "comun.schema.json#/$defs/idRotacion"
+    },
+    "estado": {
+      "$ref": "comun.schema.json#/$defs/estado"
+    },
+    "filtroClima": {
+      "title": "FiltroClima",
+      "description": "Paso 7.1: true si alguna siembra cae fuera de ventana viable en todos los escenarios. null si no se pudo evaluar.",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "porEscenario": {
+      "title": "MetricasPorEscenario",
+      "type": "object",
+      "required": [
+        "seco",
+        "habitual",
+        "lluvioso"
+      ],
+      "properties": {
+        "seco": {
+          "$ref": "#/$defs/metricasEscenario"
+        },
+        "habitual": {
+          "$ref": "#/$defs/metricasEscenario"
+        },
+        "lluvioso": {
+          "$ref": "#/$defs/metricasEscenario"
+        }
+      },
+      "additionalProperties": false
+    },
+    "peorCaso": {
+      "description": "Escenario en el que la rotacion sale peor segun el criterio de ranking; null si no es evaluable.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/peorCaso"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "arrepentimiento": {
+      "description": "Solo criterio B: arrepentimiento maximo entre escenarios. null con el criterio A o si no es evaluable.",
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "ranking": {
+      "description": "Posicion en el ranking de robustez; null si la rotacion no es evaluable o no se ha ordenado.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ranking"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "advertencias": {
+      "type": "array",
+      "items": {
+        "$ref": "comun.schema.json#/$defs/advertencia"
+      }
+    },
+    "explicacion": {
+      "$ref": "#/$defs/explicacion"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "description": "Una rotacion NO_EVALUABLE o ERROR_DATOS no tiene peor caso, arrepentimiento ni ranking.",
+      "if": {
+        "properties": {
+          "estado": {
+            "enum": [
+              "NO_EVALUABLE",
+              "ERROR_DATOS"
+            ]
+          }
+        },
+        "required": [
+          "estado"
+        ]
+      },
+      "then": {
+        "properties": {
+          "peorCaso": {
+            "type": "null"
+          },
+          "arrepentimiento": {
+            "type": "null"
+          },
+          "ranking": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "criterioRanking": {
+      "title": "CriterioRanking",
+      "description": "A: menor exposicion hidrica en el peor caso, sin puntaje compuesto. B: puntaje por escenario, robustez = peor puntaje, minimax de arrepentimiento.",
+      "type": "string",
+      "enum": [
+        "A_exposicion_hidrica_peor_caso",
+        "B_minimax_arrepentimiento"
+      ]
+    },
+    "pilarDeficitHidrico": {
+      "title": "PilarDeficitHidrico",
+      "description": "Pilar 1 (nucleo).",
+      "type": "object",
+      "required": [
+        "estado",
+        "proporcionDemandaNoCubierta",
+        "diasDeficit",
+        "diasDeficitEtapasSensibles"
+      ],
+      "properties": {
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proporcionDemandaNoCubierta": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "diasDeficit": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "diasDeficitEtapasSensibles": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "deficitTotalMm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "excesoTotalMm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "pilarCompatibilidadCiclo": {
+      "title": "PilarCompatibilidadCiclo",
+      "description": "Pilar 2: siembras en meses viables segun clima y calendario.",
+      "type": "object",
+      "required": [
+        "estado",
+        "siembrasFueraDeVentana"
+      ],
+      "properties": {
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "siembrasFueraDeVentana": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "pilarProteccionSuelo": {
+      "title": "PilarProteccionSuelo",
+      "description": "Pilar 3: indice relativo de erosion y periodos de suelo desnudo; no son toneladas.",
+      "type": "object",
+      "required": [
+        "estado",
+        "indiceErosionRelativo",
+        "diasSueloDesnudo"
+      ],
+      "properties": {
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "indiceErosionRelativo": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "diasSueloDesnudo": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "pilarRiesgoCalor": {
+      "title": "PilarRiesgoCalor",
+      "type": "object",
+      "required": [
+        "estado",
+        "diasEstresCalor"
+      ],
+      "properties": {
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "diasEstresCalor": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "pilarAporteIndirecto": {
+      "title": "PilarAporteIndirecto",
+      "description": "Reglas simples (leguminosa, cobertura, diversidad); no afirma nitrogeno medido.",
+      "type": "object",
+      "required": [
+        "estado",
+        "incluyeLeguminosa",
+        "especiesDistintas"
+      ],
+      "properties": {
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "incluyeLeguminosa": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "especiesDistintas": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "metricasEscenario": {
+      "title": "MetricasEscenario",
+      "type": "object",
+      "required": [
+        "anioReal",
+        "estado",
+        "pilares",
+        "puntaje"
+      ],
+      "properties": {
+        "anioReal": {
+          "description": "Anio real del escenario, siempre visible.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "pilares": {
+          "title": "Pilares",
+          "type": "object",
+          "required": [
+            "deficitHidrico"
+          ],
+          "properties": {
+            "deficitHidrico": {
+              "$ref": "#/$defs/pilarDeficitHidrico"
+            },
+            "compatibilidadCiclo": {
+              "$ref": "#/$defs/pilarCompatibilidadCiclo"
+            },
+            "proteccionSuelo": {
+              "$ref": "#/$defs/pilarProteccionSuelo"
+            },
+            "riesgoCalor": {
+              "$ref": "#/$defs/pilarRiesgoCalor"
+            },
+            "aporteIndirecto": {
+              "$ref": "#/$defs/pilarAporteIndirecto"
+            }
+          },
+          "additionalProperties": false
+        },
+        "puntaje": {
+          "description": "Solo criterio B: puntaje compuesto del escenario. null con el criterio A.",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "peorCaso": {
+      "title": "PeorCaso",
+      "type": "object",
+      "required": [
+        "escenario",
+        "criterio",
+        "metrica",
+        "valor"
+      ],
+      "properties": {
+        "escenario": {
+          "$ref": "comun.schema.json#/$defs/escenario"
+        },
+        "criterio": {
+          "$ref": "#/$defs/criterioRanking"
+        },
+        "metrica": {
+          "description": "Nombre de la metrica que define el peor caso, por ejemplo 'deficitHidrico.proporcionDemandaNoCubierta' o 'puntaje'.",
+          "type": "string",
+          "minLength": 1
+        },
+        "valor": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ranking": {
+      "title": "Ranking",
+      "type": "object",
+      "required": [
+        "posicion",
+        "de",
+        "criterio"
+      ],
+      "properties": {
+        "posicion": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "de": {
+          "description": "Total de rotaciones evaluables comparadas.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "criterio": {
+          "$ref": "#/$defs/criterioRanking"
+        },
+        "desempate": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidencia": {
+      "title": "Evidencia",
+      "description": "Dato concreto que respalda la explicacion (anio real, lluvia, mes, deficit).",
+      "type": "object",
+      "required": [
+        "texto",
+        "fuente"
+      ],
+      "properties": {
+        "texto": {
+          "type": "string",
+          "minLength": 1
+        },
+        "valor": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "unidad": {
+          "type": "string"
+        },
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        }
+      },
+      "additionalProperties": false
+    },
+    "explicacion": {
+      "title": "Explicacion",
+      "description": "Tarjeta de la rotacion (doc 05, paso 8). Si la redacta un LLM, solo usa numeros ya calculados; siempre hay plantilla de respaldo.",
+      "type": "object",
+      "required": [
+        "porQue",
+        "evidencia",
+        "beneficios",
+        "huecos",
+        "riesgos",
+        "avisoExperto",
+        "redactadaPor"
+      ],
+      "properties": {
+        "porQue": {
+          "type": "string"
+        },
+        "evidencia": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidencia"
+          }
+        },
+        "beneficios": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "huecos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "riesgos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "avisoExperto": {
+          "description": "Aviso de validar con un experto local.",
+          "type": "string",
+          "minLength": 1
+        },
+        "redactadaPor": {
+          "type": "string",
+          "enum": [
+            "plantilla",
+            "llm"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

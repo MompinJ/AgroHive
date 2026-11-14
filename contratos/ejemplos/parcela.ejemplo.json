@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "versionContrato": "0.1.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "id": "parcela-demo-isla",
+  "nombre": "Parcela demo Isla (ejemplo)",
+  "origen": "demo",
+  "ubicacion": {
+    "municipio": "Isla",
+    "estado": "Veracruz",
+    "pais": "Mexico"
+  },
+  "poligono": [
+    [
+      -95.530668,
+      18.029365
+    ],
+    [
+      -95.529332,
+      18.029365
+    ],
+    [
+      -95.529332,
+      18.030635
+    ],
+    [
+      -95.530668,
+      18.030635
+    ],
+    [
+      -95.530668,
+      18.029365
+    ]
+  ],
+  "coordenadasIlustrativas": true,
+  "areaHa": 2.0,
+  "centroide": [
+    -95.53,
+    18.03
+  ],
+  "tamanoCeldaM": 70.71,
+  "sueloId": "suelo-demo-isla",
+  "terreno": {
+    "estado": "EXPLORATORIO",
+    "fuente": {
+      "nombre": "EJEMPLO - valores ficticios (no es SRTM ni tiles Terrarium)",
+      "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+    }
+  },
+  "celdas": [
+    {
+      "id": "c-0-0",
+      "i": 0,
+      "j": 0,
+      "centro": [
+        -95.530334,
+        18.030318
+      ],
+      "fraccionDentro": 1,
+      "elevacionM": 31.0,
+      "pendientePct": 1.5
+    },
+    {
+      "id": "c-0-1",
+      "i": 0,
+      "j": 1,
+      "centro": [
+        -95.529666,
+        18.030318
+      ],
+      "fraccionDentro": 1,
+      "elevacionM": 30.2,
+      "pendientePct": 2.8
+    },
+    {
+      "id": "c-1-0",
+      "i": 1,
+      "j": 0,
+      "centro": [
+        -95.530334,
+        18.029682
+      ],
+      "fraccionDentro": 1,
+      "elevacionM": 29.5,
+      "pendientePct": 3.4
+    },
+    {
+      "id": "c-1-1",
+      "i": 1,
+      "j": 1,
+      "centro": [
+        -95.529666,
+        18.029682
+      ],
+      "fraccionDentro": 1,
+      "elevacionM": null,
+      "pendientePct": null
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    },
+    {
+      "codigo": "ELEVACION_FALTANTE",
+      "mensaje": "La celda c-1-1 no tiene elevacion: se muestra el hueco, no se rellena.",
+      "severidad": "aviso"
+    }
+  ]
+}
