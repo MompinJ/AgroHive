@@ -453,7 +453,7 @@ export interface Modelo3D {
   prefijo: string;
 }
 /**
- * Respuesta de GET /api/ndvi (A4.11): NDVI de MODIS MOD13Q1 (pixel de 250 m, compuesto de 16 dias) en un punto, por el servicio REST de ORNL DAAC. Es EVIDENCIA de los anios de escenario: el pixel es mayor que la parcela, no muestra el cultivo del usuario y no entra al ranking (no hay relacion publicada entre NDVI y los pilares).
+ * Respuesta de GET /api/ndvi (A4.11): NDVI de MODIS MOD13Q1 V061 (pixel de 250 m, compuesto de 16 dias) en un punto. Fuente principal: Microsoft Planetary Computer, coleccion modis-13Q1-061 (dato de NASA LP DAAC servido por Microsoft). Respaldo: servicio REST de ORNL DAAC, que no se llama en vivo; la demo usa cache y el paquete de demo. [VERIFICAR] una persona lee los terminos de uso de Planetary Computer (https://planetarycomputer.microsoft.com/terms) antes de la entrega. Es EVIDENCIA de los anios de escenario: el pixel es mayor que la parcela, no muestra el cultivo del usuario y no entra al ranking (no hay relacion publicada entre NDVI y los pilares).
  */
 export interface Ndvi {
   meta: Meta;

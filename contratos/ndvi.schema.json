@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://agrohive.example/contratos/ndvi.schema.json",
   "title": "Ndvi",
-  "description": "Respuesta de GET /api/ndvi (A4.11): NDVI de MODIS MOD13Q1 (pixel de 250 m, compuesto de 16 dias) en un punto, por el servicio REST de ORNL DAAC. Es EVIDENCIA de los anios de escenario: el pixel es mayor que la parcela, no muestra el cultivo del usuario y no entra al ranking (no hay relacion publicada entre NDVI y los pilares).",
+  "description": "Respuesta de GET /api/ndvi (A4.11): NDVI de MODIS MOD13Q1 V061 (pixel de 250 m, compuesto de 16 dias) en un punto. Fuente principal: Microsoft Planetary Computer, coleccion modis-13Q1-061 (dato de NASA LP DAAC servido por Microsoft). Respaldo: servicio REST de ORNL DAAC, que no se llama en vivo; la demo usa cache y el paquete de demo. [VERIFICAR] una persona lee los terminos de uso de Planetary Computer (https://planetarycomputer.microsoft.com/terms) antes de la entrega. Es EVIDENCIA de los anios de escenario: el pixel es mayor que la parcela, no muestra el cultivo del usuario y no entra al ranking (no hay relacion publicada entre NDVI y los pilares).",
   "type": "object",
   "required": [
     "meta",
@@ -78,7 +78,7 @@
       "additionalProperties": false
     },
     "fuente": {
-      "description": "ORNL DAAC MODIS (servicio REST), con la cita doi:10.3334/ORNLDAAC/1600 en cita.",
+      "description": "Fuente del dato. Principal: Microsoft Planetary Computer (coleccion modis-13Q1-061), con la cita del producto en cita: Didan, K. (2021). MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061. NASA EOSDIS Land Processes DAAC. doi:10.5067/MODIS/MOD13Q1.061. Respaldo: ORNL DAAC MODIS (servicio REST), cita doi:10.3334/ORNLDAAC/1600.",
       "$ref": "comun.schema.json#/$defs/fuente"
     },
     "limites": {

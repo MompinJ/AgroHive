@@ -16,9 +16,9 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
 | **Eduardo** | 15 | 2 | 1 | 1 | 79 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
-| **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
+| **balam** | 10 | 0 | 0 | 5 | 67 % de 15 |
 
-Proyecto completo: **48 de 60** actividades hechas (80 %), 3 en curso, 1 bloqueadas.
+Proyecto completo: **49 de 60** actividades hechas (82 %), 3 en curso, 1 bloqueadas.
 
 ## Mompin
 
@@ -56,10 +56,10 @@ Proyecto completo: **48 de 60** actividades hechas (80 %), 3 en curso, 1 bloquea
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — `https://64-23-143-102.sslip.io` responde (front 200, `/health` en `d182af4`, contrato 0.9.0, mediworks 200). Esta sesión no entró por SSH (`Permission denied (publickey,password)`); no se desplegó
 - [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — `GET /api/smap` y `contratos/smap.schema.json` existen. No está en la interfaz. Sin `EARTHDATA_TOKEN` responde 503 (comprobado en local el 14/11 noche, 2024-06-01 a 2024-06-08). No se puso el token: hace falta el OK explícito, también en el droplet
 - [x] **A4.10** Lluvia GPM IMERG vía NASA POWER (IMERG_PRECTOT con time-standard=UTC, sin cuenta Earthdata) en GET /api/clima y en el paquete de demo, como evidencia: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en features/imerg/ y features/encargos/eduardo-datos-globales.md `HECHO` — `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance
-- [x] **A4.11** NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto, como evidencia de los años de escenario; no entra al ranking. El servicio previsto era ORNL DAAC; se sustituyo porque no respondia `HECHO` — ORNL DAAC no respondio (502, 503). La serie sale de Microsoft Planetary Computer, MOD13Q1 V061, validada contra ORNL en 4 fechas. Cache, limites del pixel y paquete completo en `datos/demo/respuestas/ndvi.json`. Cita del producto: doi:10.5067/MODIS/MOD13Q1.061. Pedido a Mompin: la descripcion de `contratos/ndvi.schema.json` sigue citando ORNL y doi:10.3334/ORNLDAAC/1600
+- [x] **A4.11** NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto, como evidencia de los años de escenario; no entra al ranking. El servicio previsto era ORNL DAAC; se sustituyo porque no respondia `HECHO` — ORNL DAAC no respondio (502, 503). La serie sale de Microsoft Planetary Computer, MOD13Q1 V061, validada contra ORNL en 4 fechas. Cache, limites del pixel y paquete completo en `datos/demo/respuestas/ndvi.json`. Cita del producto: doi:10.5067/MODIS/MOD13Q1.061. El schema traido en este merge (contratos 0.12.2) cita Planetary Computer, coleccion `modis-13Q1-061`; ORNL queda como respaldo que no se llama en vivo
 - [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después — C5 no está cruzada (el producto no está congelado); no se empieza
 - [x] **A4.13** Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP `HECHO` — `GET /api/calendario`. Isla (18.03, -95.53) devuelve SIAP/INIFAP. Iowa (42, -93.5) devuelve maiz de temporal de GGCMI: dia 133 (13 de mayo) y la madurez en la nota de la fuente, doi:10.5281/zenodo.5062513. Frijol `NO_EVALUABLE`: ni Zenodo ni el NetCDF dicen que `bea_rf` sea frijol. Calabaza y chile `NO_EVALUABLE`. En Mexico, fuera de Isla, no se usa GGCMI
-- [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — A3.6 está `[HECHO]` en `origin/main` (`58fab7a`) y esta rama todavía no lo tiene; no se midió el mínimo ni el fallback
+- [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — Cifras de SwiftShader ya en `docs/06` (Mompin, buzón #202; no se re-midió): polígono de 518 celdas, maíz en madurez de 449 380 a 216 280 triángulos y de 3.2 a 5.0 cuadros/s con manchones; 6 draw calls (8 con celda); en reposo no se dibuja. A3.6 ya está en la rama: modo 2D y fallback inicial sin WebGL. Falta hardware real (laptop sin GPU dedicada y celular) y la pérdida de contexto WebGL
 - [x] **A5.8** Respaldo local sin internet y capturas `HECHO` — 14/11 noche, segunda pasada: API con `herramientas/demo-sin-red.sh` y Chrome headless con proxy inválido. P0 a P3 y método de la demo de Isla sin peticiones externas; NDVI del paquete 200; SMAP 503 sin token; clima lejano 503. Capturas en `docs/capturas/noche-14/`. No se apagó el wifi. El mapa de polígono pide teselas de Esri
 
 ## Mafer
@@ -83,7 +83,7 @@ Proyecto completo: **48 de 60** actividades hechas (80 %), 3 en curso, 1 bloquea
 - [x] **A2.10** Mapa y dibujo de polígono libre (Leaflet) `HECHO`
 - [x] **A3.4** Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario `HECHO`
 - [x] **A3.5** Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado `HECHO`
-- [ ] **A3.6** Modo 2D ligero con los mismos valores del motor
+- [x] **A3.6** Modo 2D ligero con los mismos valores del motor `HECHO`
 - [x] **A4.1** Dashboard: gráficas de lluvia, demanda y balance (Recharts) `HECHO` — series del Worker, graficas y tabla verificadas
 - [x] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos `HECHO` — motor y tarjetas visibles en laboratorio y comparacion
 - [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)

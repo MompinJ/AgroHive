@@ -290,6 +290,9 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
             Banderin blanco con borde negro: cultivo no recomendado en el lugar segun la fuente local ({noRecomendados} {noRecomendados === 1 ? 'celda' : 'celdas'}).
           </p>
         )}
+        <p className="escena-detalle">
+          Cada celda se dibuja como un manchón de plantas en surcos: la densidad es visual, no a escala. La celda elegida muestra el modelo detallado de su planta.
+        </p>
         <p className="escena-detalle">{textoEscalaSuelo(modelo.grupoSuelo)}</p>
         <p className="escena-detalle">
           Lluvia del día (serie del motor, mm/día): llovizna desde {CORTES_LLUVIA.minimaMm} mm, moderada desde {CORTES_LLUVIA.moderadaDesdeMm} mm,

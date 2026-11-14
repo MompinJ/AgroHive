@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Merge de main y estado de A5.4 (Eduardo)
+
+- **Archivos:** `docs/14` (marca y vistas regeneradas), `docs/01`, `docs/04`, `docs/11` (resolución del merge).
+- **Cambio:** entra `origin/main`, incluido A3.6 (modo 2D y fallback inicial sin WebGL). A5.4 queda `[BLOQUEADO]`: no se repitieron mediciones de escena. Las cifras de SwiftShader están en `docs/06` (Mompin, buzón #202): polígono de 518 celdas, maíz en madurez de 449 380 a 216 280 triángulos y de 3.2 a 5.0 cuadros/s con manchones, 6 draw calls (8 con celda), en reposo no se dibuja. Falta hardware real (laptop sin GPU dedicada y celular) y la pérdida de contexto WebGL. El 2D de balam es el respaldo inicial, no el seguimiento de un contexto que se pierde después.
+- **Fuente / evidencia:** `docs/06` y el mensaje #202. Sin medición nueva.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — A4.13: calendario GGCMI fuera de México (Eduardo)
 
 - **Archivos:** `api/app/calendario.py`, `api/app/rutas/calendario.py`, `api/tests/test_calendario.py`, `datos/calendario/` (Natural Earth 110m, recuadro OSM de Isla, `mai_rf` de GGCMI), `docs/14`, `docs/04`, `docs/11`, `api/README.md`.
@@ -25,6 +32,19 @@ Decisiones afectadas:
 - **Archivos:** `docs/14` (notas; vistas regeneradas), `docs/demo-sin-red.md`, `docs/capturas/noche-14/`, `AgroVault/Compartido/Pendientes.md`.
 - **Cambio:** se volvió a correr la demo de Isla con la salida de la API y del navegador bloqueada. P0 a P3 quedan con datos del paquete y el motor (criterio B). La API local sin red responde el paquete y da 503 fuera de él. A4.6 y A5.8 siguen `[HECHO]` con esa evidencia. A4.7 sigue `[EN CURSO]`: la URL pública responde en el commit `d182af4` y el SSH de esta sesión fue rechazado, así que no hubo despliegue. A4.8 sigue `[EN CURSO]`: 503 sin token, sin poner `EARTHDATA_TOKEN`. A4.12 sigue pendiente de C5. A4.13 quedó `[HECHO]` en la entrada de arriba (`GET /api/calendario`; esta pasada volvió a correr `test_calendario.py`, 4 pruebas). A5.4 sigue bloqueada: A3.6 está `[HECHO]` en `origin/main` (`58fab7a`) y esta rama todavía no lo tiene.
 - **Fuente / evidencia:** `bash herramientas/demo-sin-red.sh --solo-api`; `pytest` de `test_demo.py`, `test_ndvi.py` y `test_smap.py` (46); `npm run build` en `web/`; Chrome headless. No se apagó el wifi.
+
+### 2026-11-14 — Manchón de plantas por celda en la escena (Mompin; idea de balam, modelos de Mafer)
+
+- **Archivos:** `web/src/escena/voxel/bloque.ts` (nuevo), `render/escena-three.ts` (bloque por celda, detallado en la celda elegida, marco unido en una malla), `voxel/fuente-modelos.ts` (`modelos/cultivos/bloques/`), `EscenaParcela.tsx` (nota en la leyenda), `demo-motor.ts` (la vista previa usa el polígono de 518 celdas), prueba `bloque.test.ts`; `docs/06`.
+- **Cambio:** cada celda lleva el modelo ligero de bloque y la celda elegida el detallado. Si falta el bloque, se usa uno provisional en código (21 cubos, tope de 55 y lomo por surco `[DECIDIDO]` por Mompin con Mafer). La leyenda dice que la densidad es visual, no a escala.
+- **Fuente / evidencia:** con 518 celdas, maíz en madurez pasa de 449 380 a 216 280 triángulos y de 3.2 a 5.0 cuadros/s (SwiftShader); 6 draw calls antes y después. Pendiente: medir con los bloques de Mafer (`maiz_siembra` y `maiz_madurez` primero).
+
+### 2026-11-14 — A3.6: vista 2D con el mismo resultado del motor (balam)
+
+- **Archivos:** `web/src/ui/Parcela2D.tsx`, `parcela2d.css`, `Parcela2D.test.tsx`, `LaboratorioConectado.tsx`, `useLaboratorio.ts`; `docs/06`, `docs/14`, vistas generadas del tablero y `web/README.md`.
+- **Cambio:** selector 2D/3D conservado al navegar. La cuadrícula reutiliza el adaptador, las placas SVG, la leyenda y la ficha del 3D, sin importar Three.js, sin recalcular indicadores y sin consultas nuevas al alternar. Controles táctiles de 48 px, flechas, Inicio/Fin y lista de celdas; huecos y motivos NO_EVALUABLE explícitos. Fallback inicial automático si no hay WebGL2. A5.4 deja de estar bloqueada por A3.6; la medición de hardware sigue pendiente con Eduardo.
+- **Fuente / evidencia:** pruebas de contrato de ejemplo, 1600 celdas y orientación; navegador con R1/ciclo 2/seco muestra frijol, métricas idénticas y cero mensajes/peticiones nuevos al alternar. Sin WebGL: cero canvas y sin descargar el módulo 3D. 320 px sin desborde y axe sin incidencias en los criterios revisados. Capturas `web/evidencia/a3-6-*`.
+- **Decisiones afectadas:** se ejecuta el alcance 2D/3D aprobado de doc 06; no cambia el contrato ni el motor. Para el trabajo de Balam, video y presentación siguen cancelados por su petición expresa. La sincronización conserva también la decisión del equipo registrada por Mompin de definirlos al final; no reactiva trabajo de Balam.
 
 ### 2026-11-14 — Corrección: video y presentación se definen al final, no están canceladas (Mompin, sesión features)
 
@@ -341,6 +361,13 @@ Decisiones afectadas:
 - **Decisiones afectadas:** ninguna.
 
 ## Historial
+
+### 2026-11-14 (noche) — Contratos 0.12.2: fuente principal de NDVI en Microsoft Planetary Computer
+
+- **Archivos:** `contratos/ndvi.schema.json` (descripciones), ejemplo e inválidos de NDVI, tipos, README; fila de MODIS en `04`; `docs/README-borrador.md`; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.2, en un commit aparte).
+- **Cambio y motivo:** pedido de Eduardo. La fuente principal de NDVI pasa a ser Microsoft Planetary Computer: colección `modis-13Q1-061`, MOD13Q1 V061 de NASA LP DAAC servido por Microsoft, con la cita Didan, K. (2021), doi:10.5067/MODIS/MOD13Q1.061. ORNL DAAC queda de respaldo y no se llama en vivo; la demo usa caché y paquete. El schema no fijaba el servicio en ningún enum: solo cambian las descripciones y el ejemplo, así que es compatible. `[VERIFICAR]`: una persona lee https://planetarycomputer.microsoft.com/terms antes de la entrega.
+- **Fuente / evidencia:** pedido de Eduardo transmitido por la sesión maestra; la cita de Didan (2021) ya está en `README.md`.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — Contratos 0.12.1: inicio de IMERG en 1998-01-01
 
