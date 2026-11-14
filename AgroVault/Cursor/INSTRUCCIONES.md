@@ -24,7 +24,7 @@ Antes de una tarea que no sea un typo, lee [[Compartido/Reglas]], [[Compartido/R
 ## Qué ya está decidido y Cursor suele reabrir
 
 - Motor en `web/src/motor/`, Web Worker, TypeScript. FastAPI no calcula el balance ni el ranking.
-- Tipos del front generados desde OpenAPI.
+- Tipos de datos desde `contratos/tipos/` (generados de los JSON Schema, fuente de verdad); FastAPI respeta esos schemas con prueba; OpenAPI solo genera el cliente de las llamadas HTTP.
 - Polígono libre dentro del MVP, más paquete de demo de Isla para trabajar sin red.
 - Catálogo de cultivos en JSON, con fuente por valor. Vacío = `NO_EVALUABLE`.
 - Three.js carga `.bbmodel`. El render no elige la etapa.
@@ -40,7 +40,7 @@ alwaysApply: true
 ---
 
 - Contexto largo: AgroVault/Bienvenido.md, luego AgroVault/Compartido/.
-- Motor en TypeScript dentro de un Web Worker (web/). FastAPI (api/) solo proxy y cache. Tipos desde OpenAPI.
+- Motor en TypeScript dentro de un Web Worker (web/). FastAPI (api/) solo proxy y cache. Tipos de datos desde contratos/ (JSON Schema); OpenAPI solo para el cliente HTTP.
 - El front no recalcula indicadores. El 3D solo representa la salida del motor.
 - Dato faltante => NO_EVALUABLE. Toda cifra con fuente. No fijar [EN EVENTO] ni [DEPENDE-DATOS].
 - Cambios de alcance en docs/01-REGISTRO-DE-CAMBIOS.md.

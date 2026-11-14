@@ -1,6 +1,8 @@
 # contratos/
 
-Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un ejemplo por contrato y tipos TypeScript generados. **Solo los edita Mompin**: si necesitas un campo nuevo, pídelo.
+Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un ejemplo por contrato y tipos TypeScript generados.
+
+**Fuente de verdad `[DECIDIDO]` 14/11:** estos schemas mandan sobre los datos. El motor y el front usan `tipos/contratos.d.ts`; los modelos de FastAPI (`api/`) deben respetar estos schemas, con una prueba que lo verifique (por ejemplo, validar las respuestas o los ejemplos contra el schema); el cliente generado desde OpenAPI solo cubre las llamadas HTTP. **Solo los edita Mompin**: si necesitas un campo nuevo, pídelo.
 
 ## Contratos
 
@@ -9,7 +11,8 @@ Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un e
 | `comun.schema.json` | Definiciones compartidas: estados de doc 04, `fuente`, `valorCitado`, `meta`, coordenadas, ids | — |
 | `parcela.schema.json` | Polígono, cuadrícula y celdas con elevación y pendiente | Front (polígono) + API (elevación) |
 | `suelo.schema.json` | Textura y pH estimados, siempre `SUPUESTO`; respaldo de selector manual | API (`/api/suelo`, A2.14) |
-| `cultivo.schema.json` | Catálogo propio de cultivos: ciclo, etapas FAO-56, Kc, umbrales EcoCrop, ventanas de siembra | `datos/catalogos/` (A1.5) |
+| `cultivo.schema.json` | Catálogo propio de cultivos: ciclo, etapas FAO-56, Kc, umbrales EcoCrop (lluvia del ciclo y lluvia anual por separado), ventanas de siembra | `datos/catalogos/` (A1.5) |
+| `tabla-suelos.schema.json` | Tabla por clase textural: rangos de FAO-56 Tabla 19 y TAW por metro (`mm/m`), con fuente o `NO_EVALUABLE` | `datos/catalogos/` (A1.6) |
 | `clima-escenario.schema.json` | Serie diaria de un año real del histórico (seco, habitual, lluvioso) | API (`/api/clima`) + motor (A2.5) |
 | `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo banda de incertidumbre por mes | API + motor (A2.13) |
 | `plan-siembra.schema.json` | Rotación del selector: cultivo por ciclo y, si se pinta por bloques, por celda | Front (selector) |
@@ -41,4 +44,4 @@ npm test        # valida cada ejemplo y comprueba que los casos de pruebas/inval
 npm run tipos   # regenera tipos/contratos.d.ts (no editar a mano)
 ```
 
-Versión del contrato: `0.2.0` (0.2.0 agrega `ponderacion` y deja B como criterio principal). Si un cambio rompe la compatibilidad, se sube la versión y se anota en `docs/01-REGISTRO-DE-CAMBIOS.md`.
+Versión del contrato: `0.3.0`. Historial: 0.2.0 agrega `ponderacion` y deja B como criterio principal; 0.3.0 agrega la lluvia anual al catálogo de cultivos (`umbrales.lluviaAnualMinMm` y `lluviaAnualMaxMm`, distinta de la lluvia del ciclo) y el contrato `tabla-suelos`. Si un cambio rompe la compatibilidad, se sube la versión y se anota en `docs/01-REGISTRO-DE-CAMBIOS.md`.

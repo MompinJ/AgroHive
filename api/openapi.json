@@ -354,7 +354,15 @@
       "AguaSuelo": {
         "properties": {
           "tawMmPorM": {
-            "$ref": "#/components/schemas/ValorNoEvaluable"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ValorEvaluable"
+              },
+              {
+                "$ref": "#/components/schemas/ValorNoEvaluable"
+              }
+            ],
+            "title": "Tawmmporm"
           }
         },
         "type": "object",
@@ -659,6 +667,17 @@
                 "type": "null"
               }
             ]
+          },
+          "cita": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cita"
           },
           "unidades": {
             "anyOf": [
@@ -1369,6 +1388,50 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "ValorEvaluable": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "const": "EVALUABLE",
+            "title": "Estado",
+            "default": "EVALUABLE"
+          },
+          "valor": {
+            "type": "number",
+            "title": "Valor"
+          },
+          "unidad": {
+            "type": "string",
+            "title": "Unidad"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "etiqueta": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "FUENTE",
+                  "SUPUESTO",
+                  "USUARIO"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Etiqueta"
+          }
+        },
+        "type": "object",
+        "required": [
+          "valor",
+          "unidad",
+          "fuente"
+        ],
+        "title": "ValorEvaluable"
       },
       "ValorNoEvaluable": {
         "properties": {

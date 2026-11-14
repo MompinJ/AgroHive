@@ -16,13 +16,13 @@ Para que Codex te cargue solo, esta ficha tiene que estar en la raíz del repo c
 
 Simulador "what if" de rotaciones de cultivos contra años reales de NASA POWER. Se busca la rotación que no colapsa en el peor año, no la de mayor rendimiento. Hackathon NASA Space Apps 2026, reto Field Shift, sede Boca del Río. Equipo de 4. Ramas: `main`, `balam`, `Mompin`, `Mafer`, `Eduardo`.
 
-El 14/11/2026 el hackathon ya empezó. Se puede escribir código. `contratos/` ya existe (A1.1, v0.2.0, falta la revisión de los 4); `web/` y `api/` todavía no tienen código. No inventes que ya compilan.
+El 14/11/2026 el hackathon ya empezó. Se puede escribir código. `contratos/` ya existe (A1.1, v0.3.0, falta la revisión de los 4); `web/` y `api/` todavía no tienen código. No inventes que ya compilan.
 
 ## Stack
 
 - `web/`: React, Vite, TypeScript. Motor en Web Worker, carpeta prevista `web/src/motor/`. Mapa Leaflet, cuadrícula Turf.js (tope cerca de 1600 celdas), 3D con Three.js y React Three Fiber (`InstancedMesh`), gráficas Recharts. Modelos `.bbmodel` cargados directo.
-- `api/`: Python, FastAPI. Proxy y caché de NASA POWER, Open-Meteo, elevación y suelo. `GET /health`. OpenAPI es la fuente de los tipos; el cliente TS se genera con `openapi-typescript`.
-- `contratos/`: JSON Schema, fuente de verdad de los contratos (`AgroVault/Compartido/Contratos.md` solo los resume). Ejemplos en `contratos/ejemplos/`, tipos TS en `contratos/tipos/`. Solo los edita Mompin.
+- `api/`: Python, FastAPI. Proxy y caché de NASA POWER, Open-Meteo, elevación y suelo. `GET /health`. Los modelos respetan los schemas de `contratos/`, con prueba; OpenAPI solo genera el cliente TS de las llamadas HTTP (`openapi-typescript`).
+- `contratos/`: JSON Schema, fuente de verdad de los contratos (`AgroVault/Compartido/Contratos.md` solo los resume). Ejemplos en `contratos/ejemplos/`, tipos TS en `contratos/tipos/` (son los tipos de datos del motor y del front). Solo los edita Mompin.
 - `datos/`: catálogos y demo precargada. `datos/cache/` no se commitea.
 - `modelos/`: `.bbmodel` generados con `herramientas/voxelkit.py`.
 - `docs/`: spec vigente.

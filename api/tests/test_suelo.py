@@ -2,6 +2,7 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
+from app import config, servicios
 from app.clientes import isric
 from app.main import app
 from app.textura import GRUPO, clasificar
@@ -52,10 +53,10 @@ def test_suelo_con_geotiff_reales(simular, validar):
     f = s["textura"]["fraccionesPct"]
     assert abs(f["arena"] + f["limo"] + f["arcilla"] - 100) < 0.5
     assert abs(f["arena"] - 50.4) < 0.3 and abs(f["limo"] - 27.1) < 0.3 and abs(f["arcilla"] - 22.5) < 0.3
-    assert s["textura"]["clase"] == "franco_arcillo_arenoso" and s["textura"]["grupo"] == "franco"
+    assert s["textura"]["clase"] == "franco_arcillo_arenoso" and s["textura"]["grupo"] == "arcilloso"  # grupo segun la tabla de A1.6
     assert 5.0 <= s["ph"]["valor"] <= 5.8
     assert s["profundidad"] == {"desdeCm": 0, "hastaCm": 30}
-    assert s["agua"]["tawMmPorM"]["estado"] == "NO_EVALUABLE"  # la tabla FAO-56 es de A1.6
+    assert s["agua"]["tawMmPorM"]["estado"] == "NO_EVALUABLE"  # sin tabla de suelos en este checkout: no se inventa
     assert "SUELO_SUPUESTO" in {a["codigo"] for a in s["advertencias"]}
     assert len(llamadas) == 12  # 4 propiedades x 3 capas
     cliente.get(URL)
@@ -86,3 +87,43 @@ def test_geotiff_ilegible_es_error_de_fuente(simular):
 
 def test_suelo_valida_coordenadas():
     assert cliente.get("/api/suelo?lat=95&lon=0").status_code == 422
+
+
+def escribir_tabla(texturas):
+    """Escribe una tabla de suelos con la misma forma que datos/catalogos/suelos.json (A1.6, de Mafer)."""
+    import json
+    config.CATALOGOS_DIR.mkdir(parents=True, exist_ok=True)
+    (config.CATALOGOS_DIR / "suelos.json").write_text(json.dumps({"meta": {"versionContrato": "0.2.0", "esEjemplo": False}, "versionCatalogo": "0.1.0",
+                                                                  "representanteGrupo": {}, "texturas": texturas}), encoding="utf-8")
+
+
+HUECO = "FAO-56 Tabla 19 no tiene fila para esta clase USDA; falta otra fuente citada."
+FUENTE_TAW = {"nombre": "FAO-56 (Allen et al., 1998), Tabla 19 y ecuacion 82", "url": "https://www.fao.org/4/x0490e/x0490e0c.htm", "cita": "Tabla 19, fila 'Loamy sand'",
+              "consultado": "2026-11-14", "unidades": "mm por metro de suelo"}
+
+
+def test_la_clase_de_isla_no_tiene_taw_en_fao56_y_se_dice(simular, validar):
+    simular(isric_real)
+    escribir_tabla([{"clase": "franco_arcillo_arenoso", "grupo": "arcilloso", "tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": HUECO}}])
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    assert s["textura"]["clase"] == "franco_arcillo_arenoso"
+    assert s["agua"]["tawMmPorM"] == {"estado": "NO_EVALUABLE", "motivo": HUECO}  # nunca se sustituye por el de un grupo vecino
+
+
+def test_taw_de_la_tabla_de_suelos_se_copia_con_su_fuente(simular, validar, monkeypatch):
+    simular(isric_real)
+    monkeypatch.setattr(servicios.clasificacion, "clasificar", lambda *a: "arena_franca")
+    escribir_tabla([{"clase": "arena_franca", "grupo": "arenoso", "tawMmPorM": {"estado": "EVALUABLE", "valor": 90.0, "unidad": "mm/m", "fuente": FUENTE_TAW, "etiqueta": "FUENTE"}}])
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    taw = s["agua"]["tawMmPorM"]
+    assert taw["estado"] == "EVALUABLE" and taw["valor"] == 90.0 and taw["fuente"]["cita"].startswith("Tabla 19")
+    assert s["textura"]["grupo"] == "arenoso"  # el grupo sale de la tabla
+
+
+def test_catalogo_de_suelos_roto_no_tumba_la_api(simular):
+    simular(isric_real)
+    config.CATALOGOS_DIR.mkdir(parents=True, exist_ok=True)
+    (config.CATALOGOS_DIR / "suelos.json").write_text("{roto", encoding="utf-8")
+    assert cliente.get(URL).status_code == 200

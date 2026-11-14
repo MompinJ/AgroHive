@@ -11,7 +11,8 @@ Contexto resumido por herramienta: `AgroVault/` (Codex: `AgroVault/Codex/AGENTS.
 
 ## Stack decidido
 - `web/`: React + Vite + TypeScript. El **motor de simulacion** corre en el navegador dentro de un **Web Worker** (`web/src/motor/`). El 3D usa Three.js con `InstancedMesh`.
-- `api/`: Python + FastAPI. Proxy y cache de NASA POWER, Open-Meteo, elevacion y suelo. Publica OpenAPI; el cliente TypeScript se genera de ahi.
+- `api/`: Python + FastAPI. Proxy y cache de NASA POWER, Open-Meteo, elevacion y suelo. Publica OpenAPI; el cliente TypeScript de las llamadas HTTP se genera de ahi.
+- Tipos `[DECIDIDO]`: Los JSON Schema de `contratos/` son la fuente de verdad de los datos: los tipos TS salen de ahi (`contratos/tipos/`) y los modelos de FastAPI deben respetarlos, con una prueba que lo verifique. El cliente generado desde OpenAPI solo cubre las llamadas HTTP.
 - `contratos/`: JSON Schema y ejemplos. **Solo lo edita Mompin**; si necesitas un campo nuevo, pidelo.
 - `modelos/`: modelos 3D `.bbmodel`, generados con el agente `modelador-voxel` (`.claude/agents/`) y `herramientas/voxelkit.py`.
 

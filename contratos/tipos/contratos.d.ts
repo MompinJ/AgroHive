@@ -81,6 +81,10 @@ export type FraccionesTextura = {
   limo: number;
   arcilla: number;
 } | null;
+/**
+ * Agua total disponible por metro de suelo. Si es EVALUABLE, la unidad es mm/m.
+ */
+export type TawPorMetro = ValorCitado & {};
 
 export interface ContratosAgroHive {
   "clima-escenario"?: ClimaEscenario;
@@ -91,6 +95,7 @@ export interface ContratosAgroHive {
   "resultado-celda"?: ResultadoCeldas;
   "resultado-rotacion"?: ResultadoRotacion;
   suelo?: Suelo;
+  "tabla-suelos"?: TablaSuelos;
 }
 /**
  * Serie climatica diaria de un escenario historico (seco, habitual, lluvioso). Es un anio real del historico, no una prediccion. La misma serie aplica a todas las celdas de la parcela.
@@ -282,7 +287,7 @@ export interface CoeficientesKc {
   final: ValorCitado;
 }
 /**
- * Rangos de EcoCrop y umbral de estres por calor.
+ * Rangos de EcoCrop y umbral de estres por calor. La lluvia viene en dos escalas distintas: del ciclo (siembra a cosecha) y anual (como la publica EcoCrop); no se convierten entre si.
  */
 export interface UmbralesCultivo {
   tMinAbsC: ValorCitado;
@@ -291,6 +296,8 @@ export interface UmbralesCultivo {
   tOptMaxC: ValorCitado;
   lluviaCicloMinMm: ValorCitado;
   lluviaCicloMaxMm: ValorCitado;
+  lluviaAnualMinMm: ValorCitado;
+  lluviaAnualMaxMm: ValorCitado;
   tEstresCalorC: ValorCitado;
 }
 export interface VentanaSiembra {
@@ -764,4 +771,64 @@ export interface PhEstimado {
  */
 export interface AguaSuelo {
   tawMmPorM?: ValorCitado;
+}
+/**
+ * Tabla de suelos por clase textural (A1.6): rangos de humedad y agua disponible por metro (TAW) de FAO-56 Tabla 19, con fuente por valor. La consume el motor para pasar de la textura del suelo (contrato suelo) a la capacidad de la cubeta. Basada en la propuesta de Mafer (datos/catalogos/suelos.schema.json). Son valores tipicos por textura, no medidos: aplicados a una parcela siguen siendo SUPUESTO.
+ */
+export interface TablaSuelos {
+  meta: Meta;
+  versionCatalogo: string;
+  /**
+   * Como se obtiene tawMmPorM a partir de los rangos, por ejemplo 'punto medio de (thetaFC - thetaWP) x 1000, FAO-56 ecuacion 82'.
+   */
+  metodoTaw?: string;
+  representanteGrupo: RepresentanteGrupo;
+  notaRepresentanteGrupo?: string;
+  /**
+   * Una entrada por clase USDA. Que no se repitan clases lo comprueba el motor o el generador del catalogo.
+   *
+   * @minItems 1
+   */
+  texturas: [TexturaTabla, ...TexturaTabla[]];
+}
+/**
+ * Clase USDA que usa cada grupo del selector manual cuando no hay mapa global. Es una eleccion del equipo, no de FAO.
+ */
+export interface RepresentanteGrupo {
+  arenoso: ClaseTextura;
+  franco: ClaseTextura;
+  arcilloso: ClaseTextura;
+}
+export interface TexturaTabla {
+  clase: ClaseTextura;
+  grupo: GrupoSuelo;
+  /**
+   * EVALUABLE si la clase tiene TAW con fuente; NO_EVALUABLE si la tabla no la cubre.
+   */
+  estado: "EVALUABLE" | "NO_EVALUABLE";
+  /**
+   * Nombre de la fila en FAO-56 Tabla 19 (por ejemplo 'Loam'); null si no hay fila para esa clase.
+   */
+  filaFao: string | null;
+  rangos: RangosHumedadSuelo | ValorNoEvaluable;
+  tawMmPorM: TawPorMetro;
+}
+/**
+ * Fila de FAO-56 Tabla 19: humedad a capacidad de campo y punto de marchitez (m3/m3), agua disponible (m3/m3), REW y TEW (mm).
+ */
+export interface RangosHumedadSuelo {
+  estado: "EVALUABLE";
+  fuente: Fuente;
+  thetaFcM3M3: RangoTabla;
+  thetaWpM3M3: RangoTabla;
+  aguaDisponibleM3M3: RangoTabla;
+  rewMm: RangoTabla;
+  tewMm: RangoTabla;
+}
+/**
+ * Rango [min, max] publicado en la tabla. Que min <= max lo comprueba el generador.
+ */
+export interface RangoTabla {
+  min: number;
+  max: number;
 }

@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/tabla-suelos.schema.json",
+  "title": "TablaSuelos",
+  "description": "Tabla de suelos por clase textural (A1.6): rangos de humedad y agua disponible por metro (TAW) de FAO-56 Tabla 19, con fuente por valor. La consume el motor para pasar de la textura del suelo (contrato suelo) a la capacidad de la cubeta. Basada en la propuesta de Mafer (datos/catalogos/suelos.schema.json). Son valores tipicos por textura, no medidos: aplicados a una parcela siguen siendo SUPUESTO.",
+  "type": "object",
+  "required": [
+    "meta",
+    "versionCatalogo",
+    "representanteGrupo",
+    "texturas"
+  ],
+  "properties": {
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
+    "versionCatalogo": {
+      "type": "string",
+      "minLength": 1
+    },
+    "metodoTaw": {
+      "description": "Como se obtiene tawMmPorM a partir de los rangos, por ejemplo 'punto medio de (thetaFC - thetaWP) x 1000, FAO-56 ecuacion 82'.",
+      "type": "string",
+      "minLength": 1
+    },
+    "representanteGrupo": {
+      "title": "RepresentanteGrupo",
+      "description": "Clase USDA que usa cada grupo del selector manual cuando no hay mapa global. Es una eleccion del equipo, no de FAO.",
+      "type": "object",
+      "required": [
+        "arenoso",
+        "franco",
+        "arcilloso"
+      ],
+      "properties": {
+        "arenoso": {
+          "$ref": "suelo.schema.json#/$defs/claseTextura"
+        },
+        "franco": {
+          "$ref": "suelo.schema.json#/$defs/claseTextura"
+        },
+        "arcilloso": {
+          "$ref": "suelo.schema.json#/$defs/claseTextura"
+        }
+      },
+      "additionalProperties": false
+    },
+    "notaRepresentanteGrupo": {
+      "type": "string"
+    },
+    "texturas": {
+      "description": "Una entrada por clase USDA. Que no se repitan clases lo comprueba el motor o el generador del catalogo.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/textura"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "rango": {
+      "title": "RangoTabla",
+      "description": "Rango [min, max] publicado en la tabla. Que min <= max lo comprueba el generador.",
+      "type": "object",
+      "required": [
+        "min",
+        "max"
+      ],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "rangosCitados": {
+      "title": "RangosHumedadSuelo",
+      "description": "Fila de FAO-56 Tabla 19: humedad a capacidad de campo y punto de marchitez (m3/m3), agua disponible (m3/m3), REW y TEW (mm).",
+      "type": "object",
+      "required": [
+        "estado",
+        "fuente",
+        "thetaFcM3M3",
+        "thetaWpM3M3",
+        "aguaDisponibleM3M3",
+        "rewMm",
+        "tewMm"
+      ],
+      "properties": {
+        "estado": {
+          "const": "EVALUABLE"
+        },
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        },
+        "thetaFcM3M3": {
+          "$ref": "#/$defs/rango"
+        },
+        "thetaWpM3M3": {
+          "$ref": "#/$defs/rango"
+        },
+        "aguaDisponibleM3M3": {
+          "$ref": "#/$defs/rango"
+        },
+        "rewMm": {
+          "$ref": "#/$defs/rango"
+        },
+        "tewMm": {
+          "$ref": "#/$defs/rango"
+        }
+      },
+      "additionalProperties": false
+    },
+    "taw": {
+      "title": "TawPorMetro",
+      "description": "Agua total disponible por metro de suelo. Si es EVALUABLE, la unidad es mm/m.",
+      "allOf": [
+        {
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        },
+        {
+          "type": "object",
+          "if": {
+            "properties": {
+              "estado": {
+                "const": "EVALUABLE"
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unidad": {
+                "const": "mm/m"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "textura": {
+      "title": "TexturaTabla",
+      "type": "object",
+      "required": [
+        "clase",
+        "grupo",
+        "estado",
+        "filaFao",
+        "rangos",
+        "tawMmPorM"
+      ],
+      "properties": {
+        "clase": {
+          "$ref": "suelo.schema.json#/$defs/claseTextura"
+        },
+        "grupo": {
+          "$ref": "suelo.schema.json#/$defs/grupoSelector"
+        },
+        "estado": {
+          "description": "EVALUABLE si la clase tiene TAW con fuente; NO_EVALUABLE si la tabla no la cubre.",
+          "type": "string",
+          "enum": [
+            "EVALUABLE",
+            "NO_EVALUABLE"
+          ]
+        },
+        "filaFao": {
+          "description": "Nombre de la fila en FAO-56 Tabla 19 (por ejemplo 'Loam'); null si no hay fila para esa clase.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rangos": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/rangosCitados"
+            },
+            {
+              "$ref": "comun.schema.json#/$defs/valorNoEvaluable"
+            }
+          ]
+        },
+        "tawMmPorM": {
+          "$ref": "#/$defs/taw"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "Una clase EVALUABLE tiene fila de la tabla y TAW con fuente.",
+          "if": {
+            "properties": {
+              "estado": {
+                "const": "EVALUABLE"
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "properties": {
+              "filaFao": {
+                "type": "string"
+              },
+              "tawMmPorM": {
+                "properties": {
+                  "estado": {
+                    "const": "EVALUABLE"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        {
+          "description": "Una clase NO_EVALUABLE no lleva TAW (nunca un numero por defecto).",
+          "if": {
+            "properties": {
+              "estado": {
+                "const": "NO_EVALUABLE"
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "properties": {
+              "tawMmPorM": {
+                "properties": {
+                  "estado": {
+                    "const": "NO_EVALUABLE"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

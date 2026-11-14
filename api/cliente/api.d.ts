@@ -139,7 +139,8 @@ export interface components {
         };
         /** AguaSuelo */
         AguaSuelo: {
-            tawMmPorM: components["schemas"]["ValorNoEvaluable"];
+            /** Tawmmporm */
+            tawMmPorM: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
         };
         /** CeldaEntrada */
         CeldaEntrada: {
@@ -227,6 +228,8 @@ export interface components {
                 number
             ] | null;
             periodo?: components["schemas"]["Periodo"] | null;
+            /** Cita */
+            cita?: string | null;
             /** Unidades */
             unidades?: string | null;
             /** Consultado */
@@ -483,6 +486,22 @@ export interface components {
             input?: unknown;
             /** Context */
             ctx?: Record<string, never>;
+        };
+        /** ValorEvaluable */
+        ValorEvaluable: {
+            /**
+             * Estado
+             * @default EVALUABLE
+             * @constant
+             */
+            estado: "EVALUABLE";
+            /** Valor */
+            valor: number;
+            /** Unidad */
+            unidad: string;
+            fuente: components["schemas"]["Fuente"];
+            /** Etiqueta */
+            etiqueta?: ("FUENTE" | "SUPUESTO" | "USUARIO") | null;
         };
         /** ValorNoEvaluable */
         ValorNoEvaluable: {

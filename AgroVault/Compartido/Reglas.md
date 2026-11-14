@@ -26,7 +26,7 @@ Aplican a Cursor, Codex y Claude. El detalle de producto está en [[Resumen]].
 - Cambiar cultivo o rotación invalida el resultado anterior hasta recalcular.
 - Mismos datos y mismo plan ⇒ mismo resultado.
 - Sin emojis en el código. Sin llaves ni tokens en el repo (variables de entorno).
-- Los contratos de datos son los JSON Schema de `contratos/`; sus tipos TS se generan en `contratos/tipos/`. El cliente del API sale de OpenAPI (`openapi-typescript`). Ningún tipo se duplica a mano (cómo se alinean los dos está en [[Pendientes]]).
+- Tipos `[DECIDIDO]` 14/11: Los JSON Schema de `contratos/` son la fuente de verdad de los datos: los tipos TS salen de ahí (`contratos/tipos/`) y los modelos de FastAPI deben respetarlos, con una prueba que lo verifique. El cliente generado desde OpenAPI solo cubre las llamadas HTTP. Ningún tipo se duplica a mano.
 
 ## Alcance y equipo
 

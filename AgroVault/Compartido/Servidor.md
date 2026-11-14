@@ -16,7 +16,7 @@ No hay contraseñas ni llaves en este vault ni en el repo. El acceso SSH lo tien
 | Cosa | Dónde |
 | --- | --- |
 | Usuario del sistema | `agrohive` (sin shell, sin sudo), carpeta `/opt/agrohive` |
-| Clon del repo | `/opt/agrohive/repo`. Hoy está en la rama `Eduardo` (la API aún no está en `main`); cuando Mompin integre el pull request, pasar a `main` |
+| Clon del repo | `/opt/agrohive/repo`, en la rama `main` desde la integración del 14/11 (commit `a57b98c`) |
 | Entorno de Python | `/opt/agrohive/venv` (fastapi, uvicorn) |
 | Servicio | `agrohive-api.service` (systemd), uvicorn en `127.0.0.1:8010`, solo local |
 | App | `ExecStart` apunta a `app.main:app` con `WorkingDirectory=/opt/agrohive/repo/api`. El `stub/app.py` provisional ya no se usa |
@@ -29,10 +29,10 @@ Convivencia con `mediworks` (V-16): comparte nginx, certbot y el droplet. Usa `m
 
 ## Cómo se actualiza
 
-1. Mompin integra a `main`.
-2. Eduardo, en el droplet: `sudo -u agrohive git -C /opt/agrohive/repo checkout main && sudo -u agrohive git -C /opt/agrohive/repo pull`, luego `sudo -u agrohive /opt/agrohive/venv/bin/pip install -r /opt/agrohive/repo/api/requirements.txt` y `systemctl restart agrohive-api`.
+1. Lo que entra a `main` en GitHub no llega solo al servidor: Eduardo lo despliega.
+2. En el droplet: `sudo -u agrohive git -C /opt/agrohive/repo pull`, luego `sudo -u agrohive /opt/agrohive/venv/bin/pip install -r /opt/agrohive/repo/api/requirements.txt` y `systemctl restart agrohive-api`.
 3. Si el front se sirve desde nginx (opción 2 de `docs/13`), se agrega un `location /` con `root` al server block de AgroHive; la API ya acepta el origen `https://64-23-143-102.sslip.io` en CORS.
-4. Comprobar `https://64-23-143-102.sslip.io/health` y `https://mediworks.mx/` (debe seguir en 200).
+4. Comprobar `https://64-23-143-102.sslip.io/health`, `/api/cultivos` y `https://mediworks.mx/` (debe seguir en 200).
 
 Logs: `journalctl -u agrohive-api`.
 
