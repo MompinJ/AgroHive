@@ -108,7 +108,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.12 | Bloques de suelo por tipo y humedad | R4 | S | Sonnet | A1.4 | Variantes en `modelos/` |
 | A2.13 `[EN CURSO]` backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | R2 + R3 | M | Opus | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, horizonte de 6 meses, etiquetado como aproximado. Después del motor; no bloquea el MVP |
 | A2.14 `[HECHO]` | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | R3 | M | Sonnet | A1.3, A0.7 | `GET /api/suelo` devuelve textura y pH con etiqueta `SUPUESTO`; respaldo manual (V-23) |
-| A2.15 | Cliente OpenLandMap y comparación con ISRIC en `GET /api/suelo` (V-23: ambos servicios) | R3 | S | Sonnet | A2.14 | `GET /api/suelo` devuelve `estimaciones` de ISRIC y OpenLandMap con fuente y `estimacionUsada` |
+| A2.15 `[HECHO]` | Cliente OpenLandMap y comparación con ISRIC en `GET /api/suelo` (V-23: ambos servicios) | R3 | S | Sonnet | A2.14 | `GET /api/suelo` devuelve `estimaciones` de ISRIC y OpenLandMap con fuente y `estimacionUsada` |
 | A2.16 (Mafer) | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | R3 / Mafer | M | Opus | A2.14, A1.6 | `agua.tawMmPorM` con `metodoTaw` y `retencion` (θsat, θFC, θWP), citado y `SUPUESTO`; prueba contra valores publicados del artículo |
 
 Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 hechas; el motor devuelve resultados por celda con el paquete de demo real (A2.4: POWER, SoilGrids y Terrarium de Isla; suelo franco del selector manual mientras el TAW de Isla es `NO_EVALUABLE`) y pasa las pruebas 1 a 5 de doc 05 (`web/src/motor/pruebas/c2.test.ts`); C2 se cruza al integrarse a `main`.
@@ -210,7 +210,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 10 | 1 | 0 | 3 | 71 % de 14 |
-| **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
+| **Eduardo** | 9 | 2 | 2 | 1 | 64 % de 14 |
 | **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
@@ -246,7 +246,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.4 | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | HECHO | paquete conforme a contratos (clima 2005-10-01 a 2025-12-31, terreno, suelo, proxima temporada) sobre una parcela ficticia en Isla; el motor ya corre con el |
 | A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | EN CURSO | backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir |
 | A2.14 | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | HECHO |  |
-| A2.15 | Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) | PENDIENTE |  |
+| A2.15 | Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) | HECHO |  |
 | A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | EN CURSO | front servido en el droplet; falta la demo real (A4.6) |
 | A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | PENDIENTE |  |
 | A5.4 | Medición de requisitos mínimos y fallback WebGL | BLOQUEADO | espera el modo 2D (A3.6) |

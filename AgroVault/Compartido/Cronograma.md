@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 10 | 1 | 0 | 3 | 71 % de 14 |
-| **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
+| **Eduardo** | 9 | 2 | 2 | 1 | 64 % de 14 |
 | **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **21 de 56** actividades hechas (38 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **22 de 56** actividades hechas (39 %), 5 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -48,7 +48,7 @@ Proyecto completo: **21 de 56** actividades hechas (38 %), 5 en curso, 2 bloquea
 - [x] **A2.4** Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) `HECHO` — paquete conforme a contratos (clima 2005-10-01 a 2025-12-31, terreno, suelo, proxima temporada) sobre una parcela ficticia en Isla; el motor ya corre con el
 - [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir
 - [x] **A2.14** Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché ([[APIs]]) `HECHO`
-- [ ] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios)
+- [x] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) `HECHO`
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)
 - [ ] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan)
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)

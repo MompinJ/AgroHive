@@ -12,6 +12,14 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Motor con el suelo real de Isla y desempate del p50 al año más reciente (Mompin)
+
+- **Archivos:** `web/src/motor/escenarios.ts` (desempate), pruebas `escenarios.test.ts`, `motor.test.ts` y `c2.test.ts`; `docs/05`, `docs/13`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`. Se integra `origin/Eduardo` (A2.15 OpenLandMap, A2.16 en `/api/suelo` y paquete de demo regenerado).
+- **Decisión `[DECIDIDO]` (Mompin, 14/11):** si dos años quedan a la misma distancia del percentil, gana el **más reciente** (antes, el más antiguo). Se sigue declarando el segundo más cercano. Con la serie del paquete de demo (20 años) el p50 empata siempre entre los dos años centrales: el habitual pasa de **2008 a 2016**. Seco 2023 y lluvioso 2024 no cambian.
+- **Suelo real de Isla en la evidencia de C2:** `datos/demo/respuestas/suelo.json` trae TAW 122.3 mm/m y retención por Saxton y Rawls (θsat 0.454, θFC 0.293, θWP 0.171). La rotación pasa a `EVALUABLE` en los tres escenarios y cada ciclo arranca con la humedad de POWER (GWETROOT convertida; advertencia `CONDICION_INICIAL_GWETROOT`) en lugar del supuesto de capacidad de campo. Milpa en el seco (2023): 2.4 % de la demanda sin cubrir, 46 días, 25.3 mm de déficit y 1 052.8 mm de exceso (coincide con lo que reportó Eduardo). Un suelo sin TAW sigue dando `NO_EVALUABLE`.
+- **Ranking B con el suelo real:** 1.º maíz-maíz (arrepentimiento máximo 0.0065), 2.º milpa (0.013), 3.º frijol-frijol (0.060); para las tres el peor escenario es el lluvioso (2024). Con el selector franco y el arranque a capacidad de campo el frijol iba primero: el orden depende del suelo y de la condición inicial.
+- **Fuente / evidencia:** `cd web && npm test` (145 pruebas; la de escena `demo-motor.test.ts` la ajusta su sesión, porque suponía el TAW de Isla en `NO_EVALUABLE`).
+
 ### 2026-11-14 — A3.1 y A3.2: escena 3D con relieve y cargador de `.bbmodel` (Mompin, rama `Mompin-escena`)
 
 - **Archivos:** `web/src/escena/` (nuevo), `web/escena.html`, `web/package.json` (three 0.187.0, @types/three 0.187.0, vitest 5.1.0), `docs/06`, `docs/07`, `docs/14`, `AgroVault/Compartido/Pendientes.md`.
@@ -156,6 +164,22 @@ Decisiones afectadas:
 - **Archivos:** `.gitignore`; se dejan de versionar `.vscode/tasks.json`, `.vscode/settings.json`, `.vscode/agrohive.code-snippets` y `.vscode/mascota/clawd.py`.
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
+
+### 2026-11-14 (noche) — A2.16 conectada: TAW y retencion en /api/suelo; /health con commit (Eduardo)
+
+- **Archivos:** `api/app/pedotransferencia.py` (nuevo), `api/app/servicios.py`, `api/app/modelos.py`, `api/app/config.py`, `api/app/main.py`, pruebas, `datos/demo/` (paquete regenerado), `api/README.md`.
+- **Cambio:** `GET /api/suelo` devuelve `agua.tawMmPorM`, `metodoTaw` y `retencion` por Saxton y Rawls (2006), usando `datos/catalogos/saxton_rawls.py` de Mafer sin copiarlo. Para la parcela demo (franco arcillo arenoso, que FAO-56 Tabla 19 no cubre): **TAW 122.3 mm/m**, thetaSat 0.454, thetaFC 0.293, thetaWP 0.171 m3/m3, con arena 48.4 %, arcilla 25.7 % y materia organica 2.79 % (de 16.2 g/kg de carbono organico de ISRIC x 1.724). `suelo.json` del paquete de demo ya los trae, validado contra `suelo.schema.json`.
+- **Decisiones mias, a confirmar:** (1) Saxton-Rawls va **antes** que la tabla FAO-56 porque da la retencion que el motor necesita para GWETROOT; la tabla queda de respaldo; (2) con estimacion EXPLORATORIA (pixeles a mas de 1 km) o sin carbono organico el TAW es NO_EVALUABLE con su motivo; (3) el factor 1.724 (van Bemmelen) esta citado como Nelson y Sommers (1982) con `VERIFICAR`: lo debe confirmar una persona.
+- **Tambien:** `VERSION_CONTRATO` de la API pasa a 0.7.0 y `/health` incluye `versionContrato` y `commit` (pedido de Mompin #42).
+- **Pendiente:** un solo PR con A2.15 + esta conexion + paquete regenerado; Mompin integra y yo despliego una vez.
+
+### 2026-11-14 (noche) — A2.15: OpenLandMap en /api/suelo (Eduardo)
+
+- **Archivos:** `api/app/clientes/openlandmap.py`, `api/app/servicios.py`, `api/requirements.txt` (rasterio), pruebas, `api/README.md`, `AgroVault/Compartido/APIs.md` y `Pendientes.md`, `datos/pruebas-apis/respuestas/openlandmap_estimacion.json`.
+- **Cambio:** `GET /api/suelo` devuelve en `estimaciones` las dos fuentes (ISRIC 250 m y OpenLandMap 30 m) y `estimacionUsada` (ISRIC por defecto; OpenLandMap si ISRIC no responde, con la advertencia `SUELO_ISRIC_NO_DISPONIBLE`). Si OpenLandMap falla, el endpoint sigue con ISRIC y `OPENLANDMAP_NO_DISPONIBLE`.
+- **Fuente / evidencia:** lectura real del 14/11 en (-95.53, 18.03): OpenLandMap da arcilla 28 %, arena 48 %, limo 24 % (la **misma clase** que ISRIC, franco arcillo arenoso), pH 5.9 contra 5.4 de ISRIC y carbono 8.2 g/kg contra 16.2 g/kg de ISRIC (ambos 0-30 cm): **coinciden en textura y difieren en pH y sobre todo en carbono (el doble)**, dato relevante para A2.16 (Saxton-Rawls usa materia organica).
+- **Decision mia, a confirmar:** ISRIC sigue como estimacion usada (es la verificada con su documentacion); cambiar a OpenLandMap es una linea.
+- **Ojo para el despliegue:** nueva dependencia `rasterio` (rueda con GDAL); la primera consulta en frio tarda unos 12 s.
 
 ### 2026-11-14 (noche) — Marcador de chamba en el buzon de quejas (Eduardo, pedido de Mompin #28)
 
