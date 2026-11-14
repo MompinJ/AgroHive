@@ -55,6 +55,7 @@ function VistaPrevia() {
   const parcela =
     fuente === 'motor' ? parcelaMotor : fuente === 'carga' ? parcelaCarga : fuente === 'cuadricula' ? (parcelaBalam ?? parcelaMotor) : (parcelaEjemplo as unknown as Parcela);
   const conMotor = fuente !== 'ejemplo' && (fuente !== 'cuadricula' || parcelaBalam !== null);
+  const sueloEscena = useMemo(() => (fuente === 'ejemplo' ? null : entradasDemo(suelo).suelo), [fuente, suelo]);
   const idRotacion: RotacionPrueba = fuente === 'carga' ? 'R1' : rotacion;
 
   useEffect(() => {
@@ -196,6 +197,7 @@ function VistaPrevia() {
       <EscenaParcela
         parcela={parcela}
         resultado={resultado}
+        suelo={sueloEscena}
         onEscena={(e) => {
           window.escenaPrueba = e;
         }}

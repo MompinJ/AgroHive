@@ -1,10 +1,11 @@
-// Fuente de los .bbmodel de Mafer (modelos/cultivos/). Vite los empaqueta como
+// Fuente de los .bbmodel de Mafer (modelos/cultivos/ y modelos/suelos/). Vite los empaqueta como
 // texto y se cargan bajo demanda: solo se baja el modelo que la escena usa.
 // Para sumar un cultivo basta con dejar su <cultivo>_<etapa>.bbmodel en modelos/cultivos/.
 
 import { leerBbmodel, type ModeloVoxel } from './bbmodel';
 
-const archivos = import.meta.glob('../../../../modelos/cultivos/*.bbmodel', {
+// Plantas (modelos/cultivos/) y losas de suelo (modelos/suelos/, A2.12); los nombres no se repiten.
+const archivos = import.meta.glob(['../../../../modelos/cultivos/*.bbmodel', '../../../../modelos/suelos/*.bbmodel'], {
   query: '?raw',
   import: 'default',
 }) as Record<string, () => Promise<string>>;
@@ -23,7 +24,7 @@ const cache = new Map<string, Promise<ModeloVoxel>>();
 
 export function cargarModelo(clave: string): Promise<ModeloVoxel> {
   const cargar = porClave.get(clave);
-  if (!cargar) return Promise.reject(new Error(`No hay ${clave}.bbmodel en modelos/cultivos/.`));
+  if (!cargar) return Promise.reject(new Error(`No hay ${clave}.bbmodel en modelos/.`));
   let p = cache.get(clave);
   if (!p) {
     p = cargar().then((texto) => leerBbmodel(JSON.parse(texto), `${clave}.bbmodel`));
