@@ -46,9 +46,9 @@ https://power.larc.nasa.gov/api/temporal/daily/point?start=20060101&end=20251231
 
 Sin verificar (hacer una llamada real antes de codificar):
 
-- `VERIFICAR` unidad de `ALLSKY_SFC_SW_DWN` (hay fuentes que dicen MJ/m²/día y otras kWh/m²/día; el bloque `parameters` de la respuesta trae la unidad). Es V-06.
-- `VERIFICAR` si `GWETROOT`, `GWETTOP`, `GWETPROF` están en la comunidad AG. La página de comunidades ubica la humedad de suelo en HY. Consultar `/api/temporal/daily/configuration`. No usar humedad de suelo de POWER en el balance hasta probarlo (V-06).
-- `VERIFICAR` CORS (V-22). Ninguna página lo declara. Por defecto todo pasa por el backend, como ya está decidido.
+- Probado el 14/11 (A0.7): `ALLSKY_SFC_SW_DWN` viene en MJ/m²/día. Ver `datos/pruebas-apis/LEEME.md`.
+- Probado el 14/11 (A0.7): `GWETROOT`, `GWETTOP` y `GWETPROF` sí están en AG (y en SB), sin unidad (fracción). El endpoint diario solo acepta las comunidades RE, SB y AG; `HY` da 422. Falta decidir si entran al balance (V-06).
+- Probado el 14/11 (A0.7): un GET simple devuelve `access-control-allow-origin: *`; el preflight `OPTIONS` da 404. Aun así, todo pasa por el backend, como ya está decidido (V-22).
 - `PRECTOTCORR` es mm/día; el diario es un valor por día, el mensual es promedio mm/día.
 
 ## Open-Meteo (respaldo, ET0, elevación, pronóstico)
@@ -62,7 +62,7 @@ Atribución obligatoria (CC BY 4.0). Gratis solo no comercial, sin garantía de 
 - Cobertura: ERA5 (0.25°) desde 1940, ERA5-Land (0.1°) desde 1950, con 5 días de retraso. Para consistencia multidecadal usar ERA5 o ERA5-Land, no "best match".
 - Variables diarias confirmadas: `temperature_2m_max`, `temperature_2m_min`, `shortwave_radiation_sum` (MJ/m²), `et0_fao_evapotranspiration` (mm, FAO-56 Penman-Monteith), `wind_speed_10m_max`.
 - Variables horarias confirmadas: `precipitation`, `soil_moisture_0_to_7cm`, `soil_moisture_7_to_28cm`, `soil_moisture_28_to_100cm`, `soil_moisture_100_to_255cm` (m³/m³).
-- Aviso de la propia página: ERA5-Land no trae lluvia, radiación ni viento. Para lluvia usar ERA5. `VERIFICAR` el nombre diario exacto de la lluvia (`precipitation_sum`) y de la humedad de suelo diaria con una llamada.
+- Aviso de la propia página: ERA5-Land no trae lluvia, radiación ni viento. Para lluvia usar ERA5. Probado el 14/11: `precipitation_sum` con `models=era5`; humedad de suelo diaria `soil_moisture_0_to_7cm_mean` (y 7-28, 28-100) con `models=era5_land`.
 - La nota de proveedor dice que el archivo histórico no está en el plan Standard de pago; el plan abierto sí aplica para uso no comercial.
 
 ### Elevación
@@ -74,18 +74,18 @@ Atribución obligatoria (CC BY 4.0). Gratis solo no comercial, sin garantía de 
 [Documentación](https://open-meteo.com/en/docs/seasonal-forecast-api). Base: `https://seasonal-api.open-meteo.com/v1/seasonal`.
 
 - Modelos: ECMWF Seasonal Seamless (EC46 los primeros 46 días, luego SEAS5), SEAS5, EC46; versiones de 51 miembros o media del ensamble. 36 km, global.
-- Horizonte: la página dice "7 Months"; por defecto 6 meses. Esto responde a V-21: el tope documentado es **7 meses**, no 9. El 9 que circula viene de una lista de terceros.
+- Horizonte: por defecto 6 meses. Probado el 14/11 (A0.7): `forecast_days=210` devuelve 7 meses y el máximo es 217 días; `forecast_months` se ignora. El 9 de listas de terceros no se sostiene (V-21).
 - Variables mensuales y semanales con **Mean y Anomaly** (precipitación, T2m, T máx y mín, radiación de onda corta, humedad de suelo en cuatro capas, evapotranspiración). La anomalía es pronóstico menos climatología del modelo (hindcasts ECMWF). Además hay probabilidades de anomalía y los índices EFI y Shift of Tails.
 - Actualización: EC46 a diario; SEAS5 el día 5 de cada mes.
 - No tiene corrección de sesgo. Se lee como "más seco o más húmedo que lo normal", nunca como milímetros. Coincide con la regla de banda de incertidumbre de [[Reglas]].
 - Atribución: "based on data and products of the European Centre for Medium-Range Weather Forecasts (ECMWF)".
-- `VERIFICAR` los nombres de parámetro de la API (la página solo muestra nombres de pantalla) y el selector de modelo. Probar con una llamada.
+- Probado el 14/11: `monthly=precipitation_mean,precipitation_anomaly,temperature_2m_mean,temperature_2m_anomaly` funciona (mm y K). El selector `models=` no se probó.
 
 ## Elevación alternativa
 
 ### AWS Terrain Tiles (Terrarium)
 
-[Registro](https://registry.opendata.aws/terrain-tiles). Bucket público `elevation-tiles-prod` (us-east-1), sin cuenta ni llave. Ruta: `https://elevation-tiles-prod.s3.amazonaws.com/terrarium/{z}/{x}/{y}.png`. Decodificar: `elevacion_m = (R * 256 + G + B / 256) - 32768`. Exige atribución a Mapzen/Linux Foundation y a las fuentes del DEM. Sin SLA. `VERIFICAR` el zoom máximo (fuentes dicen 15 o 16). Sirve para decodificar en el navegador o en el backend con Pillow.
+[Registro](https://registry.opendata.aws/terrain-tiles). Bucket público `elevation-tiles-prod` (us-east-1), sin cuenta ni llave. Ruta: `https://elevation-tiles-prod.s3.amazonaws.com/terrarium/{z}/{x}/{y}.png`. Decodificar: `elevacion_m = (R * 256 + G + B / 256) - 32768`. Exige atribución a Mapzen/Linux Foundation y a las fuentes del DEM. Sin SLA. Probado el 14/11: z15 responde 200 y z16 da 404 en la zona de prueba. Sirve para decodificar en el navegador o en el backend con Pillow.
 
 ### OpenTopography
 
@@ -97,6 +97,7 @@ Atribución obligatoria (CC BY 4.0). Gratis solo no comercial, sin garantía de 
 
 [Acceso y FAQ](https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_02.html) (actualizada 27/01/2026), [WCS](https://docs.isric.org/globaldata/soilgrids/wcs.html) (04/12/2025).
 
+- **Probado el 14/11 (A2.14):** el WCS responde para `clay`, `sand`, `silt` y `phh2o` (30 coberturas por mapa, p. ej. `clay_0-5cm_mean`). La reproyección a EPSG:4326 del servidor deja ceros en ventanas chicas: se pide en el CRS nativo (Homolosine, `+proj=igh`) y se convierte la coordenada con `pyproj`. Un 0 es "sin dato" (hay una franja de ~500 m sin dato junto a la parcela de prueba). Conversión: arena y arcilla g/kg ÷ 10 = %, pH ×10 ÷ 10 ([FAQ de ISRIC](https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html)). Implementado en `api/app/clientes/isric.py`.
 - La API REST sigue anunciada como **pausada** por problemas, sin fecha de regreso, y su política de uso es de 5 llamadas por minuto. No depender de ella. `VERIFICAR` si volvió desde enero.
 - WCS: un servicio por propiedad, `https://maps.isric.org/mapserv?map=/map/<propiedad>.map`. Ejemplos documentados con `nitrogen.map`; `clay.map` y `sand.map` siguen el mismo patrón y `phh2o.map` se confirma con GetCapabilities.
 - Cada servicio expone 24 coberturas (6 profundidades x 4 cuantiles). Patrón de ID: `<propiedad>_<profundidad>_<cuantil>`, por ejemplo `nitrogen_5-15cm_Q0.5`. `VERIFICAR` con GetCapabilities el ID exacto de la capa superficial y la media.
@@ -131,7 +132,7 @@ Regla: cualquiera de las dos queda `SUPUESTO`; el selector manual FAO-56 sigue d
 - **AppEEARS** ([API](https://appeears.earthdatacloud.nasa.gov/api/)): inicio de sesión `POST /api/login` (Basic con Earthdata, devuelve token Bearer de unas 48 h); muestras puntuales con `POST /api/task` (`task_type: "point"`, `params.dates`, `params.layers`, `params.coordinates` en EPSG:4326). Respuesta 202 con `task_id`; consultar `GET /api/task/{id}`. Para NDVI MODIS, `MOD13Q1.061` con capa `_250m_16_days_NDVI` (`VERIFICAR`: el nombre de capa vino de un resumen, no del texto literal). Es asíncrono; no sirve para el flujo en vivo del polígono.
 - **GIBS / Worldview**: capas WMTS sin llave, ejemplo `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/{fecha}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`. Hubo un reporte de tiles negros en la capa de color verdadero. `VERIFICAR` el ID de la capa de precipitación en el documento de capacidades. Decoración de mapa solamente; no alimenta el motor.
 
-## Orden sugerido de pruebas (para quien tome A0.7 y A2.14)
+## Orden sugerido de pruebas (los pasos 1, 2, 3 y 5 ya se hicieron en A0.7, ver `datos/pruebas-apis/LEEME.md`; quedan el 4 y el 6)
 
 1. POWER diario puntual con los 7 parámetros de arriba: unidades reales, `GWETROOT` en AG, un navegador con `fetch` para CORS.
 2. Open-Meteo archivo con ERA5: nombres diarios exactos de lluvia y humedad de suelo; contar llamadas gastadas.
