@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — `/health` lee la version de contratos (Eduardo)
+
+- **Archivos:** `api/app/config.py`, `api/tests/test_basico.py`.
+- **Cambio:** `VERSION_CONTRATO` ya no va escrito en la API. Al arrancar se lee `version` de `contratos/package.json` (ruta por `AGROHIVE_CONTRATOS_PACKAGE`, si no el paquete del repo). Si el archivo no esta, no es JSON o no trae `version`, la API no arranca. No se inventa un numero. `/health` sigue publicando ese valor.
+- **Fuente / evidencia:** `contratos/package.json` esta en `0.12.2`. Antes el codigo tenia el mismo texto fijo: coincidia hoy y se desfasaba en el siguiente bump hasta correr pytest.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Merge de main y estado de A5.4 (Eduardo)
 
 - **Archivos:** `docs/14` (marca y vistas regeneradas), `docs/01`, `docs/04`, `docs/11` (resolución del merge).

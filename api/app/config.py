@@ -1,4 +1,5 @@
 """Configuracion por variables de entorno. Nunca poner llaves ni tokens en el repo."""
+import json
 import os
 from pathlib import Path
 
@@ -9,7 +10,26 @@ CATALOGOS_DIR = Path(os.environ.get("AGROHIVE_CATALOGOS_DIR", RAIZ / "datos" / "
 CALENDARIO_DIR = Path(os.environ.get("AGROHIVE_CALENDARIO_DIR", RAIZ / "datos" / "calendario"))
 CORS_ORIGENES = [o.strip() for o in os.environ.get("AGROHIVE_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173").split(",") if o.strip()]
 VERSION_API = "0.1.0"
-VERSION_CONTRATO = "0.12.2"  # debe coincidir con contratos/package.json; la prueba de /health lo exige
+PAQUETE_CONTRATOS = Path(os.environ.get("AGROHIVE_CONTRATOS_PACKAGE", RAIZ / "contratos" / "package.json"))
+
+
+def leer_version_contrato(ruta: Path) -> str:
+    """Version de contratos/package.json. Si no esta, la API no arranca: no se inventa un numero."""
+    try:
+        texto = ruta.read_text(encoding="utf-8")
+    except OSError as e:
+        raise RuntimeError(f"No se encontro la version de contratos en {ruta}") from e
+    try:
+        paquete = json.loads(texto)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"contratos/package.json no es JSON valido: {ruta}") from e
+    version = paquete.get("version") if isinstance(paquete, dict) else None
+    if not isinstance(version, str) or not version.strip():
+        raise RuntimeError(f"contratos/package.json no trae version: {ruta}")
+    return version.strip()
+
+
+VERSION_CONTRATO = leer_version_contrato(PAQUETE_CONTRATOS)
 
 
 def commit() -> str | None:
