@@ -31,6 +31,7 @@ Estas decisiones se tomaron al iniciar el evento y **prevalecen** sobre las prop
 | Servidor (V-15 a V-17) | Droplet de Eduardo con `sslip.io` y certificado Let's Encrypt. Cerrado | Opciones de "Servidor sin dominio" |
 | Calendario de siembra (A0.6, V-20) | Las ventanas de siembra **dependen del lugar, no del cultivo**: salen del catálogo y van en el contrato `calendario-local` (municipio con clave INEGI, cultivo, temporada PV/OI, ventana con fuente SIAP o INIFAP; sin dato, `NO_EVALUABLE`). La fecha de siembra de cada ciclo la elige el usuario; el plan guarda el calendario usado y un `porQue`. Un cultivo que la fuente no registra en el lugar se muestra, pero no se recomienda (caso: calabaza en Isla, SIAP 2021-2025). Mafer revisa si SIAP tiene API o datos abiertos de siembras | Ventanas por cultivo en el catálogo |
 | Clima por ciclo (A2.8) | Opción (c) `temporada_tipica`: cada ciclo en su temporada típica (PV u OI) dentro del año del escenario | Opciones a/b/c abiertas en 05 |
+| Escenarios (A2.5) | El percentil p10 / p50 / p90 se calcula sobre la **lluvia de las temporadas de siembra PV y OI** (año agrícola de SIAP: OI de octubre de *t*-1 a marzo de *t*, PV de abril a septiembre de *t*), no del año calendario. El escenario es un año real y siempre se muestra. Desempate: el año más antiguo; se declara el segundo más cercano (con 20 años el p50 siempre empata entre los dos centrales: hoy 2008 sobre 2016). Detalle en 05, paso 1 (Mompin, 14/11) | "Lluvia anual" `[PROPUESTA]` en 04 y 05 |
 
 ## Consecuencias técnicas
 

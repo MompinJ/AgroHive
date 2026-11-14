@@ -30,6 +30,26 @@ Decisiones afectadas:
 - **Fuente / evidencia:** CSV de cierre agrícola municipal de SIAP y los PDF de INIFAP citados en `datos/catalogos/README.md`; consultado el 14/11/2026.
 - **Decisiones afectadas:** V-20 cerrado (calendario cargado); la zona demo de 13 pasa a verificada.
 
+### 2026-11-14 — A4.2 ranking, contratos 0.6.0 en el motor y escenarios con el paquete de demo (Mompin)
+
+- **Archivos:** `web/src/motor/ranking.ts` (nuevo), `motor.ts`, `balance.ts`, `escenarios.ts`, `protocolo.ts`, `cliente.ts`, `index.ts`, `tipos.ts`; pruebas `ranking.test.ts` y `c2.test.ts`; se borra el fixture propio `web/src/motor/pruebas/datos/power-isla-2006-2025.json` (las pruebas usan `datos/demo/respuestas/`); `docs/05`, `docs/13`, `docs/14`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
+- **A4.2:** criterio B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio) con respaldo automático A cuando solo el pilar hídrico tiene número, que es el caso hasta A3.7. Normalización definida en A4.2 (doc 05, paso 7): déficit hídrico = fracción de la demanda cubierta; compatibilidad = fracción de siembras en ventana; protección del suelo = 1 − índice de erosión; calor y aporte indirecto son complementarios y quedan fuera del puntaje. Pesos iguales `SUPUESTO` si no hay pesos del usuario ni con fuente. Las rotaciones `EXPLORATORIO` no reciben posición.
+- **Exceso de agua:** se calcula y se expone (`excesoTotalMm`, `excesoMm` por celda; los días con exceso van en la evidencia de la tarjeta y en `ResultadoMotor.exceso`, porque el contrato no tiene campo para ellos). No entra al ranking hasta que el equipo lo decida.
+- **Contratos 0.6.0:** el motor llena `seleccion.lluviaTemporadasMm` (PV, OI y total con la fuente SIAP) y deja `etapa: null` en los registros sin parámetros del cultivo.
+- **Cambio de escenario habitual:** con la ventana del paquete de demo (2005-10-01 a 2025-12-31: 20 años agrícolas) el habitual pasa de **2016 a 2008**; seco 2023 y lluvioso 2024 no cambian. Con 20 años el p50 es el punto medio de los dos años centrales (2016: 1 912.0 mm; 2008: 1 932.1 mm), que empatan, y la regla de desempate elige el más antiguo. Reemplaza el "habitual 2016" de la entrada anterior.
+- **Evidencia de C2:** con `suelo.json` del paquete (franco arcillo arenoso) la rotación es `NO_EVALUABLE` (TAW hasta A2.16); con el selector manual declarado (franco) da resultados por celda y por rotación conformes al contrato y el ranking A de tres rotaciones. 59 pruebas en verde.
+
+### 2026-11-14 — A2.5, A2.6 y A2.7: motor de agua y escenarios (Mompin)
+
+- **Archivos:** `web/src/motor/` (escenarios, ET0, cultivo y Kc, cubeta, suelo, estados, motor, protocolo y Web Worker, cliente; pruebas en `web/src/motor/pruebas/` con un fixture real de POWER), `web/package.json` (vitest 5.1.0 y script `test`), `docs/05`, `docs/04`, `docs/13`, `docs/14`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
+- **Decisión `[DECIDIDO]` (Mompin, 14/11) sobre los escenarios:** el percentil p10 / p50 / p90 se calcula sobre la **lluvia de las temporadas de siembra PV y OI**, no del año calendario. **Ventanas:** año agrícola de SIAP, con OI = siembras de octubre de *t*-1 a marzo de *t* y PV = siembras de abril a septiembre de *t*; la lluvia del año *t* es la suma del 1 de octubre de *t*-1 al 30 de septiembre de *t*. Fuente: SIAP, *Normatividad Técnica para la Generación de Estadística Básica Agropecuaria 2022*, p. 10, p. 20 (Cuadro No. 1) y p. 46. **Percentil:** definición 7 de Hyndman y Fan (1996), sobre los años con las dos temporadas completas (mínimo 10, doc 04). **Desempate:** año más cercano al percentil; si dos quedan a la misma distancia (menos de 0.05 mm) gana el más antiguo, y siempre se declara el segundo más cercano. La serie del escenario cubre los 18 meses del año agrícola de SIAP (oct *t*-1 a mar *t*+1).
+- **Resultado con datos reales** (POWER, celda de la parcela demo, 2006-2025): seco 2023, habitual 2016, lluvioso 2024 (2025 queda a 2 mm de 2024).
+- **Cambio (A2.6):** ET0 Penman-Monteith FAO-56 desde POWER (Hargreaves si faltan variables, ET0 de Open-Meteo si viene), Kc por la curva FAO-56 y cubeta FAO-56 cap. 8 con TAW del suelo y p del cultivo. Cada ciclo se simula en su temporada dentro del año agrícola del escenario (A2.8); las fechas de `resultado-celda` son las del plan.
+- **Cambio (A2.7):** pilar de déficit hídrico y estados de evaluabilidad (`ERROR_DATOS` > `NO_EVALUABLE` > `EXPLORATORIO` > `RESPALDO_HISTORICO` > `EVALUABLE`), con salida validada contra `resultado-rotacion` y `resultado-celda`.
+- **Supuestos declarados en el resultado:** cada ciclo arranca a capacidad de campo (FAO-56 cap. 8) hasta que A2.16 dé θsat y θFC para convertir GWETROOT (la conversión ya está en el motor); sin escurrimiento por pendiente hasta A3.7; Kc sin ajuste climático (falta la altura del cultivo); `estadoPlanta` nunca `podrida` (sin umbral con fuente).
+- **Fuente / evidencia:** 45 pruebas en verde (`cd web && npm test`), entre ellas las pruebas 1 a 5 de doc 05 (la parte de erosión de la 2 queda como `todo` para A3.7) y los ejemplos 2, 3, 8 y 18 de FAO-56.
+- **Decisiones afectadas:** doc 05, paso 1 (de `[PROPUESTA]` a `[DECIDIDO]`); doc 04, escenarios; doc 13, fila nueva "Escenarios (A2.5)". Pedido a A2.4: que la serie de la demo empiece el 2005-10-01 para tener 20 años agrícolas.
+
 ### 2026-11-14 — API: suelo con la tabla de A1.6 y CORS para el front (Eduardo)
 
 - **Archivos:** `api/app/textura.py`, `api/app/servicios.py`, `api/app/modelos.py`, `api/app/config.py`, pruebas, `api/README.md`, `AgroVault/Compartido/Pendientes.md`.
@@ -77,6 +97,20 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Contratos 0.6.0 (compatible): lluvia por temporadas y etapa nula
+
+- **Archivos:** `contratos/clima-escenario.schema.json`, `contratos/resultado-celda.schema.json`, ejemplos, casos inválidos, tipos, README; versión en la vault.
+- **Cambio y motivo:** pedido del motor. (1) `seleccion.lluviaTemporadasMm` {pv, oi, total, fuente}, opcional: la lluvia del año agrícola con la que se elige el escenario (ventanas PV y OI de SIAP), separada de `lluviaAnualMm`, que sigue siendo la del año calendario. (2) `etapa` puede ser `null` cuando no hay parámetros del cultivo; en ese caso el registro no puede ser `EVALUABLE` y lleva motivo (antes el motor ponía `siembra`). Las dos cosas amplían el contrato: lo que ya validaba sigue validando.
+- **Fuente / evidencia:** `npm test` 55/55; `pytest` en `api/` 39; `validar.mjs` de los catálogos; `npm test` (45) y `npm run build` (incluye `tsc --noEmit`) en `web/`.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — A1.1 `[HECHO]`; A2.16 asignada a Mafer
+
+- **Archivos:** `14` (fila de A1.1, fila de A2.16 y tablero), `AgroVault/Compartido/{Pendientes,Resumen}.md`.
+- **Cambio y motivo:** decisiones de Mompin. A1.1 pasa a `[HECHO]` porque `main` está en verde y el equipo revisó los contratos en persona. A2.16 (TAW por pedotransferencia de Saxton y Rawls, 2006) la hace Mafer. Se actualizó además el estado del repo en `Resumen.md`, que todavía decía que no había código en `web/` ni en `api/`.
+- **Fuente / evidencia:** decisión del evento transmitida por la sesión maestra.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — `main` de vuelta en verde tras contratos 0.4.0 y 0.5.0; regla de cambios de contrato
 
 - **Archivos:** `api/app/{proxima,modelos,servicios}.py`, `api/tests/test_proxima.py`, `api/openapi.json`, `api/cliente/api.d.ts` (Eduardo); `web/src/ui/demo.ts` (balam); `datos/catalogos/{generar.py,cultivos.json,README.md}` (Mafer); `AGENTS.md`, `AgroVault/Compartido/Reglas.md`.
@@ -93,6 +127,44 @@ Decisiones afectadas:
 - **Archivos:** `.gitignore`; se dejan de versionar `.vscode/tasks.json`, `.vscode/settings.json`, `.vscode/agrohive.code-snippets` y `.vscode/mascota/clawd.py`.
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
+
+### 2026-11-14 (noche) — Marcador de chamba en el buzon de quejas (Eduardo, pedido de Mompin #28)
+
+- **Archivos:** `herramientas/cronograma.py`, `herramientas/quejas-ia/QUEJAS.md` (bloque entre marcadores) y `README.md`.
+- **Cambio:** `cronograma.py` ahora tambien escribe, al inicio de `QUEJAS.md`, un "Marcador de chamba": avance por persona ponderado por esfuerzo (XS=1, S=2, M=3, L=5), hechas, en curso y pendientes, ordenado de mas a menos, con una linea por lugar. Reutiliza el parser de `docs/14`; corre cada vez que se regenera el cronograma y `--revisar` tambien lo vigila.
+- **Regla de la casa:** las lineas solo usan numeros reales del tablero y hablan del trabajo, no de la persona.
+
+### 2026-11-14 (noche) — A2.4: paquete de demo conforme a contratos (Eduardo)
+
+- **Archivos:** `datos/demo/` (generador, cache, `respuestas/`, manifiesto y LEEME), `api/app/servicios.py`, `api/app/proxima.py`, pruebas, `api/README.md`, `docs/14`.
+- **Cambio:** el paquete se regenera con la **ventana `2005-10-01` a `2025-12-31`** que pidio el motor (Mompin, #27): 20 anios agricolas completos. Es `servicios.VENTANA_ESTANDAR` y tambien la usa la proxima temporada. El generador llama a la API por dentro, **valida las 4 respuestas contra `contratos/`** y guarda el cuerpo de cada una en `datos/demo/respuestas/` para que el motor las lea directo, ademas de la cache. Sin red: `/api/clima`, `/api/suelo` y `/api/proxima-temporada` responden 200 (probado con un proxy inexistente); con otro periodo, 503.
+- **Evidencia para C2:** el selector de escenarios del motor (`seleccionarEscenarios`) corre con `respuestas/serie-clima.json` y devuelve `EVALUABLE`: seco 2023, **habitual 2008**, lluvioso 2024 (Mompin reporto 2016 como habitual; la diferencia viene de la ventana, que ahora incluye oct-dic 2005, a revisar por el motor).
+- **Zona:** Isla (INEGI 30/077, A0.6 de Mafer, que da el municipio y no coordenadas). La parcela sigue siendo ficticia (2 ha); su centroide `(-95.53, 18.03)` coincide con la localidad de Isla (`VERIFICAR`).
+- **A avisar:** el front debe pedir esas fechas exactas; la cache de POWER y suelo cambio de clave, asi que el paquete anterior (ventana 2006) ya no sirve.
+
+### 2026-11-14 (tarde-noche) — API: contratos 0.5.0, GWETROOT y revision de Mompin (Eduardo)
+
+- **Archivos:** `api/` (modelos, servicios, clientes, rutas, pruebas, OpenAPI y cliente TS), `datos/pruebas-apis/`, `docs/14`, `AgroVault/Compartido/Pendientes.md`.
+- **Cambio, siguiendo la revision de Mompin (mensaje #4):** (1) las respuestas de clima, suelo, proxima temporada, elevacion y cultivos se validan **completas** contra los schemas de `contratos/` (`serie-clima`, `suelo`, `proxima-temporada`, `cultivo`, `parcela`); (2) modelos mas estrictos: `esEjemplo`, `etiqueta` y `estado` obligatorios y `clase` de textura limitada a las 12 clases; (3) los 503 devuelven `{estado: ERROR_DATOS, motivo}` como declara el OpenAPI, ya no `{detail}`; (4) `/api/cultivos` tiene `response_model`; (5) ISRIC con pixeles a mas de 1 km sale `EXPLORATORIO`, no `EVALUABLE`; (6) V-06: POWER pide `GWETROOT` y la API lo devuelve como `humedadRaizFraccionSat` (sin convertir) con el metadato `humedadSuelo`; (7) `/api/suelo` devuelve `estimaciones` (hoy solo ISRIC, con carbono organico en g/kg) y `estimacionUsada`.
+- **Fuente / evidencia:** GWETROOT real de POWER (fraccion 0 a 1, `datos/pruebas-apis/respuestas/power_ag.json`); carbono organico de ISRIC `soc` (dg/kg dividido entre 10, FAQ de ISRIC); 51 pruebas en verde.
+- **Cambio de comportamiento a avisar:** los 503 ya no traen `detail`; la clave de cache de POWER y de suelo cambio (`power_v2`, `suelo_isric_v2`), asi que el paquete de demo anterior no sirve y hay que regenerarlo.
+- **Pendiente mio:** regenerar el paquete de demo (A2.4) con la zona real de Mafer y el periodo `2005-10-01` a `2025-12-31` pedido por Mompin, y el cliente de OpenLandMap (A2.15).
+
+### 2026-11-14 (noche) — Cronograma por persona y marcas al dia (Eduardo)
+
+- **Archivos:** `herramientas/cronograma.py` (nuevo), `docs/14-CRONOGRAMA.md`, `docs/cronograma.html` (regenerado), `AgroVault/Compartido/Cronograma.md` (nueva), `AgroVault/Bienvenido.md`, `AgroVault/Compartido/Lectura.md`.
+- **Cambio:** el cronograma ahora se ve por persona (Mompin, Eduardo, Mafer, balam) con estado por actividad, en tres vistas generadas desde las marcas de `docs/14`: una seccion nueva "Estado por persona", la pagina `docs/cronograma.html` (ya no filtra por R1 a R4 ni guarda marcas en el navegador) y una nota de Obsidian. El HTML dejo de tener datos propios: no se desfasa de `docs/14`.
+- **Marcas puestas (verificadas):** A0.1 y A0.2 hechas (repo con `main` y 4 ramas; `docs/` en el repo); A1.4, A1.5 y A1.6 ya estaban marcadas por Mafer solo en el tablero y se copiaron a sus filas; A1.2 `[EN CURSO]` (build y rutas P0 a P3 verificados, falta el Worker del motor segun el README de balam); A5.4 y A5.8 `[BLOQUEADO]`.
+- **Estado:** 11 de 54 hechas (20 %): Mompin 2, Eduardo 6, Mafer 3, balam 0. A0.3 queda sin responsable unico.
+- **Pendiente de otros:** balam debe confirmar si A1.2 pasa a hecha cuando exista el Worker; Mafer, que `[HECHO]` de A1.4 a A1.6 ahora tambien esta en sus filas.
+
+### 2026-11-14 (noche) — A2.4: paquete de demo sin internet (Eduardo)
+
+- **Archivos:** `datos/demo/` (generador, manifiesto, cache y LEEME), `api/app/cache.py`, `api/app/clientes/terrarium.py`, `api/app/proxima.py`, `api/app/config.py`, pruebas, `api/README.md`, `docs/14`.
+- **Cambio:** la API lee `datos/demo/cache/` cuando falta su cache local. Con el paquete responden sin red clima 2006-2025, elevacion, suelo y proxima temporada de la parcela demo (probado con la red forzada a fallar: 200 en milisegundos; sin paquete, 503). El pronostico estacional guarda ahora su fecha de consulta y, si esta vencido y no hay red, se sirve con la advertencia `ESTACIONAL_EN_CACHE` y su fecha real en `emitido`.
+- **Limite:** la parcela es la de `contratos/ejemplos/parcela.ejemplo.json` (coordenadas ilustrativas cerca de Isla); los datos son reales para esa coordenada. Hay que regenerar con `datos/demo/generar.py` cuando A0.6 confirme la zona.
+- **Fuente / evidencia:** 43 pruebas, incluidas las del paquete; generado el 2026-11-14 desde NASA POWER, ISRIC, Terrarium y Open-Meteo.
+- **Pendiente:** A5.8 (capturas y demo completa con la red apagada) depende de que el front llame a la API (A4.6).
 
 ### 2026-11-14 (noche) — A4.7: front servido desde el droplet (Eduardo)
 

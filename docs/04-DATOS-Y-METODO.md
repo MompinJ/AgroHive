@@ -61,7 +61,7 @@ El MVP usa un **selector manual de tipo de suelo** (arcilloso, franco, arenoso) 
 
 1. Ventana objetivo: **2006–2025** (20 años completos). Nunca tratar 2026 como año completo.
 2. Respaldo: **2016–2025** (10 años) si falta tiempo, cobertura o calidad.
-3. Escenarios: **seco, habitual y lluvioso**, elegidos con criterio reproducible. Propuesta: años cerca de los percentiles **p10, p50 y p90** de lluvia; idealmente considerando también la distribución de la lluvia en etapas sensibles. `[PROPUESTA]`
+3. Escenarios: **seco, habitual y lluvioso**, elegidos con criterio reproducible: el año agrícola real más cercano a los percentiles **p10, p50 y p90** de la lluvia de las temporadas de siembra PV y OI de SIAP (no del año calendario). `[DECIDIDO]` 14/11; definición de las ventanas, percentil y desempate en doc 05, paso 1 (A2.5). La distribución de la lluvia en etapas sensibles queda como mejora.
 4. Mostrar siempre **qué años reales** corresponden a cada escenario.
 5. Si los datos lo permiten, evaluar la robustez sobre **todo el histórico** y usar los tres escenarios como vistas interpretables. `[DEPENDE-DATOS]`
 6. Conservar datos diarios, unidades, faltantes, fecha de consulta y método de agregación.

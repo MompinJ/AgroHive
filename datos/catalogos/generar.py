@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
-VERSION_CONTRATO = "0.5.0"
+VERSION_CONTRATO = "0.6.0"
 VERSION_CATALOGO = "0.1.0"
 CONSULTADO = "2026-11-14"
 

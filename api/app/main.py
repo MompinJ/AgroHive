@@ -1,8 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
-from . import config
+from . import config, servicios
+from .modelos import ErrorDatos
 from .rutas import clima, cultivos, proxima, suelo, terreno
 
 app = FastAPI(
@@ -22,3 +24,9 @@ app.include_router(proxima.router)
 @app.get("/health", tags=["salud"])
 def health():
     return {"status": "ok", "servicio": "agrohive-api", "version": config.VERSION_API}
+
+
+@app.exception_handler(servicios.SinDatos)
+async def sin_datos(_: Request, e: servicios.SinDatos):
+    """Ni la fuente principal, ni el respaldo, ni la cache respondieron: 503 con el cuerpo ErrorDatos que declara el OpenAPI."""
+    return JSONResponse(status_code=503, content=ErrorDatos(motivo=str(e)).model_dump())

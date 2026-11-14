@@ -85,7 +85,7 @@ def test_sin_fuentes_ni_cache_es_error_datos(simular):
     simular(responder(power_ok=False, om_ok=False))
     r = cliente.get(f"/api/clima?{PARAMS}")
     assert r.status_code == 503
-    assert r.json()["detail"]["estado"] == "ERROR_DATOS"
+    assert r.json()["estado"] == "ERROR_DATOS"
 
 
 def test_cache_vencida_si_todo_falla(simular, monkeypatch):
