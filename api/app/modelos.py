@@ -145,8 +145,14 @@ class ValorEvaluable(SinNulos):
     etiqueta: Literal["FUENTE", "SUPUESTO", "USUARIO"] | None = None
 
 
-class AguaSuelo(BaseModel):
+class MetodoTaw(BaseModel):
+    metodo: Literal["tabla_fao56", "pedotransferencia_saxton_rawls_2006"]
+    fuente: Fuente
+
+
+class AguaSuelo(SinNulos):
     tawMmPorM: ValorEvaluable | ValorNoEvaluable
+    metodoTaw: MetodoTaw | None = None  # obligatorio en el contrato si el TAW es EVALUABLE
 
 
 class Suelo(SinNulos):

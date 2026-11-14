@@ -7,7 +7,8 @@ import type { Crop, CropSequence } from './selections';
 // mediciones ficticias ni el ranking del ejemplo de resultado-rotacion.
 const meta: Meta = parcela.meta;
 const location: Parcela['ubicacion'] = parcela.ubicacion;
-const exampleCycles: Pick<Ciclo, 'ciclo' | 'cultivo'>[] = plan.ciclos;
+// El JSON importado ensancha los enums a string; el ejemplo ya valida contra plan-siembra en contratos/.
+const exampleCycles = plan.ciclos as Ciclo[];
 const cropLabels: Record<string, Crop> = { maiz: 'Maíz', frijol: 'Frijol', calabaza: 'Calabaza' };
 
 function cropForCycle(cycle: number): Crop {

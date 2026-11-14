@@ -30,6 +30,7 @@ Aplican a Cursor, Codex y Claude. El detalle de producto está en [[Resumen]].
 
 ## Alcance y equipo
 
+- Ningún cambio de contrato que rompa algo entra a `main` hasta que todo lo que depende de él esté en verde (API, catálogos, web): se arregla en el mismo cambio avisando al dueño, o el contrato acepta la versión anterior durante la transición. Antes de subir a `main`: `npm test` en `contratos/`, `pytest` en `api/`, `node datos/catalogos/validar.mjs` y `npx tsc --noEmit -p web`.
 - Antes y después de trabajar, verifica los cambios (`git fetch`, revisa lo que subieron otros, corre las pruebas) y actualiza la documentación existente que tu cambio afecte (`docs/`, `AgroVault/`, README, `AGENTS.md`) en vez de dejarla desfasada o crear duplicados.
 - Ya estamos en el evento: lo que decida Mompin es decisión del equipo; se registra como `[DECIDIDO]` (en `docs/13` y `docs/01`).
 - `[EN EVENTO]` y `[DEPENDE-DATOS]` no se fijan sin acuerdo. Si hace falta un default para compilar, déjalo marcado y anótalo.

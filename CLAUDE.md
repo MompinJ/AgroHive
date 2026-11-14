@@ -7,6 +7,7 @@
 - Lo marcado `[EN EVENTO]` o `[DEPENDE-DATOS]` no se fija sin acuerdo del equipo.
 - Ya estamos en el evento: lo que decida Mompin es decision del equipo; registrarla como `[DECIDIDO]`.
 - Antes y despues de trabajar: git fetch, revisar lo que subieron otros, correr las pruebas y actualizar la documentacion afectada (docs/, AgroVault/, README, AGENTS.md) sin dejarla desfasada ni duplicarla.
+- `main` siempre en verde: un cambio de contrato que rompa algo no entra a `main` hasta que lo que depende de el pase (se arregla en el mismo cambio avisando al dueno, o el contrato acepta la version anterior durante la transicion). Antes de subir: `npm test` en `contratos/`, pytest en `api/`, `node datos/catalogos/validar.mjs` y `tsc` en `web/`.
 - Registrar cambios de alcance en `docs/01-REGISTRO-DE-CAMBIOS.md`.
 - Trabajar solo en la rama propia; no editar archivos de otro responsable sin avisar.
 - Sin emojis en el codigo. No subir llaves ni tokens (usar variables de entorno).

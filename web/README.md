@@ -33,7 +33,7 @@ App conserva las selecciones de interfaz mientras permanece montada, incluso al 
 
 - Al comenzar A1.2 no existía `contratos/ejemplos/`; durante el trabajo llegó a `main` y se integró en `balam`. `src/ui/demo.ts` lee ubicación, área y aviso de `parcela.ejemplo.json`, y los cultivos de R1 de `plan-siembra.ejemplo.json`, usando tipos generados de A1.1. La selección global sigue los ciclos generales; la excepción `porCelda` no se interpreta en esta actividad.
 - El adaptador no importa el ejemplo de resultados: sus mediciones, años históricos y ranking son ficticios. Todos los indicadores continúan NO_EVALUABLE. Un cultivo ausente o desconocido también se muestra como NO_EVALUABLE. No se generan geometrías, parámetros de cultivo ni mediciones.
-- Compatibilidad con contratos 0.5.0: el adaptador tipa los campos `ciclo` y `cultivo` que consume mediante `Pick<Ciclo, ...>` del tipo generado; no fuerza el JSON completo a `Ciclo[]` ni convierte `temporada` con un cast. La edición de fechas, temporadas y calendario local pertenece a la integración de A3.4 y sigue pendiente.
+- Compatibilidad con contratos 0.5.0: se conserva la corrección integrada por Mompin en `main` (2deb464): los ciclos del JSON de ejemplo se interpretan como `Ciclo[]` del tipo generado, y el ejemplo se valida contra su schema en las pruebas de contratos. La edición de fechas, temporadas y calendario local pertenece a la integración de A3.4 y sigue pendiente.
 - R1 parte de maíz/frijol/maíz del ejemplo del contrato; R0 y R2 son alternativas locales para probar los controles, sin parámetros científicos ni resultados. Las secuencias no son recomendaciones agronómicas.
 - Isla y 2 ha son el supuesto de la demo del doc 06; la verificación de zona está pendiente según doc 13. La ilustración es decorativa, sin datos geográficos.
 - El mapa (A2.10), cuadrícula (A2.9), escena y motor se integrarán después. No hay botones que simulen calcular, cambiar a 3D ni dibujar polígonos.
@@ -54,6 +54,8 @@ Referencia principal: captura de AgroHive entregada por Balam y `DESIGN.md` de D
 Verificación de la primera iteración (blur de 2 px y texto oscuro): build y TypeScript; Chromium con Playwright a 1662×946, 1440×900, 1024×768, 768×1024, 390×844 y 320×700. Asset cargado, sin desbordamiento horizontal ni superposición de cabecera/título, sin gradiente de fondo, navegación y diálogos comprobados, cero errores de consola y cero solicitudes externas durante el flujo. No se realizó revisión con lector de pantalla. En el ajuste posterior de colores y blur a 3,5 px, la revisión visual queda a cargo de Balam por petición expresa; las capturas y el informe enlazados abajo son de la primera iteración.
 
 Capturas: [inicio de escritorio](evidencia/P0.png), [inicio móvil](evidencia/P0-mobile-390.png). Resultados: [revisión del inicio](evidencia/inicio.json). La evidencia de A1.2 de la sección siguiente corresponde a la base inicial, antes de esta iteración.
+
+Integración del diseño con `main` (contratos 0.5.0, 1922e7c): se conserva la corrección del adaptador de Mompin. Verificaciones: contratos 52/52, API 39 pruebas correctas (una advertencia de deprecación de Starlette/httpx), catálogos válidos y build/TypeScript correctos. Sin QA visual adicional, por petición de Balam.
 
 ## Revisión manual
 
