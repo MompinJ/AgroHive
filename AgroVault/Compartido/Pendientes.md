@@ -13,6 +13,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 | ID | Estado | Nota |
 | --- | --- | --- |
 | A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.5.0 en `contratos/`: 12 schemas (más `comun`), ejemplos, `npm test` (52/52) y tipos TS. Ver [[Contratos]] |
+| A2.16 | `[EN CURSO]` (Mafer): función y pruebas hechas en `datos/catalogos/saxton_rawls.py`; falta que Eduardo la conecte a `/api/suelo` | Verificada contra el artículo (Tabla 3, 12 clases): arena y arcilla en fracción, **materia orgánica en porcentaje**. Sin materia orgánica, o con materia orgánica > 8 % o arcilla > 60 %, el TAW queda `NO_EVALUABLE`. El carbono orgánico de SoilGrids pasa a materia orgánica con el factor 1.724 (citarlo) |
 | A1.5, A1.6 | Hechas (Mafer) | `datos/catalogos/`: milpa (maiz, frijol, calabaza) desde FAO-56 y EcoCrop, y TAW por textura (FAO-56 Tabla 19), validados contra contratos 0.3.0 (`cultivo` y `tabla-suelos`); `python datos/catalogos/generar.py` y `node datos/catalogos/validar.mjs`. La lluvia de EcoCrop va en `lluviaAnual*`; `lluviaCiclo*`, umbral de calor y ventanas de siembra siguen `NO_EVALUABLE` |
 
 El resto del reparto y su estado está en el tablero de `docs/14` (al final).

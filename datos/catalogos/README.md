@@ -12,6 +12,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 | `cultivos.json` | `contratos/cultivo.schema.json` | Milpa: maiz, frijol, calabaza |
 | `suelos.json` | `contratos/tabla-suelos.schema.json` | TAW por clase USDA, FAO-56 Tabla 19 |
 | `calendario-isla.json` | `contratos/calendario-local.schema.json` | Ventanas de siembra y presencia en SIAP de Isla, por cultivo y temporada |
+| `saxton_rawls.py` | `agua` de `contratos/suelo.schema.json` | TAW y retencion (θsat, θFC, θWP) por pedotransferencia de Saxton y Rawls (2006) para cualquier textura; pruebas contra la Tabla 3 del articulo con `python -m unittest discover -s datos/catalogos` |
 
 ## Fuentes (consultadas el 14/11/2026)
 
