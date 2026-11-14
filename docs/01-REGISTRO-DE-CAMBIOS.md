@@ -12,6 +12,14 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A0.6: zona demo y calendario verificados en SIAP e INIFAP (Mafer)
+
+- **Archivos:** `datos/catalogos/generar.py`, `cultivos.json`, `README.md`, nuevo `datos/catalogos/fuentes/siap_isla_2021_2025.csv`; `docs/13` (zona y V-20), `docs/14` (tablero), `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** ventanas de siembra con fuente en el catálogo: maíz PV 1 jun-15 jul (INIFAP, C. E. Cotaxtla, 2022, DDR San Andrés Tuxtla), maíz OI nov-dic y frijol OI 20 sep-20 oct (Agenda Técnica Agrícola de Veracruz, INIFAP 2015).
+- **Hallazgo para el equipo:** SIAP 2021-2025 confirma Isla (municipio 77) como zona de temporal con maíz en PV y OI, frijol sobre todo en OI y chile verde, pero **no registra calabaza**. Sus ventanas quedan `NO_EVALUABLE`; falta decidir cómo se presenta la calabaza en la demo.
+- **Fuente / evidencia:** CSV de cierre agrícola municipal de SIAP (2021-2025) y los PDF de INIFAP citados en `datos/catalogos/README.md`.
+- **Decisiones afectadas:** zona demo de 13 pasa a verificada; V-20 cerrado salvo la calabaza.
+
 ### 2026-11-14 — API: suelo con la tabla de A1.6 y CORS para el front (Eduardo)
 
 - **Archivos:** `api/app/textura.py`, `api/app/servicios.py`, `api/app/modelos.py`, `api/app/config.py`, pruebas, `api/README.md`, `AgroVault/Compartido/Pendientes.md`.
