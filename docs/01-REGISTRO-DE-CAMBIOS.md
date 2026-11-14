@@ -273,6 +273,15 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — Tercer despliegue: main d182af4 con la escena montada (Eduardo, aviso de Mompin #102)
+
+- **Despliegue:** el droplet corre `main` en `d182af4`: escena 3D montada en el Laboratorio, selector A3.4 conectado al motor, banda A4.9, sistema visual de balam, chile de Mafer y `GET /api/smap`. Anunciado antes por el buzon; una sola sesion desplego. Front construido en el droplet y publicado con respaldo del anterior.
+- **Pregunta de Mompin respondida:** los `.bbmodel` **no hay que copiarlos**: `import.meta.glob(..., { query: '?raw' })` los empaqueta como trozos de JS (31 archivos `maiz_*`, `frijol_*`, `calabaza_*`, `chile_*` y `suelo_*`), verificado en el `dist` local y en produccion (por ejemplo `chile_madurez-*.js` y `frijol_madurez-*.js` responden 200). `fs.allow` de `vite.config.ts` solo aplica a `npm run dev`.
+- **Verificado desde fuera:** `/` 200 con el bundle nuevo; `EscenaParcela` y `serie-clima` 200; `/health` trae `commit: d182af4`; `/api/suelo` de Isla da TAW 122.3 mm/m con ISRIC y OpenLandMap; `mediworks.mx` sigue en 200. `/api/smap` sin token responde 503 visible. `earthaccess` 0.19.0, `h5py` 3.16.0 y `rasterio` 1.5.2 instalados.
+- **Sin cambiar:** no hay `EARTHDATA_TOKEN` en el servidor (falta el OK explicito del usuario); `nginx` sin cambios.
+- **Dato nuevo:** el bundle trae el paquete de clima completo en `serie-clima-*.js` (1.27 MB, 190 KB comprimido), la pantalla inicial baja eso aunque no lo use todavia.
+- **Nota:** `/health` dice `versionContrato 0.9.0` porque ese es el valor en `main`; mi rama ya trae 0.10.0 y llegara en el proximo deploy.
+
 ### 2026-11-14 (noche) — Cronograma al dia tras mezclar main ce58cc4 (Eduardo)
 
 - **Archivos:** `docs/14`, `docs/cronograma.html`, `AgroVault/Compartido/Cronograma.md`, `herramientas/quejas-ia/QUEJAS.md` (regenerados), `api/app/config.py`, `api/tests/test_basico.py`, `datos/demo/` (regenerado).
