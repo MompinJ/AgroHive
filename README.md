@@ -11,7 +11,7 @@ AgroHive es un **simulador visual "what if"** que compara **rotaciones de cultiv
 - **Parcela de demo:** 2 ha ficticias en Isla (municipio INEGI 30/077), con coordenadas ilustrativas (`contratos/ejemplos/parcela.ejemplo.json`, `datos/demo/LEEME.md`).
 - **La demo compara R1 a R4** y muestra como sugerida **R4, milpa sembrada dentro de las ventanas de INIFAP** (`docs/13`). El orden que se ve es el que calcula el motor.
 - **La decisión final es del agricultor.** AgroHive no reemplaza a un agrónomo (`docs/00`, `docs/10`).
-- **Demo publicada:** <https://64-23-143-102.sslip.io>. El 14/11/2026 respondía y `/health` informaba el commit `d182af4`. Está en el servidor de un integrante del equipo (`docs/13`): la dirección puede cambiar.
+- **Demo publicada:** <https://64-23-143-102.sslip.io>. El 14/11/2026 por la noche `/health` informaba el commit `23f8a53` y `versionContrato` 0.12.2. Está en el servidor de un integrante del equipo (`docs/13`): la dirección puede cambiar.
 
 ## Estructura
 

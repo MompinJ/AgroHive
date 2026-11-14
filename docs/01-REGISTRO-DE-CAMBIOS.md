@@ -20,6 +20,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — A4.7: droplet en `23f8a53` (Eduardo)
+
+- **Archivos:** `docs/14` (A4.7 `[HECHO]`; vistas regeneradas), `api/despliegue/README.md`, `README.md`, `AgroVault/Compartido/Servidor.md`, `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** se corrio `api/despliegue/actualizar-servidor.sh` en el droplet. La URL publica queda en `main` `23f8a53`: `/health` con `versionContrato` 0.12.2 (leida de `contratos/package.json`), front 200, `/api/calendario` y `/api/cultivos` 200. `mediworks.mx` sigue en 200. No se puso `EARTHDATA_TOKEN`.
+- **Fuente / evidencia:** `https://64-23-143-102.sslip.io/health`.
+- **Decisiones afectadas:** ninguna. A4.8 sigue `[EN CURSO]` (falta el OK del token). A4.12 sigue despues de C5. A5.4 sigue `[BLOQUEADO]`.
+
 ### 2026-11-14 (noche) — `/health` lee la version de contratos (Eduardo)
 
 - **Archivos:** `api/app/config.py`, `api/tests/test_basico.py`.
