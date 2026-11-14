@@ -162,6 +162,14 @@ Decisiones afectadas:
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
 
+### 2026-11-14 — Visores de modelos: el aviso de "no llegó a cargar" se quedaba visible (Mafer)
+
+- **Archivos:** `herramientas/voxelkit.py` (una línea de la plantilla) y los 8 visores generados: `modelos/cultivos/visor_{maiz,frijol,calabaza,chile,milpa}.html`, `modelos/suelos/visor_suelos.html`, `modelos/props/visor_mascota.html` y `modelos/cultivos/bloques/visor_bloques.html`.
+- **El error (mío):** el aviso que agregué en A2.12 se muestra a los 4 s si el visor no marcó que cargó, y **nunca se ocultaba**: si Three.js tardaba más de 4 s en bajar del CDN, el aviso quedaba encima de un visor que sí funcionaba. Lo detectó el agente de modelado en Chrome sin pantalla y se reprodujo (captura con el aviso sobre los modelos ya dibujados).
+- **Cambio:** al terminar de cargar, el visor oculta el aviso. Cada visor cambió exactamente una línea (el texto insertado es `document.getElementById('aviso').hidden=true;`); los 8 se regeneraron desde su propia lista de modelos, en su orden, con el mismo número de cubos que antes.
+- **Verificación (Chrome, DOM final):** con carga normal el aviso queda `hidden` y el visor muestra "Todos"; con el CDN de Three.js bloqueado el aviso **sigue visible** y el visor no carga, así que no se perdió su función. Nota: la primera prueba sin internet falló por un error de mi comando (la regla del resolvedor lleva espacios y hay que entrecomillarla), no del visor.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 — Modelos ligeros de bloque: los dos primeros, de maíz (Mafer)
 
 - **Archivos:** nuevos `modelos/cultivos/bloques/` (`bloques.py`, `maiz_siembra_bloque.bbmodel`, `maiz_madurez_bloque.bbmodel` y `visor_bloques.html`) y `web/src/escena/pruebas/bloques.test.ts`. Sin cambios en la paleta ni en modelos existentes.

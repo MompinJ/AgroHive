@@ -40,4 +40,4 @@ document.getElementById('t').textContent=all?'Todos':n;let k=0;names.forEach(q=>
 for(const n of[...names,'todos']){const b=document.createElement('button');b.textContent=n;b.onclick=()=>set(n);ui.append(b);btn[n]=b}
 addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();r.setSize(innerWidth,innerHeight)});
 addEventListener('keydown',e=>{const a=[...names,'todos'],i=a.findIndex(q=>btn[q].classList.contains('on'));if(e.key==='ArrowRight')set(a[(i+1)%a.length]);if(e.key==='ArrowLeft')set(a[(i+a.length-1)%a.length])});
-set('todos');window.__visorListo=true;(function f(){requestAnimationFrame(f);ctl.update();r.render(scene,cam)})();</script></body></html>
+set('todos');window.__visorListo=true;document.getElementById('aviso').hidden=true;(function f(){requestAnimationFrame(f);ctl.update();r.render(scene,cam)})();</script></body></html>
