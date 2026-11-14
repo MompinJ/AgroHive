@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
-| **Eduardo** | 10 | 3 | 2 | 3 | 56 % de 18 |
+| **Eduardo** | 10 | 3 | 2 | 4 | 53 % de 19 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
 | **balam** | 6 | 1 | 0 | 9 | 38 % de 16 |
 
-Proyecto completo: **37 de 60** actividades hechas (62 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **37 de 61** actividades hechas (61 %), 5 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -56,6 +56,7 @@ Proyecto completo: **37 de 60** actividades hechas (62 %), 5 en curso, 2 bloquea
 - [ ] **A4.10** Lluvia GPM IMERG vía NASA POWER (IMERG_PRECTOT con time-standard=UTC, sin cuenta Earthdata) en GET /api/clima y en el paquete de demo, como evidencia: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en features/imerg/ y features/encargos/eduardo-datos-globales.md
 - [ ] **A4.11** NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking
 - [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después
+- [ ] **A4.13** Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
 - [-] **A5.8** Respaldo local sin internet y capturas `BLOQUEADO` — espera A2.4 con la zona real y el front conectado (A4.6)
 
