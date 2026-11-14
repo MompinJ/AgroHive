@@ -7,6 +7,7 @@ import './laboratorio.css';
 import { TarjetasRotacion } from './TarjetasRotacion';
 
 const Escena = lazy(() => import('../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
+const DashboardBalance = lazy(() => import('./DashboardBalance'));
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 const pilares: Record<string, string> = { deficitHidrico: 'Déficit hídrico', excesoHidrico: 'Exceso de agua', compatibilidadCiclo: 'Compatibilidad de fechas', proteccionSuelo: 'Protección del suelo', riesgoCalor: 'Riesgo por calor', aporteIndirecto: 'Aporte indirecto' };
 export function FuenteVisible({ fuente }: { fuente: Fuente }) {
@@ -19,6 +20,7 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
   const { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda } = estado.seleccion;
   const [celdas, setCeldas] = useState<{ clave: string; valor: ResultadoCeldas } | null>(null);
   const [errorCeldas, setErrorCeldas] = useState('');
+  const [mostrarDashboard, setMostrarDashboard] = useState(false);
   const plan = estado.planes.find((p) => p.rotacionId === rotacion) ?? estado.planes[0];
   const visible = plan?.ciclos.find((c) => c.ciclo === ciclo) ?? plan?.ciclos[0];
   const claveFecha = `${plan?.rotacionId}:${visible?.ciclo}:${visible?.siembra}`;
@@ -97,6 +99,8 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
       <details><summary>Fuentes y advertencias del cálculo</summary>{ranking.advertencias.map((a, i) => <p key={i}>{a.mensaje}</p>)}{resultado?.advertencias?.map((a, i) => <p key={i}>{a.mensaje}</p>)}</details>
       {comparacion && <ActionLink href="#/laboratorio" secondary>Volver al laboratorio</ActionLink>}
     </Card>}
+    <button className="ui-action" aria-expanded={mostrarDashboard} onClick={() => setMostrarDashboard((v) => !v)}>{mostrarDashboard ? 'Ocultar gráficas de agua' : 'Mostrar gráficas de agua'}</button>
+    {mostrarDashboard && estado.calculo && <Suspense fallback={<DataState state="loading">Cargando dashboard.</DataState>}><DashboardBalance cliente={estado.calculo.cliente} revision={estado.calculo.clave} rotacion={plan.rotacionId} escenario={escenario} /></Suspense>}
     {ranking && <TarjetasRotacion rotaciones={ranking.rotaciones} />}
     <Card title="Próxima temporada aproximada" eyebrow="Exploratorio">
       <label><input type="checkbox" checked={mostrarBanda} onChange={(e) => setMostrarBanda(e.target.checked)} /> Mostrar banda de incertidumbre</label>

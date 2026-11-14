@@ -674,3 +674,9 @@ Primera documentación por tema a partir del video del compañero, el audio de l
 - La descarga anticipada de la serie no se reprodujo en el build de producción con caché de navegador nueva: Inicio no solicitó serie-clima; laboratorio sí. Se mantiene import dinámico. No se presenta esta prueba local como verificación del despliegue público.
 - Tras integrar main, la escena recibe también suelo y la demo usa R1/R2/R4, según la decisión de 13. A3.8 se conserva como entrega de la sesión de escena.
 - A4.1 sigue pendiente de la operación serieBalance del Worker; el contrato serie-balance ya llegó. Solicitud a Mompin #127 y respuesta #132. No se agrega el balance en la interfaz.
+
+### 2026-11-14 — A4.1 dashboard conectado de Balam
+- Tras la entrega de serieBalance por Mompin, el dashboard pide al Worker la serie de la rotación/escenario calculados. Las sumas mensuales, la demanda y el balance se reciben del motor; la UI solo representa y formatea. No usa los valores ficticios del ejemplo.
+- `ui/DashboardBalance.tsx` usa Recharts con carga diferida al abrir las gráficas. Cada ciclo muestra lluvia/ETc/consumo ajustado y déficit/percolación mensuales, unidades, estado, fuentes, TAW y una tabla con humedad media y mes climático. Datos faltantes se muestran como NO_EVALUABLE. Los trazos distinguen las series sin depender del color; sin animación y con tabla accesible.
+- Se comparó el primer valor de lluvia de la tabla contra el mensaje recibido del Worker; coincide. Instrumentación confirmó que cambiar escenario consulta serieBalance sin reenviar simular. Layout estable tras ResizeObserver a 1440/768/390/320 px; axe sin incidencias automáticas en el estado revisado. Captura dashboard-320.png.
+- A4.1 se marca HECHO; las notas anteriores de espera describen el estado previo a la llegada de la operación del motor. Recharts está fijado a la versión exacta registrada en package.json/lockfile. Referencias técnicas en web/README.md.

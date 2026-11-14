@@ -134,7 +134,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
-| A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | R1 | M | Sonnet | A2.7 | Gráficas reales del escenario |
+| A4.1 `[HECHO]` series del Worker, graficas y tabla verificadas | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | R1 | M | Sonnet | A2.7 | Gráficas reales del escenario |
 | A4.2 `[HECHO]` 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3) | Ranking de rotaciones por robustez: criterio B `[DECIDIDO]` (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | R2 | M | Opus | A2.7 (y A3.7 para B) | Tabla ordenada con 3 o más rotaciones; pesos y criterio declarados |
 | A4.3 `[HECHO]` motor y tarjetas visibles en laboratorio y comparacion | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | R2 | S | Sonnet | A4.3 | Con respaldo en plantilla |
@@ -217,7 +217,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | **Mompin** | 16 | 0 | 0 | 0 | 100 % de 16 |
 | **Eduardo** | 12 | 2 | 2 | 3 | 63 % de 19 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
-| **balam** | 8 | 0 | 0 | 7 | 53 % de 15 |
+| **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
 ### Mompin
 
@@ -292,7 +292,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A3.4 | Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario | HECHO |  |
 | A3.5 | Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado | HECHO |  |
 | A3.6 | Modo 2D ligero con los mismos valores del motor | PENDIENTE |  |
-| A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | PENDIENTE |  |
+| A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | HECHO | series del Worker, graficas y tabla verificadas |
 | A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | HECHO | motor y tarjetas visibles en laboratorio y comparacion |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | PENDIENTE |  |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | HECHO |  |

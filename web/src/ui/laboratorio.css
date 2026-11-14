@@ -18,6 +18,8 @@
 .rotation-cards .card { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--space-4); }
 .rotation-cards ul { padding-inline-start: var(--space-6); margin: 0; }
 .rotation-cards li { margin-block: var(--space-2); overflow-wrap: anywhere; }
+.balance-chart { min-width: 0; width: 100%; height: 300px; }
+.balance-chart .recharts-legend-wrapper { font-size: var(--text-caption); }
 @media (max-width: 800px) { .rotation-cards { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 1150px) { .lab-connected { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); } .lab-connected > :last-child { grid-column: 1 / -1; } }
 @media (max-width: 700px) { .lab-connected { grid-template-columns: minmax(0, 1fr); } .lab-connected .card { padding: var(--space-4); } .ui-table-wrap th, .ui-table-wrap td { padding: 8px; font-size: var(--text-caption); } }

@@ -127,3 +127,13 @@ A4.3 muestra `ranking.rotaciones[].explicacion` en laboratorio y comparación, c
 A4.6 usa `usarDatosParcela` de Eduardo para las parcelas propias. Su estado está vinculado al centroide para evitar mostrar datos anteriores; reintentar invalida el estado visible. La prueba de recorrido usó FastAPI real local en 8017 y su paquete precargado: las cuatro consultas respondieron 200 y el flujo llegó a comparación. El proxy de navegador de QA solo redirigió solicitudes al servidor local, no sustituyó sus respuestas. Esto no mide disponibilidad pública ni corrige problemas del despliegue.
 
 La serie se verificó en `npm run preview -- --port 4174` con una sesión de Chromium nueva: cero solicitudes serie-clima desde Inicio, descarga al abrir laboratorio. Ya estaba cargada con import dinámico; no se introdujo una segunda estrategia de carga. Evidencia: `evidencia/tarjetas-rotacion-320.png` y `evidencia/metodo-fuentes-320.png`. Tarjetas y método sin desbordamiento en la revisión a 320 px; prueba de fuentes y render estático de huecos/riesgos incluida. Dashboard A4.1 espera la operación del Worker; no usa valores del ejemplo del contrato.
+
+## Dashboard A4.1
+
+El botón Mostrar gráficas de agua carga `DashboardBalance` y Recharts solo cuando se abre. Consulta `cliente.serieBalance(rotacionId, escenario)` y grafica la salida mensual del motor por ciclo: lluvia, demanda ETc, consumo ajustado, déficit y percolación. La tabla añade el mes climático y humedad media. No agrega indicadores ni sustituye null por cero. Esta sección sustituye la nota anterior de dashboard a la espera del Worker.
+
+Rotación o escenario cambian la consulta de series y descartan respuestas viejas; no se vuelve a simular ni a consultar la API. Se muestran fuentes, unidades, estado y motivos cuando no hay datos. Leyendas y trazos discontinuos distinguen las series, sin animación; tabla accesible en región desplazable con aviso visible.
+
+Verificado en Chromium sobre el build de producción: el dato de lluvia de la tabla coincide con el del mensaje del Worker; cambiar escenario no envía simular. Sin desbordamiento estable tras adaptación del ResizeObserver a 1440/768/390/320; axe sin incidencias automáticas en el estado revisado. Captura `evidencia/dashboard-320.png`.
+
+Referencias oficiales: [Recharts ResponsiveContainer](https://recharts.github.io/en-US/api/ResponsiveContainer/), [LineChart y accesibilidad](https://recharts.github.io/en-US/api/LineChart/). Las series y sus agregados pertenecen al motor, no a Recharts.

@@ -16,9 +16,9 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | **Mompin** | 16 | 0 | 0 | 0 | 100 % de 16 |
 | **Eduardo** | 12 | 2 | 2 | 3 | 63 % de 19 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
-| **balam** | 8 | 0 | 0 | 7 | 53 % de 15 |
+| **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
-Proyecto completo: **42 de 61** actividades hechas (69 %), 3 en curso, 2 bloqueadas.
+Proyecto completo: **43 de 61** actividades hechas (70 %), 3 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -85,7 +85,7 @@ Proyecto completo: **42 de 61** actividades hechas (69 %), 3 en curso, 2 bloquea
 - [x] **A3.4** Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario `HECHO`
 - [x] **A3.5** Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado `HECHO`
 - [ ] **A3.6** Modo 2D ligero con los mismos valores del motor
-- [ ] **A4.1** Dashboard: gráficas de lluvia, demanda y balance (Recharts)
+- [x] **A4.1** Dashboard: gráficas de lluvia, demanda y balance (Recharts) `HECHO` — series del Worker, graficas y tabla verificadas
 - [x] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos `HECHO` — motor y tarjetas visibles en laboratorio y comparacion
 - [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)
 - [x] **A4.5** Pantalla de método, fuentes y advertencias (A1, A3) `HECHO`

@@ -12,13 +12,13 @@ Generado por `herramientas/cronograma.py` desde `docs/14`; se actualiza cada vez
 | --- | --- | --- | --- | --- | --- |
 | 1 | **Mompin** | 100 % (51 de 51 puntos) | 16 | 0 | 0 |
 | 2 | **Mafer** | 68 % (23 de 34 puntos) | 8 | 1 | 3 |
-| 3 | **Eduardo** | 58 % (30 de 52 puntos) | 12 | 2 | 5 |
-| 4 | **balam** | 56 % (20 de 36 puntos) | 8 | 0 | 7 |
+| 3 | **balam** | 64 % (23 de 36 puntos) | 9 | 0 | 6 |
+| 4 | **Eduardo** | 58 % (30 de 52 puntos) | 12 | 2 | 5 |
 
 1. Mompin lidera con 100 %: 16 hechas, y el cronograma le da la razon.
 2. Mafer va segundo con 68 %: cerca del podio, lejos de la gloria.
-3. Eduardo va tercero con 58 %: 12 hechas y 5 esperando turno.
-4. balam cierra con 56 %: 7 actividades pendientes lo miran con carino.
+3. balam va tercero con 64 %: 9 hechas y 6 esperando turno.
+4. Eduardo cierra con 58 %: 5 actividades pendientes lo miran con carino.
 
 <!-- marcador-chamba:fin -->
 
