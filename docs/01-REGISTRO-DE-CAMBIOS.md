@@ -191,6 +191,18 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — A1.7: contratos 0.10.0 para el alcance mundial (compatible)
+
+- **Archivos:** `contratos/{serie-clima,clima-escenario,calendario-local}.schema.json`, nuevos `contratos/ndvi.schema.json` y `contratos/smap.schema.json`, ejemplos (uno fuera de México y uno con IMERG), 11 casos inválidos, tipos, README; `13`, `14` (A1.7 `[HECHO]`); vault.
+- **Cambio y motivo:** A1.7 (decisión de Mompin, 13 "Alcance geográfico").
+  1. `lluviaSatelital` {variable `IMERG_PRECTOT`, estandarHora `UTC`, fuente, dias [{fecha, lluviaMm o null}]}, opcional: evidencia que no entra al balance ni a los escenarios; el -999 va como `null`.
+  2. `calendario-local.ubicacion` acepta la forma INEGI (como el calendario de Isla de Mafer, que sigue validando) o la forma genérica `paisIso` + `unidadAdministrativa` {sistema, clave, nombre, nivel}.
+  3. `ndvi`: punto, producto MOD13Q1 (250 m, 16 días, escala), serie con estado por dato (sin dato, `null` y motivo, nunca 0), fuente con cita doi:10.3334/ORNLDAAC/1600 y los tres límites obligatorios (píxel mayor que la parcela, no muestra el cultivo, no entra al ranking).
+  4. `smap`: forma tomada de `api/app/modelos_smap.py` de Eduardo (rama `Eduardo`), más `producto` opcional (36 o 9 km, ~0-5 cm, m3/m3). Es contraste y no entra al ranking ni al balance.
+  No se tocó la descripción de las celdas de la parcela (pendiente de Mompin).
+- **Fuente / evidencia:** `features/encargos/eduardo-datos-globales.md`. `npm test` 82/82; el calendario de Isla y los catálogos validan.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Contratos 0.9.0 (rama `contratos-nulos`): regla de pilar sin dato para todos los pilares `[DECIDIDO]`
 
 - **Archivos:** `contratos/resultado-rotacion.schema.json`, versión en ejemplos e inválidos, 5 casos inválidos nuevos, README; `13`.

@@ -13,19 +13,19 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 13 | 1 | 0 | 1 | 87 % de 15 |
+| **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
 | **Eduardo** | 10 | 3 | 2 | 3 | 56 % de 18 |
 | **Mafer** | 7 | 1 | 0 | 4 | 58 % de 12 |
 | **balam** | 3 | 0 | 0 | 13 | 19 % de 16 |
 
-Proyecto completo: **32 de 60** actividades hechas (53 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **33 de 60** actividades hechas (55 %), 4 en curso, 2 bloqueadas.
 
 ## Mompin
 
 - [x] **A0.1** Repo Git con 5 ramas y estructura de carpetas `HECHO`
 - [x] **A0.2** Documentación consolidada en docs/ `HECHO`
 - [x] **A1.1** Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS ([[Contratos]]) `HECHO`
-- [ ] **A1.7** Contratos para el alcance mundial (13, "Alcance geográfico"): calendario-local con lugar genérico (país más id del lugar; la clave INEGI queda como un caso) y bloque opcional lluviaSatelital (IMERG vía POWER, en UTC) en serie-clima y clima-escenario; cambio compatible
+- [x] **A1.7** Contratos para el alcance mundial (13, "Alcance geográfico"): calendario-local con lugar genérico (país más id del lugar; la clave INEGI queda como un caso) y bloque opcional lluviaSatelital (IMERG vía POWER, en UTC) en serie-clima y clima-escenario; cambio compatible `HECHO`
 - [x] **A2.5** Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) `HECHO` — 14/11
 - [x] **A2.6** ET0, ETc y balance de agua por bloque (cubeta) `HECHO` — 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7)
 - [x] **A2.7** Pilar de déficit hídrico y estados de evaluabilidad `HECHO` — 14/11

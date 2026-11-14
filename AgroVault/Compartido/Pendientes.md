@@ -12,7 +12,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 
 | ID | Estado | Nota |
 | --- | --- | --- |
-| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.8.0 en `contratos/`: 12 schemas (más `comun`), ejemplos, `npm test` (63/63) y tipos TS. Ver [[Contratos]] |
+| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.10.0 en `contratos/`: 14 schemas (más `comun`), ejemplos, `npm test` (82/82) y tipos TS. Ver [[Contratos]] |
 | A2.5, A2.6, A2.7 | Hechas (Mompin, integradas a `main`) | Motor en `web/src/motor/` (funciones puras + Web Worker; la interfaz usa `crearClienteMotor()`): escenarios por lluvia de temporadas PV+OI de SIAP, ET0 Penman-Monteith FAO-56, cubeta FAO-56 cap. 8, pilar de déficit hídrico y estados. Pruebas 1 a 5 de doc 05 en verde (`cd web && npm test`; la parte de erosión de la prueba 2 pasa a A3.7). Ver `docs/05` |
 | A5.5 | Hecha (Mompin) | Regresión de la demo en `web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`: escenarios, pilares de la milpa, estados, ranking y análogos. Si un cambio mueve un número a propósito, se regenera con `ACTUALIZAR_REGRESION=1` y se explica en `docs/01` |
 | A3.7 | Hecha (Mompin) | Compatibilidad de ciclo con el calendario de Isla (frijol PV, chile y calabaza sin ventana con fuente ⇒ `NO_EVALUABLE`); protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente. Ranking B con hasta cuatro pilares; con el suelo real gana la milpa sembrada dentro de ventana. Pendiente si hay datos: índice de erosión y umbral de calor con fuente |

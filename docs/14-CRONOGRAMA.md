@@ -89,7 +89,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A1.4 `[HECHO]` | Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) | R4 | M | Sonnet | A0.3 | `.bbmodel` abre en Blockbench |
 | A1.5 `[HECHO]` | Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente | R3 | M | Opus | A0.3 | JSON con citas; vacíos como `NO_EVALUABLE` |
 | A1.6 `[HECHO]` | Tabla de suelos (TAW por textura, FAO-56) | R3 | S | Sonnet | — | JSON con fuente |
-| A1.7 | Contratos para el alcance mundial (13, "Alcance geográfico"): `calendario-local` con lugar genérico (país más id del lugar; la clave INEGI queda como un caso) y bloque opcional `lluviaSatelital` (IMERG vía POWER, en UTC) en `serie-clima` y `clima-escenario`; cambio compatible | R2 | S | Opus | A1.1 | `npm test` de `contratos/` en verde con un ejemplo fuera de México y uno con IMERG |
+| A1.7 `[HECHO]` | Contratos para el alcance mundial (13, "Alcance geográfico"): `calendario-local` con lugar genérico (país más id del lugar; la clave INEGI queda como un caso) y bloque opcional `lluviaSatelital` (IMERG vía POWER, en UTC) en `serie-clima` y `clima-escenario`; cambio compatible | R2 | S | Opus | A1.1 | `npm test` de `contratos/` en verde con un ejemplo fuera de México y uno con IMERG |
 
 ## F2 · Datos y motor (en paralelo)
 
@@ -213,7 +213,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 13 | 1 | 0 | 1 | 87 % de 15 |
+| **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
 | **Eduardo** | 10 | 3 | 2 | 3 | 56 % de 18 |
 | **Mafer** | 7 | 1 | 0 | 4 | 58 % de 12 |
 | **balam** | 3 | 0 | 0 | 13 | 19 % de 16 |
@@ -225,7 +225,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A0.1 | Repo Git con 5 ramas y estructura de carpetas | HECHO |  |
 | A0.2 | Documentación consolidada en docs/ | HECHO |  |
 | A1.1 | Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS | HECHO |  |
-| A1.7 | Contratos para el alcance mundial (13, "Alcance geográfico"): calendario-local con lugar genérico (país más id del lugar; la clave INEGI queda como un caso) y bloque opcional lluviaSatelital (IMERG vía POWER, en UTC) en serie-clima y clima-escenario; cambio compatible | PENDIENTE |  |
+| A1.7 | Contratos para el alcance mundial (13, "Alcance geográfico"): calendario-local con lugar genérico (país más id del lugar; la clave INEGI queda como un caso) y bloque opcional lluviaSatelital (IMERG vía POWER, en UTC) en serie-clima y clima-escenario; cambio compatible | HECHO |  |
 | A2.5 | Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) | HECHO | 14/11 |
 | A2.6 | ET0, ETc y balance de agua por bloque (cubeta) | HECHO | 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7) |
 | A2.7 | Pilar de déficit hídrico y estados de evaluabilidad | HECHO | 14/11 |
