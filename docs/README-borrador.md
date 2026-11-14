@@ -70,7 +70,7 @@ Estados de cada resultado: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_D
 | **NASA POWER** (diario, comunidad AG) | Lluvia, temperatura, radiación, humedad, viento y `GWETROOT` (humedad de raíz, MERRA-2); base del MVP | API sin llave | CC BY 4.0; citar el proyecto POWER y la versión y fecha de consulta ([referencing](https://power.larc.nasa.gov/docs/referencing/)) (`AgroVault/Compartido/APIs.md`) |
 | **GPM IMERG** (`IMERG_PRECTOT` vía POWER, en UTC) | Lluvia satelital como evidencia; no entra al balance ni a los escenarios (A4.10, `[VERIFICAR]` estado en `docs/14`) | Vía POWER, sin cuenta | Como POWER; `[VERIFICAR]` cita propia de IMERG |
 | **SMAP L3** | Humedad del suelo superficial (~0-5 cm, 36 km) como contraste; no entra al ranking ni al balance (A4.8) | Earthdata con token | `[VERIFICAR]` política y cita de NASA Earthdata |
-| **MODIS MOD13Q1** | NDVI (250 m, 16 días) como evidencia; no entra al ranking (A4.11, `[VERIFICAR]` estado) | REST de ORNL DAAC, sin cuenta | Cita `doi:10.3334/ORNLDAAC/1600` (`docs/04`); `[VERIFICAR]` licencia |
+| **MODIS MOD13Q1** | NDVI (250 m, 16 días) como evidencia; no entra al ranking (A4.11, `[VERIFICAR]` estado) | Microsoft Planetary Computer, colección `modis-13Q1-061`; respaldo REST de ORNL DAAC (no se llama en vivo) | Didan, K. (2021), doi:10.5067/MODIS/MOD13Q1.061; respaldo `doi:10.3334/ORNLDAAC/1600` (`docs/04`); `[VERIFICAR]` términos de Planetary Computer |
 
 ### Fuentes no NASA
 

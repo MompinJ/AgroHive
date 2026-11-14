@@ -324,6 +324,13 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Contratos 0.12.2: fuente principal de NDVI en Microsoft Planetary Computer
+
+- **Archivos:** `contratos/ndvi.schema.json` (descripciones), ejemplo e inválidos de NDVI, tipos, README; fila de MODIS en `04`; `docs/README-borrador.md`; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.2, en un commit aparte).
+- **Cambio y motivo:** pedido de Eduardo. La fuente principal de NDVI pasa a ser Microsoft Planetary Computer: colección `modis-13Q1-061`, MOD13Q1 V061 de NASA LP DAAC servido por Microsoft, con la cita Didan, K. (2021), doi:10.5067/MODIS/MOD13Q1.061. ORNL DAAC queda de respaldo y no se llama en vivo; la demo usa caché y paquete. El schema no fijaba el servicio en ningún enum: solo cambian las descripciones y el ejemplo, así que es compatible. `[VERIFICAR]`: una persona lee https://planetarycomputer.microsoft.com/terms antes de la entrega.
+- **Fuente / evidencia:** pedido de Eduardo transmitido por la sesión maestra; la cita de Didan (2021) ya está en `README.md`.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Contratos 0.12.1: inicio de IMERG en 1998-01-01
 
 - **Archivos:** `contratos/clima-escenario.schema.json` (descripción de `lluviaSatelital`, que también usa `serie-clima`), versión en ejemplos e inválidos, tipos, README; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.1, en un commit aparte).
