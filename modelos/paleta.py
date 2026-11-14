@@ -113,6 +113,17 @@ PALETA_AGROHIVE = {
     'arcilloso_humedo': '#452419',
     'arcilloso_humedo_dark': '#2e1711',
     'arcilloso_humedo_light': '#9a7468',
+    # 78-80: hoja de chile (verde oscuro brillante, mas oscuro que el frijol)
+    'chile_hoja_dark': '#1f4a1c',
+    'chile_hoja': '#2b6624',
+    'chile_hoja_light': '#4f8f34',
+    # 81-82: fruto de chile verde (serrano / jalapeno)
+    'chile_verde_dark': '#357219',
+    'chile_verde': '#53a028',
+    # 83: punta del chile rojo maduro (el cuerpo usa 'red', indice 11)
+    'chile_rojo_dark': '#86160f',
+    # 84: semilla de chile, plana y amarillo palido
+    'chile_semilla': '#ecdca2',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'

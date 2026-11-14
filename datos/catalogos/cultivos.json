@@ -749,6 +749,254 @@
         "prefijo": "calabaza"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 100 dias). EcoCrop da un ciclo de 80 a 140 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+    },
+    {
+      "id": "chile",
+      "nombreComun": "Chile",
+      "nombreCientifico": "Capsicum annuum L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 125,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 35,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 40,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.6,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sweet Peppers (bell)', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "Kc ini general del grupo b. Vegetables - Solanum Family (la fila del pimiento no da Kc ini propio). FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.05,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sweet Peppers (bell)', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Nota 2: si el chile crece en estacas de 1.5 a 2 m puede tomarse 1.15. Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.9,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sweet Peppers (bell)', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 1.0,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Sweet Peppers (bell)', Zr maximo 0.5-1.0 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.3,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Sweet Peppers (bell)', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 8,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sweet pepper' (Capsicum annuum L.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 35,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sweet pepper' (Capsicum annuum L.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 17,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sweet pepper' (Capsicum annuum L.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sweet pepper' (Capsicum annuum L.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 500,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sweet pepper' (Capsicum annuum L.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1250 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 1700,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sweet pepper' (Capsicum annuum L.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1250 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "modelo3d": {
+        "prefijo": "chile"
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 60 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. FAO-56 y EcoCrop no traen 'chile verde': se usa el pimiento dulce (Sweet pepper, Sweet Peppers (bell)), que es la misma especie, Capsicum annuum. Es una equivalencia, no un dato medido en chile serrano o jalapeno: una persona debe revisarla. 'Hot pepper' de EcoCrop es otra especie (Capsicum frutescens) y no se uso."
     }
   ]
 }

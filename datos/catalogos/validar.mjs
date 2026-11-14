@@ -74,7 +74,7 @@ for (const e of calendario.entradas) {
   if (e.ventana.estado === "EVALUABLE" && e.presencia.estado !== "registrado") {
     fallar(`calendario-isla.json: ${e.cultivo}/${e.temporada} tiene ventana pero el cultivo no esta registrado en el lugar`);
   }
-  if (!cultivos.cultivos.some((c) => c.id === e.cultivo) && e.cultivo !== "chile") {
+  if (!cultivos.cultivos.some((c) => c.id === e.cultivo)) {
     fallar(`calendario-isla.json: ${e.cultivo} no esta en el catalogo`);
   }
 }

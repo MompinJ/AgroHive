@@ -226,6 +226,28 @@ CULTIVOS = [
                 "rmin": 300, "ropmn": 600, "ropmx": 1600, "rmax": 2800},
         "modelo3d": "calabaza",
     },
+    {
+        "id": "chile",
+        "nombreComun": "Chile",
+        "nombreCientifico": "Capsicum annuum L.",
+        "esLeguminosa": False,
+        "equivalencia": ("FAO-56 y EcoCrop no traen 'chile verde': se usa el pimiento dulce (Sweet pepper, Sweet Peppers (bell)), "
+                         "que es la misma especie, Capsicum annuum. Es una equivalencia, no un dato medido en chile serrano o jalapeno: "
+                         "una persona debe revisarla. 'Hot pepper' de EcoCrop es otra especie (Capsicum frutescens) y no se uso."),
+        "t11": {"fila": "Sweet peppers (bell)", "region": "Europe and Medit.", "siembra": "April/June",
+                "etapas": (30, 35, 40, 20), "total": 125,
+                "porque": ("Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal "
+                           "primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30.")},
+        "t12": {"fila": "Sweet Peppers (bell)",
+                "ini": (0.6, "Kc ini general del grupo b. Vegetables - Solanum Family (la fila del pimiento no da Kc ini propio)."),
+                "mid": (1.05, "Nota 2: si el chile crece en estacas de 1.5 a 2 m puede tomarse 1.15."),
+                "end": (0.90, None)},
+        "t22": {"fila": "Sweet Peppers (bell)", "zr": 1.0, "zrRango": "0.5-1.0", "p": 0.30},
+        "eco": {"fila": "Sweet pepper", "sci": "Capsicum annuum L.", "gmin": 60, "gmax": 180,
+                "tmin": 8, "topmn": 17, "topmx": 30, "tmax": 35,
+                "rmin": 500, "ropmn": 600, "ropmx": 1250, "rmax": 1700},
+        "modelo3d": "chile",
+    },
 ]
 
 NOTA_KC_INI = (
@@ -290,6 +312,7 @@ def cultivo(c):
             f"Ciclo y etapas de FAO-56 Tabla 11 (total {t11['total']} dias). EcoCrop da un ciclo de "
             f"{eco['gmin']} a {eco['gmax']} dias para la especie, demasiado amplio para el motor. "
             "Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+            + (" " + c["equivalencia"] if "equivalencia" in c else "")
         ),
     }
 
