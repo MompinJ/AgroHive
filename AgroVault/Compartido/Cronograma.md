@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 4 | 1 | 0 | 9 | 29 % de 14 |
-| **Eduardo** | 6 | 4 | 2 | 2 | 43 % de 14 |
+| **Eduardo** | 7 | 3 | 2 | 2 | 50 % de 14 |
 | **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **13 de 56** actividades hechas (23 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **14 de 56** actividades hechas (25 %), 4 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -41,7 +41,7 @@ Proyecto completo: **13 de 56** actividades hechas (23 %), 5 en curso, 2 bloquea
 
 - [x] **A0.4** Acceso SSH, firewall y hostname del servidor (V-15 a V-17) ([[Servidor]]) `HECHO`
 - [x] **A0.7** Verificar Open-Meteo estacional, CORS de POWER y acceso a elevación (V-21, V-22) ([[APIs]]) `HECHO`
-- [/] **A1.3** Esqueleto api/: FastAPI, /health, OpenAPI, generación del cliente TS de las llamadas HTTP ([[Contratos]]) `EN CURSO`
+- [x] **A1.3** Esqueleto api/: FastAPI, /health, OpenAPI, generación del cliente TS de las llamadas HTTP ([[Contratos]]) `HECHO`
 - [x] **A2.1** Cliente NASA POWER diario con caché y reintentos ([[APIs]]) `HECHO`
 - [x] **A2.2** Respaldo Open-Meteo y estados RESPALDO_HISTORICO / ERROR_DATOS `HECHO`
 - [x] **A2.3** Elevación por celda (tiles Terrarium o SRTM) y pendiente ([[APIs]]) `HECHO`

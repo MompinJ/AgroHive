@@ -83,6 +83,14 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (tarde-noche) — API: contratos 0.5.0, GWETROOT y revision de Mompin (Eduardo)
+
+- **Archivos:** `api/` (modelos, servicios, clientes, rutas, pruebas, OpenAPI y cliente TS), `datos/pruebas-apis/`, `docs/14`, `AgroVault/Compartido/Pendientes.md`.
+- **Cambio, siguiendo la revision de Mompin (mensaje #4):** (1) las respuestas de clima, suelo, proxima temporada, elevacion y cultivos se validan **completas** contra los schemas de `contratos/` (`serie-clima`, `suelo`, `proxima-temporada`, `cultivo`, `parcela`); (2) modelos mas estrictos: `esEjemplo`, `etiqueta` y `estado` obligatorios y `clase` de textura limitada a las 12 clases; (3) los 503 devuelven `{estado: ERROR_DATOS, motivo}` como declara el OpenAPI, ya no `{detail}`; (4) `/api/cultivos` tiene `response_model`; (5) ISRIC con pixeles a mas de 1 km sale `EXPLORATORIO`, no `EVALUABLE`; (6) V-06: POWER pide `GWETROOT` y la API lo devuelve como `humedadRaizFraccionSat` (sin convertir) con el metadato `humedadSuelo`; (7) `/api/suelo` devuelve `estimaciones` (hoy solo ISRIC, con carbono organico en g/kg) y `estimacionUsada`.
+- **Fuente / evidencia:** GWETROOT real de POWER (fraccion 0 a 1, `datos/pruebas-apis/respuestas/power_ag.json`); carbono organico de ISRIC `soc` (dg/kg dividido entre 10, FAQ de ISRIC); 51 pruebas en verde.
+- **Cambio de comportamiento a avisar:** los 503 ya no traen `detail`; la clave de cache de POWER y de suelo cambio (`power_v2`, `suelo_isric_v2`), asi que el paquete de demo anterior no sirve y hay que regenerarlo.
+- **Pendiente mio:** regenerar el paquete de demo (A2.4) con la zona real de Mafer y el periodo `2005-10-01` a `2025-12-31` pedido por Mompin, y el cliente de OpenLandMap (A2.15).
+
 ### 2026-11-14 (noche) — Cronograma por persona y marcas al dia (Eduardo)
 
 - **Archivos:** `herramientas/cronograma.py` (nuevo), `docs/14-CRONOGRAMA.md`, `docs/cronograma.html` (regenerado), `AgroVault/Compartido/Cronograma.md` (nueva), `AgroVault/Bienvenido.md`, `AgroVault/Compartido/Lectura.md`.

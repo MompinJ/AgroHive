@@ -37,7 +37,7 @@ def _fuente_clima(nombre, url, resolucion, unidades, coord, desde, hasta, consul
 async def serie_clima(lat: float, lon: float, desde: date, hasta: date) -> dict:
     """Serie diaria: POWER con cache; si falla, Open-Meteo (RESPALDO_HISTORICO); si falla, cache vencida; si no, SinDatos."""
     clat, clon = power.centro_celda(lat, lon)
-    clave = f"power_{clat:.3f}_{clon:.3f}_{desde:%Y%m%d}_{hasta:%Y%m%d}"
+    clave = f"power_v2_{clat:.3f}_{clon:.3f}_{desde:%Y%m%d}_{hasta:%Y%m%d}"  # v2: incluye GWETROOT
     coord = (lon, lat)
     async with _candado(clave):
         en_cache = cache.leer(clave)
@@ -59,6 +59,9 @@ def _respuesta_power(registro: dict, coord, desde, hasta, advertencias, estado="
         "meta": _meta(), "estado": estado, "respaldo": False, "coordenada": coord,
         "fuente": _fuente_clima(power.NOMBRE, power.URL, power.RESOLUCION, power.UNIDADES, tuple(registro["celda"]),
                                 desde, hasta, registro["consultado"], "Todas las celdas de la parcela comparten esta serie."),
+        "humedadSuelo": {**power.HUMEDAD_SUELO, "fuente": {"nombre": power.NOMBRE, "url": power.URL, "unidades": "fraccion de saturacion (0 a 1)",
+                                                         "consultado": registro["consultado"], "resolucion": power.RESOLUCION,
+                                                         "nota": "GWETROOT; la profundidad (~100 cm) es la que describe el contrato y no esta verificada en la documentacion de POWER (VERIFICAR)."}},
         "diario": registro["diario"], "advertencias": advertencias,
     }
 
@@ -170,8 +173,11 @@ def _id_suelo(lat: float, lon: float) -> str:
     return f"suelo-{round(abs(lat) * 1000)}{'n' if lat >= 0 else 's'}-{round(abs(lon) * 1000)}{'e' if lon >= 0 else 'w'}"
 
 
+ID_ISRIC = "isric-soilgrids-wcs"
+
+
 async def suelo(lat: float, lon: float) -> dict:
-    clave = f"suelo_isric_{round(lat / 0.0025)}_{round(lon / 0.0025)}"
+    clave = f"suelo_isric_v2_{round(lat / 0.0025)}_{round(lon / 0.0025)}"  # v2: incluye carbono organico
     async with _candado(clave):
         en_cache = cache.leer(clave)
         if en_cache:
@@ -180,8 +186,8 @@ async def suelo(lat: float, lon: float) -> dict:
             try:
                 sem = asyncio.Semaphore(4)
                 async with http.crear_cliente() as c:
-                    props = dict(zip(("clay", "sand", "silt", "phh2o"),
-                                     await asyncio.gather(*[_propiedad(c, sem, p, lon, lat) for p in ("clay", "sand", "silt", "phh2o")])))
+                    nombres = ("clay", "sand", "silt", "phh2o", "soc")
+                    props = dict(zip(nombres, await asyncio.gather(*[_propiedad(c, sem, p, lon, lat) for p in nombres])))
             except http.ErrorFuente as e:
                 raise SinDatos(f"SoilGrids no respondio ({e}); use el selector manual de suelo") from e
             registro = {"consultado": date.today().isoformat(), "props": props}
@@ -195,6 +201,9 @@ async def suelo(lat: float, lon: float) -> dict:
     arena, limo, arcilla = (100 * v / total for v in (arena, limo, arcilla))
     clase = clasificacion.clasificar(arena, limo, arcilla)
     radio = max(p["radioM"] for p in props.values() if p)
+    radio_textura = max(props[k]["radioM"] for k in ("clay", "sand", "silt"))
+    # Con pixeles a mas de 1 km el valor es una extrapolacion: EXPLORATORIO, no EVALUABLE (doc 04, revision de Mompin 14/11)
+    estado_textura = "EXPLORATORIO" if radio_textura > 1000 else "EVALUABLE"
     fuente = {"nombre": isric.NOMBRE, "url": "https://maps.isric.org", "coordenada": (lon, lat), "unidades": "% (arena, limo, arcilla), pH en agua",
               "consultado": registro["consultado"], "resolucion": "250 m",
               "nota": f"Media de 0 a 30 cm ponderada por espesor de capa; mediana de los pixeles con dato a menos de {radio} m del punto. "
@@ -205,22 +214,33 @@ async def suelo(lat: float, lon: float) -> dict:
     if any(p and p["capas"] < len(isric.PROFUNDIDADES) for p in props.values()):
         advertencias.append({"codigo": "SUELO_CAPAS_INCOMPLETAS", "mensaje": "Alguna capa de profundidad no tiene dato; la media usa las capas disponibles.", "severidad": "info"})
     ph = props.get("phh2o")
+    soc = props.get("soc")
+    estado_ph = "EXPLORATORIO" if ph and ph["radioM"] > 1000 else "EVALUABLE"
     tabla = clasificacion.cargar_catalogo_suelos().get(clase)
     grupo = tabla["grupo"] if tabla else clasificacion.GRUPO[clase]
     if tabla:
         taw = tabla["tawMmPorM"]
     else:
         taw = {"estado": "NO_EVALUABLE", "motivo": "La tabla de suelos (A1.6, datos/catalogos/suelos.json) no esta disponible en este servidor."}
+    fracciones = {"arena": round(arena, 1), "limo": round(limo, 1), "arcilla": round(arcilla, 1)}
     fuente_ph = {**fuente, "unidades": "pH en agua (adimensional)",
                  "nota": f"Media de 0 a 30 cm ponderada por espesor de capa; mediana de los pixeles con dato a menos de {radio} m del punto."}
     return {
         "meta": _meta(), "id": _id_suelo(lat, lon), "etiqueta": "SUPUESTO", "origen": "mapa_global",
         "aviso": "pH y textura estimados por un modelo global (SoilGrids, 250 m); no son una medicion de la parcela.",
         "coordenada": (lon, lat), "profundidad": {"desdeCm": 0, "hastaCm": 30},
-        "textura": {"estado": "EVALUABLE", "etiqueta": "SUPUESTO", "clase": clase, "grupo": grupo,
-                    "fraccionesPct": {"arena": round(arena, 1), "limo": round(limo, 1), "arcilla": round(arcilla, 1)}, "fuente": fuente},
-        "ph": ({"estado": "EVALUABLE", "etiqueta": "SUPUESTO", "valor": round(ph["valor"], 1), "fuente": fuente_ph} if ph
+        "textura": {"estado": estado_textura, "etiqueta": "SUPUESTO", "clase": clase, "grupo": grupo,
+                    "fraccionesPct": fracciones, "fuente": fuente},
+        "ph": ({"estado": estado_ph, "etiqueta": "SUPUESTO", "valor": round(ph["valor"], 1), "fuente": fuente_ph} if ph
                else {"estado": "NO_EVALUABLE", "motivo": "SoilGrids no tiene dato de pH en esta zona."}),
+        "estimaciones": [{
+            "id": ID_ISRIC, "servicio": "isric_soilgrids_wcs", "estado": estado_textura, "fuente": fuente,
+            "profundidad": {"desdeCm": 0, "hastaCm": 30},
+            "textura": {"clase": clase, "fraccionesPct": fracciones},
+            "ph": round(ph["valor"], 1) if ph else None,
+            "carbonoOrganicoGKg": round(soc["valor"], 1) if soc else None,
+        }],
+        "estimacionUsada": ID_ISRIC,
         "agua": ({"tawMmPorM": taw, "metodoTaw": {"metodo": "tabla_fao56", "fuente": taw["fuente"]}} if taw.get("estado") == "EVALUABLE"
                  else {"tawMmPorM": taw}),
         "advertencias": advertencias,

@@ -143,6 +143,22 @@ export interface components {
             tawMmPorM: components["schemas"]["ValorEvaluable"] | components["schemas"]["ValorNoEvaluable"];
             metodoTaw?: components["schemas"]["MetodoTaw"] | null;
         };
+        /**
+         * CatalogoCultivos
+         * @description Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, NO_EVALUABLE.
+         */
+        CatalogoCultivos: {
+            /** Estado */
+            estado?: "NO_EVALUABLE" | null;
+            /** Motivo */
+            motivo?: string | null;
+            /** Cultivos */
+            cultivos: {
+                [key: string]: unknown;
+            }[];
+        } & {
+            [key: string]: unknown;
+        };
         /** CeldaEntrada */
         CeldaEntrada: {
             /** Id */
@@ -196,6 +212,8 @@ export interface components {
             vientoMS?: number | null;
             /** Et0Mm */
             et0Mm?: number | null;
+            /** Humedadraizfraccionsat */
+            humedadRaizFraccionSat?: number | null;
         };
         /** ErrorDatos */
         ErrorDatos: {
@@ -207,6 +225,33 @@ export interface components {
             estado: "ERROR_DATOS";
             /** Motivo */
             motivo: string;
+        };
+        /**
+         * EstimacionSuelo
+         * @description Lo que devolvio un servicio de suelo para la coordenada (para comparar ISRIC y OpenLandMap, V-23).
+         */
+        EstimacionSuelo: {
+            /** Id */
+            id: string;
+            /**
+             * Servicio
+             * @enum {string}
+             */
+            servicio: "isric_soilgrids_wcs" | "openlandmap";
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+            fuente: components["schemas"]["Fuente"];
+            profundidad?: components["schemas"]["ProfundidadCm"] | null;
+            textura: components["schemas"]["TexturaEstimada"];
+            /** Ph */
+            ph: number | null;
+            /** Carbonoorganicogkg */
+            carbonoOrganicoGKg?: number | null;
+            /** Motivo */
+            motivo?: string | null;
         };
         /** FraccionesTextura */
         FraccionesTextura: {
@@ -245,6 +290,24 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /**
+         * HumedadSuelo
+         * @description De donde sale humedadRaizFraccionSat y para que se usa (V-06).
+         */
+        HumedadSuelo: {
+            /**
+             * Variable
+             * @constant
+             */
+            variable: "GWETROOT";
+            /** Definicion */
+            definicion: string;
+            /** Profundidadcm */
+            profundidadCm?: number | null;
+            fuente: components["schemas"]["Fuente"];
+            /** Uso */
+            uso: ("condicion_inicial" | "comparacion")[];
+        };
         /** MesAproximado */
         MesAproximado: {
             /** Mes */
@@ -260,10 +323,7 @@ export interface components {
         Meta: {
             /** Versioncontrato */
             versionContrato: string;
-            /**
-             * Esejemplo
-             * @default false
-             */
+            /** Esejemplo */
             esEjemplo: boolean;
             /** Generado */
             generado?: string | null;
@@ -299,7 +359,6 @@ export interface components {
             estado: "EVALUABLE" | "EXPLORATORIO" | "RESPALDO_HISTORICO";
             /**
              * Etiqueta
-             * @default SUPUESTO
              * @constant
              */
             etiqueta: "SUPUESTO";
@@ -390,6 +449,7 @@ export interface components {
             fuente: components["schemas"]["Fuente"];
             /** Diario */
             diario: components["schemas"]["DiaClima"][];
+            humedadSuelo?: components["schemas"]["HumedadSuelo"] | null;
             /**
              * Advertencias
              * @default []
@@ -406,7 +466,6 @@ export interface components {
             id: string;
             /**
              * Etiqueta
-             * @default SUPUESTO
              * @constant
              */
             etiqueta: "SUPUESTO";
@@ -426,6 +485,10 @@ export interface components {
             textura: components["schemas"]["Textura"];
             /** Ph */
             ph: components["schemas"]["PhEstimado"] | components["schemas"]["ValorNoEvaluable"];
+            /** Estimaciones */
+            estimaciones?: components["schemas"]["EstimacionSuelo"][] | null;
+            /** Estimacionusada */
+            estimacionUsada?: string | null;
             agua?: components["schemas"]["AguaSuelo"] | null;
             /**
              * Advertencias
@@ -470,12 +533,11 @@ export interface components {
             estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
             /**
              * Etiqueta
-             * @default SUPUESTO
              * @constant
              */
             etiqueta: "SUPUESTO";
             /** Clase */
-            clase?: string | null;
+            clase?: ("arena" | "arena_franca" | "franco_arenoso" | "franco" | "franco_limoso" | "limo" | "franco_arcillo_arenoso" | "franco_arcilloso" | "franco_arcillo_limoso" | "arcillo_arenoso" | "arcillo_limoso" | "arcilla") | null;
             /**
              * Grupo
              * @enum {string}
@@ -483,6 +545,12 @@ export interface components {
             grupo: "arenoso" | "franco" | "arcilloso";
             fraccionesPct?: components["schemas"]["FraccionesTextura"] | null;
             fuente?: components["schemas"]["Fuente"] | null;
+        };
+        /** TexturaEstimada */
+        TexturaEstimada: {
+            /** Clase */
+            clase: ("arena" | "arena_franca" | "franco_arenoso" | "franco" | "franco_limoso" | "limo" | "franco_arcillo_arenoso" | "franco_arcilloso" | "franco_arcillo_limoso" | "arcillo_arenoso" | "arcillo_limoso" | "arcilla") | null;
+            fraccionesPct: components["schemas"]["FraccionesTextura"];
         };
         /** ValidationError */
         ValidationError: {
@@ -635,7 +703,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["CatalogoCultivos"];
                 };
             };
         };

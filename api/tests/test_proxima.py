@@ -106,4 +106,4 @@ def test_historia_insuficiente_no_inventa_bandas(simular, validar):
 def test_sin_clima_no_hay_capa(simular):
     simular(responder(power=False, om=False))
     r = cliente.get(URL)
-    assert r.status_code == 503 and r.json()["detail"]["estado"] == "ERROR_DATOS"
+    assert r.status_code == 503 and r.json()["estado"] == "ERROR_DATOS"

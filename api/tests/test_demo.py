@@ -51,7 +51,7 @@ def test_otra_zona_sin_paquete_sigue_fallando_con_503(simular, monkeypatch, tmp_
     generar_paquete(simular, monkeypatch, tmp_path)
     simular(lambda r: httpx.Response(503))
     r = cliente.get("/api/clima?lat=42.0&lon=-93.6&desde=2006-01-01&hasta=2025-12-31")
-    assert r.status_code == 503 and r.json()["detail"]["estado"] == "ERROR_DATOS"
+    assert r.status_code == 503 and r.json()["estado"] == "ERROR_DATOS"
 
 
 def test_pronostico_viejo_del_paquete_dice_su_fecha(simular, monkeypatch, tmp_path):

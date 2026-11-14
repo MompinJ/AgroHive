@@ -85,7 +85,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | --- | --- | --- | --- | --- | --- | --- |
 | A1.1 `[HECHO]` | Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS | R2 + R3 | M | Opus | A0.3 | `contratos/` revisado por los 4 |
 | A1.2 `[EN CURSO]` rutas P0 a P3 y build verificados; falta el Worker del motor (coordinar con Mompin) | Esqueleto `web/`: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | R1 | S | Sonnet | A1.1 | `npm run dev` abre las pantallas |
-| A1.3 `[EN CURSO]` | Esqueleto `api/`: FastAPI, `/health`, OpenAPI, generación del cliente TS de las llamadas HTTP | R3 | S | Sonnet | A1.1 | Cliente TS generado compila; prueba de que los modelos de FastAPI respetan `contratos/` |
+| A1.3 `[HECHO]` | Esqueleto `api/`: FastAPI, `/health`, OpenAPI, generación del cliente TS de las llamadas HTTP | R3 | S | Sonnet | A1.1 | Cliente TS generado compila; prueba de que los modelos de FastAPI respetan `contratos/` |
 | A1.4 `[HECHO]` | Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) | R4 | M | Sonnet | A0.3 | `.bbmodel` abre en Blockbench |
 | A1.5 `[HECHO]` | Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente | R3 | M | Opus | A0.3 | JSON con citas; vacíos como `NO_EVALUABLE` |
 | A1.6 `[HECHO]` | Tabla de suelos (TAW por textura, FAO-56) | R3 | S | Sonnet | — | JSON con fuente |
@@ -210,7 +210,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 4 | 1 | 0 | 9 | 29 % de 14 |
-| **Eduardo** | 6 | 4 | 2 | 2 | 43 % de 14 |
+| **Eduardo** | 7 | 3 | 2 | 2 | 50 % de 14 |
 | **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
@@ -239,7 +239,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | --- | --- | --- | --- |
 | A0.4 | Acceso SSH, firewall y hostname del servidor (V-15 a V-17) | HECHO |  |
 | A0.7 | Verificar Open-Meteo estacional, CORS de POWER y acceso a elevación (V-21, V-22) | HECHO |  |
-| A1.3 | Esqueleto api/: FastAPI, /health, OpenAPI, generación del cliente TS de las llamadas HTTP | EN CURSO |  |
+| A1.3 | Esqueleto api/: FastAPI, /health, OpenAPI, generación del cliente TS de las llamadas HTTP | HECHO |  |
 | A2.1 | Cliente NASA POWER diario con caché y reintentos | HECHO |  |
 | A2.2 | Respaldo Open-Meteo y estados RESPALDO_HISTORICO / ERROR_DATOS | HECHO |  |
 | A2.3 | Elevación por celda (tiles Terrarium o SRTM) y pendiente | HECHO |  |
