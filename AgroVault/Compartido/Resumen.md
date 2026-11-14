@@ -54,7 +54,7 @@ Columna vertebral: **NASA POWER** diario, sin llave. Comunidad `AG`. Parámetros
 
 Respaldo climático: Open-Meteo (archivo histórico). Si POWER cae, el estado es `RESPALDO_HISTORICO` o `ERROR_DATOS`, visible.
 
-Elevación: SRTM o tiles Terrarium. Es lo que hace distinto a cada bloque. `[VERIFICAR]` acceso (V-08).
+Elevación: Open-Meteo Elevation (GLO-90), tiles Terrarium o SRTM; ver [[APIs]]. Es lo que hace distinto a cada bloque. `[VERIFICAR]` acceso (V-08).
 
 Otros datasets NASA (GPM, SMAP, MODIS, Landsat, ECOSTRESS, GRACE) son extra. Solo entran si se integran de verdad. SMAP, GPM y MODIS van por `earthaccess` en Python, por eso el backend es FastAPI.
 
@@ -133,9 +133,9 @@ Si hay que cortar, en este orden se caen: extras NASA y props, slider de meses, 
 
 Eduardo toma el servidor (A0.4, A4.7).
 
-## Estado del repo al armar este vault
+## Estado del repo (14/11, noche)
 
-Hay documentación (`docs/`), `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, `CLAUDE.md`, `README.md` y este vault. No hay todavía `web/`, `api/`, `contratos/` ni `datos/` con catálogo. El README describe la estructura objetivo, no código ya escrito.
+Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.1.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
 
 ## Límites para el pitch
 
