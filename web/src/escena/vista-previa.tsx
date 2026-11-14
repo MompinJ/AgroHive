@@ -10,10 +10,18 @@ import parcelaEjemplo from '../../../contratos/ejemplos/parcela.ejemplo.json';
 import resultadoEjemplo from '../../../contratos/ejemplos/resultado-celda.ejemplo.json';
 import type { Escenario, Parcela, ResultadoCeldas, SerieClima } from '../../../contratos/tipos/contratos';
 import { crearClienteMotor, type ClienteMotor } from '../motor';
-import { entradasDemo, fechasPlan, parcelaConTerrenoDemo, type ModoSuelo } from './demo-motor';
+import { entradasCarga, entradasDemo, fechasPlan, parcelaCargaSintetica, parcelaConTerrenoDemo, type ModoSuelo } from './demo-motor';
+import type { EscenaThree } from './render/escena-three';
+
+// Para medir rendimiento desde una prueba automatizada (A5.4): window.escenaPrueba.estadisticas().
+declare global {
+  interface Window {
+    escenaPrueba?: EscenaThree | null;
+  }
+}
 import { EscenaParcela } from './EscenaParcela';
 
-type Fuente = 'motor' | 'ejemplo';
+type Fuente = 'motor' | 'carga' | 'ejemplo';
 
 const ESCENARIOS: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 const FECHAS = fechasPlan();
@@ -30,7 +38,9 @@ function VistaPrevia() {
   const [estado, setEstado] = useState('');
 
   const parcelaMotor = useMemo(() => parcelaConTerrenoDemo(), []);
-  const parcela = fuente === 'motor' ? parcelaMotor : (parcelaEjemplo as unknown as Parcela);
+  const parcelaCarga = useMemo(() => parcelaCargaSintetica(), []);
+  const parcela = fuente === 'motor' ? parcelaMotor : fuente === 'carga' ? parcelaCarga : (parcelaEjemplo as unknown as Parcela);
+  const conMotor = fuente !== 'ejemplo';
   const fecha = FECHAS[indiceFecha] ?? FECHAS[0]!;
 
   useEffect(() => {
@@ -41,7 +51,7 @@ function VistaPrevia() {
 
   // Simula la rotacion de prueba cuando cambia el suelo (el plan y el clima son fijos).
   useEffect(() => {
-    if (!cliente || fuente !== 'motor') return;
+    if (!cliente || !conMotor) return;
     let vigente = true;
     setListo(false);
     setEstado('Calculando con el motor...');
@@ -49,7 +59,10 @@ function VistaPrevia() {
       try {
         const serie = (await import('../../../datos/demo/respuestas/serie-clima.json')).default as unknown as SerieClima;
         const sel = await cliente.escenarios(serie);
-        await cliente.simular({ ...entradasDemo(suelo), escenarios: sel.escenarios });
+        const entradas = fuente === 'carga' ? entradasCarga(suelo) : entradasDemo(suelo);
+        const t0 = performance.now();
+        await cliente.simular({ ...entradas, escenarios: sel.escenarios });
+        console.info(`[escena] motor: simular ${entradas.parcela.celdas.length} celdas en ${Math.round(performance.now() - t0)} ms`);
         if (vigente) setListo(true);
       } catch (e) {
         if (vigente) setEstado(`El motor no respondio: ${(e as Error).message}`);
@@ -58,7 +71,7 @@ function VistaPrevia() {
     return () => {
       vigente = false;
     };
-  }, [cliente, fuente, suelo]);
+  }, [cliente, fuente, conMotor, suelo]);
 
   // Pide al motor el resultado por celda de la fecha y el escenario elegidos.
   useEffect(() => {
@@ -72,7 +85,8 @@ function VistaPrevia() {
     cliente
       .celdas('R1', escenario, fecha)
       .then((r) => {
-        if (!vigente) return;
+        // Un resultado de la rotacion anterior (otra parcela) se descarta mientras se recalcula.
+        if (!vigente || r.parcelaId !== parcela.id) return;
         setResultado(r);
         setEstado(`Motor: R1, escenario ${escenario} (anio real ${r.anioReal}), fecha del plan ${fecha}.`);
       })
@@ -84,7 +98,7 @@ function VistaPrevia() {
     return () => {
       vigente = false;
     };
-  }, [cliente, listo, fuente, escenario, fecha]);
+  }, [cliente, listo, fuente, escenario, fecha, parcela.id]);
 
   return (
     <main style={{ maxWidth: 960, margin: '0 auto', padding: 16, fontFamily: 'system-ui, sans-serif', color: '#183e32' }}>
@@ -96,16 +110,17 @@ function VistaPrevia() {
             Fuente{' '}
             <select value={fuente} onChange={(e) => setFuente(e.target.value as Fuente)}>
               <option value="motor">Motor real + paquete de demo</option>
+              <option value="carga">Prueba de carga: 1600 celdas sinteticas (no son datos)</option>
               <option value="ejemplo">Ejemplo de contratos (ficticio)</option>
             </select>
           </label>
-          {fuente === 'motor' && (
+          {conMotor && (
             <>
               <label>
                 Suelo{' '}
                 <select value={suelo} onChange={(e) => setSuelo(e.target.value as ModoSuelo)}>
                   <option value="manual_franco">Selector manual: franco (SUPUESTO)</option>
-                  <option value="mapa">Del mapa (TAW NO_EVALUABLE hasta A2.16)</option>
+                  <option value="mapa">Del mapa (TAW de Saxton y Rawls, SUPUESTO)</option>
                 </select>
               </label>
               <label>
@@ -119,7 +134,7 @@ function VistaPrevia() {
             </>
           )}
         </div>
-        {fuente === 'motor' && (
+        {conMotor && (
           <label style={estiloFila}>
             Fecha del plan: <strong>{fecha}</strong>
             <input
@@ -133,13 +148,19 @@ function VistaPrevia() {
           </label>
         )}
         <p style={{ margin: 0, fontSize: '0.8rem' }} role="status">
-          {fuente === 'motor'
+          {conMotor
             ? 'Plan de prueba R1: maiz (PV 2016), frijol (OI 2016), maiz (PV 2017). '
             : ''}
           {estado}
         </p>
       </fieldset>
-      <EscenaParcela parcela={parcela} resultado={resultado} />
+      <EscenaParcela
+        parcela={parcela}
+        resultado={resultado}
+        onEscena={(e) => {
+          window.escenaPrueba = e;
+        }}
+      />
     </main>
   );
 }

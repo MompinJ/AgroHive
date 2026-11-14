@@ -60,18 +60,19 @@ Elevación: Terrarium por defecto y Open-Meteo Elevation de respaldo (V-08, deci
 
 Otros datasets NASA (GPM, SMAP, MODIS, Landsat, ECOSTRESS, GRACE) son extra. Solo entran si se integran de verdad. SMAP, GPM y MODIS van por `earthaccess` en Python, por eso el backend es FastAPI.
 
-Escenarios (`[DECIDIDO]` 14/11, A2.5 hecha): el año agrícola real más cercano a p10, p50 y p90 de la lluvia de las temporadas de siembra PV y OI de SIAP (OI oct *t*-1 a mar *t*, PV abr a sep *t*), no del año calendario; empate: el más antiguo. Mostrar el año. Con el paquete de demo (POWER, 2005-10 a 2025): 2023 seco, 2008 habitual (empata con 2016 en el p50; gana el más antiguo), 2024 lluvioso. Detalle en `docs/05`, paso 1. `[DEPENDE-DATOS]` si la robustez se calcula sobre todo el histórico o solo sobre esos tres años.
+Escenarios (`[DECIDIDO]` 14/11, A2.5 hecha): el año agrícola real más cercano a p10, p50 y p90 de la lluvia de las temporadas de siembra PV y OI de SIAP (OI oct *t*-1 a mar *t*, PV abr a sep *t*), no del año calendario; empate: el más reciente (`[DECIDIDO]`). Mostrar el año. Con el paquete de demo (POWER, 2005-10 a 2025): 2023 seco, 2016 habitual (empata con 2008 en el p50; gana el más reciente), 2024 lluvioso. Detalle en `docs/05`, paso 1. `[DEPENDE-DATOS]` si la robustez se calcula sobre todo el histórico o solo sobre esos tres años.
 
 Motor, independiente del render (`docs/05`):
 
 1. Perfil del histórico y elección de los tres años.
 2. Asignación de clima a cada ciclo: **`[DECIDIDO]` (c) `temporada_tipica`**, cada ciclo en su temporada típica (PV u OI) dentro del año del escenario. La fecha de siembra la elige el usuario; el selector la sugiere desde el calendario local del municipio (`calendario-local`, fuente SIAP o INIFAP) y explica por qué. Un cultivo no registrado en el lugar se muestra, pero no se recomienda.
 3. ET0 (la de Open-Meteo si viene; si no, Penman-Monteith FAO-56 con POWER; Hargreaves si faltan humedad, viento o radiación) y ETc = Kc de la etapa × ET0 (curva FAO-56 ec. 66). Duraciones de etapa publicadas. Hecho (A2.6, `web/src/motor/`).
-4. Balance de cubeta por bloque (FAO-56 cap. 8, hecho en A2.6): lluvia entra, lo que no cabe es exceso (percolación), ETc sale, lo que no se cubre es déficit. TAW según suelo; arranque a capacidad de campo como supuesto declarado hasta A2.16. Pendiente: sin escurrimiento hasta tener coeficiente con fuente (A3.7).
+4. Balance de cubeta por bloque (FAO-56 cap. 8, hecho en A2.6): lluvia entra, lo que no cabe es exceso (percolación), ETc sale, lo que no se cubre es déficit. TAW según suelo (Saxton y Rawls con el suelo del mapa); el agua al sembrar sale de GWETROOT convertida con θsat y θFC; sin retención (selector manual), arranque a capacidad de campo declarado. Pendiente: sin escurrimiento hasta tener coeficiente con fuente (A3.7).
 5. Estrés hídrico, estrés por calor y avance fenológico. Salida cualitativa para el render.
 6. Pilares: déficit (núcleo), exceso de agua (percolación profunda, FAO-56 ec. 88; decidido el 14/11 para el ranking B), compatibilidad de ciclo, erosión relativa (no toneladas, inspirada en USLE/RUSLE). Los dos últimos se recortan si faltan datos.
 7. Ranking (A4.2 hecha, `ranking.ts`; hoy B con déficit y exceso de agua, `[DECIDIDO]` 14/11): el criterio principal es el peor caso. `[DECIDIDO]` el 14/11: opción B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio). Pesos con fuente o, si no hay, iguales y declarados `SUPUESTO`. Si los pilares 2 y 3 (A3.7) no llegan, respaldo con la opción A (menor déficit en el peor caso). Si nada es evaluable, decirlo.
-8. Tarjeta de explicación con plantilla. Un LLM, si se usa, solo redacta números ya calculados.
+8. Próxima temporada (A2.13, hecha en el motor): años análogos reales dentro de la banda de lluvia; solo los ciclos que se siembran en el horizonte; rango `EXPLORATORIO`, sin cifra y sin ranking.
+9. Tarjeta de explicación con plantilla. Un LLM, si se usa, solo redacta números ya calculados.
 
 Estados: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS`, `RESPALDO_HISTORICO`.
 

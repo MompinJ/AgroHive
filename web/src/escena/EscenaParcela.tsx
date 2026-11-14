@@ -19,6 +19,8 @@ export interface EscenaParcelaProps {
   /** Fecha de los registros a mostrar (slider de meses, A5.2). Por defecto, la primera. */
   fecha?: string;
   className?: string;
+  /** Solo para mediciones (vista previa, A5.4): recibe la escena three ya creada. */
+  onEscena?: (escena: EscenaThree | null) => void;
 }
 
 function prefiereMenosMovimiento(): boolean {
@@ -40,7 +42,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, className = '' }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, className = '', onEscena }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -69,6 +71,7 @@ export function EscenaParcela({ parcela, resultado, fecha, className = '' }: Esc
     if (!lienzo.current) return;
     try {
       escena.current = new EscenaThree(lienzo.current, opciones);
+      onEscena?.(escena.current);
     } catch (e) {
       if (e instanceof ErrorWebGL) setSinWebGL(true);
       else throw e;
@@ -76,6 +79,7 @@ export function EscenaParcela({ parcela, resultado, fecha, className = '' }: Esc
     return () => {
       escena.current?.dispose();
       escena.current = null;
+      onEscena?.(null);
     };
     // Se crea una sola vez; las opciones se actualizan en el efecto de abajo.
     // eslint-disable-next-line react-hooks/exhaustive-deps

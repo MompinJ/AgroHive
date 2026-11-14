@@ -1,0 +1,8 @@
+{
+  "nota": "Medicion real del 2026-11-14 en (-95.53, 18.03) con api/app/clientes/openlandmap.py: mediana de una ventana de 5 x 5 pixeles de 30 m, capa 0 a 30 cm, ya con la escala aplicada. Formato: [valor, pixeles validos, pixeles totales].",
+  "clay": [28.0, 25, 25],
+  "sand": [48.0, 25, 25],
+  "silt": [24.0, 25, 25],
+  "ph": [5.9, 25, 25],
+  "oc": [8.2, 25, 25]
+}

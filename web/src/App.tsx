@@ -7,10 +7,12 @@ import { ActionLink, Brand, MethodNotes, Navigation, PageHeading } from './ui/co
 import { pages, usePage } from './ui/navigation';
 import { demo } from './ui/demo';
 import { InicioHeader } from './ui/InicioHeader';
+import { useMotor } from './ui/useMotor';
 import { initialRotations } from './ui/selections';
 import type { Crop, Cycle, RotationChoices, RotationId, Scenario } from './ui/selections';
 
 export default function App() {
+  const estadoMotor = useMotor();
   const { path, mode } = usePage();
   const isHome = path === '/';
   const [rotation, setRotation] = useState<RotationId>('R1');
@@ -53,7 +55,7 @@ export default function App() {
     <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
     {isHome ? <InicioHeader /> : <>
       <header className="site-header"><div className="header-inner"><Brand /><Navigation path={path} /><span className="prototype-badge"><span aria-hidden="true" />Prototipo A1.2</span></div></header>
-      <div className="prototype-strip"><div className="wrap"><strong>Interfaz de demostración</strong><span>Sin conexión a datos NASA ni al motor de simulación.</span><span>{demo.notice}</span></div></div>
+      <div className="prototype-strip"><div className="wrap"><strong>Interfaz de demostración</strong><span role="status">{estadoMotor}. Las selecciones todavía no ejecutan simulaciones.</span><span>{demo.notice}</span></div></div>
     </>}
     <main id="contenido" className={isHome ? 'landing-main' : 'wrap main-content'} tabIndex={-1}>{content}{!isHome && <MethodNotes />}</main>
     <div className="sr-only" role="status">{announcement}</div>

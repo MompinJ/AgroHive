@@ -1,9 +1,13 @@
+import json
+
 import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from app import config, servicios
-from app.clientes import isric
+import pytest
+
+from app import config, pedotransferencia, servicios
+from app.clientes import isric, openlandmap
 from app.main import app
 from app.textura import GRUPO, clasificar
 from tests.conftest import real
@@ -56,11 +60,14 @@ def test_suelo_con_geotiff_reales(simular, validar):
     assert s["textura"]["clase"] == "franco_arcillo_arenoso" and s["textura"]["grupo"] == "arcilloso"  # grupo segun la tabla de A1.6
     assert 5.0 <= s["ph"]["valor"] <= 5.8
     assert s["profundidad"] == {"desdeCm": 0, "hastaCm": 30}
-    assert s["agua"]["tawMmPorM"]["estado"] == "NO_EVALUABLE"  # sin tabla de suelos en este checkout: no se inventa
+    if pedotransferencia.modulo() is not None:  # A2.16 de Mafer (datos/catalogos/saxton_rawls.py)
+        assert s["agua"]["tawMmPorM"]["estado"] == "EVALUABLE"
+        assert s["agua"]["metodoTaw"]["metodo"] == "pedotransferencia_saxton_rawls_2006"
     assert "SUELO_SUPUESTO" in {a["codigo"] for a in s["advertencias"]}
-    assert len(llamadas) == 15  # 5 propiedades (arcilla, arena, limo, pH, carbono) x 3 capas
+    isric_llamadas = [u for u in llamadas if "maps.isric.org" in u]
+    assert len(isric_llamadas) == 15  # 5 propiedades (arcilla, arena, limo, pH, carbono) x 3 capas
     cliente.get(URL)
-    assert len(llamadas) == 15, "la segunda consulta sale de la cache"
+    assert len([u for u in llamadas if "maps.isric.org" in u]) == 15, "la segunda consulta sale de la cache"
 
 
 def test_suelo_sin_servicio_es_error_datos_para_usar_el_selector(simular):
@@ -102,17 +109,64 @@ FUENTE_TAW = {"nombre": "FAO-56 (Allen et al., 1998), Tabla 19 y ecuacion 82", "
               "consultado": "2026-11-14", "unidades": "mm por metro de suelo"}
 
 
-def test_la_clase_de_isla_no_tiene_taw_en_fao56_y_se_dice(simular, validar):
+def test_la_clase_de_isla_sin_fila_fao56_obtiene_taw_por_saxton_rawls(simular, validar):
+    """Isla (franco arcillo arenoso) no tiene fila en FAO-56 Tabla 19: antes era NO_EVALUABLE, ahora sale por pedotransferencia."""
+    if pedotransferencia.modulo() is None:
+        pytest.skip("falta datos/catalogos/saxton_rawls.py (A2.16 de Mafer)")
     simular(isric_real)
     escribir_tabla([{"clase": "franco_arcillo_arenoso", "grupo": "arcilloso", "tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": HUECO}}])
     s = cliente.get(URL).json()
     validar(s, "suelo#")
-    assert s["textura"]["clase"] == "franco_arcillo_arenoso"
-    assert s["agua"]["tawMmPorM"] == {"estado": "NO_EVALUABLE", "motivo": HUECO}  # nunca se sustituye por el de un grupo vecino
+    agua = s["agua"]
+    assert agua["tawMmPorM"]["estado"] == "EVALUABLE" and 100 <= agua["tawMmPorM"]["valor"] <= 150  # mm/m, orden de magnitud de un franco arcilloso
+    assert agua["metodoTaw"]["metodo"] == "pedotransferencia_saxton_rawls_2006" and agua["metodoTaw"]["etiqueta"] == "SUPUESTO"
+    entradas = agua["metodoTaw"]["entradas"]
+    assert entradas["estimacionId"] == "isric-soilgrids-wcs"
+    assert "1.724" in entradas["materiaOrganicaPct"]["fuente"]["cita"]  # el factor carbono a materia organica va citado
+    r = agua["retencion"]
+    assert r["thetaWpM3M3"]["valor"] < r["thetaFcM3M3"]["valor"] < r["thetaSatM3M3"]["valor"]  # lo que el motor necesita para GWETROOT
+    assert abs(agua["tawMmPorM"]["valor"] - 1000 * (r["thetaFcM3M3"]["valor"] - r["thetaWpM3M3"]["valor"])) < 0.5
+
+
+def test_sin_el_modulo_de_pedotransferencia_cae_a_la_tabla_fao56(simular, validar, monkeypatch):
+    simular(isric_real)
+    monkeypatch.setattr(pedotransferencia, "modulo", lambda: None)
+    monkeypatch.setattr(servicios.clasificacion, "clasificar", lambda *a: "arena_franca")
+    escribir_tabla([{"clase": "arena_franca", "grupo": "arenoso", "tawMmPorM": {"estado": "EVALUABLE", "valor": 90.0, "unidad": "mm/m", "fuente": FUENTE_TAW, "etiqueta": "FUENTE"}}])
+    agua = cliente.get(URL).json()["agua"]
+    assert agua["metodoTaw"]["metodo"] == "tabla_fao56" and agua["tawMmPorM"]["valor"] == 90.0 and "retencion" not in agua
+
+
+def test_sin_modulo_y_sin_fila_el_taw_es_no_evaluable_y_no_toma_el_de_otra_clase(simular, validar, monkeypatch):
+    simular(isric_real)
+    monkeypatch.setattr(pedotransferencia, "modulo", lambda: None)
+    escribir_tabla([{"clase": "franco_arcillo_arenoso", "grupo": "arcilloso", "tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": HUECO}},
+                    {"clase": "arcilla", "grupo": "arcilloso", "tawMmPorM": {"estado": "EVALUABLE", "valor": 160.0, "unidad": "mm/m", "fuente": FUENTE_TAW, "etiqueta": "FUENTE"}}])
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    assert s["agua"] == {"tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": HUECO}}
+
+
+def test_estimacion_exploratoria_no_da_taw_por_pedotransferencia(simular, validar, monkeypatch):
+    if pedotransferencia.modulo() is None:
+        pytest.skip("falta datos/catalogos/saxton_rawls.py (A2.16 de Mafer)")
+    simular(isric_real)
+    original = isric.estimar
+    monkeypatch.setattr(isric, "estimar", lambda pix, x, y, f: (lambda r: None if r is None else (r[0], r[1], 3000))(original(pix, x, y, f)))
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    assert s["textura"]["estado"] == "EXPLORATORIO"
+    assert s["agua"]["tawMmPorM"]["estado"] == "NO_EVALUABLE" and "EXPLORATORIA" in s["agua"]["tawMmPorM"]["motivo"]
+
+
+def test_materia_organica_desde_carbono_organico():
+    assert abs(pedotransferencia.materia_organica_pct(16.2) - 2.793) < 0.001  # g/kg de C -> % de C (/10) -> % de materia organica (x 1.724)
+    assert pedotransferencia.materia_organica_pct(0) == 0
 
 
 def test_taw_de_la_tabla_de_suelos_se_copia_con_su_fuente(simular, validar, monkeypatch):
     simular(isric_real)
+    monkeypatch.setattr(pedotransferencia, "modulo", lambda: None)  # esta prueba es de la tabla FAO-56
     monkeypatch.setattr(servicios.clasificacion, "clasificar", lambda *a: "arena_franca")
     escribir_tabla([{"clase": "arena_franca", "grupo": "arenoso", "tawMmPorM": {"estado": "EVALUABLE", "valor": 90.0, "unidad": "mm/m", "fuente": FUENTE_TAW, "etiqueta": "FUENTE"}}])
     s = cliente.get(URL).json()
@@ -149,3 +203,51 @@ def test_pixeles_lejanos_son_exploratorios_y_se_dice(simular, validar, monkeypat
     assert s["textura"]["estado"] == "EXPLORATORIO" and s["ph"]["estado"] == "EXPLORATORIO"
     assert s["estimaciones"][0]["estado"] == "EXPLORATORIO"
     assert "SUELO_SIN_DATO_CERCANO" in {a["codigo"] for a in s["advertencias"]}
+
+
+def olm_real(monkeypatch):
+    """OpenLandMap simulado con la medicion real guardada (el catalogo STAC y GDAL no se tocan en las pruebas)."""
+    medicion = {k: tuple(v) for k, v in json.loads(real("openlandmap_estimacion.json")).items() if k != "nota"}
+
+    async def estimar(cliente, lon, lat):
+        return medicion
+    monkeypatch.setattr(openlandmap, "estimar", estimar)
+
+
+def test_openlandmap_se_suma_a_isric_para_compararlas(simular, validar, monkeypatch):
+    simular(isric_real)
+    olm_real(monkeypatch)
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    isric_e, olm_e = s["estimaciones"]
+    assert (isric_e["servicio"], olm_e["servicio"]) == ("isric_soilgrids_wcs", "openlandmap")
+    assert s["estimacionUsada"] == isric_e["id"]  # ISRIC sigue siendo la usada por defecto
+    assert olm_e["textura"]["clase"] == "franco_arcillo_arenoso" == isric_e["textura"]["clase"]  # las dos coinciden en la clase
+    assert olm_e["ph"] == 5.9 and olm_e["carbonoOrganicoGKg"] == 8.2 and olm_e["profundidad"] == {"desdeCm": 0, "hastaCm": 30}
+    assert olm_e["fuente"]["resolucion"] == "30 m" and "zenodo" in olm_e["fuente"]["cita"]
+    assert olm_e["estado"] == "EVALUABLE"
+
+
+def test_si_isric_falla_se_usa_openlandmap_y_se_dice(simular, validar, monkeypatch):
+    simular(lambda r: httpx.Response(503))
+    olm_real(monkeypatch)
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    assert s["estimacionUsada"] == "openlandmap-soildb" and [e["servicio"] for e in s["estimaciones"]] == ["openlandmap"]
+    assert s["textura"]["clase"] == "franco_arcillo_arenoso" and s["ph"]["valor"] == 5.9
+    assert "SUELO_ISRIC_NO_DISPONIBLE" in {a["codigo"] for a in s["advertencias"]}
+
+
+def test_si_openlandmap_falla_solo_queda_isric_con_aviso(simular, validar):
+    simular(isric_real)  # el catalogo STAC responde 404: OpenLandMap no esta disponible
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    assert [e["servicio"] for e in s["estimaciones"]] == ["isric_soilgrids_wcs"]
+    assert "OPENLANDMAP_NO_DISPONIBLE" in {a["codigo"] for a in s["advertencias"]}
+
+
+def test_pixeles_sin_dato_de_openlandmap_son_exploratorios(monkeypatch):
+    import numpy as np
+    assert openlandmap.resumir(np.array([[255, 255], [255, 255]]), 255, 1.0) is None  # nada que mediar
+    v, validos, total = openlandmap.resumir(np.array([[59, 255], [61, 255]]), 255, 0.1)
+    assert (round(v, 1), validos, total) == (6.0, 2, 4)  # mediana de 59 y 61 con factor 0.1: 6.0

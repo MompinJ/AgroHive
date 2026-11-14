@@ -4,8 +4,9 @@ import math
 from datetime import date, datetime, timedelta, timezone
 
 from . import cache, config, http
+from . import pedotransferencia
 from . import textura as clasificacion
-from .clientes import isric, openmeteo, power, terrarium
+from .clientes import isric, openlandmap, openmeteo, power, terrarium
 from .modelos import CeldaEntrada
 
 _candados: dict[str, asyncio.Lock] = {}
@@ -177,7 +178,7 @@ def _id_suelo(lat: float, lon: float) -> str:
 ID_ISRIC = "isric-soilgrids-wcs"
 
 
-async def suelo(lat: float, lon: float) -> dict:
+async def _suelo_isric(lat: float, lon: float) -> dict:
     clave = f"suelo_isric_v2_{round(lat / 0.0025)}_{round(lon / 0.0025)}"  # v2: incluye carbono organico
     async with _candado(clave):
         en_cache = cache.leer(clave)
@@ -217,13 +218,15 @@ async def suelo(lat: float, lon: float) -> dict:
     ph = props.get("phh2o")
     soc = props.get("soc")
     estado_ph = "EXPLORATORIO" if ph and ph["radioM"] > 1000 else "EVALUABLE"
-    tabla = clasificacion.cargar_catalogo_suelos().get(clase)
-    grupo = tabla["grupo"] if tabla else clasificacion.GRUPO[clase]
-    if tabla:
-        taw = tabla["tawMmPorM"]
-    else:
-        taw = {"estado": "NO_EVALUABLE", "motivo": "La tabla de suelos (A1.6, datos/catalogos/suelos.json) no esta disponible en este servidor."}
+    grupo = _grupo(clase)
     fracciones = {"arena": round(arena, 1), "limo": round(limo, 1), "arcilla": round(arcilla, 1)}
+    estimacion = {
+        "id": ID_ISRIC, "servicio": "isric_soilgrids_wcs", "estado": estado_textura, "fuente": fuente,
+        "profundidad": {"desdeCm": 0, "hastaCm": 30},
+        "textura": {"clase": clase, "fraccionesPct": fracciones},
+        "ph": round(ph["valor"], 1) if ph else None,
+        "carbonoOrganicoGKg": round(soc["valor"], 1) if soc else None,
+    }
     fuente_ph = {**fuente, "unidades": "pH en agua (adimensional)",
                  "nota": f"Media de 0 a 30 cm ponderada por espesor de capa; mediana de los pixeles con dato a menos de {radio} m del punto."}
     return {
@@ -234,15 +237,112 @@ async def suelo(lat: float, lon: float) -> dict:
                     "fraccionesPct": fracciones, "fuente": fuente},
         "ph": ({"estado": estado_ph, "etiqueta": "SUPUESTO", "valor": round(ph["valor"], 1), "fuente": fuente_ph} if ph
                else {"estado": "NO_EVALUABLE", "motivo": "SoilGrids no tiene dato de pH en esta zona."}),
-        "estimaciones": [{
-            "id": ID_ISRIC, "servicio": "isric_soilgrids_wcs", "estado": estado_textura, "fuente": fuente,
-            "profundidad": {"desdeCm": 0, "hastaCm": 30},
-            "textura": {"clase": clase, "fraccionesPct": fracciones},
-            "ph": round(ph["valor"], 1) if ph else None,
-            "carbonoOrganicoGKg": round(soc["valor"], 1) if soc else None,
-        }],
+        "estimaciones": [estimacion],
         "estimacionUsada": ID_ISRIC,
-        "agua": ({"tawMmPorM": taw, "metodoTaw": {"metodo": "tabla_fao56", "fuente": taw["fuente"]}} if taw.get("estado") == "EVALUABLE"
-                 else {"tawMmPorM": taw}),
+        "agua": _agua(clase, estimacion),
         "advertencias": advertencias,
     }
+
+
+# ---------------------------------------------------------------- suelo: OpenLandMap y composicion (A2.15)
+
+ID_OLM = "openlandmap-soildb"
+
+
+def _grupo(clase: str) -> str:
+    """Grupo del selector manual para una clase USDA, segun la tabla de suelos de A1.6 (copia de respaldo si falta el archivo)."""
+    tabla = clasificacion.cargar_catalogo_suelos().get(clase)
+    return tabla["grupo"] if tabla else clasificacion.GRUPO[clase]
+
+
+def _agua(clase: str, estimacion: dict) -> dict:
+    """Agua del suelo: Saxton y Rawls (2006) primero, porque da el TAW **y** la retencion (thetaSat, thetaFC, thetaWP) que el motor
+    necesita para convertir GWETROOT (fraccion de saturacion) a fraccion de TAW; la tabla FAO-56 queda de respaldo (solo TAW);
+    sin ninguna de las dos, NO_EVALUABLE con motivo. Nunca se toma el valor de una clase vecina."""
+    ped = pedotransferencia.agua(estimacion)
+    if ped is not None and ped["tawMmPorM"].get("estado") == "EVALUABLE":
+        return ped
+    tabla = clasificacion.cargar_catalogo_suelos().get(clase)
+    if tabla and tabla["tawMmPorM"].get("estado") == "EVALUABLE":
+        taw = tabla["tawMmPorM"]
+        return {"tawMmPorM": taw, "metodoTaw": {"metodo": "tabla_fao56", "fuente": taw["fuente"]}}
+    if ped is not None:
+        return ped  # NO_EVALUABLE con el motivo de Saxton y Rawls
+    if tabla:
+        return {"tawMmPorM": tabla["tawMmPorM"]}
+    return {"tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": "No hay tabla de suelos ni pedotransferencia disponibles en este servidor."}}
+
+
+async def _estimacion_openlandmap(lat: float, lon: float) -> tuple[dict | None, dict | None]:
+    """(estimacion de OpenLandMap o None, advertencia si no se pudo). Nunca lanza: es una segunda opinion, no un requisito."""
+    clave = f"suelo_olm_v1_{round(lat / 0.001)}_{round(lon / 0.001)}"
+    en_cache = cache.leer(clave)
+    if en_cache:
+        registro = en_cache[0]
+    else:
+        try:
+            async with http.crear_cliente() as c:
+                props = await openlandmap.estimar(c, lon, lat)
+        except http.ErrorFuente as e:
+            return None, {"codigo": "OPENLANDMAP_NO_DISPONIBLE", "mensaje": f"OpenLandMap no respondio ({e}); solo hay estimacion de ISRIC.", "severidad": "info"}
+        registro = {"consultado": date.today().isoformat(), "props": props}
+        if all(props.get(k) for k in ("clay", "sand", "silt")):
+            cache.escribir(clave, registro)
+    props = registro["props"]
+    if not all(props.get(k) for k in ("clay", "sand", "silt")):
+        return None, {"codigo": "OPENLANDMAP_SIN_DATO", "mensaje": "OpenLandMap no tiene dato de textura en este punto.", "severidad": "info"}
+    arcilla, arena, limo = props["clay"][0], props["sand"][0], props["silt"][0]
+    total = arcilla + arena + limo
+    arcilla, arena, limo = (100 * v / total for v in (arcilla, arena, limo))
+    clase = clasificacion.clasificar(arena, limo, arcilla)
+    validos = min(props[k][1] / props[k][2] for k in ("clay", "sand", "silt"))
+    ph, oc = props.get("ph"), props.get("oc")
+    return {
+        "id": ID_OLM, "servicio": "openlandmap", "estado": "EVALUABLE" if validos >= 0.5 else "EXPLORATORIO",
+        "fuente": {"nombre": openlandmap.NOMBRE, "url": "https://openlandmap.org", "cita": openlandmap.DOI, "coordenada": (lon, lat),
+                   "periodo": {"desde": date(2020, 1, 1), "hasta": date(2022, 12, 31)}, "unidades": "% (arena, limo, arcilla), pH en agua, g/kg (carbono organico)",
+                   "consultado": registro["consultado"], "resolucion": "30 m",
+                   "nota": "Capa de 0 a 30 cm; mediana de una ventana de 5 x 5 pixeles. Licencia CC-BY-4.0. Fracciones normalizadas a 100."},
+        "profundidad": {"desdeCm": 0, "hastaCm": 30},
+        "textura": {"clase": clase, "fraccionesPct": {"arena": round(arena, 1), "limo": round(limo, 1), "arcilla": round(arcilla, 1)}},
+        "ph": round(ph[0], 1) if ph else None,
+        "carbonoOrganicoGKg": round(oc[0], 1) if oc else None,
+    }, None
+
+
+def _respuesta_desde_estimacion(est: dict, lat: float, lon: float, advertencias: list[dict]) -> dict:
+    """Respuesta de /api/suelo cuando la estimacion usada es la de OpenLandMap (ISRIC no respondio)."""
+    clase = est["textura"]["clase"]
+    grupo = _grupo(clase)
+    fuente_ph = {**est["fuente"], "unidades": "pH en agua (adimensional)"}
+    return {
+        "meta": _meta(), "id": _id_suelo(lat, lon), "etiqueta": "SUPUESTO", "origen": "mapa_global",
+        "aviso": "pH y textura estimados por un modelo global (OpenLandMap, 30 m); no son una medicion de la parcela.",
+        "coordenada": (lon, lat), "profundidad": est["profundidad"],
+        "textura": {"estado": est["estado"], "etiqueta": "SUPUESTO", "clase": clase, "grupo": grupo, "fraccionesPct": est["textura"]["fraccionesPct"], "fuente": est["fuente"]},
+        "ph": ({"estado": est["estado"], "etiqueta": "SUPUESTO", "valor": est["ph"], "fuente": fuente_ph} if est["ph"] is not None
+               else {"estado": "NO_EVALUABLE", "motivo": "OpenLandMap no tiene dato de pH en este punto."}),
+        "estimaciones": [est], "estimacionUsada": est["id"], "agua": _agua(clase, est),
+        "advertencias": [{"codigo": "SUELO_SUPUESTO", "mensaje": "pH y textura estimados por un modelo global; no son una medicion de su parcela.", "severidad": "aviso"}, *advertencias],
+    }
+
+
+async def suelo(lat: float, lon: float) -> dict:
+    """Textura y pH de la zona. ISRIC es la estimacion usada; OpenLandMap se suma para compararlas (V-23) y la sustituye si ISRIC falla."""
+    tarea_olm = asyncio.create_task(_estimacion_openlandmap(lat, lon))
+    error = None
+    try:
+        resp = await _suelo_isric(lat, lon)
+    except SinDatos as e:
+        resp, error = None, e
+    olm, aviso = await tarea_olm
+    if resp is None:
+        if olm is None:
+            raise error
+        extra = [{"codigo": "SUELO_ISRIC_NO_DISPONIBLE", "mensaje": f"ISRIC no respondio ({error}); se usa OpenLandMap.", "severidad": "aviso"}]
+        return _respuesta_desde_estimacion(olm, lat, lon, extra)
+    if olm is not None:
+        resp["estimaciones"].append(olm)
+    elif aviso is not None:
+        resp["advertencias"].append(aviso)
+    return resp
