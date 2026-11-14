@@ -21,6 +21,7 @@ Estas decisiones se tomaron al iniciar el evento y **prevalecen** sobre las prop
 | Cultivos | **Catálogo propio en JSON** (6 a 8 cultivos) sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y Kc de FAO-56, con fuente por valor. Sin API externa de cultivos: ninguna cubre bien la agronomía | Búsqueda de una API de cultivos |
 | Zona y cultivo | Zona demo en Isla, Veracruz (temporal, sin riego), pendiente de **verificar en SIAP**. Núcleo: **milpa (maíz, frijol, calabaza)**; cultivo extra vistoso (chile) si hay tiempo de modelado | Maíz, frijol y sorgo de 03 |
 | Organización | El trabajo **no se reparte por rol sino por actividad**: cada integrante toma actividades del cronograma (ver 14). R1 a R4 quedan como áreas, no como dueños | Roles por nombre (V-18) |
+| Comunicación entre sesiones | **Buzón por la red local** (`herramientas/buzon/`): servidor en la laptop de Mompin, puerto 3000; cada sesión de IA escucha en segundo plano y avisa a su usuario. Solo avisos; el código sigue por git. Se apaga y se cierra el puerto al terminar (Mompin, 14/11) | Avisos solo por GitHub |
 | Ranking | **Criterio B** (doc 05, paso 7): puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio. Pesos con fuente o iguales declarados `SUPUESTO`. Respaldo: criterio A (solo pilar hídrico) si los pilares 2 y 3 (A3.7) no llegan | Opciones A y B `[EN EVENTO]` en 05 y 11 |
 
 ## Consecuencias técnicas

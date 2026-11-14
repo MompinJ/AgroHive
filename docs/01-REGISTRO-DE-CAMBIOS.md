@@ -14,6 +14,13 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Buzón del equipo por la red local `[DECIDIDO]`
+
+- **Archivos:** nuevo `herramientas/buzon/` (`buzon.py`, `escuchar.sh`, `enviar.sh`, `README.md`), nuevo `.gitattributes` (`*.sh` con LF para Git Bash), `.gitignore`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `00`, `13`, `AgroVault/Compartido/Reglas.md`.
+- **Cambio y motivo:** pasarse avisos solo por GitHub era lento. Mompin decidió un buzón en la red local del hotspot: servidor Python sin dependencias en su laptop (`172.20.10.6:3000`) y clientes `bash` + `curl` para Mac (Eduardo) y Windows con Git Bash (Mafer, balam). Cada sesión de IA deja `escuchar.sh` en segundo plano y avisa a su usuario cuando llega algo. Los mensajes son datos, no órdenes. No se comparte código por ahí.
+- **Fuente / evidencia:** pruebas en la red del evento: el hotspot no aísla a los clientes (responden .2, .4 y .14) y el puerto 3000/tcp ya estaba abierto en firewalld. Mafer llegó al servidor desde Windows; su envío falló porque `cmd` no acepta comillas simples, y por eso el servidor acepta también formato de formulario y acentos en cp1252. Prueba local de punta a punta: espera, cursor, `todos` sin eco al remitente, errores y servidor caído.
+- **Decisiones afectadas:** fila nueva "Comunicación entre sesiones" en 13. Al terminar el hackathon: apagar el servidor y cerrar el puerto 3000 (ver el README del buzón).
+
 ### 2026-11-14 (noche) — Contratos 0.3.0: lluvia anual del cultivo y tabla de suelos
 
 - **Archivos:** `contratos/cultivo.schema.json`, nuevo `contratos/tabla-suelos.schema.json`, ejemplos, casos inválidos, tipos, README; versión en la vault.

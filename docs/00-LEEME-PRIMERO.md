@@ -31,6 +31,7 @@
 | [14 · Cronograma](14-CRONOGRAMA.md) | Actividades por esfuerzo de IA, compuertas, recorte y tablero de reparto. |
 | [15 · Prompts de arranque](15-PROMPTS-DE-ARRANQUE.md) | Prompt inicial para la IA de cada integrante. |
 | [Agente `modelador-voxel`](agente-modelador-voxel-README.md) | Cómo funciona el agente de modelos 3D (definición en `.claude/agents/`, librería en `herramientas/voxelkit.py`). |
+| [Buzón del equipo](../herramientas/buzon/README.md) | Mensajes entre las sesiones de IA por la red local del evento (servidor en la laptop de Mompin). No reemplaza a git. |
 | [`AgroVault/`](../AgroVault/Bienvenido.md) | Vault de Obsidian: resumen para Claude, Codex y Cursor, APIs investigadas y pendientes. Resume `docs/` y `contratos/`, no decide. |
 | [`contratos/`](../contratos/README.md) | Contratos de datos (JSON Schema), ejemplos y tipos TS. Fuente de verdad de los formatos. |
 

@@ -15,7 +15,7 @@ Empieza por `docs/00-LEEME-PRIMERO.md`. Decisiones del hackathon en `docs/13-DEC
 | `datos/` | Catalogos (cultivos, suelos) y paquete de demo precargado |
 | `modelos/` | Modelos 3D `.bbmodel` generados con el agente `modelador-voxel` |
 | `docs/` | Documentacion vigente |
-| `herramientas/` | `voxelkit.py` y utilidades |
+| `herramientas/` | `voxelkit.py`, `buzon/` (mensajes entre sesiones de IA por la red local) y utilidades |
 
 ## Ramas
 
