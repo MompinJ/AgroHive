@@ -12,7 +12,7 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 4. Por material, 3 tonos (oscuro, base, claro). Lo claro va en tapas y puntas; lo oscuro en bajos, nudos y arrugas.
 5. Los indices 0-15 son `PALETA_BASE` de `herramientas/voxelkit.py`, en el mismo orden.
 
-## Colores (44)
+## Colores (60)
 
 | Indice | Nombre | Hex | Uso |
 | --- | --- | --- | --- |
@@ -60,5 +60,21 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 | 41 | moho_dark | #55604b | Moho en sombra |
 | 42 | moho | #7d8b6c | Moho gris verdoso |
 | 43 | moho_light | #aab69c | Moho con luz, alas de mosca |
+| 44 | frijol_hoja_dark | #55862f | Tallo, peciolos y hojas bajas de frijol |
+| 45 | frijol_hoja | #7fb240 | Foliolo de frijol base (mas claro y amarillo que el maiz) |
+| 46 | frijol_hoja_light | #b3d66a | Foliolo terminal de frijol, punta de guia |
+| 47 | vaina_dark | #8f9c3c | Vaina de frijol en sombra, cotiledon arrugado |
+| 48 | vaina | #c2c860 | Vaina de frijol verde-amarilla, cotiledon |
+| 49 | vaina_light | #e2df95 | Pico de la vaina, cotiledon con luz |
+| 50 | frijol_negro | #2b2230 | Semilla de frijol negro, vaina podrida |
+| 51 | flor_lila | #c7a3dc | Flor de frijol |
+| 52 | calabaza_hoja_dark | #2c5a2e | Peciolo y lobulo en sombra de calabaza |
+| 53 | calabaza_hoja | #3f7f3c | Lamina de hoja de calabaza |
+| 54 | calabaza_hoja_light | #6aa65a | Lobulo con luz, cotiledon de calabaza |
+| 55 | calabaza_mancha | #a8c69c | Mancha plateada de la hoja (rasgo de C. moschata) |
+| 56 | calabaza_fruto_dark | #36603a | Tapa del fruto verde |
+| 57 | calabaza_fruto | #5f8f4a | Fruto de calabaza verde |
+| 58 | calabaza_crema | #e2cf94 | Gajos crema del fruto, pepitas |
+| 59 | calabaza_naranja | #cf7f2c | Fruto de calabaza ya madurando |
 
-Los hex son elegidos a ojo para el estilo voxel (no medidos de fotos).
+Los hex son elegidos a ojo para el estilo voxel (no medidos de fotos). Las manchas plateadas de la hoja de calabaza y el fruto verde de C. moschata se tomaron de descripciones varietales (no de una variedad concreta).
