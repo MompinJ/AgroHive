@@ -101,30 +101,46 @@ describe('C2 con el paquete de demo (POWER, SoilGrids con Saxton y Rawls y Terra
     expect(r.exceso.lluvioso!.mm).toBeGreaterThan(r.exceso.seco!.mm);
   });
 
-  it('ranking de tres rotaciones con el suelo real: criterio B con deficit y exceso de agua', () => {
-    const planes = [
-      milpa,
-      plan('R2', [['maiz', '2016-06-15', 'PV'], ['maiz', '2017-06-15', 'PV']]),
-      plan('R3', [['frijol', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]),
-    ];
-    const res = rankear(planes.map((p) => ({ rotacion: simularRotacion(entradas(p, sueloIsla)).rotacion, numeroSiembras: p.ciclos.length })));
+  const R2 = plan('R2', [['maiz', '2016-06-15', 'PV'], ['maiz', '2017-06-15', 'PV']]);
+  const R3 = plan('R3', [['frijol', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]);
+  // Milpa con todas las siembras dentro de las ventanas de INIFAP (maiz PV 1 jun a 15 jul; frijol OI 20 sep a 20 oct).
+  const R4 = plan('R4', [['maiz', '2016-06-01', 'PV'], ['frijol', '2016-10-10', 'OI'], ['maiz', '2017-06-01', 'PV']]);
+  const rk = (planes: PlanSiembra[]) =>
+    rankear(planes.map((p) => ({ rotacion: simularRotacion(entradas(p, sueloIsla)).rotacion, numeroSiembras: p.ciclos.length })));
+
+  it('A3.7 con el calendario de Isla: compatibilidad de ciclo y dias de suelo desnudo del anio agricola', () => {
+    const p1 = simularRotacion(entradas(milpa, sueloIsla)).rotacion;
+    expect(p1.porEscenario.seco.pilares.compatibilidadCiclo).toEqual({ estado: 'EVALUABLE', siembrasFueraDeVentana: 1 }); // frijol el 1 de nov
+    expect(p1.filtroClima).toBe(true);
+    expect(p1.porEscenario.seco.pilares.proteccionSuelo).toMatchObject({ estado: 'EVALUABLE', indiceErosionRelativo: null, diasSueloDesnudo: 162 });
+    const p3 = simularRotacion(entradas(R3, sueloIsla)).rotacion;
+    expect(p3.porEscenario.seco.pilares.compatibilidadCiclo?.estado).toBe('NO_EVALUABLE'); // frijol PV sin ventana con fuente
+    expect(p3.filtroClima).toBeNull();
+    expect(simularRotacion(entradas(R2, sueloIsla)).rotacion.porEscenario.seco.pilares.proteccionSuelo?.diasSueloDesnudo).toBe(257);
+  });
+
+  it('ranking de tres rotaciones con el suelo real: la compatibilidad queda fuera porque el frijol PV no tiene ventana', () => {
+    const res = rk([milpa, R2, R3]);
     expect(res.criterio).toBe('B_minimax_arrepentimiento');
-    expect(res.ponderacion?.pesos).toEqual({ deficitHidrico: 0.5, excesoHidrico: 0.5 });
-    expect(res.orden.map((f) => [f.rotacionId, f.arrepentimiento])).toEqual([['R2', 0.0065], ['R1', 0.013], ['R3', 0.0601]]);
+    expect(res.ponderacion?.pesos).toEqual({ deficitHidrico: 0.3333, excesoHidrico: 0.3333, proteccionSuelo: 0.3333 });
+    expect(res.ponderacion?.pilaresExcluidos).toContain('compatibilidadCiclo');
+    expect(res.orden.map((f) => [f.rotacionId, f.arrepentimiento])).toEqual([['R1', 0], ['R3', 0.0467], ['R2', 0.0909]]);
+    for (const r of res.rotaciones) expect(validadorContrato('resultado-rotacion')(r)).toEqual([]);
+  });
+
+  it('con los cuatro pilares (todas las siembras con ventana): gana la milpa sembrada dentro de ventana', () => {
+    const res = rk([milpa, R2, R4]);
+    expect(res.ponderacion?.pesos).toEqual({ deficitHidrico: 0.25, excesoHidrico: 0.25, compatibilidadCiclo: 0.25, proteccionSuelo: 0.25 });
+    expect(res.orden.map((f) => [f.rotacionId, f.arrepentimiento])).toEqual([['R4', 0], ['R2', 0.0766], ['R1', 0.0993]]);
     for (const r of res.rotaciones) expect(validadorContrato('resultado-rotacion')(r)).toEqual([]);
   });
 
   it('robustez: el orden no cambia con el TAW de la sensibilidad del factor de materia organica (1.724 / 2.0 / 2.5)', () => {
-    const planes = [
-      milpa,
-      plan('R2', [['maiz', '2016-06-15', 'PV'], ['maiz', '2017-06-15', 'PV']]),
-      plan('R3', [['frijol', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]),
-    ];
     for (const taw of [122.3, 124.1, 127.4]) {
       const suelo = structuredClone(sueloIsla);
       (suelo.agua!.tawMmPorM as { valor: number }).valor = taw;
-      const res = rankear(planes.map((p) => ({ rotacion: simularRotacion(entradas(p, suelo)).rotacion, numeroSiembras: p.ciclos.length })));
-      expect(res.orden.map((f) => f.rotacionId)).toEqual(['R2', 'R1', 'R3']);
+      const res = rankear([milpa, R2, R4].map((p) => ({ rotacion: simularRotacion(entradas(p, suelo)).rotacion, numeroSiembras: p.ciclos.length })));
+      expect(res.orden.map((f) => f.rotacionId)).toEqual(['R4', 'R2', 'R1']);
     }
   });
 

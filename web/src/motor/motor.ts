@@ -10,8 +10,12 @@ import { balanceCiclo, type BalanceCiclo } from './balance';
 import { etapaVisual, parametrosCultivo, type ParametrosCultivo } from './cultivo';
 import { serieEt0, type MetodoEt0 } from './et0';
 import { peorEstado, juntarAdvertencias, sinNumeros } from './estados';
-import { aDia, esBisiesto, mesDe, sumarDias } from './fechas';
+import { aDia, sumarDias } from './fechas';
 import { SIAP_CICLOS } from './fuentes';
+import { pilarCompatibilidad, pilarProteccion, type CicloParaPilar } from './pilares';
+import { siembraEnEscenario } from './temporadas';
+
+export { siembraEnEscenario };
 import { FUENTE_DR_INICIAL_CERO, resolverTaw, retencionParaCondicionInicial, type ResultadoTaw } from './suelo';
 import {
   ESCENARIOS,
@@ -29,7 +33,10 @@ import {
   type Parcela,
   type PilarAporteIndirecto,
   type PilarDeficitHidrico,
+  type PilarCompatibilidadCiclo,
   type PilarExcesoHidrico,
+  type PilarProteccionSuelo,
+  type PilarRiesgoCalor,
   type PilaresMotor,
   type ProximaTemporadaAproximada,
   type SerieClima,
@@ -121,24 +128,6 @@ export interface ResultadoMotor {
 
 const clave = (ciclo: number, cultivo: string) => `${ciclo}|${cultivo}`;
 const r = (x: number, d = 2) => Math.round(x * 10 ** d) / 10 ** d;
-
-/** Fecha de siembra en el clima del escenario (anio agricola t), segun la temporada del ciclo. */
-export function siembraEnEscenario(siembra: string, temporada: Temporada, anioAgricola: number): { fecha: string; aviso?: string } {
-  const mes = mesDe(siembra);
-  const anio = temporada === 'OI' && mes >= 10 ? anioAgricola - 1 : anioAgricola;
-  let md = siembra.slice(5);
-  let aviso: string | undefined;
-  if (md === '02-29' && !esBisiesto(anio)) {
-    md = '02-28';
-    aviso = `La siembra del 29 de febrero se simula el 28 de febrero de ${anio} (anio no bisiesto).`;
-  }
-  const enVentana = temporada === 'PV' ? mes >= 4 && mes <= 9 : mes >= 10 || mes <= 3;
-  if (!enVentana) {
-    const v = temporada === 'PV' ? 'abril a septiembre' : 'octubre a marzo';
-    aviso = `${aviso ? `${aviso} ` : ''}La siembra del ${siembra} esta fuera de la ventana de siembras ${temporada} de SIAP (${v}).`;
-  }
-  return aviso ? { fecha: `${anio}-${md}`, aviso } : { fecha: `${anio}-${md}` };
-}
 
 function ciclosDeCeldas(plan: PlanSiembra, parcela: Parcela): Map<string, CicloPlan[]> {
   const generales: CicloPlan[] = [...plan.ciclos]
@@ -409,6 +398,9 @@ function metricas(
   ciclosPorCelda: Map<string, CicloPlan[]>,
   catalogo: Map<string, Cultivo>,
   aporte: PilarAporteIndirecto,
+  compat: PilarCompatibilidadCiclo,
+  paraPilar: Map<string, CicloParaPilar[]>,
+  planValido: boolean,
 ): MetricasEscenario {
   const hidrico = pilarHidrico(sim, e.parcela.celdas, ciclosPorCelda);
   const ex = excesoEscenario(sim, e.parcela.celdas, ciclosPorCelda);
@@ -418,17 +410,40 @@ function metricas(
   if (ex && hidrico.motivo) exceso.motivo = hidrico.motivo;
   const umbrales = [...new Set([...ciclosPorCelda.values()].flat().map((c) => c.cultivo))].map((c) => catalogo.get(c)?.umbrales.tEstresCalorC);
   const sinUmbral = umbrales.some((u) => !u || u.estado !== 'EVALUABLE');
+  const pesos = new Map(e.parcela.celdas.map((c) => [c.id, c.fraccionDentro ?? 1]));
+  const proteccion: PilarProteccionSuelo = planValido
+    ? pilarProteccion(sim.anioReal, paraPilar, pesos)
+    : { estado: 'NO_EVALUABLE', motivo: 'Plan invalido: no se pueden contar los dias de suelo desnudo.', indiceErosionRelativo: null, diasSueloDesnudo: null };
   const pilares: PilaresMotor = {
       deficitHidrico: hidrico,
       excesoHidrico: exceso,
-      compatibilidadCiclo: { estado: 'NO_EVALUABLE', motivo: 'Pilar 2 pendiente (A3.7).', siembrasFueraDeVentana: null },
-      proteccionSuelo: { estado: 'NO_EVALUABLE', motivo: 'Pilar 3 pendiente (A3.7).', indiceErosionRelativo: null, diasSueloDesnudo: null },
+      compatibilidadCiclo: compat,
+      proteccionSuelo: proteccion,
       riesgoCalor: sinUmbral
         ? { estado: 'NO_EVALUABLE', motivo: 'El catalogo no tiene umbral de estres por calor con fuente para todos los cultivos del plan.', diasEstresCalor: null }
-        : { estado: 'NO_EVALUABLE', motivo: 'Riesgo por calor pendiente (A3.7).', diasEstresCalor: null },
+        : riesgoCalor(sim, e.parcela.celdas, ciclosPorCelda, catalogo),
       aporteIndirecto: aporte,
   };
   return { anioReal: sim.anioReal, estado: hidrico.estado, pilares, puntaje: null };
+}
+
+/** Dias de ciclo con tMax sobre el umbral de calor del cultivo (catalogo, con fuente), promedio de la parcela. */
+function riesgoCalor(sim: SimulacionEscenario, celdas: Parcela['celdas'], ciclosPorCelda: Map<string, CicloPlan[]>, catalogo: Map<string, Cultivo>): PilarRiesgoCalor {
+  if (sinNumeros(sim.estado)) return { estado: sim.estado, motivo: sim.motivo ?? `Escenario ${sim.estado}.`, diasEstresCalor: null };
+  let w = 0;
+  let dias = 0;
+  for (const celda of celdas) {
+    const peso = celda.fraccionDentro ?? 1;
+    w += peso;
+    for (const c of ciclosPorCelda.get(celda.id) ?? []) {
+      const u = catalogo.get(c.cultivo)?.umbrales.tEstresCalorC;
+      const tmax = sim.ciclos.get(clave(c.ciclo, c.cultivo))?.tMax ?? [];
+      if (u?.estado !== 'EVALUABLE') continue;
+      if (tmax.some((t) => t === null)) return { estado: 'NO_EVALUABLE', motivo: `Faltan temperaturas maximas en el ciclo ${c.ciclo}.`, diasEstresCalor: null };
+      dias += peso * tmax.filter((t) => (t as number) > u.valor).length;
+    }
+  }
+  return { estado: sim.estado, diasEstresCalor: Math.round(dias / w) };
 }
 
 interface Preparacion {
@@ -497,17 +512,21 @@ export function simularRotacion(e: EntradasMotor): ResultadoMotor {
     simulaciones[esc] = simularEscenario(esc, e.escenarios[esc], e, taw, clavesCiclo, parametros, motivosCultivo, erroresPlan);
   }
   const aporte = pilarAporte(ciclosPorCelda, catalogo);
-  const porEscenario = {
-    seco: metricas(simulaciones.seco, e, ciclosPorCelda, catalogo, aporte),
-    habitual: metricas(simulaciones.habitual, e, ciclosPorCelda, catalogo, aporte),
-    lluvioso: metricas(simulaciones.lluvioso, e, ciclosPorCelda, catalogo, aporte),
-  };
+  const paraPilar = new Map(
+    [...ciclosPorCelda].map(([id, l]) => [id, l.map((c) => ({ ...c, totalDias: parametros.get(c.cultivo)?.totalDias ?? null }))] as const),
+  );
+  const pesosCelda = new Map(e.parcela.celdas.map((c) => [c.id, c.fraccionDentro ?? 1]));
+  const comp = erroresPlan.length > 0
+    ? { pilar: { estado: 'NO_EVALUABLE' as const, motivo: `Plan invalido: ${erroresPlan.join(' ')}`, siembrasFueraDeVentana: null }, avisos: [] }
+    : pilarCompatibilidad(e.plan, e.calendario, paraPilar, pesosCelda);
+  const m = (x: Escenario) => metricas(simulaciones[x], e, ciclosPorCelda, catalogo, aporte, comp.pilar, paraPilar, erroresPlan.length === 0);
+  const porEscenario = { seco: m('seco'), habitual: m('habitual'), lluvioso: m('lluvioso') };
   let estado = peorEstado(...ESCENARIOS.map((x) => porEscenario[x].estado));
   if (noRecomendados.length > 0) estado = peorEstado(estado, 'EXPLORATORIO');
 
   const esEjemplo =
     e.plan.meta.esEjemplo || e.parcela.meta.esEjemplo || ESCENARIOS.some((x) => e.escenarios[x]?.meta.esEjemplo === true);
-  const advertencias = construirAdvertencias(e, simulaciones, taw, erroresPlan, avisosCultivo, noRecomendados, estado);
+  const advertencias = construirAdvertencias(e, simulaciones, taw, erroresPlan, [...avisosCultivo, ...comp.avisos], noRecomendados, estado);
   const exceso = {
     seco: excesoEscenario(simulaciones.seco, e.parcela.celdas, ciclosPorCelda),
     habitual: excesoEscenario(simulaciones.habitual, e.parcela.celdas, ciclosPorCelda),
@@ -519,7 +538,8 @@ export function simularRotacion(e: EntradasMotor): ResultadoMotor {
       : { versionContrato: VERSION_CONTRATO, esEjemplo: false },
     rotacionId: e.plan.rotacionId,
     estado,
-    filtroClima: null,
+    // Paso 7.1: una siembra fuera de la ventana local cae fuera en todos los escenarios (la ventana no depende del clima).
+    filtroClima: comp.pilar.siembrasFueraDeVentana === null ? null : comp.pilar.siembrasFueraDeVentana > 0,
     porEscenario,
     peorCaso: null,
     arrepentimiento: null,
@@ -575,7 +595,7 @@ function construirAdvertencias(
   });
   a.push({
     codigo: 'SIN_ESCURRIMIENTO',
-    mensaje: 'La cubeta no separa escurrimiento: toda la lluvia infiltra y lo que excede la capacidad se cuenta como exceso (percolacion). La pendiente no cambia el balance hasta tener un coeficiente con fuente (A3.7).',
+    mensaje: 'La cubeta no separa escurrimiento: toda la lluvia infiltra y lo que excede la capacidad se cuenta como exceso (percolacion). La pendiente no cambia el balance: no hay coeficiente de escurrimiento con fuente para la celda.',
     severidad: 'info',
   });
   const et0 = ESCENARIOS.reduce((s, x) => s + sims[x].metodoEt0.hargreaves_fao56, 0);
@@ -640,7 +660,8 @@ function explicacion(
     'Agua del suelo al sembrar supuesta a capacidad de campo hasta convertir la humedad de POWER (A2.16).',
     'Clima regional de NASA POWER: el mismo para toda la parcela.',
     'Sin datos de mercado ni de rendimiento: no se estiman toneladas ni ingresos.',
-    'Pilares de compatibilidad de ciclo, proteccion del suelo y calor pendientes (A3.7).',
+    'Sin indice de erosion con fuente (falta intensidad de lluvia sub-diaria y factores C y LS): la proteccion del suelo se mide con los dias de suelo desnudo.',
+    'Sin umbral de calor con fuente en el catalogo: el riesgo por calor no se evalua.',
   ];
   if (!taw.ok) huecos.unshift(taw.motivo);
   return {
