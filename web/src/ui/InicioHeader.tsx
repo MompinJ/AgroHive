@@ -29,12 +29,12 @@ export function InicioHeader() {
         <div className="landing-dialog-heading"><h2 id="landing-dialog-title">{panel === 'how' ? 'Cómo funciona AgroHive' : 'Recursos y límites'}</h2><button type="button" className="landing-close" onClick={() => dialog.current?.close()} aria-label="Cerrar información">Cerrar</button></div>
         {panel === 'how' ? <>
           <ol><li>Elige la parcela de demostración o consulta la entrada de terreno propio.</li><li>Explora los controles de cultivos, ciclos y escenarios en el laboratorio.</li><li>Abre la comparación conservando tus selecciones.</li></ol>
-          <p>Este prototipo demuestra la interfaz. Los datos climáticos y el motor aún no están conectados; los indicadores se muestran como NO_EVALUABLE.</p>
+          <p>El laboratorio usa datos climáticos precargados y ejecuta el motor en tu navegador. Para una parcela propia consulta los datos disponibles para su ubicación. Si falta un dato o parámetro, el indicador se muestra como NO_EVALUABLE y explica el motivo.</p>
           <a className="landing-button" href="#/terreno">Explorar parcela demo</a>
         </> : <>
-          <p>La fuente climática prevista es <a href="https://power.larc.nasa.gov/" target="_blank" rel="noreferrer">NASA POWER (abre otra pestaña)</a>. Representa información regional, no mediciones de cada bloque.</p>
-          <p>Las ilustraciones son decorativas. La demo de Isla, Veracruz usa 2 hectáreas ficticias, según el documento 06 del proyecto; la verificación de zona sigue pendiente según el documento 13.</p>
-          <p>La interfaz utiliza ejemplos de contratos. No se muestran mediciones ni rankings ficticios. AgroHive no predice cosechas ni ingresos y no reemplaza asesoría agronómica.</p>
+          <p>El clima de la demo proviene de <a href="https://power.larc.nasa.gov/" target="_blank" rel="noreferrer">NASA POWER (abre otra pestaña)</a>. Representa información regional, no mediciones de cada bloque. Método y fuentes muestra el origen y los límites de los datos usados.</p>
+          <p>Las ilustraciones son decorativas. La demo de Isla, Veracruz usa una parcela ficticia de 2 hectáreas, con clima y estimaciones de suelo de fuentes reales. No representa un levantamiento de campo.</p>
+          <p>Los indicadores y el ranking los calcula el motor. Los supuestos y datos faltantes se declaran en el laboratorio. AgroHive no predice cosechas ni ingresos y no reemplaza asesoría agronómica.</p>
         </>}
       </div>
     </dialog>

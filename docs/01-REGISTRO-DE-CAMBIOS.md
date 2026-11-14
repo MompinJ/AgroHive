@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 — A5.2 y A5.3: tiempo compartido, móvil y accesibilidad (balam)
+
+- **Archivos:** `web/src/ui/ControlTiempo.tsx`, `tiempo.ts`, `useSerieBalance.ts`, `tiempo.css` y pruebas; `LaboratorioConectado`, `DashboardBalance`, `InicioHeader`, `system.css`, `terreno.css`; `docs/06`, `docs/14`, vistas del tablero y `web/README.md`.
+- **Cambio:** deslizador diario, pasos mensuales y reproducción iniciada por el usuario; fechas limitadas a la serie del ciclo que devuelve el Worker, sin inventar duración. Consulta compartida para control temporal, dashboard y lluvia 3D. Un temporizador espera cada resultado; arrastre agrupado en 120 ms, respuestas antiguas descartadas. Pausa al cambiar contexto, ocultar pestaña, error o movimiento reducido. Consulta fallida recuperable sin dejar avisos viejos.
+- **Accesibilidad:** se conserva el h1 enfocado al completar la carga, se amplían opciones táctiles y se corrigen desbordamientos de palabras largas e imagen de Terreno al ampliar texto. Inicio explica el motor ya conectado. Tokens globales de DESIGN.md, sin bibliotecas nuevas.
+- **Evidencia:** navegador: un solo `serieBalance` compartido; 25 cambios rápidos producen una consulta de celdas; retraso simulado de 2.2 s no acumula pasos; errores transitorios recuperados. Cinco rutas a 320/720/1440 px con texto base al 200% sin desborde; axe sin incidencias A/AA revisadas; teclado, foco de ruta y retorno del diálogo con Escape. Capturas `web/evidencia/a5-2-tiempo-*`. No se verificó con lector de pantalla real ni hardware táctil físico.
+- **Alcance:** A5.2/A5.3 hechas en el tablero; A5.4 sigue con Eduardo y sus límites documentados. No cambia motor, contratos ni indicadores.
+
 ## Formato de entrada
 
 ```text

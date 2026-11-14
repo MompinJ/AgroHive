@@ -155,8 +155,8 @@ Compuerta **C4** al terminar A4.6.
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
 | A5.1 `[HECHO]` con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento. Además (Mompin): lluvia del día desde `serieBalance`, con mm y fuente | Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) | R1 + R4 | M | Sonnet | A3.2 | Transiciones suaves, opción de reducir movimiento |
-| A5.2 | Slider de meses | R1 | M | Sonnet | A3.4 | Reproducir y arrastrar sin acumular animaciones |
-| A5.3 | Móvil y accesibilidad (táctil, teclado) | R1 | M | Sonnet | A4.6 | Operable sin hover |
+| A5.2 `[HECHO]` | Slider de meses | R1 | M | Sonnet | A3.4 | Control diario/mensual desde la serie del motor; reproducción con pausa, sin simular ni acumular consultas; 2D/3D y lluvia comparten datos |
+| A5.3 `[HECHO]` | Móvil y accesibilidad (táctil, teclado) | R1 | M | Sonnet | A4.6 | Cinco pantallas a 320/720/1440 px con texto base al 200%, teclado, foco estable, movimiento reducido y axe; lector de pantalla real pendiente de validación humana |
 | A5.4 `[BLOQUEADO]` Cifras de SwiftShader ya en `docs/06` (Mompin, buzón #202; no se re-midió): polígono de 518 celdas, maíz en madurez de 449 380 a 216 280 triángulos y de 3.2 a 5.0 cuadros/s con manchones; 6 draw calls (8 con celda); en reposo no se dibuja. A3.6 ya está en la rama: modo 2D y fallback inicial sin WebGL. Falta hardware real (laptop sin GPU dedicada y celular) y la pérdida de contexto WebGL | Medición de requisitos mínimos y fallback WebGL | R1 | S | Haiku | A3.6 | Cifra documentada para jueces |
 | A5.5 `[HECHO]` 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) | Pruebas de regresión del motor y de contratos | R2 | M | Sonnet | A4.2 | Suite en verde |
 | A5.7 `[EN CURSO]` | README con método, fuentes, límites, licencias y declaración de IA | R4 | S | Sonnet | A4.5 | README completo |
@@ -224,7 +224,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
 | **Eduardo** | 15 | 2 | 1 | 1 | 79 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
-| **balam** | 10 | 0 | 0 | 5 | 67 % de 15 |
+| **balam** | 12 | 0 | 0 | 3 | 80 % de 15 |
 
 ### Mompin
 
@@ -303,8 +303,8 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | PENDIENTE |  |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | HECHO |  |
 | A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | HECHO |  |
-| A5.2 | Slider de meses | PENDIENTE |  |
-| A5.3 | Móvil y accesibilidad (táctil, teclado) | PENDIENTE |  |
+| A5.2 | Slider de meses | HECHO |  |
+| A5.3 | Móvil y accesibilidad (táctil, teclado) | HECHO |  |
 | A5.9 | Envío final según reglas oficiales | PENDIENTE |  |
 
 ### Equipo (sin responsable único)

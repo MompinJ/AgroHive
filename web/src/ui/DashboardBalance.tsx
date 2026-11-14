@@ -1,24 +1,12 @@
-import { useEffect, useState } from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import type { Escenario, SerieBalance } from '../../../contratos/tipos/contratos';
-import type { ClienteMotor } from '../motor/cliente';
 import { Card, DataState } from './components';
-import { conLimite } from './useLaboratorio';
+import type { EstadoSerieBalance } from './useSerieBalance';
 import { nombresCultivos } from './planes';
 
 const formato = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 });
-export default function DashboardBalance({ cliente, revision, rotacion, escenario }: { cliente: ClienteMotor; revision: string; rotacion: string; escenario: Escenario }) {
-  const [serie, setSerie] = useState<{ clave: string; datos: SerieBalance } | null>(null);
-  const [error, setError] = useState<{ clave: string; motivo: string } | null>(null);
-  const [intento, setIntento] = useState(0);
-  const clave = `${revision}:${rotacion}:${escenario}:${intento}`;
-  useEffect(() => {
-    let activo = true;
-    void conLimite(cliente.serieBalance(rotacion, escenario)).then((datos) => { if (activo) setSerie({ clave, datos }); }).catch((e: unknown) => { if (activo) setError({ clave, motivo: e instanceof Error ? e.message : 'No se pudo leer la serie.' }); });
-    return () => { activo = false; };
-  }, [cliente, clave, rotacion, escenario]);
-  const datos = serie?.clave === clave ? serie.datos : null;
-  if (!datos) return <Card title="Dashboard de agua"><DataState state={error?.clave === clave ? 'error' : 'loading'}>{error?.clave === clave ? error.motivo : 'Consultando las series del motor.'}</DataState>{error?.clave === clave && <button className="ui-action" onClick={() => setIntento((n) => n + 1)}>Reintentar series</button>}</Card>;
+export default function DashboardBalance({ serie }: { serie: EstadoSerieBalance }) {
+  const datos = serie.datos;
+  if (!datos) return <Card title="Dashboard de agua"><DataState state={serie.error ? 'error' : 'loading'}>{serie.error || 'Consultando las series del motor.'}</DataState>{serie.error && <button className="ui-action" onClick={serie.reintentar}>Reintentar series</button>}</Card>;
   return <section className="ui-flow" aria-labelledby="dashboard-titulo">
     <h2 id="dashboard-titulo">Dashboard de agua · {datos.rotacionId} · {datos.escenario} {datos.anioReal}</h2>
     <p>{datos.estado}{datos.motivo ? ` · ${datos.motivo}` : ''}. Las fechas de las gráficas son las del plan; la tabla identifica el mes climático real.</p>
