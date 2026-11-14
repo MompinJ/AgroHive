@@ -36,7 +36,7 @@ export type {
 import type { Escenario } from '../../../contratos/tipos/contratos';
 
 /** Version de contratos/ con la que el motor genera sus salidas. */
-export const VERSION_CONTRATO = '0.5.0';
+export const VERSION_CONTRATO = '0.6.0';
 
 export const ESCENARIOS: readonly Escenario[] = ['seco', 'habitual', 'lluvioso'];
 

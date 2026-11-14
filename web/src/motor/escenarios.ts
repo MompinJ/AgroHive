@@ -204,11 +204,16 @@ export function seleccionarEscenarios(serie: SerieClima): SeleccionEscenarios {
         ventana,
         percentilObjetivo: p,
         lluviaAnualMm: elegido.calendarioMm === null ? null : r1(elegido.calendarioMm),
+        lluviaTemporadasMm: {
+          pv: elegido.pvMm === null ? null : r1(elegido.pvMm),
+          oi: elegido.oiMm === null ? null : r1(elegido.oiMm),
+          total: r1(elegido.temporadasMm),
+          fuente: SIAP_CICLOS,
+        },
         criterio:
           `Anio agricola SIAP con la lluvia de temporadas PV + OI (1 oct ${t - 1} a 30 sep ${t}) mas cercana al p${p} ` +
           `(${HYNDMAN_FAN.nombre}, ${HYNDMAN_FAN.cita}) de ${candidatos.length} anios completos de ${ventana.desde} a ${ventana.hasta}; ` +
-          `empate a menos de ${TOLERANCIA_EMPATE_MM} mm: el anio mas antiguo. Ventanas de siembra: ${SIAP_CICLOS.nombre}, ${SIAP_CICLOS.cita}. ` +
-          `lluviaAnualMm es la del anio calendario ${t}, solo como referencia.`,
+          `empate a menos de ${TOLERANCIA_EMPATE_MM} mm: el anio mas antiguo. Ventanas de siembra en lluviaTemporadasMm.fuente.`,
       },
       diario,
       advertencias,

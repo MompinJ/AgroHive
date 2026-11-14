@@ -44,6 +44,12 @@ describe('A2.5 con la serie real de NASA POWER de la celda demo (2006 a 2025)', 
     expect(seleccionarEscenarios(seriePowerIsla())).toEqual(sel);
   });
 
+  it('guarda la lluvia por temporada del anio elegido (seco 2023: total 1523.4 mm)', () => {
+    const t = sel.escenarios.seco?.seleccion.lluviaTemporadasMm;
+    expect(t?.total).toBe(1523.4);
+    expect((t?.pv as number) + (t?.oi as number)).toBeCloseTo(1523.4, 0);
+  });
+
   it('declara el anio cercano (2025 esta a 2 mm de 2024 en el p90)', () => {
     const adv = sel.escenarios.lluvioso?.advertencias?.find((a) => a.codigo === 'ANIO_CERCANO');
     expect(adv?.mensaje).toContain('2025');
@@ -57,6 +63,7 @@ describe('A2.5 con la serie real de NASA POWER de la celda demo (2006 a 2025)', 
       expect(esc.diario[0]?.fecha).toBe(`${t - 1}-10-01`);
       expect(esc.diario[esc.diario.length - 1]?.fecha).toBe(`${t + 1}-03-31`);
       expect(esc.seleccion.criterio).toContain('PV + OI');
+      expect(esc.seleccion.lluviaTemporadasMm?.fuente.nombre).toContain('SIAP');
     }
   });
 });

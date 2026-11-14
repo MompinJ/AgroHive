@@ -662,8 +662,7 @@ function registroCelda(res: ResultadoMotor, sim: SimulacionEscenario, celdaId: s
       motivo: sc?.motivo ?? sim.motivo ?? 'Sin resultado para este ciclo.',
       ciclo: actual.ciclo,
       cultivo: actual.cultivo,
-      // El contrato exige una etapa: sin parametros del cultivo solo se sabe que el ciclo ya se sembro.
-      etapa: ev?.etapa ?? 'siembra',
+      etapa: ev?.etapa ?? null,
       ...nulos,
       ...extra,
     };

@@ -156,7 +156,7 @@ describe('Prueba 5: cultivo sin parametros => NO_EVALUABLE, nunca cero', () => {
   });
   it('las celdas del ciclo sin parametros no llevan numeros; las del frijol si', () => {
     const maiz = resultadoCeldas(r, 'seco', '2016-07-01')!;
-    expect(maiz.registros[0]).toMatchObject({ estado: 'NO_EVALUABLE', humedad: null, deficitMm: null, estadoPlanta: null });
+    expect(maiz.registros[0]).toMatchObject({ estado: 'NO_EVALUABLE', etapa: null, humedad: null, deficitMm: null, estadoPlanta: null });
     expect(validarCeldas(maiz)).toEqual([]);
     expect(resultadoCeldas(r, 'seco', '2016-12-01')!.registros[0]!.humedad).not.toBeNull();
   });
