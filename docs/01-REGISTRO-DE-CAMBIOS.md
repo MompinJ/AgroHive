@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Herramienta de medición de la escena para A5.4 (Mompin)
+
+- **Archivos:** `web/medir.html` y `web/src/escena/medir/medir.tsx` (nuevos), `herramientas/medir-escena/` (`medir.mjs` y `README.md`), `render/escena-three.ts` y `EscenaParcela.tsx` (recuperación ante pérdida del contexto WebGL); `docs/06`, `docs/14` (nota en A5.4).
+- **Cambio:** página y script que miden la escena en el equipo real: GPU, WebGL, triángulos, draw calls, reposo, viento, memoria, primera escena y pérdida de contexto. La escena se reconstruye si el navegador devuelve el contexto; si no, avisa que se use el modo 2D.
+- **Fuente / evidencia:** corrida en headless con SwiftShader (tabla en el README); falta la del hardware real (Eduardo). Para publicar `medir.html` en el droplet hace falta una línea en `web/vite.config.ts` (de balam).
+
 ### 2026-11-14 — Prueba de los dos primeros bloques de Mafer en la escena (Mompin)
 
 - **Archivos:** `web/src/escena/voxel/catalogo.ts` (`giroSurcos`), `render/escena-three.ts` (altura del detallado elegido), `demo-motor.ts` (días de siembra en la vista previa); `docs/06`.

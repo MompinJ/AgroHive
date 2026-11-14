@@ -59,7 +59,7 @@ Proyecto completo: **48 de 60** actividades hechas (80 %), 3 en curso, 0 bloquea
 - [x] **A4.11** NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto, como evidencia de los años de escenario; no entra al ranking. El servicio previsto era ORNL DAAC; se sustituyó porque no respondía `HECHO` — ORNL DAAC no respondió (502, 503). La serie sale de Microsoft Planetary Computer, MOD13Q1 V061, validada contra ORNL en 4 fechas. Caché, límites del píxel y paquete completo en `datos/demo/respuestas/ndvi.json`. Cita del producto: doi:10.5067/MODIS/MOD13Q1.061
 - [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después
 - [ ] **A4.13** Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP
-- [ ] **A5.4** Medición de requisitos mínimos y fallback WebGL
+- [ ] **A5.4** Medición de requisitos mínimos y fallback WebGL — (herramienta de medición lista, Mompin: `herramientas/medir-escena/`; falta correrla en el hardware real)
 - [x] **A5.8** Respaldo local sin internet y capturas `HECHO` — demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503)
 
 ## Mafer

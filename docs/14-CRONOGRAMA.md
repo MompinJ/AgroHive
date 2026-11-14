@@ -157,7 +157,7 @@ Compuerta **C4** al terminar A4.6.
 | A5.1 `[HECHO]` con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento. Además (Mompin): lluvia del día desde `serieBalance`, con mm y fuente | Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) | R1 + R4 | M | Sonnet | A3.2 | Transiciones suaves, opción de reducir movimiento |
 | A5.2 | Slider de meses | R1 | M | Sonnet | A3.4 | Reproducir y arrastrar sin acumular animaciones |
 | A5.3 | Móvil y accesibilidad (táctil, teclado) | R1 | M | Sonnet | A4.6 | Operable sin hover |
-| A5.4 | Medición de requisitos mínimos y fallback WebGL | R1 | S | Haiku | A3.6 | Cifra documentada para jueces; 2D de A3.6 disponible para medir |
+| A5.4 (herramienta de medición lista, Mompin: `herramientas/medir-escena/`; falta correrla en el hardware real) | Medición de requisitos mínimos y fallback WebGL | R1 | S | Haiku | A3.6 | Cifra documentada para jueces; 2D de A3.6 disponible para medir |
 | A5.5 `[HECHO]` 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) | Pruebas de regresión del motor y de contratos | R2 | M | Sonnet | A4.2 | Suite en verde |
 | A5.7 `[EN CURSO]` | README con método, fuentes, límites, licencias y declaración de IA | R4 | S | Sonnet | A4.5 | README completo |
 | A5.8 `[HECHO]` demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
@@ -269,7 +269,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto, como evidencia de los años de escenario; no entra al ranking. El servicio previsto era ORNL DAAC; se sustituyó porque no respondía | HECHO | ORNL DAAC no respondió (502, 503). La serie sale de Microsoft Planetary Computer, MOD13Q1 V061, validada contra ORNL en 4 fechas. Caché, límites del píxel y paquete completo en `datos/demo/respuestas/ndvi.json`. Cita del producto: doi:10.5067/MODIS/MOD13Q1.061 |
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | PENDIENTE |  |
 | A4.13 | Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP | PENDIENTE |  |
-| A5.4 | Medición de requisitos mínimos y fallback WebGL | PENDIENTE |  |
+| A5.4 | Medición de requisitos mínimos y fallback WebGL | PENDIENTE | (herramienta de medición lista, Mompin: `herramientas/medir-escena/`; falta correrla en el hardware real) |
 | A5.8 | Respaldo local sin internet y capturas | HECHO | demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) |
 
 ### Mafer
