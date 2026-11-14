@@ -262,6 +262,15 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A4.8: GET /api/smap (SMAP L3 36 km), contraste informativo (Eduardo, sesion B)
+
+- **Archivos:** `api/app/clientes/earthdata.py`, `api/app/rutas/smap.py`, `api/app/modelos_smap.py`, `api/tests/test_smap.py`, `api/app/main.py`, `api/requirements.txt` (earthaccess y h5py), OpenAPI y cliente regenerados, `api/README.md`, `docs/14`. Hecho en la rama `Eduardo-B` y mezclado en `Eduardo` por la sesion A tras revisarlo.
+- **Cambio:** `GET /api/smap?lon&lat&desde&hasta` devuelve la humedad del suelo superficial (~5 cm) de SMAP L3 (SPL3SMP, 36 km) por dia y pase AM/PM, con la bandera de calidad sin interpretar, fuente, resolucion y periodo. Alcance acordado con Mompin (#82): **contraste informativo, EXPLORATORIO, fuera del ranking y del balance**. Maximo 10 dias, hasta hoy menos 3 (SMAP publica con retraso).
+- **Token:** solo por la variable de entorno `EARTHDATA_TOKEN`; no esta en el repo, la cache ni los logs (revisado el diff: sin credenciales literales). Sin token, 503 `ERROR_DATOS` con motivo.
+- **Evidencia:** 73 pruebas de la API (13 nuevas, sin red ni token); lectura real en Isla el 2025-06-15: celda (140, 226), humedad PM 0.1754 m3/m3, coincide con el granulo completo.
+- **Limites a decir:** ~20 s por dia (lectura por rangos HTTP) y celda de 36 km (una parcela cabe entera en una celda); mide ~5 cm y **no** es la zona de raices que usa el motor.
+- **Pendiente:** el schema `smap.schema.json` en `contratos/` (propuesta a Mompin; hasta entonces la forma de la respuesta es una propuesta y no hay prueba contra contratos) y el OK **explicito del usuario** para poner `EARTHDATA_TOKEN` en el droplet; no se desplegara antes.
+
 ### 2026-11-14 (noche) — A4.6: cargador de datos de la parcela (Eduardo)
 
 - **Archivos:** `web/src/api/datosParcela.ts`, `usarDatosParcela.ts`, `datosParcela.test.ts` y el README de esa carpeta. No se tocan `ui`, `paginas`, `motor` ni `escena`.

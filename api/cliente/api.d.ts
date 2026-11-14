@@ -104,6 +104,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/smap": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Smap
+         * @description Humedad del suelo SMAP L3 (36 km) por dia. Maximo 10 dias, hasta 3 dias antes de hoy. Sin token de Earthdata responde 503 con motivo.
+         */
+        get: operations["smap_api_smap_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -174,6 +194,18 @@ export interface components {
                 number
             ];
         };
+        /** CeldaSmap */
+        CeldaSmap: {
+            /** Fila */
+            fila: number;
+            /** Columna */
+            columna: number;
+            /** Centro */
+            centro: [
+                number,
+                number
+            ];
+        };
         /** CeldaTerreno */
         CeldaTerreno: {
             /** Id */
@@ -215,6 +247,30 @@ export interface components {
             et0Mm?: number | null;
             /** Humedadraizfraccionsat */
             humedadRaizFraccionSat?: number | null;
+        };
+        /** DiaSmap */
+        DiaSmap: {
+            /**
+             * Fecha
+             * Format: date
+             */
+            fecha: string;
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "ERROR_DATOS";
+            /** Motivo */
+            motivo?: string | null;
+            /** Granulo */
+            granulo?: string | null;
+            /**
+             * Pases
+             * @default []
+             */
+            pases: components["schemas"]["PaseSmap"][];
+            /** Humedadm3M3 */
+            humedadM3M3?: number | null;
         };
         /**
          * EntradasPedotransferencia
@@ -355,6 +411,18 @@ export interface components {
             etiqueta?: "SUPUESTO" | null;
             entradas?: components["schemas"]["EntradasPedotransferencia"] | null;
         };
+        /** PaseSmap */
+        PaseSmap: {
+            /**
+             * Pase
+             * @enum {string}
+             */
+            pase: "AM" | "PM";
+            /** Humedadm3M3 */
+            humedadM3M3?: number | null;
+            /** Banderacalidad */
+            banderaCalidad?: number | null;
+        };
         /** Periodo */
         Periodo: {
             /**
@@ -480,6 +548,39 @@ export interface components {
             /** Diario */
             diario: components["schemas"]["DiaClima"][];
             humedadSuelo?: components["schemas"]["HumedadSuelo"] | null;
+            /**
+             * Advertencias
+             * @default []
+             */
+            advertencias: components["schemas"]["Advertencia"][];
+        };
+        /**
+         * Smap
+         * @description Humedad del suelo superficial de SMAP en la celda de 36 km del punto. Contraste: nunca es una medicion de la parcela.
+         */
+        Smap: {
+            meta: components["schemas"]["Meta"];
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE";
+            /**
+             * Etiqueta
+             * @constant
+             */
+            etiqueta: "SUPUESTO";
+            /** Aviso */
+            aviso: string;
+            /** Coordenada */
+            coordenada: [
+                number,
+                number
+            ];
+            celda?: components["schemas"]["CeldaSmap"] | null;
+            fuente: components["schemas"]["Fuente"];
+            /** Dias */
+            dias: components["schemas"]["DiaSmap"][];
             /**
              * Advertencias
              * @default []
@@ -808,6 +909,47 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDatos"];
+                };
+            };
+        };
+    };
+    smap_api_smap_get: {
+        parameters: {
+            query: {
+                lon: number;
+                lat: number;
+                desde: string;
+                hasta: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Smap"];
+                };
+            };
+            /** @description Rango o punto invalido */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Service Unavailable */
             503: {

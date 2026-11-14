@@ -302,6 +302,85 @@
         }
       }
     },
+    "/api/smap": {
+      "get": {
+        "tags": [
+          "smap"
+        ],
+        "summary": "Smap",
+        "description": "Humedad del suelo SMAP L3 (36 km) por dia. Maximo 10 dias, hasta 3 dias antes de hoy. Sin token de Earthdata responde 503 con motivo.",
+        "operationId": "smap_api_smap_get",
+        "parameters": [
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Desde"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Hasta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Smap"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDatos"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Rango o punto invalido"
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -476,6 +555,39 @@
         ],
         "title": "CeldaEntrada"
       },
+      "CeldaSmap": {
+        "properties": {
+          "fila": {
+            "type": "integer",
+            "title": "Fila"
+          },
+          "columna": {
+            "type": "integer",
+            "title": "Columna"
+          },
+          "centro": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Centro"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fila",
+          "columna",
+          "centro"
+        ],
+        "title": "CeldaSmap"
+      },
       "CeldaTerreno": {
         "properties": {
           "id": {
@@ -648,6 +760,73 @@
           "tMinC"
         ],
         "title": "DiaClima"
+      },
+      "DiaSmap": {
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "ERROR_DATOS"
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "granulo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Granulo"
+          },
+          "pases": {
+            "items": {
+              "$ref": "#/components/schemas/PaseSmap"
+            },
+            "type": "array",
+            "title": "Pases",
+            "default": []
+          },
+          "humedadM3M3": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Humedadm3M3"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fecha",
+          "estado"
+        ],
+        "title": "DiaSmap"
       },
       "EntradasPedotransferencia": {
         "properties": {
@@ -1129,6 +1308,47 @@
         ],
         "title": "MetodoTaw"
       },
+      "PaseSmap": {
+        "properties": {
+          "pase": {
+            "type": "string",
+            "enum": [
+              "AM",
+              "PM"
+            ],
+            "title": "Pase"
+          },
+          "humedadM3M3": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Humedadm3M3"
+          },
+          "banderaCalidad": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Banderacalidad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pase"
+        ],
+        "title": "PaseSmap"
+      },
       "Periodo": {
         "properties": {
           "desde": {
@@ -1463,6 +1683,84 @@
         ],
         "title": "SerieClima",
         "description": "Serie diaria de un periodo, sin elegir escenario. El motor (A2.5) corta los anios de cada escenario."
+      },
+      "Smap": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE"
+            ],
+            "title": "Estado"
+          },
+          "etiqueta": {
+            "type": "string",
+            "const": "SUPUESTO",
+            "title": "Etiqueta"
+          },
+          "aviso": {
+            "type": "string",
+            "title": "Aviso"
+          },
+          "coordenada": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Coordenada"
+          },
+          "celda": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CeldaSmap"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "dias": {
+            "items": {
+              "$ref": "#/components/schemas/DiaSmap"
+            },
+            "type": "array",
+            "title": "Dias"
+          },
+          "advertencias": {
+            "items": {
+              "$ref": "#/components/schemas/Advertencia"
+            },
+            "type": "array",
+            "title": "Advertencias",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "estado",
+          "etiqueta",
+          "aviso",
+          "coordenada",
+          "fuente",
+          "dias"
+        ],
+        "title": "Smap",
+        "description": "Humedad del suelo superficial de SMAP en la celda de 36 km del punto. Contraste: nunca es una medicion de la parcela."
       },
       "Suelo": {
         "properties": {
