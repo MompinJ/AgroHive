@@ -13,12 +13,12 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 11 | 0 | 0 | 3 | 79 % de 14 |
+| **Mompin** | 12 | 0 | 0 | 2 | 86 % de 14 |
 | **Eduardo** | 9 | 1 | 2 | 2 | 64 % de 14 |
 | **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **22 de 56** actividades hechas (39 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **23 de 56** actividades hechas (41 %), 4 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -32,7 +32,7 @@ Proyecto completo: **22 de 56** actividades hechas (39 %), 4 en curso, 2 bloquea
 - [x] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `HECHO` — 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9)
 - [x] **A3.1** Escena 3D con relieve (altura por bloque, InstancedMesh) `HECHO`
 - [x] **A3.2** Cargador de .bbmodel con instancing por cultivo y etapa `HECHO`
-- [ ] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa)
+- [x] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) `HECHO` — 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
 - [ ] **A4.6** Conectar front y API (cliente generado, estados de carga y error)
 - [ ] **A5.5** Pruebas de regresión del motor y de contratos

@@ -12,6 +12,14 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A3.7: pilares de compatibilidad de ciclo y protección del suelo (Mompin)
+
+- **Archivos:** `web/src/motor/pilares.ts` (nuevo), `temporadas.ts` (nuevo: `siembraEnEscenario` sale de `motor.ts`), `motor.ts`, `ranking.ts`; pruebas `c2.test.ts` y `ranking.test.ts`; `docs/05`, `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault`.
+- **Compatibilidad de ciclo:** cuenta las siembras fuera de la ventana del calendario local de Isla (INIFAP; A0.6). Si alguna siembra no tiene ventana con fuente (frijol PV, chile, calabaza), el pilar es `NO_EVALUABLE` con motivo; sin calendario, también. `filtroClima` queda lleno. Subpuntaje del ranking: fracción de siembras en ventana.
+- **Protección del suelo:** cuenta los días de suelo desnudo del año agrícola de SIAP. El índice de erosión queda en `null` porque RUSLE necesita I30 y factores C y LS con fuente, que no hay; no se inventan. Subpuntaje: fracción del año con cultivo. Riesgo por calor: el cálculo está listo, pero sigue `NO_EVALUABLE` sin umbral con fuente en el catálogo.
+- **Cómo cambia el ranking (suelo real de Isla):** antes, con déficit y exceso, el orden era maíz-maíz, milpa, frijol-frijol. Con la protección del suelo (la compatibilidad queda fuera por el frijol PV) es milpa (0), frijol-frijol (0.047), maíz-maíz (0.091): pesan los 257 días de suelo desnudo del monocultivo. Con una milpa sembrada dentro de las ventanas de INIFAP entran los cuatro pilares: milpa en ventana (0), maíz-maíz (0.077), milpa con el frijol fuera de ventana (0.099). El orden no cambia con la sensibilidad del TAW (122.3 a 127.4 mm/m).
+- **Fuente / evidencia:** `cd web && npm test` (159 pruebas).
+
 ### 2026-11-14 — A2.13: escenario de próxima temporada con años análogos y contratos 0.9.0 en el motor (Mompin)
 
 - **Archivos:** `web/src/motor/analogos.ts` (nuevo), `motor.ts` (`preparar`, `pilaresAguaEnClima`, entrada opcional `proximaTemporada`), `proxima.ts`, `protocolo.ts`, `index.ts`, `tipos.ts` (`VERSION_CONTRATO` 0.9.0); prueba `analogos.test.ts`; `docs/05`, `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault`. Se integra la rama `contratos-nulos` (0.9.0).
