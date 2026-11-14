@@ -12,6 +12,7 @@ Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un e
 | `parcela.schema.json` | Polígono, cuadrícula y celdas con elevación y pendiente | Front (polígono) + API (elevación) |
 | `suelo.schema.json` | Textura y pH estimados, siempre `SUPUESTO`; respaldo de selector manual | API (`/api/suelo`, A2.14) |
 | `cultivo.schema.json` | Catálogo propio de cultivos: ciclo, etapas FAO-56, Kc, umbrales EcoCrop (lluvia del ciclo y lluvia anual por separado), ventanas de siembra | `datos/catalogos/` (A1.5) |
+| `tabla-suelos.schema.json` | Tabla por clase textural: rangos de FAO-56 Tabla 19 y TAW por metro (`mm/m`), con fuente o `NO_EVALUABLE` | `datos/catalogos/` (A1.6) |
 | `clima-escenario.schema.json` | Serie diaria de un año real del histórico (seco, habitual, lluvioso) | API (`/api/clima`) + motor (A2.5) |
 | `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo banda de incertidumbre por mes | API + motor (A2.13) |
 | `plan-siembra.schema.json` | Rotación del selector: cultivo por ciclo y, si se pinta por bloques, por celda | Front (selector) |

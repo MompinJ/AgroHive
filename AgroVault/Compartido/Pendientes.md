@@ -12,7 +12,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 
 | ID | Estado | Nota |
 | --- | --- | --- |
-| A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.2.0 en `contratos/`: 9 schemas, ejemplos, `npm test` (25/25) y tipos TS. Ver [[Contratos]] |
+| A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.3.0 en `contratos/`: 10 schemas (más `comun`), ejemplos, `npm test` (32/32) y tipos TS. Ver [[Contratos]] |
 
 El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 
