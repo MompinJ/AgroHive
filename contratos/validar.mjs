@@ -3,7 +3,8 @@
 // 2. Cada contrato debe tener su ejemplo en ejemplos/<contrato>.ejemplo.json y ese ejemplo debe ser valido.
 //    Las variantes ejemplos/<contrato>.<variante>.ejemplo.json tambien deben ser validas.
 // 3. Todo ejemplo debe declarar meta.esEjemplo = true (nunca se presenta como dato real).
-// 4. Cada caso en pruebas/invalidos/<contrato>.<caso>.json debe ser RECHAZADO por su schema.
+// 4. Cada caso en pruebas/invalidos/<contrato>.<caso>.json debe ser RECHAZADO por su schema o por un chequeo extra.
+// 5. CHEQUEOS_EXTRA: reglas entre partes del documento que JSON Schema no expresa (por ejemplo, largos de columnas).
 // Uso: npm test (desde contratos/). Sale con codigo 1 si algo falla.
 
 import { readFileSync, readdirSync, existsSync } from "node:fs";
@@ -44,6 +45,28 @@ let pruebas = 0;
 const formatearErrores = (errores) =>
   (errores ?? []).map((e) => `      ${e.instancePath || "/"} ${e.message}`).join("\n");
 
+// Reglas que JSON Schema no puede expresar (comparan partes del documento entre si).
+// Cada funcion devuelve una lista de errores; vacia si el documento cumple.
+const CHEQUEOS_EXTRA = {
+  "serie-balance": (d) => {
+    const errores = [];
+    (d?.ciclos ?? []).forEach((c, i) => {
+      const largos = Object.entries(c?.dias ?? {}).map(([k, v]) => [k, Array.isArray(v) ? v.length : -1]);
+      const distintos = new Set(largos.map(([, n]) => n));
+      if (distintos.size > 1) {
+        errores.push(`/ciclos/${i}/dias columnas de largo distinto (${largos.map(([k, n]) => `${k}=${n}`).join(", ")})`);
+      }
+      const n = largos.length ? largos[0][1] : 0;
+      const sumaMeses = (c?.mensual ?? []).reduce((a, m) => a + (m?.dias ?? 0), 0);
+      if ((c?.mensual ?? []).length && sumaMeses !== n) {
+        errores.push(`/ciclos/${i}/mensual la suma de dias (${sumaMeses}) no coincide con el largo de las columnas (${n})`);
+      }
+    });
+    return errores;
+  },
+};
+const chequeoExtra = (contrato, datos) => (CHEQUEOS_EXTRA[contrato] ? CHEQUEOS_EXTRA[contrato](datos) : []);
+
 const obtenerValidador = (contrato) => {
   const v = ajv.getSchema(`${BASE}${contrato}.schema.json`);
   if (!v) throw new Error(`No se pudo compilar el schema ${contrato}`);
@@ -61,9 +84,10 @@ for (const contrato of contratos) {
   }
   const datos = leer(ruta);
   const validar = obtenerValidador(contrato);
-  if (!validar(datos)) {
+  const extra = validar(datos) ? chequeoExtra(contrato, datos) : [];
+  if (validar.errors || extra.length) {
     fallos++;
-    console.log(`  FALLA  ${contrato}.ejemplo.json\n${formatearErrores(validar.errors)}`);
+    console.log(`  FALLA  ${contrato}.ejemplo.json\n${formatearErrores(validar.errors)}${extra.map((e) => `      ${e}`).join("\n")}`);
   } else if (datos?.meta?.esEjemplo !== true) {
     fallos++;
     console.log(`  FALLA  ${contrato}.ejemplo.json: meta.esEjemplo debe ser true`);
@@ -86,9 +110,10 @@ for (const archivo of variantes) {
   }
   const datos = leer(join(dirEjemplos, archivo));
   const validar = obtenerValidador(contrato);
-  if (!validar(datos)) {
+  const extra = validar(datos) ? chequeoExtra(contrato, datos) : [];
+  if (validar.errors || extra.length) {
     fallos++;
-    console.log(`  FALLA  ${archivo}\n${formatearErrores(validar.errors)}`);
+    console.log(`  FALLA  ${archivo}\n${formatearErrores(validar.errors)}${extra.map((e) => `      ${e}`).join("\n")}`);
   } else if (datos?.meta?.esEjemplo !== true) {
     fallos++;
     console.log(`  FALLA  ${archivo}: meta.esEjemplo debe ser true`);
@@ -115,12 +140,17 @@ for (const archivo of invalidos) {
     continue;
   }
   const validar = obtenerValidador(contrato);
-  if (validar(leer(join(dirInvalidos, archivo)))) {
+  const datosInvalidos = leer(join(dirInvalidos, archivo));
+  const aceptadoPorSchema = validar(datosInvalidos);
+  const extra = aceptadoPorSchema ? chequeoExtra(contrato, datosInvalidos) : [];
+  if (aceptadoPorSchema && extra.length === 0) {
     fallos++;
     console.log(`  FALLA  ${archivo}: fue aceptado y deberia rechazarse`);
-  } else {
+  } else if (!aceptadoPorSchema) {
     const primero = validar.errors?.[0];
     console.log(`  ok     ${archivo} (rechazado: ${primero?.instancePath || "/"} ${primero?.message})`);
+  } else {
+    console.log(`  ok     ${archivo} (rechazado por chequeo extra: ${extra[0]})`);
   }
 }
 

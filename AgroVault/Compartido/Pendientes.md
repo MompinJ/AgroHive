@@ -12,7 +12,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 
 | ID | Estado | Nota |
 | --- | --- | --- |
-| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.10.0 en `contratos/`: 14 schemas (más `comun`), ejemplos, `npm test` (82/82) y tipos TS. Ver [[Contratos]] |
+| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.11.0 en `contratos/`: 15 schemas (más `comun`), ejemplos, `npm test` (91/91) y tipos TS. Ver [[Contratos]] |
 | A2.5, A2.6, A2.7 | Hechas (Mompin, integradas a `main`) | Motor en `web/src/motor/` (funciones puras + Web Worker; la interfaz usa `crearClienteMotor()`): escenarios por lluvia de temporadas PV+OI de SIAP, ET0 Penman-Monteith FAO-56, cubeta FAO-56 cap. 8, pilar de déficit hídrico y estados. Pruebas 1 a 5 de doc 05 en verde (`cd web && npm test`; la parte de erosión de la prueba 2 pasa a A3.7). Ver `docs/05` |
 | A4.1 | Parte del motor hecha (Mompin); contrato `serie-balance` propuesto para 0.11.0; falta graficar (balam) | `cliente.serieBalance(rotacionId, escenario)`: lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo. La interfaz no recalcula |
 | A4.3 | Parte lógica hecha (Mompin); falta mostrarla (balam) | `web/src/motor/tarjetas.ts` llena `explicacion` (por qué, evidencia con fuente, beneficios, huecos, riesgos) y el Worker la devuelve en `rankear`. Plantilla sin LLM; nada sin número o fuente |
