@@ -139,7 +139,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | R2 | S | Sonnet | A4.3 | Con respaldo en plantilla |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | R1 + R3 | M | Opus | A2.1, A3.4 | Flujo P0 a P3 con datos reales |
-| A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
+| A4.7 `[EN CURSO]` front servido en el droplet; falta la demo real (A4.6) | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
 | A4.8 | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
 | A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | Sonnet | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
 

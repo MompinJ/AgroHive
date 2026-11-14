@@ -59,6 +59,13 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — A4.7: front servido desde el droplet (Eduardo)
+
+- **Archivos:** `api/despliegue/` (nginx, proxy y script), `AgroVault/Compartido/Servidor.md`, `docs/14`. Cambios en el droplet: `/var/www/agrohive-web`, `/etc/nginx/agrohive-proxy.conf` y el server block de AgroHive.
+- **Cambio:** `https://64-23-143-102.sslip.io/` sirve el build de `web/` (esqueleto de balam, A1.2) y la API sigue en `/api/`, `/health` y `/docs` del mismo origen. No hace falta CORS para esa ruta.
+- **Verificacion:** `/` 200 html, asset 200, `/health` y `/api/cultivos` 200, `mediworks.mx` sigue en 200; `nginx -t` antes de recargar y respaldo del bloque anterior en el droplet.
+- **Pendiente:** la demo real depende de que el front llame a la API (A4.6, balam y Eduardo).
+
 ### 2026-11-14 (noche) — Calendario local, fecha elegida por el usuario y A2.8 `[DECIDIDO]`; contratos 0.5.0
 
 - **Archivos:** `03`, `05` (paso 2), `06` (selector), `08`, `13`, `14` (A0.6, A2.8, A3.4); `contratos/` 0.5.0 (`cultivo`, nuevo `calendario-local`, `plan-siembra`, `resultado-rotacion`, `resultado-celda`, `comun.temporada`); vault.

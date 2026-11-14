@@ -22,7 +22,7 @@ No hay contraseñas ni llaves en este vault ni en el repo. El acceso SSH lo tien
 | App | `ExecStart` apunta a `app.main:app` con `WorkingDirectory=/opt/agrohive/repo/api`. El `stub/app.py` provisional ya no se usa |
 | Caché de datos | `/opt/agrohive/cache` (clima, tiles y suelo; se puede borrar sin riesgo) |
 | Variables de entorno | `/opt/agrohive/agrohive.env` (`AGROHIVE_CACHE_DIR`, `AGROHIVE_CATALOGOS_DIR`, `AGROHIVE_CORS_ORIGINS`; sin secretos) |
-| nginx | `/etc/nginx/sites-available/agrohive`, enlazado en `sites-enabled`. 80 redirige a 443; 443 hace proxy a `:8010` |
+| nginx | `/etc/nginx/sites-available/agrohive`, enlazado en `sites-enabled`. 80 redirige a 443. En 443: `/api/`, `/health`, `/docs` y `/openapi.json` van a la API (`:8010`); el resto sirve el front desde `/var/www/agrohive-web`. Copia de la configuración en `api/despliegue/` |
 | Certificado | `/etc/letsencrypt/live/agrohive/`, emitido con `certbot certonly --webroot`; la renovación recarga nginx |
 
 Convivencia con `mediworks` (V-16): comparte nginx, certbot y el droplet. Usa `mediworks.mx` y el puerto 3000, con PostgreSQL en `127.0.0.1:5432`. AgroHive no tocó sus archivos; el puerto 8010 estaba libre. Se comprobó que `mediworks.mx` sigue respondiendo 200 después del cambio.
@@ -31,7 +31,7 @@ Convivencia con `mediworks` (V-16): comparte nginx, certbot y el droplet. Usa `m
 
 1. Lo que entra a `main` en GitHub no llega solo al servidor: Eduardo lo despliega.
 2. En el droplet: `sudo -u agrohive git -C /opt/agrohive/repo pull`, luego `sudo -u agrohive /opt/agrohive/venv/bin/pip install -r /opt/agrohive/repo/api/requirements.txt` y `systemctl restart agrohive-api`.
-3. Si el front se sirve desde nginx (opción 2 de `docs/13`), se agrega un `location /` con `root` al server block de AgroHive; la API ya acepta el origen `https://64-23-143-102.sslip.io` en CORS.
+3. El front (`web/`) se sirve desde el mismo origen que la API (opción 2 de `docs/13`, sin CORS ni mixed content). Para actualizarlo: `SERVIDOR=root@64.23.143.102 sh api/despliegue/desplegar-front.sh`. Hoy es el esqueleto de balam (A1.2), sin llamadas a la API.
 4. Comprobar `https://64-23-143-102.sslip.io/health`, `/api/cultivos` y `https://mediworks.mx/` (debe seguir en 200).
 
 Logs: `journalctl -u agrohive-api`.
