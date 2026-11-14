@@ -1,0 +1,53 @@
+/* Estilos de la escena 3D. Todo va bajo .escena para no chocar con web/src/ui. */
+.escena {
+  --escena-tinta: #183e32;
+  --escena-tenue: #52655a;
+  --escena-linea: #d8ded3;
+  --escena-fondo: #fffefa;
+  display: grid;
+  gap: 12px;
+  color: var(--escena-tinta);
+  font-size: 0.85rem;
+}
+.escena .sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.escena-lienzo-caja {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  min-height: 260px;
+  border: 1px solid var(--escena-linea);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #e9efe6;
+}
+.escena-lienzo { display: block; width: 100%; height: 100%; touch-action: none; }
+.escena-lienzo:focus-visible { outline: 3px solid var(--escena-tinta); outline-offset: -3px; }
+.escena-sin-webgl { display: grid; place-content: center; height: 100%; padding: 24px; text-align: center; }
+.escena-controles { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.escena-control { display: grid; gap: 4px; min-height: 44px; }
+.escena-control input[type='range'] { width: min(220px, 100%); min-height: 24px; }
+.escena-check { display: flex; gap: 8px; align-items: center; }
+.escena-check input { width: 20px; height: 20px; }
+.escena-boton {
+  min-height: 44px; padding: 8px 14px; border: 1px solid var(--escena-tinta); border-radius: 6px;
+  background: var(--escena-fondo); color: var(--escena-tinta); font: inherit; font-weight: 600; cursor: pointer;
+}
+.escena-boton:focus-visible, .escena-control input:focus-visible { outline: 3px solid var(--escena-tinta); outline-offset: 2px; }
+.escena-seleccion { margin: 0; padding: 10px 12px; border-left: 3px solid var(--escena-tinta); background: var(--escena-fondo); }
+.escena-leyenda h3 { margin: 0 0 8px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.escena-leyenda ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.escena-leyenda li { display: flex; gap: 8px; align-items: center; }
+.escena-muestra { width: 32px; height: 32px; image-rendering: pixelated; border-radius: 3px; flex-shrink: 0; }
+.escena-cuenta { color: var(--escena-tenue); }
+.escena-detalle { display: block; color: var(--escena-tenue); font-size: 0.75rem; }
+.escena-avisos { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.escena-aviso { margin: 0; }
+.escena-aviso-critico { padding: 10px 12px; border: 2px solid #8a1c1c; border-radius: 8px; background: #fff3f0; color: #5c1010; }
+.escena-aviso-info { color: var(--escena-tenue); }
+.escena-lista summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+.escena-lista ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 0.75rem; }
+@media (prefers-reduced-motion: reduce) {
+  .escena * { transition: none !important; animation: none !important; }
+}
