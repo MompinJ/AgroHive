@@ -104,6 +104,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ndvi": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener Ndvi
+         * @description NDVI de MODIS MOD13Q1 (250 m, 16 dias) en el punto, de ORNL DAAC. **Evidencia**: no entra al ranking. Maximo 400 dias por consulta.
+         */
+        get: operations["obtener_ndvi_api_ndvi_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/smap": {
         parameters: {
             query?: never;
@@ -215,6 +235,28 @@ export interface components {
             /** Pendientepct */
             pendientePct: number | null;
         };
+        /**
+         * DatoNdvi
+         * @description Un compuesto de 16 dias. `ndvi` null (sin dato) siempre se envia; `motivo` y `calidad` se omiten si estan vacios.
+         */
+        DatoNdvi: {
+            /**
+             * Fecha
+             * Format: date
+             */
+            fecha: string;
+            /** Ndvi */
+            ndvi: number | null;
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+            /** Motivo */
+            motivo?: string | null;
+            /** Calidad */
+            calidad?: number | null;
+        };
         /** DefinicionBanda */
         DefinicionBanda: {
             /** Percentilinferior */
@@ -247,6 +289,19 @@ export interface components {
             et0Mm?: number | null;
             /** Humedadraizfraccionsat */
             humedadRaizFraccionSat?: number | null;
+        };
+        /**
+         * DiaLluviaSatelital
+         * @description Un dia de IMERG. `lluviaMm` null = sin dato (relleno de POWER); el campo siempre se envia.
+         */
+        DiaLluviaSatelital: {
+            /**
+             * Fecha
+             * Format: date
+             */
+            fecha: string;
+            /** Lluviamm */
+            lluviaMm: number | null;
         };
         /** DiaSmap */
         DiaSmap: {
@@ -379,6 +434,25 @@ export interface components {
             /** Uso */
             uso: ("condicion_inicial" | "comparacion")[];
         };
+        /**
+         * LluviaSatelital
+         * @description Lluvia GPM IMERG via POWER: EVIDENCIA, no entra al balance ni a la eleccion de escenarios (contrato clima-escenario, 0.10.0).
+         */
+        LluviaSatelital: {
+            /**
+             * Variable
+             * @constant
+             */
+            variable: "IMERG_PRECTOT";
+            /**
+             * Estandarhora
+             * @constant
+             */
+            estandarHora: "UTC";
+            fuente: components["schemas"]["Fuente"];
+            /** Dias */
+            dias: components["schemas"]["DiaLluviaSatelital"][];
+        };
         /** MesAproximado */
         MesAproximado: {
             /** Mes */
@@ -410,6 +484,39 @@ export interface components {
             /** Etiqueta */
             etiqueta?: "SUPUESTO" | null;
             entradas?: components["schemas"]["EntradasPedotransferencia"] | null;
+        };
+        /**
+         * Ndvi
+         * @description NDVI de MODIS en un punto: EVIDENCIA de los anios de escenario, no entra al ranking.
+         */
+        Ndvi: {
+            meta: components["schemas"]["Meta"];
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+            /** Motivo */
+            motivo?: string | null;
+            /** Aviso */
+            aviso: string;
+            /** Coordenada */
+            coordenada: [
+                number,
+                number
+            ];
+            periodo: components["schemas"]["Periodo"];
+            producto: components["schemas"]["ProductoNdvi"];
+            fuente: components["schemas"]["Fuente"];
+            /** Limites */
+            limites: ("PIXEL_MAYOR_QUE_PARCELA" | "NO_MUESTRA_CULTIVO_DEL_USUARIO" | "NO_ENTRA_AL_RANKING")[];
+            /** Serie */
+            serie: components["schemas"]["DatoNdvi"][];
+            /**
+             * Advertencias
+             * @default []
+             */
+            advertencias: components["schemas"]["Advertencia"][];
         };
         /** PaseSmap */
         PaseSmap: {
@@ -451,6 +558,31 @@ export interface components {
             /** Valor */
             valor: number;
             fuente: components["schemas"]["Fuente"];
+        };
+        /** ProductoNdvi */
+        ProductoNdvi: {
+            /**
+             * Nombre
+             * @default MOD13Q1
+             * @constant
+             */
+            nombre: "MOD13Q1";
+            /** Banda */
+            banda: string;
+            /**
+             * Pixelm
+             * @default 250
+             * @constant
+             */
+            pixelM: 250;
+            /**
+             * Compuestodias
+             * @default 16
+             * @constant
+             */
+            compuestoDias: 16;
+            /** Escala */
+            escala: number;
         };
         /** ProfundidadCm */
         ProfundidadCm: {
@@ -548,6 +680,7 @@ export interface components {
             /** Diario */
             diario: components["schemas"]["DiaClima"][];
             humedadSuelo?: components["schemas"]["HumedadSuelo"] | null;
+            lluviaSatelital?: components["schemas"]["LluviaSatelital"] | null;
             /**
              * Advertencias
              * @default []
@@ -909,6 +1042,47 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDatos"];
+                };
+            };
+        };
+    };
+    obtener_ndvi_api_ndvi_get: {
+        parameters: {
+            query: {
+                lat: number;
+                lon: number;
+                desde: string;
+                hasta: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ndvi"];
+                };
+            };
+            /** @description Periodo invalido */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Service Unavailable */
             503: {

@@ -342,7 +342,7 @@ async def _estimacion_openlandmap(lat: float, lon: float) -> tuple[dict | None, 
     ph, oc = props.get("ph"), props.get("oc")
     return {
         "id": ID_OLM, "servicio": "openlandmap", "estado": "EVALUABLE" if validos >= 0.5 else "EXPLORATORIO",
-        "fuente": {"nombre": openlandmap.NOMBRE, "url": "https://openlandmap.org", "cita": openlandmap.DOI, "coordenada": (lon, lat),
+        "fuente": {"nombre": openlandmap.NOMBRE, "url": "https://openlandmap.org", "cita": openlandmap.CITA, "coordenada": (lon, lat),
                    "periodo": {"desde": date(2020, 1, 1), "hasta": date(2022, 12, 31)}, "unidades": "% (arena, limo, arcilla), pH en agua, g/kg (carbono organico)",
                    "consultado": registro["consultado"], "resolucion": "30 m",
                    "nota": "Capa de 0 a 30 cm; mediana de una ventana de 5 x 5 pixeles. Licencia CC-BY-4.0. Fracciones normalizadas a 100."},

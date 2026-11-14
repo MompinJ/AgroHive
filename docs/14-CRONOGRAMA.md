@@ -126,7 +126,7 @@ Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 
 | A3.6 | Modo 2D ligero con los mismos valores del motor | R1 | M | Sonnet | A2.7 | Alternar 2D/3D no cambia métricas |
 | A3.7 `[HECHO]` 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente) | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | R2 | **L** | Opus | A2.7 | Entran solo si los datos alcanzan |
 | A3.8 `[HECHO]` con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas) | Tooltips y valores por bloque | R1 | S | Sonnet | A3.4 | Toque o hover muestra humedad, déficit, pendiente |
-| A3.9 `[EN CURSO]` | Cultivos 4 en adelante, props y mascota | R4 | M | Sonnet | A2.11 | Extras según tiempo |
+| A3.9 `[HECHO]` | Cultivos 4 en adelante, props y mascota | R4 | M | Sonnet | A2.11 | Extras según tiempo |
 
 Compuerta **C3** al terminar A3.1 y A3.2.
 
@@ -144,7 +144,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | A4.8 `[EN CURSO]` `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN` | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
 | A4.9 `[HECHO]` | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | Sonnet | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
 | A4.10 `[HECHO]` `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance || Lluvia GPM IMERG vía NASA POWER (`IMERG_PRECTOT` con `time-standard=UTC`, sin cuenta Earthdata) en `GET /api/clima` y en el paquete de demo, como **evidencia**: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en `features/imerg/` y `features/encargos/eduardo-datos-globales.md` | R3 | S | Sonnet | A2.1, A1.7 | Serie IMERG con fuente y estándar de hora; `-999` como `null`; prueba con respuesta guardada; paquete de demo regenerado |
-| A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking | R3 | S | Sonnet | A1.3, A1.7 | `GET /api/ndvi` con caché, cita `doi:10.3334/ORNLDAAC/1600` y el límite del píxel (250 m, más grande que la parcela) declarado |
+| A4.11 `[BLOQUEADO]` ORNL DAAC no responde de forma usable (502, 503 y llamadas de 40 s sin respuesta); cliente y ruta listos y probados con respuestas reales, apagados del paquete de demo hasta que el servicio funcione || NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking | R3 | S | Sonnet | A1.3, A1.7 | `GET /api/ndvi` con caché, cita `doi:10.3334/ORNLDAAC/1600` y el límite del píxel (250 m, más grande que la parcela) declarado |
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | R3 | **L** | Opus | A4.6 | Parcela de prueba en EE. UU. con su rotación real de CDL, con fuente |
 | A4.13 | Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (`mai_rf`) y frijol (`bea_rf`, `[VERIFICAR]` que sea frijol), servido como `calendario-local` con su fuente. Calabaza y chile quedan `NO_EVALUABLE`; en México siguen mandando SIAP e INIFAP | R3 | M | Opus | A1.7, A4.6 (C4) | Una coordenada fuera de México devuelve la ventana de siembra del maíz con fuente GGCMI; en Isla sigue la de SIAP/INIFAP |
 
@@ -199,7 +199,7 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 | --- | --- | --- | --- | --- |
 | **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor) `[HECHO]`, A3.7 `[HECHO]`, A5.5 `[HECHO]`, A3.8 (con balam) `[HECHO]`, A5.1 (con Mafer) `[HECHO]`; integra y administra `main`, A1.7 | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.6 (cliente de la API, con balam), A4.7, A4.8, A4.10, A4.11, A4.12, A4.13 (después de C4), A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
-| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[HECHO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[HECHO]`, A2.11 `[HECHO]`, A2.12 `[HECHO]`, A3.3 `[HECHO]`, A3.9 `[EN CURSO]`, A5.6, A5.7 `[EN CURSO]` | A1.4 (paleta y primer modelo del maíz) |
+| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[HECHO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[HECHO]`, A2.11 `[HECHO]`, A2.12 `[HECHO]`, A3.3 `[HECHO]`, A3.9 `[HECHO]`, A5.6, A5.7 `[EN CURSO]` | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
 
 Cada actividad se marca en este documento con su estado (`EN CURSO`, `BLOQUEADO`, `HECHO`) al lado del ID. Si alguien termina, toma la siguiente actividad libre del camino crítico antes que un extra.
@@ -215,8 +215,8 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
-| **Eduardo** | 12 | 2 | 2 | 3 | 63 % de 19 |
-| **Mafer** | 8 | 2 | 0 | 1 | 73 % de 11 |
+| **Eduardo** | 12 | 2 | 3 | 2 | 63 % de 19 |
+| **Mafer** | 9 | 1 | 0 | 1 | 82 % de 11 |
 | **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
 ### Mompin
@@ -259,7 +259,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | EN CURSO | front servido en el droplet; falta la demo real (A4.6) |
 | A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | EN CURSO | `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN` |
 | A4.10 |  | HECHO | `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance |
-| A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking | PENDIENTE |  |
+| A4.11 |  | BLOQUEADO | ORNL DAAC no responde de forma usable (502, 503 y llamadas de 40 s sin respuesta); cliente y ruta listos y probados con respuestas reales, apagados del paquete de demo hasta que el servicio funcione |
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | PENDIENTE |  |
 | A4.13 | Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP | PENDIENTE |  |
 | A5.4 | Medición de requisitos mínimos y fallback WebGL | BLOQUEADO | espera el modo 2D (A3.6) |
@@ -277,7 +277,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.12 | Bloques de suelo por tipo y humedad | HECHO |  |
 | A2.16 | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | HECHO | (Mafer) `[HECHO]` |
 | A3.3 | Estados visuales: color + icono + patrón, leyenda | HECHO |  |
-| A3.9 | Cultivos 4 en adelante, props y mascota | EN CURSO |  |
+| A3.9 | Cultivos 4 en adelante, props y mascota | HECHO |  |
 | A5.6 | Guion, video de demo y ensayo | PENDIENTE |  |
 | A5.7 | README con método, fuentes, límites, licencias y declaración de IA | EN CURSO |  |
 

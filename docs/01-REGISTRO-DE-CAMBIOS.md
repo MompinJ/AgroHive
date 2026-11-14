@@ -131,6 +131,15 @@ Decisiones afectadas:
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
 
+### 2026-11-14 — A5.1: revisión de "reducir movimiento" (Mafer)
+
+- **Archivos:** ninguno de código; solo este registro. La revisión la pidió Mompin al pasar A5.1 a la sesión de la escena.
+- **Qué se revisó:** el código (`escena/animacion.ts`, `render/escena-three.ts`, `EscenaParcela.tsx` y todo el CSS) y el comportamiento real en **Chrome** (headless con SwiftShader, conducido por CDP) sobre `web/escena.html`, la vista previa con el motor real y el paquete de demo. 30 comprobaciones; los controles (sin reducir) hacen que la prueba no sea vacía.
+- **Resultado: cumple.** (1) Sin reducir, al cambiar de etapa hay transición y termina; con la preferencia del sistema o el checkbox, **no hay transición** ni mallas "saliendo", y las plantas quedan de inmediato en su escala final. (2) Con la preferencia activa **en el arranque** y **en vivo** (incluso a media transición): las transiciones terminan al instante, el viento se apaga y su control se deshabilita, y la escena queda en **0 cuadros** en reposo. (3) **Inercia real:** al arrastrar y soltar, sin reducir la cámara sigue 11.1 unidades; con reducir, 0.00000 (la vista sigue girando mientras se arrastra). (4) **Cambios rápidos:** 8 cambios en 0.3 s, con y sin reducir, no dejan mallas de más, salientes ni transiciones colgadas. (5) El checkbox manual funciona igual que la preferencia, y al desmarcarlo la animación vuelve. (6) La mascota es estática. (7) El CSS no define animaciones propias y las transiciones de botones solo existen bajo `prefers-reduced-motion: no-preference`.
+- **Observaciones (no son fallas):** (a) si el sistema quita la preferencia con la escena abierta, el control **no** se desmarca solo (conservador: queda reducido hasta que la persona lo desmarque). (b) Las transiciones CSS de botones fuera de la escena obedecen solo a la preferencia del sistema, no al checkbox, que es de la escena. (c) La duración observada fue de ~500 ms contra los 450 ms nominales: lo explican la carga asíncrona del modelo y el muestreo cada 25 ms, no un fallo.
+- **Límites de la prueba:** Chrome headless con render por software, no un navegador interactivo ni un móvil; la demo solo tiene una malla de plantas (un cultivo y una etapa a la vez); se midió el estado interno y la posición de la cámara, no los píxeles; la duración de 450 ms y el lugar de la mascota no se juzgaron (son `[PROPUESTA]`). El guion de la prueba no está en el repo.
+- **Decisiones afectadas:** A5.1 (de Mompin, con Mafer): revisión de Mafer hecha.
+
 ### 2026-11-14 — A5.7: README con licencias y reglas oficiales verificadas (Mafer)
 
 - **Archivos:** `README.md` (reemplaza al anterior, a partir de `docs/README-borrador.md` de Mompin); nuevo `datos/catalogos/fuentes/LEEME.md`; `docs/02` (un enlace); `docs/14`, Pendientes. El borrador queda como historial.
@@ -382,6 +391,14 @@ Decisiones afectadas:
 - **Archivos:** `.gitignore`; se dejan de versionar `.vscode/tasks.json`, `.vscode/settings.json`, `.vscode/agrohive.code-snippets` y `.vscode/mascota/clawd.py`.
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
+
+### 2026-11-14 (noche) — A4.11: NDVI de MODIS escrito pero BLOQUEADO por ORNL DAAC; DOI de OpenLandMap corregidos (Eduardo)
+
+- **Archivos:** `api/app/clientes/ornl.py`, `api/app/ndvi.py`, `api/app/modelos_ndvi.py`, `api/app/rutas/ndvi.py`, `api/app/http.py`, `api/tests/test_ndvi.py`, `datos/demo/generar.py`, `datos/pruebas-apis/respuestas/ornl_*.json`, `api/README.md`, `AgroVault/Compartido/APIs.md`, `docs/14`.
+- **A4.11 `[BLOQUEADO]`:** el servicio REST de ORNL DAAC no respondio de forma usable (502, 503 y una llamada de 40 s sin recibir un byte). **Decision del usuario: no usar ORNL.** El cliente y `GET /api/ndvi` quedaron escritos y con 15 pruebas con respuestas reales guardadas (valores, relleno, rango, calidad, ventanas, cache, fallos parciales, contrato `ndvi`), pero **no entran al paquete de demo** (`generar.py` solo los incluye con `--con-ndvi`) y el front no debe llamarlos.
+- **Lo verificado contra el propio servicio antes de que cayera:** maximo **10 fechas por llamada**; NDVI valido de -2000 a 10000, **relleno -3000** (escalado seria -0.3, por eso se descarta explicitamente), escala 0.0001; calidad valida 0 a 3, relleno -1. Tiempo limite de 20 s por llamada a ORNL para que una consulta no se cuelgue minutos.
+- **Correccion de cita (aviso de Mafer #130, verificada en Zenodo):** `OpenLandMap` citaba `doi:10.5281/zenodo.15528399`, que es la **arcilla 2000-2005**, porque lo tome del campo `doi` de la coleccion STAC (que apunta al primer periodo). Las capas que se leen son 2020-2022: arcilla `15528401`, arena `15528413`, limo `15528425`, pH `15471105` y carbono organico `15535759` y `15535761` (el conjunto esta partido en dos mitades en Zenodo). Todas CC BY 4.0. Corregido en `openlandmap.py`, en `suelo.json` del paquete y en `APIs.md`; la prueba ahora exige cada DOI correcto y rechaza el viejo.
+- **Verificaciones:** api 98, contratos 82/82, catalogos y unittest; el paquete salio igual salvo la fecha de generacion.
 
 ### 2026-11-14 (noche) — A4.10: lluvia satelital IMERG en /api/clima y paquete de demo regenerado (Eduardo)
 
@@ -696,3 +713,9 @@ Primera documentación por tema a partir del video del compañero, el audio de l
 - `ui/DashboardBalance.tsx` usa Recharts con carga diferida al abrir las gráficas. Cada ciclo muestra lluvia/ETc/consumo ajustado y déficit/percolación mensuales, unidades, estado, fuentes, TAW y una tabla con humedad media y mes climático. Datos faltantes se muestran como NO_EVALUABLE. Los trazos distinguen las series sin depender del color; sin animación y con tabla accesible.
 - Se comparó el primer valor de lluvia de la tabla contra el mensaje recibido del Worker; coincide. Instrumentación confirmó que cambiar escenario consulta serieBalance sin reenviar simular. Layout estable tras ResizeObserver a 1440/768/390/320 px; axe sin incidencias automáticas en el estado revisado. Captura dashboard-320.png.
 - A4.1 se marca HECHO; las notas anteriores de espera describen el estado previo a la llegada de la operación del motor. Recharts está fijado a la versión exacta registrada en package.json/lockfile. Referencias técnicas en web/README.md.
+
+### 2026-11-14 — A4.8: producto SMAP en la respuesta y login de earthaccess con candado
+- **Cambio:** `GET /api/smap` ahora devuelve `producto` (`SPL3SMP`, 36 km, 0 a 5 cm, `m3/m3`), como pide `contratos/smap.schema.json` (de Mompin); las pruebas validan la respuesta completa contra ese schema, incluidos los días sin dato y con error de la fuente.
+- **Corrección de una revisión:** `earthaccess` guarda el login en estado global y la ruta lee hasta 3 días a la vez en hilos distintos. La sesión autenticada se crea una sola vez, bajo `threading.Lock`, y se reutiliza 30 minutos (prueba con 6 hilos: un solo login). El token sigue saliendo solo de `EARTHDATA_TOKEN`.
+- **Sin cambio de alcance.** El token en el droplet y el despliegue siguen siendo de la sesión A; esta rama no toca NDVI (A4.11 está en pausa).
+- **Verificación:** api 87, contratos 91/91, catálogos y `unittest`, `tsc` y vitest de web (338) en verde.

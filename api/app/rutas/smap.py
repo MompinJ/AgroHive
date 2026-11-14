@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException, Query
 from .. import cache, http, servicios
 from ..clientes import earthdata
 from ..modelos import Advertencia, ErrorDatos, Fuente, Periodo
-from ..modelos_smap import DiaSmap, PaseSmap, Smap, CeldaSmap
+from ..modelos_smap import CeldaSmap, DiaSmap, PaseSmap, ProductoSmap, ProfundidadSmap, Smap
 
 router = APIRouter(prefix="/api", tags=["smap"])
 
@@ -69,7 +69,8 @@ async def serie(lon: float, lat: float, desde: date, hasta: date) -> Smap:
         advertencias.append(Advertencia(codigo="DIAS_SIN_LEER", mensaje="Algunos dias no se pudieron leer; aparecen con estado ERROR_DATOS.", severidad="aviso"))
     return Smap(
         meta=_meta(), estado="EVALUABLE" if any(d.estado == "EVALUABLE" for d in dias) else "NO_EVALUABLE", etiqueta="SUPUESTO", aviso=AVISO,
-        coordenada=(lon, lat), celda=CeldaSmap(fila=sitio[0], columna=sitio[1], centro=centro),
+        coordenada=(lon, lat), producto=ProductoSmap(nombre=earthdata.PRODUCTO, resolucionKm=36, profundidadCm=ProfundidadSmap(desde=0, hasta=5), unidad="m3/m3"),
+        celda=CeldaSmap(fila=sitio[0], columna=sitio[1], centro=centro),
         fuente=Fuente(nombre=earthdata.NOMBRE, url=earthdata.URL, coordenada=centro, periodo=Periodo(desde=desde, hasta=hasta),
                       unidades=earthdata.UNIDADES, consultado=datetime.now(timezone.utc).date(), resolucion=earthdata.RESOLUCION,
                       nota="Valor por pase (AM y PM) del algoritmo DCA; la bandera de calidad se entrega tal cual, sin interpretarla."),

@@ -13,8 +13,8 @@ class ErrorFuente(Exception):
     """Una fuente externa fallo despues de los reintentos."""
 
 
-def crear_cliente() -> httpx.AsyncClient:
-    return httpx.AsyncClient(timeout=60, headers={"User-Agent": config.USER_AGENT}, follow_redirects=True)
+def crear_cliente(tiempo_s: float = 60) -> httpx.AsyncClient:
+    return httpx.AsyncClient(timeout=tiempo_s, headers={"User-Agent": config.USER_AGENT}, follow_redirects=True)
 
 
 async def get(cliente: httpx.AsyncClient, url: str, params: dict | list | None = None, reintentos: int = 3) -> httpx.Response:

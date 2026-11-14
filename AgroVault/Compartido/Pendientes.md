@@ -6,12 +6,21 @@ actualizado: 2026-11-14
 
 # Pendientes
 
-No cierres estas filas en código "para ir avanzando". Si un default es inevitable para compilar, déjalo detrás de una constante con el id de la fila y un comentario `VERIFICAR`.
+No cierres una fila "para ir avanzando". Si un default es inevitable para compilar, déjalo detrás de una constante con el id y un comentario `VERIFICAR`. El tablero generado está en [[Cronograma]]. Algunas marcas de `docs/14` van detrás del código; abajo se dice cuál.
 
-## Estado de actividades
+## Hecho y que el vault no debe volver a abrir
 
-| ID | Estado | Nota |
+Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo, años análogos, tarjetas en el motor, regresión, contratos 0.10.0, catálogo y calendario de Isla, TAW de Saxton y Rawls conectado a `/api/suelo`, ISRIC y OpenLandMap, IMERG como evidencia, escena 3D con modelos de la milpa y el chile, losas de suelo en la escena, estados con daltonismo, selector R1–R4, banda en la interfaz, paquete de demo, API y front en el droplet. Detalle en [[Resumen]] y `docs/13`.
+
+## Marcas de `docs/14` que ya no describen el código
+
+| ID | La marca dice | El código, el 14/11 por la noche |
 | --- | --- | --- |
+| A4.6 | Falta conectar las páginas | `useLaboratorio.ts` carga el paquete de demo o `cargarDatosParcela` y llama al Worker. Sigue `[EN CURSO]` hasta que el equipo la cierre: no se declara la demo pública ni el modo sin red de punta a punta |
+| A4.9 | A2.13 aún dice "falta la interfaz" | A4.9 está `[HECHO]`: la banda se muestra y se apaga |
+| A4.8 | Falta el schema `smap` | `contratos/smap.schema.json` existe desde 0.10.0. Sigue abierto el token en el droplet y el uso en la interfaz |
+| A2.12 / A3.1 | La escena no carga losas o no está en el Laboratorio | La escena carga las 9 losas y el Laboratorio la monta en diferido |
+| C2 en `docs/14` | El TAW de Isla es `NO_EVALUABLE` | El suelo del paquete trae TAW 122.3 mm/m y la rotación sale `EVALUABLE` |
 | A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.11.0 en `contratos/`: 15 schemas (más `comun`), ejemplos, `npm test` (91/91) y tipos TS. Ver [[Contratos]] |
 | A2.5, A2.6, A2.7 | Hechas (Mompin, integradas a `main`) | Motor en `web/src/motor/` (funciones puras + Web Worker; la interfaz usa `crearClienteMotor()`): escenarios por lluvia de temporadas PV+OI de SIAP, ET0 Penman-Monteith FAO-56, cubeta FAO-56 cap. 8, pilar de déficit hídrico y estados. Pruebas 1 a 5 de doc 05 en verde (`cd web && npm test`; la parte de erosión de la prueba 2 pasa a A3.7). Ver `docs/05` |
 | A4.1 | Parte del motor hecha (Mompin), contrato `serie-balance` 0.11.0; falta graficar (balam) | `cliente.serieBalance(rotacionId, escenario)`: lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo. La interfaz no recalcula |
@@ -23,51 +32,57 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 | A3.3 | **`[HECHO]`** (Mafer) | Estados legibles con daltonismo: simulación de Machado et al. 2009 en `web/src/escena/daltonismo.ts` y pruebas (dE ≥ 15 entre estados, íconos y patrones distintos). `NO_EVALUABLE` pasó a `#ececec`; íconos finales; ver `docs/06` |
 | A2.11 | **`[HECHO]`** (Mafer): frijol y calabaza, validados en el visor | `modelos/cultivos/`: 5 etapas de cada uno, paleta de 60 colores. Sin modelo propio para `estresada` y `marchita` (placa de estado). Abrir `visor_milpa.html` |
 | A5.7 | `[EN CURSO]` (Mafer): README hecho, **falta revision humana de licencias y de la declaracion de IA** | `README.md` ya reemplaza al anterior. Pendiente: decidir la licencia del repo; marca de agua en imagenes generadas con IA (web/src/ui/assets, video); citas de NSIDC y de IMERG. Reglas oficiales de entrega leidas el 14/11: demo = 7 slides o video <= 30 s, en ingles (ver `docs/01`) |
-| A3.9 | `[EN CURSO]` (Mafer): **chile y mascota hechos**; props descartados (extras de fase 2, de acuerdo con Mompin) | El chile usa los parametros del **pimiento dulce** (misma especie): **revisar**. La mascota es un **elote** (la eligio A3.9, los docs no fijan la verdura): `modelos/props/mascota_feliz.bbmodel`; la escena reservara un lugar opcional y aun no la muestra. `web/src/ui/demo.ts` aun no lista el chile (balam) |
+| A3.9 | **`[HECHO]`** (Mafer): chile y mascota; props (pozo, casa, arboles, pajaro) descartados, de acuerdo con Mompin | El chile usa los parametros del **pimiento dulce** (misma especie): **revisar**. La mascota es un **elote** (la eligio A3.9, los docs no fijan la verdura): `modelos/props/mascota_feliz.bbmodel`; la escena reservara un lugar opcional. `web/src/ui/demo.ts` aun no lista el chile (balam) |
 | A2.12 | **`[HECHO]`** (Mafer) | 9 losas de suelo en `modelos/suelos/` (tipo × humedad), para ponerse encima de la columna. **La escena aún no las carga** (hoy colorea la columna sin distinguir tipo); la integración es de A3. Ver `docs/07` |
 | A2.16 | **`[HECHO]`** (Mafer, conectada por Eduardo y desplegada) | Función y pruebas en `datos/catalogos/saxton_rawls.py`, verificada contra la Tabla 3 del artículo: arena y arcilla en fracción, **materia orgánica en porcentaje**. Sin materia orgánica, o con materia orgánica > 8 % o arcilla > 60 %, el TAW queda `NO_EVALUABLE`. El carbono orgánico de SoilGrids pasa a materia orgánica con el factor 1.724 (citarlo) |
 | A3.1, A3.2 | **`[HECHO]`** (Mompin, rama `Mompin-escena`) | `web/src/escena/`: relieve por bloque, huecos `NO_EVALUABLE` (nunca cero), tope de 1600 celdas, placas de estado (base de A3.3 en `estilos-estado.ts`) y `.bbmodel` por cultivo + etapa con `InstancedMesh`. Vista previa `web/escena.html` con el motor real. Falta: montarla en Laboratorio (balam, ver `web/src/escena/INTEGRACION.md`), `server.fs.allow` en `vite.config.ts` para `npm run dev`, modelos de frijol y calabaza (A2.11) |
 | A1.5, A1.6 | Hechas (Mafer) | `datos/catalogos/`: milpa (maiz, frijol, calabaza) desde FAO-56 y EcoCrop, y TAW por textura (FAO-56 Tabla 19), validados contra contratos 0.3.0 (`cultivo` y `tabla-suelos`); `python datos/catalogos/generar.py` y `node datos/catalogos/validar.mjs`. La lluvia de EcoCrop va en `lluviaAnual*`; `lluviaCiclo*`, umbral de calor y ventanas de siembra siguen `NO_EVALUABLE` |
 
-El resto del reparto y su estado está en el tablero de `docs/14` (al final).
+No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes dejar de tratarlas como trabajo por hacer.
 
-## Abiertos que cambian el diseño
+## Abierto de verdad
 
-| ID | Tema | Mientras tanto |
-| --- | --- | --- |
-| V-19 | Ranking: **B `[DECIDIDO]` el 14/11**. Lo abierto es si se pinta por bloques (`[EN EVENTO]`) | B: puntaje compuesto por escenario, arrepentimiento minimax, desempate por promedio. Sin pesos con fuente, pesos iguales declarados `SUPUESTO` en `ponderacion`; no inventes pesos. Riesgo: B necesita los pilares 2 y 3 (A3.7); si no llegan, respaldo A (solo pilar hídrico), declarado en el resultado. `porCelda` queda `null` |
-| A2.8 | Clima por ciclo: **`[DECIDIDO]` (c) `temporada_tipica`** (14/11) | Cada ciclo en su temporada típica (PV u OI) dentro del año del escenario; el plan la fija en `asignacionClima` |
-| V-20 | Calendario de Isla: **cargado** (A0.6, Mafer) en `datos/catalogos/calendario-isla.json` | Maíz PV, maíz OI y frijol OI con ventana y fuente (INIFAP); frijol PV, chile y calabaza sin ventana (`NO_EVALUABLE`); calabaza `no_registrado` en SIAP 2021-2025. Las ventanas de OI son recomendaciones estatales, no de Isla. No inventes fechas |
-| V-21 | Horizonte del pronóstico estacional: **`[DECIDIDO]` 6 meses** (14/11) | El servicio da 7 con `forecast_days=210`; el contrato fija `horizonteMeses` en 6. Método de A2.13 aprobado: distribución histórica desplazada por la anomalía de SEAS5, sin tendencia y con advertencia |
-| V-22 | CORS de NASA POWER | Evidencia A0.7: el GET simple trae `access-control-allow-origin: *`, el preflight da 404. Todo el clima sigue pasando por el backend |
-| Suelo | TAW del suelo del mapa global: **`[DECIDIDO]`** pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica de SoilGrids, `SUPUESTO` (A2.16, la hace **Mafer**) | Mientras no esté, la demo usa el selector manual. No uses el TAW de un grupo vecino. El factor de carbono orgánico a materia orgánica se cita `[VERIFICAR]` |
-| V-23 | Servicio de suelo: **`[DECIDIDO]` ambos**, ISRIC WCS y OpenLandMap, para compararlos (A2.15) | El contrato `suelo` lleva `estimaciones` por servicio y `estimacionUsada`. Implementado el 14/11 (A2.15): `GET /api/suelo` trae las dos estimaciones; ISRIC es la usada y OpenLandMap la sustituye si ISRIC falla (Eduardo) |
-| V-06 | Humedad de POWER: **`[DECIDIDO]`** `GWETROOT` entra como condición inicial de la cubeta al sembrar y como comparación con la humedad simulada | Es fracción de **saturación** (MERRA-2, ~100 cm), no de TAW: convertir con θsat, θFC y θWP (Saxton y Rawls); sin ellos, `NO_EVALUABLE`. Resolución gruesa declarada. Contrato: `humedadRaizFraccionSat` y `humedadSuelo` Implementado en la API el 14/11: `GET /api/clima` devuelve `humedadRaizFraccionSat` y `humedadSuelo` (Eduardo). |
-| V-08 | Elevación: **`[DECIDIDO]`** Terrarium por defecto, Open-Meteo de respaldo | Ya es así en `POST /api/elevacion` |
-| V-09 | Kc, ciclos, umbrales | Solo valores con cita. Si no hay cita, `NO_EVALUABLE` (el schema del catálogo lo obliga) |
-| Motor | Huecos que el motor declara y no rellena | Arranque a capacidad de campo (Dr,i = 0) solo sin retención del suelo (selector manual; con el suelo del mapa ya se usa GWETROOT); `diasDeficitEtapasSensibles` en `null` sin etapas sensibles con fuente (A1.5); sin escurrimiento por pendiente (A3.7); `estadoPlanta` nunca `podrida` (sin umbral de encharcamiento con fuente); riesgo por calor `NO_EVALUABLE` sin `tEstresCalorC` |
-
-## Servidor (Eduardo)
-
-| ID | Tema |
+| ID | Qué falta |
 | --- | --- |
-| V-15 | Cerrado 14/11: droplet con `sslip.io` y Let's Encrypt (ver [[Servidor]]) |
-| V-16 | Cerrado 14/11 (ver [[Servidor]]) |
-| V-17 | Cerrado 14/11: `sslip.io` + Let's Encrypt (ver [[Servidor]]) |
+| A3.6 | Modo 2D con los mismos números. Bloquea A5.4 |
+| A3.8 | Tooltip o toque: humedad, déficit, pendiente |
+| A3.9 | Chile y mascota hechos. Falta revisión humana del visor y de la equivalencia pimiento dulce. La escena no muestra la mascota. Props descartados |
+| A4.1 | Gráficas de lluvia, demanda y balance (balam). El motor ya entrega las series: `cliente.serieBalance(rotacionId, escenario)` con lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo (contrato `serie-balance` 0.11.0). La interfaz no recalcula |
+| A4.3 | Pintar `explicacion` en la comparación. La plantilla ya sale de `rankear` |
+| A4.4 | Redacción con LLM, opcional, solo sobre números ya calculados |
+| A4.5 | Pantalla de método, fuentes y advertencias |
+| A4.6 | Cerrar el flujo con datos vivos y sin red. Ver la fila de arriba |
+| A4.7 | El droplet sirve front y API. La demo "real" espera el cierre de A4.6. Último despliegue anotado en `docs/01`: `main` `d182af4` |
+| A4.8 | `/api/smap` existe. Sin `EARTHDATA_TOKEN` en el servidor responde 503. Hace falta el OK explícito para poner el token. No entra al ranking |
+| A4.11 | `GET /api/ndvi` (MOD13Q1). El contrato ya existe. No entra al ranking |
+| A4.12 | CDL y SSURGO, después de C5, solo en EE. UU. |
+| A4.13 | Calendario GGCMI fuera de México, después de C4. En México siguen SIAP e INIFAP |
+| A5.1 | Animación mínima al cambiar de etapa |
+| A5.2 | Slider de meses |
+| A5.3 | Móvil y teclado de punta a punta |
+| A5.6 | Hay guion en `docs/guion-video-borrador.md`. Falta grabar. Duración y reglas `[VERIFICAR]` (V-03, V-04) |
+| A5.7 | `[EN CURSO]` (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`, video) y citas de NSIDC e IMERG. Reglas oficiales leídas el 14/11: demo = 7 slides o video de 30 s o menos, en inglés (ver `docs/01`). Licencias sin constancia en el repo: `[VERIFICAR]` |
+| A5.8 | Capturas y demo con la red apagada. Bloqueada por A4.6 |
+| A5.9 | Envío |
+| A0.3 | Sigue sin marca. El ranking y los cultivos ya se decidieron en `docs/13` |
+| A0.5 | Reglas oficiales de entrega, video e IA |
+| V-19 | Solo queda pintar por bloques `[EN EVENTO]`. `porCelda` sigue `null` |
+| V-22 | POWER responde CORS en el GET simple. El clima igual pasa por el backend |
+| V-24 | Decir en el pitch el rango, no una temporada exacta |
+| V-01, V-03, V-04 | Horario de sede, formato de entrega y declaración de IA |
 
-## Decidido el 14/11 (no lo reabras)
+## Huecos científicos que el motor deja en `NO_EVALUABLE` a propósito
 
-Detalle en `docs/13`. Tipos: los JSON Schema de `contratos/` son la fuente de verdad; FastAPI los respeta con prueba y OpenAPI solo genera el cliente HTTP. Ranking con el criterio B, respaldo A si A3.7 no llega (ver V-19 arriba). Motor en TypeScript dentro de un Web Worker; backend FastAPI solo proxy, caché y extras de Earthdata; polígono libre dentro del MVP; servidor en el droplet de Eduardo, sin dominio; documentación en `docs/` del repo; cronograma por esfuerzo de IA; capa "próxima temporada" como banda de incertidumbre, después del motor; pH y textura estimados con etiqueta `SUPUESTO`; catálogo propio de cultivos en JSON (EcoCrop y FAO-56); zona demo en Isla con la milpa como núcleo; reparto por actividad, no por rol.
+- Índice de erosión: faltan I30 y los factores C y LS con fuente.
+- Estrés por calor: el catálogo no trae umbral citado.
+- `estadoPlanta` no pasa a `podrida`.
+- Sin escurrimiento por pendiente.
+- Frijol PV, chile y calabaza en Isla: sin ventana de siembra.
+- Calabaza en Isla: se muestra y no se recomienda.
+- Fuera de México: sin calendario hasta A4.13.
+- Kc sin ajuste por altura del cultivo.
+- Normalización del exceso (1 − fracción percolada) es `SUPUESTO`.
 
-## Siguen en evento o en datos, aunque 13 haya cerrado otras cosas
+## No reabrir
 
-- Slider de meses: no es compuerta.
-- Prioridades del agricultor (agua, ingreso, suelo) y su rotación actual: mejora.
-- Sliders "lluvia −20 %" y "temperatura +2 °C": mejora. Si entran, la serie ajustada va como `EXPLORATORIO`.
-- Pilares 2 y 3: A2.7 ya está; entran si los datos alcanzan (A3.7). Con datos reales de Isla el pilar hídrico distingue poco entre rotaciones (0 a 4 % de demanda sin cubrir), así que pesan para el ranking.
-- GPM, SMAP, MODIS: actividad L, después de C1.
-- Horario real de la sede, formato de video y reglas de declaración de IA (V-01, V-03, V-04).
-
-## Tablero
-
-El reparto inicial del 14/11 ya está en `docs/14` (tablero al final). Cada quien marca el estado de sus actividades (`[EN CURSO]`, `[BLOQUEADO]`, `[HECHO]`) junto al ID. No te asignes actividades de otro sin acordarlo con el equipo.
+Ranking B, `temporada_tipica`, horizonte de 6 meses, Terrarium por defecto, ISRIC como estimación usada (OpenLandMap de respaldo), `GWETROOT` convertido, TAW por Saxton y Rawls, tipos desde `contratos/`, Three.js sin React Three Fiber, `sslip.io`, buzón local, orientación de la cuadrícula, IMERG fuera del balance. Lista completa en `docs/13`.

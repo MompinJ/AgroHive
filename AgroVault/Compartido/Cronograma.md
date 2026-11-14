@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
-| **Eduardo** | 12 | 2 | 2 | 3 | 63 % de 19 |
-| **Mafer** | 8 | 2 | 0 | 1 | 73 % de 11 |
+| **Eduardo** | 12 | 2 | 3 | 2 | 63 % de 19 |
+| **Mafer** | 9 | 1 | 0 | 1 | 82 % de 11 |
 | **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
-Proyecto completo: **44 de 61** actividades hechas (72 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **45 de 61** actividades hechas (74 %), 3 en curso, 3 bloqueadas.
 
 ## Mompin
 
@@ -56,7 +56,7 @@ Proyecto completo: **44 de 61** actividades hechas (72 %), 4 en curso, 2 bloquea
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)
 - [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN`
 - [x] **A4.10**  `HECHO` — `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance
-- [ ] **A4.11** NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking
+- [-] **A4.11**  `BLOQUEADO` — ORNL DAAC no responde de forma usable (502, 503 y llamadas de 40 s sin respuesta); cliente y ruta listos y probados con respuestas reales, apagados del paquete de demo hasta que el servicio funcione
 - [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después
 - [ ] **A4.13** Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
@@ -72,7 +72,7 @@ Proyecto completo: **44 de 61** actividades hechas (72 %), 4 en curso, 2 bloquea
 - [x] **A2.12** Bloques de suelo por tipo y humedad `HECHO`
 - [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
 - [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
-- [/] **A3.9** Cultivos 4 en adelante, props y mascota `EN CURSO`
+- [x] **A3.9** Cultivos 4 en adelante, props y mascota `HECHO`
 - [ ] **A5.6** Guion, video de demo y ensayo
 - [/] **A5.7** README con método, fuentes, límites, licencias y declaración de IA `EN CURSO`
 
