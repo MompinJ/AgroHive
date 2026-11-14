@@ -114,6 +114,20 @@ describe('C2 con el paquete de demo (POWER, SoilGrids con Saxton y Rawls y Terra
     for (const r of res.rotaciones) expect(validadorContrato('resultado-rotacion')(r)).toEqual([]);
   });
 
+  it('robustez: el orden no cambia con el TAW de la sensibilidad del factor de materia organica (1.724 / 2.0 / 2.5)', () => {
+    const planes = [
+      milpa,
+      plan('R2', [['maiz', '2016-06-15', 'PV'], ['maiz', '2017-06-15', 'PV']]),
+      plan('R3', [['frijol', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]),
+    ];
+    for (const taw of [122.3, 124.1, 127.4]) {
+      const suelo = structuredClone(sueloIsla);
+      (suelo.agua!.tawMmPorM as { valor: number }).valor = taw;
+      const res = rankear(planes.map((p) => ({ rotacion: simularRotacion(entradas(p, suelo)).rotacion, numeroSiembras: p.ciclos.length })));
+      expect(res.orden.map((f) => f.rotacionId)).toEqual(['R2', 'R1', 'R3']);
+    }
+  });
+
   it('con el calendario real de Isla (A0.6): la calabaza, que SIAP no registra, se muestra pero no se ordena', () => {
     const conCalabaza = plan('R4', [['calabaza', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]);
     const r = simularRotacion(entradas(conCalabaza, sueloManual)).rotacion;
