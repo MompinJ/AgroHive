@@ -52,6 +52,17 @@ Decisiones afectadas:
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
 
+### 2026-11-14 — A3.3: estados visuales legibles con daltonismo; A2.11: frijol y calabaza (Mafer)
+
+- **Archivos:** `web/src/escena/estilos-estado.ts`, `patrones.ts`, `EscenaParcela.tsx` (una línea), nuevos `daltonismo.ts` y `pruebas/daltonismo.test.ts`; `modelos/` (frijol, calabaza, paleta y los 5 `.bbmodel` del maíz); `docs/06`, `docs/14`, `AgroVault/Compartido/Pendientes.md`. Los archivos de `escena/` son de Mompin, que dejó escrito que A3.3 los ajusta ahí.
+- **A3.3, cambio:** simulación de daltonismo con la fuente publicada (Machado et al. 2009) y pruebas con mínimos de color, íconos y patrones. Solo se cambia un color: `NO_EVALUABLE` (y "sin elevación", que lo repite) de `#9a9a9a` a `#ececec`. Íconos finales: gota partida, hoja colgando, equis (reemplaza a "moho", que no se entendía en 8 × 8) y surcos. La leyenda deja de leerse dos veces en lectores de pantalla.
+- **A3.3, hallazgo:** con los colores provisionales, bajo deuteranopia `podrida` y `NO_EVALUABLE` casi se confundían (dE 7.1) y `NO_EVALUABLE` con `normal` (12): confundir "sin dato" con "normal" es justo lo que el proyecto no debe permitir. Los umbrales (dE 15; 16 y 48 píxeles) son del equipo `[PROPUESTA]`, no de la fuente.
+- **A2.11, cambio:** `frijol` y `calabaza` con las 5 etapas del maíz (siembra, brote, crecimiento, madurez, podrida) y paleta de 60 colores (16 nuevos al final, índices 44 a 59); visores `visor_frijol.html`, `visor_calabaza.html` y `visor_milpa.html`. `estresada` y `marchita` no tienen modelo propio: la escena usa el de su etapa más la placa de estado.
+- **Corrección:** la prueba de Mompin que compara la paleta incrustada con `modelos/paleta.md` falló para el maíz, porque el agente de modelado había revertido los `.bbmodel` del maíz para que git no los marcara. Se regeneran con `python modelos/cultivos/maiz.py`: solo cambia la textura incrustada (ahora con los 60 colores) y las piezas son idénticas.
+- **Fuente / evidencia:** Machado, G. M., Oliveira, M. M. y Fernandes, L. A. F. (2009), IEEE TVCG 15(6): 1291-1298 (matrices de https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html; cada fila suma 1, comprobado en pruebas). `cd web && npm test`: 189 pruebas; `tsc` y `npm run build` sin errores.
+- **Pendiente:** los modelos de frijol y calabaza se revisaron con renders propios del agente, no en Three.js ni en Blockbench; falta que una persona abra `visor_milpa.html`. Los colores de los modelos son a ojo.
+- **Decisiones afectadas:** A2.11 y A3.3 (en revisión).
+
 ### 2026-11-14 — A2.16: pedotransferencia de Saxton y Rawls verificada contra el artículo (Mafer)
 
 - **Archivos:** nuevos `datos/catalogos/saxton_rawls.py` y `test_saxton_rawls.py`; `datos/catalogos/README.md`; `docs/14` (tablero) y `AgroVault/Compartido/Pendientes.md`.
@@ -195,6 +206,28 @@ Decisiones afectadas:
 - **Archivos:** `.gitignore`; se dejan de versionar `.vscode/tasks.json`, `.vscode/settings.json`, `.vscode/agrohive.code-snippets` y `.vscode/mascota/clawd.py`.
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
+
+### 2026-11-14 (noche) — Despliegue unico de main cd3fed2 y API a contratos 0.9.0 (Eduardo)
+
+- **Despliegue (pedido de Mompin #36 y #46):** el droplet corre `main` en `cd3fed2`: API con OpenLandMap, Saxton-Rawls y el paquete de demo; front con la escena 3D y el Worker del motor, construido en el propio droplet (`npm ci` + `npm run build`, node 20.20.1) y copiado a `/var/www/agrohive-web` con respaldo del anterior; `rasterio` 1.5.2 instalado sin problemas (probado antes en un entorno temporal). nginx sin cambios.
+- **Verificado desde fuera:** `/` 200 con el bundle nuevo, `/health` trae `commit: cd3fed2`, `/api/suelo` de Isla da TAW 122.3 mm/m por Saxton-Rawls con ISRIC y OpenLandMap, `/api/proxima-temporada` da 6 meses, `mediworks.mx` sigue en 200.
+- **Cambio en la API:** `VERSION_CONTRATO` pasa a 0.9.0 (el contrato actual; `/health` del servidor dice 0.7.0 hasta que este cambio llegue a `main`).
+- **Incidente:** la segunda sesion de Eduardo anuncio un despliegue paralelo cuando el mio ya iba a la mitad; se avisó por el buzon y el servidor quedo sin cambios de ella. Regla para la proxima: una sola sesion despliega y anuncia antes por el buzon.
+
+### 2026-11-14 (noche) — API a contratos 0.8.0 y cronograma al dia (Eduardo)
+
+- **Archivos:** `api/app/config.py`, `api/tests/test_basico.py`, `docs/14`, vistas del cronograma.
+- **Cambio:** `VERSION_CONTRATO` de la API pasa a 0.8.0. Los schemas que usa la API (`serie-clima`, `suelo`, `proxima-temporada`, `cultivo`, `parcela`) no cambiaron en 0.8.0 (cambia `resultado-rotacion`, del motor), asi que no hay otro ajuste.
+- **Cronograma:** A4.8 pasa a `[EN CURSO]` (sondeo de viabilidad de SMAP/GPM por la segunda sesion de Eduardo, sin tocar el repo). Estado: 22 de 56 hechas (39 %); Eduardo 9 de 15, Mompin 10 de 14, Mafer 3 de 12, balam 0 de 16.
+- **Verificaciones:** api 60, contratos 63/63, catalogos y unittest de Mafer, build de web ok. `npm test` de web falla 2 pruebas del motor y la escena que afirman `NO_EVALUABLE` para el suelo de Isla: las actualiza Mompin en el merge atomico con mi `suelo.json`.
+
+### 2026-11-14 (noche) — A4.6: cliente de la API para el front (Eduardo, con balam)
+
+- **Archivos:** `web/src/api/` (`cliente.ts`, `usarApi.ts`, `cliente.test.ts`, `README.md`), `docs/14`. Carpeta nueva, sin tocar `web/src/ui`, `paginas`, `motor` ni `escena`.
+- **Cambio:** funciones tipadas para `/api/clima`, `/api/suelo`, `/api/proxima-temporada`, `/api/cultivos`, `/api/elevacion` y `/health`, que devuelven `{ok, datos}` o `{ok: false, error: ERROR_DATOS}` y nunca lanzan; hook `usarApi` con los estados de `<DataState>`; `VENTANA_ESTANDAR` (2005-10-01 a 2025-12-31). Los datos usan `contratos/tipos`; el cliente generado de OpenAPI solo describe `/api/elevacion` (regla del 14/11).
+- **Evidencia:** 10 pruebas nuevas con `fetch` simulado (exito, 503, 422, red caida, cuerpo no JSON, tiempo agotado, cancelacion, POST de terreno); typecheck en verde.
+- **Pendiente:** conectar las paginas de balam y el motor de Mompin. A4.6 queda tambien en mi fila del tablero (Mompin la asigno a los dos); la fila de Mompin sigue listandola.
+- **Nota:** `npm test` en `web/` falla hoy 2 pruebas del motor y la escena que afirman `NO_EVALUABLE` para el suelo de Isla: es el cambio atomico que Mompin integra con mi `suelo.json`.
 
 ### 2026-11-14 (noche) — A2.16 conectada: TAW y retencion en /api/suelo; /health con commit (Eduardo)
 
@@ -389,3 +422,6 @@ Consolidación basada en Notion v1.2 y en `docs/`. Ver `00 — AGROHIVE DOCUMENT
 ### 2026-11-10 — v0.2 de Mompin (carpeta `docs/`)
 
 Primera documentación por tema a partir del video del compañero, el audio de la reunión y la verificación de APIs. Ver `docs/DOCUMENTACION_MAESTRA.md`.
+
+### 2026-11-14 — Cierre A1.2
+- App.tsx y ui/useMotor.ts inicializan el Worker existente sin modificar motor ni contratos. Confirmacion mediante olvidar, timeout y limpieza al desmontar. Se actualiza el tablero y README. Sin cambio de alcance cientifico.
