@@ -4,9 +4,23 @@
   "title": "ProximaTemporadaAproximada",
   "description": "Capa opcional 'proxima temporada (aproximada)' (decision 14/11, doc 13; A2.13). Anomalia del pronostico estacional (ECMWF via Open-Meteo) aplicada a la climatologia historica, o respaldo estadistico propio (percentiles y tendencia). Se entrega SOLO como banda de incertidumbre por mes: no hay campo de cifra unica a proposito. Es complementaria al clima del escenario y no bloquea el MVP.",
   "type": "object",
-  "required": ["meta", "esPrediccion", "estado", "aviso", "metodo", "coordenada", "emitido", "horizonteMeses", "banda", "fuentes", "meses"],
+  "required": [
+    "meta",
+    "esPrediccion",
+    "estado",
+    "aviso",
+    "metodo",
+    "coordenada",
+    "emitido",
+    "horizonteMeses",
+    "banda",
+    "fuentes",
+    "meses"
+  ],
   "properties": {
-    "meta": { "$ref": "comun.schema.json#/$defs/meta" },
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
     "esPrediccion": {
       "description": "Siempre false: no predice una temporada exacta, muestra un rango plausible.",
       "const": false
@@ -14,7 +28,11 @@
     "estado": {
       "description": "EXPLORATORIO por naturaleza; ERROR_DATOS o NO_EVALUABLE si no se pudo construir.",
       "type": "string",
-      "enum": ["EXPLORATORIO", "ERROR_DATOS", "NO_EVALUABLE"]
+      "enum": [
+        "EXPLORATORIO",
+        "ERROR_DATOS",
+        "NO_EVALUABLE"
+      ]
     },
     "aviso": {
       "description": "Texto visible obligatorio, por ejemplo 'Rango aproximado, no es una prediccion'.",
@@ -22,20 +40,23 @@
       "minLength": 1
     },
     "metodo": {
-      "description": "anomalia_estacional: anomalia del pronostico estacional sobre la climatologia. respaldo_estadistico: percentiles y tendencia del historico propio.",
+      "description": "anomalia_estacional (metodo aprobado de A2.13): para cada mes se toma la distribucion historica de ese mes (20 anios de POWER) y se desplaza por la anomalia de SEAS5; la banda son los percentiles de esa distribucion desplazada. Sin tendencia, declarada en una advertencia. respaldo_estadistico: los mismos percentiles sin desplazar.",
       "type": "string",
-      "enum": ["anomalia_estacional", "respaldo_estadistico"]
+      "enum": [
+        "anomalia_estacional",
+        "respaldo_estadistico"
+      ]
     },
-    "coordenada": { "$ref": "comun.schema.json#/$defs/lonLat" },
+    "coordenada": {
+      "$ref": "comun.schema.json#/$defs/lonLat"
+    },
     "emitido": {
       "description": "Fecha de emision del pronostico o del calculo de respaldo.",
       "$ref": "comun.schema.json#/$defs/fecha"
     },
     "horizonteMeses": {
-      "description": "Meses cubiertos. El maximo real de Open-Meteo esta por confirmar (V-21: 7 o 9 meses).",
-      "type": "integer",
-      "minimum": 1,
-      "maximum": 12
+      "description": "Horizonte fijo de 6 meses (V-21, decidido el 14/11: se habla en semestres), aunque el servicio estacional llegue a 7.",
+      "const": 6
     },
     "climatologia": {
       "description": "Ventana historica de referencia de la climatologia.",
@@ -45,25 +66,43 @@
       "title": "DefinicionBanda",
       "description": "Que percentiles delimitan la banda (por defecto 10 y 90).",
       "type": "object",
-      "required": ["percentilInferior", "percentilSuperior"],
+      "required": [
+        "percentilInferior",
+        "percentilSuperior"
+      ],
       "properties": {
-        "percentilInferior": { "type": "number", "minimum": 0, "maximum": 100 },
-        "percentilSuperior": { "type": "number", "minimum": 0, "maximum": 100 }
+        "percentilInferior": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "percentilSuperior": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
       },
       "additionalProperties": false
     },
     "fuentes": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "comun.schema.json#/$defs/fuente" }
+      "items": {
+        "$ref": "comun.schema.json#/$defs/fuente"
+      }
     },
     "meses": {
       "type": "array",
-      "items": { "$ref": "#/$defs/mes" }
+      "items": {
+        "$ref": "#/$defs/mes"
+      },
+      "maxItems": 6
     },
     "advertencias": {
       "type": "array",
-      "items": { "$ref": "comun.schema.json#/$defs/advertencia" }
+      "items": {
+        "$ref": "comun.schema.json#/$defs/advertencia"
+      }
     }
   },
   "additionalProperties": false,
@@ -72,17 +111,34 @@
       "title": "RangoIncertidumbre",
       "description": "Banda [inferior, superior]. null en ambos extremos si no se pudo estimar.",
       "type": "object",
-      "required": ["inferior", "superior"],
+      "required": [
+        "inferior",
+        "superior"
+      ],
       "properties": {
-        "inferior": { "type": ["number", "null"] },
-        "superior": { "type": ["number", "null"] }
+        "inferior": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "superior": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
       },
       "additionalProperties": false
     },
     "mes": {
       "title": "MesAproximado",
       "type": "object",
-      "required": ["mes", "lluviaMm", "tMediaC"],
+      "required": [
+        "mes",
+        "lluviaMm",
+        "tMediaC"
+      ],
       "properties": {
         "mes": {
           "description": "Mes en formato AAAA-MM.",
@@ -99,11 +155,17 @@
         },
         "climatologiaLluviaMm": {
           "description": "Mediana historica de lluvia del mes, solo como referencia de comparacion.",
-          "type": ["number", "null"]
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "climatologiaTMediaC": {
           "description": "Mediana historica de temperatura media del mes, solo como referencia.",
-          "type": ["number", "null"]
+          "type": [
+            "number",
+            "null"
+          ]
         }
       },
       "additionalProperties": false

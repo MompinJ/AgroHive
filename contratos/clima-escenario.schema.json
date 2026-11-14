@@ -93,6 +93,10 @@
         "$ref": "#/$defs/dia"
       }
     },
+    "humedadSuelo": {
+      "description": "Metadatos de la humedad de suelo de POWER si la serie la incluye.",
+      "$ref": "#/$defs/humedadSuelo"
+    },
     "advertencias": {
       "type": "array",
       "items": {
@@ -172,6 +176,58 @@
             "null"
           ],
           "minimum": 0
+        },
+        "humedadRaizFraccionSat": {
+          "description": "Humedad de la zona de raices de NASA POWER (GWETROOT, MERRA-2): fraccion de SATURACION de 0 a 1, en los primeros ~100 cm, regional (0.5 x 0.625 grados). No es fraccion de TAW: para usarla en la cubeta se convierte con thetaSat, thetaFC y thetaWP del suelo (ver metadatos en humedadSuelo). null si falta.",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "humedadSuelo": {
+      "title": "MetadatoHumedadSuelo",
+      "description": "De donde sale humedadRaizFraccionSat y para que se usa (V-06, decidido el 14/11).",
+      "type": "object",
+      "required": [
+        "variable",
+        "definicion",
+        "fuente",
+        "uso"
+      ],
+      "properties": {
+        "variable": {
+          "const": "GWETROOT"
+        },
+        "definicion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profundidadCm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        },
+        "uso": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "condicion_inicial",
+              "comparacion"
+            ]
+          }
         }
       },
       "additionalProperties": false

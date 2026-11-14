@@ -94,6 +94,7 @@ export interface ContratosAgroHive {
   "proxima-temporada"?: ProximaTemporadaAproximada;
   "resultado-celda"?: ResultadoCeldas;
   "resultado-rotacion"?: ResultadoRotacion;
+  "serie-clima"?: SerieClima;
   suelo?: Suelo;
   "tabla-suelos"?: TablaSuelos;
 }
@@ -119,6 +120,7 @@ export interface ClimaEscenario {
   fuente: Fuente;
   seleccion: SeleccionEscenario;
   diario: DiaClima[];
+  humedadSuelo?: MetadatoHumedadSuelo;
   advertencias?: Advertencia[];
 }
 /**
@@ -209,6 +211,23 @@ export interface DiaClima {
    * ET0 del dia si la fuente la entrega (Open-Meteo); si no, la calcula el motor.
    */
   et0Mm?: number | null;
+  /**
+   * Humedad de la zona de raices de NASA POWER (GWETROOT, MERRA-2): fraccion de SATURACION de 0 a 1, en los primeros ~100 cm, regional (0.5 x 0.625 grados). No es fraccion de TAW: para usarla en la cubeta se convierte con thetaSat, thetaFC y thetaWP del suelo (ver metadatos en humedadSuelo). null si falta.
+   */
+  humedadRaizFraccionSat?: number | null;
+}
+/**
+ * De donde sale humedadRaizFraccionSat y para que se usa (V-06, decidido el 14/11).
+ */
+export interface MetadatoHumedadSuelo {
+  variable: "GWETROOT";
+  definicion: string;
+  profundidadCm?: number | null;
+  fuente: Fuente;
+  /**
+   * @minItems 1
+   */
+  uso: ["condicion_inicial" | "comparacion", ...("condicion_inicial" | "comparacion")[]];
 }
 export interface Advertencia {
   /**
@@ -447,22 +466,32 @@ export interface ProximaTemporadaAproximada {
    */
   aviso: string;
   /**
-   * anomalia_estacional: anomalia del pronostico estacional sobre la climatologia. respaldo_estadistico: percentiles y tendencia del historico propio.
+   * anomalia_estacional (metodo aprobado de A2.13): para cada mes se toma la distribucion historica de ese mes (20 anios de POWER) y se desplaza por la anomalia de SEAS5; la banda son los percentiles de esa distribucion desplazada. Sin tendencia, declarada en una advertencia. respaldo_estadistico: los mismos percentiles sin desplazar.
    */
   metodo: "anomalia_estacional" | "respaldo_estadistico";
   coordenada: LonLat;
   emitido: Fecha;
   /**
-   * Meses cubiertos. El maximo real de Open-Meteo esta por confirmar (V-21: 7 o 9 meses).
+   * Horizonte fijo de 6 meses (V-21, decidido el 14/11: se habla en semestres), aunque el servicio estacional llegue a 7.
    */
-  horizonteMeses: number;
+  horizonteMeses: 6;
   climatologia?: Periodo;
   banda: DefinicionBanda;
   /**
    * @minItems 1
    */
   fuentes: [Fuente, ...Fuente[]];
-  meses: MesAproximado[];
+  /**
+   * @maxItems 6
+   */
+  meses:
+    | []
+    | [MesAproximado]
+    | [MesAproximado, MesAproximado]
+    | [MesAproximado, MesAproximado, MesAproximado]
+    | [MesAproximado, MesAproximado, MesAproximado, MesAproximado]
+    | [MesAproximado, MesAproximado, MesAproximado, MesAproximado, MesAproximado]
+    | [MesAproximado, MesAproximado, MesAproximado, MesAproximado, MesAproximado, MesAproximado];
   advertencias?: Advertencia[];
 }
 /**
@@ -712,7 +741,24 @@ export interface Evidencia {
   fuente: Fuente;
 }
 /**
- * Suelo de la parcela (decision 14/11, doc 13): textura y pH estimados por zona con mapas globales (ISRIC WCS u OpenLandMap) o elegidos en el selector manual de respaldo. Siempre etiqueta SUPUESTO: no se mide en la parcela.
+ * Respuesta de GET /api/clima: serie diaria de un periodo, sin elegir escenario (modelo SerieClima de api/app/modelos.py). El motor (A2.5) corta de aqui los anios de cada escenario y arma clima-escenario. Usa el mismo dia que clima-escenario.
+ */
+export interface SerieClima {
+  meta: Meta;
+  estado: EstadoEvaluacion;
+  /**
+   * true si los datos no vienen de NASA POWER.
+   */
+  respaldo: boolean;
+  coordenada: LonLat;
+  periodo?: Periodo;
+  fuente: Fuente;
+  diario: DiaClima[];
+  humedadSuelo?: MetadatoHumedadSuelo;
+  advertencias?: Advertencia[];
+}
+/**
+ * Suelo de la parcela (decisiones del 14/11, doc 13): textura y pH estimados por zona con mapas globales o elegidos en el selector manual de respaldo. Se consultan AMBOS servicios (ISRIC SoilGrids por WCS y OpenLandMap) para compararlos: cada uno va en 'estimaciones' y 'estimacionUsada' dice cual alimenta textura, pH y agua. El TAW sale de la tabla FAO-56 (A1.6) o de la pedotransferencia de Saxton y Rawls (2006). Siempre etiqueta SUPUESTO: no se mide en la parcela.
  */
 export interface Suelo {
   meta: Meta;
@@ -736,6 +782,16 @@ export interface Suelo {
    * pH estimado o NO_EVALUABLE si el servicio no respondio y no hay respaldo.
    */
   ph: PhEstimado | ValorNoEvaluable;
+  /**
+   * Estimaciones por servicio, para comparar ISRIC y OpenLandMap. Opcional; si existe, estimacionUsada es obligatoria.
+   *
+   * @minItems 1
+   */
+  estimaciones?: [EstimacionSuelo, ...EstimacionSuelo[]];
+  /**
+   * id de la estimacion que alimenta textura, pH y agua; null si se uso el selector manual.
+   */
+  estimacionUsada?: string | null;
   agua?: AguaSuelo;
   advertencias?: Advertencia[];
 }
@@ -767,10 +823,62 @@ export interface PhEstimado {
   fuente: Fuente;
 }
 /**
- * Parametros de agua derivados de la textura con la tabla de A1.6 (FAO-56).
+ * Lo que devolvio un servicio de suelo para la coordenada.
+ */
+export interface EstimacionSuelo {
+  id: string;
+  servicio: "isric_soilgrids_wcs" | "openlandmap";
+  estado: EstadoEvaluacion;
+  fuente: Fuente;
+  profundidad?: ProfundidadCm;
+  textura: TexturaEstimada;
+  /**
+   * pH en agua; null si el servicio no lo dio.
+   */
+  ph: number | null;
+  /**
+   * Carbono organico del suelo (g/kg); null si no se dio.
+   */
+  carbonoOrganicoGKg?: number | null;
+  motivo?: string;
+}
+export interface TexturaEstimada {
+  clase: ClaseTextura | null;
+  fraccionesPct: FraccionesTextura;
+}
+/**
+ * Agua disponible del suelo y como se obtuvo. Si el TAW es EVALUABLE, metodoTaw es obligatorio.
  */
 export interface AguaSuelo {
-  tawMmPorM?: ValorCitado;
+  tawMmPorM: ValorCitado;
+  metodoTaw?: MetodoTaw;
+  retencion?: RetencionAgua;
+}
+export interface MetodoTaw {
+  /**
+   * tabla_fao56: TAW por clase textural de contratos/tabla-suelos (FAO-56 Tabla 19). pedotransferencia_saxton_rawls_2006: calculado desde arena, arcilla y materia organica (aplica a cualquier textura, incluidas las que no estan en la tabla).
+   */
+  metodo: "tabla_fao56" | "pedotransferencia_saxton_rawls_2006";
+  fuente: Fuente;
+  etiqueta?: "SUPUESTO";
+  entradas?: EntradasPedotransferencia;
+}
+/**
+ * Entradas de Saxton y Rawls (2006) y de que estimacion salen.
+ */
+export interface EntradasPedotransferencia {
+  estimacionId: string;
+  arenaPct: ValorCitado;
+  arcillaPct: ValorCitado;
+  materiaOrganicaPct: ValorCitado;
+}
+/**
+ * Contenidos de agua (m3/m3) a saturacion, capacidad de campo y punto de marchitez. Hacen falta, por ejemplo, para pasar la humedad de POWER (fraccion de saturacion) a fraccion de TAW.
+ */
+export interface RetencionAgua {
+  thetaSatM3M3: ValorCitado;
+  thetaFcM3M3: ValorCitado;
+  thetaWpM3M3: ValorCitado;
 }
 /**
  * Tabla de suelos por clase textural (A1.6): rangos de humedad y agua disponible por metro (TAW) de FAO-56 Tabla 19, con fuente por valor. La consume el motor para pasar de la textura del suelo (contrato suelo) a la capacidad de la cubeta. Basada en la propuesta de Mafer (datos/catalogos/suelos.schema.json). Son valores tipicos por textura, no medidos: aplicados a una parcela siguen siendo SUPUESTO.
