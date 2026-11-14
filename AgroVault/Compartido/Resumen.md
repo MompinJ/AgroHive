@@ -45,7 +45,7 @@ Frase de demo: AgroHive convierte la historia climática de NASA en comparacione
 | Historial | 2006–2025 (20 años). Respaldo 2016–2025. 2026 no es un año completo |
 | Cultivos núcleo | Milpa: maíz, frijol, calabaza. Chile si da tiempo el modelado |
 | Catálogo | JSON propio, 6 a 8 cultivos, sembrado desde FAO EcoCrop (rangos) y Kc de FAO-56. Sin API de cultivos |
-| Rotaciones de ejemplo | R0 maíz-maíz-maíz; R1 maíz-frijol-maíz; R2 se ajusta al catálogo real (en 03 aún dice sorgo) |
+| Rotaciones de ejemplo | R1 milpa, R2 maíz-maíz, R3 frijol-frijol y R4 milpa sembrada dentro de las ventanas de INIFAP (maíz el 1 de junio, frijol el 10 de octubre). Comparación por defecto de la demo: **R1, R2 y R4**, con R4 sugerida (orden R4, R2, R1; `[DECIDIDO]` 14/11). R3 queda en el selector: su frijol PV no tiene ventana con fuente y sacaría el pilar de compatibilidad |
 | Suelo | Selector manual (arcilloso, franco, arenoso) con TAW de FAO-56, etiqueta `SUPUESTO`. Además, textura y pH de zona de **ISRIC WCS y OpenLandMap**, comparados; TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, también `SUPUESTO` |
 
 ## Ciencia, en corto
