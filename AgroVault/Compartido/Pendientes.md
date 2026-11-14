@@ -26,9 +26,9 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 
 | ID | Tema |
 | --- | --- |
-| V-15 | SSH, usuario y firewall del droplet |
-| V-16 | Puertos y servicios que ya usa `mediworks` |
-| V-17 | Hostname (`sslip.io` u otro) y certificado |
+| V-15 | SSH, usuario y firewall del droplet (evidencia A0.4, ver [[Servidor]]) |
+| V-16 | Puertos y servicios que ya usa `mediworks` (evidencia A0.4, ver [[Servidor]]) |
+| V-17 | Hostname (`sslip.io` u otro) y certificado (evidencia A0.4, ver [[Servidor]]) |
 
 ## Siguen en evento o en datos, aunque 13 haya cerrado otras cosas
 
