@@ -45,5 +45,32 @@ export type { PilarExcesoHidrico } from '../../../contratos/tipos/contratos';
 export type PilaresMotor = import('../../../contratos/tipos/contratos').Pilares;
 export type PesosMotor = import('../../../contratos/tipos/contratos').PesosPilares;
 
+/**
+ * Escenario "proxima temporada" con anios analogos ([DECIDIDO] 14/11). Forma propuesta para contratos 0.8.0
+ * (resultado-rotacion.proximaTemporada); cuando llegue, se reemplaza por el tipo generado.
+ */
+export interface ProximaTemporadaRotacion {
+  estado: 'EXPLORATORIO' | 'NO_EVALUABLE' | 'ERROR_DATOS';
+  motivo?: string;
+  esPrediccion: false;
+  aviso: string;
+  emitido: string;
+  horizonte: { desde: string; hasta: string };
+  criterioAnalogos: string;
+  ciclosEvaluados: number[];
+  ciclosFuera?: { ciclo: number; motivo: string }[];
+  aniosAnalogos: {
+    anioReal: number;
+    mesesDentro: number;
+    deMeses: number;
+    estado: import('../../../contratos/tipos/contratos').EstadoEvaluacion;
+    motivo?: string;
+    deficitHidrico: import('../../../contratos/tipos/contratos').PilarDeficitHidrico;
+    excesoHidrico: import('../../../contratos/tipos/contratos').PilarExcesoHidrico;
+  }[];
+  rango: Record<'proporcionDemandaNoCubierta' | 'fraccionLluviaPercolada' | 'excesoTotalMm', import('../../../contratos/tipos/contratos').RangoIncertidumbre>;
+  fuentes: import('../../../contratos/tipos/contratos').Fuente[];
+}
+
 /** Etapas FAO-56 (Tabla 11). */
 export type EtapaFao = 'inicial' | 'desarrollo' | 'media' | 'final';

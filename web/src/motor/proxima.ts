@@ -5,7 +5,7 @@
 // en t, como en SIAP_CICLOS) y dice si queda debajo, dentro o encima de la banda.
 // No se suman las bandas de varios meses: la suma de percentiles mensuales no es un percentil de la suma.
 import { mesDe } from './fechas';
-import type { ClimaEscenario, Escenario } from './tipos';
+import type { ClimaEscenario, DiaClima, Escenario } from './tipos';
 import { ESCENARIOS, type Advertencia } from './tipos';
 import type { ProximaTemporadaAproximada, RangoIncertidumbre } from '../../../contratos/tipos/contratos';
 
@@ -62,8 +62,9 @@ function problemas(doc: ProximaTemporadaAproximada): string[] {
   return p;
 }
 
-function lluviaDelMes(esc: ClimaEscenario, mesReal: string): number | null {
-  const dias = esc.diario.filter((d) => d.fecha.startsWith(mesReal));
+/** Lluvia de un mes calendario (AAAA-MM) como suma de diarios; null si falta algun dia. */
+export function lluviaMensual(diario: readonly DiaClima[], mesReal: string): number | null {
+  const dias = diario.filter((d) => d.fecha.startsWith(mesReal));
   const [a, m] = mesReal.split('-').map(Number) as [number, number];
   const enMes = new Date(Date.UTC(a, m, 0)).getUTCDate();
   if (dias.length !== enMes || dias.some((d) => d.lluviaMm === null)) return null;
@@ -100,7 +101,7 @@ export function vistaProximaTemporada(
       const esc = escenarios[e];
       if (!esc || esc.estado === 'ERROR_DATOS' || esc.estado === 'NO_EVALUABLE') continue;
       const mesReal = mesEnEscenario(m.mes, esc.anioReal);
-      const lluvia = lluviaDelMes(esc, mesReal);
+      const lluvia = lluviaMensual(esc.diario, mesReal);
       const { inferior, superior } = m.lluviaMm;
       const posicion: PosicionEnBanda | null =
         lluvia === null || inferior === null || superior === null ? null : lluvia < inferior ? 'debajo' : lluvia > superior ? 'encima' : 'dentro';
