@@ -2,12 +2,12 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: contratos/*.schema.json (v0.4.0, A1.1)
+fuente: contratos/*.schema.json (v0.5.0, A1.1)
 ---
 
 # Contratos
 
-La fuente de verdad son los JSON Schema de `contratos/` (versión `0.4.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.5.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
 - Detalle y reglas: `contratos/README.md`
 - Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`
@@ -22,12 +22,13 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.4.0`, activ
 | `comun.schema.json` | Estados de `docs/04`, `meta`, `fuente`, `valorCitado`, `lonLat`, ids | — |
 | `parcela.schema.json` | Polígono, cuadrícula y celdas con `elevacionM` y `pendientePct`; enlaza el suelo con `sueloId` | Front (polígono) + API (elevación) |
 | `suelo.schema.json` | Textura (USDA y grupo del selector) y pH estimados, siempre `SUPUESTO`; `estimaciones` de ISRIC y OpenLandMap y `estimacionUsada`; TAW con `metodoTaw` (tabla FAO-56 o Saxton y Rawls 2006) y `retencion` | API `GET /api/suelo` (A2.14, A2.15, A2.16) |
-| `cultivo.schema.json` | Catálogo: ciclo, etapas y Kc de FAO-56, umbrales de EcoCrop (lluvia del ciclo y lluvia anual por separado), ventanas de siembra | `datos/catalogos/` (A1.5) |
+| `cultivo.schema.json` | Catálogo, solo lo que no depende del lugar: ciclo, etapas y Kc de FAO-56, umbrales de EcoCrop (lluvia del ciclo y lluvia anual por separado) | `datos/catalogos/` (A1.5) |
+| `calendario-local.schema.json` | Calendario por municipio (clave INEGI): cultivo, temporada PV/OI, ventana de siembra con fuente y presencia del cultivo en el lugar | `datos/` (A0.6) |
 | `tabla-suelos.schema.json` | TAW por metro y rangos de humedad por clase textural (FAO-56 Tabla 19), con fuente o `NO_EVALUABLE` | `datos/catalogos/` (A1.6) |
 | `serie-clima.schema.json` | Respuesta de `GET /api/clima`: serie diaria del periodo, sin escenario | API `GET /api/clima` |
 | `clima-escenario.schema.json` | Serie diaria de un año real (seco, habitual, lluvioso) y cómo se eligió; humedad de POWER opcional (`humedadRaizFraccionSat`, fracción de saturación) | Motor (A2.5), desde `serie-clima` |
 | `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo bandas por mes, `horizonteMeses` fijo en 6 | API + motor (A2.13) |
-| `plan-siembra.schema.json` | Rotación del selector: cultivo por ciclo y, si se pinta por bloques, por celda | Front (selector) |
+| `plan-siembra.schema.json` | Rotación del selector: cultivo, temporada y fecha elegida por el usuario por ciclo, con `porQue`; `calendarioLocal` usado; `asignacionClima` = `temporada_tipica` | Front (selector) |
 | `resultado-celda.schema.json` | Salida del motor por celda y fecha | Motor |
 | `resultado-rotacion.schema.json` | Pilares por escenario, peor caso, ranking (B principal, A de respaldo), pesos declarados y explicación | Motor |
 
@@ -41,7 +42,8 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.4.0`, activ
 - `fuente` es un objeto (nombre, url, coordenada, periodo, unidades, consultado), no un texto. La radiación diaria se llama `radiacionMjM2Dia`.
 - Próxima temporada: `esPrediccion` es siempre `false`, el `aviso` es obligatorio y cada mes trae bandas `{inferior, superior}` sin cifra única.
 - Ranking: el criterio principal es B (`B_minimax_arrepentimiento`; `[DECIDIDO]` el 14/11). Con B, el resultado lleva `puntaje` por escenario, `arrepentimiento` y `ponderacion` (pesos, etiqueta `SUPUESTO`/`USUARIO`/`FUENTE`, pilares excluidos). A (`A_exposicion_hidrica_peor_caso`) queda de respaldo si A3.7 no llega; con A, `puntaje`, `arrepentimiento` y `ponderacion` van en `null`. Ejemplo del respaldo: `contratos/ejemplos/resultado-rotacion.respaldo-a.ejemplo.json`.
-- `plan-siembra.asignacionClima` queda en `null` hasta que se decida A2.8 (`mismo_anio`, `ventanas_consecutivas`, `temporada_tipica`).
+- `plan-siembra.asignacionClima` es siempre `temporada_tipica` (A2.8 decidido). La fecha de siembra la elige el usuario y cada ciclo explica su `porQue`.
+- Un cultivo que se muestra pero no se recomienda en el lugar va en `resultado-rotacion.cultivosNoRecomendados` (motivo y fuente) y en la celda como `noRecomendadoEnLugar` con `fuenteMotivo`; la rotación queda `EXPLORATORIO`.
 
 Lo que el schema no puede comprobar (ciclos en orden cronológico, polígono cerrado, cultivos del plan presentes en el catálogo) lo valida el motor.
 

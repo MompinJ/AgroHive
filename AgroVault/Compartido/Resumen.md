@@ -65,7 +65,7 @@ Escenarios: años reales cerca de p10, p50 y p90 de lluvia. Mostrar el año. `[P
 Motor, independiente del render (`docs/05`):
 
 1. Perfil del histórico y elección de los tres años.
-2. Asignación de clima a cada ciclo: **abierta**. Tres ciclos no son tres años. Opciones: los tres ciclos dentro del año del escenario, ventanas consecutivas del histórico, o la temporada típica de cada cultivo en ese año. Hay que registrarla en `docs/01` cuando se elija.
+2. Asignación de clima a cada ciclo: **`[DECIDIDO]` (c) `temporada_tipica`**, cada ciclo en su temporada típica (PV u OI) dentro del año del escenario. La fecha de siembra la elige el usuario; el selector la sugiere desde el calendario local del municipio (`calendario-local`, fuente SIAP o INIFAP) y explica por qué. Un cultivo no registrado en el lugar se muestra, pero no se recomienda.
 3. ET0 (Open-Meteo, o Hargreaves-Samani, o Penman-Monteith si hay humedad y viento) y ETc = Kc de la etapa × ET0. Duraciones de etapa publicadas.
 4. Balance de cubeta por bloque: lluvia entra, lo que no cabe es exceso, ETc sale, lo que falta es déficit. TAW según suelo. Pendiente alta puede reducir infiltración; hay que justificarlo.
 5. Estrés hídrico, estrés por calor y avance fenológico. Salida cualitativa para el render.
@@ -138,7 +138,7 @@ Eduardo toma el servidor (A0.4, A4.7).
 
 ## Estado del repo (14/11, noche)
 
-Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.4.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
+Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.5.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
 
 ## Límites para el pitch
 

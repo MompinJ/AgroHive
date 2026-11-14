@@ -12,7 +12,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 
 | ID | Estado | Nota |
 | --- | --- | --- |
-| A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.4.0 en `contratos/`: 11 schemas (más `comun`), ejemplos, `npm test` (42/42) y tipos TS. Ver [[Contratos]] |
+| A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.5.0 en `contratos/`: 12 schemas (más `comun`), ejemplos, `npm test` (52/52) y tipos TS. Ver [[Contratos]] |
 | A1.5, A1.6 | Hechas (Mafer) | `datos/catalogos/`: milpa (maiz, frijol, calabaza) desde FAO-56 y EcoCrop, y TAW por textura (FAO-56 Tabla 19), validados contra contratos 0.3.0 (`cultivo` y `tabla-suelos`); `python datos/catalogos/generar.py` y `node datos/catalogos/validar.mjs`. La lluvia de EcoCrop va en `lluviaAnual*`; `lluviaCiclo*`, umbral de calor y ventanas de siembra siguen `NO_EVALUABLE` |
 
 El resto del reparto y su estado está en el tablero de `docs/14` (al final).
@@ -22,8 +22,8 @@ El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 | ID | Tema | Mientras tanto |
 | --- | --- | --- |
 | V-19 | Ranking: **B `[DECIDIDO]` el 14/11**. Lo abierto es si se pinta por bloques (`[EN EVENTO]`) | B: puntaje compuesto por escenario, arrepentimiento minimax, desempate por promedio. Sin pesos con fuente, pesos iguales declarados `SUPUESTO` en `ponderacion`; no inventes pesos. Riesgo: B necesita los pilares 2 y 3 (A3.7); si no llegan, respaldo A (solo pilar hídrico), declarado en el resultado. `porCelda` queda `null` |
-| A2.8 | Cómo se asigna el clima a cada ciclo (`docs/05`, paso 2) | Opciones: (a) los tres ciclos dentro del mismo año del escenario (`mismo_anio`); (b) ventanas consecutivas reales del histórico (`ventanas_consecutivas`); (c) cada ciclo en su temporada típica dentro del año del escenario (`temporada_tipica`). `plan-siembra.asignacionClima` queda en `null` hasta decidir. No asumas "un ciclo = un año". Se registra en `docs/01` |
-| V-20 | Cultivos y calendario de Isla en SIAP | Milpa como núcleo; no inventes fechas de siembra. Las ventanas del catálogo quedan `NO_EVALUABLE` |
+| A2.8 | Clima por ciclo: **`[DECIDIDO]` (c) `temporada_tipica`** (14/11) | Cada ciclo en su temporada típica (PV u OI) dentro del año del escenario; el plan la fija en `asignacionClima` |
+| V-20 | Calendario de Isla: forma **`[DECIDIDO]`** (contrato `calendario-local`); faltan los datos reales con fuente (Mafer, A0.6; revisa si SIAP tiene API o datos abiertos de siembras) | Las ventanas dependen del lugar, no del cultivo: ya no van en el catálogo. La fecha de cada ciclo la elige el usuario y el plan explica su `porQue`. Sin dato, `NO_EVALUABLE`. Un cultivo no registrado en el lugar se muestra, pero no se recomienda (calabaza en Isla: SIAP 2021-2025 no la registra) |
 | V-21 | Horizonte del pronóstico estacional: **`[DECIDIDO]` 6 meses** (14/11) | El servicio da 7 con `forecast_days=210`; el contrato fija `horizonteMeses` en 6. Método de A2.13 aprobado: distribución histórica desplazada por la anomalía de SEAS5, sin tendencia y con advertencia |
 | V-22 | CORS de NASA POWER | Evidencia A0.7: el GET simple trae `access-control-allow-origin: *`, el preflight da 404. Todo el clima sigue pasando por el backend |
 | Suelo | TAW del suelo del mapa global: **`[DECIDIDO]`** pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica de SoilGrids, `SUPUESTO` (A2.16) | Mientras no esté, la demo usa el selector manual. No uses el TAW de un grupo vecino. El factor de carbono orgánico a materia orgánica se cita `[VERIFICAR]` |
