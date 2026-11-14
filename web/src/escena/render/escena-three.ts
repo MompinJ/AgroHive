@@ -12,7 +12,7 @@ import { rgbaPlaca } from '../placa';
 import { colorSuelo } from '../suelo';
 import type { ModeloVoxel, Vec3 } from '../voxel/bbmodel';
 import { AMPLITUD_VIENTO, DURACION_TRANSICION_MS, escalaInicial, interpolar, saleEncogiendo, type PlantaPrevia } from '../animacion';
-import { agruparPorModelo, claveModelo, escalaPorAvance, giroCelda, modeloRespaldo } from '../voxel/catalogo';
+import { agruparPorModelo, claveModelo, escalaPorAvance, giroCelda, giroSurcos, modeloRespaldo } from '../voxel/catalogo';
 import { bloqueProvisional, claveBloque } from '../voxel/bloque';
 import { cargarModelo, MODELOS_DISPONIBLES } from '../voxel/fuente-modelos';
 import { unirCubos } from '../voxel/geometria';
@@ -62,6 +62,8 @@ export interface EstadisticasRender {
 const TOPE_HUECO = -GROSOR_BASE * 0.6;
 /** Losas de suelo (A2.12): cuerpo de 2 unidades bajo su cara superior y detalle de hasta 1 unidad encima. */
 const CUERPO_LOSA = 2 / 16;
+/** Altura maxima del detallado en la celda elegida, en veces la del manchon `[PROPUESTA]`. */
+const FACTOR_ALTO_DETALLE = 1.6;
 const DETALLE_LOSA = 1 / 16;
 const LADO_BLOQUE = 0.96;
 /**
@@ -479,7 +481,14 @@ export class EscenaThree {
       }
       if (token !== this.tokenDetalle) return; // la seleccion cambio mientras cargaba
       const detalle = new THREE.Mesh(geo, this.materialMascota);
-      const e = this.plantasActuales.get(id)?.escala ?? 1;
+      // El detallado no debe sobresalir demasiado del manchon (los bloques son mas bajos a
+      // proposito): como mucho 1.6 veces la altura del bloque. Ambos son visuales, no a escala.
+      if (!geo.boundingBox) geo.computeBoundingBox();
+      if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
+      const altoDetalle = geo.boundingBox!.max.y;
+      const altoBloque = mesh.geometry.boundingBox!.max.y;
+      const ajuste = altoDetalle > 0 ? Math.min(1, (altoBloque * FACTOR_ALTO_DETALLE) / altoDetalle) : 1;
+      const e = (this.plantasActuales.get(id)?.escala ?? 1) * ajuste;
       detalle.position.copy(meta.pos[k]!);
       detalle.quaternion.copy(meta.rot[k]!);
       detalle.scale.setScalar(e);
@@ -759,7 +768,7 @@ export class EscenaThree {
         const final = escalaPorAvance(b.avanceEtapa);
         const inicio = escalaInicial(previas.get(b.celdaId), grupo.clave, final, animar);
         const pos = new THREE.Vector3(b.x, this.topeDe(b), b.z);
-        const rot = new THREE.Quaternion().setFromAxisAngle(eje, (giroCelda(b.celdaId) * Math.PI) / 2);
+        const rot = new THREE.Quaternion().setFromAxisAngle(eje, (giroSurcos(b.celdaId) * Math.PI) / 2);
         meta.celdas.push(b.celdaId);
         meta.pos.push(pos);
         meta.rot.push(rot);
