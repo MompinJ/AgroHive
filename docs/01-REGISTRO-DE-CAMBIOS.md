@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Avisos de datos en la escena (Mompin, pedido de Eduardo)
+
+- **Archivos:** `web/src/escena/avisos-datos.ts` y `AvisosDatos.tsx` (nuevos), `EscenaParcela.tsx` (prop `avisosDatos`), `escena.css`, `vista-previa.tsx`, `escena.html`, prueba `avisos-datos.test.ts`; `docs/06`, `INTEGRACION.md`.
+- **Cambio:** franja plegable con los avisos de `usarDatosParcela` y del terreno: clima de respaldo, suelo `SUPUESTO`, relieve interpolado y próxima temporada no disponible. Los avisos del terreno ya no se repiten en la lista general de la escena.
+- **Fuente / evidencia:** prueba con los códigos reales de la API; vista previa con los avisos del paquete de demo, a 400 px sin desborde.
+
 ### 2026-11-14 — A3.8: ficha por celda en la escena (Mompin, con balam)
 
 - **Archivos:** `web/src/escena/ficha.ts` (nuevo), `EscenaParcela.tsx`, `render/escena-three.ts`, `escena.css`, prueba `ficha.test.ts`; `docs/06`, `docs/14` (A3.8 pasa del tablero de balam al de Mompin, con balam).
