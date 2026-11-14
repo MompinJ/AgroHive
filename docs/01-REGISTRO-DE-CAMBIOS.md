@@ -188,6 +188,12 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A4.8 desbloqueada (Eduardo)
+
+- **Cambio:** A4.8 pasa de `[BLOQUEADO]` a `[EN CURSO]`: el usuario entrego un token de Earthdata a la segunda sesion, que confirmo en un directorio temporal el login, la descarga de un granulo SMAP L3 (31.7 MB) y la lectura de humedad en Isla. Corrige mi marca anterior (2f78bd1), que se basaba en que no habia cuenta.
+- **Reglas:** el token vive **solo** en variables de entorno (`EARTHDATA_TOKEN` o usuario y contrasena), nunca en el repo, en `.env` subido, en logs ni en mensajes del buzon; sin token, la ruta debe responder `NO_EVALUABLE` o `ERROR_DATOS` visible, no fallar ni inventar.
+- **Trabajo:** la segunda sesion lo implementa en la rama `Eduardo-B` (un `git worktree` aparte) para no pisar la rama `Eduardo`; yo hago el merge.
+
 ### 2026-11-14 (noche) — Segundo despliegue de main 9ad0443 (Eduardo, aviso de Mompin #68)
 
 - **Despliegue:** el droplet corre `main` en `9ad0443` (A3.3 y A2.11 de Mafer, API 0.9.0 y cliente A4.6). Se anuncio antes por el buzon; una sola sesion desplego.
