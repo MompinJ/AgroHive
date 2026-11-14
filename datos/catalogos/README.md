@@ -11,11 +11,18 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 | --- | --- | --- |
 | `cultivos.json` | `contratos/cultivo.schema.json` | Milpa: maiz, frijol, calabaza |
 | `suelos.json` | `contratos/tabla-suelos.schema.json` | TAW por clase USDA, FAO-56 Tabla 19 |
+| `calendario-isla.json` | `contratos/calendario-local.schema.json` | Ventanas de siembra y presencia en SIAP de Isla, por cultivo y temporada |
+| `saxton_rawls.py` | `agua` de `contratos/suelo.schema.json` | TAW y retencion (θsat, θFC, θWP) por pedotransferencia de Saxton y Rawls (2006) para cualquier textura; pruebas contra la Tabla 3 del articulo con `python -m unittest discover -s datos/catalogos` |
 
 ## Fuentes (consultadas el 14/11/2026)
 
 - **FAO-56** (Allen et al., 1998): Tabla 11 (dias por etapa) y Tabla 12 (Kc) en [cap. 6](https://www.fao.org/4/x0490e/x0490e0b.htm); Tabla 19 (agua del suelo) en [cap. 7](https://www.fao.org/4/x0490e/x0490e0c.htm); Tabla 22 (Zr, p) y ec. 82 (TAW) en [cap. 8](https://www.fao.org/4/x0490e/x0490e0e.htm). Valores extraidos del HTML original.
 - **FAO EcoCrop**: `ecocrop.fao.org` dio HTTP 503; se uso la copia de la base en el paquete R [Recocrop](https://github.com/cropmodels/Recocrop) (`inst/parameters/ecocrop.rds`, commit `3a01315`).
+
+- **SIAP** (A0.6, V-20): [cierre agricola municipal](https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php) 2021-2025. Isla = municipio 77 de Veracruz, DDR 175 San Andres Tuxtla. Extracto con las 85 filas del municipio en `fuentes/siap_isla_2021_2025.csv`.
+- **INIFAP**, ventanas de siembra (el contrato guarda meses; el dia exacto queda en la nota de la fuente):
+  - Maiz PV temporal, 1 jun-15 jul: [guia de maiz de temporal del sur de Veracruz](https://www.gob.mx/cms/uploads/attachment/file/723016/Maiz_temporal_tehuantepec.pdf) (C. E. Cotaxtla, 2022), que cubre el DDR San Andres Tuxtla.
+  - Maiz OI, noviembre-diciembre, y frijol OI con humedad residual, 20 sep-20 oct: [Agenda Tecnica Agricola de Veracruz](https://www.gob.mx/cms/uploads/attachment/file/1066118/Agenda_T_cnica_Agr_cola_-_Veracruz-compressed.pdf) (2a ed., 2015), recomendaciones estatales.
 
 ## Elecciones que una persona debe revisar
 
@@ -28,12 +35,13 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 | Kc end del maiz | 0.35 (de 0.60-0.35) | Cosecha tras secado en campo (nota 11) |
 | Profundidad de raiz (Zr) | **Siempre el maximo del rango** de Tabla 22 (maiz 1.7 de 1.0-1.7; frijol 0.9 de 0.6-0.9; calabaza 1.5 de 1.0-1.5) | Tabla 22 nota 1: los valores mayores son para temporal o para modelar estres hidrico |
 | TAW | Punto medio del rango (thetaFC - thetaWP) x 1000 | La tabla da rangos; se guarda el rango completo |
+| Regimen de las ventanas OI | `temporal` (la agenda dice "riego y humedad residual") | SIAP clasifica el maiz y frijol OI de Isla como temporal, sin riego |
 | Grupos del selector | arenoso = arena franca, franco = franco, arcilloso = arcilla | Eleccion del equipo, no de FAO |
 
 ## Huecos (NO_EVALUABLE)
 
 - **Lluvia por ciclo**: sin fuente. La lluvia de EcoCrop es **anual** y va en `lluviaAnualMinMm/MaxMm` (rango absoluto RMIN-RMAX; el optimo queda en la nota de la fuente). No se convierte a lluvia del ciclo.
 - **Umbral de estres por calor**: sin fuente verificada (EcoCrop solo da medias mensuales).
-- **Ventanas de siembra**: ya no van en `cultivos.json` (contratos 0.5.0): dependen del lugar y van en `contratos/calendario-local.schema.json`. Antes de quitarlas, las tres (maíz, frijol, calabaza) estaban en `NO_EVALUABLE` con el motivo "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)", así que no se perdió ningún dato con fuente. Falta cargar el calendario de Isla (municipio 30/077, DDR San Andrés Tuxtla) en un archivo con la forma de `calendario-local` (A0.6).
+- **Ventanas de siembra**: no van en `cultivos.json` (contratos 0.5.0): dependen del lugar y viven en `calendario-isla.json` (contrato `calendario-local`). Maiz PV y OI y frijol OI tienen ventana con fuente; frijol PV y chile no la tienen y la calabaza no esta registrada en Isla segun SIAP.
 - **Etapas sensibles**: pendiente de fuente (FAO-33, Ky); el campo se omite.
 - **Suelos sin fila en Tabla 19**: franco arcillo arenoso, franco arcilloso, arcillo arenoso.

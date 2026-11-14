@@ -1,0 +1,86 @@
+Anio,Idestado,Nomestado,Idddr,Nomddr,Idmunicipio,Nommunicipio,Nomcicloproductivo,Nommodalidad,Nomcultivo,Sembrada,Cosechada,Siniestrada,Nomunidad,Volumenproduccion,Rendimiento
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Chile verde,232,232,0,Tonelada,2018.4,8.7
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Frijol,191,191,0,Tonelada,219.65,1.15
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Maíz grano,4479,4479,0,Tonelada,21947.1,4.9
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Sandía,102,102,0,Tonelada,1642.2,16.1
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Frijol,30,30,0,Tonelada,42,1.4
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Maíz grano,4100,4100,0,Tonelada,19680,4.8
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Sandía,323,323,0,Tonelada,4904.93,15.19
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Sorgo grano,48,48,0,Tonelada,163.2,3.4
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Caña de azúcar,295,295,0,Tonelada,29479.35,99.93
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Limón,24,24,0,Tonelada,374.4,15.6
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Piña,1458,1458,0,Tonelada,69998.58,48.01
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Caña de azúcar,1098,1098,0,Tonelada,80154,73
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Limón,104,54,0,Tonelada,745.2,13.8
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Naranja,59,59,0,Tonelada,495.01,8.39
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Papaya,97,97,0,Tonelada,2230.03,22.99
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Piña,9981,3509,0,Tonelada,163350.4,46.55
+2021,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Plátano,38,38,0,Tonelada,475,12.5
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Chile verde,233,233,0,Tonelada,2050.4,8.8
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Frijol,192,192,0,Tonelada,222.72,1.16
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Maíz grano,4479.8,4479.8,0,Tonelada,24634.5,5.5
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Sandía,101,101,0,Tonelada,1628.12,16.12
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Chile verde,112,112,0,Tonelada,784,7
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Frijol,32,32,0,Tonelada,44.16,1.38
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Maíz grano,4102,4102,0,Tonelada,19279.4,4.7
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Sandía,325,325,0,Tonelada,4943.34,15.21
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Sorgo grano,49,49,0,Tonelada,170.52,3.48
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Caña de azúcar,280,280,0,Tonelada,28000,100
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Limón,26.4,26.4,0,Tonelada,414.48,15.7
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Piña,1460,1460,0,Tonelada,70094.6,48.01
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Caña de azúcar,1086.53,1086.53,0,Tonelada,79365.69,73.05
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Limón,106,56,0,Tonelada,770.56,13.76
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Naranja,122,122,0,Tonelada,869.2,7.12
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Papaya,98.5,98.5,0,Tonelada,2235.95,22.7
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Piña,10001.4,3512.9,0,Tonelada,163444.76,46.53
+2022,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Plátano,79.5,79.5,0,Tonelada,981.89,12.35
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Chile verde,234.00,234.00,0.00,Tonelada,2054.52,8.78
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Frijol,195.00,195.00,0.00,Tonelada,222.30,1.14
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Maíz grano,4480.00,4480.00,0.00,Tonelada,24684.80,5.51
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Sandía,102.00,102.00,0.00,Tonelada,1642.20,16.10
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Chile verde,113.50,113.50,0.00,Tonelada,800.18,7.05
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Frijol,32.90,32.90,0.00,Tonelada,46.06,1.40
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Maíz grano,4104.00,4104.00,0.00,Tonelada,19494.00,4.75
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Sandía,327.00,327.00,0.00,Tonelada,4976.04,15.22
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Sorgo grano,50.00,50.00,0.00,Tonelada,175.50,3.51
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Caña de azúcar,287.00,287.00,0.00,Tonelada,28126.00,98.00
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Limón,26.45,26.45,0.00,Tonelada,414.74,15.68
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Piña,1463.11,1463.11,0.00,Tonelada,70946.20,48.49
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Caña de azúcar,1090.53,1090.53,0.00,Tonelada,75791.84,69.50
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Limón,107.84,56.84,0.00,Tonelada,784.39,13.80
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Naranja,122.12,122.12,0.00,Tonelada,876.58,7.18
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Papaya,98.53,98.53,0.00,Tonelada,2235.65,22.69
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Piña,10008.13,3514.35,0.00,Tonelada,163443.18,46.51
+2023,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Plátano,79.58,79.58,0.00,Tonelada,992.08,12.47
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Chile verde,235.2,235.2,0,Tonelada,2079.17,8.84
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Frijol,198,198,0,Tonelada,227.7,1.15
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Maíz grano,4490,4490,0,Tonelada,25144,5.6
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Sandía,104,104,0,Tonelada,1735.76,16.69
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Chile verde,114.8,114.8,0,Tonelada,809.34,7.05
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Frijol,33.9,33.9,0,Tonelada,47.46,1.4
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Maíz grano,4103.4,4103.4,0,Tonelada,19491.15,4.75
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Sandía,329.3,329.3,0,Tonelada,5011.14,15.22
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Sorgo grano,49.4,49.4,0,Tonelada,173.39,3.51
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Caña de azúcar,290,290,0,Tonelada,29353.8,101.22
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Limón,26.65,26.65,0,Tonelada,418.94,15.72
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Piña,1475.15,1475.15,0,Tonelada,70984.22,48.12
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Caña de azúcar,1100.25,1100.25,0,Tonelada,77732.66,70.65
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Limón,109.1,57.1,0,Tonelada,786.84,13.78
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Naranja,100.45,100.45,0,Tonelada,743.15,7.4
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Papaya,98.76,98.76,0,Tonelada,2242.84,22.71
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Piña,10036.23,3525.58,0,Tonelada,164070.31,46.54
+2024,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Plátano,64.65,64.65,0,Tonelada,797.02,12.33
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Chile verde,236,236,0,Tonelada,2083.88,8.83
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Frijol,196,196,0,Tonelada,223,1.14
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Maíz grano,4495,4495,0,Tonelada,25127.05,5.59
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Otoño-Invierno,Temporal,Sandía,103,103,0,Tonelada,1717.01,16.67
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Primavera-Verano,Temporal,Maíz grano,4108,4108,0,Tonelada,20636.96,5.02
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Caña de azúcar,290,290,0,Tonelada,29290,101
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Limón,27.65,26.65,0,Tonelada,420.27,15.77
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Riego,Piña,1475.15,1475.15,0,Tonelada,71500.52,48.47
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Caña de azúcar,1100.25,1092,0,Tonelada,77127.96,70.63
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Limón,109.1,57.1,0,Tonelada,787.98,13.8
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Naranja,100.45,100.45,0,Tonelada,700.63,6.97
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Papaya,98.76,98.76,0,Tonelada,2245.8,22.74
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Piña,10036.23,6780.38,0,Tonelada,315594.44,46.55
+2025,30,Veracruz,175,San Andrés Tuxtla,77,Isla,Perennes,Temporal,Plátano,64.65,64.65,0,Tonelada,798.71,12.35

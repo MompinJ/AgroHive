@@ -15,10 +15,10 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 8 | 1 | 0 | 5 | 57 % de 14 |
 | **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
-| **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
+| **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **19 de 56** actividades hechas (34 %), 3 en curso, 2 bloqueadas.
+Proyecto completo: **19 de 56** actividades hechas (34 %), 5 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -56,13 +56,13 @@ Proyecto completo: **19 de 56** actividades hechas (34 %), 3 en curso, 2 bloquea
 
 ## Mafer
 
-- [ ] **A0.6** Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20)
+- [/] **A0.6** Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) `EN CURSO`
 - [x] **A1.4** Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) `HECHO`
 - [x] **A1.5** Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente `HECHO`
 - [x] **A1.6** Tabla de suelos (TAW por textura, FAO-56) `HECHO`
 - [ ] **A2.11** Cultivos 1 a 3 completos, todas las etapas y estados de estrés
 - [ ] **A2.12** Bloques de suelo por tipo y humedad
-- [ ] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica — (Mafer)
+- [/] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `EN CURSO` — (Mafer)
 - [ ] **A3.3** Estados visuales: color + icono + patrón, leyenda
 - [ ] **A3.9** Cultivos 4 en adelante, props y mascota
 - [ ] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento)
