@@ -186,9 +186,18 @@ R1 y R2 concentran el cupo fuerte. R3 y R4 deben reservar tiempo para apoyarlos 
 
 Una fila por actividad tomada. Al tomarla, anotar nombre y estado; al terminar, cambiar a `HECHO`. Estados: `EN CURSO`, `BLOQUEADO`, `HECHO`.
 
-| Actividad | Responsable | Estado | Nota |
-| --- | --- | --- | --- |
-| (libre) | (nombre) | (estado) | Ejemplo: A1.1, Mompin, EN CURSO |
+Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin administra `main`, integra los pull requests y lleva lo más pesado porque tiene el cupo mayor (Claude Max).
+
+| Responsable | Rama | Herramientas de IA | Actividades | Primera tarea |
+| --- | --- | --- | --- | --- |
+| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1, A2.5, A2.6, A2.7, A2.8, A3.1, A3.2, A4.2, A4.6, A2.13 (parte del motor), A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
+| **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.13 (parte del backend), A4.7, A4.8, A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
+| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6, A1.4, A1.5, A1.6, A2.11, A2.12, A3.3, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
+| **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A3.8, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
+
+Cada actividad se marca en este documento con su estado (`EN CURSO`, `BLOQUEADO`, `HECHO`) al lado del ID. Si alguien termina, toma la siguiente actividad libre del camino crítico antes que un extra.
+
+Notas sobre cupos: Mompin concentra las actividades de Fable y Opus (A2.6, A3.1, A1.1, A2.5, A2.7, A2.8, A4.2, A4.6, A3.2). Eduardo y Mafer usan Claude de 20 para las actividades de Opus de su lista (A1.5, A2.11, A4.8, A2.13) y Sonnet para lo demás. balam, con Codex, usa su modelo más fuerte para A3.4 y A4.6 y el estándar para el resto; sus 3 resets se reservan para el tramo de integración.
 
 ## Cómo mantener este documento
 
