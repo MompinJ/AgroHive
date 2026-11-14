@@ -1,7 +1,7 @@
 // Patrones e iconos como mascaras de pixeles (1 = tinta, 0 = color del estado).
 // Puros: la escena 3D los vuelve textura (DataTexture) y el modo 2D o la leyenda
-// pueden dibujarlos en canvas o SVG con los mismos pixeles. Los iconos son
-// provisionales `[PROPUESTA]` para A3.3: se reemplazan aqui sin tocar la escena.
+// pueden dibujarlos en canvas o SVG con los mismos pixeles. Los iconos son los
+// finales de A3.3; las pruebas exigen una distancia minima de pixeles entre ellos.
 
 import type { Icono, Patron } from './estilos-estado';
 
@@ -44,44 +44,44 @@ const DIBUJOS: Record<Icono, string[]> = {
     '#.......',
   ],
   gota_tachada: [
-    '#...#...',
-    '.#.###..',
-    '..#####.',
-    '.###.##.',
-    '.####.#.',
-    '.#####..',
-    '..###.#.',
-    '.......#',
+    '...#....',
+    '..###...',
+    '...##...',
+    '.##.##..',
+    '.###.#..',
+    '.####...',
+    '..###...',
+    '........',
   ],
   hoja_caida: [
     '#.......',
     '.#......',
-    '.##.....',
-    '.####...',
+    '.#.##...',
+    '..####..',
     '..#####.',
-    '...#####',
-    '.....##.',
+    '...####.',
+    '....###.',
     '........',
   ],
-  moho: [
-    '.#...#..',
-    '###.###.',
-    '.#...#..',
-    '...#....',
-    '..###.#.',
-    '...#.###',
-    '.#....#.',
-    '###.....',
+  equis: [
+    '#......#',
+    '##....##',
+    '.##..##.',
+    '..####..',
+    '..####..',
+    '.##..##.',
+    '##....##',
+    '#......#',
   ],
   surco: [
     '........',
-    '........',
-    '#..#..#.',
-    '##.##.##',
+    '..####..',
+    '.######.',
     '########',
     '........',
-    '........',
-    '........',
+    '..####..',
+    '.######.',
+    '########',
   ],
   interrogacion: [
     '..####..',
