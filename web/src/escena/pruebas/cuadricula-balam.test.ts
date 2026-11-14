@@ -49,10 +49,10 @@ describe('cuadricula de balam -> escena', () => {
     expect(oeste.x).toBeLessThan(0);
   });
 
-  it('el ejemplo de contratos (i = 0 al norte) conserva su orientacion', () => {
-    expect(orientacion(parcelaEjemplo as unknown as Parcela)).toEqual({ iCreceAlNorte: false, jCreceAlOeste: false });
+  it('el ejemplo de contratos (i = 0 al sur, como balam) conserva su orientacion', () => {
+    expect(orientacion(parcelaEjemplo as unknown as Parcela)).toEqual({ iCreceAlNorte: true, jCreceAlOeste: false });
     const e = construirEscena(parcelaEjemplo as unknown as Parcela, null);
-    expect(e.bloques.find((b) => b.celdaId === 'c-0-0')!.z).toBeLessThan(0);
+    expect(e.bloques.find((b) => b.celdaId === 'c-0-0')!.z).toBeGreaterThan(0);
   });
 
   it('una celda de borde parcial conserva su fraccionDentro', () => {
