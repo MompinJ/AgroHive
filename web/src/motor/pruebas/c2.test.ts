@@ -4,12 +4,13 @@ import { seleccionarEscenarios } from '../escenarios';
 import { sumarDias } from '../fechas';
 import { resultadoCeldas, simularRotacion, type EntradasMotor } from '../motor';
 import { rankear } from '../ranking';
-import type { CatalogoCultivos, Parcela, PlanSiembra, Suelo, TablaSuelos } from '../tipos';
+import type { CalendarioLocal, CatalogoCultivos, Parcela, PlanSiembra, Suelo, TablaSuelos } from '../tipos';
 import catalogo from '../../../../datos/catalogos/cultivos.json';
 import tabla from '../../../../datos/catalogos/suelos.json';
 import parcelaEjemplo from '../../../../contratos/ejemplos/parcela.ejemplo.json';
 import sueloDemo from '../../../../datos/demo/respuestas/suelo.json';
 import terrenoDemo from '../../../../datos/demo/respuestas/terreno.json';
+import calendarioIsla from '../../../../datos/catalogos/calendario-isla.json';
 import { seriePowerIsla, validadorContrato } from './utiles';
 
 // Parcela de ejemplo (2 ha, 4 celdas) con la elevacion y la pendiente reales del paquete (Terrarium).
@@ -39,7 +40,7 @@ function plan(id: string, ciclos: [string, string, 'PV' | 'OI'][]): PlanSiembra 
     meta: { versionContrato: '0.6.0', esEjemplo: false },
     rotacionId: id,
     parcelaId: parcela.id,
-    calendarioLocal: { sinCalendarioLocal: true, motivo: 'Calendario de Isla pendiente (A0.6).' },
+    calendarioLocal: { calendarioId: 'calendario-isla' },
     asignacionClima: 'temporada_tipica',
     ciclos: ciclos.map(([cultivo, siembra, temporada], i) => ({ ciclo: i + 1, cultivo, siembra, temporada, porQue: 'Fecha de prueba.' })) as PlanSiembra['ciclos'],
     porCelda: null,
@@ -53,6 +54,7 @@ const entradas = (p: PlanSiembra, suelo: Suelo): EntradasMotor => ({
   suelo,
   tablaSuelos: tabla as unknown as TablaSuelos,
   catalogo: catalogo as unknown as CatalogoCultivos,
+  calendario: calendarioIsla as unknown as CalendarioLocal,
   escenarios: sel.escenarios,
 });
 
@@ -94,5 +96,15 @@ describe('C2 con el paquete de demo (POWER, SoilGrids y Terrarium reales de Isla
     expect(res.ponderacion?.pesos).toEqual({ deficitHidrico: 0.5, excesoHidrico: 0.5 });
     expect(res.orden).toHaveLength(3);
     for (const r of res.rotaciones) expect(validadorContrato('resultado-rotacion')(r)).toEqual([]);
+  });
+
+  it('con el calendario real de Isla (A0.6): la calabaza, que SIAP no registra, se muestra pero no se ordena', () => {
+    const conCalabaza = plan('R4', [['calabaza', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]);
+    const r = simularRotacion(entradas(conCalabaza, sueloManual)).rotacion;
+    expect(r.estado).toBe('EXPLORATORIO');
+    expect(r.cultivosNoRecomendados?.[0]).toMatchObject({ cultivo: 'calabaza', calendarioId: 'calendario-isla' });
+    const res = rankear([{ rotacion: simularRotacion(entradas(milpa, sueloManual)).rotacion, numeroSiembras: 3 }, { rotacion: r, numeroSiembras: 2 }]);
+    expect(res.orden.map((f) => f.rotacionId)).toEqual(['R1']);
+    expect(validadorContrato('resultado-rotacion')(res.rotaciones[1])).toEqual([]);
   });
 });
