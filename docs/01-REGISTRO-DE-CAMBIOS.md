@@ -264,6 +264,13 @@ Decisiones afectadas:
 - **Fuente / evidencia:** `datos/pruebas-apis/LEEME.md` y `respuestas/`, consulta del 2026-11-14, coordenada de prueba 18.03, -95.53 (no es la parcela demo).
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
+### 2026-11-14 — Marcas de Eduardo en el cronograma
+
+- **Archivos:** `docs/14-CRONOGRAMA.md` y las vistas que regenera `herramientas/cronograma.py`.
+- **Cambio:** revisión de `api/` y `datos/demo/` en la rama `Eduardo`. A4.11 pasa a `[HECHO]`: `GET /api/ndvi` con caché y el paquete `datos/demo/respuestas/ndvi.json` completo. ORNL DAAC no respondió; la serie es MOD13Q1 V061 vía Microsoft Planetary Computer, cita doi:10.5067/MODIS/MOD13Q1.061. A4.6, A4.7 y A4.8 siguen abiertas, con la nota puesta al día (el código del laboratorio ya llama al Worker; el droplet sigue en `d182af4`; SMAP no está en la interfaz ni tiene token en el servidor).
+- **Fuente / evidencia:** `datos/demo/respuestas/ndvi.json` (estado `EXPLORATORIO`, límites del píxel), `api/app/rutas/ndvi.py`, `https://64-23-143-102.sslip.io/health` (`commit: d182af4`).
+- **Decisiones afectadas:** ninguna.
+
 ## Historial
 
 ### 2026-11-14 (noche) — Contratos 0.11.0: `serie-balance` para el dashboard (A4.1)
