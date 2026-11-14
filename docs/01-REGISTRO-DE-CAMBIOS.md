@@ -12,6 +12,41 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — `/health` lee la version de contratos (Eduardo)
+
+- **Archivos:** `api/app/config.py`, `api/tests/test_basico.py`.
+- **Cambio:** `VERSION_CONTRATO` ya no va escrito en la API. Al arrancar se lee `version` de `contratos/package.json` (ruta por `AGROHIVE_CONTRATOS_PACKAGE`, si no el paquete del repo). Si el archivo no esta, no es JSON o no trae `version`, la API no arranca. No se inventa un numero. `/health` sigue publicando ese valor.
+- **Fuente / evidencia:** `contratos/package.json` esta en `0.12.2`. Antes el codigo tenia el mismo texto fijo: coincidia hoy y se desfasaba en el siguiente bump hasta correr pytest.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 — Prueba de los dos primeros bloques de Mafer en la escena (Mompin)
+
+- **Archivos:** `web/src/escena/voxel/catalogo.ts` (`giroSurcos`), `render/escena-three.ts` (altura del detallado elegido), `demo-motor.ts` (días de siembra en la vista previa); `docs/06`.
+- **Medido:** 518 celdas con maíz en madurez: bloque de Mafer 424 516 triángulos y 3.3 cuadros/s; detallado 449 380 y 3.2; provisional (21 cubos) 216 280 y 4.8. Vértices por modelo: madurez detallado 1 980, bloque 1 836 (1 530 sin caras de abajo), provisional 630.
+- **Cambio:** surcos paralelos (giro 0° o 180°) y detallado de la celda elegida a lo sumo 1.6 veces el manchón.
+- **Pendiente (decisión de Mompin con Mafer):** el tope de 55 cubos no aligera la escena; se propone bajarlo y quitar las caras de abajo antes de hacer los otros 18 bloques.
+
+### 2026-11-14 (noche) — Merge de main y estado de A5.4 (Eduardo)
+
+- **Archivos:** `docs/14` (marca y vistas regeneradas), `docs/01`, `docs/04`, `docs/11` (resolución del merge).
+- **Cambio:** entra `origin/main`, incluido A3.6 (modo 2D y fallback inicial sin WebGL). A5.4 queda `[BLOQUEADO]`: no se repitieron mediciones de escena. Las cifras de SwiftShader están en `docs/06` (Mompin, buzón #202): polígono de 518 celdas, maíz en madurez de 449 380 a 216 280 triángulos y de 3.2 a 5.0 cuadros/s con manchones, 6 draw calls (8 con celda), en reposo no se dibuja. Falta hardware real (laptop sin GPU dedicada y celular) y la pérdida de contexto WebGL. El 2D de balam es el respaldo inicial, no el seguimiento de un contexto que se pierde después.
+- **Fuente / evidencia:** `docs/06` y el mensaje #202. Sin medición nueva.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — A4.13: calendario GGCMI fuera de México (Eduardo)
+
+- **Archivos:** `api/app/calendario.py`, `api/app/rutas/calendario.py`, `api/tests/test_calendario.py`, `datos/calendario/` (Natural Earth 110m, recuadro OSM de Isla, `mai_rf` de GGCMI), `docs/14`, `docs/04`, `docs/11`, `api/README.md`.
+- **Cambio:** `GET /api/calendario`. Isla sigue con SIAP/INIFAP. Fuera de México el maíz de temporal es el día de siembra de GGCMI fase 3 (`mai_rf`, doi:10.5281/zenodo.5062513); la madurez va en la nota porque el contrato no tiene ese campo. Un solo ciclo: la otra temporada es `NO_EVALUABLE`. El frijol no se lee de `bea_rf`: la ficha y el NetCDF no dicen que sea frijol. Calabaza y chile, `NO_EVALUABLE`. En México, fuera del recuadro de Isla, tampoco se usa GGCMI.
+- **Pedido a Mompin:** si la madurez debe ir en un campo propio de `calendario-local`, hay que agregarlo. Hoy vive en `fuente.nota`.
+- **Fuente / evidencia:** `pytest` de `api/` (121 pruebas), incluidas Isla, Iowa (día 133 = 13 de mayo) y Ciudad de México.
+- **Decisiones afectadas:** ninguna nueva. Sigue `[VERIFICAR]` qué cultivo es `bea`.
+
+### 2026-11-14 (noche) — Revisión de A4.6, A4.7, A4.8 y A5.8 (Eduardo)
+
+- **Archivos:** `docs/14` (notas; vistas regeneradas), `docs/demo-sin-red.md`, `docs/capturas/noche-14/`, `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** se volvió a correr la demo de Isla con la salida de la API y del navegador bloqueada. P0 a P3 quedan con datos del paquete y el motor (criterio B). La API local sin red responde el paquete y da 503 fuera de él. A4.6 y A5.8 siguen `[HECHO]` con esa evidencia. A4.7 sigue `[EN CURSO]`: la URL pública responde en el commit `d182af4` y el SSH de esta sesión fue rechazado, así que no hubo despliegue. A4.8 sigue `[EN CURSO]`: 503 sin token, sin poner `EARTHDATA_TOKEN`. A4.12 sigue pendiente de C5. A4.13 quedó `[HECHO]` en la entrada de arriba (`GET /api/calendario`; esta pasada volvió a correr `test_calendario.py`, 4 pruebas). A5.4 sigue bloqueada: A3.6 está `[HECHO]` en `origin/main` (`58fab7a`) y esta rama todavía no lo tiene.
+- **Fuente / evidencia:** `bash herramientas/demo-sin-red.sh --solo-api`; `pytest` de `test_demo.py`, `test_ndvi.py` y `test_smap.py` (46); `npm run build` en `web/`; Chrome headless. No se apagó el wifi.
+
 ### 2026-11-14 — Manchón de plantas por celda en la escena (Mompin; idea de balam, modelos de Mafer)
 
 - **Archivos:** `web/src/escena/voxel/bloque.ts` (nuevo), `render/escena-three.ts` (bloque por celda, detallado en la celda elegida, marco unido en una malla), `voxel/fuente-modelos.ts` (`modelos/cultivos/bloques/`), `EscenaParcela.tsx` (nota en la leyenda), `demo-motor.ts` (la vista previa usa el polígono de 518 celdas), prueba `bloque.test.ts`; `docs/06`.
@@ -30,6 +65,23 @@ Decisiones afectadas:
 - **Archivos:** `docs/13` (fila "Video y presentación"), `docs/14` (línea bajo F5 y sección "Actividades canceladas" renombrada a "Fuera del tablero hasta el final", A5.6 como "Se define al final"; vistas regeneradas), `docs/guion-video-borrador.md` (encabezado) y `AgroVault/Compartido/Resumen.md`.
 - **Cambio y motivo:** la entrada "Cancelación de video y presentación y ajustes de revisión de Balam" registró video y presentación como CANCELADAS. La decisión de Mompin es otra: se definen al final, cuando el front esté conforme, fuera del tablero y sin asignar. Siguen sin contar en el reparto ni en los porcentajes. La entrada anterior se conserva como historial.
 - **Decisiones afectadas:** "Video y presentación" (13), A5.6.
+
+### 2026-11-14 — IMERG desde 1998-01-01 y cita exacta de NDVI (Eduardo, buzón de Mompin y Mafer)
+
+- **Archivos:** `api/app/clientes/power.py` (`INICIO_IMERG`), `api/tests/test_clima.py`, `api/app/clientes/planetary.py` (cita), `api/app/ndvi.py`, `api/tests/test_ndvi.py`, `api/tests/test_contratos_api.py`, `datos/demo/respuestas/ndvi.json` (solo el campo `cita`), `AgroVault/Compartido/APIs.md`, `api/README.md`, `docs/04`, `docs/13` (filas nuevas y V-25).
+- **Cambio:** la API recorta IMERG a 1998-01-01, no a 1998-06-01 ni a 2000-06-01. Una llamada a POWER (`time-standard=UTC`, parcela demo) dio último `-999` el 1997-12-31 y primer valor el 1998-01-01 (0.0), igual que CMR y que la medición de Mafer. Los 0.0 del 25 al 31 de mayo de 1998 se documentan como lluvia cero: la prueba pide esa fecha sin recortar y `parsear_imerg` conserva el 0. La demo desde 2005 no cambia. `APIs.md` (~línea 152) deja de decir 2000-06-01 y 1998-06-01.
+- **NDVI:** se aplica la decisión de Mompin. Cita exacta de Didan (2021), doi:10.5067/MODIS/MOD13Q1.061, más "Datos servidos por Microsoft Planetary Computer." El token SAS y las URL firmadas no se guardan. La caché y el paquete son el respaldo que usa la demo; ORNL no se llama en vivo. `[VERIFICAR]` V-25: una persona lee https://planetarycomputer.microsoft.com/terms antes de la entrega final.
+- **No se tocó:** `contratos/` (la descripción de `ndvi.schema.json` sigue en ORNL y doi:10.3334/ORNLDAAC/1600; la calidad del píxel ya está en 0.12.0 y el paquete es 0.12.1), `openlandmap.py` (el DOI de la colección STAC 10.5281/zenodo.15528399 no es el de las capas 2020-2022 que cita el código; no se "corrigió"), `features/imerg/LEEME.md` (sigue hablando del recorte al 1998-06-01; es de Mompin), archivos de Balam.
+- **Fuente / evidencia:** llamadas a POWER el 14/11/2026, parcela 18.03, -95.53, `time-standard=UTC`: 1997-12-28 a 1998-01-05 (último `-999` el 1997-12-31, primer valor 0.0 el 1998-01-01) y 1998-05-25 a 1998-05-31 (los siete días en 0.0). `pytest` en `api/`: 121 pruebas.
+- **Decisiones afectadas:** inicio de IMERG y NDVI por Planetary Computer, registradas en 13. El PR con las cuatro verificaciones en verde no se abrió: no hay commit ni push en esta sesión.
+
+### 2026-11-14 — A4.11 cerrado con Planetary Computer; la API declara contratos 0.12.1 (Eduardo)
+
+- **Archivos:** `api/app/clientes/planetary.py`, `api/app/ndvi.py`, `api/app/rutas/ndvi.py`, `api/app/config.py` (`versionContrato` 0.12.1), `api/tests/test_ndvi.py`, `api/tests/test_basico.py`, `datos/demo/respuestas/ndvi.json`, `docs/14` (A4.11 `[HECHO]`; se corrige el `||` que vaciaba el nombre de A4.10 y A4.11), `docs/04`, `api/README.md`, `AgroVault/Compartido/{APIs,Codigo,Contratos,Pendientes,Resumen}.md`.
+- **Cambio:** ORNL DAAC no sirve la serie. `GET /api/ndvi` lee MOD13Q1 V061 en Microsoft Planetary Computer, con caché, calidad (pixel reliability) y el paquete de demo. `/health` deja de anunciar 0.10.0. La cita quedó después en el texto exacto de Didan (2021); ver la entrada de arriba.
+- **Pedido a Mompin (no se editó `contratos/`):** la descripción de `ndvi.schema.json` sigue diciendo ORNL DAAC y doi:10.3334/ORNLDAAC/1600. El schema no obliga ese DOI; conviene alinearlo con la fuente real.
+- **Fuente / evidencia:** pruebas de `api/tests/test_ndvi.py` con respuestas guardadas y validación cruzada de 4 fechas; `datos/demo/respuestas/ndvi.json`.
+- **Decisiones afectadas:** ninguna en esta entrada. A4.8 sigue `[EN CURSO]` (falta `EARTHDATA_TOKEN` en el droplet y la interfaz). A4.12 sigue después de C5. A4.13 sigue pendiente.
 
 ### 2026-11-14 — Lluvia del día en la escena con datos reales (Mompin)
 

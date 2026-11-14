@@ -51,6 +51,25 @@ Los enlaces a fuentes externas (NASA POWER, etc.) siguen en pantalla, pero no ab
 
 En `docs/capturas/` (PNG de 128 colores, unos 700 KB en total). Escritorio 1440 x 900: `01-inicio`, `02-terreno`, `03-laboratorio`, `04-laboratorio-escena-3d`, `05-comparacion`, `06-metodo`, `07-poligono-sin-teselas-del-mapa` y `08-parcela-lejana-sin-red-error-visible`. Móvil 390 x 844: `09-inicio`, `10-laboratorio-escena-3d`, `11-comparacion` y `12-metodo`.
 
+## Segunda pasada (14/11 noche)
+
+Misma idea: la API corre con `bash herramientas/demo-sin-red.sh --solo-api` (sockets de Python bloqueados salvo loopback, caché vacía, sin `EARTHDATA_TOKEN`) y el front compilado se abre en Chrome headless con `--proxy-server=http://127.0.0.1:9` y bypass solo de `127.0.0.1`. No se apagó el wifi. El `GET /health` de esa API dijo contrato `0.12.1` y commit `ada213b` (el merge con `origin/main` `488095b` estaba en el árbol y todavía no en un commit).
+
+| Qué | Resultado |
+| --- | --- |
+| `GET /api/clima` Isla, 2005-10-01 a 2025-12-31 | 200, `EVALUABLE`, 7397 días, con `lluviaSatelital` |
+| `GET /api/suelo` Isla | 200, clase `franco_arcillo_arenoso`, grupo `arcilloso`, TAW 122.3 mm/m `EVALUABLE` con etiqueta `SUPUESTO`, aviso `SUELO_SUPUESTO` |
+| `POST /api/elevacion` (4 celdas de la parcela de ejemplo) | 200, 62.0, 63.3, 63.1 y 62.6 m |
+| `GET /api/proxima-temporada` Isla | 200, `EXPLORATORIO`, 6 meses, `emitido` 2026-11-14 (el paquete es de ese día, así que no sale `ESTACIONAL_EN_CACHE`) |
+| `GET /api/cultivos` | 200, maíz, frijol, calabaza y chile |
+| `GET /api/clima` en 40.4, -3.7 | 503, `ERROR_DATOS` |
+| `GET /api/smap` 2024-06-01 a 2024-06-08 | 503, `ERROR_DATOS`, falta `EARTHDATA_TOKEN` |
+| `GET /api/ndvi` 2023-01-01 a 2023-06-01 | 200, `EXPLORATORIO`, 9 compuestos, leídos del paquete (ya no es 404) |
+| Front `#/`, `#/terreno`, `#/laboratorio`, `#/comparacion`, `#/metodo` | Cargan. En laboratorio y comparación no hubo peticiones fuera de `127.0.0.1`. El motor dejó la comparación en criterio B: R4, R2 y R1 `EVALUABLE` (posiciones 1, 2 y 3; peor escenario lluvioso). En laboratorio el año habitual salió 2016 `EVALUABLE` |
+| `#/terreno?modo=poligono` | El mapa pidió teselas de Esri World Imagery (`server.arcgisonline.com`). Con el proxy inválido esas peticiones no son locales |
+
+Capturas de esta pasada, 1440 x 900, en `docs/capturas/noche-14/` (`01-inicio` a `05-metodo`). No se repitió el dibujo de una parcela lejana en el navegador: el 503 de elevación y clima fuera del paquete se volvió a ver por `curl`. Las 12 capturas de más arriba siguen siendo de la pasada anterior (commit `2007104`).
+
 ## Límites de esta prueba
 
 - La red se simuló bloqueando la salida de la API (hook y proxies) y del navegador (proxy inválido); no se apagó el wifi. No se probó con la API en otra máquina ni con el wifi realmente apagado.
