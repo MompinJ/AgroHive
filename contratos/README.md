@@ -14,7 +14,7 @@ Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un e
 | `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo banda de incertidumbre por mes | API + motor (A2.13) |
 | `plan-siembra.schema.json` | Rotación del selector: cultivo por ciclo y, si se pinta por bloques, por celda | Front (selector) |
 | `resultado-celda.schema.json` | Salida del motor por celda y fecha (etapa, estado visual, humedad, déficit) | Motor |
-| `resultado-rotacion.schema.json` | Pilares por escenario, peor caso, ranking (criterio A o B) y explicación | Motor |
+| `resultado-rotacion.schema.json` | Pilares por escenario, peor caso, ranking (criterio B principal; A de respaldo), pesos declarados y explicación | Motor |
 
 ## Reglas que el schema obliga a cumplir
 
@@ -22,6 +22,7 @@ Contratos de datos de AgroHive (actividad A1.1) en JSON Schema 2020-12, con un e
 - Un registro `NO_EVALUABLE` o `ERROR_DATOS` lleva todos sus indicadores en `null`, nunca en cero. Si el estado no es `EVALUABLE`, debe incluir un `motivo`.
 - Suelo, textura y pH llevan siempre la etiqueta `SUPUESTO`.
 - La próxima temporada tiene `esPrediccion: false`, un `aviso` obligatorio y bandas `{inferior, superior}` sin cifra única.
+- Ranking B (decisión de Mompin del 14/11, pendiente de ratificar): con B, el resultado declara `ponderacion` (pesos por pilar, etiqueta y pilares excluidos) y `arrepentimiento`. Sin pesos con fuente se usan pesos iguales etiquetados `SUPUESTO`; con etiqueta `FUENTE` la cita es obligatoria. El criterio A (solo pilar hídrico) queda como respaldo si A3.7 no llega.
 - Todo documento lleva `meta.versionContrato`. Si `meta.esEjemplo` es `true`, también lleva `meta.aviso`.
 - Nomenclatura: `estado` es siempre el estado de evaluación de doc 04. El estado visual de la planta se llama `estadoPlanta`.
 
@@ -29,7 +30,7 @@ Lo que el schema no puede comprobar (que los ciclos sean cronológicos, que el p
 
 ## Ejemplos
 
-`ejemplos/<contrato>.ejemplo.json`: parcela demo de Isla, Veracruz, de 2 ha y 4 celdas, con **coordenadas ilustrativas** y **valores ficticios**. Todos llevan `meta.esEjemplo: true` y su aviso. En el catálogo, el maíz tiene sus parámetros en `NO_EVALUABLE` porque aún no tienen fuente (A1.5). El `cultivo_ficticio` existe solo para mostrar la forma `EVALUABLE`: no usarlo en la demo.
+`ejemplos/<contrato>.ejemplo.json` (y variantes `<contrato>.<variante>.ejemplo.json`, como `resultado-rotacion.respaldo-a`): parcela demo de Isla, Veracruz, de 2 ha y 4 celdas, con **coordenadas ilustrativas** y **valores ficticios**. Todos llevan `meta.esEjemplo: true` y su aviso. En el catálogo, el maíz tiene sus parámetros en `NO_EVALUABLE` porque aún no tienen fuente (A1.5). El `cultivo_ficticio` existe solo para mostrar la forma `EVALUABLE`: no usarlo en la demo.
 
 ## Comandos
 
@@ -40,4 +41,4 @@ npm test        # valida cada ejemplo y comprueba que los casos de pruebas/inval
 npm run tipos   # regenera tipos/contratos.d.ts (no editar a mano)
 ```
 
-Versión del contrato: `0.1.0`. Si un cambio rompe la compatibilidad, se sube la versión y se anota en `docs/01-REGISTRO-DE-CAMBIOS.md`.
+Versión del contrato: `0.2.0` (0.2.0 agrega `ponderacion` y deja B como criterio principal). Si un cambio rompe la compatibilidad, se sube la versión y se anota en `docs/01-REGISTRO-DE-CAMBIOS.md`.

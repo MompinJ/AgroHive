@@ -1,6 +1,7 @@
 // Valida los contratos de AgroHive.
 // 1. Compila cada *.schema.json (JSON Schema 2020-12) en modo estricto.
 // 2. Cada contrato debe tener su ejemplo en ejemplos/<contrato>.ejemplo.json y ese ejemplo debe ser valido.
+//    Las variantes ejemplos/<contrato>.<variante>.ejemplo.json tambien deben ser validas.
 // 3. Todo ejemplo debe declarar meta.esEjemplo = true (nunca se presenta como dato real).
 // 4. Cada caso en pruebas/invalidos/<contrato>.<caso>.json debe ser RECHAZADO por su schema.
 // Uso: npm test (desde contratos/). Sale con codigo 1 si algo falla.
@@ -68,6 +69,31 @@ for (const contrato of contratos) {
     console.log(`  FALLA  ${contrato}.ejemplo.json: meta.esEjemplo debe ser true`);
   } else {
     console.log(`  ok     ${contrato}.ejemplo.json`);
+  }
+}
+
+// Variantes validas opcionales: ejemplos/<contrato>.<variante>.ejemplo.json
+const variantes = readdirSync(dirEjemplos)
+  .filter((f) => f.endsWith(".ejemplo.json") && f.split(".").length === 4)
+  .sort();
+for (const archivo of variantes) {
+  pruebas++;
+  const contrato = archivo.split(".")[0];
+  if (!contratos.includes(contrato)) {
+    fallos++;
+    console.log(`  FALLA  ${archivo}: el prefijo no corresponde a ningun contrato`);
+    continue;
+  }
+  const datos = leer(join(dirEjemplos, archivo));
+  const validar = obtenerValidador(contrato);
+  if (!validar(datos)) {
+    fallos++;
+    console.log(`  FALLA  ${archivo}\n${formatearErrores(validar.errors)}`);
+  } else if (datos?.meta?.esEjemplo !== true) {
+    fallos++;
+    console.log(`  FALLA  ${archivo}: meta.esEjemplo debe ser true`);
+  } else {
+    console.log(`  ok     ${archivo}`);
   }
 }
 
