@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 11 | 1 | 0 | 2 | 79 % de 14 |
-| **Eduardo** | 10 | 3 | 2 | 0 | 67 % de 15 |
+| **Eduardo** | 10 | 2 | 3 | 0 | 67 % de 15 |
 | **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
 | **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
 
-Proyecto completo: **24 de 56** actividades hechas (43 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **24 de 56** actividades hechas (43 %), 4 en curso, 3 bloqueadas.
 
 ## Mompin
 
@@ -51,7 +51,7 @@ Proyecto completo: **24 de 56** actividades hechas (43 %), 5 en curso, 2 bloquea
 - [x] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) `HECHO`
 - [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)
-- [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — sondeo de viabilidad (viable o no, cuenta Earthdata, peso y tiempo por punto); sin tocar el repo todavia
+- [-] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `BLOQUEADO` — sondeo hecho: earthaccess instala y la busqueda sobre Isla responde para SMAP (36 y 9 km), GPM IMERG diario y MODIS NDVI; la descarga exige una cuenta Earthdata del equipo (credenciales por variable de entorno, nunca en el repo). No es camino critico
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
 - [-] **A5.8** Respaldo local sin internet y capturas `BLOQUEADO` — espera A2.4 con la zona real y el front conectado (A4.6)
 

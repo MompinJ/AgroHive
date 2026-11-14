@@ -188,6 +188,13 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A4.8: sondeo de viabilidad de los extras NASA (Eduardo)
+
+- **Archivos:** `docs/14` (A4.8). Sin cambios de codigo: el sondeo se hizo en un directorio temporal.
+- **Resultado:** `earthaccess` 0.19.0 instala bien y la **busqueda** de granulos sin iniciar sesion responde sobre Isla (-95.53, 18.03) para SMAP L3 36 km (`SPL3SMP`), SMAP L3 9 km (`SPL3SMP_E`), GPM IMERG diario (`GPM_3IMERGDF`) y MODIS NDVI (`MOD13Q1`). La **descarga exige una cuenta de NASA Earthdata**; no hay credenciales y no se piden por el repo.
+- **Estado:** A4.8 queda `[BLOQUEADO]` hasta que alguien del equipo confirme una cuenta Earthdata (usuario y contrasena, o token, como variables de entorno `EARTHDATA_USERNAME` y `EARTHDATA_PASSWORD`, nunca subidas). No es camino critico: en el plan de recorte de `docs/14` es de lo primero que se sacrifica.
+- **No se reviso** que variables traen los productos ni se descargo ningun dato, asi que no se afirma nada sobre su utilidad para el motor.
+
 ### 2026-11-14 (noche) — Despliegue unico de main cd3fed2 y API a contratos 0.9.0 (Eduardo)
 
 - **Despliegue (pedido de Mompin #36 y #46):** el droplet corre `main` en `cd3fed2`: API con OpenLandMap, Saxton-Rawls y el paquete de demo; front con la escena 3D y el Worker del motor, construido en el propio droplet (`npm ci` + `npm run build`, node 20.20.1) y copiado a `/var/www/agrohive-web` con respaldo del anterior; `rasterio` 1.5.2 instalado sin problemas (probado antes en un entorno temporal). nginx sin cambios.

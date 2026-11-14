@@ -140,7 +140,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |
 | A4.6 `[EN CURSO]` cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor | Conectar front y API (cliente generado, estados de carga y error) | R1 + R3 | M | Opus | A2.1, A3.4 | Flujo P0 a P3 con datos reales |
 | A4.7 `[EN CURSO]` front servido en el droplet; falta la demo real (A4.6) | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
-| A4.8 `[EN CURSO]` sondeo de viabilidad (viable o no, cuenta Earthdata, peso y tiempo por punto); sin tocar el repo todavia | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
+| A4.8 `[BLOQUEADO]` sondeo hecho: earthaccess instala y la busqueda sobre Isla responde para SMAP (36 y 9 km), GPM IMERG diario y MODIS NDVI; la descarga exige una cuenta Earthdata del equipo (credenciales por variable de entorno, nunca en el repo). No es camino critico | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
 | A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | Sonnet | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
 
 Compuerta **C4** al terminar A4.6.
@@ -210,7 +210,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 11 | 1 | 0 | 2 | 79 % de 14 |
-| **Eduardo** | 10 | 3 | 2 | 0 | 67 % de 15 |
+| **Eduardo** | 10 | 2 | 3 | 0 | 67 % de 15 |
 | **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
 | **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
 
@@ -249,7 +249,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.15 | Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) | HECHO |  |
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | EN CURSO | cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor |
 | A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | EN CURSO | front servido en el droplet; falta la demo real (A4.6) |
-| A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | EN CURSO | sondeo de viabilidad (viable o no, cuenta Earthdata, peso y tiempo por punto); sin tocar el repo todavia |
+| A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | BLOQUEADO | sondeo hecho: earthaccess instala y la busqueda sobre Isla responde para SMAP (36 y 9 km), GPM IMERG diario y MODIS NDVI; la descarga exige una cuenta Earthdata del equipo (credenciales por variable de entorno, nunca en el repo). No es camino critico |
 | A5.4 | Medición de requisitos mínimos y fallback WebGL | BLOQUEADO | espera el modo 2D (A3.6) |
 | A5.8 | Respaldo local sin internet y capturas | BLOQUEADO | espera A2.4 con la zona real y el front conectado (A4.6) |
 
