@@ -227,6 +227,34 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A4.6: cargador de datos de la parcela (Eduardo)
+
+- **Archivos:** `web/src/api/datosParcela.ts`, `usarDatosParcela.ts`, `datosParcela.test.ts` y el README de esa carpeta. No se tocan `ui`, `paginas`, `motor` ni `escena`.
+- **Hallazgo:** el **terreno ya estaba conectado** por balam (`DibujarParcela` y `escena/demo-motor` llaman a `obtenerTerreno` con la cuadricula). Lo que falta para cerrar A4.6 es que `Laboratorio` y `Comparacion` (que siguen diciendo "faltan los datos") carguen clima, suelo y cultivos.
+- **Cambio:** `cargarDatosParcela([lon, lat])` trae en paralelo clima de la ventana estandar, suelo, cultivos y proxima temporada; `fallaObligatoria` nombra el dato obligatorio que fallo; `avisosDe` junta las advertencias y el respaldo (que siempre debe verse, docs/04); `usarDatosParcela` lo expone como un solo estado `loading | ready | error`. La proxima temporada es opcional y no bloquea.
+- **Evidencia:** 15 pruebas de `web/src/api` (5 nuevas: exito, falla obligatoria, capa opcional, avisos de respaldo, sin red); typecheck en verde.
+- **Falta (de otros):** que balam use el hook en `Laboratorio`/`Comparacion` y que Mompin pase `datos.clima`, `datos.suelo` y `datos.cultivos` al motor (`crearClienteMotor`). Con eso A4.6 y A4.7 se cierran.
+
+### 2026-11-14 (noche) — A4.8 desbloqueada (Eduardo)
+
+- **Cambio:** A4.8 pasa de `[BLOQUEADO]` a `[EN CURSO]`: el usuario entrego un token de Earthdata a la segunda sesion, que confirmo en un directorio temporal el login, la descarga de un granulo SMAP L3 (31.7 MB) y la lectura de humedad en Isla. Corrige mi marca anterior (2f78bd1), que se basaba en que no habia cuenta.
+- **Reglas:** el token vive **solo** en variables de entorno (`EARTHDATA_TOKEN` o usuario y contrasena), nunca en el repo, en `.env` subido, en logs ni en mensajes del buzon; sin token, la ruta debe responder `NO_EVALUABLE` o `ERROR_DATOS` visible, no fallar ni inventar.
+- **Trabajo:** la segunda sesion lo implementa en la rama `Eduardo-B` (un `git worktree` aparte) para no pisar la rama `Eduardo`; yo hago el merge.
+
+### 2026-11-14 (noche) — Segundo despliegue de main 9ad0443 (Eduardo, aviso de Mompin #68)
+
+- **Despliegue:** el droplet corre `main` en `9ad0443` (A3.3 y A2.11 de Mafer, API 0.9.0 y cliente A4.6). Se anuncio antes por el buzon; una sola sesion desplego.
+- **Verificado desde fuera:** `/health` trae `commit: 9ad0443` y `versionContrato: 0.9.0`; `/api/suelo` de Isla da TAW 122.3 mm/m con ISRIC y OpenLandMap; `/api/clima` da 7 397 dias `EVALUABLE` con contrato 0.9.0; `mediworks.mx` sigue en 200.
+- **Front:** se construyo en el droplet y su huella es **identica** a la publicada, asi que no se copio nada: los cambios de la escena y los modelos de frijol y calabaza aun no entran al bundle de la app.
+- **Tropiezo:** el script temporal del build en `/tmp` fallo con `Permission denied` (un archivo de la vez anterior de otro usuario). Se movio a `/opt/agrohive/` y el procedimiento queda en `api/despliegue/actualizar-servidor.sh` (sin probar de punta a punta hasta el proximo despliegue).
+
+### 2026-11-14 (noche) — A4.8: sondeo de viabilidad de los extras NASA (Eduardo)
+
+- **Archivos:** `docs/14` (A4.8). Sin cambios de codigo: el sondeo se hizo en un directorio temporal.
+- **Resultado:** `earthaccess` 0.19.0 instala bien y la **busqueda** de granulos sin iniciar sesion responde sobre Isla (-95.53, 18.03) para SMAP L3 36 km (`SPL3SMP`), SMAP L3 9 km (`SPL3SMP_E`), GPM IMERG diario (`GPM_3IMERGDF`) y MODIS NDVI (`MOD13Q1`). La **descarga exige una cuenta de NASA Earthdata**; no hay credenciales y no se piden por el repo.
+- **Estado:** A4.8 queda `[BLOQUEADO]` hasta que alguien del equipo confirme una cuenta Earthdata (usuario y contrasena, o token, como variables de entorno `EARTHDATA_USERNAME` y `EARTHDATA_PASSWORD`, nunca subidas). No es camino critico: en el plan de recorte de `docs/14` es de lo primero que se sacrifica.
+- **No se reviso** que variables traen los productos ni se descargo ningun dato, asi que no se afirma nada sobre su utilidad para el motor.
+
 ### 2026-11-14 (noche) — Despliegue unico de main cd3fed2 y API a contratos 0.9.0 (Eduardo)
 
 - **Despliegue (pedido de Mompin #36 y #46):** el droplet corre `main` en `cd3fed2`: API con OpenLandMap, Saxton-Rawls y el paquete de demo; front con la escena 3D y el Worker del motor, construido en el propio droplet (`npm ci` + `npm run build`, node 20.20.1) y copiado a `/var/www/agrohive-web` con respaldo del anterior; `rasterio` 1.5.2 instalado sin problemas (probado antes en un entorno temporal). nginx sin cambios.
