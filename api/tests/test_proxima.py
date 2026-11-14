@@ -41,7 +41,7 @@ def responder(estacional=True, power=True, om=False):
 
 
 def totales_diciembre():
-    return [31 * (1.0 + 0.1 * a) for a in range(20)]  # 2006 a 2025
+    return [31 * (1.0 + 0.1 * a) for a in range(-1, 20)]  # diciembres de 2005 a 2025 (ventana estandar desde el 2005-10-01)
 
 
 def test_percentil_coincide_con_cuantiles_estandar():

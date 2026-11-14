@@ -9,6 +9,7 @@ from .clientes import isric, openmeteo, power, terrarium
 from .modelos import CeldaEntrada
 
 _candados: dict[str, asyncio.Lock] = {}
+VENTANA_ESTANDAR = (date(2005, 10, 1), date(2025, 12, 31))  # 20 anios agricolas completos (el ciclo OI cruza el anio); la pide el motor y el paquete de demo
 DIAS_SERIE_ESTABLE = 90  # POWER sustituye valores casi en tiempo real por consolidados cada varios meses
 TTL_RECIENTE_S = 24 * 3600
 

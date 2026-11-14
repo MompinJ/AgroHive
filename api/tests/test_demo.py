@@ -5,7 +5,7 @@ from datetime import date, timedelta
 import httpx
 from fastapi.testclient import TestClient
 
-from app import cache, config, proxima
+from app import cache, config, proxima, servicios
 from app.main import app
 from tests.test_proxima import power_sintetico, real
 
@@ -40,8 +40,9 @@ def test_sin_red_y_sin_cache_responde_el_paquete(simular, monkeypatch, tmp_path)
     generar_paquete(simular, monkeypatch, tmp_path)
     llamadas = simular(lambda r: httpx.Response(503))  # sin red
     llamadas.clear()  # la lista del fixture es la misma de la fase de generacion
-    r = cliente.get("/api/clima?lat=18.03&lon=-95.53&desde=2006-01-01&hasta=2025-12-31")
-    assert r.status_code == 200 and r.json()["estado"] == "EVALUABLE" and len(r.json()["diario"]) == 7305
+    desde, hasta = servicios.VENTANA_ESTANDAR
+    r = cliente.get(f"/api/clima?lat=18.03&lon=-95.53&desde={desde}&hasta={hasta}")
+    assert r.status_code == 200 and r.json()["estado"] == "EVALUABLE" and len(r.json()["diario"]) == (hasta - desde).days + 1
     p = cliente.get("/api/proxima-temporada?lat=18.03&lon=-95.53")
     assert p.status_code == 200 and p.json()["metodo"] == "anomalia_estacional"
     assert llamadas == [], "con el paquete no debe tocar la red"
@@ -50,7 +51,7 @@ def test_sin_red_y_sin_cache_responde_el_paquete(simular, monkeypatch, tmp_path)
 def test_otra_zona_sin_paquete_sigue_fallando_con_503(simular, monkeypatch, tmp_path):
     generar_paquete(simular, monkeypatch, tmp_path)
     simular(lambda r: httpx.Response(503))
-    r = cliente.get("/api/clima?lat=42.0&lon=-93.6&desde=2006-01-01&hasta=2025-12-31")
+    r = cliente.get(f"/api/clima?lat=42.0&lon=-93.6&desde={servicios.VENTANA_ESTANDAR[0]}&hasta={servicios.VENTANA_ESTANDAR[1]}")
     assert r.status_code == 503 and r.json()["estado"] == "ERROR_DATOS"
 
 

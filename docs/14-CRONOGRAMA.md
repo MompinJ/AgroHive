@@ -97,7 +97,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.1 `[HECHO]` | Cliente NASA POWER diario con caché y reintentos | R3 | M | Sonnet | A1.3 | `GET /api/clima` devuelve serie real (C1) |
 | A2.2 `[HECHO]` | Respaldo Open-Meteo y estados `RESPALDO_HISTORICO` / `ERROR_DATOS` | R3 | S | Sonnet | A2.1 | Se activa al apagar POWER |
 | A2.3 `[HECHO]` | Elevación por celda (tiles Terrarium o SRTM) y pendiente | R3 | M | Sonnet | A1.3 | `GET /api/elevacion` por polígono |
-| A2.4 `[EN CURSO]` mecanismo y paquete hechos con la parcela de ejemplo; falta regenerarlo con la zona real (A0.6) | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | R3 | S | Sonnet | A2.1, A2.3 | Demo funciona sin internet |
+| A2.4 `[HECHO]` paquete conforme a contratos (clima 2005-10-01 a 2025-12-31, terreno, suelo, proxima temporada) sobre una parcela ficticia en Isla; el motor ya corre con el | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | R3 | S | Sonnet | A2.1, A2.3 | Demo funciona sin internet |
 | A2.5 `[HECHO]` 14/11 | Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) | R2 | M | Opus | A1.1 | Años reales visibles y reproducibles |
 | A2.6 `[HECHO]` 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7) | ET0, ETc y balance de agua por bloque (cubeta) | R2 | **L** | Fable | A1.1, A1.5, A1.6 | Pruebas 1 a 5 de doc 05 en verde |
 | A2.7 `[HECHO]` 14/11 | Pilar de déficit hídrico y estados de evaluabilidad | R2 | M | Opus | A2.6 | Métricas por rotación y escenario |
@@ -210,7 +210,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 7 | 1 | 0 | 6 | 50 % de 14 |
-| **Eduardo** | 7 | 3 | 2 | 2 | 50 % de 14 |
+| **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
 | **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
@@ -243,7 +243,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.1 | Cliente NASA POWER diario con caché y reintentos | HECHO |  |
 | A2.2 | Respaldo Open-Meteo y estados RESPALDO_HISTORICO / ERROR_DATOS | HECHO |  |
 | A2.3 | Elevación por celda (tiles Terrarium o SRTM) y pendiente | HECHO |  |
-| A2.4 | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | EN CURSO | mecanismo y paquete hechos con la parcela de ejemplo; falta regenerarlo con la zona real (A0.6) |
+| A2.4 | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | HECHO | paquete conforme a contratos (clima 2005-10-01 a 2025-12-31, terreno, suelo, proxima temporada) sobre una parcela ficticia en Isla; el motor ya corre con el |
 | A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | EN CURSO | backend hecho; falta la parte del motor (Mompin) |
 | A2.14 | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | HECHO |  |
 | A2.15 | Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) | PENDIENTE |  |

@@ -62,3 +62,17 @@ def test_errores_503_tienen_la_forma_que_declara_openapi():
     assert set(declarado["properties"]) == {"estado", "motivo"}
     for ruta in ("/api/clima", "/api/suelo", "/api/proxima-temporada"):
         assert "503" in cliente.get("/openapi.json").json()["paths"][ruta]["get"]["responses"]
+
+
+def test_el_paquete_de_demo_committeado_cumple_los_contratos(validar):
+    """datos/demo/respuestas/ es lo que consume el motor: si un contrato cambia y el paquete no se regenera, esto falla."""
+    carpeta = RAIZ / "datos" / "demo" / "respuestas"
+    cargar = lambda n: json.loads((carpeta / f"{n}.json").read_text(encoding="utf-8"))  # noqa: E731
+    serie = cargar("serie-clima")
+    validar(serie, "serie-clima#")
+    assert serie["estado"] == "EVALUABLE" and serie["diario"][0]["fecha"] == "2005-10-01" and serie["diario"][-1]["fecha"] == "2025-12-31"
+    validar(cargar("suelo"), "suelo#")
+    validar(cargar("proxima-temporada"), "proxima-temporada#")
+    terreno = cargar("terreno")
+    validar(terreno["terreno"], "parcela#/properties/terreno")
+    assert len(terreno["celdas"]) == 4

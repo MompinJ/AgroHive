@@ -17,7 +17,7 @@ from .clientes import openmeteo
 P_INF, P_SUP = 10.0, 90.0
 HORIZONTE_MESES = 6  # V-21, decidido el 14/11: se habla en semestres aunque SEAS5 de 7 meses
 MIN_ANIOS = 10
-VENTANA = (date(2006, 1, 1), date(2025, 12, 31))
+VENTANA = servicios.VENTANA_ESTANDAR  # la misma serie que usa el motor: una sola consulta y una sola cache
 TTL_ESTACIONAL_S = 24 * 3600
 AVISO = "Rango aproximado, no es una prediccion de la proxima temporada. Muestra lo plausible segun el historico y la tendencia del pronostico estacional."
 

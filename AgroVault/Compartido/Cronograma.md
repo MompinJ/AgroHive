@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 7 | 1 | 0 | 6 | 50 % de 14 |
-| **Eduardo** | 7 | 3 | 2 | 2 | 50 % de 14 |
+| **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
 | **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **17 de 56** actividades hechas (30 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **18 de 56** actividades hechas (32 %), 3 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -45,7 +45,7 @@ Proyecto completo: **17 de 56** actividades hechas (30 %), 4 en curso, 2 bloquea
 - [x] **A2.1** Cliente NASA POWER diario con caché y reintentos ([[APIs]]) `HECHO`
 - [x] **A2.2** Respaldo Open-Meteo y estados RESPALDO_HISTORICO / ERROR_DATOS `HECHO`
 - [x] **A2.3** Elevación por celda (tiles Terrarium o SRTM) y pendiente ([[APIs]]) `HECHO`
-- [/] **A2.4** Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) `EN CURSO` — mecanismo y paquete hechos con la parcela de ejemplo; falta regenerarlo con la zona real (A0.6)
+- [x] **A2.4** Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) `HECHO` — paquete conforme a contratos (clima 2005-10-01 a 2025-12-31, terreno, suelo, proxima temporada) sobre una parcela ficticia en Isla; el motor ya corre con el
 - [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; falta la parte del motor (Mompin)
 - [x] **A2.14** Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché ([[APIs]]) `HECHO`
 - [ ] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios)

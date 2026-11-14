@@ -94,6 +94,14 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A2.4: paquete de demo conforme a contratos (Eduardo)
+
+- **Archivos:** `datos/demo/` (generador, cache, `respuestas/`, manifiesto y LEEME), `api/app/servicios.py`, `api/app/proxima.py`, pruebas, `api/README.md`, `docs/14`.
+- **Cambio:** el paquete se regenera con la **ventana `2005-10-01` a `2025-12-31`** que pidio el motor (Mompin, #27): 20 anios agricolas completos. Es `servicios.VENTANA_ESTANDAR` y tambien la usa la proxima temporada. El generador llama a la API por dentro, **valida las 4 respuestas contra `contratos/`** y guarda el cuerpo de cada una en `datos/demo/respuestas/` para que el motor las lea directo, ademas de la cache. Sin red: `/api/clima`, `/api/suelo` y `/api/proxima-temporada` responden 200 (probado con un proxy inexistente); con otro periodo, 503.
+- **Evidencia para C2:** el selector de escenarios del motor (`seleccionarEscenarios`) corre con `respuestas/serie-clima.json` y devuelve `EVALUABLE`: seco 2023, **habitual 2008**, lluvioso 2024 (Mompin reporto 2016 como habitual; la diferencia viene de la ventana, que ahora incluye oct-dic 2005, a revisar por el motor).
+- **Zona:** Isla (INEGI 30/077, A0.6 de Mafer, que da el municipio y no coordenadas). La parcela sigue siendo ficticia (2 ha); su centroide `(-95.53, 18.03)` coincide con la localidad de Isla (`VERIFICAR`).
+- **A avisar:** el front debe pedir esas fechas exactas; la cache de POWER y suelo cambio de clave, asi que el paquete anterior (ventana 2006) ya no sirve.
+
 ### 2026-11-14 (tarde-noche) — API: contratos 0.5.0, GWETROOT y revision de Mompin (Eduardo)
 
 - **Archivos:** `api/` (modelos, servicios, clientes, rutas, pruebas, OpenAPI y cliente TS), `datos/pruebas-apis/`, `docs/14`, `AgroVault/Compartido/Pendientes.md`.

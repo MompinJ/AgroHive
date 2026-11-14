@@ -1,19 +1,31 @@
 {
-  "generado": "2026-11-14T20:16:34+00:00",
+  "generado": "2026-11-14T21:08:04+00:00",
   "parcela": "parcela-demo-isla",
   "centroide": [
     -95.53,
     18.03
   ],
   "coordenadasIlustrativas": true,
-  "periodoClima": [
-    "2006-01-01",
+  "ventanaClima": [
+    "2005-10-01",
     "2025-12-31"
   ],
+  "versionContrato": "0.5.0",
+  "validadoContra": [
+    "serie-clima",
+    "suelo",
+    "parcela (terreno y celdas)",
+    "proxima-temporada"
+  ],
   "entradas": [
-    "estacional_36_-191.json",
-    "power_18.000_-95.625_20060101_20251231.json",
-    "suelo_isric_7212_-38212.json",
-    "terrarium/14/3844/7357.png"
+    "cache/estacional_36_-191.json",
+    "cache/power_v2_18.000_-95.625_20051001_20251231.json",
+    "cache/suelo_isric_v2_7212_-38212.json",
+    "cache/terrarium/14/3844/7357.png",
+    "manifiesto.json",
+    "respuestas/proxima-temporada.json",
+    "respuestas/serie-clima.json",
+    "respuestas/suelo.json",
+    "respuestas/terreno.json"
   ]
 }
