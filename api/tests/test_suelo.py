@@ -1,9 +1,11 @@
+import json
+
 import httpx
 import pytest
 from fastapi.testclient import TestClient
 
 from app import config, servicios
-from app.clientes import isric
+from app.clientes import isric, openlandmap
 from app.main import app
 from app.textura import GRUPO, clasificar
 from tests.conftest import real
@@ -58,9 +60,10 @@ def test_suelo_con_geotiff_reales(simular, validar):
     assert s["profundidad"] == {"desdeCm": 0, "hastaCm": 30}
     assert s["agua"]["tawMmPorM"]["estado"] == "NO_EVALUABLE"  # sin tabla de suelos en este checkout: no se inventa
     assert "SUELO_SUPUESTO" in {a["codigo"] for a in s["advertencias"]}
-    assert len(llamadas) == 15  # 5 propiedades (arcilla, arena, limo, pH, carbono) x 3 capas
+    isric_llamadas = [u for u in llamadas if "maps.isric.org" in u]
+    assert len(isric_llamadas) == 15  # 5 propiedades (arcilla, arena, limo, pH, carbono) x 3 capas
     cliente.get(URL)
-    assert len(llamadas) == 15, "la segunda consulta sale de la cache"
+    assert len([u for u in llamadas if "maps.isric.org" in u]) == 15, "la segunda consulta sale de la cache"
 
 
 def test_suelo_sin_servicio_es_error_datos_para_usar_el_selector(simular):
@@ -149,3 +152,51 @@ def test_pixeles_lejanos_son_exploratorios_y_se_dice(simular, validar, monkeypat
     assert s["textura"]["estado"] == "EXPLORATORIO" and s["ph"]["estado"] == "EXPLORATORIO"
     assert s["estimaciones"][0]["estado"] == "EXPLORATORIO"
     assert "SUELO_SIN_DATO_CERCANO" in {a["codigo"] for a in s["advertencias"]}
+
+
+def olm_real(monkeypatch):
+    """OpenLandMap simulado con la medicion real guardada (el catalogo STAC y GDAL no se tocan en las pruebas)."""
+    medicion = {k: tuple(v) for k, v in json.loads(real("openlandmap_estimacion.json")).items() if k != "nota"}
+
+    async def estimar(cliente, lon, lat):
+        return medicion
+    monkeypatch.setattr(openlandmap, "estimar", estimar)
+
+
+def test_openlandmap_se_suma_a_isric_para_compararlas(simular, validar, monkeypatch):
+    simular(isric_real)
+    olm_real(monkeypatch)
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    isric_e, olm_e = s["estimaciones"]
+    assert (isric_e["servicio"], olm_e["servicio"]) == ("isric_soilgrids_wcs", "openlandmap")
+    assert s["estimacionUsada"] == isric_e["id"]  # ISRIC sigue siendo la usada por defecto
+    assert olm_e["textura"]["clase"] == "franco_arcillo_arenoso" == isric_e["textura"]["clase"]  # las dos coinciden en la clase
+    assert olm_e["ph"] == 5.9 and olm_e["carbonoOrganicoGKg"] == 8.2 and olm_e["profundidad"] == {"desdeCm": 0, "hastaCm": 30}
+    assert olm_e["fuente"]["resolucion"] == "30 m" and "zenodo" in olm_e["fuente"]["cita"]
+    assert olm_e["estado"] == "EVALUABLE"
+
+
+def test_si_isric_falla_se_usa_openlandmap_y_se_dice(simular, validar, monkeypatch):
+    simular(lambda r: httpx.Response(503))
+    olm_real(monkeypatch)
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    assert s["estimacionUsada"] == "openlandmap-soildb" and [e["servicio"] for e in s["estimaciones"]] == ["openlandmap"]
+    assert s["textura"]["clase"] == "franco_arcillo_arenoso" and s["ph"]["valor"] == 5.9
+    assert "SUELO_ISRIC_NO_DISPONIBLE" in {a["codigo"] for a in s["advertencias"]}
+
+
+def test_si_openlandmap_falla_solo_queda_isric_con_aviso(simular, validar):
+    simular(isric_real)  # el catalogo STAC responde 404: OpenLandMap no esta disponible
+    s = cliente.get(URL).json()
+    validar(s, "suelo#")
+    assert [e["servicio"] for e in s["estimaciones"]] == ["isric_soilgrids_wcs"]
+    assert "OPENLANDMAP_NO_DISPONIBLE" in {a["codigo"] for a in s["advertencias"]}
+
+
+def test_pixeles_sin_dato_de_openlandmap_son_exploratorios(monkeypatch):
+    import numpy as np
+    assert openlandmap.resumir(np.array([[255, 255], [255, 255]]), 255, 1.0) is None  # nada que mediar
+    v, validos, total = openlandmap.resumir(np.array([[59, 255], [61, 255]]), 255, 0.1)
+    assert (round(v, 1), validos, total) == (6.0, 2, 4)  # mediana de 59 y 61 con factor 0.1: 6.0
