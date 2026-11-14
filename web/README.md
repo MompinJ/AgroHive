@@ -1,6 +1,6 @@
 # AgroHive web — A1.2
 
-Esqueleto de interfaz React + Vite + TypeScript. Corre sin backend y sin solicitudes a servicios externos. Node.js 20.19+ o 22.12+ según los requisitos de Vite; npm incluido con Node.
+Interfaz React + Vite + TypeScript. La demo usa datos precargados; las parcelas propias consultan la API. Node.js 20.19+ o 22.12+ según los requisitos de Vite; npm incluido con Node.
 
 ```sh
 cd web
@@ -16,7 +16,7 @@ npm run build
 npm run preview
 ```
 
-`build` comprueba tipos antes de generar `dist/`. Las versiones exactas se fijan en package.json y package-lock.json. React y React DOM son las únicas dependencias de ejecución. Vite y su plugin oficial proveen desarrollo/HMR/build; TypeScript y los paquetes @types comprueban tipos. CSS propio, fuentes del sistema y navegación hash evitan dependencias adicionales y peticiones remotas.
+`build` comprueba tipos antes de generar `dist/`. Las versiones exactas se fijan en package.json y package-lock.json. La app también utiliza Leaflet, Turf y Three.js. Vite y su plugin oficial proveen desarrollo/HMR/build; TypeScript y los paquetes @types comprueban tipos. CSS propio, fuentes del sistema y navegación hash evitan dependencias adicionales y peticiones remotas.
 
 ## Vistas y estado
 
@@ -37,7 +37,7 @@ App conserva las selecciones de interfaz mientras permanece montada, incluso al 
 - R1 parte de maíz/frijol/maíz del ejemplo del contrato; R0 y R2 son alternativas locales para probar los controles, sin parámetros científicos ni resultados. Las secuencias no son recomendaciones agronómicas.
 - Isla y 2 ha son el supuesto de la demo del doc 06; la verificación de zona está pendiente según doc 13. La ilustración es decorativa, sin datos geográficos.
 - El mapa (A2.10), cuadrícula (A2.9), escena y motor se integrarán después. No hay botones que simulen calcular, cambiar a 3D ni dibujar polígonos.
-- **Worker pendiente de coordinación con Mompin:** ubicación propuesta `src/motor/motor.worker.ts`; comprobación de disponibilidad propuesta `{ type: 'PING' }` → `{ type: 'READY' }`. No se creó este archivo ni se enviaron mensajes. Contrato de simulación pendiente de A1.1. La interfaz permanece independiente del Worker.
+- **Worker integrado:** `src/motor/worker.ts` y `crearClienteMotor()` de Mompin. A1.2 comprueba respuesta mediante `olvidar`; A3.4 ejecuta planes y consulta celdas mediante el protocolo existente. No se usa PING/READY.
 - En P0, Cómo funciona y Recursos abren diálogos nativos; en P1–P3, método y fuentes se consultan mediante un acordeón nativo sin perder selecciones. El enlace a NASA POWER solo se abre por acción explícita.
 
 ## Inicio — iteración visual con referencia Duna
@@ -78,7 +78,7 @@ Fuentes técnicas: [Vite](https://vite.dev/guide/) y [React useEffect](https://r
 - Archivos propios restringidos a `web/`; los contratos y modelos nuevos llegaron por merge de `origin/main`, sin modificaciones propias.
 - Capturas en `evidencia/`: [P0](evidencia/P0.png), [P1](evidencia/P1.png), [P2](evidencia/P2.png), [P3](evidencia/P3.png) y [laboratorio a 320 px](evidencia/P2-mobile-320.png).
 
-El criterio funcional de las cuatro vistas ejecutables está cubierto. El Worker sigue pendiente de coordinación con Mompin; no se marca como entregado ni se modifica el tablero compartido desde esta actividad.
+El criterio funcional de las cuatro vistas ejecutables está cubierto. A1.2 se cerró al conectar el Worker; el tablero vigente refleja la entrega.
 
 ## Cierre A1.2
 La UI inicializa el cliente existente de Mompin mediante useMotor, comprueba su respuesta con olvidar en la sesion vacia y termina el Worker al desmontarse. Muestra disponibilidad o error con un limite de espera de 10 segundos. Esta seccion sustituye las notas anteriores de Worker pendiente; las simulaciones desde los controles siguen en A3.4/A4.6.
@@ -107,3 +107,15 @@ La cuadrícula usa Turf para área e intersecciones, como máximo 1600 celdas y 
 Verificado en navegador: entrada de cuatro coordenadas, generación, guardado, regreso del laboratorio y conservación del contorno; 503 con motivo y reintento exitoso mediante respuestas sintéticas, sin mediciones inventadas en el producto. Sin desbordamiento a 1440, 390 y 320 px. Captura: `evidencia/terreno-poligono-320.png`. Pruebas de cuadrícula cubren contrato JSON Schema, conservación de área, borde cóncavo, límite y contornos inválidos.
 
 Referencias técnicas: [Leaflet](https://leafletjs.com/reference.html), [Turf intersect](https://turfjs.org/docs/api/intersect). El cliente en `src/api/` conserva la implementación y documentación de Eduardo.
+
+## Sistema visual compartido y laboratorio A3.4 A4.9
+
+La referencia visual está en `../DESIGN.md`. `src/ui/tokens.css` contiene los valores globales; `system.css`, los componentes y estados comunes. Inicio y Terreno usan alias semánticos. Los colores de estados del motor en la escena se conservan. No se incorporó GT America porque no se proporcionó; se usa la pila local declarada.
+
+P2/P3 ahora usan `LaboratorioConectado` y `useLaboratorio`. La demo carga datos precargados de Isla con contorno ficticio y mediciones regionales reales; una parcela propia llama al cargador de Eduardo (`cargarDatosParcela`) con su centroide, ventana estándar y cancelación. Clima, suelo y catálogo deben responder; la capa próxima temporada es opcional. Se muestran motivos de error y reintento. No se hereda el calendario de Isla para otras parcelas.
+
+Los planes R1 a R4, las selecciones y la banda se conservan en App durante la navegación. Los cultivos usan ids del catálogo; las fechas muestran por qué y su fuente. Cada cambio de plan invalida resultados y reemplaza el Worker, ignorando respuestas obsoletas. Escenario/ciclo/fecha solo consultan resultados de celdas. La escena se carga diferida. El rango de próxima temporada se puede apagar; sus números, años análogos, advertencias y exclusiones salen del motor.
+
+Verificación de esta entrega: pruebas de planes contra JSON Schema, prueba R1/frijol/2023, build y TypeScript. En Chromium se verificó que los cambios de escenario/ciclo y banda no envían otra petición simular; cambiar cultivo sí la envía. P2/P3 conservan selección al navegar. Anchos de laboratorio 1440/1024/768/390/320 sin desbordamiento; las cuatro rutas y la entrada polígono también pasan la comprobación a 320. Axe no encontró incidencias automáticas WCAG A/AA en los estados revisados de laboratorio y comparación. No se hizo revisión con lector de pantalla ni zoom nativo al 200 %. Fuentes/estados científicos requieren la validación humana del proyecto.
+
+Capturas: `evidencia/laboratorio-conectado-desktop.png` y `evidencia/laboratorio-conectado-320.png`. El paquete Three.js y la serie climática se descargan por carga diferida y generan advertencias de tamaño de chunk en Vite; no bloquean el build. La plantilla documental System Design no pudo renderizarse por ausencia de LibreOffice; no se entrega un DOCX sin verificación visual.
