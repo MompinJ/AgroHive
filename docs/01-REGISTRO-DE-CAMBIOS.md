@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A4.3: tarjetas de rotación, parte lógica (Mompin, rama `Mompin-motor`)
+
+- **Archivos:** `web/src/motor/tarjetas.ts` (nuevo), `protocolo.ts` (`rankear` devuelve las rotaciones con su tarjeta), `index.ts`; pruebas `tarjetas.test.ts` y la regresión (`regresion/demo-isla.json` suma el ranking R1 a R4 y las tarjetas de R4 y R2; los números anteriores no cambian); `docs/05` (paso 8), `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** plantilla sin LLM que llena `explicacion` de `resultado-rotacion` (no hizo falta un contrato nuevo): por qué, evidencia con fuente por cifra, beneficios medidos, huecos y riesgos, en español para un agricultor. Nada sin número o fuente: no se habla de plagas, nitrógeno, rendimiento ni precios, y una rotación `NO_EVALUABLE` solo dice su motivo.
+- **Decisión `[DECIDIDO]` (Mompin):** la demo compara R1 a R4 con R4 (milpa en ventana de INIFAP) como sugerida; con el suelo real el ranking la pone primera por sí solo (arrepentimiento 0).
+- **Fuente / evidencia:** `cd web && npm test` (303 pruebas).
+
 ### 2026-11-14 — Losas de suelo de A2.12 en la escena (Mompin, rama `Mompin-escena`)
 
 - **Archivos:** `web/src/escena/suelo.ts`, `adaptador.ts`, `modelo.ts`, `render/escena-three.ts`, `voxel/fuente-modelos.ts`, `EscenaParcela.tsx` (nueva prop `suelo`), `vista-previa.tsx`, prueba `suelo-escena.test.ts`; `docs/06`, `INTEGRACION.md`.

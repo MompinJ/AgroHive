@@ -212,6 +212,116 @@
       }
     ]
   },
+  "rankingDemoR1aR4": {
+    "criterio": "B_minimax_arrepentimiento",
+    "pesos": {
+      "deficitHidrico": 0.3333,
+      "excesoHidrico": 0.3333,
+      "proteccionSuelo": 0.3333
+    },
+    "orden": [
+      {
+        "rotacionId": "R4",
+        "arrepentimiento": 0,
+        "peorEscenario": "lluvioso"
+      },
+      {
+        "rotacionId": "R1",
+        "arrepentimiento": 0.0213,
+        "peorEscenario": "lluvioso"
+      },
+      {
+        "rotacionId": "R3",
+        "arrepentimiento": 0.0673,
+        "peorEscenario": "lluvioso"
+      },
+      {
+        "rotacionId": "R2",
+        "arrepentimiento": 0.1021,
+        "peorEscenario": "lluvioso"
+      }
+    ]
+  },
+  "tarjetas": {
+    "R4": {
+      "porQue": "Es la opción más robusta de las 4 rotaciones comparadas. En los tres años de referencia (año seco 2023, año habitual 2016, año lluvioso 2024) tiene el mejor puntaje de todas (el puntaje combina falta de agua, exceso de agua y días sin cultivo; 1 es lo mejor). Su peor año es el año lluvioso (2024), con 0.65 de 1. Cultivos: maíz y frijol.",
+      "beneficios": [
+        "Agua: aun en el año seco (2023) el suelo le dio al cultivo el 97.8 % del agua que necesitaba.",
+        "Suelo: es la que menos tiempo deja el terreno sin cultivo (149 días en el año habitual, contra 163 a 258 días de las demás).",
+        "Agua de lluvia: en el año lluvioso es la que menos lluvia pierde por debajo de la raíz (62.1 %).",
+        "Fechas: todas las siembras caen en las ventanas recomendadas por INIFAP para la zona.",
+        "Rotación: combina 2 especies e incluye una leguminosa (frijol). Este simulador no mide su aporte al suelo."
+      ],
+      "riesgos": [
+        "Su peor año es el año lluvioso (2024): faltó el 3.2 % del agua y 2150 mm de lluvia se fueron por debajo de la raíz.",
+        "Exceso de agua: en el año lluvioso (2024) el mes más difícil fue julio de 2024, con 567 mm que el suelo no pudo guardar.",
+        "Falta de agua: en el año seco el mes más difícil fue junio de 2023 (24 mm que el cultivo pidió y no tuvo)."
+      ],
+      "huecos": [
+        "Las fechas de siembra no entran a la comparación: R3 tiene una siembra sin ventana con fuente en el calendario local.",
+        "No se evalúa el calor: el catálogo no tiene un umbral de temperatura con fuente para estos cultivos.",
+        "No se calcula el riesgo de erosión: haría falta la intensidad de la lluvia en lapsos de 30 minutos y datos de cobertura y pendiente con fuente; solo se cuentan los días sin cultivo.",
+        "El suelo (franco arcillo arenoso, 122 mm de agua útil por metro) es una estimación (mapa global), no una medición de su parcela.",
+        "El clima de NASA POWER es regional (cuadros de 0.5 por 0.625 grados, unos 56 por 66 km aquí): es el mismo para toda la parcela.",
+        "La humedad del suelo al sembrar viene de un modelo regional (NASA POWER), no de una medición en el campo.",
+        "No se consideran precios, costos, rendimiento ni plagas."
+      ],
+      "evidencia": [
+        "Año seco (2023): llovieron 1523 mm en las temporadas de siembra PV y OI.",
+        "Año seco (2023): al cultivo le faltó el 2.2 % del agua que necesitaba (48 días con falta de agua, 24 mm).",
+        "Año seco (2023): 995 mm de lluvia se fueron por debajo de la raíz en 106 días (el 42.6 % de lo que llovió durante los ciclos).",
+        "Año seco (2023): el terreno queda sin cultivo 148 de 365 días del año agrícola.",
+        "Año habitual (2016): llovieron 1912 mm en las temporadas de siembra PV y OI.",
+        "Año habitual (2016): al cultivo le faltó el 0.9 % del agua que necesitaba (20 días con falta de agua, 9 mm).",
+        "Año habitual (2016): 1677 mm de lluvia se fueron por debajo de la raíz en 129 días (el 56.3 % de lo que llovió durante los ciclos).",
+        "Año habitual (2016): el terreno queda sin cultivo 149 de 366 días del año agrícola.",
+        "Año lluvioso (2024): llovieron 2084 mm en las temporadas de siembra PV y OI.",
+        "Año lluvioso (2024): al cultivo le faltó el 3.2 % del agua que necesitaba (30 días con falta de agua, 32 mm).",
+        "Año lluvioso (2024): 2150 mm de lluvia se fueron por debajo de la raíz en 184 días (el 62.1 % de lo que llovió durante los ciclos).",
+        "Año lluvioso (2024): el terreno queda sin cultivo 149 de 366 días del año agrícola.",
+        "Ciclo 1, maíz sembrado el 1 de junio: dentro de la ventana recomendada (del 1 de junio al 15 de julio).",
+        "Ciclo 2, frijol sembrado el 10 de octubre: dentro de la ventana recomendada (del 20 de septiembre al 20 de octubre).",
+        "Ciclo 3, maíz sembrado el 1 de junio: dentro de la ventana recomendada (del 1 de junio al 15 de julio)."
+      ]
+    },
+    "R2": {
+      "porQue": "Queda en el lugar 4 de 4 por robustez. En el año en que más se aleja de la mejor opción queda 0.1 puntos por debajo de ella (el puntaje combina falta de agua, exceso de agua y días sin cultivo; 1 es lo mejor). Su peor año es el año lluvioso (2024), con 0.55 de 1. Cultivos: maíz.",
+      "beneficios": [
+        "Agua: aun en el año seco (2023) el suelo le dio al cultivo el 98.4 % del agua que necesitaba.",
+        "Fechas: todas las siembras caen en las ventanas recomendadas por INIFAP para la zona."
+      ],
+      "riesgos": [
+        "Su peor año es el año lluvioso (2024): 2012 mm de lluvia se fueron por debajo de la raíz.",
+        "Exceso de agua: en el año lluvioso (2024) el mes más difícil fue julio de 2024, con 651 mm que el suelo no pudo guardar.",
+        "Falta de agua: en el año seco el mes más difícil fue junio de 2023 (14 mm que el cultivo pidió y no tuvo)."
+      ],
+      "huecos": [
+        "Las fechas de siembra no entran a la comparación: R3 tiene una siembra sin ventana con fuente en el calendario local.",
+        "No se evalúa el calor: el catálogo no tiene un umbral de temperatura con fuente para estos cultivos.",
+        "No se calcula el riesgo de erosión: haría falta la intensidad de la lluvia en lapsos de 30 minutos y datos de cobertura y pendiente con fuente; solo se cuentan los días sin cultivo.",
+        "El suelo (franco arcillo arenoso, 122 mm de agua útil por metro) es una estimación (mapa global), no una medición de su parcela.",
+        "El clima de NASA POWER es regional (cuadros de 0.5 por 0.625 grados, unos 56 por 66 km aquí): es el mismo para toda la parcela.",
+        "La humedad del suelo al sembrar viene de un modelo regional (NASA POWER), no de una medición en el campo.",
+        "No se consideran precios, costos, rendimiento ni plagas."
+      ],
+      "evidencia": [
+        "Año seco (2023): llovieron 1523 mm en las temporadas de siembra PV y OI.",
+        "Año seco (2023): al cultivo le faltó el 1.6 % del agua que necesitaba (22 días con falta de agua, 14 mm).",
+        "Año seco (2023): 931 mm de lluvia se fueron por debajo de la raíz en 96 días (el 44 % de lo que llovió durante los ciclos).",
+        "Año seco (2023): el terreno queda sin cultivo 257 de 365 días del año agrícola.",
+        "Año habitual (2016): llovieron 1912 mm en las temporadas de siembra PV y OI.",
+        "Año habitual (2016): al cultivo no le faltó agua.",
+        "Año habitual (2016): 1406 mm de lluvia se fueron por debajo de la raíz en 118 días (el 57.1 % de lo que llovió durante los ciclos).",
+        "Año habitual (2016): el terreno queda sin cultivo 258 de 366 días del año agrícola.",
+        "Año lluvioso (2024): llovieron 2084 mm en las temporadas de siembra PV y OI.",
+        "Año lluvioso (2024): al cultivo casi no le faltó agua (2 días, menos de 1 mm).",
+        "Año lluvioso (2024): 2012 mm de lluvia se fueron por debajo de la raíz en 166 días (el 65.6 % de lo que llovió durante los ciclos).",
+        "Año lluvioso (2024): el terreno queda sin cultivo 258 de 366 días del año agrícola.",
+        "Ciclo 1, maíz sembrado el 15 de junio: dentro de la ventana recomendada (del 1 de junio al 15 de julio).",
+        "Ciclo 2, maíz sembrado el 15 de junio: dentro de la ventana recomendada (del 1 de junio al 15 de julio)."
+      ]
+    }
+  },
   "proximaTemporada": {
     "coincidencias": {
       "seco": {
