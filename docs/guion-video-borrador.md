@@ -1,8 +1,8 @@
 # Guion base del video de demo (borrador)
 
-> **Actividad CANCELADA** por indicación expresa de Balam (14/11/2026; docs/13 y docs/14). El video y la presentación no se planifican ni se asignan. Este archivo se conserva exclusivamente como historial, no como trabajo pendiente.
+> **Borrador para el final, no es tarea activa** `[DECIDIDO]` (Mompin, 14/11; docs/13 y docs/14): el video y la presentación se definen cuando el front esté conforme; no están en el tablero ni asignados, pero **no están cancelados**. Este archivo se conserva como punto de partida.
 
-> **Texto histórico de A5.6; sin responsable ni entrega activa.** Duración objetivo: **2 a 3 minutos** `[VERIFICAR]`. El formato, la duración máxima y las reglas de uso de IA, marca e imágenes de NASA dependen de las reglas oficiales (V-03, V-04 en `docs/11`; A0.5 en `docs/14`). Todas las cifras salen de `web/src/motor/pruebas/regresion/demo-isla.json` (versión de contrato 0.10.0) y de `docs/05`, `docs/13` y `api/README.md`. Si el paquete de demo se regenera, hay que volver a revisarlas.
+> **Borrador de A5.6, sin responsable por ahora.** Duración objetivo: **2 a 3 minutos** `[VERIFICAR]`. El formato, la duración máxima y las reglas de uso de IA, marca e imágenes de NASA dependen de las reglas oficiales (V-03, V-04 en `docs/11`; A0.5 en `docs/14`). Todas las cifras salen de `web/src/motor/pruebas/regresion/demo-isla.json` (versión de contrato 0.10.0) y de `docs/05`, `docs/13` y `api/README.md`. Si el paquete de demo se regenera, hay que volver a revisarlas.
 
 **Cómo leerlo:** cada escena trae lo que se ve en pantalla, el texto de la voz y una duración aproximada. Lo marcado `[VERIFICAR]` depende de que la pieza esté en la interfaz el día de la grabación (estado en `docs/14`).
 

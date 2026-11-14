@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Corrección: video y presentación se definen al final, no están canceladas (Mompin, sesión features)
+
+- **Archivos:** `docs/13` (fila "Video y presentación"), `docs/14` (línea bajo F5 y sección "Actividades canceladas" renombrada a "Fuera del tablero hasta el final", A5.6 como "Se define al final"; vistas regeneradas), `docs/guion-video-borrador.md` (encabezado) y `AgroVault/Compartido/Resumen.md`.
+- **Cambio y motivo:** la entrada "Cancelación de video y presentación y ajustes de revisión de Balam" registró video y presentación como CANCELADAS. La decisión de Mompin es otra: se definen al final, cuando el front esté conforme, fuera del tablero y sin asignar. Siguen sin contar en el reparto ni en los porcentajes. La entrada anterior se conserva como historial.
+- **Decisiones afectadas:** "Video y presentación" (13), A5.6.
+
 ### 2026-11-14 — Lluvia del día en la escena con datos reales (Mompin)
 
 - **Archivos:** `web/src/escena/lluvia.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (prop `serieBalance`), `escena.css`, `vista-previa.tsx`, prueba `lluvia.test.ts`; `docs/06`, `docs/14` (nota en A5.1), `INTEGRACION.md`.
