@@ -12,6 +12,18 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A3.8: ficha por celda en la escena (Mompin, con balam)
+
+- **Archivos:** `web/src/escena/ficha.ts` (nuevo), `EscenaParcela.tsx`, `render/escena-three.ts`, `escena.css`, prueba `ficha.test.ts`; `docs/06`, `docs/14` (A3.8 pasa del tablero de balam al de Mompin, con balam).
+- **Cambio:** ficha con los valores del motor y de la parcela, con unidades y `NO_EVALUABLE` explicado. Se abre con clic, toque, lista de celdas, botones N/O/E/S o teclado (Enter y Escape). Con ratón hay además un globo al pasar el cursor. Marco fijo en la celda elegida. Banderín para "cultivo no recomendado en el lugar", que antes solo salía en texto. Los colores de `escena.css` pasan a variables para adaptar después el modo oscuro.
+- **Fuente / evidencia:** 184 pruebas de escena; headless en el Laboratorio con calabaza (no registrada en Isla): clic, globo, teclado, lista y cambio de fecha; 400 px sin desborde; cero errores de consola.
+
+### 2026-11-14 — Placa de estado más chica en la escena `[DECIDIDO]` (Mompin)
+
+- **Archivos:** `web/src/escena/render/escena-three.ts`, `docs/06`.
+- **Cambio:** la placa pasa de 0.82 a 0.6 del lado de la celda para que se vea la losa de suelo (A2.12) y su humedad. La textura es la misma (contraste WCAG y mínimos de `daltonismo.ts`).
+- **Decisiones afectadas:** decidido por Mompin el 14/11.
+
 ### 2026-11-14 — A4.3: tarjetas de rotación, parte lógica (Mompin, rama `Mompin-motor`)
 
 - **Archivos:** `web/src/motor/tarjetas.ts` (nuevo), `protocolo.ts` (`rankear` devuelve las rotaciones con su tarjeta), `index.ts`; pruebas `tarjetas.test.ts` y la regresión (`regresion/demo-isla.json` suma el ranking R1 a R4 y las tarjetas de R4 y R2; los números anteriores no cambian); `docs/05` (paso 8), `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault/Compartido/Pendientes.md`.
@@ -224,6 +236,24 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — Contratos 0.11.0: `serie-balance` para el dashboard (A4.1)
+
+- **Archivos:** nuevo `contratos/serie-balance.schema.json`, ejemplo, 8 casos inválidos, `contratos/validar.mjs` (chequeos extra), tipos, README; `13`; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.11.0, en un commit aparte).
+- **Cambio y motivo:** el borrador del motor, aprobado por Mompin para el dashboard de balam, entra con estos ajustes de convención:
+  1. Las columnas diarias admiten `null` cuando falta un dato de entrada, nunca 0, como el resto de los contratos.
+  2. Las columnas que no pueden ser negativas llevan `minimum: 0`.
+  3. Los subesquemas llevan `title`, para que los tipos tengan nombre, y cada columna lleva descripción con la ecuación de FAO-56 donde aplica (80, 85, 88).
+  4. JSON Schema no puede exigir que las columnas tengan el mismo largo. `validar.mjs` lo comprueba con un chequeo extra, junto con que la suma de días del resumen mensual cuadre.
+- **Fuente / evidencia:** propuesta del motor; FAO-56, capítulo 8. `npm test` 91/91.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Comparación por defecto de la demo: R1, R2 y R4 `[DECIDIDO]` (corrige "R1 a R4")
+
+- **Archivos:** `13` (fila "Rotaciones de la demo"), `docs/guion-video-borrador.md`, `docs/README-borrador.md`, `AgroVault/Compartido/Resumen.md`.
+- **Cambio y motivo:** Mompin corrigió la decisión anterior. La demo compara por defecto R1, R2 y R4, porque R3 (frijol-frijol) tiene una siembra sin ventana con fuente (frijol PV) y saca el pilar de compatibilidad. Con R1, R2 y R4 entran los cuatro pilares y el orden es R4 (0), R2 (0.077) y R1 (0.099). R3 sigue en el selector. Se quitó del guion la nota de "si se comparan las cuatro" y se actualizó la fila de rotaciones de ejemplo de la vault, que seguía con R0 a R2.
+- **Fuente / evidencia:** decisión transmitida por la sesión maestra; `web/src/motor/pruebas/regresion/demo-isla.json` (`rankingCuatroPilares`); doc 05, paso 7.
+- **Decisiones afectadas:** "Rotaciones de la demo" en 13.
 
 ### 2026-11-14 (noche) — Guion base del video de demo (A5.6)
 

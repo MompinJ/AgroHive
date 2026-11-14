@@ -5,6 +5,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Advertencia, Parcela, ResultadoCeldas, Suelo } from '../../../contratos/tipos/contratos';
 import { construirEscena } from './adaptador';
+import { bloqueCentral, fichaBloque, vecino } from './ficha';
 import { describirBloque, entradasLeyenda, type EntradaLeyenda } from './leyenda';
 import { EXAGERACION_VERTICAL_DEFECTO, type BloqueEscena } from './modelo';
 import { rgbaPlaca } from './placa';
@@ -50,6 +51,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
   const [reducirMovimiento, setReducirMovimiento] = useState(prefiereMenosMovimiento);
   const [seleccion, setSeleccion] = useState<BloqueEscena | null>(null);
+  const [hover, setHover] = useState<{ bloque: BloqueEscena; x: number; y: number } | null>(null);
   const [avisosRender, setAvisosRender] = useState<Advertencia[]>([]);
   const [sinWebGL, setSinWebGL] = useState(false);
 
@@ -63,6 +65,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
     () => ({
       reducirMovimiento,
       onSeleccion: setSeleccion,
+      onHover: (bloque: BloqueEscena | null, x: number, y: number) => setHover(bloque ? { bloque, x, y } : null),
       onAviso: (codigo: string, mensaje: string) =>
         setAvisosRender((prev) => (prev.some((a) => a.mensaje === mensaje) ? prev : [...prev, { codigo, mensaje, severidad: 'aviso' }])),
     }),
@@ -92,10 +95,23 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
   }, [opciones]);
 
   useEffect(() => {
-    setSeleccion(null);
+    // La seleccion se conserva si la celda sigue en la escena (otra fecha, ciclo o escenario).
+    setSeleccion((prev) => (prev ? (modelo.bloques.find((b) => b.celdaId === prev.celdaId) ?? null) : null));
+    setHover(null);
     setAvisosRender([]);
     escena.current?.actualizar(modelo);
   }, [modelo]);
+
+  const elegir = (b: BloqueEscena | null) => {
+    setSeleccion(b);
+    escena.current?.seleccionar(b);
+  };
+  const ficha = seleccion ? fichaBloque(seleccion) : null;
+  const noRecomendados = modelo.bloques.filter((b) => b.noRecomendadoEnLugar).length;
+  const mover = (dx: number, dz: number) => {
+    const actual = seleccion ?? bloqueCentral(modelo.bloques);
+    if (actual) elegir(seleccion ? vecino(modelo.bloques, actual, dx, dz) : actual);
+  };
 
   const avisos = [...modelo.avisos, ...avisosRender];
   const criticos = avisos.filter((a) => a.severidad === 'critico');
@@ -120,8 +136,21 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
             ref={lienzo}
             className="escena-lienzo"
             tabIndex={0}
-            aria-label="Parcela en 3D. Arrastra para girar, rueda o pellizca para acercar, flechas para desplazar. Toca un bloque para ver su estado."
+            aria-label="Parcela en 3D. Arrastra para girar, rueda o pellizca para acercar, flechas para desplazar. Toca un bloque o pulsa Enter para ver su estado; Escape quita la seleccion. La lista de celdas de abajo permite elegir cualquier celda."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                elegir(seleccion ?? bloqueCentral(modelo.bloques));
+              } else if (e.key === 'Escape') {
+                elegir(null);
+              }
+            }}
           />
+        )}
+        {hover && !sinWebGL && (
+          <div className="escena-globo" style={{ left: hover.x, top: hover.y }} aria-hidden="true">
+            <strong>{hover.bloque.celdaId}</strong> {fichaBloque(hover.bloque).resumen}
+          </div>
         )}
       </div>
 
@@ -148,9 +177,47 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
         </button>
       </div>
 
-      <p className="escena-seleccion" aria-live="polite">
-        {seleccion ? describirBloque(seleccion) : 'Toca o haz clic en un bloque para ver su estado.'}
-      </p>
+      <div className="escena-ficha">
+        <div className="escena-elegir">
+          <label className="escena-control">
+            <span>Celda</span>
+            <select value={seleccion?.celdaId ?? ''} onChange={(e) => elegir(modelo.bloques.find((b) => b.celdaId === e.target.value) ?? null)}>
+              <option value="">Elige una celda</option>
+              {modelo.bloques.map((b) => (
+                <option key={b.celdaId} value={b.celdaId}>
+                  {b.celdaId} · {fichaBloque(b).resumen}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="escena-flechas" role="group" aria-label="Moverse a la celda vecina">
+            <button type="button" className="escena-boton" onClick={() => mover(0, -1)} aria-label="Celda al norte">N</button>
+            <button type="button" className="escena-boton" onClick={() => mover(-1, 0)} aria-label="Celda al oeste">O</button>
+            <button type="button" className="escena-boton" onClick={() => mover(1, 0)} aria-label="Celda al este">E</button>
+            <button type="button" className="escena-boton" onClick={() => mover(0, 1)} aria-label="Celda al sur">S</button>
+          </div>
+        </div>
+        <div aria-live="polite" className="escena-ficha-cuerpo">
+          {ficha ? (
+            <>
+              <h3>{ficha.titulo}</h3>
+              <dl>
+                {ficha.filas.map((f) => (
+                  <div key={f.etiqueta} className={f.faltante ? 'escena-faltante' : undefined}>
+                    <dt>{f.etiqueta}</dt>
+                    <dd>
+                      {f.valor}
+                      {f.nota && <span className="escena-detalle">{f.faltante ? `Falta: ${f.nota}` : f.nota}</span>}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </>
+          ) : (
+            <p className="escena-detalle">Toca o haz clic en un bloque, o elige una celda en la lista, para ver sus valores.</p>
+          )}
+        </div>
+      </div>
 
       <div className="escena-leyenda">
         <h3>Leyenda{modelo.fecha ? ` · ${modelo.fecha}` : ''}</h3>
@@ -166,6 +233,11 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
             </li>
           ))}
         </ul>
+        {noRecomendados > 0 && (
+          <p className="escena-detalle">
+            Banderin blanco con borde negro: cultivo no recomendado en el lugar segun la fuente local ({noRecomendados} {noRecomendados === 1 ? 'celda' : 'celdas'}).
+          </p>
+        )}
         <p className="escena-detalle">{textoEscalaSuelo(modelo.grupoSuelo)}</p>
       </div>
 
