@@ -224,7 +224,11 @@ def test_openlandmap_se_suma_a_isric_para_compararlas(simular, validar, monkeypa
     assert s["estimacionUsada"] == isric_e["id"]  # ISRIC sigue siendo la usada por defecto
     assert olm_e["textura"]["clase"] == "franco_arcillo_arenoso" == isric_e["textura"]["clase"]  # las dos coinciden en la clase
     assert olm_e["ph"] == 5.9 and olm_e["carbonoOrganicoGKg"] == 8.2 and olm_e["profundidad"] == {"desdeCm": 0, "hastaCm": 30}
-    assert olm_e["fuente"]["resolucion"] == "30 m" and "zenodo" in olm_e["fuente"]["cita"]
+    assert olm_e["fuente"]["resolucion"] == "30 m"
+    cita = olm_e["fuente"]["cita"]
+    for doi in ("15528401", "15528413", "15528425", "15471105", "15535759", "15535761"):  # capas 2020-2022 verificadas en Zenodo
+        assert f"doi:10.5281/zenodo.{doi}" in cita, doi
+    assert "15528399" not in cita, "ese DOI es la arcilla 2000-2005, no la capa que se lee"
     assert olm_e["estado"] == "EVALUABLE"
 
 

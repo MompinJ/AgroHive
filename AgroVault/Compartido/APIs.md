@@ -17,6 +17,8 @@ Investigación para decidir qué fuentes usa el backend (`api/`, FastAPI) y el m
 - **POWER `GWETROOT` (V-06):** entra al balance (condición inicial y comparación). Es fracción de saturación de MERRA-2 en ~100 cm, no de TAW: hay que convertirla. Agregar `GWETROOT` a los parámetros del cliente de POWER.
 - **Servidor (V-15 a V-17):** `sslip.io` + Let's Encrypt.
 
+La tabla de abajo es la investigación **previa** a las llamadas del 14/11. Lo que ya se construyó está en la sección de decisiones, en [[Contratos]] y en [[Codigo]]. No uses la columna "Veredicto" para reabrir V-06, V-08, V-21 o V-23.
+
 ## Recomendación en una tabla
 
 | Necesidad | Primera opción | Respaldo | Llave | Veredicto |
@@ -125,9 +127,13 @@ Atribución obligatoria (CC BY 4.0). Gratis solo no comercial, sin garantía de 
 
 **Probado el 14/11:** `IMERG_PRECTOT` (mm/día, GPM IMERG, 0.1°) sale de la misma API diaria de POWER, **sin cuenta Earthdata**, pero solo con `time-standard=UTC` (en hora local devuelve `-999` en todo). Cada celda de 0.1° tiene su propia serie (a diferencia de MERRA-2, de 0.5° × 0.625°). Los últimos ~2 meses vienen en `-999` (→ `null`). Implementado en `api/app/clientes/power.py` y expuesto como `lluviaSatelital` en `GET /api/clima`. Evidencia, no entra al balance. Prototipo y hallazgos en `features/imerg/`.
 
+### NDVI de MODIS por ORNL DAAC (A4.11)
+
+**Probado el 14/11:** `https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=&longitude=&band=250m_16_days_NDVI&startDate=A<año><día juliano>&endDate=...&kmAboveBelow=0&kmLeftRight=0`, sin cuenta ni llave. **Máximo 10 fechas por llamada.** `/MOD13Q1/bands` da el relleno (-3000), el rango válido (-2000 a 10000) y la escala (0.0001); la banda `250m_16_days_pixel_reliability` da la calidad (0 a 3, relleno -1). El servicio responde 502 y 503 a ratos: hay que reintentar. Cita: doi:10.3334/ORNLDAAC/1600. Implementado en `api/app/clientes/ornl.py` y `api/app/ndvi.py`; evidencia, no entra al ranking.
+
 ### OpenLandMap
 
-**Probado el 14/11 (A2.15):** el catálogo STAC es estático en `https://s3.eu-central-1.wasabisys.com/stac/openlandmap/catalog.json` (la web `stac.openlandmap.org` es solo un navegador). Las capas `clay.tot_iso.11277.2020.wpct`, `sand.tot_iso.11277.2020.wpct`, `silt.tot_iso.11277.2020.wpct`, `ph.h2o_iso.10390.2021.index` y `oc_iso.10694.1995.wpml` (OpenLandMap-soildb, 30 m, 0-30 cm, 2020-2022, CC-BY-4.0, DOI zenodo 15528399) son COG de decenas de GB en `s3.opengeohub.org`; `rasterio` lee solo la ventana del punto por rangos HTTP (3 a 5 s por capa). Unidades: arcilla, arena y limo en % (escala 1, nodata 255), pH ×0.1 y carbono en g/kg ×0.1. Implementado en `api/app/clientes/openlandmap.py`.
+**Probado el 14/11 (A2.15):** el catálogo STAC es estático en `https://s3.eu-central-1.wasabisys.com/stac/openlandmap/catalog.json` (la web `stac.openlandmap.org` es solo un navegador). Las capas `clay.tot_iso.11277.2020.wpct`, `sand.tot_iso.11277.2020.wpct`, `silt.tot_iso.11277.2020.wpct`, `ph.h2o_iso.10390.2021.index` y `oc_iso.10694.1995.wpml` (OpenLandMap-soildb, 30 m, 0-30 cm, 2020-2022, CC-BY-4.0, DOI de cada capa 2020-2022 en Zenodo: arcilla 15528401, arena 15528413, limo 15528425, pH 15471105 y carbono 15535759 y 15535761 (el `doi` de la colección STAC apunta al período 2000-2005: no usarlo)) son COG de decenas de GB en `s3.opengeohub.org`; `rasterio` lee solo la ventana del punto por rangos HTTP (3 a 5 s por capa). Unidades: arcilla, arena y limo en % (escala 1, nodata 255), pH ×0.1 y carbono en g/kg ×0.1. Implementado en `api/app/clientes/openlandmap.py`.
 
 El 250 m (v02) está en Google Earth Engine como clase de textura USDA y pH en agua a seis profundidades. El 30 m (OpenLandMap-soildb) tiene pH, carbono orgánico, densidad aparente y arcilla, arena y limo en 0-30, 30-60 y 60-100 cm, como COG, publicado en el catálogo STAC `stac.openlandmap.org` ([Zenodo](https://zenodo.org/records/15470432), [paper ESSD 2026](https://essd.copernicus.org/articles/18/989/2026/)). `VERIFICAR` colección STAC, ruta del COG y resolución real (las fuentes dan 0.00025° y 0.00075°). Los COG permiten leer solo la ventana de la parcela con `rasterio`.
 

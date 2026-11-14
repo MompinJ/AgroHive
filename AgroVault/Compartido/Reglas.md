@@ -16,7 +16,9 @@ Aplican a Cursor, Codex y Claude. El detalle de producto está en [[Resumen]].
 - Los escenarios seco / habitual / lluvioso son **años históricos reales**, no un pronóstico. El año real se muestra.
 - La capa "próxima temporada" es una banda de incertidumbre. Nunca una cifra de lluvia o de cosecha.
 - pH y textura de mapas globales van etiquetados `SUPUESTO`. No son una medición de la parcela.
-- El 3D no es altura ni biomasa. Etapa y estado (`normal`, `estresada`, `marchita`, `podrida`) los decide el motor.
+- El 3D no es altura ni biomasa. Etapa y `estadoPlanta` (`normal`, `estresada`, `marchita`, `podrida`) los decide el motor. Hoy `podrida` no se emite: no hay umbral con fuente.
+- IMERG y SMAP no entran al balance ni al ranking. Un -999 de POWER es `null`, nunca 0.
+- La cuadrícula cuenta `i` desde el sur y `j` desde el oeste.
 
 ## Código
 
@@ -44,4 +46,4 @@ Aplican a Cursor, Codex y Claude. El detalle de producto está en [[Resumen]].
 
 - Droplet de Eduardo (Ubuntu 24.04, 2 vCPU, 4 GB, 50 GB, SFO3). AgroHive va en su propio `server` block, usuario, puerto y `systemd`.
 - No toques la configuración de `mediworks` que ya vive en ese droplet.
-- No se compra dominio. Hostname todavía `[VERIFICAR]` (V-17).
+- No se compra dominio. Hostname cerrado (V-17): `https://64-23-143-102.sslip.io`. Detalle en [[Servidor]]. Una sola sesión despliega, y avisa antes por el buzón.

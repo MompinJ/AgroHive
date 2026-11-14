@@ -1,0 +1,22 @@
+{
+ "consultado": "2026-11-14",
+ "fuente": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/bands",
+ "bandas": [
+  {
+   "band": "250m_16_days_NDVI",
+   "description": "16 day NDVI average",
+   "units": "NDVI ratio - No units",
+   "valid_range": "-2000 to 10000",
+   "fill_value": "-3000",
+   "scale_factor": "0.0001",
+   "add_offset": "0"
+  },
+  {
+   "band": "250m_16_days_pixel_reliability",
+   "description": "Quality reliability of VI pixel",
+   "units": "rank",
+   "valid_range": "0 to 3",
+   "fill_value": "-1"
+  }
+ ]
+}

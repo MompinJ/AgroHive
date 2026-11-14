@@ -8,7 +8,7 @@ proyecto: AgroHive
 
 Contexto de trabajo de **AgroHive** para tres agentes de código. La fuente larga sigue siendo `docs/` en el repo. Este vault es el resumen que cada IA debe cargar antes de tocar alcance, datos o arquitectura.
 
-Fecha de este resumen: **14 de noviembre de 2026**, primer día del hackathon. Ya se puede escribir código. Donde `docs/13` o `docs/14` contradigan a `docs/03`, `docs/08` o `docs/09`, mandan 13 y 14.
+Fecha de este resumen: **14 de noviembre de 2026, noche**. El hackathon ya va en código: motor, API, escena, catálogos y demo. Donde `docs/13` o `docs/14` contradigan a `docs/03`, `docs/08` o `docs/09`, mandan 13 y 14. Donde una marca vieja de `docs/14` contradiga el código, manda el código y se anota en [[Compartido/Pendientes]].
 
 ## Entra por tu herramienta
 
@@ -20,7 +20,8 @@ Fecha de este resumen: **14 de noviembre de 2026**, primer día del hackathon. Y
 
 Las tres leen el mismo núcleo:
 
-- [[Compartido/Resumen]] — qué es el producto, stack, ciencia y demo
+- [[Compartido/Resumen]] — qué es el producto, stack, ciencia y cifras de la demo
+- [[Compartido/Codigo]] — dónde vive cada carpeta y cómo se verifica
 - [[Compartido/Reglas]] — lo que ninguna IA puede saltarse
 - [[Compartido/Contratos]] — resumen de `contratos/*.schema.json` (la fuente de verdad)
 - [[Compartido/Lectura]] — qué documento de `docs/` abrir según la tarea

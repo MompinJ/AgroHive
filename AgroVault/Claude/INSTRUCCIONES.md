@@ -21,18 +21,17 @@ Para engancharla sin copiarla dos veces, una línea en `CLAUDE.md` basta:
 3. `docs/00-LEEME-PRIMERO.md`, `docs/11-DECISIONES-PENDIENTES-Y-RIESGOS.md`, `docs/13-DECISIONES-HACKATHON.md`, `docs/14-CRONOGRAMA.md`
 4. El documento del tema, según [[Compartido/Lectura]]
 5. [[Compartido/Pendientes]] antes de rellenar un hueco
+6. [[Compartido/Codigo]] antes de crear un archivo que quizá ya existe
 
-No inventes un dato que no esté. Márcalo `[VERIFICAR]` y, si el equipo está de acuerdo en dejar constancia, anótalo en `docs/11`. No conviertas una `[PROPUESTA]` en hecho.
+No inventes un dato que no esté. Márcalo `[VERIFICAR]`. No conviertas una `[PROPUESTA]` en hecho. El motor, el ranking, la escena y los cultivos de la milpa ya están: extiéndelos, no los reescribas. Cifras de la demo en [[Compartido/Resumen]].
 
 ## Qué se te da bien en este equipo, y el límite
 
-La nota de equipo (`docs/09`) dice que Claude rinde en la parte visual. Úsalo para la escena, los estados, la paleta y los modelos. El cupo fuerte no se gasta en boilerplate de Vite ni en renombrar archivos.
-
-El motor científico pide el mismo cuidado que el 3D: fórmulas citadas, pruebas de `docs/05`, y `NO_EVALUABLE` cuando falte una entrada. Una escena bonita con un Kc inventado no sirve.
+La nota de equipo (`docs/09`) decía que Claude rinde en la parte visual. En este repo Mompin ya usó ese cupo para el motor y la escena, y Mafer para los modelos. Antes de abrir un generador nuevo, mira `modelos/` y `web/src/escena/`. El cupo que queda es el recorte de [[Compartido/Pendientes]], no un segundo motor.
 
 ## Agente de modelos
 
-Ya está en `.claude/agents/modelador-voxel.md`. Pídelo por nombre: "usa modelador-voxel para el maíz en sus etapas".
+Ya está en `.claude/agents/modelador-voxel.md`. Maíz, frijol, calabaza, chile y las losas ya están en `modelos/`. Pídelo solo para una pieza nueva.
 
 Ese agente habla en español mexicano informal. El código va sin emojis. Trabaja en la raíz del repo, escribe el generador en Python con `herramientas/voxelkit.py`, corre `check` y `preview`, y mira el PNG. No abre el navegador ni otras sesiones de Claude salvo que el usuario lo pida. No gasta créditos de servicios externos.
 
@@ -59,4 +58,4 @@ Si el preview falla o no abriste Blockbench, dilo. No escribas que el modelo se 
 
 ## Recorte
 
-Si la tarea se hincha, para en la compuerta de `docs/14` y di qué quedó fuera. Orden de corte: extras de NASA y props, slider de meses, pilares 2 y 3, 3D (quedan 2D y cajas), polígono libre (queda la parcela demo). Se quedan la trazabilidad de POWER, los límites dichos en la interfaz, tres rotaciones, el peor caso y la entrega.
+Si la tarea se hincha, para y di qué quedó fuera. Orden de corte de `docs/14`: extras A4.12, A4.11, A4.8 y A3.9, luego el slider de meses, luego quedarse solo con el pilar hídrico, luego 2D con cajas, luego la parcela demo fija. Se quedan la trazabilidad de POWER, los límites dichos en la interfaz, tres rotaciones, el peor caso y la entrega.
