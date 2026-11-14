@@ -12,6 +12,15 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A2.13: escenario de próxima temporada con años análogos y contratos 0.9.0 en el motor (Mompin)
+
+- **Archivos:** `web/src/motor/analogos.ts` (nuevo), `motor.ts` (`preparar`, `pilaresAguaEnClima`, entrada opcional `proximaTemporada`), `proxima.ts`, `protocolo.ts`, `index.ts`, `tipos.ts` (`VERSION_CONTRATO` 0.9.0); prueba `analogos.test.ts`; `docs/05`, `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault`. Se integra la rama `contratos-nulos` (0.9.0).
+- **Decisión `[DECIDIDO]` (Mompin, 14/11):** escenario "próxima temporada" con años análogos reales. Son los años agrícolas cuya lluvia mensual cae dentro de la banda p10-p90 en todos los meses del horizonte; si ninguno, los que caen en más meses, declarado. Solo se simulan los ciclos sembrados dentro del horizonte. Va en `resultado-rotacion.proximaTemporada` (contratos 0.8.0): `EXPLORATORIO`, `esPrediccion: false`, rango mínimo-máximo sin cifra única, fuera del ranking, con el aviso "años parecidos a lo que se espera, no es predicción".
+- **Con el paquete de demo** (noviembre de 2026 a abril de 2027, suelo real de Isla, milpa): años análogos 2006, 2008, 2013, 2019, 2022 y 2025; solo se evalúa el frijol OI. Demanda sin cubrir de 0 a 10.6 %, fracción percolada de 0.09 a 0.54.
+- **Sin capa no se emite el bloque:** sin fecha de emisión ni horizonte, cualquier fecha sería inventada. Queda la advertencia `PROXIMA_TEMPORADA_NO_DISPONIBLE`.
+- **Contratos 0.9.0:** los pilares no evaluables del motor ya llevaban los indicadores en `null` y su motivo; todas las salidas validan contra 0.9.0.
+- **Fuente / evidencia:** `cd web && npm test` (157 pruebas).
+
 ### 2026-11-14 — Motor con el suelo real de Isla y desempate del p50 al año más reciente (Mompin)
 
 - **Archivos:** `web/src/motor/escenarios.ts` (desempate), pruebas `escenarios.test.ts`, `motor.test.ts` y `c2.test.ts`; `docs/05`, `docs/13`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`. Se integra `origin/Eduardo` (A2.15 OpenLandMap, A2.16 en `/api/suelo` y paquete de demo regenerado).

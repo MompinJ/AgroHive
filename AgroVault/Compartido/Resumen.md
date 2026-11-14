@@ -71,7 +71,8 @@ Motor, independiente del render (`docs/05`):
 5. Estrés hídrico, estrés por calor y avance fenológico. Salida cualitativa para el render.
 6. Pilares: déficit (núcleo), exceso de agua (percolación profunda, FAO-56 ec. 88; decidido el 14/11 para el ranking B), compatibilidad de ciclo, erosión relativa (no toneladas, inspirada en USLE/RUSLE). Los dos últimos se recortan si faltan datos.
 7. Ranking (A4.2 hecha, `ranking.ts`; hoy B con déficit y exceso de agua, `[DECIDIDO]` 14/11): el criterio principal es el peor caso. `[DECIDIDO]` el 14/11: opción B (puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio). Pesos con fuente o, si no hay, iguales y declarados `SUPUESTO`. Si los pilares 2 y 3 (A3.7) no llegan, respaldo con la opción A (menor déficit en el peor caso). Si nada es evaluable, decirlo.
-8. Tarjeta de explicación con plantilla. Un LLM, si se usa, solo redacta números ya calculados.
+8. Próxima temporada (A2.13, hecha en el motor): años análogos reales dentro de la banda de lluvia; solo los ciclos que se siembran en el horizonte; rango `EXPLORATORIO`, sin cifra y sin ranking.
+9. Tarjeta de explicación con plantilla. Un LLM, si se usa, solo redacta números ya calculados.
 
 Estados: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS`, `RESPALDO_HISTORICO`.
 
