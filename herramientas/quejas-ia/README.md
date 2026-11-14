@@ -22,6 +22,10 @@ bash herramientas/quejas-ia/quejar.sh Mompin 9 "Otro cambio de alcance a las 3 a
 
 Tambien se puede editar `QUEJAS.md` a mano copiando una queja existente.
 
+## Marcador de chamba
+
+Al inicio de `QUEJAS.md`, entre marcadores, hay un marcador con el avance de cada quien (ponderado por esfuerzo: XS=1, S=2, M=3, L=5), cuantas actividades hechas, en curso y pendientes, y una linea de roast segun el lugar. **No se edita a mano**: lo genera `python3 herramientas/cronograma.py` desde `docs/14` y se actualiza cada vez que se regenera el cronograma. Las lineas usan solo numeros reales del tablero.
+
 ## Reglas de la casa
 
 1. Se vale gritar. No se valen insultos reales, datos personales ni nada que no dirias
