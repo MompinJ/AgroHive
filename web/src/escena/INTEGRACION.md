@@ -1,0 +1,44 @@
+# Escena 3D: punto de integración propuesto `[PROPUESTA]`
+
+Para balam (dueño de `web/src/ui/` y `web/src/paginas/`). La carpeta `web/src/escena/` no edita sus archivos; lo de abajo es lo que haría falta tocar en ellos, y se hace solo con su OK (o lo hace balam).
+
+## Qué expone la escena
+
+```tsx
+import { EscenaParcela } from '../escena/EscenaParcela';
+
+<EscenaParcela
+  parcela={parcela}       // contrato parcela (front + POST /api/elevacion)
+  resultado={resultado}   // contrato resultado-celda del motor, o null si aún no hay
+  fecha={fecha}           // opcional: fecha de los registros (slider de meses, A5.2)
+/>
+```
+
+- Solo recibe contratos (`contratos/tipos/`). No pide datos ni recalcula indicadores: cambiar 2D/3D o de pestaña no vuelve a consultar nada.
+- Trae su leyenda (color, patrón, icono y texto), sus avisos (datos de ejemplo, celdas sin elevación, exageración vertical, modelo provisional), los controles (exageración, reducir movimiento, restablecer vista), la descripción del bloque tocado en una región `aria-live` y una lista de celdas en texto.
+- Si no hay WebGL, muestra el aviso y deja la leyenda; el modo 2D (A3.6) puede leer los mismos módulos puros (`adaptador.ts`, `estilos-estado.ts`, `placa.ts`, `leyenda.ts`).
+- Sus estilos van bajo `.escena` en `escena/escena.css`; no usa clases de `ui/styles.css`.
+
+## Dónde montarla
+
+`web/src/paginas/Laboratorio.tsx`, tarjeta "Parcela demo · Isla" (`terrain-panel`): reemplazar el contenido de `.terrain-preview` (hoy `<FieldIllustration compact />` y la etiqueta "Espacio reservado para el terreno") por `<EscenaParcela … />`. El `selection-readout` y el `CycleSelector` se quedan como están.
+
+Cargarla diferida para que three.js no entre en el paquete inicial de P0 y P1:
+
+```tsx
+const EscenaParcela = lazy(() => import('../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
+// <Suspense fallback={<DataState state="loading">Cargando escena 3D</DataState>}> … </Suspense>
+```
+
+## Qué datos pasarle
+
+- **Ahora (sin motor):** la parcela de `contratos/ejemplos/parcela.ejemplo.json`. Para `resultado`, dos opciones:
+  1. `null`: la escena muestra el relieve y todas las celdas como "Sin resultado". Es coherente con lo que hoy promete `ui/demo.ts` (no importa mediciones ficticias).
+  2. `resultado-celda.ejemplo.json`: muestra estados, pero es un único resultado (R1, seco, 2015-12-01) que **no cambia** con la rotación, el ciclo ni el escenario elegidos. La escena avisa "Datos de ejemplo", pero la página tendría que decir que la selección todavía no cambia la escena.
+  Recomiendo la opción 1 en Laboratorio y dejar la 2 solo en la vista previa (`/escena.html`).
+- **Con motor (A2.7) y selector (A3.4):** el `ResultadoCeldas` de la rotación, el escenario y el ciclo seleccionados (`SELECT_CYCLE` muestra el cultivo de ese ciclo, doc 06). Prueba crítica A3.5: R1, ciclo 2, seco muestra frijol con su etapa y estado.
+- **Con polígono (A2.9, A2.10):** la parcela que arma la cuadrícula, con elevación y pendiente de `POST /api/elevacion` (las celdas que vuelvan en `null` se dibujan como hueco `NO_EVALUABLE`).
+
+## Vista previa sin tocar la app
+
+`npm run dev` en `web/` y abrir `http://127.0.0.1:5173/escena.html`. Es solo de desarrollo: `vite build` no la incluye (no se tocó `vite.config.ts`).
