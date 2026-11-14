@@ -12,7 +12,7 @@ No cierres estas filas en código "para ir avanzando". Si un default es inevitab
 
 | ID | Estado | Nota |
 | --- | --- | --- |
-| A1.1 | Hecha, **falta la revisión de los 4** (`[EN CURSO]` en `docs/14` hasta entonces) | Contratos v0.5.0 en `contratos/`: 12 schemas (más `comun`), ejemplos, `npm test` (52/52) y tipos TS. Ver [[Contratos]] |
+| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.5.0 en `contratos/`: 12 schemas (más `comun`), ejemplos, `npm test` (52/52) y tipos TS. Ver [[Contratos]] |
 | A1.5, A1.6 | Hechas (Mafer) | `datos/catalogos/`: milpa (maiz, frijol, calabaza) desde FAO-56 y EcoCrop, y TAW por textura (FAO-56 Tabla 19), validados contra contratos 0.3.0 (`cultivo` y `tabla-suelos`); `python datos/catalogos/generar.py` y `node datos/catalogos/validar.mjs`. La lluvia de EcoCrop va en `lluviaAnual*`; `lluviaCiclo*`, umbral de calor y ventanas de siembra siguen `NO_EVALUABLE` |
 
 El resto del reparto y su estado está en el tablero de `docs/14` (al final).
@@ -26,7 +26,7 @@ El resto del reparto y su estado está en el tablero de `docs/14` (al final).
 | V-20 | Calendario de Isla: forma **`[DECIDIDO]`** (contrato `calendario-local`); faltan los datos reales con fuente (Mafer, A0.6; revisa si SIAP tiene API o datos abiertos de siembras) | Las ventanas dependen del lugar, no del cultivo: ya no van en el catálogo. La fecha de cada ciclo la elige el usuario y el plan explica su `porQue`. Sin dato, `NO_EVALUABLE`. Un cultivo no registrado en el lugar se muestra, pero no se recomienda (calabaza en Isla: SIAP 2021-2025 no la registra) |
 | V-21 | Horizonte del pronóstico estacional: **`[DECIDIDO]` 6 meses** (14/11) | El servicio da 7 con `forecast_days=210`; el contrato fija `horizonteMeses` en 6. Método de A2.13 aprobado: distribución histórica desplazada por la anomalía de SEAS5, sin tendencia y con advertencia |
 | V-22 | CORS de NASA POWER | Evidencia A0.7: el GET simple trae `access-control-allow-origin: *`, el preflight da 404. Todo el clima sigue pasando por el backend |
-| Suelo | TAW del suelo del mapa global: **`[DECIDIDO]`** pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica de SoilGrids, `SUPUESTO` (A2.16) | Mientras no esté, la demo usa el selector manual. No uses el TAW de un grupo vecino. El factor de carbono orgánico a materia orgánica se cita `[VERIFICAR]` |
+| Suelo | TAW del suelo del mapa global: **`[DECIDIDO]`** pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica de SoilGrids, `SUPUESTO` (A2.16, la hace **Mafer**) | Mientras no esté, la demo usa el selector manual. No uses el TAW de un grupo vecino. El factor de carbono orgánico a materia orgánica se cita `[VERIFICAR]` |
 | V-23 | Servicio de suelo: **`[DECIDIDO]` ambos**, ISRIC WCS y OpenLandMap, para compararlos (A2.15) | El contrato `suelo` lleva `estimaciones` por servicio y `estimacionUsada`. Hoy `GET /api/suelo` solo usa ISRIC |
 | V-06 | Humedad de POWER: **`[DECIDIDO]`** `GWETROOT` entra como condición inicial de la cubeta al sembrar y como comparación con la humedad simulada | Es fracción de **saturación** (MERRA-2, ~100 cm), no de TAW: convertir con θsat, θFC y θWP (Saxton y Rawls); sin ellos, `NO_EVALUABLE`. Resolución gruesa declarada. Contrato: `humedadRaizFraccionSat` y `humedadSuelo` |
 | V-08 | Elevación: **`[DECIDIDO]`** Terrarium por defecto, Open-Meteo de respaldo | Ya es así en `POST /api/elevacion` |
