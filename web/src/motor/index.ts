@@ -7,4 +7,5 @@ export { rankear, SIN_OPCION_ROBUSTA, type OpcionesRanking, type ResultadoRankin
 export { vistaProximaTemporada, mesEnEscenario, type VistaProximaTemporada, type MesProximaTemporada } from './proxima';
 export { proximaTemporadaRotacion, simularRotacionCompleta, candidatosAnalogos, AVISO_ANALOGOS } from './analogos';
 export { tarjetaRotacion, conTarjetas, AVISO_EXPERTO, type ContextoTarjetas } from './tarjetas';
-export { VERSION_CONTRATO, ESCENARIOS } from './tipos';
+export { serieBalance } from './series';
+export { VERSION_CONTRATO, ESCENARIOS, type SerieBalance } from './tipos';

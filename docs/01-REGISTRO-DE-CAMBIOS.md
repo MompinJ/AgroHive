@@ -12,6 +12,19 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A4.1, parte del motor: series del balance de agua para el dashboard (Mompin, rama `Mompin-motor`)
+
+- **Archivos:** `web/src/motor/series.ts` (nuevo), `motor.ts` (cada ciclo guarda su lluvia y ET0 diarias), `protocolo.ts` y `cliente.ts` (operación `serieBalance`), `tipos.ts` (tipo local con la forma propuesta), `index.ts`; prueba `series.test.ts`; regresión; `docs/05` y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** a pedido de balam, el Worker entrega, bajo demanda y por rotación y escenario, las series diarias (en columnas) y mensuales de lluvia, ET0, ETc, ETc ajustada, agotamiento, RAW, humedad (fracción de TAW), percolación y déficit de cada ciclo, con unidades, fechas (del plan y del clima), estado y fuente. Contrato `serie-balance` 0.11.0 (sesión de contratos): el motor usa el tipo generado, recorta a ≥ 0 el ruido de redondeo y valida sus salidas contra el schema y el chequeo de largos de `contratos/validar.mjs`. Las sumas cuadran con los pilares.
+- **Regresión:** el ranking y las tarjetas de referencia pasan al conjunto por defecto de la demo `[DECIDIDO]`, R1, R2 y R4 (R4, R2, R1, con los cuatro pilares); R1 a R4 queda como caso adicional. Se suman las series mensuales de R4 en el año seco. Los números de antes no cambian; solo cambia el texto de las tarjetas por el conjunto comparado.
+- **Fuente / evidencia:** `cd web && npm test` (316 pruebas).
+
+### 2026-11-14 — Avisos de datos en la escena (Mompin, pedido de Eduardo)
+
+- **Archivos:** `web/src/escena/avisos-datos.ts` y `AvisosDatos.tsx` (nuevos), `EscenaParcela.tsx` (prop `avisosDatos`), `escena.css`, `vista-previa.tsx`, `escena.html`, prueba `avisos-datos.test.ts`; `docs/06`, `INTEGRACION.md`.
+- **Cambio:** franja plegable con los avisos de `usarDatosParcela` y del terreno: clima de respaldo, suelo `SUPUESTO`, relieve interpolado y próxima temporada no disponible. Los avisos del terreno ya no se repiten en la lista general de la escena.
+- **Fuente / evidencia:** prueba con los códigos reales de la API; vista previa con los avisos del paquete de demo, a 400 px sin desborde.
+
 ### 2026-11-14 — A3.8: ficha por celda en la escena (Mompin, con balam)
 
 - **Archivos:** `web/src/escena/ficha.ts` (nuevo), `EscenaParcela.tsx`, `render/escena-three.ts`, `escena.css`, prueba `ficha.test.ts`; `docs/06`, `docs/14` (A3.8 pasa del tablero de balam al de Mompin, con balam).

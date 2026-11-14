@@ -10,6 +10,7 @@ import { seleccionarEscenarios } from '../escenarios';
 import { resultadoCeldas, simularRotacion, type EntradasMotor } from '../motor';
 import { vistaProximaTemporada } from '../proxima';
 import { rankear } from '../ranking';
+import { serieBalance } from '../series';
 import { conTarjetas } from '../tarjetas';
 import {
   ESCENARIOS,
@@ -83,7 +84,9 @@ function resumen() {
   });
   const bloque = proximaTemporadaRotacion(entradas(PLANES.R1), capa, serie)!;
   const todas = rk(['R1', 'R2', 'R3', 'R4']);
-  const conT = conTarjetas({ ranking: todas, motores: sims, catalogo: catalogo as unknown as CatalogoCultivos, calendario: calendarioIsla as unknown as CalendarioLocal, suelo: sueloDemo as unknown as Suelo });
+  // Demo por defecto [DECIDIDO]: R1, R2 y R4, con R4 sugerida.
+  const demo = rk(['R1', 'R2', 'R4']);
+  const conT = conTarjetas({ ranking: demo, motores: sims, catalogo: catalogo as unknown as CatalogoCultivos, calendario: calendarioIsla as unknown as CalendarioLocal, suelo: sueloDemo as unknown as Suelo });
   const tarjeta = (id: string) => {
     const x = conT.find((r) => r.rotacionId === id)!.explicacion;
     return { porQue: x.porQue, beneficios: x.beneficios, riesgos: x.riesgos, huecos: x.huecos, evidencia: x.evidencia.map((e) => e.texto) };
@@ -108,7 +111,9 @@ function resumen() {
     rankingTresRotaciones: orden(rk(['R1', 'R2', 'R3'])),
     rankingCuatroPilares: orden(rk(['R1', 'R2', 'R4'])),
     rankingDemoR1aR4: orden(todas),
-    tarjetas: { R4: tarjeta('R4'), R2: tarjeta('R2') },
+    rankingDemoPorDefecto: orden(demo),
+    tarjetas: { R4: tarjeta('R4'), R2: tarjeta('R2'), R1: tarjeta('R1') },
+    serieBalanceR4Seco: serieBalance(sims.R4!, 'seco')!.ciclos.map((c) => ({ ciclo: c.ciclo, cultivo: c.cultivo, fechaClima: c.fechaClima, tawMm: c.tawMm, mensual: c.mensual })),
     proximaTemporada: {
       coincidencias: vista.coincidencias,
       analogos: bloque.aniosAnalogos.map((a) => a.anioReal),
@@ -145,10 +150,15 @@ describe('A5.5 regresion de la demo (paquete A2.4, suelo real de Isla)', () => {
     expect(actual.rankingTresRotaciones, msg('el ranking de tres rotaciones')).toEqual(ref.rankingTresRotaciones);
     expect(actual.rankingCuatroPilares, msg('el ranking con cuatro pilares')).toEqual(ref.rankingCuatroPilares);
   });
-  it('ranking de la demo (R1 a R4, R4 sugerida) y tarjetas de R4 y R2 (A4.3)', () => {
+  it('ranking de la demo por defecto (R1, R2 y R4; R4 sugerida), caso R1 a R4 y tarjetas (A4.3)', () => {
+    expect(actual.rankingDemoPorDefecto, msg('el ranking por defecto de la demo')).toEqual(ref.rankingDemoPorDefecto);
+    expect(actual.rankingDemoPorDefecto.orden.map((f: { rotacionId: string }) => f.rotacionId)).toEqual(['R4', 'R2', 'R1']);
     expect(actual.rankingDemoR1aR4, msg('el ranking R1 a R4')).toEqual(ref.rankingDemoR1aR4);
     expect(actual.rankingDemoR1aR4.orden[0].rotacionId).toBe('R4');
     expect(actual.tarjetas, msg('el texto de las tarjetas')).toEqual(ref.tarjetas);
+  });
+  it('serie-balance de R4 en el seco, por mes (A4.1)', () => {
+    expect(actual.serieBalanceR4Seco, msg('las series del balance')).toEqual(ref.serieBalanceR4Seco);
   });
   it('proxima temporada: comparacion con la banda y anios analogos', () => {
     expect(actual.proximaTemporada, msg('la proxima temporada')).toEqual(ref.proximaTemporada);
