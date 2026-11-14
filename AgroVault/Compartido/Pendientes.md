@@ -21,7 +21,7 @@ Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo,
 | A4.8 | Falta el schema `smap` | `contratos/smap.schema.json` existe desde 0.10.0. Sigue abierto el token en el droplet y el uso en la interfaz |
 | A2.12 / A3.1 | La escena no carga losas o no está en el Laboratorio | La escena carga las 9 losas y el Laboratorio la monta en diferido |
 | C2 en `docs/14` | El TAW de Isla es `NO_EVALUABLE` | El suelo del paquete trae TAW 122.3 mm/m y la rotación sale `EVALUABLE` |
-| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.11.0 en `contratos/`: 15 schemas (más `comun`), ejemplos, `npm test` (91/91) y tipos TS. Ver [[Contratos]] |
+| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.12.0 en `contratos/`: 15 schemas (más `comun`), ejemplos, `npm test` (92/92) y tipos TS. Ver [[Contratos]] |
 | A2.5, A2.6, A2.7 | Hechas (Mompin, integradas a `main`) | Motor en `web/src/motor/` (funciones puras + Web Worker; la interfaz usa `crearClienteMotor()`): escenarios por lluvia de temporadas PV+OI de SIAP, ET0 Penman-Monteith FAO-56, cubeta FAO-56 cap. 8, pilar de déficit hídrico y estados. Pruebas 1 a 5 de doc 05 en verde (`cd web && npm test`; la parte de erosión de la prueba 2 pasa a A3.7). Ver `docs/05` |
 | A4.1 | Parte del motor hecha (Mompin), contrato `serie-balance` 0.11.0; falta graficar (balam) | `cliente.serieBalance(rotacionId, escenario)`: lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo. La interfaz no recalcula |
 | A4.3 | Parte lógica hecha (Mompin); falta mostrarla (balam) | `web/src/motor/tarjetas.ts` llena `explicacion` (por qué, evidencia con fuente, beneficios, huecos, riesgos) y el Worker la devuelve en `rankear`. Plantilla sin LLM; nada sin número o fuente |
@@ -31,7 +31,7 @@ Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo,
 | A4.2 | Hecha (Mompin) | Ranking B con hasta cuatro pilares: déficit, exceso de agua (`excesoHidrico`, contratos 0.7.0, `[DECIDIDO]` 14/11), compatibilidad y protección del suelo (A3.7), pesos iguales `SUPUESTO`. Normalización en `docs/05`, paso 7. Desempate del p50 `[DECIDIDO]`: el año más reciente (habitual 2016). Con el suelo real de Isla (A3.7): 1.º milpa, 2.º frijol-frijol, 3.º maíz-maíz; con una milpa sembrada dentro de ventana gana esa (ver `docs/05`, paso 7) |
 | A3.3 | **`[HECHO]`** (Mafer) | Estados legibles con daltonismo: simulación de Machado et al. 2009 en `web/src/escena/daltonismo.ts` y pruebas (dE ≥ 15 entre estados, íconos y patrones distintos). `NO_EVALUABLE` pasó a `#ececec`; íconos finales; ver `docs/06` |
 | A2.11 | **`[HECHO]`** (Mafer): frijol y calabaza, validados en el visor | `modelos/cultivos/`: 5 etapas de cada uno, paleta de 60 colores. Sin modelo propio para `estresada` y `marchita` (placa de estado). Abrir `visor_milpa.html` |
-| A5.7 | `[EN CURSO]` (Mafer): README hecho, **falta revision humana de licencias y de la declaracion de IA** | `README.md` ya reemplaza al anterior. Pendiente: decidir la licencia del repo; marca de agua en imagenes generadas con IA (web/src/ui/assets, video); citas de NSIDC y de IMERG. Reglas oficiales de entrega leidas el 14/11: demo = 7 slides o video <= 30 s, en ingles (ver `docs/01`) |
+| A5.7 | `[EN CURSO]` (Mafer): README hecho, **falta revision humana de licencias y de la declaracion de IA** | `README.md` ya reemplaza al anterior. Pendiente: decidir la licencia del repo; marca de agua en imagenes generadas con IA (web/src/ui/assets); citas de NSIDC y de IMERG |
 | A3.9 | **`[HECHO]`** (Mafer): chile y mascota; props (pozo, casa, arboles, pajaro) descartados, de acuerdo con Mompin | El chile usa los parametros del **pimiento dulce** (misma especie): **revisar**. La mascota es un **elote** (la eligio A3.9, los docs no fijan la verdura): `modelos/props/mascota_feliz.bbmodel`; la escena reservara un lugar opcional. `web/src/ui/demo.ts` aun no lista el chile (balam) |
 | A2.12 | **`[HECHO]`** (Mafer) | 9 losas de suelo en `modelos/suelos/` (tipo × humedad), para ponerse encima de la columna. **La escena aún no las carga** (hoy colorea la columna sin distinguir tipo); la integración es de A3. Ver `docs/07` |
 | A2.16 | **`[HECHO]`** (Mafer, conectada por Eduardo y desplegada) | Función y pruebas en `datos/catalogos/saxton_rawls.py`, verificada contra la Tabla 3 del artículo: arena y arcilla en fracción, **materia orgánica en porcentaje**. Sin materia orgánica, o con materia orgánica > 8 % o arcilla > 60 %, el TAW queda `NO_EVALUABLE`. El carbono orgánico de SoilGrids pasa a materia orgánica con el factor 1.724 (citarlo) |
@@ -60,12 +60,11 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 | A5.1 | Animación mínima al cambiar de etapa |
 | A5.2 | Slider de meses |
 | A5.3 | Móvil y teclado de punta a punta |
-| A5.6 | Hay guion en `docs/guion-video-borrador.md`. Falta grabar. Duración y reglas `[VERIFICAR]` (V-03, V-04) |
-| A5.7 | `[EN CURSO]` (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`, video) y citas de NSIDC e IMERG. Reglas oficiales leídas el 14/11: demo = 7 slides o video de 30 s o menos, en inglés (ver `docs/01`). Licencias sin constancia en el repo: `[VERIFICAR]` |
+| A5.7 | `[EN CURSO]` (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |
 | A5.8 | Capturas y demo con la red apagada. Bloqueada por A4.6 |
 | A5.9 | Envío |
 | A0.3 | Sigue sin marca. El ranking y los cultivos ya se decidieron en `docs/13` |
-| A0.5 | Reglas oficiales de entrega, video e IA |
+| A0.5 | Reglas oficiales de entrega e IA |
 | V-19 | Solo queda pintar por bloques `[EN EVENTO]`. `porCelda` sigue `null` |
 | V-22 | POWER responde CORS en el GET simple. El clima igual pasa por el backend |
 | V-24 | Decir en el pitch el rango, no una temporada exacta |

@@ -56,6 +56,12 @@ Decisiones afectadas:
 - **Cambio:** la escena carga las 9 losas de Mafer (`modelos/suelos/`) y pinta la columna con el tono del tipo de suelo. La losa sale de `textura.grupo` del contrato `suelo` y de la `humedad` del motor, con cortes en tercios de TAW `[PROPUESTA]`. Si falta el tipo o la humedad no hay losa, y sin humedad la columna va en gris.
 - **Fuente / evidencia:** tonos tomados de `modelos/paleta.md` (verificado en prueba); 159 pruebas de escena; headless con el motor real: suelo del mapa de Isla (arcilloso) y selector manual (franco).
 
+### 2026-11-14 — Video y presentación fuera del cronograma (Mompin)
+
+- **Archivos:** `docs/14` (sin A5.6; A5.9 solo envío y sin depender de A5.6; C6, A0.5, área R4 y camino crítico sin video ni pitch; tablero de Mafer; vistas regeneradas), `docs/13` (fila "Video y presentación" `[DECIDIDO]`; V-24 sin dueño), `AgroVault/Compartido/Pendientes.md`, `AgroVault/Compartido/Resumen.md`, `AgroVault/Compartido/Codigo.md` y `docs/guion-video-borrador.md` (aviso de borrador).
+- **Cambio y motivo:** el equipo veía el video y la presentación como pendientes y eso confundía los roles. Se definen al final, cuando el front esté conforme, y no se asignan ahora.
+- **Decisiones afectadas:** A5.6 (eliminada), A5.9, compuerta C6, V-24.
+
 ### 2026-11-14 — Calendario y aptitud fuera de México: GGCMI fase 3 y GAEZ v4 (Mompin, sesión features)
 
 - **Archivos:** `docs/13` (fila "Calendario y aptitud fuera de México" `[DECIDIDO]`), `docs/11` (tabla de recursos y riesgo del calendario), `docs/14` (A4.13 y tablero de Eduardo; vistas regeneradas).
@@ -285,6 +291,16 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — Contratos 0.12.0: correcciones de citas de IMERG, SMAP y MOD13 (compatible)
+
+- **Archivos:** `contratos/clima-escenario.schema.json` (`lluviaSatelital`, que también usa `serie-clima`), `contratos/smap.schema.json`, `contratos/ndvi.schema.json`, ejemplo de SMAP, un caso inválido, tipos, README; vault (`Contratos.md`, `Pendientes.md`); `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.0, en un commit aparte).
+- **Cambio y motivo:** correcciones que encontró Eduardo-B.
+  1. **IMERG:** la descripción decía que empieza el 2000-06-01. Ahora registra las tres fechas que dan las fuentes: POWER 1998-06-01, el catálogo de NASA 1998-01-01 y el espejo de UCAR 2000-06-01, con `[VERIFICAR]` contra GES DISC. Agrega el producto GPM_3IMERGDF V07 y su DOI, 10.5067/GPM/IMERGDF/DAY/07, que confirma el catálogo de NASA (data.nasa.gov).
+  2. **SMAP:** campo opcional `pases[].calidad` (alta, baja o desconocida): alta si `retrieval_qual_flag` vale 0 u 8, baja si el bit 0 está en 1. Lo confirman el ATBD de O'Neill y Bindlish (rev. F, 2020) y la guía de NSIDC. El DOI 10.5067/4XXOGX0OOW1S y la Tabla 6 de la guía de 2023 no se pudieron confirmar: `[VERIFICAR]`. Ojo: "cualquier bit en 1 es malo" no es exacto, porque el 8 tiene un bit en 1 y es de alta calidad.
+  3. **MOD13:** se documenta la pixel reliability: 0 bueno, 1 marginal, 2 nieve o hielo y 3 nublado, confirmados para v061. El -1 de relleno solo consta para V005: `[VERIFICAR]` en v6.1 y en ORNL DAAC.
+- **Fuente / evidencia:** data.nasa.gov (GPM_3IMERGDF V07); ATBD L2/L3 SM P rev. F (smap.jpl.nasa.gov); NSIDC, interpretación de banderas de los productos pasivos; documentación de MOD13Q1 v061 (Earth Engine) y página de QA de V005 del LP DAAC. `npm test` 92/92.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — Contratos 0.11.0: `serie-balance` para el dashboard (A4.1)
 
@@ -736,3 +752,9 @@ Primera documentación por tema a partir del video del compañero, el audio de l
 - Se conserva la atribución del servicio activo. El crédito de World Imagery se tomó de copyrightText del servicio oficial (consulta 14/11/2026): Esri, Vantor, Earthstar Geographics y GIS User Community. Se aclara en pantalla que las imágenes no son en vivo y que fecha/detalle dependen del lugar; no se inventa su fecha de captura.
 - Contorno con borde oscuro y trazo blanco sobre satélite, vértices con relleno contrastado y cuadrícula visible. Las imágenes son solo fondo de orientación; no cambian parámetros del motor ni identifican cultivos.
 - Chromium sobre build de producción: teselas reales de ambos servicios cargaron, cuatro vértices y cuadrícula persistieron al alternar, sin consultas a /api/; sin desbordamiento a 320 px. Se forzó fallo de teselas satelitales y se recuperó cambiando a calles. Captura web/evidencia/mapa-satelital.png.
+
+### 2026-11-14 — Correcciones de la verificación de citas: inicio de IMERG y licencia de POWER
+- **Cambio:** `INICIO_IMERG` pasa de 2000-06-01 a **1998-06-01** (`api/app/clientes/power.py`), con dos pruebas: la petición se recorta a 1998-06-01 y un rango de 1999 ya no se recorta. Antes la API descartaba dos años de datos válidos de IMERG V07 para rangos que empiezan antes de 2000-06-01. No cambia la ventana estándar de la demo (2005-10-01 a 2025-12-31).
+- **Fuente / evidencia:** la metodología de POWER lista "IMERG Precipitation, 0.1 grados, diario UTC, inicio June 1, 1998" (https://power.larc.nasa.gov/docs/methodology/); el catálogo CMR de NASA da cobertura de `GPM_3IMERGDF` V07 desde 1998-01-01. Esto **desmiente** la nota anterior de que los valores no nulos de 1999 eran "de origen no verificado": son IMERG V07 válidos.
+- **`APIs.md`:** se quita "Licencia CC BY 4.0" de NASA POWER. Su guía de referencia (`docs/referencing`, `docs` y `docs/services/api`) no declara licencia; los datos de misiones NASA siguen la política general de Earthdata (CC0 salvo restricción marcada), `VERIFICAR`. Se conserva la cita obligatoria.
+- **Pendiente de otros dueños (no se tocó):** `contratos/clima-escenario.schema.json` (descripción de `lluviaSatelital`) y `features/imerg/LEEME.md` y `features/encargos/eduardo-datos-globales.md` siguen diciendo 2000-06-01 (Mompin); los DOI del `README.md` (IMERG diario y carbono orgánico de OpenLandMap) son de Mafer.

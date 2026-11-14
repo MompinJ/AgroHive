@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
-| **Eduardo** | 12 | 2 | 3 | 2 | 63 % de 19 |
-| **Mafer** | 9 | 1 | 0 | 1 | 82 % de 11 |
+| **Eduardo** | 13 | 2 | 2 | 2 | 68 % de 19 |
+| **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
 | **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
-Proyecto completo: **45 de 61** actividades hechas (74 %), 3 en curso, 3 bloqueadas.
+Proyecto completo: **46 de 60** actividades hechas (77 %), 3 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -60,7 +60,7 @@ Proyecto completo: **45 de 61** actividades hechas (74 %), 3 en curso, 3 bloquea
 - [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después
 - [ ] **A4.13** Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
-- [-] **A5.8** Respaldo local sin internet y capturas `BLOQUEADO` — espera A2.4 con la zona real y el front conectado (A4.6)
+- [x] **A5.8** Respaldo local sin internet y capturas `HECHO` — demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503)
 
 ## Mafer
 
@@ -73,12 +73,11 @@ Proyecto completo: **45 de 61** actividades hechas (74 %), 3 en curso, 3 bloquea
 - [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
 - [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
 - [x] **A3.9** Cultivos 4 en adelante, props y mascota `HECHO`
-- [ ] **A5.6** Guion, video de demo y ensayo
 - [/] **A5.7** README con método, fuentes, límites, licencias y declaración de IA `EN CURSO`
 
 ## balam
 
-- [ ] **A0.5** Verificar reglas de entrega, IA y video (V-03, V-04)
+- [ ] **A0.5** Verificar reglas de entrega e IA (V-03, V-04)
 - [x] **A1.2** Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías `HECHO` — rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados
 - [x] **A2.9** Cuadrícula desde polígono (Turf.js) con tope de celdas `HECHO`
 - [x] **A2.10** Mapa y dibujo de polígono libre (Leaflet) `HECHO`
@@ -105,6 +104,6 @@ Proyecto completo: **45 de 61** actividades hechas (74 %), 3 en curso, 3 bloquea
 - **C3 · Escena viva**: se cruza cuando bloques 3D con relieve y estado coloreado desde el motor. Si no: Plan 2D y plantas procedurales
 - **C4 · Congelar funciones**: se cruza cuando ya no entran funciones nuevas. Si no: Recortar extras
 - **C5 · Congelar producto**: se cruza cuando solo errores y pulido. Si no: —
-- **C6 · Entrega lista**: se cruza cuando demo, video, README y envío listos. Si no: Respaldo local y video
+- **C6 · Entrega lista**: se cruza cuando demo, README y envío listos. Si no: Respaldo local
 
 Casillas: `[x]` hecha, `[/]` en curso, `[-]` bloqueada, `[ ]` pendiente.

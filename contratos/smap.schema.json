@@ -144,6 +144,16 @@
           "type": [
             "integer",
             "null"
+          ],
+          "description": "retrieval_qual_flag tal cual (entero de bits). Segun el ATBD de SMAP L2/L3 (O'Neill y Bindlish, rev. F, 2020), los valores 0 u 8 son retrievals de alta calidad; segun NSIDC, el bit 0 en 1 indica calidad incierta (no recomendada). Interpretacion en el campo calidad."
+        },
+        "calidad": {
+          "description": "Interpretacion de banderaCalidad (opcional, 0.12.0): alta si vale 0 u 8; baja si el bit 0 esta en 1; desconocida si no hay bandera o vale otra cosa. Fuente: ATBD de SMAP (O'Neill y Bindlish, 2020) y guia de NSIDC; la Tabla 6 de la guia de SMAP L3 (O'Neill et al., 2023, doi:10.5067/4XXOGX0OOW1S) [VERIFICAR DOI y tabla].",
+          "type": "string",
+          "enum": [
+            "alta",
+            "baja",
+            "desconocida"
           ]
         }
       },
