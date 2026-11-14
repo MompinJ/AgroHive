@@ -126,6 +126,14 @@ Por rotación, una tarjeta con:
 
 Si se usa un LLM, **solo redacta** a partir de números ya calculados. No decide ni inventa datos. Debe haber una plantilla de respaldo sin LLM.
 
+**Implementado (A4.3, parte lógica, `web/src/motor/tarjetas.ts`, 14/11):** la plantilla llena `explicacion` de `resultado-rotacion` (no hizo falta un contrato nuevo) y el Worker la devuelve en `rankear`; balam la muestra. Está en español para un agricultor, sin LLM. Cada frase sale de un número o una fuente del resultado; si no hay dato, la frase no se dice o se dice que falta.
+- **Por qué:** posición en el ranking, los tres años reales y qué combina el puntaje; si no tiene posición, "se muestra para explorar, pero no se recomienda" o "no se puede evaluar" con el motivo.
+- **Evidencia** (cada una con su fuente): lluvia de temporadas de cada año (POWER), falta de agua, exceso (FAO-56 ec. 88), días sin cultivo (SIAP) y cada siembra frente a su ventana (INIFAP).
+- **Beneficios:** solo hechos medidos y comparados con las demás rotaciones: agua cubierta en el año seco, menos días sin cultivo, menos lluvia perdida, siembras en ventana, leguminosa ("este simulador no mide su aporte al suelo"). No se habla de plagas ni de nitrógeno.
+- **Huecos:** pilares que no entran y por qué, calor sin umbral, erosión sin I30, suelo estimado, clima regional (tamaño de la celda según la latitud), humedad inicial regional, chile con datos del pimiento dulce, sin precios, costos, rendimiento ni plagas.
+- **Riesgos:** peor año con sus cifras, mes con más exceso en el año lluvioso, mes con más falta de agua en el año seco, siembras fuera de ventana y cultivos no recomendados.
+- **En la demo (R1 a R4, suelo real de Isla), R4 sale primera por el propio ranking**, no por la plantilla: "Es la opción más robusta de las 4 rotaciones comparadas…". Las tarjetas de R4 y R2 están en la regresión (A5.5).
+
 ## Propiedades obligatorias
 - **Determinista:** mismos datos y plan ⇒ mismo resultado.
 - **Rápido:** recalcular al cambiar escenario en menos de unos cientos de ms.

@@ -16,9 +16,9 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
 | **Eduardo** | 11 | 3 | 2 | 2 | 61 % de 18 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
-| **balam** | 6 | 0 | 0 | 10 | 38 % de 16 |
+| **balam** | 6 | 1 | 0 | 9 | 38 % de 16 |
 
-Proyecto completo: **38 de 60** actividades hechas (63 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **38 de 60** actividades hechas (63 %), 5 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -85,7 +85,7 @@ Proyecto completo: **38 de 60** actividades hechas (63 %), 4 en curso, 2 bloquea
 - [ ] **A3.6** Modo 2D ligero con los mismos valores del motor
 - [ ] **A3.8** Tooltips y valores por bloque
 - [ ] **A4.1** Dashboard: gráficas de lluvia, demanda y balance (Recharts)
-- [ ] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos
+- [/] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos `EN CURSO` — parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam)
 - [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)
 - [ ] **A4.5** Pantalla de método, fuentes y advertencias (A1, A3)
 - [x] **A4.9** Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción `HECHO`

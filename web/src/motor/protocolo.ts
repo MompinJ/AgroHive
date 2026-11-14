@@ -5,6 +5,7 @@ import { simularRotacionCompleta } from './analogos';
 import { resultadoCeldas, type EntradasMotor, type ResultadoMotor } from './motor';
 import { vistaProximaTemporada, type VistaProximaTemporada } from './proxima';
 import { rankear, type OpcionesRanking, type ResultadoRanking } from './ranking';
+import { conTarjetas } from './tarjetas';
 import type { ProximaTemporadaAproximada } from '../../../contratos/tipos/contratos';
 import type { Escenario, ResultadoCeldas, ResultadoRotacion, SerieClima } from './tipos';
 
@@ -31,6 +32,7 @@ export type Respuesta = { id: number; ok: true; resultado: Resultados[keyof Resu
 
 export class EstadoMotor {
   private readonly rotaciones = new Map<string, ResultadoMotor>();
+  private readonly entradas = new Map<string, EntradasMotor>();
 
   atender(p: Peticion): Respuesta {
     try {
@@ -40,6 +42,7 @@ export class EstadoMotor {
         case 'simular': {
           const r = simularRotacionCompleta(p.entradas);
           this.rotaciones.set(p.entradas.plan.rotacionId, r);
+          this.entradas.set(p.entradas.plan.rotacionId, p.entradas);
           return { id: p.id, ok: true, resultado: r.rotacion };
         }
         case 'celdas': {
@@ -57,13 +60,23 @@ export class EstadoMotor {
             const r = this.rotaciones.get(i) as ResultadoMotor;
             return { rotacion: r.rotacion, numeroSiembras: r.plan.ciclos.length };
           });
-          return { id: p.id, ok: true, resultado: rankear(entrada, p.opciones ?? {}) };
+          const ranking = rankear(entrada, p.opciones ?? {});
+          // A4.3: cada rotacion sale con su tarjeta en `explicacion` (plantilla, sin LLM).
+          const e0 = this.entradas.get(ids[0] as string) as EntradasMotor;
+          const motores = Object.fromEntries(ids.map((i) => [i, this.rotaciones.get(i) as ResultadoMotor]));
+          const rotaciones = conTarjetas({ ranking, motores, catalogo: e0.catalogo, calendario: e0.calendario ?? null, suelo: e0.suelo });
+          return { id: p.id, ok: true, resultado: { ...ranking, rotaciones } };
         }
         case 'proxima':
           return { id: p.id, ok: true, resultado: vistaProximaTemporada(p.proxima, p.escenarios) };
         case 'olvidar':
-          if (p.rotacionId) this.rotaciones.delete(p.rotacionId);
-          else this.rotaciones.clear();
+          if (p.rotacionId) {
+            this.rotaciones.delete(p.rotacionId);
+            this.entradas.delete(p.rotacionId);
+          } else {
+            this.rotaciones.clear();
+            this.entradas.clear();
+          }
           return { id: p.id, ok: true, resultado: null };
       }
     } catch (e) {

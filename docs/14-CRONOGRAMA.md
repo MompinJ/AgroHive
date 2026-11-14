@@ -136,7 +136,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | --- | --- | --- | --- | --- | --- | --- |
 | A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | R1 | M | Sonnet | A2.7 | Gráficas reales del escenario |
 | A4.2 `[HECHO]` 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3) | Ranking de rotaciones por robustez: criterio B `[DECIDIDO]` (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | R2 | M | Opus | A2.7 (y A3.7 para B) | Tabla ordenada con 3 o más rotaciones; pesos y criterio declarados |
-| A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
+| A4.3 `[EN CURSO]` parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam) | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | R2 | S | Sonnet | A4.3 | Con respaldo en plantilla |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |
 | A4.6 `[EN CURSO]` cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor | Conectar front y API (cliente generado, estados de carga y error) | R1 + R3 | M | Opus | A2.1, A3.4 | Flujo P0 a P3 con datos reales |
@@ -216,7 +216,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
 | **Eduardo** | 11 | 3 | 2 | 2 | 61 % de 18 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
-| **balam** | 6 | 0 | 0 | 10 | 38 % de 16 |
+| **balam** | 6 | 1 | 0 | 9 | 38 % de 16 |
 
 ### Mompin
 
@@ -291,7 +291,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A3.6 | Modo 2D ligero con los mismos valores del motor | PENDIENTE |  |
 | A3.8 | Tooltips y valores por bloque | PENDIENTE |  |
 | A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | PENDIENTE |  |
-| A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | PENDIENTE |  |
+| A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | EN CURSO | parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam) |
 | A4.4 | Redacción con LLM sobre números ya calculados (opcional) | PENDIENTE |  |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | PENDIENTE |  |
 | A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | HECHO |  |

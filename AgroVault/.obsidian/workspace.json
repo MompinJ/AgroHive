@@ -6,6 +6,7 @@
       {
         "id": "d42498bf0580f085",
         "type": "tabs",
+        "dimension": 25.578034682080926,
         "children": [
           {
             "id": "7ae3389eb9de2df2",
@@ -26,6 +27,7 @@
       {
         "id": "f8e7867f4ef17b36",
         "type": "tabs",
+        "dimension": 74.42196531791907,
         "children": [
           {
             "id": "b3685816bd71af1d",
@@ -115,7 +117,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Bienvenido.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -134,7 +135,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Bienvenido.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -177,7 +177,6 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Bienvenido.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -204,8 +203,10 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "7ae3389eb9de2df2",
+  "active": "b3685816bd71af1d",
   "lastOpenFiles": [
+    "Compartido/Cronograma.md",
+    "Bienvenido.md",
     "Compartido/Servidor.md",
     "Compartido/APIs.md",
     "Claude/INSTRUCCIONES.md",
@@ -219,7 +220,6 @@
     "Compartido/Contratos.md",
     "Compartido/Resumen.md",
     "Compartido/Reglas.md",
-    "Compartido",
-    "Bienvenido.md"
+    "Compartido"
   ]
 }
