@@ -282,7 +282,7 @@ export interface CoeficientesKc {
   final: ValorCitado;
 }
 /**
- * Rangos de EcoCrop y umbral de estres por calor.
+ * Rangos de EcoCrop y umbral de estres por calor. La lluvia viene en dos escalas distintas: del ciclo (siembra a cosecha) y anual (como la publica EcoCrop); no se convierten entre si.
  */
 export interface UmbralesCultivo {
   tMinAbsC: ValorCitado;
@@ -291,6 +291,8 @@ export interface UmbralesCultivo {
   tOptMaxC: ValorCitado;
   lluviaCicloMinMm: ValorCitado;
   lluviaCicloMaxMm: ValorCitado;
+  lluviaAnualMinMm: ValorCitado;
+  lluviaAnualMaxMm: ValorCitado;
   tEstresCalorC: ValorCitado;
 }
 export interface VentanaSiembra {

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.2.0",
+    "versionContrato": "0.3.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -81,6 +81,14 @@
         "lluviaCicloMaxMm": {
           "estado": "NO_EVALUABLE",
           "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: rango anual de FAO EcoCrop con cita verificada por una persona."
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: rango anual de FAO EcoCrop con cita verificada por una persona."
         },
         "tEstresCalorC": {
           "estado": "NO_EVALUABLE",
@@ -264,6 +272,26 @@
           "estado": "EVALUABLE",
           "valor": 1200,
           "unidad": "mm",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 600,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
+            "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+          },
+          "etiqueta": "SUPUESTO"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 2000,
+          "unidad": "mm/anio",
           "fuente": {
             "nombre": "EJEMPLO - valores ficticios (cultivo ficticio)",
             "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
