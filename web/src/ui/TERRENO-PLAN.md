@@ -14,4 +14,4 @@ Plan de implementación:
 - [x] Probar geometría, límites, errores y persistencia de navegación; ejecutar suites y build.
 - [x] Actualizar README, registro y cronograma con evidencia real.
 
-Límites: WGS84, sin cruce del antimeridiano, latitudes menores de 85 grados y extensión local de hasta 100 km. Son límites técnicos del generador local, no parámetros agronómicos. Base cartográfica OpenStreetMap con atribución; si no carga se avisa. Suelo pendiente de consulta, sin inventar propiedades.
+Límites: WGS84, sin cruce del antimeridiano, latitudes menores de 85 grados y extensión local de hasta 100 km. Son límites técnicos del generador local, no parámetros agronómicos. Vista satelital Esri World Imagery por defecto, con OpenStreetMap como alternativa y atribución de cada fuente; si no carga se avisa. Suelo pendiente de consulta, sin inventar propiedades.

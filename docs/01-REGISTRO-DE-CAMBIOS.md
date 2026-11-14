@@ -719,3 +719,9 @@ Primera documentación por tema a partir del video del compañero, el audio de l
 - **Corrección de una revisión:** `earthaccess` guarda el login en estado global y la ruta lee hasta 3 días a la vez en hilos distintos. La sesión autenticada se crea una sola vez, bajo `threading.Lock`, y se reutiliza 30 minutos (prueba con 6 hilos: un solo login). El token sigue saliendo solo de `EARTHDATA_TOKEN`.
 - **Sin cambio de alcance.** El token en el droplet y el despliegue siguen siendo de la sesión A; esta rama no toca NDVI (A4.11 está en pausa).
 - **Verificación:** api 87, contratos 91/91, catálogos y `unittest`, `tsc` y vitest de web (338) en verde.
+
+### 2026-11-14 — Vista satelital predeterminada en el mapa de Balam
+- Balam aprobó en el chat usar vista satelital por defecto, con selector para volver al mapa de calles. MapaParcela alterna Esri World Imagery y OpenStreetMap manteniendo el mismo mapa, vértices y cuadrícula; no consulta de nuevo clima, suelo ni elevación.
+- Se conserva la atribución del servicio activo. El crédito de World Imagery se tomó de copyrightText del servicio oficial (consulta 14/11/2026): Esri, Vantor, Earthstar Geographics y GIS User Community. Se aclara en pantalla que las imágenes no son en vivo y que fecha/detalle dependen del lugar; no se inventa su fecha de captura.
+- Contorno con borde oscuro y trazo blanco sobre satélite, vértices con relleno contrastado y cuadrícula visible. Las imágenes son solo fondo de orientación; no cambian parámetros del motor ni identifican cultivos.
+- Chromium sobre build de producción: teselas reales de ambos servicios cargaron, cuatro vértices y cuadrícula persistieron al alternar, sin consultas a /api/; sin desbordamiento a 320 px. Se forzó fallo de teselas satelitales y se recuperó cambiando a calles. Captura web/evidencia/mapa-satelital.png.
