@@ -128,6 +128,22 @@ def test_parametros_invalidos_son_422(monkeypatch, consulta):
     assert cliente.get(f"/api/smap?lon={LON}&lat={LAT}&{consulta}").status_code == 422
 
 
+def test_la_sesion_de_earthaccess_se_crea_una_sola_vez_aunque_haya_hilos(monkeypatch):
+    import sys
+    import threading
+    import types
+    logins = []
+    falso = types.SimpleNamespace(login=lambda strategy: (logins.append(1), types.SimpleNamespace(authenticated=True))[1],
+                                  get_requests_https_session=lambda: object())
+    monkeypatch.setitem(sys.modules, "earthaccess", falso)
+    monkeypatch.setitem(earthdata._sesion, "objeto", None)
+    sesiones = []
+    hilos = [threading.Thread(target=lambda: sesiones.append(earthdata._sesion_autenticada())) for _ in range(6)]
+    [h.start() for h in hilos]
+    [h.join() for h in hilos]
+    assert len(logins) == 1 and len({id(s) for s in sesiones}) == 1
+
+
 def test_leer_pases_respeta_el_rango_valido_y_el_relleno():
     buf = io.BytesIO()
     with h5py.File(buf, "w") as h:
