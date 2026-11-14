@@ -95,6 +95,13 @@ Lo ideal es calcular los tres; se recorta según datos y tiempo. `[DEPENDE-DATOS
 - En el Worker: `rankear` (protocolo) o `cliente.rankear()`. Se vuelve a pedir después de cada `simular`, porque el arrepentimiento depende de las demás rotaciones.
 - Con datos reales (paquete de demo, suelo franco del selector): orden A = R2 (maíz-maíz: 0 % en los tres escenarios), R1 (milpa: 0.16 % en el seco), R3 (frijol-frijol: 0.32 % en el seco). Son diferencias muy pequeñas, que pueden cambiar con el clima o el suelo; la tarjeta lo explica con las cifras.
 
+## Capa "próxima temporada (aproximada)" en el motor (A2.13, 14/11)
+La banda la construye la API (`GET /api/proxima-temporada`, método de doc 13). El motor (`web/src/motor/proxima.ts`, mensaje `proxima` del Worker) **no la recalcula ni la convierte en cifra**:
+- Revisa lo que el contrato obliga: `esPrediccion: false`, 6 meses, bandas con los dos extremos y no invertidas. Si algo no se cumple, la capa queda `NO_EVALUABLE` con motivo y no se muestra. `ERROR_DATOS` de la API se conserva.
+- Pone cada mes de la banda junto a la **lluvia real del mismo mes** en el año agrícola de cada escenario (octubre a diciembre en *t*-1, el resto en *t*) y dice si cae debajo, dentro o encima de la banda, además de en cuántos meses cae dentro. No suma bandas de varios meses, porque la suma de percentiles mensuales no es un percentil de la suma.
+- Con el paquete de demo (emitido 14/11, noviembre de 2026 a abril de 2027): el habitual (2008) cae dentro de la banda en 6 de 6 meses; el seco (2023) y el lluvioso (2024), en 5 de 6. La banda p10-p90 es ancha, así que distingue poco entre escenarios.
+- **Sin decidir:** correr un escenario "próxima temporada" en el motor. La propuesta es usar años análogos reales: los años del histórico cuya lluvia mensual cae dentro de la banda en todos los meses del horizonte. El plan se simularía en cada uno y se mostraría el rango de resultados como `EXPLORATORIO`, sin ranking. Necesita un lugar en el contrato `resultado-rotacion` (hoy solo tiene seco, habitual y lluvioso). No se generan series diarias a partir de la banda: eso sería inventar días.
+
 ## Paso 8: explicación
 Por rotación, una tarjeta con:
 - Por qué se sugiere, con evidencia concreta (año real, lluvia, mes, déficit).

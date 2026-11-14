@@ -106,7 +106,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | R1 | M | Sonnet | A1.2 | El usuario dibuja y ve su parcela (P1) |
 | A2.11 | Cultivos 1 a 3 completos, todas las etapas y estados de estrés | R4 | **L** | Opus | A1.4 | Modelos probados en la escena real (V-14) |
 | A2.12 | Bloques de suelo por tipo y humedad | R4 | S | Sonnet | A1.4 | Variantes en `modelos/` |
-| A2.13 `[EN CURSO]` backend hecho; falta la parte del motor (Mompin) | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | R2 + R3 | M | Opus | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, horizonte de 6 meses, etiquetado como aproximado. Después del motor; no bloquea el MVP |
+| A2.13 `[EN CURSO]` backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | R2 + R3 | M | Opus | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, horizonte de 6 meses, etiquetado como aproximado. Después del motor; no bloquea el MVP |
 | A2.14 `[HECHO]` | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | R3 | M | Sonnet | A1.3, A0.7 | `GET /api/suelo` devuelve textura y pH con etiqueta `SUPUESTO`; respaldo manual (V-23) |
 | A2.15 | Cliente OpenLandMap y comparación con ISRIC en `GET /api/suelo` (V-23: ambos servicios) | R3 | S | Sonnet | A2.14 | `GET /api/suelo` devuelve `estimaciones` de ISRIC y OpenLandMap con fuente y `estimacionUsada` |
 | A2.16 (Mafer) | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | R3 / Mafer | M | Opus | A2.14, A1.6 | `agua.tawMmPorM` con `metodoTaw` y `retencion` (θsat, θFC, θWP), citado y `SUPUESTO`; prueba contra valores publicados del artículo |
@@ -225,7 +225,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.6 | ET0, ETc y balance de agua por bloque (cubeta) | HECHO | 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7) |
 | A2.7 | Pilar de déficit hídrico y estados de evaluabilidad | HECHO | 14/11 |
 | A2.8 | Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) | HECHO | (c) `temporada_tipica`, 14/11 |
-| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | EN CURSO | backend hecho; falta la parte del motor (Mompin) |
+| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | EN CURSO | backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir |
 | A3.1 | Escena 3D con relieve (altura por bloque, InstancedMesh) | PENDIENTE |  |
 | A3.2 | Cargador de .bbmodel con instancing por cultivo y etapa | PENDIENTE |  |
 | A3.7 | Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) | PENDIENTE |  |
@@ -244,7 +244,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.2 | Respaldo Open-Meteo y estados RESPALDO_HISTORICO / ERROR_DATOS | HECHO |  |
 | A2.3 | Elevación por celda (tiles Terrarium o SRTM) y pendiente | HECHO |  |
 | A2.4 | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | HECHO | paquete conforme a contratos (clima 2005-10-01 a 2025-12-31, terreno, suelo, proxima temporada) sobre una parcela ficticia en Isla; el motor ya corre con el |
-| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | EN CURSO | backend hecho; falta la parte del motor (Mompin) |
+| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | EN CURSO | backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir |
 | A2.14 | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | HECHO |  |
 | A2.15 | Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) | PENDIENTE |  |
 | A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | EN CURSO | front servido en el droplet; falta la demo real (A4.6) |
