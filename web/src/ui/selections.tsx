@@ -1,5 +1,7 @@
-// Estado de interacción local. No representa contratos ni resultados del motor.
-export const crops = ['Maíz', 'Frijol', 'Calabaza'] as const;
+import { demoSequence } from './demo';
+
+// Estado de interacción local; R1 parte del plan de ejemplo de A1.1.
+export const crops = ['Maíz', 'Frijol', 'Calabaza', 'NO_EVALUABLE'] as const;
 export type Crop = typeof crops[number];
 export type Cycle = 1 | 2 | 3;
 export const cycles: readonly Cycle[] = [1, 2, 3];
@@ -12,7 +14,7 @@ export type RotationChoices = Record<RotationId, CropSequence>;
 
 export const initialRotations: RotationChoices = {
   R0: ['Maíz', 'Maíz', 'Maíz'],
-  R1: ['Maíz', 'Frijol', 'Calabaza'],
+  R1: demoSequence,
   R2: ['Frijol', 'Calabaza', 'Maíz'],
 };
 

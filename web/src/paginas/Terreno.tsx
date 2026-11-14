@@ -1,12 +1,13 @@
 import { ActionLink, Card, FieldIllustration, PageHeading } from '../ui/components';
+import { demo } from '../ui/demo';
 
 export function Terreno({ polygonMode, onSelectDemo }: { polygonMode: boolean; onSelectDemo: () => void }) {
   return <>
     <PageHeading step="02" title="Empieza por un terreno.">Explora el caso de ejemplo mientras preparamos la conexión con mapas y datos reales.</PageHeading>
     <div className="terrain-layout">
-      <Card title="Isla, Veracruz" eyebrow="Parcela de demostración" className="demo-card">
+      <Card title={demo.location} eyebrow="Parcela de demostración" className="demo-card">
         <FieldIllustration compact />
-        <div className="demo-description"><span className="small-tag">SUPUESTO</span><p><strong>2 hectáreas ficticias</strong> para explorar la interfaz. No corresponden a un levantamiento real del terreno.</p></div>
+        <div className="demo-description"><span className="small-tag">SUPUESTO</span><p><strong>{demo.areaHa} hectáreas ficticias</strong> para explorar la interfaz. No corresponden a un levantamiento real del terreno.</p></div>
         <p>El clima, la elevación y las propiedades del suelo están pendientes de integrar. No se descargarán datos al continuar.</p>
         <a className="button" href="#/laboratorio" onClick={onSelectDemo}>Abrir laboratorio demo <span aria-hidden="true">↗</span></a>
       </Card>

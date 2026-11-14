@@ -13,7 +13,7 @@ export function Comparacion({ rotations, rotation, cycle, scenario }: { rotation
     </Card>)}</div>
     <div className="evidence-grid">
       <Card title="¿Qué falta para evaluar?" eyebrow="Evidencia y evaluabilidad">
-        <DataState state="missing">Aún no están integrados los contratos, las series climáticas y los resultados del motor.</DataState>
+        <DataState state="missing">Se utilizan ejemplos de contratos, pero aún faltan las series climáticas reales y los resultados del motor.</DataState>
         <p>Una alternativa será evaluable cuando el motor entregue los indicadores y su evidencia. Este prototipo no presenta resultados evaluables de ejemplo.</p>
       </Card>
       <Card title="Ninguna recomendación todavía" eyebrow="Riesgos y límites">

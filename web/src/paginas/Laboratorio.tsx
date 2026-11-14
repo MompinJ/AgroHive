@@ -1,6 +1,7 @@
 import { ActionLink, Card, DataState, FieldIllustration, PageHeading } from '../ui/components';
 import { crops, cycles, CycleSelector, rotationIds, ScenarioSelector } from '../ui/selections';
 import type { Crop, CropSequence, Cycle, RotationId, Scenario } from '../ui/selections';
+import { demo } from '../ui/demo';
 
 interface LaboratoryProps {
   rotation: RotationId;
@@ -34,7 +35,7 @@ export function Laboratorio(props: LaboratoryProps) {
         <p className="quiet-note">Sin fechas de siembra ni parámetros agronómicos. No son recomendaciones de rotación.</p>
       </Card>
       <Card title="Parcela demo · Isla" eyebrow="02 / Explora" className="terrain-panel">
-        <div className="terrain-toolbar"><span className="small-tag">2 ha ficticias · SUPUESTO</span><span className="view-pending">2D / 3D pendientes</span></div>
+        <div className="terrain-toolbar"><span className="small-tag">{demo.areaHa} ha ficticias · SUPUESTO</span><span className="view-pending">2D / 3D pendientes</span></div>
         <div className="terrain-preview"><FieldIllustration compact /><div className="preview-label"><strong>Espacio reservado para el terreno</strong><span>Ilustración decorativa, sin cuadrícula ni relieve real</span></div></div>
         <div className="selection-readout" role="status"><span>{rotation} / Ciclo {cycle}</span><strong>{sequence[cycle - 1]}</strong><span>Escenario {scenario.toLowerCase()}</span></div>
         <CycleSelector value={cycle} onChange={props.onCycle} />

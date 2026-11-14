@@ -5,6 +5,7 @@ import { Laboratorio } from './paginas/Laboratorio';
 import { Terreno } from './paginas/Terreno';
 import { ActionLink, Brand, MethodNotes, Navigation, PageHeading } from './ui/components';
 import { pages, usePage } from './ui/navigation';
+import { demo } from './ui/demo';
 import { initialRotations } from './ui/selections';
 import type { Crop, Cycle, RotationChoices, RotationId, Scenario } from './ui/selections';
 
@@ -49,7 +50,7 @@ export default function App() {
   return <>
     <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
     <header className="site-header"><div className="header-inner"><Brand /><Navigation path={path} /><span className="prototype-badge"><span aria-hidden="true" />Prototipo A1.2</span></div></header>
-    <div className="prototype-strip"><div className="wrap"><strong>Interfaz de demostración</strong><span>Sin conexión a datos NASA ni al motor de simulación.</span></div></div>
+    <div className="prototype-strip"><div className="wrap"><strong>Interfaz de demostración</strong><span>Sin conexión a datos NASA ni al motor de simulación.</span><span>{demo.notice}</span></div></div>
     <main id="contenido" className="wrap main-content" tabIndex={-1}>{content}<MethodNotes /></main>
     <div className="sr-only" role="status">{announcement}</div>
     <footer className="site-footer wrap"><p>AgroHive <span aria-hidden="true">/</span> Code Hive · NASA Space Apps 2026</p><p>Apoya la decisión del agricultor. No reemplaza asesoría agronómica.</p></footer>
