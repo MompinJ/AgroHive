@@ -87,6 +87,10 @@ export type FiltroClima = boolean | null;
  */
 export type CriterioRanking = "B_minimax_arrepentimiento" | "A_exposicion_hidrica_peor_caso";
 /**
+ * Una columna diaria (mm o mm/dia). null si ese dia falta el dato de entrada; nunca se rellena con 0.
+ */
+export type ColumnaDiaria = (number | null)[];
+/**
  * Clase textural USDA (12 clases).
  */
 export type ClaseTextura =
@@ -129,6 +133,7 @@ export interface ContratosAgroHive {
   "proxima-temporada"?: ProximaTemporadaAproximada;
   "resultado-celda"?: ResultadoCeldas;
   "resultado-rotacion"?: ResultadoRotacion;
+  "serie-balance"?: SerieBalance;
   "serie-clima"?: SerieClima;
   smap?: Smap;
   suelo?: Suelo;
@@ -1015,6 +1020,93 @@ export interface Evidencia {
   valor?: number | null;
   unidad?: string;
   fuente: Fuente;
+}
+/**
+ * Series del balance de agua (FAO-56 cap. 8) de una rotacion en un escenario, por ciclo: diaria en columnas y agregada por mes. La entrega el motor bajo demanda (A4.1, dashboard); la interfaz solo las grafica, no recalcula. Las fechas son las del plan; el clima de cada dia es el del anio real del escenario (fechaClima = fecha del clima del primer dia). Un ciclo NO_EVALUABLE o ERROR_DATOS no lleva series (columnas vacias y mensual vacio) y lleva motivo. Agregado en 0.11.0 (A4.1).
+ */
+export interface SerieBalance {
+  meta: Meta;
+  rotacionId: IdRotacion;
+  escenario: Escenario;
+  anioReal: number;
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  unidades: UnidadesBalance;
+  /**
+   * @minItems 1
+   */
+  fuentes: [Fuente, ...Fuente[]];
+  ciclos: CicloSerieBalance[];
+  advertencias?: Advertencia[];
+}
+/**
+ * Unidades de cada columna (fijas).
+ */
+export interface UnidadesBalance {
+  lluviaMm: "mm/dia";
+  et0Mm: "mm/dia";
+  etcMm: "mm/dia";
+  etcAjMm: "mm/dia";
+  drMm: "mm";
+  rawMm: "mm";
+  humedad: "fraccion de TAW (0 a 1)";
+  percolacionMm: "mm/dia";
+  deficitMm: "mm/dia";
+}
+export interface CicloSerieBalance {
+  ciclo: number;
+  cultivo: IdCultivo;
+  /**
+   * Celdas que siguen este cultivo en este ciclo (con porCelda puede haber varias series por ciclo).
+   *
+   * @minItems 1
+   */
+  celdas: [IdCelda, ...IdCelda[]];
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  desde: Fecha;
+  /**
+   * Fecha del clima del escenario que corresponde al primer dia; null si el ciclo no se simulo.
+   */
+  fechaClima: Fecha | null;
+  /**
+   * Capacidad de la cubeta TAW = TAW por metro x Zr (mm); null si no se simulo.
+   */
+  tawMm: number | null;
+  dias: ColumnasDiarias;
+  /**
+   * Sumas por mes del plan (mm) y humedad media; mesClima es el mes del clima del escenario.
+   */
+  mensual: MesBalance[];
+}
+/**
+ * Columnas diarias alineadas: el indice i es el dia desde + i. Todas con el mismo largo: el schema no puede exigirlo; lo comprueba contratos/validar.mjs (chequeo extra) y lo garantiza el motor.
+ */
+export interface ColumnasDiarias {
+  lluviaMm: ColumnaDiaria;
+  et0Mm: ColumnaDiaria;
+  etcMm: ColumnaDiaria;
+  etcAjMm: ColumnaDiaria;
+  drMm: ColumnaDiaria;
+  rawMm: ColumnaDiaria;
+  /**
+   * Agua en la cubeta como fraccion de TAW (0 a 1), igual que resultado-celda.humedad.
+   */
+  humedad: (number | null)[];
+  percolacionMm: ColumnaDiaria;
+  deficitMm: ColumnaDiaria;
+}
+export interface MesBalance {
+  mes: string;
+  mesClima: string;
+  dias: number;
+  lluviaMm: number;
+  et0Mm: number;
+  etcMm: number;
+  etcAjMm: number;
+  percolacionMm: number;
+  deficitMm: number;
+  humedadMedia: number;
 }
 /**
  * Respuesta de GET /api/clima: serie diaria de un periodo, sin elegir escenario (modelo SerieClima de api/app/modelos.py). El motor (A2.5) corta de aqui los anios de cada escenario y arma clima-escenario. Usa el mismo dia que clima-escenario.

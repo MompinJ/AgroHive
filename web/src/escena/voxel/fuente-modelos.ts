@@ -4,8 +4,9 @@
 
 import { leerBbmodel, type ModeloVoxel } from './bbmodel';
 
-// Plantas (modelos/cultivos/) y losas de suelo (modelos/suelos/, A2.12); los nombres no se repiten.
-const archivos = import.meta.glob(['../../../../modelos/cultivos/*.bbmodel', '../../../../modelos/suelos/*.bbmodel'], {
+// Plantas (modelos/cultivos/), losas de suelo (modelos/suelos/, A2.12) y props como la mascota
+// (modelos/props/); los nombres no se repiten.
+const archivos = import.meta.glob(['../../../../modelos/cultivos/*.bbmodel', '../../../../modelos/suelos/*.bbmodel', '../../../../modelos/props/*.bbmodel'], {
   query: '?raw',
   import: 'default',
 }) as Record<string, () => Promise<string>>;

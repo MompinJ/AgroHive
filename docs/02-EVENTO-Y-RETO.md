@@ -55,5 +55,5 @@ SMAP, ECOSTRESS, GPM, Landsat, MODIS, NASA POWER, GRACE y GRACE-FO, SRTM y otros
 ## Enlaces
 
 - [NASA Space Apps Challenge 2026](https://www.spaceappschallenge.org/2026/)
-- [Reto Field Shift](https://www.spaceappschallenge.org/2026/challenges/field-shift-adapting-farms-with-nasa-data/)
+- [Reto Field Shift](https://www.spaceappschallenge.org/2026/challenges/adapting-farms-with-nasa-data/)
 - [Preguntas públicas sobre recursos e IA](https://github.com/nasa/spaceapps/discussions/1849)

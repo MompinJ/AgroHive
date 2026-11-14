@@ -31,7 +31,7 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 | A3.6 | Modo 2D con los mismos números. Bloquea A5.4 |
 | A3.8 | Tooltip o toque: humedad, déficit, pendiente |
 | A3.9 | Chile y mascota hechos. Falta revisión humana del visor y de la equivalencia pimiento dulce. La escena no muestra la mascota. Props descartados |
-| A4.1 | Gráficas de lluvia, demanda y balance |
+| A4.1 | Gráficas de lluvia, demanda y balance (balam). El motor ya entrega las series: `cliente.serieBalance(rotacionId, escenario)` con lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo (contrato `serie-balance` 0.11.0). La interfaz no recalcula |
 | A4.3 | Pintar `explicacion` en la comparación. La plantilla ya sale de `rankear` |
 | A4.4 | Redacción con LLM, opcional, solo sobre números ya calculados |
 | A4.5 | Pantalla de método, fuentes y advertencias |
@@ -45,7 +45,7 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 | A5.2 | Slider de meses |
 | A5.3 | Móvil y teclado de punta a punta |
 | A5.6 | Hay guion en `docs/guion-video-borrador.md`. Falta grabar. Duración y reglas `[VERIFICAR]` (V-03, V-04) |
-| A5.7 | Hay borrador en `docs/README-borrador.md`. `README.md` sigue corto. Licencias sin constancia en el repo: `[VERIFICAR]` |
+| A5.7 | `[EN CURSO]` (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`, video) y citas de NSIDC e IMERG. Reglas oficiales leídas el 14/11: demo = 7 slides o video de 30 s o menos, en inglés (ver `docs/01`). Licencias sin constancia en el repo: `[VERIFICAR]` |
 | A5.8 | Capturas y demo con la red apagada. Bloqueada por A4.6 |
 | A5.9 | Envío |
 | A0.3 | Sigue sin marca. El ranking y los cultivos ya se decidieron en `docs/13` |

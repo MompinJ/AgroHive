@@ -5,6 +5,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Advertencia, Parcela, ResultadoCeldas, Suelo } from '../../../contratos/tipos/contratos';
 import { construirEscena } from './adaptador';
+import type { AvisoDatos } from '../api/datosParcela';
+import { CODIGOS_TERRENO } from './avisos-datos';
+import { AvisosDatos } from './AvisosDatos';
+import { bloqueCentral, fichaBloque, vecino } from './ficha';
 import { describirBloque, entradasLeyenda, type EntradaLeyenda } from './leyenda';
 import { EXAGERACION_VERTICAL_DEFECTO, type BloqueEscena } from './modelo';
 import { rgbaPlaca } from './placa';
@@ -20,6 +24,10 @@ export interface EscenaParcelaProps {
   fecha?: string;
   /** Suelo de la parcela (GET /api/suelo o selector manual): su tipo elige el tono y las losas (A2.12). */
   suelo?: Suelo | null;
+  /** Avisos de usarDatosParcela (web/src/api/): clima de respaldo, suelo SUPUESTO, proxima temporada... */
+  avisosDatos?: readonly AvisoDatos[];
+  /** Lugar de la mascota de Mafer (si existe su modelo). Por defecto, visible. */
+  mascota?: boolean;
   className?: string;
   /** Solo para mediciones (vista previa, A5.4): recibe la escena three ya creada. */
   onEscena?: (escena: EscenaThree | null) => void;
@@ -44,12 +52,29 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, className = '', onEscena }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], mascota = true, className = '', onEscena }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
   const [reducirMovimiento, setReducirMovimiento] = useState(prefiereMenosMovimiento);
+  const [viento, setViento] = useState(false);
+
+  // Si el sistema pide menos movimiento mientras la escena esta abierta, se respeta al momento.
+  useEffect(() => {
+    let consulta: MediaQueryList;
+    try {
+      consulta = window.matchMedia('(prefers-reduced-motion: reduce)');
+    } catch {
+      return;
+    }
+    const cambio = () => {
+      if (consulta.matches) setReducirMovimiento(true);
+    };
+    consulta.addEventListener('change', cambio);
+    return () => consulta.removeEventListener('change', cambio);
+  }, []);
   const [seleccion, setSeleccion] = useState<BloqueEscena | null>(null);
+  const [hover, setHover] = useState<{ bloque: BloqueEscena; x: number; y: number } | null>(null);
   const [avisosRender, setAvisosRender] = useState<Advertencia[]>([]);
   const [sinWebGL, setSinWebGL] = useState(false);
 
@@ -62,11 +87,14 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
   const opciones = useMemo(
     () => ({
       reducirMovimiento,
+      viento,
+      mascota,
       onSeleccion: setSeleccion,
+      onHover: (bloque: BloqueEscena | null, x: number, y: number) => setHover(bloque ? { bloque, x, y } : null),
       onAviso: (codigo: string, mensaje: string) =>
         setAvisosRender((prev) => (prev.some((a) => a.mensaje === mensaje) ? prev : [...prev, { codigo, mensaje, severidad: 'aviso' }])),
     }),
-    [reducirMovimiento],
+    [reducirMovimiento, viento, mascota],
   );
 
   useEffect(() => {
@@ -92,14 +120,28 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
   }, [opciones]);
 
   useEffect(() => {
-    setSeleccion(null);
+    // La seleccion se conserva si la celda sigue en la escena (otra fecha, ciclo o escenario).
+    setSeleccion((prev) => (prev ? (modelo.bloques.find((b) => b.celdaId === prev.celdaId) ?? null) : null));
+    setHover(null);
     setAvisosRender([]);
     escena.current?.actualizar(modelo);
   }, [modelo]);
 
+  const elegir = (b: BloqueEscena | null) => {
+    setSeleccion(b);
+    escena.current?.seleccionar(b);
+  };
+  const ficha = seleccion ? fichaBloque(seleccion) : null;
+  const noRecomendados = modelo.bloques.filter((b) => b.noRecomendadoEnLugar).length;
+  const mover = (dx: number, dz: number) => {
+    const actual = seleccion ?? bloqueCentral(modelo.bloques);
+    if (actual) elegir(seleccion ? vecino(modelo.bloques, actual, dx, dz) : actual);
+  };
+
   const avisos = [...modelo.avisos, ...avisosRender];
   const criticos = avisos.filter((a) => a.severidad === 'critico');
-  const otros = avisos.filter((a) => a.severidad !== 'critico');
+  // Los avisos del terreno van en la franja de datos, no repetidos en la lista general.
+  const otros = avisos.filter((a) => a.severidad !== 'critico' && !CODIGOS_TERRENO.has(a.codigo));
 
   return (
     <section className={`escena ${className}`} aria-label="Escena 3D de la parcela">
@@ -108,6 +150,8 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
           <strong>{a.codigo === 'DATOS_DE_EJEMPLO' ? 'Datos de ejemplo' : 'Aviso'}:</strong> {a.mensaje}
         </p>
       ))}
+
+      <AvisosDatos avisos={avisosDatos} advertenciasParcela={parcela.advertencias ?? []} />
 
       <div className="escena-lienzo-caja">
         {sinWebGL ? (
@@ -120,8 +164,21 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
             ref={lienzo}
             className="escena-lienzo"
             tabIndex={0}
-            aria-label="Parcela en 3D. Arrastra para girar, rueda o pellizca para acercar, flechas para desplazar. Toca un bloque para ver su estado."
+            aria-label="Parcela en 3D. Arrastra para girar, rueda o pellizca para acercar, flechas para desplazar. Toca un bloque o pulsa Enter para ver su estado; Escape quita la seleccion. La lista de celdas de abajo permite elegir cualquier celda."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                elegir(seleccion ?? bloqueCentral(modelo.bloques));
+              } else if (e.key === 'Escape') {
+                elegir(null);
+              }
+            }}
           />
+        )}
+        {hover && !sinWebGL && (
+          <div className="escena-globo" style={{ left: hover.x, top: hover.y }} aria-hidden="true">
+            <strong>{hover.bloque.celdaId}</strong> {fichaBloque(hover.bloque).resumen}
+          </div>
         )}
       </div>
 
@@ -143,14 +200,56 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
           <input type="checkbox" checked={reducirMovimiento} onChange={(e) => setReducirMovimiento(e.target.checked)} />
           <span>Reducir movimiento</span>
         </label>
+        <label className="escena-control escena-check">
+          <input type="checkbox" checked={viento && !reducirMovimiento} disabled={reducirMovimiento} onChange={(e) => setViento(e.target.checked)} />
+          <span>Viento leve{reducirMovimiento ? ' (apagado: reducir movimiento)' : ''}</span>
+        </label>
         <button type="button" className="escena-boton" onClick={() => escena.current?.restablecerVista()} disabled={sinWebGL}>
           Restablecer vista
         </button>
       </div>
 
-      <p className="escena-seleccion" aria-live="polite">
-        {seleccion ? describirBloque(seleccion) : 'Toca o haz clic en un bloque para ver su estado.'}
-      </p>
+      <div className="escena-ficha">
+        <div className="escena-elegir">
+          <label className="escena-control">
+            <span>Celda</span>
+            <select value={seleccion?.celdaId ?? ''} onChange={(e) => elegir(modelo.bloques.find((b) => b.celdaId === e.target.value) ?? null)}>
+              <option value="">Elige una celda</option>
+              {modelo.bloques.map((b) => (
+                <option key={b.celdaId} value={b.celdaId}>
+                  {b.celdaId} · {fichaBloque(b).resumen}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="escena-flechas" role="group" aria-label="Moverse a la celda vecina">
+            <button type="button" className="escena-boton" onClick={() => mover(0, -1)} aria-label="Celda al norte">N</button>
+            <button type="button" className="escena-boton" onClick={() => mover(-1, 0)} aria-label="Celda al oeste">O</button>
+            <button type="button" className="escena-boton" onClick={() => mover(1, 0)} aria-label="Celda al este">E</button>
+            <button type="button" className="escena-boton" onClick={() => mover(0, 1)} aria-label="Celda al sur">S</button>
+          </div>
+        </div>
+        <div aria-live="polite" className="escena-ficha-cuerpo">
+          {ficha ? (
+            <>
+              <h3>{ficha.titulo}</h3>
+              <dl>
+                {ficha.filas.map((f) => (
+                  <div key={f.etiqueta} className={f.faltante ? 'escena-faltante' : undefined}>
+                    <dt>{f.etiqueta}</dt>
+                    <dd>
+                      {f.valor}
+                      {f.nota && <span className="escena-detalle">{f.faltante ? `Falta: ${f.nota}` : f.nota}</span>}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </>
+          ) : (
+            <p className="escena-detalle">Toca o haz clic en un bloque, o elige una celda en la lista, para ver sus valores.</p>
+          )}
+        </div>
+      </div>
 
       <div className="escena-leyenda">
         <h3>Leyenda{modelo.fecha ? ` · ${modelo.fecha}` : ''}</h3>
@@ -166,6 +265,11 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
             </li>
           ))}
         </ul>
+        {noRecomendados > 0 && (
+          <p className="escena-detalle">
+            Banderin blanco con borde negro: cultivo no recomendado en el lugar segun la fuente local ({noRecomendados} {noRecomendados === 1 ? 'celda' : 'celdas'}).
+          </p>
+        )}
         <p className="escena-detalle">{textoEscalaSuelo(modelo.grupoSuelo)}</p>
       </div>
 

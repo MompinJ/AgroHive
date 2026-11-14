@@ -12,10 +12,12 @@ import { EscenaParcela } from '../escena/EscenaParcela';
   resultado={resultado}   // contrato resultado-celda del motor, o null si aún no hay
   fecha={fecha}           // opcional: fecha de los registros (slider de meses, A5.2)
   suelo={suelo}           // opcional: contrato suelo (GET /api/suelo o selector manual); su tipo elige tono y losas
+  avisosDatos={avisos}    // opcional: los avisos de usarDatosParcela (state 'ready'), web/src/api/
 />
 ```
 
 - Solo recibe contratos (`contratos/tipos/`). No pide datos ni recalcula indicadores: cambiar 2D/3D o de pestaña no vuelve a consultar nada.
+- Trae la ficha por celda (A3.8): clic, toque, lista de celdas, botones N/O/E/S y teclado. No hace falta conectar nada para eso.
 - Trae su leyenda (color, patrón, icono y texto), sus avisos (datos de ejemplo, celdas sin elevación, exageración vertical, modelo provisional), los controles (exageración, reducir movimiento, restablecer vista), la descripción del bloque tocado en una región `aria-live` y una lista de celdas en texto.
 - Si no hay WebGL, muestra el aviso y deja la leyenda; el modo 2D (A3.6) puede leer los mismos módulos puros (`adaptador.ts`, `estilos-estado.ts`, `placa.ts`, `leyenda.ts`).
 - Sus estilos van bajo `.escena` en `escena/escena.css`; no usa clases de `ui/styles.css`.

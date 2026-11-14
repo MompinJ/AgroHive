@@ -13,12 +13,12 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
+| **Mompin** | 16 | 1 | 0 | 0 | 94 % de 17 |
 | **Eduardo** | 11 | 3 | 2 | 3 | 58 % de 19 |
-| **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
-| **balam** | 6 | 1 | 0 | 9 | 38 % de 16 |
+| **Mafer** | 8 | 2 | 0 | 1 | 73 % de 11 |
+| **balam** | 6 | 1 | 0 | 8 | 40 % de 15 |
 
-Proyecto completo: **38 de 61** actividades hechas (62 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **40 de 61** actividades hechas (66 %), 6 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -34,8 +34,10 @@ Proyecto completo: **38 de 61** actividades hechas (62 %), 5 en curso, 2 bloquea
 - [x] **A3.1** Escena 3D con relieve (altura por bloque, InstancedMesh) `HECHO`
 - [x] **A3.2** Cargador de .bbmodel con instancing por cultivo y etapa `HECHO`
 - [x] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) `HECHO` — 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente)
+- [x] **A3.8** Tooltips y valores por bloque `HECHO` — con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
 - [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
+- [x] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) `HECHO` — con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento
 - [x] **A5.5** Pruebas de regresión del motor y de contratos `HECHO` — 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`)
 
 ## Eduardo
@@ -71,9 +73,8 @@ Proyecto completo: **38 de 61** actividades hechas (62 %), 5 en curso, 2 bloquea
 - [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
 - [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
 - [/] **A3.9** Cultivos 4 en adelante, props y mascota `EN CURSO`
-- [ ] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento)
 - [ ] **A5.6** Guion, video de demo y ensayo
-- [ ] **A5.7** README con método, fuentes, límites, licencias y declaración de IA
+- [/] **A5.7** README con método, fuentes, límites, licencias y declaración de IA `EN CURSO`
 
 ## balam
 
@@ -84,7 +85,6 @@ Proyecto completo: **38 de 61** actividades hechas (62 %), 5 en curso, 2 bloquea
 - [x] **A3.4** Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario `HECHO`
 - [x] **A3.5** Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado `HECHO`
 - [ ] **A3.6** Modo 2D ligero con los mismos valores del motor
-- [ ] **A3.8** Tooltips y valores por bloque
 - [ ] **A4.1** Dashboard: gráficas de lluvia, demanda y balance (Recharts)
 - [/] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos `EN CURSO` — parte lógica hecha (Mompin, `web/src/motor/tarjetas.ts`); falta mostrarla (balam)
 - [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)

@@ -12,6 +12,37 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A5.1 animaciones de la escena y lugar de la mascota (Mompin, con Mafer)
+
+- **Archivos:** `web/src/escena/animacion.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (control "Viento leve", prop `mascota`), `voxel/fuente-modelos.ts` (también `modelos/props/`), prueba `animacion.test.ts`; `docs/06`, `docs/14` (A5.1 pasa a Mompin, con Mafer).
+- **Cambio:** transición suave al cambiar de etapa, escala continua al crecer y viento leve opcional (shader). Con reducir movimiento no hay ninguna animación. Las animaciones no se acumulan y la escena sigue dibujando bajo demanda. La cámara se conserva al cambiar fecha o escenario. Mascota fuera de la parcela, si existe el modelo.
+- **Fuente / evidencia:** headless: unos 12 cuadros en la transición y luego cero; 0 cuadros en reposo sin viento, unos 36 por segundo con viento; con reducir movimiento, 0 transiciones, sin viento ni inercia. Mafer revisa que respete reducir movimiento.
+
+### 2026-11-14 — A4.1, parte del motor: series del balance de agua para el dashboard (Mompin, rama `Mompin-motor`)
+
+- **Archivos:** `web/src/motor/series.ts` (nuevo), `motor.ts` (cada ciclo guarda su lluvia y ET0 diarias), `protocolo.ts` y `cliente.ts` (operación `serieBalance`), `tipos.ts` (tipo local con la forma propuesta), `index.ts`; prueba `series.test.ts`; regresión; `docs/05` y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** a pedido de balam, el Worker entrega, bajo demanda y por rotación y escenario, las series diarias (en columnas) y mensuales de lluvia, ET0, ETc, ETc ajustada, agotamiento, RAW, humedad (fracción de TAW), percolación y déficit de cada ciclo, con unidades, fechas (del plan y del clima), estado y fuente. Contrato `serie-balance` 0.11.0 (sesión de contratos): el motor usa el tipo generado, recorta a ≥ 0 el ruido de redondeo y valida sus salidas contra el schema y el chequeo de largos de `contratos/validar.mjs`. Las sumas cuadran con los pilares.
+- **Regresión:** el ranking y las tarjetas de referencia pasan al conjunto por defecto de la demo `[DECIDIDO]`, R1, R2 y R4 (R4, R2, R1, con los cuatro pilares); R1 a R4 queda como caso adicional. Se suman las series mensuales de R4 en el año seco. Los números de antes no cambian; solo cambia el texto de las tarjetas por el conjunto comparado.
+- **Fuente / evidencia:** `cd web && npm test` (316 pruebas).
+
+### 2026-11-14 — Avisos de datos en la escena (Mompin, pedido de Eduardo)
+
+- **Archivos:** `web/src/escena/avisos-datos.ts` y `AvisosDatos.tsx` (nuevos), `EscenaParcela.tsx` (prop `avisosDatos`), `escena.css`, `vista-previa.tsx`, `escena.html`, prueba `avisos-datos.test.ts`; `docs/06`, `INTEGRACION.md`.
+- **Cambio:** franja plegable con los avisos de `usarDatosParcela` y del terreno: clima de respaldo, suelo `SUPUESTO`, relieve interpolado y próxima temporada no disponible. Los avisos del terreno ya no se repiten en la lista general de la escena.
+- **Fuente / evidencia:** prueba con los códigos reales de la API; vista previa con los avisos del paquete de demo, a 400 px sin desborde.
+
+### 2026-11-14 — A3.8: ficha por celda en la escena (Mompin, con balam)
+
+- **Archivos:** `web/src/escena/ficha.ts` (nuevo), `EscenaParcela.tsx`, `render/escena-three.ts`, `escena.css`, prueba `ficha.test.ts`; `docs/06`, `docs/14` (A3.8 pasa del tablero de balam al de Mompin, con balam).
+- **Cambio:** ficha con los valores del motor y de la parcela, con unidades y `NO_EVALUABLE` explicado. Se abre con clic, toque, lista de celdas, botones N/O/E/S o teclado (Enter y Escape). Con ratón hay además un globo al pasar el cursor. Marco fijo en la celda elegida. Banderín para "cultivo no recomendado en el lugar", que antes solo salía en texto. Los colores de `escena.css` pasan a variables para adaptar después el modo oscuro.
+- **Fuente / evidencia:** 184 pruebas de escena; headless en el Laboratorio con calabaza (no registrada en Isla): clic, globo, teclado, lista y cambio de fecha; 400 px sin desborde; cero errores de consola.
+
+### 2026-11-14 — Placa de estado más chica en la escena `[DECIDIDO]` (Mompin)
+
+- **Archivos:** `web/src/escena/render/escena-three.ts`, `docs/06`.
+- **Cambio:** la placa pasa de 0.82 a 0.6 del lado de la celda para que se vea la losa de suelo (A2.12) y su humedad. La textura es la misma (contraste WCAG y mínimos de `daltonismo.ts`).
+- **Decisiones afectadas:** decidido por Mompin el 14/11.
+
 ### 2026-11-14 — A4.3: tarjetas de rotación, parte lógica (Mompin, rama `Mompin-motor`)
 
 - **Archivos:** `web/src/motor/tarjetas.ts` (nuevo), `protocolo.ts` (`rankear` devuelve las rotaciones con su tarjeta), `index.ts`; pruebas `tarjetas.test.ts` y la regresión (`regresion/demo-isla.json` suma el ranking R1 a R4 y las tarjetas de R4 y R2; los números anteriores no cambian); `docs/05` (paso 8), `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault/Compartido/Pendientes.md`.
@@ -99,6 +130,16 @@ Decisiones afectadas:
 - **Efecto:** con déficit y exceso hay dos pilares con número y el ranking pasa del respaldo A al criterio B. Con el paquete de demo (suelo franco del selector): 1.º frijol-frijol (arrepentimiento máximo 0.007), 2.º milpa (0.051), 3.º maíz-maíz (0.064); para las tres el peor escenario es el lluvioso (2024). Con A el orden era el inverso.
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
+
+### 2026-11-14 — A5.7: README con licencias y reglas oficiales verificadas (Mafer)
+
+- **Archivos:** `README.md` (reemplaza al anterior, a partir de `docs/README-borrador.md` de Mompin); nuevo `datos/catalogos/fuentes/LEEME.md`; `docs/02` (un enlace); `docs/14`, Pendientes. El borrador queda como historial.
+- **Cambio:** los `[VERIFICAR]` de licencias del borrador se contrastaron con las páginas oficiales, y se agregó la sección de datos NASA que pide el reto, la declaración de IA con las categorías de la guía oficial y la lista de lo no verificado. **Quien leyó las fuentes fue una sesión de IA: falta la revisión humana de licencias y de la declaración de IA.**
+- **Correcciones al borrador:** (1) **POWER no declara CC BY 4.0** en su guía de referencia: pide un texto de cita con servicio, versión y fecha (versión observada: v2.10.3); la afirmación de `AgroVault/Compartido/APIs.md` no pude confirmarla. (2) **SMAP, MODIS y IMERG** no se pueden presentar como usados: SMAP está en curso (A4.8) y no está en la demo, MODIS pendiente (A4.11); IMERG sí, vía POWER (A4.10). (3) **OpenLandMap:** el registro de Zenodo que citaba el borrador (15470432) es solo carbono orgánico 2000-2005; las capas que lee la API son de 2020-2022 (todas CC BY 4.0). (4) **Terrarium:** la atribución a Mapzen solo se exige para su servicio alojado; aplican las fuentes del DEM (para México, INEGI Relieve continental 2016). (5) El enlace del reto en `docs/02` estaba roto (404); el correcto no lleva `field-shift-`.
+- **Hallazgos para el equipo:** (a) **Reglas de entrega (leídas con Chrome; Python y curl fallan por el certificado):** la demo es un deck de 7 slides o un video de 30 segundos o menos, en inglés (un video hablado en otro idioma lleva subtítulos en inglés); el guion de ~2:55 no cabe como demo. La guía llama «Super Intelligence (SI)» a la IA: permitida, no para idear la solución, sin branding de NASA, marca de agua visible en imágenes y video, y reconocimiento en texto y metadatos para audio, código y datos. La entrega cierra el 15/11 a las 23:59 (hora local del evento). (b) Tres ilustraciones de la interfaz se generaron con IA (`web/src/ui/assets/terreno-prompts.md`) y la guía exige marca de agua visible. (c) `api/app/clientes/openlandmap.py` cita el DOI de la arcilla 2000-2005 aunque lee 2020-2022. (d) El repo no tiene archivo de licencia.
+- **Fuente / evidencia:** páginas oficiales leídas el 14/11/2026: POWER (guía de referencia), Earthdata (guía de uso de datos), catálogo CMR de NASA (SMAP SPL3SMP V009, GPM IMERG V07, MOD13Q1 V061), ISRIC, Zenodo (API), Tilezen y el registro de AWS, Open-Meteo, FAO (términos), SIAP, Recocrop (GitHub) y la guía de entrega de Space Apps. Marca `Co-Authored-By` de IA en los commits: varios la llevan y no todos (comprobado con `git log`).
+- **Pendiente:** revisión humana de licencias y de la declaración de IA; decidir la licencia del repo y la marca de agua; recortar el guion a la duración oficial; las citas incompletas (NSIDC, versión de IMERG en POWER).
+- **Decisiones afectadas:** V-03 y V-04 (reglas leídas, sin cerrar: las confirma una persona); A0.5, A5.6 y A5.7.
 
 ### 2026-11-14 — A3.9 (parte mascota): elote con cara feliz (Mafer)
 
@@ -224,6 +265,24 @@ Decisiones afectadas:
 - **Decisiones afectadas:** V-06 (`GWETROOT` en AG, radiación en MJ/m²/día), V-08 (Open-Meteo Elevation y Terrarium responden), V-21 (7 meses con `forecast_days=210`), V-22 (GET simple con CORS abierto, backend sigue siendo el camino). Siguen abiertas hasta que el equipo las cierre en 11 y 13.
 
 ## Historial
+
+### 2026-11-14 (noche) — Contratos 0.11.0: `serie-balance` para el dashboard (A4.1)
+
+- **Archivos:** nuevo `contratos/serie-balance.schema.json`, ejemplo, 8 casos inválidos, `contratos/validar.mjs` (chequeos extra), tipos, README; `13`; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.11.0, en un commit aparte).
+- **Cambio y motivo:** el borrador del motor, aprobado por Mompin para el dashboard de balam, entra con estos ajustes de convención:
+  1. Las columnas diarias admiten `null` cuando falta un dato de entrada, nunca 0, como el resto de los contratos.
+  2. Las columnas que no pueden ser negativas llevan `minimum: 0`.
+  3. Los subesquemas llevan `title`, para que los tipos tengan nombre, y cada columna lleva descripción con la ecuación de FAO-56 donde aplica (80, 85, 88).
+  4. JSON Schema no puede exigir que las columnas tengan el mismo largo. `validar.mjs` lo comprueba con un chequeo extra, junto con que la suma de días del resumen mensual cuadre.
+- **Fuente / evidencia:** propuesta del motor; FAO-56, capítulo 8. `npm test` 91/91.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Comparación por defecto de la demo: R1, R2 y R4 `[DECIDIDO]` (corrige "R1 a R4")
+
+- **Archivos:** `13` (fila "Rotaciones de la demo"), `docs/guion-video-borrador.md`, `docs/README-borrador.md`, `AgroVault/Compartido/Resumen.md`.
+- **Cambio y motivo:** Mompin corrigió la decisión anterior. La demo compara por defecto R1, R2 y R4, porque R3 (frijol-frijol) tiene una siembra sin ventana con fuente (frijol PV) y saca el pilar de compatibilidad. Con R1, R2 y R4 entran los cuatro pilares y el orden es R4 (0), R2 (0.077) y R1 (0.099). R3 sigue en el selector. Se quitó del guion la nota de "si se comparan las cuatro" y se actualizó la fila de rotaciones de ejemplo de la vault, que seguía con R0 a R2.
+- **Fuente / evidencia:** decisión transmitida por la sesión maestra; `web/src/motor/pruebas/regresion/demo-isla.json` (`rankingCuatroPilares`); doc 05, paso 7.
+- **Decisiones afectadas:** "Rotaciones de la demo" en 13.
 
 ### 2026-11-14 (noche) — Guion base del video de demo (A5.6)
 
