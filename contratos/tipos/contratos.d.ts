@@ -363,7 +363,7 @@ export interface MetadatoHumedadSuelo {
   uso: ["condicion_inicial" | "comparacion", ...("condicion_inicial" | "comparacion")[]];
 }
 /**
- * Lluvia por satelite GPM IMERG via NASA POWER (IMERG_PRECTOT, en UTC; sin UTC POWER no la entrega). Es EVIDENCIA: no entra al balance ni a la eleccion de escenarios. El -999 de POWER (fill_value) se guarda como null, nunca como 0. IMERG existe desde 2000-06-01 y los ultimos meses pueden faltar. Opcional (agregado en 0.10.0).
+ * Lluvia por satelite GPM IMERG via NASA POWER (IMERG_PRECTOT, en UTC; sin UTC POWER no la entrega). Es EVIDENCIA: no entra al balance ni a la eleccion de escenarios. El -999 de POWER (fill_value) se guarda como null, nunca como 0. Cobertura: segun NASA POWER, IMERG empieza el 1998-06-01; el catalogo de NASA indica 1998-01-01 y el espejo de UCAR 2000-06-01 [VERIFICAR contra la documentacion de GES DISC]. Los ultimos meses pueden faltar (IMERG Final tarda meses en publicarse). Producto: GPM IMERG Final Precipitation L3 1 day 0.1 degree V07 (GPM_3IMERGDF), doi:10.5067/GPM/IMERGDF/DAY/07. Opcional (agregado en 0.10.0).
  */
 export interface LluviaSatelital {
   variable: "IMERG_PRECTOT";
@@ -488,7 +488,7 @@ export interface DatoNdvi {
   estado: EstadoEvaluacion;
   motivo?: string;
   /**
-   * Confiabilidad del pixel segun el producto (pixel reliability), si viene.
+   * Pixel reliability de MOD13 (SummaryQA): 0 dato bueno, 1 marginal (revisar el QA detallado), 2 nieve o hielo, 3 nublado (v061); -1 relleno o sin dato segun la documentacion de V005 [VERIFICAR -1 en v6.1 y en el servicio de ORNL DAAC]. null si no viene.
    */
   calidad?: number | null;
 }
@@ -1173,7 +1173,14 @@ export interface DiaSmap {
 export interface PaseSmap {
   pase: "AM" | "PM";
   humedadM3M3?: number | null;
+  /**
+   * retrieval_qual_flag tal cual (entero de bits). Segun el ATBD de SMAP L2/L3 (O'Neill y Bindlish, rev. F, 2020), los valores 0 u 8 son retrievals de alta calidad; segun NSIDC, el bit 0 en 1 indica calidad incierta (no recomendada). Interpretacion en el campo calidad.
+   */
   banderaCalidad?: number | null;
+  /**
+   * Interpretacion de banderaCalidad (opcional, 0.12.0): alta si vale 0 u 8; baja si el bit 0 esta en 1; desconocida si no hay bandera o vale otra cosa. Fuente: ATBD de SMAP (O'Neill y Bindlish, 2020) y guia de NSIDC; la Tabla 6 de la guia de SMAP L3 (O'Neill et al., 2023, doi:10.5067/4XXOGX0OOW1S) [VERIFICAR DOI y tabla].
+   */
+  calidad?: "alta" | "baja" | "desconocida";
 }
 /**
  * Suelo de la parcela (decisiones del 14/11, doc 13): textura y pH estimados por zona con mapas globales o elegidos en el selector manual de respaldo. Se consultan AMBOS servicios (ISRIC SoilGrids por WCS y OpenLandMap) para compararlos: cada uno va en 'estimaciones' y 'estimacionUsada' dice cual alimenta textura, pH y agua. El TAW sale de la tabla FAO-56 (A1.6) o de la pedotransferencia de Saxton y Rawls (2006). Siempre etiqueta SUPUESTO: no se mide en la parcela.

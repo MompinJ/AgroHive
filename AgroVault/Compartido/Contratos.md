@@ -2,12 +2,12 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: contratos/*.schema.json (v0.11.0, A1.1)
+fuente: contratos/*.schema.json (v0.12.0, A1.1)
 ---
 
 # Contratos
 
-La fuente de verdad son los JSON Schema de `contratos/` (versión `0.11.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.12.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
 - Detalle y reglas: `contratos/README.md`
 - Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`

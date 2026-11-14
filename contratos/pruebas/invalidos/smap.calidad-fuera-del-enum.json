@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "versionContrato": "0.12.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "estado": "EXPLORATORIO",
+  "etiqueta": "SUPUESTO",
+  "aviso": "Humedad del suelo superficial (unos 5 cm) promediada en una celda de 36 km: contraste con la humedad de raiz del motor, no es una medicion de la parcela ni entra al ranking. (Valores ficticios de ejemplo.)",
+  "coordenada": [
+    -95.53,
+    18.03
+  ],
+  "producto": {
+    "nombre": "SPL3SMP",
+    "resolucionKm": 36,
+    "profundidadCm": {
+      "desde": 0,
+      "hasta": 5
+    },
+    "unidad": "m3/m3"
+  },
+  "celda": {
+    "fila": 0,
+    "columna": 0,
+    "centro": [
+      -95.5,
+      18.0
+    ]
+  },
+  "fuente": {
+    "nombre": "EJEMPLO - valores ficticios (forma de NASA SMAP L3 via Earthdata)",
+    "nota": "No proviene de ninguna consulta real."
+  },
+  "dias": [
+    {
+      "fecha": "2026-11-01",
+      "estado": "EXPLORATORIO",
+      "motivo": "Valor ficticio de ejemplo.",
+      "granulo": "EJEMPLO",
+      "pases": [
+        {
+          "pase": "AM",
+          "humedadM3M3": 0.31,
+          "banderaCalidad": 0,
+          "calidad": "buena"
+        },
+        {
+          "pase": "PM",
+          "humedadM3M3": 0.29,
+          "banderaCalidad": 0,
+          "calidad": "alta"
+        }
+      ],
+      "humedadM3M3": 0.3
+    },
+    {
+      "fecha": "2026-11-02",
+      "estado": "NO_EVALUABLE",
+      "motivo": "EJEMPLO: sin granulo ese dia (hueco de orbita).",
+      "pases": []
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    }
+  ]
+}

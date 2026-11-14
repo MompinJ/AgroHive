@@ -275,6 +275,16 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Contratos 0.12.0: correcciones de citas de IMERG, SMAP y MOD13 (compatible)
+
+- **Archivos:** `contratos/clima-escenario.schema.json` (`lluviaSatelital`, que también usa `serie-clima`), `contratos/smap.schema.json`, `contratos/ndvi.schema.json`, ejemplo de SMAP, un caso inválido, tipos, README; vault (`Contratos.md`, `Pendientes.md`); `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.0, en un commit aparte).
+- **Cambio y motivo:** correcciones que encontró Eduardo-B.
+  1. **IMERG:** la descripción decía que empieza el 2000-06-01. Ahora registra las tres fechas que dan las fuentes: POWER 1998-06-01, el catálogo de NASA 1998-01-01 y el espejo de UCAR 2000-06-01, con `[VERIFICAR]` contra GES DISC. Agrega el producto GPM_3IMERGDF V07 y su DOI, 10.5067/GPM/IMERGDF/DAY/07, que confirma el catálogo de NASA (data.nasa.gov).
+  2. **SMAP:** campo opcional `pases[].calidad` (alta, baja o desconocida): alta si `retrieval_qual_flag` vale 0 u 8, baja si el bit 0 está en 1. Lo confirman el ATBD de O'Neill y Bindlish (rev. F, 2020) y la guía de NSIDC. El DOI 10.5067/4XXOGX0OOW1S y la Tabla 6 de la guía de 2023 no se pudieron confirmar: `[VERIFICAR]`. Ojo: "cualquier bit en 1 es malo" no es exacto, porque el 8 tiene un bit en 1 y es de alta calidad.
+  3. **MOD13:** se documenta la pixel reliability: 0 bueno, 1 marginal, 2 nieve o hielo y 3 nublado, confirmados para v061. El -1 de relleno solo consta para V005: `[VERIFICAR]` en v6.1 y en ORNL DAAC.
+- **Fuente / evidencia:** data.nasa.gov (GPM_3IMERGDF V07); ATBD L2/L3 SM P rev. F (smap.jpl.nasa.gov); NSIDC, interpretación de banderas de los productos pasivos; documentación de MOD13Q1 v061 (Earth Engine) y página de QA de V005 del LP DAAC. `npm test` 92/92.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Contratos 0.11.0: `serie-balance` para el dashboard (A4.1)
 
 - **Archivos:** nuevo `contratos/serie-balance.schema.json`, ejemplo, 8 casos inválidos, `contratos/validar.mjs` (chequeos extra), tipos, README; `13`; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.11.0, en un commit aparte).
