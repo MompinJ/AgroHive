@@ -4,7 +4,7 @@ Necesita red al correrlo. Uso (desde la raiz del repo):
 
     api/.venv/bin/python datos/demo/generar.py [--parcela contratos/ejemplos/parcela.ejemplo.json]
 
-Hace cuatro llamadas a la API (por dentro, con TestClient, el mismo codigo que sirve el servidor): clima de la ventana
+Hace cuatro llamadas a la API (mas tres de NDVI MODIS, A4.11) (por dentro, con TestClient, el mismo codigo que sirve el servidor): clima de la ventana
 estandar, terreno de la parcela, suelo y proxima temporada. Valida cada respuesta contra los schemas de contratos/ y
 las deja de dos formas:
 
@@ -117,6 +117,21 @@ if r.status_code != 200 or r.json()["metodo"] != "anomalia_estacional":
 respuestas["proxima-temporada"] = r.json()
 validar(respuestas["proxima-temporada"], "proxima-temporada#", f"proxima temporada ({respuestas['proxima-temporada']['horizonteMeses']} meses)")
 
+# A4.11: NDVI de MODIS de los tres anios de escenario (evidencia, no entra al ranking). El servicio de ORNL es lento (unos 8 a 13 s por fecha) e
+# inestable: se reintenta cada anio hasta 3 veces y una serie con huecos de red no se acepta. Anio agricola t = 1 de octubre de t-1 al 30 de septiembre de t.
+ANIOS_NDVI = {"seco": 2023, "habitual": 2016, "lluvioso": 2024}  # docs/05, paso 1 (A2.5); si el motor elige otros anios, hay que regenerar
+for escenario, anio in ANIOS_NDVI.items():
+    for intento in range(1, 4):
+        r = cliente.get("/api/ndvi", params={"lat": lat, "lon": lon, "desde": f"{anio - 1}-10-01", "hasta": f"{anio}-09-30"})
+        if r.status_code == 200 and not any(d["estado"] == "ERROR_DATOS" for d in r.json()["serie"]):
+            break
+        print(f"  ndvi {escenario} {anio}: intento {intento} sin serie completa ({r.status_code})")
+    else:
+        raise SystemExit(f"ndvi {escenario} {anio}: el servicio de ORNL no entrego la serie completa tras 3 intentos; no se escribe el paquete")
+    respuestas[f"ndvi-{escenario}"] = r.json()
+    n_ok = sum(1 for d in r.json()["serie"] if d["estado"] == "EVALUABLE")
+    validar(respuestas[f"ndvi-{escenario}"], "ndvi#", f"ndvi {escenario} {anio} ({n_ok} de {len(r.json()['serie'])} compuestos con dato)")
+
 # Todo cumple: ahora si se escribe el paquete.
 for carpeta in (DEMO / "cache", DEMO / "respuestas"):
     if carpeta.exists():
@@ -134,7 +149,8 @@ manifiesto = {
     "coordenadasIlustrativas": bool(parcela.get("coordenadasIlustrativas")),
     "ventanaClima": [desde.isoformat(), hasta.isoformat()],
     "versionContrato": respuestas["serie-clima"]["meta"]["versionContrato"],
-    "validadoContra": ["serie-clima", "suelo", "parcela (terreno y celdas)", "proxima-temporada"],
+    "validadoContra": ["serie-clima", "suelo", "parcela (terreno y celdas)", "proxima-temporada", "ndvi (3 anios de escenario)"],
+    "ndviAnios": ANIOS_NDVI,
     "entradas": entradas,
 }
 (DEMO / "manifiesto.json").write_text(json.dumps(manifiesto, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
