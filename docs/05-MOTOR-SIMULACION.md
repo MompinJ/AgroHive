@@ -60,12 +60,14 @@ Lo ideal es calcular los tres; se recorta según datos y tiempo. `[DEPENDE-DATOS
 | Riesgo por calor | Días de estrés térmico | Complementario |
 | Aporte indirecto al suelo | Presencia de leguminosas y cobertura, diversidad de especies (reglas simples, sin afirmar nitrógeno medido) | Complementario |
 
-## Paso 7: filtro, robustez y ranking `[EN EVENTO]`
+## Paso 7: filtro, robustez y ranking `[PROPUESTA]` (B elegido por Mompin el 14/11, falta ratificación del equipo)
 1. **Filtro:** marcar rotaciones que chocan con el clima local (siembra fuera de ventana viable en todos los escenarios).
 2. **Robustez:** el criterio principal es el **peor caso**.
-3. Dos formas documentadas de ordenar; elegir en el evento según lo que se logre calcular:
-   - **A (v1.2):** ordenar por **menor exposición hídrica en el peor caso**; mostrar mediana, dispersión y suelo por separado. Sin puntaje compuesto inventado.
-   - **B (v0.2):** puntaje por escenario combinando pilares (ponderados por prioridades si existe F8); robustez = peor puntaje; **arrepentimiento** = mejor puntaje posible del escenario − puntaje de la rotación; preferir el menor arrepentimiento máximo; desempate por promedio.
+3. **Criterio elegido: B** (decisión de Mompin del 14/11, pendiente de que el equipo la ratifique):
+   - **B (v0.2), principal:** puntaje por escenario combinando pilares (ponderados por prioridades si existe F8); robustez = peor puntaje; **arrepentimiento** = mejor puntaje posible del escenario − puntaje de la rotación; preferir el menor arrepentimiento máximo; desempate por promedio.
+   - **Pesos:** solo con fuente, justificados o dados por el usuario (F8). Si no los hay, **pesos iguales entre los pilares evaluables, declarados como `SUPUESTO`** en el resultado (`ponderacion` en `contratos/resultado-rotacion.schema.json`). Nunca pesos inventados presentados como dato. Un pilar `NO_EVALUABLE` no entra al puntaje y se lista como excluido; si el pilar hídrico no es evaluable, el escenario es `NO_EVALUABLE`.
+   - **Normalización:** cómo pasa cada pilar a un subpuntaje de 0 a 1 se define y documenta en A4.2, con su justificación.
+   - **A (v1.2), respaldo:** ordenar por **menor exposición hídrica en el peor caso**; mostrar mediana, dispersión y suelo por separado, sin puntaje compuesto. Se usa si los pilares 2 y 3 (A3.7) no llegan: con un solo pilar, B no aporta nada sobre A. El resultado declara qué criterio usó.
 4. Si ninguna rotación es evaluable: *"No podemos determinar una opción más robusta con estos datos"*.
 
 ## Paso 8: explicación

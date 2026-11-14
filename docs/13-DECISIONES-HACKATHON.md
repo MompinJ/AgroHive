@@ -49,7 +49,7 @@ Reglas para el servidor compartido: AgroHive va en su propio `server` block de n
 | V-16 | Qué servicios y puertos ya usa `mediworks` | Eduardo |
 | V-17 | Elegir hostname (`sslip.io` u otro) y emitir certificado | Eduardo |
 | V-18 | ~~Roles por nombre~~ Reemplazado: reparto por actividad en 14 | Equipo |
-| V-19 | Ranking A o B y pintura por bloques (siguen `[EN EVENTO]`); cultivos: milpa decidida, falta confirmar parámetros | Equipo |
+| V-19 | Ranking: **B elegido por Mompin el 14/11** (puntaje compuesto + arrepentimiento minimax, desempate por promedio), falta que el equipo lo ratifique; respaldo A si A3.7 no llega. Pintura por bloques sigue `[EN EVENTO]`; cultivos: milpa decidida, falta confirmar parámetros | Equipo |
 | V-20 | Cultivos y calendario del municipio en SIAP; confirmar la zona demo | Quien tome A0.6 |
 | V-21 | Parámetros y horizonte del pronóstico estacional de Open-Meteo (las fuentes no coinciden: 7 o 9 meses; la página oficial dice 7, ver `AgroVault/Compartido/APIs.md`; falta confirmarlo con una llamada) | Quien tome A0.7 |
 | V-22 | Si NASA POWER permite llamadas desde el navegador (CORS); por defecto todo pasa por el backend | Quien tome A0.7 |

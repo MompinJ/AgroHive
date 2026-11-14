@@ -30,7 +30,7 @@
 | Parcela | Solo demo fija de Isla · también dibujar polígono propio | 03 |
 | Asignación de cultivos | Por parcela completa · pintar por bloques | 03, 06 |
 | Slider de meses | MVP · extra | 03, 06 |
-| Criterio de ranking | A: menor déficit en peor caso · B: puntaje compuesto + arrepentimiento | 05 |
+| Criterio de ranking | **B elegido por Mompin el 14/11** (puntaje compuesto + arrepentimiento minimax, desempate por promedio); falta que el equipo lo ratifique. A (menor déficit en peor caso) queda de respaldo | 05 |
 | Stack final y motor en navegador o servidor | Ver propuesta | 08 |
 | Disposición exacta de paneles | Ver propuesta | 06 |
 
@@ -80,6 +80,7 @@
 | APIs lentas o caídas en la sede | Alto | Caché, parcelas precargadas, Open-Meteo |
 | La demo falla en vivo | Alto | Video grabado, parcela probada, copia sin internet |
 | No se consiguen datos para algún pilar | Medio | Recortar por prioridad, decirlo como límite |
+| Ranking B sin pilares 2 y 3 (A3.7) o sin pesos con fuente | Medio | Pesos iguales declarados `SUPUESTO`; si A3.7 no llega, respaldo con el criterio A (solo pilar hídrico) y decirlo en la tarjeta |
 | Resolución gruesa parece debilidad | Medio | Presentarla como límite honesto; variación por relieve, suelo y cultivo |
 | Datos de suelo no disponibles | Medio | Selector manual con valores FAO |
 | Parámetros agronómicos mal citados | Medio | Citar fuentes, marcar supuestos, aviso de validación |
@@ -98,7 +99,7 @@
 | Selector / pintura de cultivos | Pintar por bloques | Una rotación fija | **Selector "what if"**; por bloques en evento |
 | Cultivos | 5–6 propuestos | Maíz, frijol, sorgo | **Se eligen en el evento** |
 | Pilares | Tres | Solo hídrico | **Los tres, según datos** |
-| Ranking | Puntaje + arrepentimiento | Peor caso hídrico | **Se elige en el evento** |
+| Ranking | Puntaje + arrepentimiento | Peor caso hídrico | **B (Mompin, 14/11; falta ratificar); A de respaldo** |
 | Documentación | Notion | Drive + Notion | **Drive; GitHub en el evento** |
 | Modelos 3D | Blockbench → GLB | Sin herramienta fija | **Agente + `.bbmodel` directo** |
 | Cronograma | 48 h | ~39 h | **Se elige en el evento** |
