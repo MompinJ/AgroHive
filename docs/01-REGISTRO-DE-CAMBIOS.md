@@ -12,6 +12,15 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Los 20 modelos de bloque con las reglas nuevas de Mompin (Mafer)
+
+- **Archivos:** `modelos/cultivos/bloques/bloques.py` y los 20 `<cultivo>_<etapa>_bloque.bbmodel` (maíz, frijol, calabaza y chile × 5 etapas; los 2 de maíz ya existentes se rehacen), `visor_bloques.html`; `web/src/escena/pruebas/bloques.test.ts`.
+- **Cambio:** por la decisión `[DECIDIDO]` de Mompin (buzón #211): tope de 24 cubos por bloque, 9 plantas de 1 o 2 cubos más 3 lomos de 1 unidad, y sin cara inferior (`texture` null en `down`) en todos los cubos. Trazado: 3 surcos y 3 plantas por surco con la misma separación (16/3), continuo entre bloques vecinos. Sin colores nuevos en la paleta; huella x/z de -8 a 8 y base en y=0. Variación determinista (semilla fija por modelo).
+- **Medido:** siembra 15 cubos (450 vértices); resto 21 cubos (630 vértices) cada uno, contra 1 980 del maíz detallado en madurez. Los triángulos y cuadros por segundo en la escena los mide la sesión de Mompin; aquí no se midieron.
+- **Pruebas:** `bloques.test.ts` pide los 20 archivos, tope de 24, sin cara inferior, 3 lomos, huella y menos vértices que el detallado (141 pruebas del archivo en verde; `web` completo 511 en verde, `tsc` y `build` bien, `contratos` 92, catálogos en verde; pytest de `api` no corre en esta máquina).
+- **Pendiente:** el visto bueno visual de la sesión de escena sobre los 18 nuevos; `docs/06` (de Mompin/balam) todavía dice 55 cubos en la línea del manchón de plantas.
+- **Decisiones afectadas:** ninguna nueva.
+
 ### 2026-11-14 (noche) — `/health` lee la version de contratos (Eduardo)
 
 - **Archivos:** `api/app/config.py`, `api/tests/test_basico.py`.
