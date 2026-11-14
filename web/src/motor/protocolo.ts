@@ -5,9 +5,10 @@ import { simularRotacionCompleta } from './analogos';
 import { resultadoCeldas, type EntradasMotor, type ResultadoMotor } from './motor';
 import { vistaProximaTemporada, type VistaProximaTemporada } from './proxima';
 import { rankear, type OpcionesRanking, type ResultadoRanking } from './ranking';
+import { serieBalance } from './series';
 import { conTarjetas } from './tarjetas';
 import type { ProximaTemporadaAproximada } from '../../../contratos/tipos/contratos';
-import type { Escenario, ResultadoCeldas, ResultadoRotacion, SerieClima } from './tipos';
+import type { Escenario, ResultadoCeldas, ResultadoRotacion, SerieBalance, SerieClima } from './tipos';
 
 export type Peticion =
   | { id: number; tipo: 'escenarios'; serie: SerieClima }
@@ -17,6 +18,8 @@ export type Peticion =
   | { id: number; tipo: 'rankear'; rotacionIds?: string[]; opciones?: OpcionesRanking }
   /** A2.13: banda de proxima temporada (GET /api/proxima-temporada) junto a los escenarios de A2.5. */
   | { id: number; tipo: 'proxima'; proxima: ProximaTemporadaAproximada | null; escenarios: SeleccionEscenarios['escenarios'] }
+  /** A4.1: series del balance de agua de una rotacion en un escenario (bajo demanda, para el dashboard). */
+  | { id: number; tipo: 'serieBalance'; rotacionId: string; escenario: Escenario }
   | { id: number; tipo: 'olvidar'; rotacionId?: string };
 
 export interface Resultados {
@@ -25,6 +28,7 @@ export interface Resultados {
   celdas: ResultadoCeldas;
   rankear: ResultadoRanking;
   proxima: VistaProximaTemporada;
+  serieBalance: SerieBalance;
   olvidar: null;
 }
 
@@ -66,6 +70,13 @@ export class EstadoMotor {
           const motores = Object.fromEntries(ids.map((i) => [i, this.rotaciones.get(i) as ResultadoMotor]));
           const rotaciones = conTarjetas({ ranking, motores, catalogo: e0.catalogo, calendario: e0.calendario ?? null, suelo: e0.suelo });
           return { id: p.id, ok: true, resultado: { ...ranking, rotaciones } };
+        }
+        case 'serieBalance': {
+          const r = this.rotaciones.get(p.rotacionId);
+          if (!r) return { id: p.id, ok: false, error: `La rotacion ${p.rotacionId} no esta calculada (o se invalido): pedir 'simular' primero.` };
+          const sb = serieBalance(r, p.escenario);
+          if (!sb) return { id: p.id, ok: false, error: `El escenario ${p.escenario} no tiene anio real: no hay series.` };
+          return { id: p.id, ok: true, resultado: sb };
         }
         case 'proxima':
           return { id: p.id, ok: true, resultado: vistaProximaTemporada(p.proxima, p.escenarios) };

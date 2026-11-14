@@ -1,0 +1,159 @@
+{
+  "meta": {
+    "versionContrato": "0.11.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Series ficticias para probar el contrato; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "rotacionId": "R4",
+  "escenario": "seco",
+  "anioReal": 2023,
+  "estado": "EXPLORATORIO",
+  "motivo": "Series ficticias de ejemplo.",
+  "unidades": {
+    "lluviaMm": "mm/dia",
+    "et0Mm": "mm/dia",
+    "etcMm": "mm/dia",
+    "etcAjMm": "mm/dia",
+    "drMm": "mm",
+    "rawMm": "mm",
+    "humedad": "fraccion de TAW (0 a 1)",
+    "percolacionMm": "mm/dia",
+    "deficitMm": "mm/dia"
+  },
+  "fuentes": [
+    {
+      "nombre": "EJEMPLO - valores ficticios (forma del balance de FAO-56, cap. 8)",
+      "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+      "nota": "Valores inventados para probar el contrato."
+    }
+  ],
+  "ciclos": [
+    {
+      "ciclo": 1,
+      "cultivo": "maiz",
+      "celdas": [
+        "c-0-0",
+        "c-0-1"
+      ],
+      "estado": "EXPLORATORIO",
+      "motivo": "Valores ficticios; el 4.o dia falta el clima (null, no 0).",
+      "desde": "2015-06-29",
+      "fechaClima": "2023-06-29",
+      "tawMm": 120.0,
+      "dias": {
+        "lluviaMm": [
+          0.0,
+          12.4,
+          3.2,
+          null
+        ],
+        "et0Mm": [
+          4.1,
+          3.2,
+          3.6,
+          null
+        ],
+        "etcMm": [
+          1.2,
+          1.0,
+          1.1,
+          null,
+          1.0
+        ],
+        "etcAjMm": [
+          1.2,
+          1.0,
+          1.1,
+          null
+        ],
+        "drMm": [
+          10.0,
+          0.0,
+          0.0,
+          null
+        ],
+        "rawMm": [
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "humedad": [
+          0.92,
+          1.0,
+          1.0,
+          null
+        ],
+        "percolacionMm": [
+          0.0,
+          1.4,
+          2.1,
+          null
+        ],
+        "deficitMm": [
+          0.0,
+          0.0,
+          0.0,
+          null
+        ]
+      },
+      "mensual": [
+        {
+          "mes": "2015-06",
+          "mesClima": "2023-06",
+          "dias": 2,
+          "lluviaMm": 12.4,
+          "et0Mm": 7.3,
+          "etcMm": 2.2,
+          "etcAjMm": 2.2,
+          "percolacionMm": 1.4,
+          "deficitMm": 0.0,
+          "humedadMedia": 0.96
+        },
+        {
+          "mes": "2015-07",
+          "mesClima": "2023-07",
+          "dias": 2,
+          "lluviaMm": 3.2,
+          "et0Mm": 3.6,
+          "etcMm": 1.1,
+          "etcAjMm": 1.1,
+          "percolacionMm": 2.1,
+          "deficitMm": 0.0,
+          "humedadMedia": 1.0
+        }
+      ]
+    },
+    {
+      "ciclo": 2,
+      "cultivo": "calabaza",
+      "celdas": [
+        "c-1-1"
+      ],
+      "estado": "NO_EVALUABLE",
+      "motivo": "EJEMPLO: cultivo sin parametros con fuente; no se simula.",
+      "desde": "2015-11-01",
+      "fechaClima": null,
+      "tawMm": null,
+      "dias": {
+        "lluviaMm": [],
+        "et0Mm": [],
+        "etcMm": [],
+        "etcAjMm": [],
+        "drMm": [],
+        "rawMm": [],
+        "humedad": [],
+        "percolacionMm": [],
+        "deficitMm": []
+      },
+      "mensual": []
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Series ficticias para probar el contrato; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    }
+  ]
+}

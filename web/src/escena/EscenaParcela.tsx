@@ -5,6 +5,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Advertencia, Parcela, ResultadoCeldas, Suelo } from '../../../contratos/tipos/contratos';
 import { construirEscena } from './adaptador';
+import type { AvisoDatos } from '../api/datosParcela';
+import { CODIGOS_TERRENO } from './avisos-datos';
+import { AvisosDatos } from './AvisosDatos';
 import { bloqueCentral, fichaBloque, vecino } from './ficha';
 import { describirBloque, entradasLeyenda, type EntradaLeyenda } from './leyenda';
 import { EXAGERACION_VERTICAL_DEFECTO, type BloqueEscena } from './modelo';
@@ -21,6 +24,8 @@ export interface EscenaParcelaProps {
   fecha?: string;
   /** Suelo de la parcela (GET /api/suelo o selector manual): su tipo elige el tono y las losas (A2.12). */
   suelo?: Suelo | null;
+  /** Avisos de usarDatosParcela (web/src/api/): clima de respaldo, suelo SUPUESTO, proxima temporada... */
+  avisosDatos?: readonly AvisoDatos[];
   className?: string;
   /** Solo para mediciones (vista previa, A5.4): recibe la escena three ya creada. */
   onEscena?: (escena: EscenaThree | null) => void;
@@ -45,7 +50,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, className = '', onEscena }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], className = '', onEscena }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -115,7 +120,8 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
 
   const avisos = [...modelo.avisos, ...avisosRender];
   const criticos = avisos.filter((a) => a.severidad === 'critico');
-  const otros = avisos.filter((a) => a.severidad !== 'critico');
+  // Los avisos del terreno van en la franja de datos, no repetidos en la lista general.
+  const otros = avisos.filter((a) => a.severidad !== 'critico' && !CODIGOS_TERRENO.has(a.codigo));
 
   return (
     <section className={`escena ${className}`} aria-label="Escena 3D de la parcela">
@@ -124,6 +130,8 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, classNa
           <strong>{a.codigo === 'DATOS_DE_EJEMPLO' ? 'Datos de ejemplo' : 'Aviso'}:</strong> {a.mensaje}
         </p>
       ))}
+
+      <AvisosDatos avisos={avisosDatos} advertenciasParcela={parcela.advertencias ?? []} />
 
       <div className="escena-lienzo-caja">
         {sinWebGL ? (

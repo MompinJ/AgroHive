@@ -11,7 +11,7 @@ Generado por `herramientas/cronograma.py` desde `docs/14`; se actualiza cada vez
 | Lugar | Persona | Hecho (ponderado) | Hechas | En curso | Pendientes |
 | --- | --- | --- | --- | --- | --- |
 | 1 | **Mompin** | 94 % (48 de 51 puntos) | 15 | 1 | 0 |
-| 2 | **Mafer** | 68 % (23 de 34 puntos) | 8 | 1 | 3 |
+| 2 | **Mafer** | 68 % (23 de 34 puntos) | 8 | 2 | 2 |
 | 3 | **Eduardo** | 65 % (34 de 52 puntos) | 13 | 2 | 4 |
 | 4 | **balam** | 42 % (15 de 36 puntos) | 6 | 1 | 8 |
 
