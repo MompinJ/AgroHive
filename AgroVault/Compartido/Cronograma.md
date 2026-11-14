@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
-| **Eduardo** | 13 | 2 | 2 | 2 | 68 % de 19 |
+| **Eduardo** | 13 | 2 | 1 | 3 | 68 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
-| **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
+| **balam** | 10 | 0 | 0 | 5 | 67 % de 15 |
 
-Proyecto completo: **46 de 60** actividades hechas (77 %), 3 en curso, 2 bloqueadas.
+Proyecto completo: **47 de 60** actividades hechas (78 %), 3 en curso, 1 bloqueadas.
 
 ## Mompin
 
@@ -59,7 +59,7 @@ Proyecto completo: **46 de 60** actividades hechas (77 %), 3 en curso, 2 bloquea
 - [-] **A4.11**  `BLOQUEADO` — ORNL DAAC no responde de forma usable (502, 503 y llamadas de 40 s sin respuesta); cliente y ruta listos y probados con respuestas reales, apagados del paquete de demo hasta que el servicio funcione
 - [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después
 - [ ] **A4.13** Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP
-- [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
+- [ ] **A5.4** Medición de requisitos mínimos y fallback WebGL
 - [x] **A5.8** Respaldo local sin internet y capturas `HECHO` — demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503)
 
 ## Mafer
@@ -83,7 +83,7 @@ Proyecto completo: **46 de 60** actividades hechas (77 %), 3 en curso, 2 bloquea
 - [x] **A2.10** Mapa y dibujo de polígono libre (Leaflet) `HECHO`
 - [x] **A3.4** Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario `HECHO`
 - [x] **A3.5** Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado `HECHO`
-- [ ] **A3.6** Modo 2D ligero con los mismos valores del motor
+- [x] **A3.6** Modo 2D ligero con los mismos valores del motor `HECHO`
 - [x] **A4.1** Dashboard: gráficas de lluvia, demanda y balance (Recharts) `HECHO` — series del Worker, graficas y tabla verificadas
 - [x] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos `HECHO` — motor y tarjetas visibles en laboratorio y comparacion
 - [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)
