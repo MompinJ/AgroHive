@@ -12,6 +12,34 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Escena con la cuadrícula de balam (A2.9) y revisión de A3.3/A2.11 (Mompin, rama `Mompin-escena`)
+
+- **Archivos:** `web/src/escena/adaptador.ts`, `placa.ts`, `demo-motor.ts`, `vista-previa.tsx`, `INTEGRACION.md`, pruebas `cuadricula-balam.test.ts` y `estados.test.ts`; `docs/06`.
+- **Cambio:** la escena orienta filas y columnas con los `centro` de las celdas: la cuadrícula de balam numera `i` desde el sur y el ejemplo de contratos desde el norte, y sin esto el relieve salía invertido norte-sur respecto al mapa. Las placas de estado llevan borde doble negro y blanco: con humedad media del suelo, Normal, Marchita y Podrida bajaban a 2.1-2.6:1 frente al suelo, por debajo del 3:1 de WCAG 1.4.11.
+- **Fuente / evidencia:** pruebas de integración con `generarCuadricula` (contrato, tope, huecos, orientación); en la vista previa en headless, polígono en L con 559 celdas, elevación de la API local con el paquete de demo y motor real.
+
+### 2026-11-14 — A5.5: pruebas de regresión del motor y de contratos (Mompin)
+
+- **Archivos:** `web/src/motor/pruebas/regresion.test.ts` y `web/src/motor/pruebas/regresion/demo-isla.json` (referencia); `docs/05`, `docs/14` (vistas regeneradas) y `AgroVault/Compartido/Pendientes.md`.
+- **Qué fija:** con el paquete de demo y el suelo real de Isla:
+  - escenarios seco 2023, habitual 2016 y lluvioso 2024, con su lluvia de temporadas y sus percentiles;
+  - pilares de la milpa por escenario: déficit, exceso, compatibilidad y suelo desnudo;
+  - estados y `filtroClima` de las rotaciones R1 a R4;
+  - un registro de `resultado-celda`;
+  - ranking de tres rotaciones (R1, R3, R2) y con cuatro pilares (R4, R2, R1), con su arrepentimiento;
+  - años análogos de la próxima temporada (2006, 2008, 2013, 2019, 2022, 2025) y su rango.
+- **Guardas de contrato:** `VERSION_CONTRATO` del motor = versión de `contratos/`; el plan de ejemplo de `contratos/` pasa por el motor y todas las salidas validan contra los schemas.
+- **Cómo cambiar un número a propósito:** `ACTUALIZAR_REGRESION=1 npx vitest run src/motor/pruebas/regresion.test.ts`, revisar el diff de `demo-isla.json` y anotarlo aquí en el mismo commit. Se comprobó que la prueba falla si cambia, por ejemplo, el año habitual.
+- **Fuente / evidencia:** `cd web && npm test` (224 pruebas).
+
+### 2026-11-14 — A3.7: pilares de compatibilidad de ciclo y protección del suelo (Mompin)
+
+- **Archivos:** `web/src/motor/pilares.ts` (nuevo), `temporadas.ts` (nuevo: `siembraEnEscenario` sale de `motor.ts`), `motor.ts`, `ranking.ts`; pruebas `c2.test.ts` y `ranking.test.ts`; `docs/05`, `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault`.
+- **Compatibilidad de ciclo:** cuenta las siembras fuera de la ventana del calendario local de Isla (INIFAP; A0.6). Si alguna siembra no tiene ventana con fuente (frijol PV, chile, calabaza), el pilar es `NO_EVALUABLE` con motivo; sin calendario, también. `filtroClima` queda lleno. Subpuntaje del ranking: fracción de siembras en ventana.
+- **Protección del suelo:** cuenta los días de suelo desnudo del año agrícola de SIAP. El índice de erosión queda en `null` porque RUSLE necesita I30 y factores C y LS con fuente, que no hay; no se inventan. Subpuntaje: fracción del año con cultivo. Riesgo por calor: el cálculo está listo, pero sigue `NO_EVALUABLE` sin umbral con fuente en el catálogo.
+- **Cómo cambia el ranking (suelo real de Isla):** antes, con déficit y exceso, el orden era maíz-maíz, milpa, frijol-frijol. Con la protección del suelo (la compatibilidad queda fuera por el frijol PV) es milpa (0), frijol-frijol (0.047), maíz-maíz (0.091): pesan los 257 días de suelo desnudo del monocultivo. Con una milpa sembrada dentro de las ventanas de INIFAP entran los cuatro pilares: milpa en ventana (0), maíz-maíz (0.077), milpa con el frijol fuera de ventana (0.099). El orden no cambia con la sensibilidad del TAW (122.3 a 127.4 mm/m).
+- **Fuente / evidencia:** `cd web && npm test` (159 pruebas).
+
 ### 2026-11-14 — A2.13: escenario de próxima temporada con años análogos y contratos 0.9.0 en el motor (Mompin)
 
 - **Archivos:** `web/src/motor/analogos.ts` (nuevo), `motor.ts` (`preparar`, `pilaresAguaEnClima`, entrada opcional `proximaTemporada`), `proxima.ts`, `protocolo.ts`, `index.ts`, `tipos.ts` (`VERSION_CONTRATO` 0.9.0); prueba `analogos.test.ts`; `docs/05`, `docs/13`, `docs/14` (vistas regeneradas) y `AgroVault`. Se integra la rama `contratos-nulos` (0.9.0).
@@ -43,6 +71,17 @@ Decisiones afectadas:
 - **Efecto:** con déficit y exceso hay dos pilares con número y el ranking pasa del respaldo A al criterio B. Con el paquete de demo (suelo franco del selector): 1.º frijol-frijol (arrepentimiento máximo 0.007), 2.º milpa (0.051), 3.º maíz-maíz (0.064); para las tres el peor escenario es el lluvioso (2024). Con A el orden era el inverso.
 - **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
 - **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
+
+### 2026-11-14 — A3.3: estados visuales legibles con daltonismo; A2.11: frijol y calabaza (Mafer)
+
+- **Archivos:** `web/src/escena/estilos-estado.ts`, `patrones.ts`, `EscenaParcela.tsx` (una línea), nuevos `daltonismo.ts` y `pruebas/daltonismo.test.ts`; `modelos/` (frijol, calabaza, paleta y los 5 `.bbmodel` del maíz); `docs/06`, `docs/14`, `AgroVault/Compartido/Pendientes.md`. Los archivos de `escena/` son de Mompin, que dejó escrito que A3.3 los ajusta ahí.
+- **A3.3, cambio:** simulación de daltonismo con la fuente publicada (Machado et al. 2009) y pruebas con mínimos de color, íconos y patrones. Solo se cambia un color: `NO_EVALUABLE` (y "sin elevación", que lo repite) de `#9a9a9a` a `#ececec`. Íconos finales: gota partida, hoja colgando, equis (reemplaza a "moho", que no se entendía en 8 × 8) y surcos. La leyenda deja de leerse dos veces en lectores de pantalla.
+- **A3.3, hallazgo:** con los colores provisionales, bajo deuteranopia `podrida` y `NO_EVALUABLE` casi se confundían (dE 7.1) y `NO_EVALUABLE` con `normal` (12): confundir "sin dato" con "normal" es justo lo que el proyecto no debe permitir. Los umbrales (dE 15; 16 y 48 píxeles) son del equipo `[PROPUESTA]`, no de la fuente.
+- **A2.11, cambio:** `frijol` y `calabaza` con las 5 etapas del maíz (siembra, brote, crecimiento, madurez, podrida) y paleta de 60 colores (16 nuevos al final, índices 44 a 59); visores `visor_frijol.html`, `visor_calabaza.html` y `visor_milpa.html`. `estresada` y `marchita` no tienen modelo propio: la escena usa el de su etapa más la placa de estado.
+- **Corrección:** la prueba de Mompin que compara la paleta incrustada con `modelos/paleta.md` falló para el maíz, porque el agente de modelado había revertido los `.bbmodel` del maíz para que git no los marcara. Se regeneran con `python modelos/cultivos/maiz.py`: solo cambia la textura incrustada (ahora con los 60 colores) y las piezas son idénticas.
+- **Fuente / evidencia:** Machado, G. M., Oliveira, M. M. y Fernandes, L. A. F. (2009), IEEE TVCG 15(6): 1291-1298 (matrices de https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html; cada fila suma 1, comprobado en pruebas). `cd web && npm test`: 189 pruebas; `tsc` y `npm run build` sin errores.
+- **Pendiente:** los modelos de frijol y calabaza se revisaron con renders propios del agente, no en Three.js ni en Blockbench; falta que una persona abra `visor_milpa.html`. Los colores de los modelos son a ojo.
+- **Decisiones afectadas:** A2.11 y A3.3 (en revisión).
 
 ### 2026-11-14 — A2.16: pedotransferencia de Saxton y Rawls verificada contra el artículo (Mafer)
 
@@ -426,3 +465,10 @@ Primera documentación por tema a partir del video del compañero, el audio de l
 
 ### 2026-11-14 — Cierre A1.2
 - App.tsx y ui/useMotor.ts inicializan el Worker existente sin modificar motor ni contratos. Confirmacion mediante olvidar, timeout y limpieza al desmontar. Se actualiza el tablero y README. Sin cambio de alcance cientifico.
+
+### 2026-11-14 — A2.10 y A2.9: mapa y cuadrícula de Balam
+- Terreno conserva su diseño e incorpora Leaflet con mapa OpenStreetMap y atribución, dibujo por clic/toque o coordenadas, deshacer y reiniciar. La carga del mapa es diferida.
+- `ui/cuadricula.ts` valida anillos y cruces, genera cuadrados locales y recorta bordes con Turf; máximo 1600 celdas. No calcula indicadores. Elevación y pendiente faltantes quedan null.
+- Se incorpora sin cambios el cliente API de Eduardo (`2e517c6`). La UI confirma antes de POST /api/elevacion, muestra fuente, estado y advertencias; permite reintentar o guardar sin relieve. App conserva la parcela durante la navegación; recargar inicia otra sesión.
+- Verificación: geometría y schema compartido, build/TypeScript; navegador a 1440/390/320 px, error 503 y éxito con respuestas sintéticas declaradas, persistencia y guardado sin elevación. No se afirma validación agronómica ni disponibilidad del servicio público.
+- Sin cambios de alcance; límites técnicos documentados en `web/src/ui/TERRENO-PLAN.md`. El selector y la simulación desde las páginas siguen pendientes.

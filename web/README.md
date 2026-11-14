@@ -82,3 +82,28 @@ El criterio funcional de las cuatro vistas ejecutables está cubierto. El Worker
 
 ## Cierre A1.2
 La UI inicializa el cliente existente de Mompin mediante useMotor, comprueba su respuesta con olvidar en la sesion vacia y termina el Worker al desmontarse. Muestra disponibilidad o error con un limite de espera de 10 segundos. Esta seccion sustituye las notas anteriores de Worker pendiente; las simulaciones desde los controles siguen en A3.4/A4.6.
+
+## Terreno — rediseño P1
+
+Composición basada en la captura de Terreno aportada por Balam: encabezado con navegación, aviso de demostración, título y acciones a la izquierda, paisaje con recorte orgánico a la derecha y dos bloques inferiores para la parcela demo y el terreno propio. Se conserva el estado del Worker incorporado en A1.2.
+
+Los colores se toman de `DESIGN.md` de Duna, compartido por el usuario: canvas Linen `#f7f7f5`, tarjetas Paper `#ffffff`, etiquetas Bone `#edece7`, texto Aubergine Ink `#1b0624` y botones Espresso `#160f0c`. No se copian el fondo beige ni los botones verdes de la captura. Tipografía sans serif del sistema (Arial/Helvetica), sin importar GT America ni otra fuente remota.
+
+- Archivos: `src/paginas/Terreno.tsx`, `src/ui/terreno.css` y selección del contenedor P1 en `src/App.tsx`. Se retiran de `styles.css` las reglas del Terreno anterior que ya no tienen consumidores.
+- Los tokens viven en `.app-shell-terrain`: la cabecera, el aviso, las acciones y el pie de esta vista usan el mismo sistema, sin extender la paleta a P0/P2/P3.
+- Diseño adaptable: hero en dos columnas en escritorio; bloques inferiores apilados por debajo de 960 px, hero apilado por debajo de 700 px y miniaturas con ancho completo por debajo de 440 px. Los textos y botones permanecen elementos HTML reales; las imágenes no contienen texto de interfaz.
+- Imágenes nuevas generadas con la herramienta integrada `image_gen` (skill imagegen), sin CLI ni API key: `src/ui/assets/terreno-hero-v1.png`, `terreno-demo-v1.png` y `terreno-poligono-v1.png`. [Prompts finales y archivos](src/ui/assets/terreno-prompts.md). Son ilustraciones ficticias, no mapas, mediciones ni evidencia científica.
+- El acceso al laboratorio conserva `onSelectDemo`. La entrada de polígono conserva `?modo=poligono` y su aviso de integración pendiente de A2.10; el dibujo de la imagen no es una herramienta de edición.
+- No se agregan dependencias ni llamadas a servicios externos. La imagen de inicio no se reemplaza.
+
+Verificación de esta entrega: `npm run build` (incluye TypeScript estricto) y `git diff --check`. No se hace QA visual de la interfaz ni se generan capturas de navegador, por instrucción de Balam; esa revisión queda a su cargo. Las capturas anteriores de P1 son del esqueleto inicial.
+
+## Terreno: A2.10 y A2.9
+
+Esta sección sustituye las referencias anteriores al mapa y la cuadrícula pendientes. En `#/terreno?modo=poligono` se dibuja el contorno en Leaflet o mediante coordenadas; hay controles para deshacer, reiniciar y centrar. La base es OpenStreetMap con atribución y requiere red; si falla, el formulario sigue disponible.
+
+La cuadrícula usa Turf para área e intersecciones, como máximo 1600 celdas y bordes parciales; el lado mínimo es una decisión técnica de visualización (10 m), no la resolución de los datos NASA. Límites y plan en `src/ui/TERRENO-PLAN.md`. El usuario confirma antes de consultar elevación con el cliente de Eduardo. Se muestran estado, fuente, advertencias y errores con reintento; también se puede guardar sin relieve (null, NO_EVALUABLE). La parcela se conserva en App al navegar, no después de recargar. La simulación y el suelo se conectarán en A3.4/A4.6.
+
+Verificado en navegador: entrada de cuatro coordenadas, generación, guardado, regreso del laboratorio y conservación del contorno; 503 con motivo y reintento exitoso mediante respuestas sintéticas, sin mediciones inventadas en el producto. Sin desbordamiento a 1440, 390 y 320 px. Captura: `evidencia/terreno-poligono-320.png`. Pruebas de cuadrícula cubren contrato JSON Schema, conservación de área, borde cóncavo, límite y contornos inválidos.
+
+Referencias técnicas: [Leaflet](https://leafletjs.com/reference.html), [Turf intersect](https://turfjs.org/docs/api/intersect). El cliente en `src/api/` conserva la implementación y documentación de Eduardo.

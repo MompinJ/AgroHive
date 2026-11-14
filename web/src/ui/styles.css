@@ -68,14 +68,7 @@ p { line-height: 1.65; }
 .card > h2 { margin-bottom: 20px; }
 .card > p { margin-block: 16px; font-size: .85rem; color: var(--muted); }
 .card > .quiet-note { font-size: .75rem; }
-.terrain-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
-.demo-card .field-illustration { background: #e6eada; border-radius: 6px; }
-.demo-description { display: flex; gap: 16px; align-items: start; margin-top: 20px; font-size: .85rem; }
-.demo-description > .small-tag { flex-shrink: 0; }
-.polygon-placeholder { background: #f1f1e9; min-height: 210px; display: grid; place-items: center; margin-bottom: 20px; border-radius: 6px; }
-.polygon-placeholder > span { width: 45%; height: 110px; border: 2px dashed #788770; transform: skew(-14deg); }
 .highlighted { border-color: #65834c; }
-.inline-note { border-left: 3px solid #65834c; padding-left: 12px; }
 .lab-grid { display: grid; grid-template-columns: minmax(230px, .85fr) minmax(300px, 1.6fr) minmax(250px, 1fr); gap: 18px; align-items: start; }
 .lab-grid > .card { padding: 20px; }
 .field-label, .choice-group legend { font-size: .78rem; font-weight: 600; display: block; margin-bottom: 10px; }
@@ -149,7 +142,7 @@ select { width: 100%; min-height: 44px; border: 1px solid #718075; border-radius
   .header-inner { flex-wrap: wrap; justify-content: center; gap: 8px; padding-top: 14px; }
   .navigation { width: 100%; justify-content: center; gap: 0; }
   .navigation a { padding: 10px 12px; }
-  .terrain-layout, .evidence-grid { grid-template-columns: 1fr; }
+  .evidence-grid { grid-template-columns: 1fr; }
   .comparison-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
@@ -161,7 +154,6 @@ select { width: 100%; min-height: 44px; border: 1px solid #718075; border-radius
   .card, .lab-grid > .card { padding: 20px; }
   .lab-grid { grid-template-columns: minmax(0, 1fr); }.metrics-panel { grid-column: auto; }
   .metrics-list { display: block; }.metrics-panel > .button { width: 100%; }
-  .demo-description { flex-direction: column; gap: 10px; }
   .page-heading { margin-bottom: 24px; }
   .comparison-toolbar { align-items: stretch; }
 }
