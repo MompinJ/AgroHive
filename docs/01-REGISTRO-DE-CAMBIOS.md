@@ -150,6 +150,14 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A4.6: cliente de la API para el front (Eduardo, con balam)
+
+- **Archivos:** `web/src/api/` (`cliente.ts`, `usarApi.ts`, `cliente.test.ts`, `README.md`), `docs/14`. Carpeta nueva, sin tocar `web/src/ui`, `paginas`, `motor` ni `escena`.
+- **Cambio:** funciones tipadas para `/api/clima`, `/api/suelo`, `/api/proxima-temporada`, `/api/cultivos`, `/api/elevacion` y `/health`, que devuelven `{ok, datos}` o `{ok: false, error: ERROR_DATOS}` y nunca lanzan; hook `usarApi` con los estados de `<DataState>`; `VENTANA_ESTANDAR` (2005-10-01 a 2025-12-31). Los datos usan `contratos/tipos`; el cliente generado de OpenAPI solo describe `/api/elevacion` (regla del 14/11).
+- **Evidencia:** 10 pruebas nuevas con `fetch` simulado (exito, 503, 422, red caida, cuerpo no JSON, tiempo agotado, cancelacion, POST de terreno); typecheck en verde.
+- **Pendiente:** conectar las paginas de balam y el motor de Mompin. A4.6 queda tambien en mi fila del tablero (Mompin la asigno a los dos); la fila de Mompin sigue listandola.
+- **Nota:** `npm test` en `web/` falla hoy 2 pruebas del motor y la escena que afirman `NO_EVALUABLE` para el suelo de Isla: es el cambio atomico que Mompin integra con mi `suelo.json`.
+
 ### 2026-11-14 (noche) — A2.16 conectada: TAW y retencion en /api/suelo; /health con commit (Eduardo)
 
 - **Archivos:** `api/app/pedotransferencia.py` (nuevo), `api/app/servicios.py`, `api/app/modelos.py`, `api/app/config.py`, `api/app/main.py`, pruebas, `datos/demo/` (paquete regenerado), `api/README.md`.

@@ -13,12 +13,12 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 10 | 1 | 0 | 3 | 71 % de 14 |
-| **Eduardo** | 9 | 2 | 2 | 1 | 64 % de 14 |
+| **Mompin** | 10 | 2 | 0 | 2 | 71 % de 14 |
+| **Eduardo** | 9 | 3 | 2 | 1 | 60 % de 15 |
 | **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **22 de 56** actividades hechas (39 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **22 de 56** actividades hechas (39 %), 6 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -34,7 +34,7 @@ Proyecto completo: **22 de 56** actividades hechas (39 %), 5 en curso, 2 bloquea
 - [x] **A3.2** Cargador de .bbmodel con instancing por cultivo y etapa `HECHO`
 - [ ] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
-- [ ] **A4.6** Conectar front y API (cliente generado, estados de carga y error)
+- [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
 - [ ] **A5.5** Pruebas de regresión del motor y de contratos
 
 ## Eduardo
@@ -49,6 +49,7 @@ Proyecto completo: **22 de 56** actividades hechas (39 %), 5 en curso, 2 bloquea
 - [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir
 - [x] **A2.14** Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché ([[APIs]]) `HECHO`
 - [x] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) `HECHO`
+- [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)
 - [ ] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan)
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
