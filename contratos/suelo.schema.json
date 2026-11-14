@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/suelo.schema.json",
+  "title": "Suelo",
+  "description": "Suelo de la parcela (decision 14/11, doc 13): textura y pH estimados por zona con mapas globales (ISRIC WCS u OpenLandMap) o elegidos en el selector manual de respaldo. Siempre etiqueta SUPUESTO: no se mide en la parcela.",
+  "type": "object",
+  "required": ["meta", "id", "etiqueta", "origen", "aviso", "textura", "ph"],
+  "properties": {
+    "meta": { "$ref": "comun.schema.json#/$defs/meta" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "etiqueta": {
+      "description": "Todo el documento es una estimacion, no una medicion.",
+      "const": "SUPUESTO"
+    },
+    "origen": {
+      "description": "mapa_global: estimado por script desde ISRIC u OpenLandMap y servido desde cache. selector_manual: el usuario eligio el tipo de suelo.",
+      "type": "string",
+      "enum": ["mapa_global", "selector_manual"]
+    },
+    "aviso": {
+      "description": "Texto visible para el usuario, por ejemplo 'pH y textura estimados por un modelo global; no son una medicion de su parcela'.",
+      "type": "string",
+      "minLength": 1
+    },
+    "coordenada": {
+      "description": "Punto donde se consulto el mapa global.",
+      "$ref": "comun.schema.json#/$defs/lonLat"
+    },
+    "profundidad": {
+      "title": "ProfundidadCm",
+      "description": "Intervalo de profundidad de la estimacion en cm (por ejemplo 0 a 30).",
+      "type": "object",
+      "required": ["desdeCm", "hastaCm"],
+      "properties": {
+        "desdeCm": { "type": "number", "minimum": 0 },
+        "hastaCm": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "textura": { "$ref": "#/$defs/textura" },
+    "ph": {
+      "description": "pH estimado o NO_EVALUABLE si el servicio no respondio y no hay respaldo.",
+      "oneOf": [
+        { "$ref": "#/$defs/phEstimado" },
+        { "$ref": "comun.schema.json#/$defs/valorNoEvaluable" }
+      ]
+    },
+    "agua": {
+      "title": "AguaSuelo",
+      "description": "Parametros de agua derivados de la textura con la tabla de A1.6 (FAO-56).",
+      "type": "object",
+      "properties": {
+        "tawMmPorM": {
+          "description": "Agua total disponible por metro de suelo (mm/m).",
+          "$ref": "comun.schema.json#/$defs/valorCitado"
+        }
+      },
+      "additionalProperties": false
+    },
+    "advertencias": {
+      "type": "array",
+      "items": { "$ref": "comun.schema.json#/$defs/advertencia" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "claseTextura": {
+      "title": "ClaseTextura",
+      "description": "Clase textural USDA (12 clases).",
+      "type": "string",
+      "enum": [
+        "arena",
+        "arena_franca",
+        "franco_arenoso",
+        "franco",
+        "franco_limoso",
+        "limo",
+        "franco_arcillo_arenoso",
+        "franco_arcilloso",
+        "franco_arcillo_limoso",
+        "arcillo_arenoso",
+        "arcillo_limoso",
+        "arcilla"
+      ]
+    },
+    "grupoSelector": {
+      "title": "GrupoSuelo",
+      "description": "Grupo simplificado del selector manual del MVP (doc 04).",
+      "type": "string",
+      "enum": ["arenoso", "franco", "arcilloso"]
+    },
+    "textura": {
+      "title": "Textura",
+      "type": "object",
+      "required": ["estado", "etiqueta", "grupo"],
+      "properties": {
+        "estado": { "$ref": "comun.schema.json#/$defs/estado" },
+        "etiqueta": { "const": "SUPUESTO" },
+        "clase": {
+          "description": "Clase USDA si viene del mapa global; null si solo se conoce el grupo del selector.",
+          "oneOf": [{ "$ref": "#/$defs/claseTextura" }, { "type": "null" }]
+        },
+        "grupo": { "$ref": "#/$defs/grupoSelector" },
+        "fraccionesPct": {
+          "title": "FraccionesTextura",
+          "description": "Porcentajes de arena, limo y arcilla del mapa global. null si no se tienen.",
+          "type": ["object", "null"],
+          "required": ["arena", "limo", "arcilla"],
+          "properties": {
+            "arena": { "type": "number", "minimum": 0, "maximum": 100 },
+            "limo": { "type": "number", "minimum": 0, "maximum": 100 },
+            "arcilla": { "type": "number", "minimum": 0, "maximum": 100 }
+          },
+          "additionalProperties": false
+        },
+        "fuente": { "$ref": "comun.schema.json#/$defs/fuente" }
+      },
+      "additionalProperties": false
+    },
+    "phEstimado": {
+      "title": "PhEstimado",
+      "type": "object",
+      "required": ["estado", "etiqueta", "valor", "fuente"],
+      "properties": {
+        "estado": { "type": "string", "enum": ["EVALUABLE", "EXPLORATORIO", "RESPALDO_HISTORICO"] },
+        "etiqueta": { "const": "SUPUESTO" },
+        "valor": {
+          "description": "pH en agua estimado por el modelo global.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 14
+        },
+        "fuente": { "$ref": "comun.schema.json#/$defs/fuente" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
