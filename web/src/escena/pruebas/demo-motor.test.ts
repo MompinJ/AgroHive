@@ -54,3 +54,31 @@ describe('vista previa con el motor real', () => {
     expect([...cultivos].sort()).toEqual(['frijol', 'maiz']);
   });
 });
+
+describe('prueba de carga sintetica (A5.4)', () => {
+  it('llega justo al tope de 1600 celdas, cumple el contrato parcela y se declara sintetica', async () => {
+    const { parcelaCargaSintetica } = await import('../demo-motor');
+    const { validadorContrato } = await import('../../motor/pruebas/utiles');
+    const p = parcelaCargaSintetica();
+    expect(p.celdas).toHaveLength(1600);
+    expect(validadorContrato('parcela')(p)).toEqual([]);
+    expect(p.meta.esEjemplo).toBe(true);
+    expect(p.meta.aviso).toMatch(/PRUEBA DE CARGA, NO SON DATOS/);
+    expect(p.terreno.estado).toBe('EXPLORATORIO');
+    const e = construirEscena(p, null);
+    expect(e.bloques).toHaveLength(1600);
+    expect(e.filas).toBe(40);
+  });
+
+  it('el motor la calcula y la escena agrupa las 1600 plantas en pocos InstancedMesh', async () => {
+    const { entradasCarga, parcelaCargaSintetica } = await import('../demo-motor');
+    const t0 = performance.now();
+    const r = simularRotacion({ ...entradasCarga('manual_franco'), escenarios });
+    const ms = performance.now() - t0;
+    const e = construirEscena(parcelaCargaSintetica(), resultadoCeldas(r, 'habitual', '2016-08-01'));
+    const grupos = agruparPorModelo(e.bloques, MODELOS_DISPONIBLES);
+    expect(grupos.reduce((s, g) => s + g.bloques.length, 0)).toBe(1600);
+    expect(grupos.length).toBeLessThanOrEqual(3);
+    console.info(`[escena] motor con 1600 celdas: ${Math.round(ms)} ms (en Node)`);
+  });
+});
