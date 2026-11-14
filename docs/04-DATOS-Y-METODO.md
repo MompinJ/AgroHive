@@ -47,6 +47,8 @@
 ### Suelo: la fuente más débil
 El MVP usa un **selector manual de tipo de suelo** (arcilloso, franco, arenoso) con valores de retención de agua de FAO-56, siempre etiquetado `SUPUESTO`. Alternativas posteriores: GeoTIFF de SoilGrids, Earth Engine, mapas de INEGI.
 
+**Decisión 14/11 (ver 13):** además se estima **textura y pH** de la zona con mapas globales descargados por script (WCS de ISRIC u OpenLandMap, 250 m; OpenLandMap-soildb a 30 m si es viable), servidos desde caché y siempre etiquetados `SUPUESTO`. El selector manual queda como respaldo. `[VERIFICAR]` qué servicio responde hoy: ISRIC indica API REST pausada, pero una FAQ reciente la describe como beta con límite de 5 llamadas por minuto.
+
 ## Período histórico y escenarios
 
 1. Ventana objetivo: **2006–2025** (20 años completos). Nunca tratar 2026 como año completo.

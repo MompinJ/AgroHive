@@ -14,11 +14,17 @@ Sin horas. Cada actividad se mide por **cuánta IA cuesta** hacerla bien, para r
 
 **Regla de cupos** (doc 09): reservar el cupo fuerte para lo crítico (motor y escena 3D); usar el cupo ligero para boilerplate, tipos, textos y configuración.
 
-## Roles
+## Áreas y reparto por actividad
 
-Asignación por nombre pendiente (V-18). Ramas: `balam`, `Mompin`, `Mafer`, `Eduardo`. Eduardo es dueño del servidor, así que lo natural es que lleve **R3 (datos y servidor)**; el resto se confirma en equipo.
+**Decisión 14/11:** no se asignan roles por persona; el equipo se **divide las actividades**. Las áreas R1 a R4 de abajo solo orientan qué tipo de trabajo es cada actividad (columna "Rol" de las tablas) y en qué carpeta vive. Ramas: `balam`, `Mompin`, `Mafer`, `Eduardo`.
 
-| Rol | Alcance | Carpeta principal |
+Cómo se reparte:
+1. Cada quien toma actividades y escribe su nombre en el **Tablero de reparto** (al final de este documento), con su estado.
+2. Respetar las dependencias: no se arranca una actividad cuyo requisito aún no existe, salvo que se acuerde un contrato provisional.
+3. Repartir el **cupo fuerte de IA**: nadie debería llevar todas las actividades L. Eduardo, por ser dueño del servidor, toma las de despliegue (A0.4, A4.7).
+4. Si alguien termina, toma la siguiente actividad libre del camino crítico antes que un extra.
+
+| Área | Alcance | Carpeta principal |
 | --- | --- | --- |
 | **R1** Interfaz y 3D | React, mapa, polígono, paneles, selector, escena 3D, 2D | `web/` |
 | **R2** Motor científico | Escenarios, balance de agua, pilares, ranking, explicaciones, pruebas | `web/src/motor/` |
@@ -52,6 +58,8 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A0.3 | Acordar roles, cultivos iniciales y criterio de ranking (V-18, V-19) | Todos | XS | — | Acta breve en 11 |
 | A0.4 | Acceso SSH, firewall y hostname del servidor (V-15 a V-17) | R3 / Eduardo | S | — | `https://<host>/health` responde |
 | A0.5 | Verificar reglas de entrega, IA y video (V-03, V-04) | R4 | XS | — | Notas en 11 |
+| A0.6 | Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) | R3 | S | — | Zona y cultivos confirmados en 13 |
+| A0.7 | Verificar Open-Meteo estacional, CORS de POWER y acceso a elevación (V-21, V-22) | R3 | S | — | Parámetros probados con una llamada real, anotados en 04 |
 
 ## F1 · Contratos y esqueleto
 
@@ -61,7 +69,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A1.2 | Esqueleto `web/`: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | R1 | S | A1.1 | `npm run dev` abre las pantallas |
 | A1.3 | Esqueleto `api/`: FastAPI, `/health`, OpenAPI, generación del cliente TS | R3 | S | A1.1 | Cliente TS generado compila |
 | A1.4 | Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) | R4 | M | A0.3 | `.bbmodel` abre en Blockbench |
-| A1.5 | Tabla de cultivos: ciclo, etapas, Kc y umbrales con fuente | R3 | M | A0.3 | JSON con citas; vacíos como `NO_EVALUABLE` |
+| A1.5 | Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente | R3 | M | A0.3 | JSON con citas; vacíos como `NO_EVALUABLE` |
 | A1.6 | Tabla de suelos (TAW por textura, FAO-56) | R3 | S | — | JSON con fuente |
 
 ## F2 · Datos y motor (en paralelo)
@@ -80,6 +88,8 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | R1 | M | A1.2 | El usuario dibuja y ve su parcela (P1) |
 | A2.11 | Cultivos 1 a 3 completos, todas las etapas y estados de estrés | R4 | **L** | A1.4 | Modelos probados en la escena real (V-14) |
 | A2.12 | Bloques de suelo por tipo y humedad | R4 | S | A1.4 | Variantes en `modelos/` |
+| A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles y tendencia); salida como banda de incertidumbre | R2 + R3 | M | A2.1, A2.5, A0.7 | Rango plausible por mes para la zona demo, etiquetado como aproximado. Después del motor; no bloquea el MVP |
+| A2.14 | Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché | R3 | M | A1.3, A0.7 | `GET /api/suelo` devuelve textura y pH con etiqueta `SUPUESTO`; respaldo manual (V-23) |
 
 Compuerta **C2** al terminar A2.1, A2.6 y A2.7.
 
@@ -111,6 +121,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | R1 + R3 | M | A2.1, A3.4 | Flujo P0 a P3 con datos reales |
 | A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | A0.4 | URL pública con la demo |
 | A4.8 | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | A2.1 | Un dataset adicional integrado de verdad |
+| A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
 
 Compuerta **C4** al terminar A4.6.
 
@@ -142,7 +153,7 @@ La escena 3D (`A2.9 -> A3.1 -> A3.2`) va en paralelo y también es crítica para
 4. 3D en problemas: plan 2D y plantas procedurales con cajas.
 5. Polígono libre en problemas: parcela demo fija más el polígono como "vista previa".
 
-## Esfuerzo total por rol (referencia para repartir cupos)
+## Esfuerzo por área (referencial, sin las actividades añadidas el 14/11 tarde)
 
 | Rol | Actividades L (cupo fuerte) | M | S/XS |
 | --- | --- | --- | --- |
@@ -152,6 +163,14 @@ La escena 3D (`A2.9 -> A3.1 -> A3.2`) va en paralelo y también es crítica para
 | R4 | A2.11 | 5 | 5 |
 
 R1 y R2 concentran el cupo fuerte. R3 y R4 deben reservar tiempo para apoyarlos cuando terminen lo suyo.
+
+## Tablero de reparto
+
+Una fila por actividad tomada. Al tomarla, anotar nombre y estado; al terminar, cambiar a `HECHO`. Estados: `EN CURSO`, `BLOQUEADO`, `HECHO`.
+
+| Actividad | Responsable | Estado | Nota |
+| --- | --- | --- | --- |
+| (libre) | (nombre) | (estado) | Ejemplo: A1.1, Mompin, EN CURSO |
 
 ## Cómo mantener este documento
 

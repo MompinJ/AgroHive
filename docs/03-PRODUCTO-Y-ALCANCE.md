@@ -104,9 +104,9 @@ Con el selector, el usuario puede armar sus propias secuencias además de estas.
 - Escalabilidad y optimización avanzada.
 
 ## Fuera de alcance
-- Predecir el clima del próximo año.
+- Predecir con certeza el clima del próximo año. (Desde 14/11 se permite una **capa aproximada** "próxima temporada" como rango con incertidumbre; ver 13.)
 - Predecir rendimientos, cosechas o ganancias.
-- Medir pH, fertilidad o reemplazar análisis de laboratorio.
+- Medir pH, fertilidad o reemplazar análisis de laboratorio. (El pH se muestra solo como estimación de un modelo global, etiquetado `SUPUESTO`; ver 13.)
 - Reemplazar a un agrónomo.
 - Detección automática de edificios, caminos o árboles desde imágenes.
 

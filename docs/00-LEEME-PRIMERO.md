@@ -9,7 +9,7 @@
 - **Idea central:** no buscamos la rotación de mayor rendimiento, buscamos **la más robusta**: la que no colapsa en el peor escenario histórico, aunque no sea la más rentable en un año ideal.
 - **Cómo se ve:** escena **3D low-poly estilo voxel** (tipo juego de granja) con **relieve**, con **modo 2D ligero** de respaldo.
 - **Cómo se usa:** el usuario elige cultivos con un **selector** ("¿y si siembro esto?"), cambia de escenario (seco / habitual / lluvioso) y ve cómo reacciona su campo, con valores, evidencia y riesgos. La decisión final siempre es del agricultor.
-- **Qué NO hace:** no predice el clima, no predice cosechas ni ingresos, no mide pH ni fertilidad, no reemplaza a un agrónomo.
+- **Qué NO hace:** no predice el clima de una temporada exacta (solo muestra un rango aproximado, ver 13), no predice cosechas ni ingresos, no mide pH ni fertilidad (el pH es una estimación de un modelo global), no reemplaza a un agrónomo.
 
 ## Índice
 

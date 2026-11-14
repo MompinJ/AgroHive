@@ -24,9 +24,9 @@ Frase de cierre del video del compañero (conservar): *si los datos satelitales 
 - Deja la decisión final al agricultor.
 
 ## Límites científicos (decirlos antes de que pregunten)
-- **No predice el clima** del próximo año: usa historia real y escenarios.
+- **No predice una temporada exacta**: usa historia real y escenarios; la capa "próxima temporada" es un rango aproximado con incertidumbre visible, nunca una cifra.
 - **No predice cosechas, rendimientos ni ganancias.**
-- **No mide pH ni fertilidad**; el suelo lo elige el usuario o es un supuesto etiquetado.
+- **No mide pH ni fertilidad**; el pH es una estimación de un modelo global y el suelo lo elige el usuario o es un supuesto etiquetado.
 - **Resolución gruesa del clima:** una parcela cabe en una sola celda de POWER; el clima es igual en toda la parcela y las diferencias entre bloques vienen de cultivo, suelo y relieve.
 - **El 3D es cualitativo:** muestra etapas y estados, no alturas ni biomasa reales.
 - **Simplificaciones:** balance de agua de cubeta, índice de erosión relativo, parámetros de tablas generales.
