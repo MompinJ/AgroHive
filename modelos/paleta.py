@@ -72,6 +72,47 @@ PALETA_AGROHIVE = {
     'moho_dark': '#55604b',
     'moho': '#7d8b6c',
     'moho_light': '#aab69c',
+    # 44-46: hoja de frijol (verde mas claro y amarillento que el maiz)
+    'frijol_hoja_dark': '#55862f',
+    'frijol_hoja': '#7fb240',
+    'frijol_hoja_light': '#b3d66a',
+    # 47-49: vaina de frijol verde-amarilla
+    'vaina_dark': '#8f9c3c',
+    'vaina': '#c2c860',
+    'vaina_light': '#e2df95',
+    # 50-51: semilla de frijol negro y flor lila
+    'frijol_negro': '#2b2230',
+    'flor_lila': '#c7a3dc',
+    # 52-55: hoja de calabaza (verde azulado, con manchas plateadas)
+    'calabaza_hoja_dark': '#2c5a2e',
+    'calabaza_hoja': '#3f7f3c',
+    'calabaza_hoja_light': '#6aa65a',
+    'calabaza_mancha': '#a8c69c',
+    # 56-59: fruto de calabaza (verde, crema, naranja de madurez)
+    'calabaza_fruto_dark': '#36603a',
+    'calabaza_fruto': '#5f8f4a',
+    'calabaza_crema': '#e2cf94',
+    'calabaza_naranja': '#cf7f2c',
+    # 60-68: suelo arenoso por humedad (seco, medio, humedo; cada uno base, oscuro, claro)
+    'arenoso_seco': '#c9ad7c',
+    'arenoso_seco_dark': '#a48a5f',
+    'arenoso_seco_light': '#e6d3a6',
+    'arenoso_medio': '#a88c5e',
+    'arenoso_medio_dark': '#876d45',
+    'arenoso_medio_light': '#c2a676',
+    'arenoso_humedo': '#7b6241',
+    'arenoso_humedo_dark': '#654f34',
+    'arenoso_humedo_light': '#8e7452',
+    # 69-77: suelo arcilloso por humedad (rojizo; seco con grietas, humedo liso con brillo)
+    'arcilloso_seco': '#96604a',
+    'arcilloso_seco_dark': '#4b2c1d',
+    'arcilloso_seco_light': '#b47c62',
+    'arcilloso_medio': '#6e3f2a',
+    'arcilloso_medio_dark': '#4e2a1c',
+    'arcilloso_medio_light': '#87533a',
+    'arcilloso_humedo': '#452419',
+    'arcilloso_humedo_dark': '#2e1711',
+    'arcilloso_humedo_light': '#9a7468',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'

@@ -13,12 +13,12 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 11 | 1 | 0 | 2 | 79 % de 14 |
+| **Mompin** | 13 | 1 | 0 | 0 | 93 % de 14 |
 | **Eduardo** | 10 | 3 | 2 | 0 | 67 % de 15 |
-| **Mafer** | 3 | 2 | 0 | 7 | 25 % de 12 |
-| **balam** | 1 | 0 | 0 | 15 | 6 % de 16 |
+| **Mafer** | 7 | 1 | 0 | 4 | 58 % de 12 |
+| **balam** | 3 | 0 | 0 | 13 | 19 % de 16 |
 
-Proyecto completo: **24 de 56** actividades hechas (43 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **32 de 56** actividades hechas (57 %), 4 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -32,10 +32,10 @@ Proyecto completo: **24 de 56** actividades hechas (43 %), 5 en curso, 2 bloquea
 - [x] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `HECHO` — 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9)
 - [x] **A3.1** Escena 3D con relieve (altura por bloque, InstancedMesh) `HECHO`
 - [x] **A3.2** Cargador de .bbmodel con instancing por cultivo y etapa `HECHO`
-- [ ] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa)
+- [x] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) `HECHO` — 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
 - [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
-- [ ] **A5.5** Pruebas de regresión del motor y de contratos
+- [x] **A5.5** Pruebas de regresión del motor y de contratos `HECHO` — 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`)
 
 ## Eduardo
 
@@ -57,14 +57,14 @@ Proyecto completo: **24 de 56** actividades hechas (43 %), 5 en curso, 2 bloquea
 
 ## Mafer
 
-- [/] **A0.6** Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) `EN CURSO`
+- [x] **A0.6** Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) `HECHO`
 - [x] **A1.4** Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) `HECHO`
 - [x] **A1.5** Catálogo propio de cultivos (milpa: maíz, frijol, calabaza; más 3 a 5 si hay tiempo) sembrado desde EcoCrop y FAO-56: ciclo, etapas, Kc y umbrales con fuente `HECHO`
 - [x] **A1.6** Tabla de suelos (TAW por textura, FAO-56) `HECHO`
-- [ ] **A2.11** Cultivos 1 a 3 completos, todas las etapas y estados de estrés
-- [ ] **A2.12** Bloques de suelo por tipo y humedad
-- [/] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `EN CURSO` — (Mafer)
-- [ ] **A3.3** Estados visuales: color + icono + patrón, leyenda
+- [x] **A2.11** Cultivos 1 a 3 completos, todas las etapas y estados de estrés `HECHO`
+- [/] **A2.12** Bloques de suelo por tipo y humedad `EN CURSO`
+- [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
+- [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
 - [ ] **A3.9** Cultivos 4 en adelante, props y mascota
 - [ ] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento)
 - [ ] **A5.6** Guion, video de demo y ensayo
@@ -74,8 +74,8 @@ Proyecto completo: **24 de 56** actividades hechas (43 %), 5 en curso, 2 bloquea
 
 - [ ] **A0.5** Verificar reglas de entrega, IA y video (V-03, V-04)
 - [x] **A1.2** Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías `HECHO` — rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados
-- [ ] **A2.9** Cuadrícula desde polígono (Turf.js) con tope de celdas
-- [ ] **A2.10** Mapa y dibujo de polígono libre (Leaflet)
+- [x] **A2.9** Cuadrícula desde polígono (Turf.js) con tope de celdas `HECHO`
+- [x] **A2.10** Mapa y dibujo de polígono libre (Leaflet) `HECHO`
 - [ ] **A3.4** Selector "what if": cultivo por ciclo, rotaciones R0 a R2, escenario
 - [ ] **A3.5** Prueba crítica: R1 + ciclo 2 + seco muestra frijol con su estado
 - [ ] **A3.6** Modo 2D ligero con los mismos valores del motor
