@@ -2,12 +2,12 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: contratos/*.schema.json (v0.3.0, A1.1)
+fuente: contratos/*.schema.json (v0.4.0, A1.1)
 ---
 
 # Contratos
 
-La fuente de verdad son los JSON Schema de `contratos/` (versión `0.3.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.4.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
 - Detalle y reglas: `contratos/README.md`
 - Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`
@@ -21,11 +21,12 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.3.0`, activ
 | --- | --- | --- |
 | `comun.schema.json` | Estados de `docs/04`, `meta`, `fuente`, `valorCitado`, `lonLat`, ids | — |
 | `parcela.schema.json` | Polígono, cuadrícula y celdas con `elevacionM` y `pendientePct`; enlaza el suelo con `sueloId` | Front (polígono) + API (elevación) |
-| `suelo.schema.json` | Textura (USDA y grupo del selector) y pH estimados, siempre `SUPUESTO` | API `GET /api/suelo` (A2.14) |
+| `suelo.schema.json` | Textura (USDA y grupo del selector) y pH estimados, siempre `SUPUESTO`; `estimaciones` de ISRIC y OpenLandMap y `estimacionUsada`; TAW con `metodoTaw` (tabla FAO-56 o Saxton y Rawls 2006) y `retencion` | API `GET /api/suelo` (A2.14, A2.15, A2.16) |
 | `cultivo.schema.json` | Catálogo: ciclo, etapas y Kc de FAO-56, umbrales de EcoCrop (lluvia del ciclo y lluvia anual por separado), ventanas de siembra | `datos/catalogos/` (A1.5) |
 | `tabla-suelos.schema.json` | TAW por metro y rangos de humedad por clase textural (FAO-56 Tabla 19), con fuente o `NO_EVALUABLE` | `datos/catalogos/` (A1.6) |
-| `clima-escenario.schema.json` | Serie diaria de un año real (seco, habitual, lluvioso) y cómo se eligió | API `GET /api/clima` + motor (A2.5) |
-| `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo bandas por mes | API + motor (A2.13) |
+| `serie-clima.schema.json` | Respuesta de `GET /api/clima`: serie diaria del periodo, sin escenario | API `GET /api/clima` |
+| `clima-escenario.schema.json` | Serie diaria de un año real (seco, habitual, lluvioso) y cómo se eligió; humedad de POWER opcional (`humedadRaizFraccionSat`, fracción de saturación) | Motor (A2.5), desde `serie-clima` |
+| `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo bandas por mes, `horizonteMeses` fijo en 6 | API + motor (A2.13) |
 | `plan-siembra.schema.json` | Rotación del selector: cultivo por ciclo y, si se pinta por bloques, por celda | Front (selector) |
 | `resultado-celda.schema.json` | Salida del motor por celda y fecha | Motor |
 | `resultado-rotacion.schema.json` | Pilares por escenario, peor caso, ranking (B principal, A de respaldo), pesos declarados y explicación | Motor |
@@ -51,7 +52,7 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 | Método y ruta | Función | Contrato de la respuesta |
 | --- | --- | --- |
 | `GET /health` | Vida del API | — |
-| `GET /api/clima?lat=&lon=&desde=&hasta=` | Serie diaria del periodo con caché, POWER con respaldo Open-Meteo. **No elige escenarios** (A2.5, motor). Implementado | `SerieClima`: mismo `dia` que `clima-escenario`; el motor corta los años. `SerieClima` aún no está en `contratos/` (se pide a Mompin) |
+| `GET /api/clima?lat=&lon=&desde=&hasta=` | Serie diaria del periodo con caché, POWER con respaldo Open-Meteo. **No elige escenarios** (A2.5, motor). Implementado | `serie-clima` (el motor arma `clima-escenario`) |
 | `POST /api/elevacion` | Recibe la cuadrícula ya generada por el front (`tamanoCeldaM` y `celdas` con id, i, j y centro; tope 1600) y devuelve elevación y pendiente por celda. Implementado | Campos `elevacionM`, `pendientePct` y `terreno` de `parcela` |
 | `GET /api/cultivos` | Catálogo JSON de `datos/catalogos/cultivos.json`; sin catálogo responde `NO_EVALUABLE`. Implementado | `cultivo` |
 | `GET /api/proxima-temporada?lat=&lon=` | Banda p10 a p90 por mes, 7 meses, sin cifra única; no es predicción. Implementado (A2.13, parte del backend) | `proxima-temporada` |
