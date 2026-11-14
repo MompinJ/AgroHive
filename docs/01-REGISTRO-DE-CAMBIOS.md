@@ -12,6 +12,17 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A2.5, A2.6 y A2.7: motor de agua y escenarios (Mompin)
+
+- **Archivos:** `web/src/motor/` (escenarios, ET0, cultivo y Kc, cubeta, suelo, estados, motor, protocolo y Web Worker, cliente; pruebas en `web/src/motor/pruebas/` con un fixture real de POWER), `web/package.json` (vitest 5.1.0 y script `test`), `docs/05`, `docs/04`, `docs/13`, `docs/14`, `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
+- **Decisión `[DECIDIDO]` (Mompin, 14/11) sobre los escenarios:** el percentil p10 / p50 / p90 se calcula sobre la **lluvia de las temporadas de siembra PV y OI**, no del año calendario. **Ventanas:** año agrícola de SIAP, con OI = siembras de octubre de *t*-1 a marzo de *t* y PV = siembras de abril a septiembre de *t*; la lluvia del año *t* es la suma del 1 de octubre de *t*-1 al 30 de septiembre de *t*. Fuente: SIAP, *Normatividad Técnica para la Generación de Estadística Básica Agropecuaria 2022*, p. 10, p. 20 (Cuadro No. 1) y p. 46. **Percentil:** definición 7 de Hyndman y Fan (1996), sobre los años con las dos temporadas completas (mínimo 10, doc 04). **Desempate:** año más cercano al percentil; si dos quedan a la misma distancia (menos de 0.05 mm) gana el más antiguo, y siempre se declara el segundo más cercano. La serie del escenario cubre los 18 meses del año agrícola de SIAP (oct *t*-1 a mar *t*+1).
+- **Resultado con datos reales** (POWER, celda de la parcela demo, 2006-2025): seco 2023, habitual 2016, lluvioso 2024 (2025 queda a 2 mm de 2024).
+- **Cambio (A2.6):** ET0 Penman-Monteith FAO-56 desde POWER (Hargreaves si faltan variables, ET0 de Open-Meteo si viene), Kc por la curva FAO-56 y cubeta FAO-56 cap. 8 con TAW del suelo y p del cultivo. Cada ciclo se simula en su temporada dentro del año agrícola del escenario (A2.8); las fechas de `resultado-celda` son las del plan.
+- **Cambio (A2.7):** pilar de déficit hídrico y estados de evaluabilidad (`ERROR_DATOS` > `NO_EVALUABLE` > `EXPLORATORIO` > `RESPALDO_HISTORICO` > `EVALUABLE`), con salida validada contra `resultado-rotacion` y `resultado-celda`.
+- **Supuestos declarados en el resultado:** cada ciclo arranca a capacidad de campo (FAO-56 cap. 8) hasta que A2.16 dé θsat y θFC para convertir GWETROOT (la conversión ya está en el motor); sin escurrimiento por pendiente hasta A3.7; Kc sin ajuste climático (falta la altura del cultivo); `estadoPlanta` nunca `podrida` (sin umbral con fuente).
+- **Fuente / evidencia:** 45 pruebas en verde (`cd web && npm test`), entre ellas las pruebas 1 a 5 de doc 05 (la parte de erosión de la 2 queda como `todo` para A3.7) y los ejemplos 2, 3, 8 y 18 de FAO-56.
+- **Decisiones afectadas:** doc 05, paso 1 (de `[PROPUESTA]` a `[DECIDIDO]`); doc 04, escenarios; doc 13, fila nueva "Escenarios (A2.5)". Pedido a A2.4: que la serie de la demo empiece el 2005-10-01 para tener 20 años agrícolas.
+
 ### 2026-11-14 — API: suelo con la tabla de A1.6 y CORS para el front (Eduardo)
 
 - **Archivos:** `api/app/textura.py`, `api/app/servicios.py`, `api/app/modelos.py`, `api/app/config.py`, pruebas, `api/README.md`, `AgroVault/Compartido/Pendientes.md`.

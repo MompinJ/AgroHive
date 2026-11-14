@@ -98,9 +98,9 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.2 `[HECHO]` | Respaldo Open-Meteo y estados `RESPALDO_HISTORICO` / `ERROR_DATOS` | R3 | S | Sonnet | A2.1 | Se activa al apagar POWER |
 | A2.3 `[HECHO]` | Elevación por celda (tiles Terrarium o SRTM) y pendiente | R3 | M | Sonnet | A1.3 | `GET /api/elevacion` por polígono |
 | A2.4 `[EN CURSO]` mecanismo y paquete hechos con la parcela de ejemplo; falta regenerarlo con la zona real (A0.6) | Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) | R3 | S | Sonnet | A2.1, A2.3 | Demo funciona sin internet |
-| A2.5 | Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) | R2 | M | Opus | A1.1 | Años reales visibles y reproducibles |
-| A2.6 | ET0, ETc y balance de agua por bloque (cubeta) | R2 | **L** | Fable | A1.1, A1.5, A1.6 | Pruebas 1 a 5 de doc 05 en verde |
-| A2.7 | Pilar de déficit hídrico y estados de evaluabilidad | R2 | M | Opus | A2.6 | Métricas por rotación y escenario |
+| A2.5 `[HECHO]` 14/11 | Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) | R2 | M | Opus | A1.1 | Años reales visibles y reproducibles |
+| A2.6 `[HECHO]` 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7) | ET0, ETc y balance de agua por bloque (cubeta) | R2 | **L** | Fable | A1.1, A1.5, A1.6 | Pruebas 1 a 5 de doc 05 en verde |
+| A2.7 `[HECHO]` 14/11 | Pilar de déficit hídrico y estados de evaluabilidad | R2 | M | Opus | A2.6 | Métricas por rotación y escenario |
 | A2.8 `[HECHO]` (c) `temporada_tipica`, 14/11 | Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) | R2 + R3 | M | Opus | A2.1, A1.5 | Opción elegida registrada en 01 |
 | A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | R1 | M | Sonnet | A1.2 | Polígono dibujado genera celdas |
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | R1 | M | Sonnet | A1.2 | El usuario dibuja y ve su parcela (P1) |
@@ -111,7 +111,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.15 | Cliente OpenLandMap y comparación con ISRIC en `GET /api/suelo` (V-23: ambos servicios) | R3 | S | Sonnet | A2.14 | `GET /api/suelo` devuelve `estimaciones` de ISRIC y OpenLandMap con fuente y `estimacionUsada` |
 | A2.16 (Mafer) | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | R3 / Mafer | M | Opus | A2.14, A1.6 | `agua.tawMmPorM` con `metodoTaw` y `retencion` (θsat, θFC, θWP), citado y `SUPUESTO`; prueba contra valores publicados del artículo |
 
-Compuerta **C2** al terminar A2.1, A2.6 y A2.7.
+Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 hechas; el motor devuelve resultados por celda con la serie real de POWER y pasa las pruebas 1 a 5 de doc 05 (rama `Mompin-motor`); C2 se cruza al integrarse a `main`.
 
 ## F3 · Escena y selector
 
@@ -192,7 +192,7 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 
 | Responsable | Rama | Herramientas de IA | Actividades | Primera tarea |
 | --- | --- | --- | --- | --- |
-| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5, A2.6, A2.7, A2.8, A3.1, A3.2, A4.2, A4.6, A2.13 (parte del motor), A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
+| **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1, A3.2, A4.2, A4.6, A2.13 (parte del motor), A3.7, A5.5; integra y administra `main` | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.7, A4.8, A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
 | **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16, A2.11, A2.12, A3.3, A3.9, A5.1, A5.6, A5.7 | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A3.8, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
@@ -209,7 +209,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 4 | 1 | 0 | 9 | 29 % de 14 |
+| **Mompin** | 7 | 1 | 0 | 6 | 50 % de 14 |
 | **Eduardo** | 7 | 3 | 2 | 2 | 50 % de 14 |
 | **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
@@ -221,9 +221,9 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A0.1 | Repo Git con 5 ramas y estructura de carpetas | HECHO |  |
 | A0.2 | Documentación consolidada en docs/ | HECHO |  |
 | A1.1 | Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS | HECHO |  |
-| A2.5 | Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) | PENDIENTE |  |
-| A2.6 | ET0, ETc y balance de agua por bloque (cubeta) | PENDIENTE |  |
-| A2.7 | Pilar de déficit hídrico y estados de evaluabilidad | PENDIENTE |  |
+| A2.5 | Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) | HECHO | 14/11 |
+| A2.6 | ET0, ETc y balance de agua por bloque (cubeta) | HECHO | 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7) |
+| A2.7 | Pilar de déficit hídrico y estados de evaluabilidad | HECHO | 14/11 |
 | A2.8 | Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) | HECHO | (c) `temporada_tipica`, 14/11 |
 | A2.13 | Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre | EN CURSO | backend hecho; falta la parte del motor (Mompin) |
 | A3.1 | Escena 3D con relieve (altura por bloque, InstancedMesh) | PENDIENTE |  |

@@ -13,21 +13,21 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 4 | 1 | 0 | 9 | 29 % de 14 |
+| **Mompin** | 7 | 1 | 0 | 6 | 50 % de 14 |
 | **Eduardo** | 7 | 3 | 2 | 2 | 50 % de 14 |
 | **Mafer** | 3 | 0 | 0 | 9 | 25 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **14 de 56** actividades hechas (25 %), 4 en curso, 2 bloqueadas.
+Proyecto completo: **17 de 56** actividades hechas (30 %), 4 en curso, 2 bloqueadas.
 
 ## Mompin
 
 - [x] **A0.1** Repo Git con 5 ramas y estructura de carpetas `HECHO`
 - [x] **A0.2** Documentación consolidada en docs/ `HECHO`
 - [x] **A1.1** Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS ([[Contratos]]) `HECHO`
-- [ ] **A2.5** Selección de escenarios seco / habitual / lluvioso (p10, p50, p90)
-- [ ] **A2.6** ET0, ETc y balance de agua por bloque (cubeta)
-- [ ] **A2.7** Pilar de déficit hídrico y estados de evaluabilidad
+- [x] **A2.5** Selección de escenarios seco / habitual / lluvioso (p10, p50, p90) `HECHO` — 14/11
+- [x] **A2.6** ET0, ETc y balance de agua por bloque (cubeta) `HECHO` — 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7)
+- [x] **A2.7** Pilar de déficit hídrico y estados de evaluabilidad `HECHO` — 14/11
 - [x] **A2.8** Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) `HECHO` — (c) `temporada_tipica`, 14/11
 - [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; falta la parte del motor (Mompin)
 - [ ] **A3.1** Escena 3D con relieve (altura por bloque, InstancedMesh)
