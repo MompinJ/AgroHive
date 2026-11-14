@@ -14,5 +14,10 @@
 .ui-action[aria-pressed="true"] { background: var(--color-action); color: var(--color-on-action); }
 .ui-flow > .card { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
 .ui-flow summary { min-height: 44px; padding-block: var(--space-3); }
+.rotation-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
+.rotation-cards .card { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--space-4); }
+.rotation-cards ul { padding-inline-start: var(--space-6); margin: 0; }
+.rotation-cards li { margin-block: var(--space-2); overflow-wrap: anywhere; }
+@media (max-width: 800px) { .rotation-cards { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 1150px) { .lab-connected { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); } .lab-connected > :last-child { grid-column: 1 / -1; } }
 @media (max-width: 700px) { .lab-connected { grid-template-columns: minmax(0, 1fr); } .lab-connected .card { padding: var(--space-4); } .ui-table-wrap th, .ui-table-wrap td { padding: 8px; font-size: var(--text-caption); } }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CalendarioLocal, CatalogoCultivos, Escenario, Parcela, PlanSiembra, ProximaTemporadaAproximada, SerieClima, Suelo, TablaSuelos } from '../../../contratos/tipos/contratos';
-import { avisosDe, cargarDatosParcela } from '../api/datosParcela';
+import { usarDatosParcela } from '../api/usarDatosParcela';
 import { crearClienteMotor, type ClienteMotor } from '../motor/cliente';
 import type { ResultadoRanking } from '../motor/ranking';
 import type { VistaProximaTemporada } from '../motor/proxima';
@@ -22,6 +22,8 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
   const [fechaElegida, setFecha] = useState<{ clave: string; fecha: string } | null>(null);
   const [mostrarBanda, setMostrarBanda] = useState(false);
   const [iniciado, setIniciado] = useState(habilitado);
+  const remotos = usarDatosParcela(iniciado && parcela ? parcela.centroide : null);
+  const datosRemotos = remotos.state === 'ready' ? remotos.datos : null;
   const [intento, setIntento] = useState(0);
   const [datos, setDatos] = useState<{ clave: string; datos: DatosLaboratorio } | null>(null);
   const [error, setError] = useState('');
@@ -42,18 +44,19 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
         const [p, serie, suelo, capa] = await Promise.all([import('../escena/demo-motor'), import('../../../datos/demo/respuestas/serie-clima.json'), import('../../../datos/demo/respuestas/suelo.json'), import('../../../datos/demo/respuestas/proxima-temporada.json')]);
         siguiente = { parcela: p.parcelaConTerrenoDemo(), serie: serie.default as unknown as SerieClima, suelo: suelo.default as Suelo, capa: capa.default as ProximaTemporadaAproximada, catalogo: cat.default as CatalogoCultivos, tabla: tab.default as TablaSuelos, calendario: calendarioIsla, avisos: ['Paquete precargado de Isla: parcela ficticia con datos climáticos y estimaciones de suelo de fuentes reales. No representa un levantamiento de campo.'] };
       } else {
-        const respuesta = await cargarDatosParcela(parcela.centroide, { senal: control.signal });
+        if (!datosRemotos || remotos.state !== 'ready') return;
+        const respuesta = datosRemotos;
         if (!respuesta.clima.ok) throw new Error(respuesta.clima.error.motivo);
         if (!respuesta.suelo.ok) throw new Error(respuesta.suelo.error.motivo);
         if (!respuesta.cultivos.ok) throw new Error(respuesta.cultivos.error.motivo);
-        siguiente = { parcela: { ...parcela, sueloId: respuesta.suelo.datos.id }, serie: respuesta.clima.datos, suelo: respuesta.suelo.datos, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: null, avisos: [...avisosDe(respuesta).map((a) => a.mensaje), 'Sin calendario local verificado para esta parcela.'] };
+        siguiente = { parcela: { ...parcela, sueloId: respuesta.suelo.datos.id }, serie: respuesta.clima.datos, suelo: respuesta.suelo.datos, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: null, avisos: [...remotos.avisos.map((a) => a.mensaje), 'Sin calendario local verificado para esta parcela.'] };
       }
       if (activo) setDatos({ clave: claveParcela, datos: siguiente });
     }
     void cargar().catch((e: unknown) => { if (activo) setError(e instanceof Error ? e.message : 'No se pudieron cargar los datos.'); });
     return () => { activo = false; control.abort(); };
-  }, [claveParcela, iniciado, intento]);
-  const actual = datos?.clave === claveParcela ? datos.datos : null;
+  }, [claveParcela, iniciado, intento, datosRemotos]);
+  const actual = datos?.clave === claveParcela && (!parcela || remotos.state === 'ready') ? datos.datos : null;
   const planes = useMemo(() => actual ? planesEditados?.clave === claveParcela ? planesEditados.planes : planesIniciales(actual.parcela, actual.calendario) : [], [actual, planesEditados, claveParcela]);
   const clave = JSON.stringify([claveParcela, planes, revision, intento]);
   useEffect(() => {
@@ -71,6 +74,6 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
     void simular().catch((e: unknown) => { if (activo) { setErrorMotor(e instanceof Error ? e.message : 'No se pudo simular.'); cliente?.terminar(); } });
     return () => { activo = false; cliente?.terminar(); };
   }, [actual, planes, clave]);
-  return { seleccion: { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda }, datos: actual, planes, calculo: calculo?.clave === clave ? calculo : null, error: error || errorMotor, actualizar: (plan: PlanSiembra) => setPlanes({ clave: claveParcela, planes: planes.map((p) => p.rotacionId === plan.rotacionId ? plan : p) }), reintentar: () => { setDatos(null); setIntento((n) => n + 1); setRevision((n) => n + 1); } };
+  return { seleccion: { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda }, datos: actual, planes, calculo: calculo?.clave === clave && actual ? calculo : null, error: parcela && remotos.state === 'error' ? remotos.error.motivo : error || errorMotor, actualizar: (plan: PlanSiembra) => setPlanes({ clave: claveParcela, planes: planes.map((p) => p.rotacionId === plan.rotacionId ? plan : p) }), reintentar: () => { setDatos(null); remotos.reintentar(); setIntento((n) => n + 1); setRevision((n) => n + 1); } };
 }
 export type LaboratorioEstado = ReturnType<typeof useLaboratorio>;

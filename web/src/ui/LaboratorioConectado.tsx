@@ -4,6 +4,7 @@ import { ActionLink, Card, DataState, PageHeading } from './components';
 import { armarPlan, explicarFecha, nombresCultivos, referenciaSiembra } from './planes';
 import { conLimite, type LaboratorioEstado } from './useLaboratorio';
 import './laboratorio.css';
+import { TarjetasRotacion } from './TarjetasRotacion';
 
 const Escena = lazy(() => import('../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
@@ -96,6 +97,7 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
       <details><summary>Fuentes y advertencias del cálculo</summary>{ranking.advertencias.map((a, i) => <p key={i}>{a.mensaje}</p>)}{resultado?.advertencias?.map((a, i) => <p key={i}>{a.mensaje}</p>)}</details>
       {comparacion && <ActionLink href="#/laboratorio" secondary>Volver al laboratorio</ActionLink>}
     </Card>}
+    {ranking && <TarjetasRotacion rotaciones={ranking.rotaciones} />}
     <Card title="Próxima temporada aproximada" eyebrow="Exploratorio">
       <label><input type="checkbox" checked={mostrarBanda} onChange={(e) => setMostrarBanda(e.target.checked)} /> Mostrar banda de incertidumbre</label>
       <p>No es una predicción de cosecha ni de una temporada exacta.</p>
