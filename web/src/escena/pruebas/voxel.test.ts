@@ -163,11 +163,15 @@ describe('catalogo de modelos', () => {
 
   it('agrupa un InstancedMesh por clave y declara el respaldo cuando falta el .bbmodel', () => {
     const grupos = agruparPorModelo(escena.bloques, new Set(['frijol_crecimiento']));
+    // c-1-1 (calabaza sin parametros) llega con etapa null (contratos 0.6.0): no lleva planta.
     expect(grupos.map((g) => [g.clave, g.resolucion.tipo, g.bloques.length])).toEqual([
-      ['calabaza_crecimiento', 'respaldo', 1],
       ['frijol_crecimiento', 'bbmodel', 2],
       ['frijol_madurez', 'respaldo', 1],
     ]);
+  });
+
+  it('sin etapa (null, faltan parametros del cultivo) no se inventa un modelo', () => {
+    expect(claveModelo({ cultivo: 'calabaza', etapa: null, registro: null })).toBeNull();
   });
 
   it('el giro por celda es estable y en pasos de 90 grados', () => {

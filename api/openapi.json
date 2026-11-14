@@ -161,7 +161,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogoCultivos"
+                }
               }
             }
           }
@@ -381,6 +383,48 @@
         ],
         "title": "AguaSuelo"
       },
+      "CatalogoCultivos": {
+        "properties": {
+          "estado": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "NO_EVALUABLE"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "cultivos": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Cultivos"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "cultivos"
+        ],
+        "title": "CatalogoCultivos",
+        "description": "Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, NO_EVALUABLE."
+      },
       "CeldaEntrada": {
         "properties": {
           "id": {
@@ -571,6 +615,19 @@
               }
             ],
             "title": "Et0Mm"
+          },
+          "humedadRaizFraccionSat": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Humedadraizfraccionsat"
           }
         },
         "type": "object",
@@ -600,6 +657,97 @@
           "motivo"
         ],
         "title": "ErrorDatos"
+      },
+      "EstimacionSuelo": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "title": "Id"
+          },
+          "servicio": {
+            "type": "string",
+            "enum": [
+              "isric_soilgrids_wcs",
+              "openlandmap"
+            ],
+            "title": "Servicio"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "profundidad": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProfundidadCm"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "textura": {
+            "$ref": "#/components/schemas/TexturaEstimada"
+          },
+          "ph": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 14.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ph"
+          },
+          "carbonoOrganicoGKg": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Carbonoorganicogkg"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "servicio",
+          "estado",
+          "fuente",
+          "textura",
+          "ph"
+        ],
+        "title": "EstimacionSuelo",
+        "description": "Lo que devolvio un servicio de suelo para la coordenada (para comparar ISRIC y OpenLandMap, V-23)."
       },
       "FraccionesTextura": {
         "properties": {
@@ -754,6 +902,55 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "HumedadSuelo": {
+        "properties": {
+          "variable": {
+            "type": "string",
+            "const": "GWETROOT",
+            "title": "Variable"
+          },
+          "definicion": {
+            "type": "string",
+            "title": "Definicion"
+          },
+          "profundidadCm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profundidadcm"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "uso": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "condicion_inicial",
+                "comparacion"
+              ]
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Uso"
+          }
+        },
+        "type": "object",
+        "required": [
+          "variable",
+          "definicion",
+          "fuente",
+          "uso"
+        ],
+        "title": "HumedadSuelo",
+        "description": "De donde sale humedadRaizFraccionSat y para que se usa (V-06)."
+      },
       "MesAproximado": {
         "properties": {
           "mes": {
@@ -806,8 +1003,7 @@
           },
           "esEjemplo": {
             "type": "boolean",
-            "title": "Esejemplo",
-            "default": false
+            "title": "Esejemplo"
           },
           "generado": {
             "anyOf": [
@@ -824,7 +1020,8 @@
         },
         "type": "object",
         "required": [
-          "versionContrato"
+          "versionContrato",
+          "esEjemplo"
         ],
         "title": "Meta"
       },
@@ -883,8 +1080,7 @@
           "etiqueta": {
             "type": "string",
             "const": "SUPUESTO",
-            "title": "Etiqueta",
-            "default": "SUPUESTO"
+            "title": "Etiqueta"
           },
           "valor": {
             "type": "number",
@@ -899,6 +1095,7 @@
         "type": "object",
         "required": [
           "estado",
+          "etiqueta",
           "valor",
           "fuente"
         ],
@@ -1108,6 +1305,16 @@
             "type": "array",
             "title": "Diario"
           },
+          "humedadSuelo": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HumedadSuelo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "advertencias": {
             "items": {
               "$ref": "#/components/schemas/Advertencia"
@@ -1142,8 +1349,7 @@
           "etiqueta": {
             "type": "string",
             "const": "SUPUESTO",
-            "title": "Etiqueta",
-            "default": "SUPUESTO"
+            "title": "Etiqueta"
           },
           "origen": {
             "type": "string",
@@ -1202,6 +1408,31 @@
             ],
             "title": "Ph"
           },
+          "estimaciones": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/EstimacionSuelo"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimaciones"
+          },
+          "estimacionUsada": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimacionusada"
+          },
           "agua": {
             "anyOf": [
               {
@@ -1225,6 +1456,7 @@
         "required": [
           "meta",
           "id",
+          "etiqueta",
           "origen",
           "aviso",
           "textura",
@@ -1329,13 +1561,26 @@
           "etiqueta": {
             "type": "string",
             "const": "SUPUESTO",
-            "title": "Etiqueta",
-            "default": "SUPUESTO"
+            "title": "Etiqueta"
           },
           "clase": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                  "arena",
+                  "arena_franca",
+                  "franco_arenoso",
+                  "franco",
+                  "franco_limoso",
+                  "limo",
+                  "franco_arcillo_arenoso",
+                  "franco_arcilloso",
+                  "franco_arcillo_limoso",
+                  "arcillo_arenoso",
+                  "arcillo_limoso",
+                  "arcilla"
+                ]
               },
               {
                 "type": "null"
@@ -1376,9 +1621,48 @@
         "type": "object",
         "required": [
           "estado",
+          "etiqueta",
           "grupo"
         ],
         "title": "Textura"
+      },
+      "TexturaEstimada": {
+        "properties": {
+          "clase": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "arena",
+                  "arena_franca",
+                  "franco_arenoso",
+                  "franco",
+                  "franco_limoso",
+                  "limo",
+                  "franco_arcillo_arenoso",
+                  "franco_arcilloso",
+                  "franco_arcillo_limoso",
+                  "arcillo_arenoso",
+                  "arcillo_limoso",
+                  "arcilla"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clase"
+          },
+          "fraccionesPct": {
+            "$ref": "#/components/schemas/FraccionesTextura"
+          }
+        },
+        "type": "object",
+        "required": [
+          "clase",
+          "fraccionesPct"
+        ],
+        "title": "TexturaEstimada"
       },
       "ValidationError": {
         "properties": {

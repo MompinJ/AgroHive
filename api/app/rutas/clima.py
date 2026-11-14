@@ -21,7 +21,4 @@ async def clima(
         raise HTTPException(422, "Periodo invalido: desde >= 1981-01-01, desde <= hasta y hasta no futuro")
     if (hasta - desde).days > LIMITE_ANIOS * 366:
         raise HTTPException(422, f"Periodo mayor a {LIMITE_ANIOS} anios")
-    try:
-        return await servicios.serie_clima(lat, lon, desde, hasta)
-    except servicios.SinDatos as e:
-        raise HTTPException(503, detail=ErrorDatos(motivo=str(e)).model_dump())
+    return await servicios.serie_clima(lat, lon, desde, hasta)
