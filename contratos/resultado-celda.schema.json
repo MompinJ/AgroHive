@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/resultado-celda.schema.json",
+  "title": "ResultadoCeldas",
+  "description": "Salida del motor por celda y fecha para una rotacion y un escenario. Es lo unico que leen la escena 3D, el modo 2D y los tooltips: el render no decide etapa ni estres. Nomenclatura: 'estado' es siempre el estado de evaluacion de doc 04; el estado visual de la planta es 'estadoPlanta'.",
+  "type": "object",
+  "required": ["meta", "rotacionId", "escenario", "anioReal", "parcelaId", "estado", "registros"],
+  "properties": {
+    "meta": { "$ref": "comun.schema.json#/$defs/meta" },
+    "rotacionId": { "$ref": "comun.schema.json#/$defs/idRotacion" },
+    "escenario": { "$ref": "comun.schema.json#/$defs/escenario" },
+    "anioReal": { "type": "integer" },
+    "parcelaId": { "type": "string" },
+    "estado": {
+      "description": "Estado global del lote: el peor de sus registros.",
+      "$ref": "comun.schema.json#/$defs/estado"
+    },
+    "registros": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/registro" }
+    },
+    "advertencias": {
+      "type": "array",
+      "items": { "$ref": "comun.schema.json#/$defs/advertencia" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "etapaVisual": {
+      "title": "EtapaVisual",
+      "description": "Etapa cualitativa para el render (doc 07). suelo_desnudo: entre ciclos o tras la cosecha. No es altura ni biomasa real.",
+      "type": "string",
+      "enum": ["suelo_desnudo", "siembra", "brote", "crecimiento", "madurez"]
+    },
+    "estadoPlanta": {
+      "title": "EstadoPlanta",
+      "description": "Estado visual cualitativo derivado del motor (doc 05, paso 5).",
+      "type": "string",
+      "enum": ["normal", "estresada", "marchita", "podrida"]
+    },
+    "registro": {
+      "title": "RegistroCelda",
+      "type": "object",
+      "required": ["celdaId", "fecha", "estado", "ciclo", "cultivo", "etapa", "avanceEtapa", "estadoPlanta", "humedad", "deficitMm", "excesoMm", "riesgoErosion"],
+      "properties": {
+        "celdaId": { "$ref": "comun.schema.json#/$defs/idCelda" },
+        "fecha": { "$ref": "comun.schema.json#/$defs/fecha" },
+        "estado": { "$ref": "comun.schema.json#/$defs/estado" },
+        "motivo": {
+          "description": "Obligatorio si el estado no es EVALUABLE: por que no se calculo o que limita el resultado.",
+          "type": "string",
+          "minLength": 1
+        },
+        "ciclo": {
+          "description": "Ciclo del plan en curso; null si la celda esta entre ciclos.",
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "cultivo": {
+          "description": "Cultivo en la celda; null si esta en suelo desnudo.",
+          "oneOf": [{ "$ref": "comun.schema.json#/$defs/idCultivo" }, { "type": "null" }]
+        },
+        "etapa": { "$ref": "#/$defs/etapaVisual" },
+        "avanceEtapa": {
+          "description": "Avance dentro de la etapa visual (0 a 1), para interpolar escala en el render.",
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "estadoPlanta": {
+          "oneOf": [{ "$ref": "#/$defs/estadoPlanta" }, { "type": "null" }]
+        },
+        "humedad": {
+          "description": "Agua en la cubeta como fraccion de TAW (0 a 1).",
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "deficitMm": {
+          "description": "Deficit acumulado en el ciclo hasta la fecha (mm): ETc no cubierta.",
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "excesoMm": {
+          "description": "Exceso acumulado en el ciclo hasta la fecha (mm): escurrimiento o drenaje.",
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "etcMm": {
+          "description": "Demanda del cultivo del dia, ETc = Kc x ET0 (mm).",
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "estresCalor": {
+          "description": "true si ese dia supero el umbral de calor del cultivo; null si no se evalua.",
+          "type": ["boolean", "null"]
+        },
+        "riesgoErosion": {
+          "description": "Indice relativo de erosion (0 a 1), inspirado en USLE/RUSLE; no son toneladas. null si el pilar no se calcula.",
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "Si no es EVALUABLE, debe explicar el motivo.",
+          "if": {
+            "properties": { "estado": { "not": { "const": "EVALUABLE" } } },
+            "required": ["estado"]
+          },
+          "then": { "required": ["motivo"] }
+        },
+        {
+          "description": "NO_EVALUABLE o ERROR_DATOS nunca llevan numeros: todos los indicadores van en null (doc 05, prueba 5).",
+          "if": {
+            "properties": { "estado": { "enum": ["NO_EVALUABLE", "ERROR_DATOS"] } },
+            "required": ["estado"]
+          },
+          "then": {
+            "properties": {
+              "avanceEtapa": { "type": "null" },
+              "estadoPlanta": { "type": "null" },
+              "humedad": { "type": "null" },
+              "deficitMm": { "type": "null" },
+              "excesoMm": { "type": "null" },
+              "etcMm": { "type": "null" },
+              "estresCalor": { "type": "null" },
+              "riesgoErosion": { "type": "null" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

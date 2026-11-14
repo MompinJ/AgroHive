@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/clima-escenario.schema.json",
+  "title": "ClimaEscenario",
+  "description": "Serie climatica diaria de un escenario historico (seco, habitual, lluvioso). Es un anio real del historico, no una prediccion. La misma serie aplica a todas las celdas de la parcela.",
+  "type": "object",
+  "required": [
+    "meta",
+    "escenario",
+    "anioReal",
+    "estado",
+    "respaldo",
+    "coordenada",
+    "fuente",
+    "seleccion",
+    "diario"
+  ],
+  "properties": {
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
+    "escenario": {
+      "$ref": "comun.schema.json#/$defs/escenario"
+    },
+    "anioReal": {
+      "description": "Anio real del historico que representa el escenario. Siempre visible en la interfaz.",
+      "type": "integer",
+      "minimum": 1981,
+      "maximum": 2025
+    },
+    "estado": {
+      "description": "EVALUABLE con la fuente principal; RESPALDO_HISTORICO si se uso Open-Meteo o cache; EXPLORATORIO si la serie es ilustrativa o esta ajustada ('que pasa si': lluvia x factor); ERROR_DATOS si no hay serie.",
+      "type": "string",
+      "enum": [
+        "EVALUABLE",
+        "RESPALDO_HISTORICO",
+        "EXPLORATORIO",
+        "ERROR_DATOS",
+        "NO_EVALUABLE"
+      ]
+    },
+    "respaldo": {
+      "description": "true si los datos no vienen de la fuente principal (NASA POWER).",
+      "type": "boolean"
+    },
+    "coordenada": {
+      "description": "Coordenada consultada (centroide de la parcela).",
+      "$ref": "comun.schema.json#/$defs/lonLat"
+    },
+    "fuente": {
+      "$ref": "comun.schema.json#/$defs/fuente"
+    },
+    "seleccion": {
+      "title": "SeleccionEscenario",
+      "description": "Como se eligio el anio del escenario, para que sea reproducible (doc 04).",
+      "type": "object",
+      "required": [
+        "ventana",
+        "percentilObjetivo",
+        "lluviaAnualMm",
+        "criterio"
+      ],
+      "properties": {
+        "ventana": {
+          "description": "Ventana historica usada (objetivo 2006 a 2025; respaldo 2016 a 2025).",
+          "$ref": "comun.schema.json#/$defs/periodo"
+        },
+        "percentilObjetivo": {
+          "description": "Percentil de lluvia anual buscado (10, 50 o 90 por defecto).",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "lluviaAnualMm": {
+          "description": "Lluvia anual total del anio elegido (suma de diarios).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "criterio": {
+          "description": "Descripcion breve del criterio, por ejemplo 'anio mas cercano al p10 de lluvia anual'.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "diario": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dia"
+      }
+    },
+    "advertencias": {
+      "type": "array",
+      "items": {
+        "$ref": "comun.schema.json#/$defs/advertencia"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "dia": {
+      "title": "DiaClima",
+      "description": "Un dia de la serie. Los valores faltantes van en null (se muestran, no se rellenan).",
+      "type": "object",
+      "required": [
+        "fecha",
+        "lluviaMm",
+        "tMaxC",
+        "tMinC"
+      ],
+      "properties": {
+        "fecha": {
+          "$ref": "comun.schema.json#/$defs/fecha"
+        },
+        "lluviaMm": {
+          "description": "Lluvia del dia en mm (POWER PRECTOTCORR).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "tMaxC": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "tMinC": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "tMediaC": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "radiacionMjM2Dia": {
+          "description": "Radiacion solar de onda corta en MJ/m2/dia (POWER ALLSKY_SFC_SW_DWN; la conversion de unidades la hace el backend, ver [VERIFICAR] en 04).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "humedadRelativaPct": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "vientoMS": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "et0Mm": {
+          "description": "ET0 del dia si la fuente la entrega (Open-Meteo); si no, la calcula el motor.",
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

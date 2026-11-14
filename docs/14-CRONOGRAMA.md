@@ -83,7 +83,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 
 | ID | Actividad | Rol | Esfuerzo IA | Modelo IA | Depende de | Entregable verificable |
 | --- | --- | --- | --- | --- | --- | --- |
-| A1.1 | Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS | R2 + R3 | M | Opus | A0.3 | `contratos/` revisado por los 4 |
+| A1.1 [EN CURSO] | Contratos de datos (parcela, clima, plan, resultado) como JSON Schema y tipos TS | R2 + R3 | M | Opus | A0.3 | `contratos/` revisado por los 4 |
 | A1.2 | Esqueleto `web/`: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | R1 | S | Sonnet | A1.1 | `npm run dev` abre las pantallas |
 | A1.3 | Esqueleto `api/`: FastAPI, `/health`, OpenAPI, generación del cliente TS | R3 | S | Sonnet | A1.1 | Cliente TS generado compila |
 | A1.4 | Paleta compartida y primer modelo de prueba (cultivo 1, una etapa) | R4 | M | Sonnet | A0.3 | `.bbmodel` abre en Blockbench |

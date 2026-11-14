@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "versionContrato": "0.1.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "rotacionId": "R1",
+  "escenario": "seco",
+  "anioReal": 2015,
+  "parcelaId": "parcela-demo-isla",
+  "estado": "NO_EVALUABLE",
+  "registros": [
+    {
+      "celdaId": "c-0-0",
+      "fecha": "2015-12-01",
+      "estado": "EXPLORATORIO",
+      "ciclo": 2,
+      "cultivo": "frijol",
+      "etapa": "crecimiento",
+      "avanceEtapa": 0.4,
+      "estadoPlanta": "estresada",
+      "humedad": 0.22,
+      "deficitMm": 48.0,
+      "excesoMm": 0.0,
+      "etcMm": 3.1,
+      "estresCalor": false,
+      "riesgoErosion": null,
+      "motivo": "Valores ficticios de ejemplo."
+    },
+    {
+      "celdaId": "c-0-1",
+      "fecha": "2015-12-01",
+      "estado": "EXPLORATORIO",
+      "ciclo": 2,
+      "cultivo": "frijol",
+      "etapa": "crecimiento",
+      "avanceEtapa": 0.4,
+      "estadoPlanta": "normal",
+      "humedad": 0.51,
+      "deficitMm": 12.5,
+      "excesoMm": 0.0,
+      "etcMm": 3.1,
+      "estresCalor": false,
+      "riesgoErosion": 0.3,
+      "motivo": "Valores ficticios de ejemplo."
+    },
+    {
+      "celdaId": "c-1-0",
+      "fecha": "2015-12-01",
+      "estado": "EXPLORATORIO",
+      "ciclo": 2,
+      "cultivo": "frijol",
+      "etapa": "madurez",
+      "avanceEtapa": 0.9,
+      "estadoPlanta": "marchita",
+      "humedad": 0.05,
+      "deficitMm": 96.0,
+      "excesoMm": 0.0,
+      "etcMm": 2.4,
+      "estresCalor": true,
+      "riesgoErosion": null,
+      "motivo": "Valores ficticios de ejemplo."
+    },
+    {
+      "celdaId": "c-1-1",
+      "fecha": "2015-12-01",
+      "estado": "NO_EVALUABLE",
+      "ciclo": 2,
+      "cultivo": "calabaza",
+      "etapa": "crecimiento",
+      "avanceEtapa": null,
+      "estadoPlanta": null,
+      "humedad": null,
+      "deficitMm": 0,
+      "excesoMm": null,
+      "etcMm": null,
+      "estresCalor": null,
+      "riesgoErosion": null,
+      "motivo": "Sin elevacion ni parametros de calabaza: no se calcula, nunca se asigna cero."
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    }
+  ]
+}
