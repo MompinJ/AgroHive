@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "versionContrato": "0.1.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "escenario": "seco",
+  "anioReal": 2015,
+  "estado": "EXPLORATORIO",
+  "respaldo": false,
+  "coordenada": [
+    -95.53,
+    18.03
+  ],
+  "fuente": {
+    "nombre": "EJEMPLO - valores ficticios (misma forma que la respuesta diaria de NASA POWER, pero no es una consulta real)",
+    "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+  },
+  "seleccion": {
+    "ventana": {
+      "desde": "2006-01-01",
+      "hasta": "2025-12-31"
+    },
+    "percentilObjetivo": 10,
+    "lluviaAnualMm": null,
+    "criterio": "EJEMPLO: el anio 2015 es ilustrativo y NO es el resultado de seleccionar el p10; la seleccion real la hace A2.5."
+  },
+  "diario": [
+    {
+      "fecha": "2015-06-01",
+      "lluviaMm": 0.0,
+      "tMaxC": 33.1,
+      "tMinC": 22.4,
+      "radiacionMjM2Dia": 21.5
+    },
+    {
+      "fecha": "2015-06-02",
+      "lluviaMm": 12.4,
+      "tMaxC": 31.0,
+      "tMinC": 22.0,
+      "radiacionMjM2Dia": 17.9
+    },
+    {
+      "fecha": "2015-06-03",
+      "lluviaMm": 3.2,
+      "tMaxC": 31.8,
+      "tMinC": 21.7,
+      "radiacionMjM2Dia": 19.6
+    },
+    {
+      "fecha": "2015-06-04",
+      "lluviaMm": null,
+      "tMaxC": null,
+      "tMinC": null,
+      "radiacionMjM2Dia": null
+    },
+    {
+      "fecha": "2015-06-05",
+      "lluviaMm": 0.0,
+      "tMaxC": 34.0,
+      "tMinC": 22.9,
+      "radiacionMjM2Dia": 22.3
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    },
+    {
+      "codigo": "DIA_FALTANTE",
+      "mensaje": "2015-06-04 sin datos: se muestra como hueco, no se rellena.",
+      "severidad": "aviso"
+    }
+  ]
+}
