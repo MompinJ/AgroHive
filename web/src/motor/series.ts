@@ -6,7 +6,7 @@ import { sinNumeros } from './estados';
 import { sumarDias } from './fechas';
 import { fao56 } from './fuentes';
 import type { ResultadoMotor } from './motor';
-import { VERSION_CONTRATO, type Escenario, type SerieBalance } from './tipos';
+import { VERSION_CONTRATO, type CicloSerieBalance, type Escenario, type SerieBalance } from './tipos';
 
 const UNIDADES: SerieBalance['unidades'] = {
   lluviaMm: 'mm/dia',
@@ -20,9 +20,10 @@ const UNIDADES: SerieBalance['unidades'] = {
   deficitMm: 'mm/dia',
 };
 const FUENTE_BALANCE = fao56('Capitulo 8: balance de agua de la zona de raices (ec. 80 a 88)', 'https://www.fao.org/4/x0490e/x0490e0e.htm');
-const r2 = (x: number) => Math.round(x * 100) / 100;
-const r3 = (x: number) => Math.round(x * 1000) / 1000;
-const vacias = (): SerieBalance['ciclos'][number]['dias'] => ({
+// Columnas con minimo 0 en el contrato (Dr entre 0 y TAW, FAO-56 ec. 86): se recorta el ruido de redondeo.
+const r2 = (x: number) => Math.max(0, Math.round(x * 100) / 100);
+const r3 = (x: number) => Math.min(1, Math.max(0, Math.round(x * 1000) / 1000));
+const vacias = (): CicloSerieBalance['dias'] => ({
   lluviaMm: [],
   et0Mm: [],
   etcMm: [],
@@ -39,13 +40,13 @@ export function serieBalance(res: ResultadoMotor, escenario: Escenario): SerieBa
   const sim = res.simulaciones[escenario];
   if (sim.anioReal === null) return null;
   // Celdas por (ciclo, cultivo): con porCelda un ciclo puede tener varias series.
-  const celdas = new Map<string, { ciclo: number; cultivo: string; siembra: string; celdas: string[] }>();
+  const celdas = new Map<string, { ciclo: number; cultivo: string; siembra: string; celdas: [string, ...string[]] }>();
   for (const [celda, ciclos] of res.ciclosPorCelda) {
     for (const c of ciclos) {
       const k = `${c.ciclo}|${c.cultivo}`;
-      const prev = celdas.get(k) ?? { ciclo: c.ciclo, cultivo: c.cultivo, siembra: c.siembra, celdas: [] };
-      prev.celdas.push(celda);
-      celdas.set(k, prev);
+      const prev = celdas.get(k);
+      if (prev) prev.celdas.push(celda);
+      else celdas.set(k, { ciclo: c.ciclo, cultivo: c.cultivo, siembra: c.siembra, celdas: [celda] });
     }
   }
   const ciclos: SerieBalance['ciclos'] = [...celdas.entries()]
@@ -95,7 +96,7 @@ export function serieBalance(res: ResultadoMotor, escenario: Escenario): SerieBa
         m.hum += d.humedad;
         meses.set(mes, m);
       });
-      const ciclo: SerieBalance['ciclos'][number] = {
+      const ciclo: CicloSerieBalance = {
         ciclo: c.ciclo,
         cultivo: c.cultivo,
         celdas: c.celdas,

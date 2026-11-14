@@ -11,7 +11,7 @@ import tabla from '../../../../datos/catalogos/suelos.json';
 import calendarioIsla from '../../../../datos/catalogos/calendario-isla.json';
 import parcela from '../../../../contratos/ejemplos/parcela.ejemplo.json';
 import sueloDemo from '../../../../datos/demo/respuestas/suelo.json';
-import { seriePowerIsla } from './utiles';
+import { seriePowerIsla, validadorContrato } from './utiles';
 
 const sel = seleccionarEscenarios(seriePowerIsla());
 function plan(id: string, ciclos: [string, string, 'PV' | 'OI'][]): PlanSiembra {
@@ -36,19 +36,34 @@ const entradas = (p: PlanSiembra, extra: Partial<EntradasMotor> = {}): EntradasM
   escenarios: sel.escenarios,
   ...extra,
 });
-const suma = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
+const suma = (xs: (number | null)[]) => xs.reduce((a: number, b) => a + (b ?? 0), 0);
+const validarSchema = validadorContrato('serie-balance');
+/** Lo mismo que CHEQUEOS_EXTRA de contratos/validar.mjs: columnas del mismo largo y suma de mensual[].dias igual al largo. */
+function validar(doc: SerieBalance): string[] {
+  const errores = validarSchema(doc);
+  doc.ciclos.forEach((c, i) => {
+    const largos = Object.values(c.dias).map((v) => v.length);
+    if (new Set(largos).size > 1) errores.push(`/ciclos/${i}/dias columnas de largo distinto`);
+    const meses = c.mensual.reduce((a, m) => a + m.dias, 0);
+    if (c.mensual.length && meses !== (largos[0] ?? 0)) errores.push(`/ciclos/${i}/mensual suma de dias distinta del largo`);
+  });
+  return errores;
+}
 
 describe('serie-balance de R4 en los tres escenarios (paquete de demo, suelo real)', () => {
   const res = simularRotacion(entradas(R4));
   for (const esc of ['seco', 'habitual', 'lluvioso'] as const) {
     const s = serieBalance(res, esc) as SerieBalance;
+    it(`${esc}: cumple serie-balance (schema y chequeo de largos de contratos/)`, () => {
+      expect(validar(s)).toEqual([]);
+    });
     it(`${esc}: columnas del largo del ciclo, humedad 0 a 1 y fechas del clima segun la temporada`, () => {
       expect(s.anioReal).toBe(res.rotacion.porEscenario[esc].anioReal);
       expect(s.ciclos.map((c) => [c.ciclo, c.cultivo])).toEqual([[1, 'maiz'], [2, 'frijol'], [3, 'maiz']]);
       for (const c of s.ciclos) {
         const largo = c.cultivo === 'maiz' ? 125 : 95;
         for (const col of Object.values(c.dias)) expect(col).toHaveLength(largo);
-        expect(c.dias.humedad.every((h) => h >= 0 && h <= 1)).toBe(true);
+        expect(c.dias.humedad.every((h) => h !== null && h >= 0 && h <= 1)).toBe(true);
         const p = R4.ciclos.find((x) => x.ciclo === c.ciclo)!;
         expect(c.fechaClima).toBe(siembraEnEscenario(p.siembra, p.temporada, s.anioReal).fecha);
         expect(c.celdas).toHaveLength(4);
@@ -79,6 +94,7 @@ describe('estados y Worker', () => {
     expect(s.ciclos[0]!.dias.deficitMm).toEqual([]);
     expect(s.ciclos[0]!.motivo).toMatch(/sorgo/);
     expect(s.motivo).toBeTruthy();
+    expect(validar(s)).toEqual([]);
     const sinClima = simularRotacion(entradas(R4, { escenarios: { seco: sel.escenarios.seco! } }));
     expect(serieBalance(sinClima, 'lluvioso')).toBeNull();
   });
@@ -90,6 +106,7 @@ describe('estados y Worker', () => {
     expect(r.ok).toBe(true);
     const s = (r as { resultado: SerieBalance }).resultado;
     expect(s.unidades.humedad).toBe('fraccion de TAW (0 a 1)');
+    expect(validar(s)).toEqual([]);
     expect(JSON.stringify(s).length).toBeLessThan(40_000);
   });
 });

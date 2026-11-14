@@ -117,7 +117,7 @@ La banda la construye la API (`GET /api/proxima-temporada`, método de doc 13). 
   - En el Worker: `simular` con `entradas.proximaTemporada = { capa, serie }` (la capa de `GET /api/proxima-temporada` y la serie completa de `GET /api/clima`).
 
 ## Series del balance para el dashboard (A4.1, parte del motor, 14/11)
-`web/src/motor/series.ts`; en el Worker, la operación `serieBalance(rotacionId, escenario)`, bajo demanda para no cargarla siempre; contrato `serie-balance`, propuesto para 0.11.0. Hay un documento por rotación y escenario, con una serie por ciclo (y por cultivo, si hay `porCelda`, con sus `celdas`):
+`web/src/motor/series.ts`; en el Worker, la operación `serieBalance(rotacionId, escenario)`, bajo demanda para no cargarla siempre; contrato `serie-balance` (0.11.0; las salidas validan contra el schema y contra el chequeo de largos de `contratos/validar.mjs`). Hay un documento por rotación y escenario, con una serie por ciclo (y por cultivo, si hay `porCelda`, con sus `celdas`):
 - **Columnas diarias alineadas desde la siembra:** lluvia, ET0, ETc, ETc ajustada, agotamiento Dr, RAW, humedad (fracción de TAW), percolación (exceso) y déficit, con unidades fijas y la capacidad de la cubeta `tawMm`.
 - **Sumas por mes:** del plan, con `mesClima` y la humedad media del mes.
 - **Fechas:** las del plan (como `resultado-celda`); `fechaClima` y `mesClima` dan el día y el mes del año real del escenario.
