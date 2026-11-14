@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A5.1 animaciones de la escena y lugar de la mascota (Mompin, con Mafer)
+
+- **Archivos:** `web/src/escena/animacion.ts` (nuevo), `render/escena-three.ts`, `EscenaParcela.tsx` (control "Viento leve", prop `mascota`), `voxel/fuente-modelos.ts` (también `modelos/props/`), prueba `animacion.test.ts`; `docs/06`, `docs/14` (A5.1 pasa a Mompin, con Mafer).
+- **Cambio:** transición suave al cambiar de etapa, escala continua al crecer y viento leve opcional (shader). Con reducir movimiento no hay ninguna animación. Las animaciones no se acumulan y la escena sigue dibujando bajo demanda. La cámara se conserva al cambiar fecha o escenario. Mascota fuera de la parcela, si existe el modelo.
+- **Fuente / evidencia:** headless: unos 12 cuadros en la transición y luego cero; 0 cuadros en reposo sin viento, unos 36 por segundo con viento; con reducir movimiento, 0 transiciones, sin viento ni inercia. Mafer revisa que respete reducir movimiento.
+
 ### 2026-11-14 — Avisos de datos en la escena (Mompin, pedido de Eduardo)
 
 - **Archivos:** `web/src/escena/avisos-datos.ts` y `AvisosDatos.tsx` (nuevos), `EscenaParcela.tsx` (prop `avisosDatos`), `escena.css`, `vista-previa.tsx`, `escena.html`, prueba `avisos-datos.test.ts`; `docs/06`, `INTEGRACION.md`.

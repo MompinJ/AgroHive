@@ -11,7 +11,8 @@ import { GROSOR_BASE, type BloqueEscena, type EscenaModelo, type EstadoVisual } 
 import { rgbaPlaca } from '../placa';
 import { colorSuelo } from '../suelo';
 import type { ModeloVoxel, Vec3 } from '../voxel/bbmodel';
-import { agruparPorModelo, escalaPorAvance, giroCelda, modeloRespaldo } from '../voxel/catalogo';
+import { AMPLITUD_VIENTO, DURACION_TRANSICION_MS, escalaInicial, interpolar, saleEncogiendo, type PlantaPrevia } from '../animacion';
+import { agruparPorModelo, claveModelo, escalaPorAvance, giroCelda, modeloRespaldo } from '../voxel/catalogo';
 import { cargarModelo, MODELOS_DISPONIBLES } from '../voxel/fuente-modelos';
 import { unirCubos } from '../voxel/geometria';
 import { decodificarPaletaPng, type ColorPaleta } from '../voxel/paleta-png';
@@ -26,6 +27,10 @@ export class ErrorWebGL extends Error {
 export interface OpcionesRender {
   reducirMovimiento: boolean;
   onSeleccion?: (bloque: BloqueEscena | null) => void;
+  /** Viento leve en las plantas (A5.1, deseable). Nunca con reducirMovimiento. */
+  viento?: boolean;
+  /** Lugar de la mascota (modelos/props/mascota_feliz.bbmodel); apagado si no existe el modelo. */
+  mascota?: boolean;
   /** Al pasar el cursor (solo raton): bloque bajo el cursor y su posicion dentro del lienzo, en px. */
   onHover?: (bloque: BloqueEscena | null, x: number, y: number) => void;
   /** Avisos del render (por ejemplo, modelo de respaldo o .bbmodel que no se pudo leer). */
@@ -43,6 +48,10 @@ export interface EstadisticasRender {
   ultimoCuadroMs: number;
   /** false con "reducir movimiento": la camara no sigue moviendose al soltar. */
   inercia: boolean;
+  /** Transiciones de plantas en curso (A5.1). */
+  transiciones: number;
+  viento: boolean;
+  mascota: boolean;
 }
 
 /** Hueco de una celda sin elevacion: por debajo del punto mas bajo, nunca "a nivel cero". */
@@ -80,6 +89,46 @@ function soportaWebGL(): boolean {
   } catch {
     return false;
   }
+}
+
+interface MetaPlantas {
+  clave: string;
+  celdas: string[];
+  pos: THREE.Vector3[];
+  rot: THREE.Quaternion[];
+}
+
+interface Transicion {
+  mesh: THREE.InstancedMesh;
+  meta: MetaPlantas;
+  desde: number[];
+  hasta: number[];
+  inicio: number;
+  /** true: planta que sale (se encoge y se elimina al terminar). */
+  sale: boolean;
+}
+
+/**
+ * Material de las plantas con viento leve en el shader (A5.1): cada instancia se mece con
+ * una fase segun su posicion, mas arriba mas, y nada con amplitud 0 (reducir movimiento).
+ */
+function crearMaterialPlantas(uniformes: { uTiempo: { value: number }; uAmplitud: { value: number } }): THREE.MeshLambertMaterial {
+  const mat = new THREE.MeshLambertMaterial({ vertexColors: true });
+  mat.onBeforeCompile = (shader) => {
+    shader.uniforms['uTiempo'] = uniformes.uTiempo;
+    shader.uniforms['uAmplitud'] = uniformes.uAmplitud;
+    shader.vertexShader = 'uniform float uTiempo;\nuniform float uAmplitud;\n' + shader.vertexShader.replace(
+      '#include <begin_vertex>',
+      `#include <begin_vertex>
+      #ifdef USE_INSTANCING
+        float fase = instanceMatrix[3][0] * 1.7 + instanceMatrix[3][2] * 2.3;
+        float alto = max(transformed.y, 0.0);
+        transformed.x += sin(uTiempo * 1.6 + fase) * uAmplitud * alto * alto;
+        transformed.z += cos(uTiempo * 1.3 + fase) * uAmplitud * 0.6 * alto * alto;
+      #endif`,
+    );
+  };
+  return mat;
 }
 
 /** Banderin (asta negra y bandera blanca con borde negro) en unidades de .bbmodel, unido en una geometria. */
@@ -150,6 +199,19 @@ export class EscenaThree {
   private cuadroHover = 0;
   private readonly materialesMarco = [new THREE.MeshBasicMaterial({ color: '#000000' }), new THREE.MeshBasicMaterial({ color: '#ffffff' })];
   private readonly marco = crearMarco(this.materialesMarco);
+  // A5.1: material de plantas que vive toda la escena (las plantas que salen lo siguen usando)
+  // y lleva el viento en el shader; transiciones en curso y escala actual por celda.
+  private readonly uniformesViento = { uTiempo: { value: 0 }, uAmplitud: { value: 0 } };
+  private readonly materialPlantas = crearMaterialPlantas(this.uniformesViento);
+  private readonly materialMascota = new THREE.MeshLambertMaterial({ vertexColors: true });
+  private readonly salida = new THREE.Group();
+  private transiciones: Transicion[] = [];
+  private readonly metaPlantas = new Map<THREE.InstancedMesh, MetaPlantas>();
+  private plantasActuales = new Map<string, PlantaPrevia>();
+  private claveVista = '';
+  private modeloActual: EscenaModelo | null = null;
+  private enPantalla = true;
+  private readonly observadorVisible: IntersectionObserver | null = null;
   private cuadros = 0;
 
   constructor(private readonly lienzo: HTMLCanvasElement, opciones: OpcionesRender) {
@@ -167,6 +229,16 @@ export class EscenaThree {
 
     this.camara = new THREE.OrthographicCamera(-1, 1, 1, -1, -100, 100);
     this.scene.add(this.raiz);
+    this.scene.add(this.salida);
+    // El viento solo corre con la escena a la vista y la pestana visible.
+    if (typeof IntersectionObserver !== 'undefined') {
+      this.observadorVisible = new IntersectionObserver((e) => {
+        this.enPantalla = e.some((x) => x.isIntersecting);
+        this.pedirCuadro();
+      });
+      this.observadorVisible.observe(lienzo);
+    }
+    document.addEventListener('visibilitychange', this.alCambiarVisibilidad);
     this.scene.add(new THREE.HemisphereLight('#ffffff', '#6b5a45', 1.6));
     const sol = new THREE.DirectionalLight('#ffffff', 1.4);
     sol.position.set(4, 8, 3);
@@ -212,12 +284,19 @@ export class EscenaThree {
       cuadros: this.cuadros,
       ultimoCuadroMs: this.ultimoCuadroMs,
       inercia: this.controles.enableDamping,
+      transiciones: this.transiciones.length,
+      viento: this.vientoActivo(),
+      mascota: !!this.raiz.getObjectByName('mascota'),
     };
   }
 
   setOpciones(opciones: OpcionesRender) {
+    const mascotaAntes = this.opciones.mascota;
     this.opciones = opciones;
     this.aplicarMovimiento();
+    if (opciones.reducirMovimiento) this.terminarTransiciones();
+    if (mascotaAntes !== opciones.mascota && this.modeloActual) void this.construirMascota(this.modeloActual, this.version);
+    this.pedirCuadro();
   }
 
   private aplicarMovimiento() {
@@ -239,14 +318,25 @@ export class EscenaThree {
 
   actualizar(modelo: EscenaModelo) {
     const version = ++this.version;
+    const animar = !this.opciones.reducirMovimiento;
+    // A5.1: las plantas actuales salen (encogiendose si su celda cambia de modelo) y las
+    // nuevas parten de la escala que habia. Lo que estaba animandose se corta aqui.
+    const previas = this.prepararSalida(modelo, animar);
     this.limpiar();
+    this.modeloActual = modelo;
     // Media altura visible: la parcela mas margen para las plantas altas.
     this.extension = Math.max(modelo.filas, modelo.columnas, 2) * 0.6 + 0.6;
     this.construirTerreno(modelo);
     this.ajustarTamano();
-    this.restablecerVista();
+    // La camara solo vuelve a la vista inicial si cambia la parcela, no al cambiar fecha o escenario.
+    const claveVista = `${modelo.parcelaId}:${modelo.filas}x${modelo.columnas}`;
+    if (claveVista !== this.claveVista) {
+      this.claveVista = claveVista;
+      this.restablecerVista();
+    }
     void this.construirLosas(modelo, version);
-    void this.construirPlantas(modelo, version);
+    void this.construirPlantas(modelo, version, previas, animar);
+    void this.construirMascota(modelo, version);
     // Conserva la seleccion si la celda sigue existiendo (cambio de fecha, ciclo o escenario).
     this.seleccionar(this.seleccionId ? (modelo.bloques.find((b) => b.celdaId === this.seleccionId) ?? null) : null);
   }
@@ -275,6 +365,11 @@ export class EscenaThree {
     this.lienzo.removeEventListener('pointermove', this.alMoverPuntero);
     this.lienzo.removeEventListener('pointerleave', this.alSalirPuntero);
     cancelAnimationFrame(this.cuadroHover);
+    this.observadorVisible?.disconnect();
+    document.removeEventListener('visibilitychange', this.alCambiarVisibilidad);
+    this.terminarTransiciones();
+    this.materialPlantas.dispose();
+    this.materialMascota.dispose();
     this.marco.traverse((o) => { if (o instanceof THREE.Mesh) o.geometry.dispose(); });
     this.materialesMarco.forEach((m) => m.dispose());
     this.controles.dispose();
@@ -480,11 +575,9 @@ export class EscenaThree {
     return g;
   }
 
-  private async construirPlantas(modelo: EscenaModelo, version: number) {
+  private async construirPlantas(modelo: EscenaModelo, version: number, previas: Map<string, PlantaPrevia>, animar: boolean) {
     const grupos = agruparPorModelo(modelo.bloques, MODELOS_DISPONIBLES);
-    const mat = this.registrar(new THREE.MeshLambertMaterial({ vertexColors: true }));
     const m = new THREE.Matrix4();
-    const q = new THREE.Quaternion();
     const eje = new THREE.Vector3(0, 1, 0);
     for (const grupo of grupos) {
       let geo: THREE.BufferGeometry;
@@ -500,20 +593,129 @@ export class EscenaThree {
       }
       if (version !== this.version) return; // llego otra actualizacion mientras cargaba
       if (aviso) this.opciones.onAviso?.(aviso[0], aviso[1]);
-      const plantas = new THREE.InstancedMesh(geo, mat, grupo.bloques.length);
+      const plantas = new THREE.InstancedMesh(geo, this.materialPlantas, grupo.bloques.length);
+      plantas.frustumCulled = false; // su tamano cambia durante la transicion
+      const meta: MetaPlantas = { clave: grupo.clave, celdas: [], pos: [], rot: [] };
+      const desde: number[] = [];
+      const hasta: number[] = [];
       grupo.bloques.forEach((b, k) => {
-        const s = escalaPorAvance(b.avanceEtapa);
-        q.setFromAxisAngle(eje, (giroCelda(b.celdaId) * Math.PI) / 2);
-        m.compose(new THREE.Vector3(b.x, this.topeDe(b), b.z), q, new THREE.Vector3(s, s, s));
+        const final = escalaPorAvance(b.avanceEtapa);
+        const inicio = escalaInicial(previas.get(b.celdaId), grupo.clave, final, animar);
+        const pos = new THREE.Vector3(b.x, this.topeDe(b), b.z);
+        const rot = new THREE.Quaternion().setFromAxisAngle(eje, (giroCelda(b.celdaId) * Math.PI) / 2);
+        meta.celdas.push(b.celdaId);
+        meta.pos.push(pos);
+        meta.rot.push(rot);
+        desde.push(inicio);
+        hasta.push(final);
+        m.compose(pos, rot, new THREE.Vector3(inicio, inicio, inicio));
         plantas.setMatrixAt(k, m);
+        this.plantasActuales.set(b.celdaId, { clave: grupo.clave, escala: inicio });
       });
       plantas.instanceMatrix.needsUpdate = true;
       plantas.computeBoundingSphere();
       plantas.name = `planta-${grupo.clave}`;
       this.raiz.add(plantas);
+      this.metaPlantas.set(plantas, meta);
       this.bloquesPorMalla.set(plantas, grupo.bloques);
+      if (desde.some((d, k) => d !== hasta[k])) {
+        this.transiciones.push({ mesh: plantas, meta, desde, hasta, inicio: performance.now(), sale: false });
+      }
       this.pedirCuadro();
     }
+  }
+
+  /** Saca las plantas actuales de la escena antes de reconstruirla (A5.1). Devuelve lo que habia por celda. */
+  private prepararSalida(modelo: EscenaModelo, animar: boolean): Map<string, PlantaPrevia> {
+    // No acumular: lo que ya estaba saliendo desaparece; lo que crecia se queda en su escala actual.
+    for (const t of this.transiciones.filter((x) => x.sale)) this.quitarSaliente(t.mesh);
+    this.transiciones = [];
+    const previas = this.plantasActuales;
+    this.plantasActuales = new Map();
+    const nuevas = new Map<string, string | null>(modelo.bloques.map((b) => [b.celdaId, claveModelo(b)]));
+    const m = new THREE.Matrix4();
+    for (const hijo of [...this.raiz.children]) {
+      const meta = hijo instanceof THREE.InstancedMesh ? this.metaPlantas.get(hijo) : undefined;
+      if (!meta) continue;
+      const mesh = hijo as THREE.InstancedMesh;
+      this.raiz.remove(mesh);
+      this.metaPlantas.delete(mesh);
+      const desde = meta.celdas.map((c) => (saleEncogiendo(meta.clave, nuevas.get(c) ?? null, animar) ? (previas.get(c)?.escala ?? 0) : 0));
+      if (!desde.some((d) => d > 0)) {
+        mesh.dispose();
+        continue;
+      }
+      desde.forEach((d, k) => {
+        m.compose(meta.pos[k]!, meta.rot[k]!, new THREE.Vector3(d, d, d));
+        mesh.setMatrixAt(k, m);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+      this.salida.add(mesh);
+      this.transiciones.push({ mesh, meta, desde, hasta: desde.map(() => 0), inicio: performance.now(), sale: true });
+    }
+    return previas;
+  }
+
+  private quitarSaliente(mesh: THREE.InstancedMesh) {
+    this.salida.remove(mesh);
+    mesh.dispose();
+  }
+
+  /** Lleva todas las transiciones a su final de inmediato (reducir movimiento o cierre). */
+  private terminarTransiciones() {
+    for (const t of this.transiciones) this.avanzarTransicion(t, 1);
+    this.transiciones = [];
+  }
+
+  /** Pone la transicion en el tiempo t (0 a 1). Devuelve true si termino. */
+  private avanzarTransicion(t: Transicion, avance: number): boolean {
+    const m = new THREE.Matrix4();
+    t.desde.forEach((d, k) => {
+      const e = interpolar(d, t.hasta[k]!, avance);
+      m.compose(t.meta.pos[k]!, t.meta.rot[k]!, new THREE.Vector3(e, e, e));
+      t.mesh.setMatrixAt(k, m);
+      if (!t.sale) this.plantasActuales.set(t.meta.celdas[k]!, { clave: t.meta.clave, escala: e });
+    });
+    t.mesh.instanceMatrix.needsUpdate = true;
+    if (avance < 1) return false;
+    if (t.sale) this.quitarSaliente(t.mesh);
+    else t.mesh.computeBoundingSphere();
+    return true;
+  }
+
+  /** Lugar de la mascota (modelos/props/mascota_feliz.bbmodel): fuera de la parcela, en la esquina noreste. */
+  private async construirMascota(modelo: EscenaModelo, version: number) {
+    this.raiz.getObjectByName('mascota')?.removeFromParent();
+    if (this.mascotaApagada() || !MODELOS_DISPONIBLES.has('mascota_feliz') || modelo.bloques.length === 0) {
+      this.pedirCuadro();
+      return;
+    }
+    let geo: THREE.BufferGeometry;
+    try {
+      geo = await this.geometriaDe('mascota_feliz', 'bbmodel');
+    } catch {
+      return; // sin modelo legible, sin mascota: es un extra
+    }
+    if (version !== this.version || this.mascotaApagada()) return; // cambio mientras cargaba
+    const mascota = new THREE.Mesh(geo, this.materialMascota);
+    mascota.name = 'mascota';
+    const xMax = Math.max(...modelo.bloques.map((b) => b.x));
+    const zMin = Math.min(...modelo.bloques.map((b) => b.z));
+    mascota.position.set(xMax + 1, 0, zMin);
+    mascota.rotation.y = Math.PI / 4; // mira hacia la camara
+    mascota.scale.setScalar(0.6); // acompana sin competir con los datos de la parcela
+    this.raiz.add(mascota);
+    this.pedirCuadro();
+  }
+
+  private mascotaApagada(): boolean {
+    return this.opciones.mascota === false;
+  }
+
+  private readonly alCambiarVisibilidad = () => this.pedirCuadro();
+
+  private vientoActivo(): boolean {
+    return !!this.opciones.viento && !this.opciones.reducirMovimiento && this.enPantalla && document.visibilityState === 'visible';
   }
 
   // ------------------------------------------------------------------ render y seleccion
@@ -538,11 +740,19 @@ export class EscenaThree {
       this.cuadroPendiente = 0;
       // Con inercia, update() devuelve true mientras la camara se sigue moviendo.
       const siguioMoviendo = this.controles.enableDamping && this.controles.update();
+      const ahora = performance.now();
+      if (this.transiciones.length > 0) {
+        this.transiciones = this.transiciones.filter((t) => !this.avanzarTransicion(t, (ahora - t.inicio) / DURACION_TRANSICION_MS));
+      }
+      const viento = this.vientoActivo();
+      this.uniformesViento.uAmplitud.value = viento ? AMPLITUD_VIENTO : 0;
+      if (viento) this.uniformesViento.uTiempo.value = ahora / 1000;
       const t0 = performance.now();
       this.renderer.render(this.scene, this.camara);
       this.ultimoCuadroMs = performance.now() - t0;
       this.cuadros++;
-      if (siguioMoviendo) this.pedirCuadro();
+      // Render bajo demanda: solo se sigue dibujando mientras algo se mueve.
+      if (siguioMoviendo || this.transiciones.length > 0 || viento) this.pedirCuadro();
     });
   }
 
