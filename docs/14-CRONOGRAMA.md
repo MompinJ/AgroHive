@@ -161,7 +161,7 @@ Compuerta **C4** al terminar A4.6.
 | A5.5 `[HECHO]` 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) | Pruebas de regresión del motor y de contratos | R2 | M | Sonnet | A4.2 | Suite en verde |
 | A5.6 | Guion, video de demo y ensayo | R4 | M | Sonnet | A4.6 | Video grabado con respaldo |
 | A5.7 `[EN CURSO]` | README con método, fuentes, límites, licencias y declaración de IA | R4 | S | Sonnet | A4.5 | README completo |
-| A5.8 `[BLOQUEADO]` espera A2.4 con la zona real y el front conectado (A4.6) | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
+| A5.8 `[HECHO]` demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
 | A5.9 | Envío final según reglas oficiales | R4 | XS | Haiku | A5.6, A5.7 | Entrega confirmada (C6) |
 
 ## Camino crítico
@@ -215,7 +215,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
-| **Eduardo** | 12 | 2 | 3 | 2 | 63 % de 19 |
+| **Eduardo** | 13 | 2 | 2 | 2 | 68 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 1 | 82 % de 11 |
 | **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
@@ -263,7 +263,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | PENDIENTE |  |
 | A4.13 | Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP | PENDIENTE |  |
 | A5.4 | Medición de requisitos mínimos y fallback WebGL | BLOQUEADO | espera el modo 2D (A3.6) |
-| A5.8 | Respaldo local sin internet y capturas | BLOQUEADO | espera A2.4 con la zona real y el front conectado (A4.6) |
+| A5.8 | Respaldo local sin internet y capturas | HECHO | demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503) |
 
 ### Mafer
 

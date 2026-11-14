@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
-| **Eduardo** | 12 | 2 | 3 | 2 | 63 % de 19 |
+| **Eduardo** | 13 | 2 | 2 | 2 | 68 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 1 | 82 % de 11 |
 | **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
-Proyecto completo: **45 de 61** actividades hechas (74 %), 3 en curso, 3 bloqueadas.
+Proyecto completo: **46 de 61** actividades hechas (75 %), 3 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -60,7 +60,7 @@ Proyecto completo: **45 de 61** actividades hechas (74 %), 3 en curso, 3 bloquea
 - [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después
 - [ ] **A4.13** Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP
 - [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — espera el modo 2D (A3.6)
-- [-] **A5.8** Respaldo local sin internet y capturas `BLOQUEADO` — espera A2.4 con la zona real y el front conectado (A4.6)
+- [x] **A5.8** Respaldo local sin internet y capturas `HECHO` — demo de Isla sin red probada bloqueando la salida de la API y del navegador (no con el wifi apagado): 5 pantallas sin errores, `herramientas/demo-sin-red.sh`, `docs/demo-sin-red.md` y 12 capturas; se pierde el mapa base de OSM y las parcelas lejanas (elevación 503)
 
 ## Mafer
 
