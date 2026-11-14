@@ -16,13 +16,13 @@ Para que Codex te cargue solo, esta ficha tiene que estar en la raíz del repo c
 
 Simulador "what if" de rotaciones de cultivos contra años reales de NASA POWER. Se busca la rotación que no colapsa en el peor año, no la de mayor rendimiento. Hackathon NASA Space Apps 2026, reto Field Shift, sede Boca del Río. Equipo de 4. Ramas: `main`, `balam`, `Mompin`, `Mafer`, `Eduardo`.
 
-El 14/11/2026 el hackathon ya empezó. Se puede escribir código. Al armar esta ficha no existían `web/`, `api/` ni `contratos/`. No inventes que ya compilan.
+El 14/11/2026 el hackathon ya empezó. Se puede escribir código. `contratos/` ya existe (A1.1, v0.1.0, falta la revisión de los 4); `web/` y `api/` todavía no tienen código. No inventes que ya compilan.
 
 ## Stack
 
 - `web/`: React, Vite, TypeScript. Motor en Web Worker, carpeta prevista `web/src/motor/`. Mapa Leaflet, cuadrícula Turf.js (tope cerca de 1600 celdas), 3D con Three.js y React Three Fiber (`InstancedMesh`), gráficas Recharts. Modelos `.bbmodel` cargados directo.
 - `api/`: Python, FastAPI. Proxy y caché de NASA POWER, Open-Meteo, elevación y suelo. `GET /health`. OpenAPI es la fuente de los tipos; el cliente TS se genera con `openapi-typescript`.
-- `contratos/`: JSON Schema alineado con `AgroVault/Compartido/Contratos.md`.
+- `contratos/`: JSON Schema, fuente de verdad de los contratos (`AgroVault/Compartido/Contratos.md` solo los resume). Ejemplos en `contratos/ejemplos/`, tipos TS en `contratos/tipos/`. Solo los edita Mompin.
 - `datos/`: catálogos y demo precargada. `datos/cache/` no se commitea.
 - `modelos/`: `.bbmodel` generados con `herramientas/voxelkit.py`.
 - `docs/`: spec vigente.
@@ -31,7 +31,14 @@ El backend no ejecuta la simulación. `POST /api/simular` de `docs/08` está sup
 
 ## Comandos
 
-Todavía no hay `package.json` ni app FastAPI. Cuando existan, prefiere los scripts del repo. Hasta entonces no inventes un flujo de build distinto al de abajo.
+Contratos (ya existe):
+
+```text
+cd contratos && npm install && npm test
+cd contratos && npm run tipos
+```
+
+Todavía no hay `package.json` en `web/` ni app FastAPI. Cuando existan, prefiere los scripts del repo. Hasta entonces no inventes un flujo de build distinto al de abajo.
 
 Previsto:
 
@@ -55,7 +62,7 @@ Requiere Python 3 y Pillow. La zanahoria de ejemplo no es un cultivo del proyect
 ## Estilo
 
 - TypeScript estricto en el front. Python con tipos en las firmas públicas del API.
-- Nombres de campos de JSON como en Contratos (`poligono`, `areaHa`, `lluviaMm`, `deficitMm`). No traduzcas el contrato a inglés en una mitad del repo.
+- Nombres de campos de JSON como en `contratos/*.schema.json` (`poligono`, `areaHa`, `lluviaMm`, `deficitMm`, `estadoPlanta`). No traduzcas el contrato a inglés en una mitad del repo.
 - Sin emojis en código ni en comentarios.
 - Sin secretos. `.env` queda fuera de git. Hay `.env.example` solo con nombres de variables.
 - Comentarios solo donde la fórmula o el estado `NO_EVALUABLE` no se entienden solos.
@@ -67,7 +74,7 @@ Requiere Python 3 y Pillow. La zanahoria de ejemplo no es un cultivo del proyect
 - Cada número citado sale de una fuente que puedas señalar.
 - El front no recalcula déficit, ETc ni ranking. 2D y 3D leen la misma salida. Cambiar de vista no llama a NASA.
 - El 3D no decide etapa ni estrés.
-- No fijes filas `[EN EVENTO]` ni `[DEPENDE-DATOS]`. Ranking A/B es V-19: mientras siga abierto, ordena por menor déficit en el peor caso y deja `arrepentimiento` en null. Fechas de siembra de Isla son V-20: no las inventes.
+- No fijes filas `[EN EVENTO]` ni `[DEPENDE-DATOS]`. Ranking A/B es V-19: mientras siga abierto, ordena por menor déficit en el peor caso (criterio A, declarado en el resultado) y deja `arrepentimiento` en null. Fechas de siembra de Isla son V-20: no las inventes.
 - No toques nginx, systemd ni puertos de `mediworks` en el droplet.
 - No edites el mismo archivo que otra rama tenga en curso. Un archivo, un responsable.
 - Modelos voxel: sigue `.claude/agents/modelador-voxel.md` y `docs/07`. Paleta: colores nuevos al final. Escala: 1 celda = 16 unidades.
@@ -75,6 +82,7 @@ Requiere Python 3 y Pillow. La zanahoria de ejemplo no es un cultivo del proyect
 
 ## Cómo entregar un cambio
 
+- Antes y después de trabajar, verifica los cambios (`git fetch`, revisa lo que subieron otros, corre las pruebas) y actualiza la documentación existente que tu cambio afecte (`docs/`, `AgroVault/`, README, `AGENTS.md`) en vez de dejarla desfasada o crear duplicados.
 - Diff mínimo, atado a una actividad de `docs/14` si el usuario la nombró (A1.1, A2.6, etc.).
 - Si moviste alcance, agrega una entrada en `docs/01-REGISTRO-DE-CAMBIOS.md` con fecha, archivos, motivo y fuente.
 - Motor: cubre el caso `NO_EVALUABLE` y al menos una prueba de `docs/05` que corresponda a lo que tocaste.

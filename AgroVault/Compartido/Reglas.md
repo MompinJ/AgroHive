@@ -26,10 +26,11 @@ Aplican a Cursor, Codex y Claude. El detalle de producto está en [[Resumen]].
 - Cambiar cultivo o rotación invalida el resultado anterior hasta recalcular.
 - Mismos datos y mismo plan ⇒ mismo resultado.
 - Sin emojis en el código. Sin llaves ni tokens en el repo (variables de entorno).
-- Tipos del cliente web salen de OpenAPI (`openapi-typescript`), no se duplican a mano.
+- Los contratos de datos son los JSON Schema de `contratos/`; sus tipos TS se generan en `contratos/tipos/`. El cliente del API sale de OpenAPI (`openapi-typescript`). Ningún tipo se duplica a mano (cómo se alinean los dos está en [[Pendientes]]).
 
 ## Alcance y equipo
 
+- Antes y después de trabajar, verifica los cambios (`git fetch`, revisa lo que subieron otros, corre las pruebas) y actualiza la documentación existente que tu cambio afecte (`docs/`, `AgroVault/`, README, `AGENTS.md`) en vez de dejarla desfasada o crear duplicados.
 - `[EN EVENTO]` y `[DEPENDE-DATOS]` no se fijan sin acuerdo. Si hace falta un default para compilar, déjalo marcado y anótalo.
 - Un archivo, un responsable. No edites archivos de otra persona sin avisarle.
 - Rama propia (`balam`, `Mompin`, `Mafer`, `Eduardo`). Integración a `main` por pull request.

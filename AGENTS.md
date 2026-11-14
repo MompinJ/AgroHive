@@ -7,6 +7,8 @@ Proyecto de hackathon (NASA Space Apps 2026, reto Field Shift): simulador "what 
 2. Leer: `docs/00-LEEME-PRIMERO.md`, `docs/13-DECISIONES-HACKATHON.md`, `docs/14-CRONOGRAMA.md` (tablero de reparto al final) y el doc del tema que vayas a tocar.
 3. Antes de escribir codigo, resumir en 5 lineas que vas a hacer y que archivos tocaras.
 
+Contexto resumido por herramienta: `AgroVault/` (Codex: `AgroVault/Codex/AGENTS.md`; nucleo comun en `AgroVault/Compartido/`). Si contradice a `docs/13`, `docs/14` o a `contratos/*.schema.json`, mandan estos.
+
 ## Stack decidido
 - `web/`: React + Vite + TypeScript. El **motor de simulacion** corre en el navegador dentro de un **Web Worker** (`web/src/motor/`). El 3D usa Three.js con `InstancedMesh`.
 - `api/`: Python + FastAPI. Proxy y cache de NASA POWER, Open-Meteo, elevacion y suelo. Publica OpenAPI; el cliente TypeScript se genera de ahi.
@@ -14,6 +16,7 @@ Proyecto de hackathon (NASA Space Apps 2026, reto Field Shift): simulador "what 
 - `modelos/`: modelos 3D `.bbmodel`, generados con el agente `modelador-voxel` (`.claude/agents/`) y `herramientas/voxelkit.py`.
 
 ## Reglas
+- Antes y despues de trabajar, verifica los cambios (`git fetch`, revisa lo que subieron otros, corre las pruebas) y actualiza la documentacion existente que tu cambio afecte (`docs/`, `AgroVault/`, README, `AGENTS.md`) en vez de dejarla desfasada o crear duplicados.
 - Trabaja solo en tu rama y en las carpetas de tu carril. No edites archivos de otro responsable sin avisar.
 - Commits pequenos y frecuentes. Nunca hagas push a `main`: abre un pull request cuando cierres una actividad con su entregable verificable. Mompin integra.
 - Cada vez que algo entre a `main`, haz `git merge origin/main` en tu rama antes de seguir.
