@@ -36,6 +36,34 @@ def _fuente_clima(nombre, url, resolucion, unidades, coord, desde, hasta, consul
             "unidades": unidades, "consultado": consultado, "resolucion": resolucion, "nota": nota}
 
 
+async def _lluvia_satelital(lat: float, lon: float, desde: date, hasta: date) -> tuple[dict | None, list[dict]]:
+    """Lluvia IMERG (evidencia) de la celda de 0.1 grados, con cache. Nunca tumba /api/clima: si falla, devuelve None y un aviso."""
+    clat, clon = power.centro_celda_imerg(lat, lon)
+    clave = f"power_imerg_v1_{clat:.3f}_{clon:.3f}_{desde:%Y%m%d}_{hasta:%Y%m%d}"
+    async with _candado(clave):
+        en_cache = cache.leer(clave)
+        if en_cache and _vigente(en_cache[1], hasta):
+            registro = en_cache[0]
+        else:
+            try:
+                async with http.crear_cliente() as c:
+                    dias = await power.lluvia_imerg(c, clat, clon, desde, hasta)
+                registro = {"consultado": date.today().isoformat(), "celda": [clon, clat], "dias": dias}
+                cache.escribir(clave, registro)
+            except http.ErrorFuente as e:
+                if not en_cache:
+                    return None, [{"codigo": "LLUVIA_SATELITAL_NO_DISPONIBLE", "mensaje": f"No se pudo leer la lluvia IMERG de NASA POWER ({str(e)[:160]}); la serie de lluvia del motor no cambia.", "severidad": "aviso"}]
+                registro = en_cache[0]
+    nota = ("Evidencia: no entra al balance de agua ni cambia los escenarios. IMERG ve tormentas que MERRA-2 aplana y en anios recientes suma menos "
+            "que PRECTOTCORR. Dia en hora UTC, unas 6 h corrido respecto al dia local de la serie principal. Los dias sin dato (relleno -999 de POWER, "
+            f"meses aun sin publicar o anteriores a {power.INICIO_IMERG.isoformat()}) van en null, nunca en 0.")
+    lluvia = {"variable": power.PARAMETRO_IMERG, "estandarHora": "UTC",
+              "fuente": _fuente_clima(power.NOMBRE_IMERG, power.URL, power.RESOLUCION_IMERG, power.UNIDADES_IMERG, tuple(registro["celda"]),
+                                      desde, hasta, registro["consultado"], nota),
+              "dias": registro["dias"]}
+    return lluvia, []
+
+
 async def serie_clima(lat: float, lon: float, desde: date, hasta: date) -> dict:
     """Serie diaria: POWER con cache; si falla, Open-Meteo (RESPALDO_HISTORICO); si falla, cache vencida; si no, SinDatos."""
     clat, clon = power.centro_celda(lat, lon)
@@ -44,16 +72,24 @@ async def serie_clima(lat: float, lon: float, desde: date, hasta: date) -> dict:
     async with _candado(clave):
         en_cache = cache.leer(clave)
         if en_cache and _vigente(en_cache[1], hasta):
-            return _respuesta_power(en_cache[0], coord, desde, hasta, [])
+            return await _con_lluvia_satelital(_respuesta_power(en_cache[0], coord, desde, hasta, []), lat, lon, desde, hasta)
         try:
             async with http.crear_cliente() as c:
                 dias = await power.serie_diaria(c, clat, clon, desde, hasta)
             registro = {"consultado": date.today().isoformat(), "celda": [clon, clat], "diario": dias}
             cache.escribir(clave, registro)
-            return _respuesta_power(registro, coord, desde, hasta, [])
+            return await _con_lluvia_satelital(_respuesta_power(registro, coord, desde, hasta, []), lat, lon, desde, hasta)
         except http.ErrorFuente as e:
             motivo_power = str(e)
     return await _respaldo_clima(lat, lon, desde, hasta, clave, en_cache, motivo_power)
+
+
+async def _con_lluvia_satelital(respuesta: dict, lat: float, lon: float, desde: date, hasta: date) -> dict:
+    lluvia, avisos = await _lluvia_satelital(lat, lon, desde, hasta)
+    if lluvia:
+        respuesta["lluviaSatelital"] = lluvia
+    respuesta["advertencias"] = [*respuesta["advertencias"], *avisos]
+    return respuesta
 
 
 def _respuesta_power(registro: dict, coord, desde, hasta, advertencias, estado="EVALUABLE") -> dict:

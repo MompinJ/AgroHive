@@ -1,4 +1,5 @@
 """NASA POWER, endpoint diario puntual, comunidad AG (probado en A0.7, datos/pruebas-apis/)."""
+import math
 from datetime import date
 
 import httpx
@@ -17,6 +18,19 @@ HUMEDAD_SUELO = {  # metadato que acompana a humedadRaizFraccionSat (contrato cl
     "profundidadCm": 100,
     "uso": ["condicion_inicial", "comparacion"],
 }
+
+
+# A4.10: lluvia GPM IMERG (0.1 grados) que POWER sirve con la misma API, SIN cuenta Earthdata. Es EVIDENCIA, no entra al balance.
+PARAMETRO_IMERG = "IMERG_PRECTOT"
+INICIO_IMERG = date(2000, 6, 1)  # IMERG empieza ahi; antes POWER devuelve valores (no -999) de origen no verificado: se descartan
+NOMBRE_IMERG = "NASA POWER (GPM IMERG, diario, hora UTC)"
+RESOLUCION_IMERG = "0.1 x 0.1 grados (GPM IMERG)"
+UNIDADES_IMERG = "mm/dia (IMERG_PRECTOT), dia en hora UTC"
+
+
+def centro_celda_imerg(lat: float, lon: float) -> tuple[float, float]:
+    """Centro de la celda IMERG de 0.1 grados que contiene el punto (verificado el 14/11: 18.03 y 18.07 dan la misma serie; 18.12, otra)."""
+    return round(math.floor(round(lat * 10, 6)) / 10 + 0.05, 3), round(math.floor(round(lon * 10, 6)) / 10 + 0.05, 3)
 
 
 def centro_celda(lat: float, lon: float) -> tuple[float, float]:
@@ -65,3 +79,30 @@ async def serie_diaria(cliente: httpx.AsyncClient, lat: float, lon: float, desde
         return parsear(r.json())
     except (KeyError, ValueError) as e:
         raise http.ErrorFuente(f"respuesta de POWER inesperada: {e!r}") from e
+
+
+def parsear_imerg(cuerpo: dict) -> list[dict]:
+    """Dias {fecha, lluviaMm} de IMERG_PRECTOT. El relleno (-999), un valor negativo o una fecha anterior al inicio de IMERG quedan en null, nunca en 0."""
+    parametros = cuerpo["properties"]["parameter"][PARAMETRO_IMERG]
+    relleno = float(cuerpo.get("header", {}).get("fill_value", -999.0))
+    dias = []
+    for f in sorted(parametros):
+        fecha = date(int(f[:4]), int(f[4:6]), int(f[6:]))
+        v = parametros[f]
+        valido = v is not None and v != relleno and v >= 0 and fecha >= INICIO_IMERG
+        dias.append({"fecha": fecha.isoformat(), "lluviaMm": v if valido else None})
+    return dias
+
+
+async def lluvia_imerg(cliente: httpx.AsyncClient, lat: float, lon: float, desde: date, hasta: date) -> list[dict]:
+    """Segunda llamada a POWER, con time-standard=UTC (en hora solar local POWER no entrega IMERG y responde -999). No mezclar con la serie en hora local."""
+    params = {
+        "start": desde.strftime("%Y%m%d"), "end": hasta.strftime("%Y%m%d"),
+        "latitude": lat, "longitude": lon,
+        "community": "AG", "parameters": PARAMETRO_IMERG, "format": "json", "time-standard": "UTC",
+    }
+    r = await http.get(cliente, URL, params)
+    try:
+        return parsear_imerg(r.json())
+    except (KeyError, ValueError, TypeError) as e:
+        raise http.ErrorFuente(f"respuesta de POWER (IMERG) inesperada: {e!r}") from e

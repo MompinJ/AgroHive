@@ -1,0 +1,67 @@
+{
+ "type": "Feature",
+ "geometry": {
+  "type": "Point",
+  "coordinates": [
+   -95.55,
+   18.05,
+   107.88
+  ]
+ },
+ "properties": {
+  "parameter": {
+   "IMERG_PRECTOT": {
+    "20260905": 10.95,
+    "20260906": 2.76,
+    "20260907": 4.81,
+    "20260908": 0.0,
+    "20260909": 3.94,
+    "20260910": 1.76,
+    "20260911": 0.1,
+    "20260912": 0.0,
+    "20260913": 20.51,
+    "20260914": 13.06,
+    "20260915": -999.0,
+    "20260916": -999.0,
+    "20260917": -999.0,
+    "20260918": -999.0,
+    "20260919": -999.0,
+    "20260920": -999.0,
+    "20260921": -999.0,
+    "20260922": -999.0,
+    "20260923": -999.0,
+    "20260924": -999.0,
+    "20260925": -999.0
+   }
+  }
+ },
+ "header": {
+  "title": "NASA/POWER Source Native Resolution Daily Data",
+  "api": {
+   "version": "v2.10.3",
+   "name": "POWER Daily API"
+  },
+  "sources": [
+   "IMERG"
+  ],
+  "fill_value": -999.0,
+  "time_standard": "UTC",
+  "start": "20260905",
+  "end": "20260925"
+ },
+ "messages": [],
+ "parameters": {
+  "IMERG_PRECTOT": {
+   "units": "mm/day",
+   "longname": "Total Precipitation"
+  }
+ },
+ "times": {
+  "data": 0.159,
+  "process": 0.01
+ },
+ "_consulta": {
+  "url": "https://power.larc.nasa.gov/api/temporal/daily/point?start=20260905&end=20260925&latitude=18.05&longitude=-95.55&community=AG&parameters=IMERG_PRECTOT&format=json&time-standard=UTC",
+  "consultado": "2026-11-14T22:17:44+00:00"
+ }
+}

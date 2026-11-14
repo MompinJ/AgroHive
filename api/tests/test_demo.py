@@ -16,12 +16,16 @@ def generar_paquete(simular, monkeypatch, tmp_path, dias_de_antiguedad=0):
     """Llena una cache con respuestas simuladas y la deja como paquete de demo; luego vacia la cache local."""
     def con_red(request: httpx.Request):
         if "power.larc" in request.url.host:
+            if request.url.params.get("parameters") == "IMERG_PRECTOT":  # A4.10: la lluvia IMERG tambien va en el paquete
+                return httpx.Response(200, content=real("power_imerg.json"))
             return power_sintetico(request)
         if "seasonal-api" in request.url.host:
             return httpx.Response(200, content=real("om_seasonal_210d.json"))
         return httpx.Response(404)
     simular(con_red)
     assert cliente.get("/api/proxima-temporada?lat=18.03&lon=-95.53").status_code == 200
+    desde, hasta = servicios.VENTANA_ESTANDAR
+    assert "lluviaSatelital" in cliente.get(f"/api/clima?lat=18.03&lon=-95.53&desde={desde}&hasta={hasta}").json()
     demo = tmp_path / "paquete"
     shutil.copytree(config.CACHE_DIR, demo)
     if dias_de_antiguedad:
@@ -45,6 +49,7 @@ def test_sin_red_y_sin_cache_responde_el_paquete(simular, monkeypatch, tmp_path)
     assert r.status_code == 200 and r.json()["estado"] == "EVALUABLE" and len(r.json()["diario"]) == (hasta - desde).days + 1
     p = cliente.get("/api/proxima-temporada?lat=18.03&lon=-95.53")
     assert p.status_code == 200 and p.json()["metodo"] == "anomalia_estacional"
+    assert "lluviaSatelital" in r.json() and not r.json()["advertencias"], "la lluvia IMERG sale del paquete, sin aviso"
     assert llamadas == [], "con el paquete no debe tocar la red"
 
 

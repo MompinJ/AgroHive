@@ -1,5 +1,5 @@
 {
-  "generado": "2026-11-14T21:30:27+00:00",
+  "generado": "2026-11-14T22:21:07+00:00",
   "parcela": "parcela-demo-isla",
   "centroide": [
     -95.53,
@@ -10,7 +10,7 @@
     "2005-10-01",
     "2025-12-31"
   ],
-  "versionContrato": "0.7.0",
+  "versionContrato": "0.9.0",
   "validadoContra": [
     "serie-clima",
     "suelo",
@@ -20,6 +20,7 @@
   "entradas": [
     "cache/estacional_36_-191.json",
     "cache/olm_urls_v1.json",
+    "cache/power_imerg_v1_18.050_-95.550_20051001_20251231.json",
     "cache/power_v2_18.000_-95.625_20051001_20251231.json",
     "cache/suelo_isric_v2_7212_-38212.json",
     "cache/suelo_olm_v1_18030_-95530.json",

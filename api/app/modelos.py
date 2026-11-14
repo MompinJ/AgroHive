@@ -67,6 +67,19 @@ class HumedadSuelo(SinNulos):
     uso: list[Literal["condicion_inicial", "comparacion"]] = Field(min_length=1)
 
 
+class DiaLluviaSatelital(BaseModel):
+    fecha: date
+    lluviaMm: float | None = Field(ge=0)
+
+
+class LluviaSatelital(BaseModel):
+    """Lluvia GPM IMERG via NASA POWER (A4.10). EVIDENCIA: no entra al balance ni cambia los escenarios. El -999 de POWER es null."""
+    variable: Literal["IMERG_PRECTOT"]
+    estandarHora: Literal["UTC"]
+    fuente: "Fuente"
+    dias: list[DiaLluviaSatelital]
+
+
 class SerieClima(SinNulos):
     """Serie diaria de un periodo, sin elegir escenario. El motor (A2.5) corta los anios de cada escenario."""
     meta: Meta
@@ -76,6 +89,7 @@ class SerieClima(SinNulos):
     fuente: Fuente
     diario: list[DiaClima]
     humedadSuelo: HumedadSuelo | None = None
+    lluviaSatelital: LluviaSatelital | None = None
     advertencias: list[Advertencia] = []
 
 
