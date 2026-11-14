@@ -54,6 +54,16 @@ def raiz_repo():
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
+def anotar(texto):
+    """Deja una linea en .git/clawd-log para saber si la tarea se disparo."""
+    try:
+        ruta = os.path.join(raiz_repo(), ".git", "clawd-log")
+        with open(ruta, "a", encoding="utf-8") as f:
+            f.write(time.strftime("%H:%M:%S") + " " + texto + "\n")
+    except Exception:
+        pass
+
+
 def hay_commit_nuevo():
     """True si HEAD cambio desde la ultima vez que paseo. Guarda el hash en .git."""
     repo = raiz_repo()
@@ -81,7 +91,9 @@ def main():
     args = ap.parse_args()
 
     if not args.siempre and not hay_commit_nuevo():
+        anotar("lanzado: omitido, ya paseo con este commit")
         return 0
+    anotar("lanzado: sale a pasear")
 
     try:
         import tkinter as tk
@@ -121,6 +133,7 @@ def main():
         "paso": 0,
         "salto": 0,
         "t0": time.time(),
+        "ticks": 0,
     }
 
     def dibujar(paso, dy):
@@ -170,11 +183,18 @@ def main():
             dy = -(5 - abs(estado["salto"] - 5)) * 6  # sube y baja, tope 30 px
             estado["salto"] -= 1
         dibujar(estado["paso"] // 3, dy)
-        root.geometry(f"{ANCHO}x{ALTO}+{int(estado['x'])}+{int(estado['y'])}")
+        root.geometry(f"+{int(estado['x'])}+{int(estado['y'])}")
+        estado["ticks"] += 1
+        if estado["ticks"] % 25 == 0:
+            root.lift()  # por si otra ventana la tapa
         root.after(40, tick)
 
     canvas.bind("<Button-1>", salir)
     root.bind("<Escape>", salir)
+    # Tamano fijo una sola vez y ventana mostrada antes de empezar a moverla.
+    root.update_idletasks()
+    root.geometry(f"{ANCHO}x{ALTO}+{int(estado['x'])}+{int(estado['y'])}")
+    root.lift()
     tick()
     root.mainloop()
     return 0
