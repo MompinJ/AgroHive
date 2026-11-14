@@ -79,7 +79,7 @@ export interface ResultadoRanking {
 const r4 = (x: number) => Math.round(x * 1e4) / 1e4;
 
 function subpuntaje(p: PilarPuntaje, m: MetricasEscenario, siembras: number): number | null {
-  const x = m.pilares as PilaresMotor;
+  const x: PilaresMotor = m.pilares;
   switch (p) {
     case 'deficitHidrico':
       return x.deficitHidrico.proporcionDemandaNoCubierta === null ? null : 1 - x.deficitHidrico.proporcionDemandaNoCubierta;
@@ -178,7 +178,7 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
     ponderacion = {
       pesos,
       etiqueta,
-      pilaresExcluidos: excluidos as Ponderacion['pilaresExcluidos'],
+      pilaresExcluidos: excluidos,
       nota:
         (usarIguales
           ? `Pesos iguales entre los ${entran.length} pilares con numero (sin pesos con fuente ni del usuario): es un supuesto, no un dato.`

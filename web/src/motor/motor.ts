@@ -101,7 +101,7 @@ export interface ExcesoEscenario {
 
 export interface ResultadoMotor {
   rotacion: ResultadoRotacion;
-  /** null si el escenario no es evaluable. Los mm tambien estan en el pilar (excesoTotalMm); los dias no tienen campo en el contrato. */
+  /** null si el escenario no es evaluable. Lo mismo va en el pilar excesoHidrico de cada escenario (contratos 0.7.0). */
   exceso: Record<Escenario, ExcesoEscenario | null>;
   simulaciones: Record<Escenario, SimulacionEscenario>;
   /** Ciclos de cada celda (generales con los reemplazos de porCelda). */
