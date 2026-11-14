@@ -1,0 +1,2 @@
+# Los scripts de bash deben quedar con LF tambien en Windows (Git Bash)
+*.sh text eol=lf
