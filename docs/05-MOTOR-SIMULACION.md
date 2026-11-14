@@ -116,6 +116,15 @@ La banda la construye la API (`GET /api/proxima-temporada`, método de doc 13). 
   - **Con el paquete de demo** (horizonte noviembre de 2026 a abril de 2027, suelo real de Isla, milpa): 6 de 20 años caen en los 6 meses: 2006, 2008, 2013, 2019, 2022 y 2025. Solo se evalúa el frijol OI (ciclo 2). Rango: demanda sin cubrir de 0 a 10.6 %, fracción de lluvia percolada de 0.09 a 0.54, exceso de 13.6 a 135.2 mm.
   - En el Worker: `simular` con `entradas.proximaTemporada = { capa, serie }` (la capa de `GET /api/proxima-temporada` y la serie completa de `GET /api/clima`).
 
+## Series del balance para el dashboard (A4.1, parte del motor, 14/11)
+`web/src/motor/series.ts`; en el Worker, la operación `serieBalance(rotacionId, escenario)`, bajo demanda para no cargarla siempre; contrato `serie-balance`, propuesto para 0.11.0. Hay un documento por rotación y escenario, con una serie por ciclo (y por cultivo, si hay `porCelda`, con sus `celdas`):
+- **Columnas diarias alineadas desde la siembra:** lluvia, ET0, ETc, ETc ajustada, agotamiento Dr, RAW, humedad (fracción de TAW), percolación (exceso) y déficit, con unidades fijas y la capacidad de la cubeta `tawMm`.
+- **Sumas por mes:** del plan, con `mesClima` y la humedad media del mes.
+- **Fechas:** las del plan (como `resultado-celda`); `fechaClima` y `mesClima` dan el día y el mes del año real del escenario.
+- **Ciclo `NO_EVALUABLE`:** va sin series y con motivo.
+- **Consistencia:** las sumas cuadran con los pilares (déficit y exceso totales) y las mensuales con las diarias; hay pruebas. Pesa unos 19 KB por rotación y escenario.
+- **La interfaz solo grafica:** no recalcula nada.
+
 ## Paso 8: explicación
 Por rotación, una tarjeta con:
 - Por qué se sugiere, con evidencia concreta (año real, lluvia, mes, déficit).
@@ -132,7 +141,7 @@ Si se usa un LLM, **solo redacta** a partir de números ya calculados. No decide
 - **Beneficios:** solo hechos medidos y comparados con las demás rotaciones: agua cubierta en el año seco, menos días sin cultivo, menos lluvia perdida, siembras en ventana, leguminosa ("este simulador no mide su aporte al suelo"). No se habla de plagas ni de nitrógeno.
 - **Huecos:** pilares que no entran y por qué, calor sin umbral, erosión sin I30, suelo estimado, clima regional (tamaño de la celda según la latitud), humedad inicial regional, chile con datos del pimiento dulce, sin precios, costos, rendimiento ni plagas.
 - **Riesgos:** peor año con sus cifras, mes con más exceso en el año lluvioso, mes con más falta de agua en el año seco, siembras fuera de ventana y cultivos no recomendados.
-- **En la demo (R1 a R4, suelo real de Isla), R4 sale primera por el propio ranking**, no por la plantilla: "Es la opción más robusta de las 4 rotaciones comparadas…". Las tarjetas de R4 y R2 están en la regresión (A5.5).
+- **En la demo por defecto (R1, R2 y R4 `[DECIDIDO]`, suelo real de Isla), R4 sale primera por el propio ranking**, no por la plantilla: "Es la opción más robusta de las 3 rotaciones comparadas…", con los cuatro pilares. Las tarjetas de R4, R2 y R1 están en la regresión (A5.5), con R1 a R4 como caso adicional.
 
 ## Propiedades obligatorias
 - **Determinista:** mismos datos y plan ⇒ mismo resultado.

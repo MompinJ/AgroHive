@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A4.1, parte del motor: series del balance de agua para el dashboard (Mompin, rama `Mompin-motor`)
+
+- **Archivos:** `web/src/motor/series.ts` (nuevo), `motor.ts` (cada ciclo guarda su lluvia y ET0 diarias), `protocolo.ts` y `cliente.ts` (operación `serieBalance`), `tipos.ts` (tipo local con la forma propuesta), `index.ts`; prueba `series.test.ts`; regresión; `docs/05` y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** a pedido de balam, el Worker entrega, bajo demanda y por rotación y escenario, las series diarias (en columnas) y mensuales de lluvia, ET0, ETc, ETc ajustada, agotamiento, RAW, humedad (fracción de TAW), percolación y déficit de cada ciclo, con unidades, fechas (del plan y del clima), estado y fuente. Contrato `serie-balance` propuesto para 0.11.0 (lo hace la sesión de contratos). Las sumas cuadran con los pilares.
+- **Regresión:** el ranking y las tarjetas de referencia pasan al conjunto por defecto de la demo `[DECIDIDO]`, R1, R2 y R4 (R4, R2, R1, con los cuatro pilares); R1 a R4 queda como caso adicional. Se suman las series mensuales de R4 en el año seco. Los números de antes no cambian; solo cambia el texto de las tarjetas por el conjunto comparado.
+- **Fuente / evidencia:** `cd web && npm test` (316 pruebas).
+
 ### 2026-11-14 — A3.8: ficha por celda en la escena (Mompin, con balam)
 
 - **Archivos:** `web/src/escena/ficha.ts` (nuevo), `EscenaParcela.tsx`, `render/escena-three.ts`, `escena.css`, prueba `ficha.test.ts`; `docs/06`, `docs/14` (A3.8 pasa del tablero de balam al de Mompin, con balam).
