@@ -29,7 +29,7 @@ Rotación = secuencia en el tiempo (ciclo 1, ciclo 2, ciclo 3), no sembrar todo 
 
 ### Qué no hace
 
-- No predice una temporada exacta. La capa opcional de "próxima temporada" es un rango, va después del motor y no bloquea el MVP.
+- No predice una temporada exacta. La capa opcional de "próxima temporada" es un rango de 6 meses (distribución histórica desplazada por la anomalía de SEAS5, sin tendencia), va después del motor y no bloquea el MVP.
 - No predice toneladas, cosechas ni ingresos.
 - No mide pH ni fertilidad. El pH mostrado es estimación de un modelo global.
 - No detecta edificios, caminos ni árboles desde imágenes.
@@ -46,15 +46,17 @@ Frase de demo: AgroHive convierte la historia climática de NASA en comparacione
 | Cultivos núcleo | Milpa: maíz, frijol, calabaza. Chile si da tiempo el modelado |
 | Catálogo | JSON propio, 6 a 8 cultivos, sembrado desde FAO EcoCrop (rangos) y Kc de FAO-56. Sin API de cultivos |
 | Rotaciones de ejemplo | R0 maíz-maíz-maíz; R1 maíz-frijol-maíz; R2 se ajusta al catálogo real (en 03 aún dice sorgo) |
-| Suelo | Selector manual (arcilloso, franco, arenoso) con TAW de FAO-56, etiqueta `SUPUESTO`. Además, textura y pH de zona por script (ISRIC WCS u OpenLandMap), también `SUPUESTO` |
+| Suelo | Selector manual (arcilloso, franco, arenoso) con TAW de FAO-56, etiqueta `SUPUESTO`. Además, textura y pH de zona de **ISRIC WCS y OpenLandMap**, comparados; TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, también `SUPUESTO` |
 
 ## Ciencia, en corto
 
 Columna vertebral: **NASA POWER** diario, sin llave. Comunidad `AG`. Parámetros candidatos: `PRECTOTCORR`, `T2M`, `T2M_MIN`, `T2M_MAX`, radiación, humedad, viento. El mensual de lluvia viene en mm/día: el total del mes es ese valor por los días. `[VERIFICAR]` unidades de radiación y dónde vive `GWETROOT` (V-06).
 
+Humedad de suelo de POWER (`GWETROOT`, V-06, decidido): condición inicial de la cubeta y comparación con la humedad simulada. Es fracción de saturación (MERRA-2, ~100 cm), no de TAW: se convierte con θsat, θFC y θWP antes de usarla.
+
 Respaldo climático: Open-Meteo (archivo histórico). Si POWER cae, el estado es `RESPALDO_HISTORICO` o `ERROR_DATOS`, visible.
 
-Elevación: Open-Meteo Elevation (GLO-90), tiles Terrarium o SRTM; ver [[APIs]]. Es lo que hace distinto a cada bloque. `[VERIFICAR]` acceso (V-08).
+Elevación: Terrarium por defecto y Open-Meteo Elevation de respaldo (V-08, decidido); ver [[APIs]]. Es lo que hace distinto a cada bloque.
 
 Otros datasets NASA (GPM, SMAP, MODIS, Landsat, ECOSTRESS, GRACE) son extra. Solo entran si se integran de verdad. SMAP, GPM y MODIS van por `earthaccess` en Python, por eso el backend es FastAPI.
 
@@ -104,7 +106,7 @@ El Worker acelera el cálculo (percentiles, 20 años). No acelera la red ni el r
 
 Con polígono libre el backend en vivo hace falta, porque clima y elevación dependen de la coordenada dibujada. La parcela demo precargada cubre la presentación sin red.
 
-Despliegue: el droplet de Eduardo, no Vercel/Render. Sin dominio, un front HTTPS no puede llamar un API HTTP. Propuesta: `sslip.io` con la IP del droplet (en `docs/13` aparece `64-23-143-102.sslip.io`) y, si falla, servir también el front desde nginx en el mismo origen. Eduardo elige (V-15 a V-17). Abrir 80 y 443. No tocar `mediworks`.
+Despliegue: el droplet de Eduardo con `sslip.io` y Let's Encrypt (V-15 a V-17 cerrados el 14/11; ver [[Servidor]]). No tocar `mediworks`.
 
 Persistencia del MVP: archivos JSON. Sin base de datos obligatoria.
 
@@ -136,7 +138,7 @@ Eduardo toma el servidor (A0.4, A4.7).
 
 ## Estado del repo (14/11, noche)
 
-Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.3.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
+Hay documentación (`docs/`), `AGENTS.md`, `CLAUDE.md`, `README.md`, `herramientas/voxelkit.py`, el agente en `.claude/agents/modelador-voxel.md`, este vault y `contratos/` (A1.1: JSON Schema v0.4.0, ejemplos ficticios, `npm test` y tipos TS; falta la revisión de los 4, ver [[Contratos]]). No hay todavía código en `web/` ni en `api/`, ni catálogo en `datos/`. El README describe la estructura objetivo, no código ya escrito.
 
 ## Límites para el pitch
 
