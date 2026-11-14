@@ -13,12 +13,12 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 15 | 1 | 0 | 0 | 94 % de 16 |
+| **Mompin** | 16 | 1 | 0 | 0 | 94 % de 17 |
 | **Eduardo** | 11 | 3 | 2 | 3 | 58 % de 19 |
-| **Mafer** | 8 | 2 | 0 | 2 | 67 % de 12 |
+| **Mafer** | 8 | 2 | 0 | 1 | 73 % de 11 |
 | **balam** | 6 | 1 | 0 | 8 | 40 % de 15 |
 
-Proyecto completo: **39 de 61** actividades hechas (64 %), 6 en curso, 2 bloqueadas.
+Proyecto completo: **40 de 61** actividades hechas (66 %), 6 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -37,6 +37,7 @@ Proyecto completo: **39 de 61** actividades hechas (64 %), 6 en curso, 2 bloquea
 - [x] **A3.8** Tooltips y valores por bloque `HECHO` — con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
 - [/] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `EN CURSO` — cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor
+- [x] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) `HECHO` — con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento
 - [x] **A5.5** Pruebas de regresión del motor y de contratos `HECHO` — 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`)
 
 ## Eduardo
@@ -72,7 +73,6 @@ Proyecto completo: **39 de 61** actividades hechas (64 %), 6 en curso, 2 bloquea
 - [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
 - [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
 - [/] **A3.9** Cultivos 4 en adelante, props y mascota `EN CURSO`
-- [ ] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento)
 - [ ] **A5.6** Guion, video de demo y ensayo
 - [/] **A5.7** README con método, fuentes, límites, licencias y declaración de IA `EN CURSO`
 
