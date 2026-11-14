@@ -13,12 +13,12 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
-| **Mompin** | 8 | 1 | 0 | 5 | 57 % de 14 |
+| **Mompin** | 10 | 1 | 0 | 3 | 71 % de 14 |
 | **Eduardo** | 8 | 2 | 2 | 2 | 57 % de 14 |
 | **Mafer** | 4 | 2 | 0 | 6 | 33 % de 12 |
 | **balam** | 0 | 1 | 0 | 15 | 0 % de 16 |
 
-Proyecto completo: **20 de 56** actividades hechas (36 %), 5 en curso, 2 bloqueadas.
+Proyecto completo: **22 de 56** actividades hechas (39 %), 5 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -30,8 +30,8 @@ Proyecto completo: **20 de 56** actividades hechas (36 %), 5 en curso, 2 bloquea
 - [x] **A2.7** Pilar de déficit hídrico y estados de evaluabilidad `HECHO` — 14/11
 - [x] **A2.8** Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) `HECHO` — (c) `temporada_tipica`, 14/11
 - [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir
-- [ ] **A3.1** Escena 3D con relieve (altura por bloque, InstancedMesh)
-- [ ] **A3.2** Cargador de .bbmodel con instancing por cultivo y etapa
+- [x] **A3.1** Escena 3D con relieve (altura por bloque, InstancedMesh) `HECHO`
+- [x] **A3.2** Cargador de .bbmodel con instancing por cultivo y etapa `HECHO`
 - [ ] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
 - [ ] **A4.6** Conectar front y API (cliente generado, estados de carga y error)
