@@ -271,7 +271,47 @@
           "minimum": 0
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "NO_EVALUABLE o ERROR_DATOS: todos los indicadores en null y motivo obligatorio (decidido el 14/11 para todos los pilares).",
+          "if": {
+            "properties": {
+              "estado": {
+                "enum": [
+                  "NO_EVALUABLE",
+                  "ERROR_DATOS"
+                ]
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "required": [
+              "motivo"
+            ],
+            "properties": {
+              "proporcionDemandaNoCubierta": {
+                "type": "null"
+              },
+              "diasDeficit": {
+                "type": "null"
+              },
+              "diasDeficitEtapasSensibles": {
+                "type": "null"
+              },
+              "deficitTotalMm": {
+                "type": "null"
+              },
+              "excesoTotalMm": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
     },
     "pilarCompatibilidadCiclo": {
       "title": "PilarCompatibilidadCiclo",
@@ -297,7 +337,35 @@
           "minimum": 0
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "NO_EVALUABLE o ERROR_DATOS: todos los indicadores en null y motivo obligatorio (decidido el 14/11 para todos los pilares).",
+          "if": {
+            "properties": {
+              "estado": {
+                "enum": [
+                  "NO_EVALUABLE",
+                  "ERROR_DATOS"
+                ]
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "required": [
+              "motivo"
+            ],
+            "properties": {
+              "siembrasFueraDeVentana": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
     },
     "pilarProteccionSuelo": {
       "title": "PilarProteccionSuelo",
@@ -332,7 +400,38 @@
           "minimum": 0
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "NO_EVALUABLE o ERROR_DATOS: todos los indicadores en null y motivo obligatorio (decidido el 14/11 para todos los pilares).",
+          "if": {
+            "properties": {
+              "estado": {
+                "enum": [
+                  "NO_EVALUABLE",
+                  "ERROR_DATOS"
+                ]
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "required": [
+              "motivo"
+            ],
+            "properties": {
+              "indiceErosionRelativo": {
+                "type": "null"
+              },
+              "diasSueloDesnudo": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
     },
     "pilarRiesgoCalor": {
       "title": "PilarRiesgoCalor",
@@ -357,7 +456,35 @@
           "minimum": 0
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "NO_EVALUABLE o ERROR_DATOS: todos los indicadores en null y motivo obligatorio (decidido el 14/11 para todos los pilares).",
+          "if": {
+            "properties": {
+              "estado": {
+                "enum": [
+                  "NO_EVALUABLE",
+                  "ERROR_DATOS"
+                ]
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "required": [
+              "motivo"
+            ],
+            "properties": {
+              "diasEstresCalor": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
     },
     "pilarAporteIndirecto": {
       "title": "PilarAporteIndirecto",
@@ -390,7 +517,38 @@
           "minimum": 0
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "NO_EVALUABLE o ERROR_DATOS: todos los indicadores en null y motivo obligatorio (decidido el 14/11 para todos los pilares).",
+          "if": {
+            "properties": {
+              "estado": {
+                "enum": [
+                  "NO_EVALUABLE",
+                  "ERROR_DATOS"
+                ]
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "required": [
+              "motivo"
+            ],
+            "properties": {
+              "incluyeLeguminosa": {
+                "type": "null"
+              },
+              "especiesDistintas": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
     },
     "metricasEscenario": {
       "title": "MetricasEscenario",
@@ -766,7 +924,7 @@
       "additionalProperties": false,
       "allOf": [
         {
-          "description": "NO_EVALUABLE o ERROR_DATOS: todos los indicadores en null y motivo obligatorio.",
+          "description": "NO_EVALUABLE o ERROR_DATOS: todos los indicadores en null y motivo obligatorio (decidido el 14/11 para todos los pilares).",
           "if": {
             "properties": {
               "estado": {
