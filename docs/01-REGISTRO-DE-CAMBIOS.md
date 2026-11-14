@@ -120,6 +120,20 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Contratos 0.9.0 (rama `contratos-nulos`): regla de pilar sin dato para todos los pilares `[DECIDIDO]`
+
+- **Archivos:** `contratos/resultado-rotacion.schema.json`, versión en ejemplos e inválidos, 5 casos inválidos nuevos, README; `13`.
+- **Cambio y motivo:** Mompin extendió a todos los pilares la regla del pilar de exceso. Si el pilar es `NO_EVALUABLE` o `ERROR_DATOS`, el motivo es obligatorio y todos sus indicadores van en `null`:
+  - `deficitHidrico`: `proporcionDemandaNoCubierta`, `diasDeficit`, `diasDeficitEtapasSensibles`, `deficitTotalMm` y `excesoTotalMm`.
+  - `compatibilidadCiclo`: `siembrasFueraDeVentana`.
+  - `proteccionSuelo`: `indiceErosionRelativo` y `diasSueloDesnudo`.
+  - `riesgoCalor`: `diasEstresCalor`.
+  - `aporteIndirecto`: `incluyeLeguminosa` y `especiesDistintas`.
+  - `excesoHidrico`: ya la tenía.
+  En `resultado-celda` la regla ya regía para los registros, así que no cambia. Es más estricto y puede rechazar salidas del motor que hoy pasan: va en la rama `contratos-nulos`, que el motor mezcla y ajusta antes de integrarse a `main`. Los tipos TS no cambian.
+- **Fuente / evidencia:** decisión transmitida por la sesión maestra. `npm test` 68/68.
+- **Decisiones afectadas:** ninguna más.
+
 ### 2026-11-14 (noche) — Escenario "próxima temporada" por rotación `[DECIDIDO]`; contratos 0.8.0 (compatible)
 
 - **Archivos:** `contratos/resultado-rotacion.schema.json`, ejemplo, 5 casos inválidos, tipos, README; `13`; vault.
