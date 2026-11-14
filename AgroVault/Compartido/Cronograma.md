@@ -15,10 +15,10 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
 | **Eduardo** | 13 | 2 | 2 | 2 | 68 % de 19 |
-| **Mafer** | 9 | 1 | 0 | 1 | 82 % de 11 |
+| **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
 | **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
-Proyecto completo: **46 de 61** actividades hechas (75 %), 3 en curso, 2 bloqueadas.
+Proyecto completo: **46 de 60** actividades hechas (77 %), 3 en curso, 2 bloqueadas.
 
 ## Mompin
 
@@ -73,12 +73,11 @@ Proyecto completo: **46 de 61** actividades hechas (75 %), 3 en curso, 2 bloquea
 - [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
 - [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
 - [x] **A3.9** Cultivos 4 en adelante, props y mascota `HECHO`
-- [ ] **A5.6** Guion, video de demo y ensayo
 - [/] **A5.7** README con método, fuentes, límites, licencias y declaración de IA `EN CURSO`
 
 ## balam
 
-- [ ] **A0.5** Verificar reglas de entrega, IA y video (V-03, V-04)
+- [ ] **A0.5** Verificar reglas de entrega e IA (V-03, V-04)
 - [x] **A1.2** Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías `HECHO` — rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados
 - [x] **A2.9** Cuadrícula desde polígono (Turf.js) con tope de celdas `HECHO`
 - [x] **A2.10** Mapa y dibujo de polígono libre (Leaflet) `HECHO`
@@ -105,6 +104,6 @@ Proyecto completo: **46 de 61** actividades hechas (75 %), 3 en curso, 2 bloquea
 - **C3 · Escena viva**: se cruza cuando bloques 3D con relieve y estado coloreado desde el motor. Si no: Plan 2D y plantas procedurales
 - **C4 · Congelar funciones**: se cruza cuando ya no entran funciones nuevas. Si no: Recortar extras
 - **C5 · Congelar producto**: se cruza cuando solo errores y pulido. Si no: —
-- **C6 · Entrega lista**: se cruza cuando demo, video, README y envío listos. Si no: Respaldo local y video
+- **C6 · Entrega lista**: se cruza cuando demo, README y envío listos. Si no: Respaldo local
 
 Casillas: `[x]` hecha, `[/]` en curso, `[-]` bloqueada, `[ ]` pendiente.
