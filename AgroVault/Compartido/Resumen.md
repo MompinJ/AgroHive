@@ -130,7 +130,7 @@ Modelos en `modelos/cultivos/` (maíz, frijol, calabaza, chile: siembra, brote, 
 
 ## Equipo y ritmo
 
-El avance por persona lo genera `herramientas/cronograma.py` en [[Cronograma]] (38 de 61 hechas al regenerar desde `docs/14`). Camino crítico que falta por cerrar: `A4.6 → A5.6 → A5.9`. C2 y C3 ya se cruzaron en código. C4 espera el cierre de A4.6.
+El avance por persona lo genera `herramientas/cronograma.py` en [[Cronograma]] (38 de 61 hechas al regenerar desde `docs/14`). Camino crítico que falta por cerrar: `A4.6 → A5.9`. Video y presentación se definen al final, fuera del tablero (`docs/13`). C2 y C3 ya se cruzaron en código. C4 espera el cierre de A4.6.
 
 Si hay que cortar: extras A4.12, A4.11, A4.8 y A3.9, luego el slider. Después se puede quedar solo el pilar hídrico, luego el 2D con cajas, luego la parcela fija. No se sacrifican la trazabilidad de POWER, los límites en voz alta, tres rotaciones, el peor caso ni la entrega.
 

@@ -47,7 +47,7 @@ Cómo se reparte:
 | **R1** Interfaz y 3D | React, mapa, polígono, paneles, selector, escena 3D, 2D | `web/` |
 | **R2** Motor científico | Escenarios, balance de agua, pilares, ranking, explicaciones, pruebas | `web/src/motor/` |
 | **R3** Datos y servidor | FastAPI, POWER, Open-Meteo, elevación, caché, catálogo de cultivos, despliegue | `api/`, `datos/` |
-| **R4** Arte, integración y entrega | Modelos con `modelador-voxel`, paleta, iconos, video, pitch, README | `modelos/`, `docs/` |
+| **R4** Arte, integración y entrega | Modelos con `modelador-voxel`, paleta, iconos, README | `modelos/`, `docs/` |
 
 Un archivo, un responsable. Los contratos (`contratos/`) los toca solo quien los propone, avisando al resto.
 
@@ -65,7 +65,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | **C3 · Escena viva** | Bloques 3D con relieve y estado coloreado desde el motor | Plan 2D y plantas procedurales |
 | **C4 · Congelar funciones** | Ya no entran funciones nuevas | Recortar extras |
 | **C5 · Congelar producto** | Solo errores y pulido | — |
-| **C6 · Entrega lista** | Demo, video, README y envío listos | Respaldo local y video |
+| **C6 · Entrega lista** | Demo, README y envío listos | Respaldo local |
 
 ## F0 · Arranque
 
@@ -75,7 +75,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A0.2 `[HECHO]` | Documentación consolidada en `docs/` | Mompin | S | Haiku | — | `docs/` al día, registro en 01 |
 | A0.3 | Acordar roles, cultivos iniciales y criterio de ranking (V-18, V-19) | Todos | XS | Haiku | — | Acta breve en 11 |
 | A0.4 `[HECHO]` | Acceso SSH, firewall y hostname del servidor (V-15 a V-17) | R3 / Eduardo | S | Sonnet | — | `https://<host>/health` responde |
-| A0.5 | Verificar reglas de entrega, IA y video (V-03, V-04) | R4 | XS | Haiku | — | Notas en 11 |
+| A0.5 | Verificar reglas de entrega e IA (V-03, V-04) | R4 | XS | Haiku | — | Notas en 11 |
 | A0.6 `[HECHO]` | Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) | R3 | S | Sonnet | — | Zona y cultivos confirmados en 13; calendario de Isla en `calendario-local` con fuente (SIAP o INIFAP) |
 | A0.7 `[HECHO]` | Verificar Open-Meteo estacional, CORS de POWER y acceso a elevación (V-21, V-22) | R3 | S | Sonnet | — | Parámetros probados con una llamada real, anotados en 04 |
 
@@ -159,14 +159,15 @@ Compuerta **C4** al terminar A4.6.
 | A5.3 | Móvil y accesibilidad (táctil, teclado) | R1 | M | Sonnet | A4.6 | Operable sin hover |
 | A5.4 `[BLOQUEADO]` espera el modo 2D (A3.6) | Medición de requisitos mínimos y fallback WebGL | R1 | S | Haiku | A3.6 | Cifra documentada para jueces |
 | A5.5 `[HECHO]` 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) | Pruebas de regresión del motor y de contratos | R2 | M | Sonnet | A4.2 | Suite en verde |
-| A5.6 | Guion, video de demo y ensayo | R4 | M | Sonnet | A4.6 | Video grabado con respaldo |
 | A5.7 `[EN CURSO]` | README con método, fuentes, límites, licencias y declaración de IA | R4 | S | Sonnet | A4.5 | README completo |
 | A5.8 `[BLOQUEADO]` espera A2.4 con la zona real y el front conectado (A4.6) | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
-| A5.9 | Envío final según reglas oficiales | R4 | XS | Haiku | A5.6, A5.7 | Entrega confirmada (C6) |
+| A5.9 | Envío final según reglas oficiales | R4 | XS | Haiku | A5.7 | Entrega confirmada (C6) |
+
+Video y presentación se definen al final, cuando el front esté conforme: quedan fuera del tablero y no se asignan ahora `[DECIDIDO]` (Mompin, 14/11; ver 13).
 
 ## Camino crítico
 
-`A1.1 -> A2.1 -> A2.6 -> A2.7 -> A3.4 -> A4.6 -> A5.6 -> A5.9`
+`A1.1 -> A2.1 -> A2.6 -> A2.7 -> A3.4 -> A4.6 -> A5.9`
 
 La escena 3D (`A2.9 -> A3.1 -> A3.2`) va en paralelo y también es crítica para la demo. Si cualquiera se atrasa, activar el plan de recorte.
 
@@ -199,7 +200,7 @@ Reparto inicial (14/11), ajustado a los cupos de IA de cada quien. Mompin admini
 | --- | --- | --- | --- | --- |
 | **Mompin** | `Mompin` | Claude Max (Fable, Opus, Sonnet) | A1.1 `[HECHO]`, A2.5 `[HECHO]`, A2.6 `[HECHO]`, A2.7 `[HECHO]`, A2.8 `[HECHO]`, A3.1 `[HECHO]`, A3.2 `[HECHO]`, A4.2 `[HECHO]`, A4.6, A2.13 (parte del motor) `[HECHO]`, A3.7 `[HECHO]`, A5.5 `[HECHO]`, A3.8 (con balam) `[HECHO]`, A5.1 (con Mafer) `[HECHO]`; integra y administra `main`, A1.7 | A1.1 (contratos con ejemplos) |
 | **Eduardo** | `Eduardo` | Cursor, Claude (20), otra de 20 | A0.4, A0.7, A1.3, A2.1, A2.2, A2.3, A2.4, A2.14, A2.15, A2.13 (parte del backend), A4.6 (cliente de la API, con balam), A4.7, A4.8, A4.10, A4.11, A4.12, A4.13 (después de C4), A5.8, A5.4 | A0.4 y A0.7 (servidor y APIs) |
-| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[HECHO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[HECHO]`, A2.11 `[HECHO]`, A2.12 `[HECHO]`, A3.3 `[HECHO]`, A3.9 `[HECHO]`, A5.6, A5.7 `[EN CURSO]` | A1.4 (paleta y primer modelo del maíz) |
+| **Mafer** | `Mafer` | Claude (20), ChatGPT Go, Gemini Pro, Copilot | A0.6 `[HECHO]`, A1.4 `[HECHO]`, A1.5 `[HECHO]`, A1.6 `[HECHO]`, A2.16 `[HECHO]`, A2.11 `[HECHO]`, A2.12 `[HECHO]`, A3.3 `[HECHO]`, A3.9 `[HECHO]`, A5.7 `[EN CURSO]` | A1.4 (paleta y primer modelo del maíz) |
 | **balam** | `balam` | Codex (20, con 3 resets) | A0.5, A1.2, A2.9, A2.10, A3.4, A3.5, A3.6, A4.1, A4.3, A4.4, A4.5, A4.9, A5.2, A5.3, A5.9 | A1.2 (esqueleto web con datos falsos) |
 
 Cada actividad se marca en este documento con su estado (`EN CURSO`, `BLOQUEADO`, `HECHO`) al lado del ID. Si alguien termina, toma la siguiente actividad libre del camino crítico antes que un extra.
@@ -216,7 +217,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
 | **Eduardo** | 12 | 2 | 3 | 2 | 63 % de 19 |
-| **Mafer** | 9 | 1 | 0 | 1 | 82 % de 11 |
+| **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
 | **balam** | 9 | 0 | 0 | 6 | 60 % de 15 |
 
 ### Mompin
@@ -278,14 +279,13 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.16 | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | HECHO | (Mafer) `[HECHO]` |
 | A3.3 | Estados visuales: color + icono + patrón, leyenda | HECHO |  |
 | A3.9 | Cultivos 4 en adelante, props y mascota | HECHO |  |
-| A5.6 | Guion, video de demo y ensayo | PENDIENTE |  |
 | A5.7 | README con método, fuentes, límites, licencias y declaración de IA | EN CURSO |  |
 
 ### balam
 
 | ID | Actividad | Estado | Nota |
 | --- | --- | --- | --- |
-| A0.5 | Verificar reglas de entrega, IA y video (V-03, V-04) | PENDIENTE |  |
+| A0.5 | Verificar reglas de entrega e IA (V-03, V-04) | PENDIENTE |  |
 | A1.2 | Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | HECHO | rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados |
 | A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | HECHO |  |
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | HECHO |  |

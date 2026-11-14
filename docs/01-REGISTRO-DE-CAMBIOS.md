@@ -56,6 +56,12 @@ Decisiones afectadas:
 - **Cambio:** la escena carga las 9 losas de Mafer (`modelos/suelos/`) y pinta la columna con el tono del tipo de suelo. La losa sale de `textura.grupo` del contrato `suelo` y de la `humedad` del motor, con cortes en tercios de TAW `[PROPUESTA]`. Si falta el tipo o la humedad no hay losa, y sin humedad la columna va en gris.
 - **Fuente / evidencia:** tonos tomados de `modelos/paleta.md` (verificado en prueba); 159 pruebas de escena; headless con el motor real: suelo del mapa de Isla (arcilloso) y selector manual (franco).
 
+### 2026-11-14 — Video y presentación fuera del cronograma (Mompin)
+
+- **Archivos:** `docs/14` (sin A5.6; A5.9 solo envío y sin depender de A5.6; C6, A0.5, área R4 y camino crítico sin video ni pitch; tablero de Mafer; vistas regeneradas), `docs/13` (fila "Video y presentación" `[DECIDIDO]`; V-24 sin dueño), `AgroVault/Compartido/Pendientes.md`, `AgroVault/Compartido/Resumen.md`, `AgroVault/Compartido/Codigo.md` y `docs/guion-video-borrador.md` (aviso de borrador).
+- **Cambio y motivo:** el equipo veía el video y la presentación como pendientes y eso confundía los roles. Se definen al final, cuando el front esté conforme, y no se asignan ahora.
+- **Decisiones afectadas:** A5.6 (eliminada), A5.9, compuerta C6, V-24.
+
 ### 2026-11-14 — Calendario y aptitud fuera de México: GGCMI fase 3 y GAEZ v4 (Mompin, sesión features)
 
 - **Archivos:** `docs/13` (fila "Calendario y aptitud fuera de México" `[DECIDIDO]`), `docs/11` (tabla de recursos y riesgo del calendario), `docs/14` (A4.13 y tablero de Eduardo; vistas regeneradas).

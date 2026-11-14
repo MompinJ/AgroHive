@@ -1,4 +1,6 @@
-# Guion base del video de demo (borrador para A5.6)
+# Guion base del video de demo (borrador)
+
+> **Borrador para el final, no es tarea activa** `[DECIDIDO]` (Mompin, 14/11, ver `docs/13`): el video y la presentación se definen cuando el front esté conforme y no están en el cronograma ni asignados. Lo que sigue se conserva como punto de partida.
 
 > **Borrador para Mafer (dueña de A5.6).** Duración objetivo: **2 a 3 minutos** `[VERIFICAR]`. El formato, la duración máxima y las reglas de uso de IA, marca e imágenes de NASA dependen de las reglas oficiales (V-03, V-04 en `docs/11`; A0.5 en `docs/14`). Todas las cifras salen de `web/src/motor/pruebas/regresion/demo-isla.json` (versión de contrato 0.10.0) y de `docs/05`, `docs/13` y `api/README.md`. Si el paquete de demo se regenera, hay que volver a revisarlas.
 
