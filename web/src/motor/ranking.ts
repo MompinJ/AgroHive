@@ -281,7 +281,9 @@ function porQue(r: ResultadoRotacion, f: { peorEscenario: Escenario; peorValor: 
   const anio = r.porEscenario[f.peorEscenario].anioReal;
   const peor = esB
     ? `su peor escenario es el ${f.peorEscenario} (anio agricola ${anio}), con puntaje ${r4(f.peorValor)} de 1`
-    : `en su peor escenario, el ${f.peorEscenario} (anio agricola ${anio}), queda sin cubrir el ${Math.round(f.peorValor * 1000) / 10} % de la demanda de agua del cultivo`;
+    : f.peorValor <= TOL
+      ? 'el suelo cubre toda la demanda de agua del cultivo en los tres escenarios'
+      : `en su peor escenario, el ${f.peorEscenario} (anio agricola ${anio}), queda sin cubrir el ${Math.round(f.peorValor * 1000) / 10} % de la demanda de agua del cultivo`;
   const lugar = fila
     ? `Posicion ${fila.posicion} de ${total} por robustez (${esB ? 'criterio B: menor arrepentimiento maximo' : 'criterio A, respaldo: menor exposicion hidrica en el peor caso'})`
     : 'Sin posicion en el ranking (se muestra como exploratoria)';

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { aDia, deDia } from '../fechas';
 import type { DiaClima, SerieClima } from '../tipos';
-import fixture from './datos/power-isla-2006-2025.json';
+import serieDemo from '../../../../datos/demo/respuestas/serie-clima.json';
 
 const dirContratos = fileURLToPath(new URL('../../../../contratos/', import.meta.url));
 
@@ -27,45 +27,9 @@ export function validadorContrato(contrato: string): (doc: unknown) => string[] 
   };
 }
 
-/** Serie real de NASA POWER de la celda demo (2006 a 2025) como respuesta de GET /api/clima. */
+/** Serie real de NASA POWER de la parcela demo (paquete A2.4, 2005-10-01 a 2025-12-31), tal cual GET /api/clima. */
 export function seriePowerIsla(): SerieClima {
-  const f = fixture as unknown as {
-    fuente: SerieClima['fuente'];
-    inicio: string;
-    dias: number;
-    lluviaMm: (number | null)[];
-    tMaxC: (number | null)[];
-    tMinC: (number | null)[];
-    tMediaC: (number | null)[];
-    radiacionMjM2Dia: (number | null)[];
-    humedadRelativaPct: (number | null)[];
-    vientoMS: (number | null)[];
-  };
-  const d0 = aDia(f.inicio);
-  const diario: DiaClima[] = [];
-  for (let i = 0; i < f.dias; i++) {
-    diario.push({
-      fecha: deDia(d0 + i),
-      lluviaMm: f.lluviaMm[i] ?? null,
-      tMaxC: f.tMaxC[i] ?? null,
-      tMinC: f.tMinC[i] ?? null,
-      tMediaC: f.tMediaC[i] ?? null,
-      radiacionMjM2Dia: f.radiacionMjM2Dia[i] ?? null,
-      humedadRelativaPct: f.humedadRelativaPct[i] ?? null,
-      vientoMS: f.vientoMS[i] ?? null,
-      et0Mm: null,
-    });
-  }
-  return {
-    meta: { versionContrato: '0.5.0', esEjemplo: false },
-    estado: 'EVALUABLE',
-    respaldo: false,
-    coordenada: [-95.625, 18.0],
-    periodo: { desde: '2006-01-01', hasta: '2025-12-31' },
-    fuente: f.fuente,
-    diario,
-    advertencias: [],
-  };
+  return structuredClone(serieDemo as unknown as SerieClima);
 }
 
 /** Serie sintetica: lluvia por anio (mm/dia constante) y clima tropical fijo. Solo para pruebas. */
