@@ -1,5 +1,5 @@
 {
-  "generado": "2026-11-14T22:24:50+00:00",
+  "generado": "2026-11-14T22:30:59+00:00",
   "parcela": "parcela-demo-isla",
   "centroide": [
     -95.53,
@@ -19,6 +19,7 @@
   ],
   "entradas": [
     "cache/estacional_36_-191.json",
+    "cache/imerg_v1_18.05_-95.55_20051001_20251231.json",
     "cache/olm_urls_v1.json",
     "cache/power_v2_18.000_-95.625_20051001_20251231.json",
     "cache/suelo_isric_v2_7212_-38212.json",

@@ -289,6 +289,16 @@ Decisiones afectadas:
 - **Cambio y motivo:** decision de Mompin. `tasks.json` ejecutaba la mascota al abrir la carpeta en VS Code (`runOn: folderOpen`): codigo que corre solo en la maquina de todos. La configuracion de editor es personal. El repo sigue publico.
 - **Efecto:** al hacer pull, git borra esos archivos de las copias locales. Quien los quiera conservar los recupera del historial (`git show dfd4d40:.vscode/mascota/clawd.py`) y quedan ignorados.
 
+### 2026-11-14 (noche) — A4.10: lluvia satelital IMERG en /api/clima y paquete de demo regenerado (Eduardo)
+
+- **Archivos:** `api/app/clientes/power.py`, `api/app/servicios.py`, `api/app/modelos.py`, `api/tests/` (test_clima, test_proxima, test_contratos_api), `datos/demo/` (regenerado), `datos/pruebas-apis/respuestas/power_imerg_*.json`, `api/README.md`, `AgroVault/Compartido/APIs.md`, `docs/14`.
+- **Cambio:** `GET /api/clima` devuelve `lluviaSatelital` (contrato 0.10.0 ya en `main`, A1.7) con `IMERG_PRECTOT` de POWER pedida en UTC. **Evidencia**: no entra al balance ni a los escenarios. `-999` es `null`, nunca 0. Si IMERG falla, el clima sale igual sin el bloque (`IMERG_NO_DISPONIBLE`).
+- **Hallazgo nuevo, no estaba en el encargo:** la celda de IMERG es de **0.1 grados**, no la de MERRA-2 (0.5 x 0.625): cuatro celdas vecinas dieron cuatro series distintas (por ejemplo, 57.67, 55.83, 77.51 y 67.38 mm el mismo dia). Por eso se pide el centro de la celda de 0.1 y la cache va por esa celda, no por la de POWER.
+- **Paquete de demo regenerado** (lo pidio Mompin, #110): trae IMERG (7 397 dias, ninguno en -999 porque 2025 ya esta publicado) y el `terreno.json` **corregido a la orientacion nueva** (i=0 al sur): antes `c-0-0` valia 63.1 m y ahora 62.0 m (filas norte y sur cruzadas). El generador ahora aborta si las celdas no cumplen "i crece al norte, j al este" y una prueba nueva recalcula cada elevacion desde los tiles guardados y falla si el terreno esta cruzado (verificado cruzandolo a proposito).
+- **Evidencia:** 83 pruebas de la API (10 nuevas de IMERG y 1 de orientacion), con respuestas reales de POWER (incluida una con `-999`); el bloque valida contra `serie-clima.schema.json`.
+- **Efecto en el front, a avisar:** `serie-clima-*.js` pasa de 1.27 a **1.55 MB** (224 KB comprimido) por llevar IMERG dentro del bundle. Y **una prueba de la escena de Mompin falla** (`web/src/escena/pruebas/demo-motor.test.ts`, "la parcela usa el terreno real del paquete"): tiene escritas las elevaciones viejas `[63.1, 62.6, 62, 63.3]`; con el paquete corregido son `[62, 63.3, 63.1, 62.6]`. El archivo es de Mompin: debe actualizarlo en el mismo merge (cambio atomico).
+- **Pendiente mio:** A4.11 (NDVI de MODIS por ORNL DAAC), que ademas necesita su contrato.
+
 ### 2026-11-14 (noche) — Tercer despliegue: main d182af4 con la escena montada (Eduardo, aviso de Mompin #102)
 
 - **Despliegue:** el droplet corre `main` en `d182af4`: escena 3D montada en el Laboratorio, selector A3.4 conectado al motor, banda A4.9, sistema visual de balam, chile de Mafer y `GET /api/smap`. Anunciado antes por el buzon; una sola sesion desplego. Front construido en el droplet y publicado con respaldo del anterior.

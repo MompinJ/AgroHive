@@ -143,7 +143,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | A4.7 `[EN CURSO]` front servido en el droplet; falta la demo real (A4.6) | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
 | A4.8 `[EN CURSO]` `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN` | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
 | A4.9 `[HECHO]` | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | Sonnet | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
-| A4.10 | Lluvia GPM IMERG vía NASA POWER (`IMERG_PRECTOT` con `time-standard=UTC`, sin cuenta Earthdata) en `GET /api/clima` y en el paquete de demo, como **evidencia**: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en `features/imerg/` y `features/encargos/eduardo-datos-globales.md` | R3 | S | Sonnet | A2.1, A1.7 | Serie IMERG con fuente y estándar de hora; `-999` como `null`; prueba con respuesta guardada; paquete de demo regenerado |
+| A4.10 `[HECHO]` `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance || Lluvia GPM IMERG vía NASA POWER (`IMERG_PRECTOT` con `time-standard=UTC`, sin cuenta Earthdata) en `GET /api/clima` y en el paquete de demo, como **evidencia**: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en `features/imerg/` y `features/encargos/eduardo-datos-globales.md` | R3 | S | Sonnet | A2.1, A1.7 | Serie IMERG con fuente y estándar de hora; `-999` como `null`; prueba con respuesta guardada; paquete de demo regenerado |
 | A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking | R3 | S | Sonnet | A1.3, A1.7 | `GET /api/ndvi` con caché, cita `doi:10.3334/ORNLDAAC/1600` y el límite del píxel (250 m, más grande que la parcela) declarado |
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | R3 | **L** | Opus | A4.6 | Parcela de prueba en EE. UU. con su rotación real de CDL, con fuente |
 
@@ -214,7 +214,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 14 | 1 | 0 | 0 | 93 % de 15 |
-| **Eduardo** | 10 | 3 | 2 | 3 | 56 % de 18 |
+| **Eduardo** | 11 | 3 | 2 | 2 | 61 % de 18 |
 | **Mafer** | 8 | 1 | 0 | 3 | 67 % de 12 |
 | **balam** | 6 | 0 | 0 | 10 | 38 % de 16 |
 
@@ -255,7 +255,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | EN CURSO | cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor |
 | A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | EN CURSO | front servido en el droplet; falta la demo real (A4.6) |
 | A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | EN CURSO | `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN` |
-| A4.10 | Lluvia GPM IMERG vía NASA POWER (IMERG_PRECTOT con time-standard=UTC, sin cuenta Earthdata) en GET /api/clima y en el paquete de demo, como evidencia: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en features/imerg/ y features/encargos/eduardo-datos-globales.md | PENDIENTE |  |
+| A4.10 |  | HECHO | `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance |
 | A4.11 | NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto con el servicio REST de ORNL DAAC (sin cuenta), como evidencia de los años de escenario; no entra al ranking | PENDIENTE |  |
 | A4.12 | Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después | PENDIENTE |  |
 | A5.4 | Medición de requisitos mínimos y fallback WebGL | BLOQUEADO | espera el modo 2D (A3.6) |
