@@ -8,8 +8,9 @@ import { StrictMode, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import parcelaEjemplo from '../../../contratos/ejemplos/parcela.ejemplo.json';
 import resultadoEjemplo from '../../../contratos/ejemplos/resultado-celda.ejemplo.json';
-import type { Escenario, Parcela, ResultadoCeldas, SerieClima } from '../../../contratos/tipos/contratos';
+import type { CatalogoCultivos, Escenario, Parcela, ProximaTemporadaAproximada, ResultadoCeldas, SerieClima, Suelo } from '../../../contratos/tipos/contratos';
 import { crearClienteMotor, type ClienteMotor } from '../motor';
+import { avisosDe, type AvisoDatos } from '../api/datosParcela';
 import {
   planPrueba,
   entradasCarga,
@@ -48,6 +49,26 @@ function VistaPrevia() {
   const [listo, setListo] = useState(false);
   const [resultado, setResultado] = useState<ResultadoCeldas | null>(null);
   const [estado, setEstado] = useState('');
+  const [avisosDatos, setAvisosDatos] = useState<AvisoDatos[]>([]);
+
+  // Avisos reales del paquete de demo, como los daria usarDatosParcela con la API.
+  useEffect(() => {
+    void Promise.all([
+      import('../../../datos/demo/respuestas/serie-clima.json'),
+      import('../../../datos/demo/respuestas/suelo.json'),
+      import('../../../datos/demo/respuestas/proxima-temporada.json'),
+      import('../../../datos/catalogos/cultivos.json'),
+    ]).then(([c, s, p, k]) =>
+      setAvisosDatos(
+        avisosDe({
+          clima: { ok: true, datos: c.default as unknown as SerieClima },
+          suelo: { ok: true, datos: s.default as unknown as Suelo },
+          proximaTemporada: { ok: true, datos: p.default as unknown as ProximaTemporadaAproximada },
+          cultivos: { ok: true, datos: k.default as unknown as CatalogoCultivos },
+        }),
+      ),
+    );
+  }, []);
 
   const parcelaMotor = useMemo(() => parcelaConTerrenoDemo(), []);
   const parcelaCarga = useMemo(() => parcelaCargaSintetica(), []);
@@ -133,7 +154,7 @@ function VistaPrevia() {
   return (
     <main style={{ maxWidth: 960, margin: '0 auto', padding: 16, fontFamily: 'system-ui, sans-serif', color: '#183e32' }}>
       <h1 style={{ fontSize: '1.2rem' }}>Vista previa de la escena (A3.1, A3.2)</h1>
-      <fieldset style={{ display: 'grid', gap: 4, border: '1px solid #d8ded3', borderRadius: 8, marginBottom: 12 }}>
+      <fieldset style={{ display: 'grid', gap: 4, border: '1px solid #d8ded3', borderRadius: 8, marginBottom: 12, minWidth: 0 }}>
         <legend>Datos</legend>
         <div style={estiloFila}>
           <label>
@@ -198,6 +219,7 @@ function VistaPrevia() {
         parcela={parcela}
         resultado={resultado}
         suelo={sueloEscena}
+        avisosDatos={fuente === 'ejemplo' ? [] : avisosDatos}
         onEscena={(e) => {
           window.escenaPrueba = e;
         }}

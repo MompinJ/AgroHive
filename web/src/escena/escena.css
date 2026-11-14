@@ -11,6 +11,9 @@
   --escena-critico-borde: #8a1c1c;
   --escena-critico-fondo: #fff3f0;
   --escena-critico-texto: #5c1010;
+  --escena-aviso-borde: #8a5a00;
+  --escena-aviso-fondo: #fff8e6;
+  --escena-info-fondo: #f1f4ee;
   display: grid;
   gap: 12px;
   color: var(--escena-tinta);
@@ -76,3 +79,13 @@
 @media (prefers-reduced-motion: reduce) {
   .escena * { transition: none !important; animation: none !important; }
 }
+.escena-datos { border: 1px solid var(--escena-linea); border-left-width: 4px; border-radius: 8px; padding: 6px 10px; background: var(--escena-info-fondo); }
+.escena-datos-aviso { border-left-color: var(--escena-aviso-borde); background: var(--escena-aviso-fondo); }
+.escena-datos-critico { border-left-color: var(--escena-critico-borde); background: var(--escena-critico-fondo); }
+.escena-datos summary { cursor: pointer; min-height: 44px; display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
+.escena-datos-titulo { font-weight: 700; }
+.escena-etiqueta { display: inline-block; padding: 2px 8px; border: 1px solid var(--escena-tenue); border-radius: 999px; font-size: 0.75rem; background: var(--escena-fondo); }
+/* Severidad tambien por forma del borde, no solo por color. */
+.escena-etiqueta-aviso { border-style: dashed; border-color: var(--escena-aviso-borde); }
+.escena-etiqueta-critico { border-width: 2px; border-color: var(--escena-critico-borde); font-weight: 700; }
+.escena-datos ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 0.8rem; }
