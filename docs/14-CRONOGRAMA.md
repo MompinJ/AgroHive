@@ -140,7 +140,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |
 | A4.6 `[EN CURSO]` cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor | Conectar front y API (cliente generado, estados de carga y error) | R1 + R3 | M | Opus | A2.1, A3.4 | Flujo P0 a P3 con datos reales |
 | A4.7 `[EN CURSO]` front servido en el droplet; falta la demo real (A4.6) | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
-| A4.8 `[EN CURSO]` desbloqueada: hay token de Earthdata (solo por variable de entorno, nunca en el repo); sondeo confirmado (descarga de un granulo SMAP L3 y lectura de humedad en Isla). Se implementa el cliente SMAP en una rama aparte (Eduardo-B) | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
+| A4.8 `[EN CURSO]` `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN` | Extras NASA: SMAP, GPM o MODIS vía `earthaccess` (solo si aportan) | R3 | **L** | Opus | A2.1 | Un dataset adicional integrado de verdad |
 | A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | R1 | S | Sonnet | A2.13, A3.4 | La banda aparece en el dashboard y se puede apagar |
 
 Compuerta **C4** al terminar A4.6.
@@ -249,7 +249,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.15 | Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) | HECHO |  |
 | A4.6 | Conectar front y API (cliente generado, estados de carga y error) | EN CURSO | cliente de la API en `web/src/api/` listo y probado; falta conectar las paginas (balam) y el motor |
 | A4.7 | Despliegue en el droplet (nginx, systemd, SSL) | EN CURSO | front servido en el droplet; falta la demo real (A4.6) |
-| A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | EN CURSO | desbloqueada: hay token de Earthdata (solo por variable de entorno, nunca en el repo); sondeo confirmado (descarga de un granulo SMAP L3 y lectura de humedad en Isla). Se implementa el cliente SMAP en una rama aparte (Eduardo-B) |
+| A4.8 | Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) | EN CURSO | `GET /api/smap` hecho y mezclado en la rama Eduardo (73 pruebas, probado en vivo en Isla); falta el schema `smap` en `contratos/` (Mompin) y, para el droplet, el OK del usuario para `EARTHDATA_TOKEN` |
 | A5.4 | Medición de requisitos mínimos y fallback WebGL | BLOQUEADO | espera el modo 2D (A3.6) |
 | A5.8 | Respaldo local sin internet y capturas | BLOQUEADO | espera A2.4 con la zona real y el front conectado (A4.6) |
 

@@ -13,6 +13,7 @@ URL publica: https://64-23-143-102.sslip.io (ver `AgroVault/Compartido/Servidor.
 | `POST /api/elevacion` | Elevacion y pendiente por celda de una cuadricula ya generada (tope 1600 celdas) | `EVALUABLE`, `RESPALDO_HISTORICO`; 503 con `ERROR_DATOS` |
 | `GET /api/suelo?lat&lon` | Textura (clase USDA y fracciones) y pH estimados de 0 a 30 cm con ISRIC SoilGrids por WCS. Siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual | `EVALUABLE` o `EXPLORATORIO` (si el dato viene de píxeles a más de 1 km); 503 con `ERROR_DATOS`. Devuelve `agua` con el TAW y la `retencion` (thetaSat, thetaFC, thetaWP) por Saxton y Rawls (2006), y `estimaciones` (ISRIC a 250 m y OpenLandMap a 30 m, para compararlas) y `estimacionUsada` (ISRIC; OpenLandMap si ISRIC falla), con carbono orgánico |
 | `GET /api/proxima-temporada?lat&lon` | Capa opcional (A2.13, parte del backend): banda p10 a p90 por mes para 6 meses (horizonte fijo del contrato, V-21). **No es una prediccion** y no trae cifra unica | `EXPLORATORIO`; 503 si no hay clima historico |
+| `GET /api/smap?lon&lat&desde&hasta` | **Contraste informativo** (A4.8): humedad del suelo superficial (~5 cm) de NASA SMAP L3 a 36 km, por dia y por pase AM/PM, con la bandera de calidad tal cual. Maximo 10 dias, hasta hoy menos 3. **No entra al ranking ni al balance.** Necesita el token `EARTHDATA_TOKEN` (variable de entorno, nunca en el repo); sin el responde 503 `ERROR_DATOS` visible. ~20 s por dia (lectura por rangos HTTP), con cache por celda y dia | `EVALUABLE` o `NO_EVALUABLE`; 503 |
 | `GET /api/cultivos` | Catalogo de `datos/catalogos/cultivos.json`; sin catalogo responde `NO_EVALUABLE` | |
 
 Documentacion interactiva en `/docs` y esquema en `/openapi.json`.
@@ -43,7 +44,7 @@ python3.12 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 .venv/bin/python -m pytest -q          # sin red: las APIs se simulan con respuestas reales guardadas en datos/pruebas-apis/
 ```
 
-Variables de entorno (ver `.env.example`): `AGROHIVE_CACHE_DIR`, `AGROHIVE_CATALOGOS_DIR`, `AGROHIVE_DEMO_DIR`, `AGROHIVE_CORS_ORIGINS`. No hay llaves ni tokens.
+Variables de entorno (ver `.env.example`; `EARTHDATA_TOKEN` solo para `/api/smap`, en el entorno del servicio y jamas en un archivo del repo): `AGROHIVE_CACHE_DIR`, `AGROHIVE_CATALOGOS_DIR`, `AGROHIVE_DEMO_DIR`, `AGROHIVE_CORS_ORIGINS`. No hay llaves ni tokens.
 
 ## Cliente TypeScript
 
