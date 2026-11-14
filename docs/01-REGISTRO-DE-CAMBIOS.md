@@ -202,6 +202,13 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Borrador del README para A5.7
+
+- **Archivos:** nuevo `docs/README-borrador.md` (no se tocó `README.md`).
+- **Cambio y motivo:** pedido de Mompin. Es un borrador para Mafer (dueña de A5.7) con qué es AgroHive, cómo correr la web, la API y la demo sin internet, el método (escenarios, balance FAO-56, pilares, ranking B, próxima temporada), las fuentes NASA y no NASA con licencias, los límites y supuestos, y una declaración de uso de IA marcada `[VERIFICAR]` hasta conocer las reglas oficiales (V-03, V-04). Cada punto remite a `docs/` o `contratos/`. Las licencias que no constan en el repo quedan `[VERIFICAR]`. La IP del servidor no se repite (hallazgo de la revisión de merges).
+- **Fuente / evidencia:** `docs/00`, `04`, `05`, `10`, `11`, `13`, `14`; `api/README.md`, `web/README.md`, `datos/demo/LEEME.md`, `datos/catalogos/README.md`, `AgroVault/Compartido/APIs.md`.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Orientación de la cuadrícula y rotaciones de la demo `[DECIDIDO]`
 
 - **Archivos:** `contratos/parcela.schema.json` (descripción de `celda`, `i` y `j`), `contratos/ejemplos/parcela.ejemplo.json` y los dos inválidos de parcela, tipos; `13`.
