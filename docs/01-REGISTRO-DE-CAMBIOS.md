@@ -12,6 +12,14 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — Pilar de exceso de agua en el ranking B y capa de próxima temporada en el motor (Mompin)
+
+- **Archivos:** `web/src/motor/` (`balance.ts`, `motor.ts`, `ranking.ts`, `tipos.ts`, `proxima.ts` nuevo, `protocolo.ts`, `cliente.ts`, `index.ts`; pruebas `ranking.test.ts`, `c2.test.ts`, `proxima.test.ts`), `docs/05`, `docs/13`, `docs/14` (con las vistas de `herramientas/cronograma.py` regeneradas), `AgroVault/Compartido/Resumen.md` y `Pendientes.md`.
+- **Decisión `[DECIDIDO]` (Mompin, 14/11):** el exceso de agua entra como pilar del ranking B. El motor emite `excesoHidrico` (contratos 0.7.0) con `excesoTotalMm`, `diasExceso` y `fraccionLluviaPercolada` (percolación de FAO-56 ec. 88 entre la lluvia de los días de ciclo). Subpuntaje = 1 − fracción percolada; la normalización queda `SUPUESTO` porque no hay un umbral publicado de encharcamiento por cultivo (FAO-56 no lo trae y EcoCrop solo da clases de drenaje), y no se inventan umbrales por cultivo. Peso igual que los demás pilares (`SUPUESTO`), salvo que el usuario dé el suyo.
+- **Efecto:** con déficit y exceso hay dos pilares con número y el ranking pasa del respaldo A al criterio B. Con el paquete de demo (suelo franco del selector): 1.º frijol-frijol (arrepentimiento máximo 0.007), 2.º milpa (0.051), 3.º maíz-maíz (0.064); para las tres el peor escenario es el lluvioso (2024). Con A el orden era el inverso.
+- **A2.13, parte del motor:** `vistaProximaTemporada` valida la banda (`esPrediccion: false`, 6 meses, sin cifra única ni bandas invertidas; si falla, `NO_EVALUABLE`) y la compara mes a mes con la lluvia real del mismo mes en los años de los tres escenarios. No suma bandas ni genera días a partir de ellas. Con el paquete de demo el habitual cae dentro de la banda en 6 de 6 meses y el seco y el lluvioso en 5 de 6. El escenario "próxima temporada" con años análogos queda propuesto, sin implementar.
+- **Fuente / evidencia:** 67 pruebas en verde (`cd web && npm test`), salidas validadas contra contratos 0.7.0.
+
 ### 2026-11-14 — A2.16: pedotransferencia de Saxton y Rawls verificada contra el artículo (Mafer)
 
 - **Archivos:** nuevos `datos/catalogos/saxton_rawls.py` y `test_saxton_rawls.py`; `datos/catalogos/README.md`; `docs/14` (tablero) y `AgroVault/Compartido/Pendientes.md`.

@@ -57,36 +57,49 @@ const R3 = simular(plan('R3', [['frijol', '2016-06-15', 'PV'], ['frijol', '2016-
 const R4 = simular(plan('R4', [['calabaza', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']], true));
 const R5 = simular(plan('R5', [['chile', '2016-06-15', 'PV']]));
 
-describe('A4.2 con los pilares de hoy: respaldo A (solo el pilar hidrico tiene numero)', () => {
+type ConExceso = { excesoHidrico?: { fraccionLluviaPercolada: number | null } };
+const sinExceso = (x: RotacionParaRanking): RotacionParaRanking => {
+  const r = structuredClone(x.rotacion);
+  for (const e of ESC) delete (r.porEscenario[e].pilares as ConExceso).excesoHidrico;
+  return { rotacion: r, numeroSiembras: x.numeroSiembras };
+};
+
+describe('A4.2 con los pilares de hoy: B con deficit y exceso de agua ([DECIDIDO] 14/11)', () => {
   const res = rankear([R1, R2, R3, R4, R5]);
-  it('usa el criterio A y ordena por menor demanda no cubierta en el peor escenario', () => {
-    expect(res.criterio).toBe('A_exposicion_hidrica_peor_caso');
-    expect(res.ponderacion).toBeNull();
-    const peor = (r: RotacionParaRanking) => Math.max(...ESC.map((e) => r.rotacion.porEscenario[e].pilares.deficitHidrico.proporcionDemandaNoCubierta!));
-    const esperado = [R1, R2, R3].sort((a, b) => peor(a) - peor(b)).map((r) => r.rotacion.rotacionId);
-    expect(res.orden.map((f) => f.rotacionId)).toEqual(esperado);
-    expect(res.orden.map((f) => f.posicion)).toEqual([1, 2, 3]);
+  it('entra al criterio B con pesos iguales SUPUESTO entre deficit y exceso', () => {
+    expect(res.criterio).toBe('B_minimax_arrepentimiento');
+    expect(res.ponderacion).toMatchObject({ etiqueta: 'SUPUESTO', pesos: { deficitHidrico: 0.5, excesoHidrico: 0.5 } });
+    expect(res.ponderacion?.pilaresExcluidos).toEqual(['compatibilidadCiclo', 'proteccionSuelo', 'riesgoCalor', 'aporteIndirecto']);
+    expect(res.ponderacion?.nota).toMatch(/SUPUESTO/);
   });
-  it('la exploratoria (calabaza no registrada) tiene peor caso pero no posicion; la no evaluable queda fuera', () => {
+  it('orden por minimax de arrepentimiento, calculado a mano desde los pilares', () => {
+    const punt = (x: RotacionParaRanking, e: Escenario) => {
+      const p = x.rotacion.porEscenario[e].pilares;
+      return 0.5 * (1 - p.deficitHidrico.proporcionDemandaNoCubierta!) + 0.5 * (1 - (p as ConExceso).excesoHidrico!.fraccionLluviaPercolada!);
+    };
+    const ord = [R1, R2, R3];
+    const mejor = Object.fromEntries(ESC.map((e) => [e, Math.max(...ord.map((x) => punt(x, e)))])) as Record<Escenario, number>;
+    const arrep = (x: RotacionParaRanking) => Math.max(...ESC.map((e) => mejor[e] - punt(x, e)));
+    const prom = (x: RotacionParaRanking) => ESC.reduce((s, e) => s + punt(x, e), 0) / 3;
+    const esperado = [...ord].sort((a, b) => arrep(a) - arrep(b) || prom(b) - prom(a)).map((x) => x.rotacion.rotacionId);
+    expect(res.orden.map((f) => f.rotacionId)).toEqual(esperado);
+    for (const f of res.orden) expect(f.arrepentimiento).toBeCloseTo(arrep(ord.find((x) => x.rotacion.rotacionId === f.rotacionId)!), 4);
+  });
+  it('la exploratoria (calabaza no registrada) tiene puntaje y peor caso pero no posicion; la no evaluable queda fuera', () => {
     const r4 = res.rotaciones.find((r) => r.rotacionId === 'R4')!;
     expect(r4.estado).toBe('EXPLORATORIO');
-    expect(r4.peorCaso).not.toBeNull();
+    expect(r4.peorCaso?.criterio).toBe('B_minimax_arrepentimiento');
+    expect(typeof r4.arrepentimiento).toBe('number');
     expect(r4.ranking).toBeNull();
-    const r5 = res.rotaciones.find((r) => r.rotacionId === 'R5')!;
-    expect(r5.peorCaso).toBeNull();
+    expect(res.rotaciones.find((r) => r.rotacionId === 'R5')!.peorCaso).toBeNull();
     expect(res.noOrdenadas.map((x) => x.rotacionId)).toEqual(['R4', 'R5']);
   });
-  it('cada rotacion cumple el contrato, declara el criterio y explica su posicion', () => {
-    for (const r of res.rotaciones) {
-      expect(validar(r)).toEqual([]);
-      expect(r.porEscenario.seco.puntaje).toBeNull();
-      expect(r.arrepentimiento).toBeNull();
-    }
+  it('cada rotacion cumple el contrato y explica su posicion', () => {
+    for (const r of res.rotaciones) expect(validar(r)).toEqual([]);
     const primera = res.rotaciones.find((r) => r.ranking?.posicion === 1)!;
-    expect(primera.ranking).toMatchObject({ de: 3, criterio: 'A_exposicion_hidrica_peor_caso' });
-    expect(primera.peorCaso?.metrica).toBe('deficitHidrico.proporcionDemandaNoCubierta');
+    expect(primera.ranking).toMatchObject({ de: 3, criterio: 'B_minimax_arrepentimiento' });
+    expect(primera.peorCaso?.metrica).toBe('puntaje');
     expect(primera.explicacion.porQue).toMatch(/^Posicion 1 de 3/);
-    expect(primera.advertencias.some((a) => a.codigo === 'RANKING_RESPALDO_A')).toBe(true);
   });
   it('no modifica la entrada y es determinista', () => {
     expect(R1.rotacion.ranking).toBeNull();
@@ -99,9 +112,24 @@ describe('A4.2 con los pilares de hoy: respaldo A (solo el pilar hidrico tiene n
   });
 });
 
+describe('A4.2 respaldo A: solo el pilar de deficit tiene numero', () => {
+  const res = rankear([R1, R2, R3].map(sinExceso));
+  it('ordena por menor demanda no cubierta en el peor escenario, sin puntaje ni pesos', () => {
+    expect(res.criterio).toBe('A_exposicion_hidrica_peor_caso');
+    expect(res.ponderacion).toBeNull();
+    const peor = (r: RotacionParaRanking) => Math.max(...ESC.map((e) => r.rotacion.porEscenario[e].pilares.deficitHidrico.proporcionDemandaNoCubierta!));
+    expect(res.orden.map((f) => f.rotacionId)).toEqual([R1, R2, R3].sort((a, b) => peor(a) - peor(b)).map((r) => r.rotacion.rotacionId));
+    for (const r of res.rotaciones) {
+      expect(r.porEscenario.seco.puntaje).toBeNull();
+      expect(r.arrepentimiento).toBeNull();
+      expect(r.advertencias.some((a) => a.codigo === 'RANKING_RESPALDO_A')).toBe(true);
+    }
+  });
+});
+
 // Rotaciones con los pilares 2 y 3 ya calculados (como los dara A3.7), con valores elegidos para revisar a mano.
 function conPilares(id: string, prop: number[], fuera: number, erosion: number): RotacionParaRanking {
-  const r: ResultadoRotacion = structuredClone(R1.rotacion);
+  const r: ResultadoRotacion = sinExceso(R1).rotacion;
   r.rotacionId = id;
   ESC.forEach((e, i) => {
     const p = r.porEscenario[e].pilares;
@@ -112,7 +140,7 @@ function conPilares(id: string, prop: number[], fuera: number, erosion: number):
   return { rotacion: r, numeroSiembras: 2 };
 }
 
-describe('A4.2 criterio B: puntaje compuesto, arrepentimiento minimax, desempate por promedio', () => {
+describe('A4.2 criterio B con los pilares 2 y 3 (sin exceso, para revisar a mano)', () => {
   // Subpuntajes: hidrico = 1 - prop; compatibilidad = 1 - fuera/2; suelo = 1 - erosion; pesos iguales (1/3).
   const A = conPilares('R1', [0.2, 0.1, 0], 0, 0.3); // puntajes 0.8333, 0.8667, 0.9
   const B = conPilares('R2', [0.1, 0.1, 0.1], 1, 0.1); // 0.7667 en los tres
@@ -123,7 +151,7 @@ describe('A4.2 criterio B: puntaje compuesto, arrepentimiento minimax, desempate
     expect(res.ponderacion).toMatchObject({
       etiqueta: 'SUPUESTO',
       pesos: { deficitHidrico: 0.3333, compatibilidadCiclo: 0.3333, proteccionSuelo: 0.3333 },
-      pilaresExcluidos: ['riesgoCalor', 'aporteIndirecto'],
+      pilaresExcluidos: ['excesoHidrico', 'riesgoCalor', 'aporteIndirecto'],
     });
   });
   it('puntajes, peor caso y arrepentimiento calculados a mano', () => {

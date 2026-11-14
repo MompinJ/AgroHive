@@ -29,11 +29,11 @@ Proyecto completo: **19 de 56** actividades hechas (34 %), 5 en curso, 2 bloquea
 - [x] **A2.6** ET0, ETc y balance de agua por bloque (cubeta) `HECHO` — 14/11 (prueba 2: la parte de erosión y pendiente pasa a A3.7)
 - [x] **A2.7** Pilar de déficit hídrico y estados de evaluabilidad `HECHO` — 14/11
 - [x] **A2.8** Decisión: cómo se asigna clima a cada ciclo (doc 05, paso 2) `HECHO` — (c) `temporada_tipica`, 14/11
-- [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; falta la parte del motor (Mompin)
+- [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir
 - [ ] **A3.1** Escena 3D con relieve (altura por bloque, InstancedMesh)
 - [ ] **A3.2** Cargador de .bbmodel con instancing por cultivo y etapa
 - [ ] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa)
-- [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (B listo; corre A de respaldo hasta que A3.7 dé los pilares 2 y 3)
+- [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
 - [ ] **A4.6** Conectar front y API (cliente generado, estados de carga y error)
 - [ ] **A5.5** Pruebas de regresión del motor y de contratos
 
@@ -46,7 +46,7 @@ Proyecto completo: **19 de 56** actividades hechas (34 %), 5 en curso, 2 bloquea
 - [x] **A2.2** Respaldo Open-Meteo y estados RESPALDO_HISTORICO / ERROR_DATOS `HECHO`
 - [x] **A2.3** Elevación por celda (tiles Terrarium o SRTM) y pendiente ([[APIs]]) `HECHO`
 - [x] **A2.4** Paquete de demo precargado (Isla, 2 ha, clima 2006 a 2025, elevación) `HECHO` — paquete conforme a contratos (clima 2005-10-01 a 2025-12-31, terreno, suelo, proxima temporada) sobre una parcela ficticia en Isla; el motor ya corre con el
-- [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; falta la parte del motor (Mompin)
+- [/] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `EN CURSO` — backend hecho; parte del motor hecha (validar la banda y compararla con los escenarios); el escenario "próxima temporada" del motor está propuesto, sin decidir
 - [x] **A2.14** Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché ([[APIs]]) `HECHO`
 - [ ] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios)
 - [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — front servido en el droplet; falta la demo real (A4.6)

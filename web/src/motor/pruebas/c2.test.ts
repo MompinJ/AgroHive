@@ -83,14 +83,15 @@ describe('C2 con el paquete de demo (POWER, SoilGrids y Terrarium reales de Isla
     expect(r.exceso.lluvioso!.mm).toBeGreaterThan(r.exceso.seco!.mm);
   });
 
-  it('ranking de tres rotaciones con los mismos anios (criterio A de respaldo mientras no llegue A3.7)', () => {
+  it('ranking de tres rotaciones con los mismos anios: criterio B con deficit y exceso de agua', () => {
     const planes = [
       milpa,
       plan('R2', [['maiz', '2016-06-15', 'PV'], ['maiz', '2017-06-15', 'PV']]),
       plan('R3', [['frijol', '2016-06-15', 'PV'], ['frijol', '2016-11-01', 'OI']]),
     ];
     const res = rankear(planes.map((p) => ({ rotacion: simularRotacion(entradas(p, sueloManual)).rotacion, numeroSiembras: p.ciclos.length })));
-    expect(res.criterio).toBe('A_exposicion_hidrica_peor_caso');
+    expect(res.criterio).toBe('B_minimax_arrepentimiento');
+    expect(res.ponderacion?.pesos).toEqual({ deficitHidrico: 0.5, excesoHidrico: 0.5 });
     expect(res.orden).toHaveLength(3);
     for (const r of res.rotaciones) expect(validadorContrato('resultado-rotacion')(r)).toEqual([]);
   });
