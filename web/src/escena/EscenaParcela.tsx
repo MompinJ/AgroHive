@@ -26,6 +26,8 @@ export interface EscenaParcelaProps {
   suelo?: Suelo | null;
   /** Avisos de usarDatosParcela (web/src/api/): clima de respaldo, suelo SUPUESTO, proxima temporada... */
   avisosDatos?: readonly AvisoDatos[];
+  /** Lugar de la mascota de Mafer (si existe su modelo). Por defecto, visible. */
+  mascota?: boolean;
   className?: string;
   /** Solo para mediciones (vista previa, A5.4): recibe la escena three ya creada. */
   onEscena?: (escena: EscenaThree | null) => void;
@@ -50,11 +52,27 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], className = '', onEscena }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], mascota = true, className = '', onEscena }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
   const [reducirMovimiento, setReducirMovimiento] = useState(prefiereMenosMovimiento);
+  const [viento, setViento] = useState(false);
+
+  // Si el sistema pide menos movimiento mientras la escena esta abierta, se respeta al momento.
+  useEffect(() => {
+    let consulta: MediaQueryList;
+    try {
+      consulta = window.matchMedia('(prefers-reduced-motion: reduce)');
+    } catch {
+      return;
+    }
+    const cambio = () => {
+      if (consulta.matches) setReducirMovimiento(true);
+    };
+    consulta.addEventListener('change', cambio);
+    return () => consulta.removeEventListener('change', cambio);
+  }, []);
   const [seleccion, setSeleccion] = useState<BloqueEscena | null>(null);
   const [hover, setHover] = useState<{ bloque: BloqueEscena; x: number; y: number } | null>(null);
   const [avisosRender, setAvisosRender] = useState<Advertencia[]>([]);
@@ -69,12 +87,14 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   const opciones = useMemo(
     () => ({
       reducirMovimiento,
+      viento,
+      mascota,
       onSeleccion: setSeleccion,
       onHover: (bloque: BloqueEscena | null, x: number, y: number) => setHover(bloque ? { bloque, x, y } : null),
       onAviso: (codigo: string, mensaje: string) =>
         setAvisosRender((prev) => (prev.some((a) => a.mensaje === mensaje) ? prev : [...prev, { codigo, mensaje, severidad: 'aviso' }])),
     }),
-    [reducirMovimiento],
+    [reducirMovimiento, viento, mascota],
   );
 
   useEffect(() => {
@@ -179,6 +199,10 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
         <label className="escena-control escena-check">
           <input type="checkbox" checked={reducirMovimiento} onChange={(e) => setReducirMovimiento(e.target.checked)} />
           <span>Reducir movimiento</span>
+        </label>
+        <label className="escena-control escena-check">
+          <input type="checkbox" checked={viento && !reducirMovimiento} disabled={reducirMovimiento} onChange={(e) => setViento(e.target.checked)} />
+          <span>Viento leve{reducirMovimiento ? ' (apagado: reducir movimiento)' : ''}</span>
         </label>
         <button type="button" className="escena-boton" onClick={() => escena.current?.restablecerVista()} disabled={sinWebGL}>
           Restablecer vista
