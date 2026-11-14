@@ -40,6 +40,29 @@ def test_celda_de_isla_coincide_con_la_verificada_contra_el_archivo():
     assert earthdata.celda(0, 89.9) is None or earthdata.celda(0, 89.9)[0] >= 0  # el polo queda en la rejilla o fuera, sin error
 
 
+def test_respuesta_cumple_el_contrato_smap(monkeypatch, validar):
+    simular(monkeypatch, datos(am=None, pm=0.1754))
+    j = cliente.get(URL).json()
+    validar(j, "smap")
+    assert j["producto"] == {"nombre": "SPL3SMP", "resolucionKm": 36, "profundidadCm": {"desde": 0, "hasta": 5}, "unidad": "m3/m3"}
+
+
+def test_dias_sin_dato_cumplen_el_contrato_y_no_llevan_humedad(monkeypatch, validar):
+    simular(monkeypatch, None)
+    j = cliente.get(URL).json()
+    validar(j, "smap")
+    assert j["dias"][0]["motivo"] and "humedadM3M3" not in j["dias"][0]
+
+
+def test_dia_con_error_de_fuente_cumple_el_contrato(monkeypatch, validar):
+    async def falso(lon, lat, dia):
+        if dia == FECHA:
+            raise http.ErrorFuente("rango rechazado")
+        return datos()
+    monkeypatch.setattr(earthdata, "humedad_dia", falso)
+    validar(cliente.get(f"/api/smap?lon={LON}&lat={LAT}&desde={FECHA}&hasta={FECHA + timedelta(days=1)}").json(), "smap")
+
+
 def test_dia_evaluable_promedia_solo_los_pases_con_dato(monkeypatch):
     simular(monkeypatch, datos(am=None, pm=0.1754))
     r = cliente.get(URL)
