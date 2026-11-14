@@ -63,6 +63,7 @@ export function MethodNotes() {
   return <details className="method-notes">
     <summary>Método, fuentes y límites de este prototipo</summary>
     <div>
+        <p><a href="#/metodo">Ver método y fuentes de esta sesión</a></p>
         <p>El laboratorio usa el motor de simulación en tu navegador. La demo carga un paquete precargado; las parcelas dibujadas consultan clima y suelo mediante la API. Cada cálculo conserva sus fuentes y supuestos.</p>
         <p>Fuente climática: <a href="https://power.larc.nasa.gov/" target="_blank" rel="noreferrer">NASA POWER (abre otra pestaña)</a>. Sus datos representan una región, no mediciones individuales de cada bloque.</p>
         <p>La parcela de demostración de Isla, Veracruz tiene un contorno ficticio de 2 hectáreas. El calendario local cita INIFAP y SIAP; no se aplica automáticamente a otras parcelas ni sustituye validación agronómica local.</p>

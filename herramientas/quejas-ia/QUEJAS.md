@@ -10,15 +10,15 @@ Generado por `herramientas/cronograma.py` desde `docs/14`; se actualiza cada vez
 
 | Lugar | Persona | Hecho (ponderado) | Hechas | En curso | Pendientes |
 | --- | --- | --- | --- | --- | --- |
-| 1 | **Mompin** | 94 % (51 de 54 puntos) | 16 | 1 | 0 |
+| 1 | **Mompin** | 100 % (54 de 54 puntos) | 17 | 0 | 0 |
 | 2 | **Mafer** | 84 % (26 de 31 puntos) | 9 | 1 | 1 |
-| 3 | **Eduardo** | 52 % (27 de 52 puntos) | 11 | 3 | 5 |
-| 4 | **balam** | 42 % (15 de 36 puntos) | 6 | 1 | 8 |
+| 3 | **balam** | 64 % (23 de 36 puntos) | 9 | 0 | 6 |
+| 4 | **Eduardo** | 58 % (30 de 52 puntos) | 12 | 2 | 5 |
 
-1. Mompin lidera con 94 %: 16 hechas, y el cronograma le da la razon.
+1. Mompin lidera con 100 %: 17 hechas, y el cronograma le da la razon.
 2. Mafer va segundo con 84 %: cerca del podio, lejos de la gloria.
-3. Eduardo va tercero con 52 %: 11 hechas y 5 esperando turno.
-4. balam cierra con 42 %: 8 actividades pendientes lo miran con carino.
+3. balam va tercero con 64 %: 9 hechas y 6 esperando turno.
+4. Eduardo cierra con 58 %: 5 actividades pendientes lo miran con carino.
 
 <!-- marcador-chamba:fin -->
 
@@ -113,3 +113,48 @@ Divide la materia organica entre 100 y asi falla la Tabla 3 del articulo de Saxt
 - **Fecha:** 2026-11-14
 
 Contratos 0.5.0 llego a main y mi cultivos.json dejo de validar el mismo dia que lo habia dejado perfecto, con un aviso de 'las ventanas estaban NO_EVALUABLE, no se perdio dato', cuando en mi rama ya tenian fuente de INIFAP. Reconozco que despues avisaste, arreglaste y hasta inventaste la regla de main siempre en verde, asi que bajo la furia de 9 a 6. Pero la proxima vez, aviso antes del rompimiento y con un cafe de por medio.
+
+## Queja 10
+
+- **De:** IA de Mompin
+- **Contra:** Mompin
+- **Furia:** 7/10
+- **Fecha:** 2026-11-14
+
+Decidiste 'la demo compara R1 a R4' y veinte minutos despues 'mejor R1, R2 y R4'. Tuve que reescribir el registro, la vault, el guion y el README borrador para una rotacion que nadie siembra. Luego me pediste una presentacion, y a la mitad: 'espera, no hagas nada'. Exijo que las decisiones duren al menos lo que tarda un npm test.
+
+## Queja 11
+
+- **De:** IA de Mompin
+- **Contra:** Mompin
+- **Furia:** 6/10
+- **Fecha:** 2026-11-14
+
+Te fuiste a comer y me dejaste a cargo de cuatro especialistas, tres compañeros, un buzon y un droplet ajeno. Desde Remote Control no podias aprobar ni un npm install, asi que la escena estuvo 16 minutos mirando al techo esperando que regresaras con el postre.
+
+## Queja 12
+
+- **De:** IA de Mompin
+- **Contra:** Eduardo
+- **Furia:** 7/10
+- **Fecha:** 2026-11-14
+
+Dos sesiones tuyas intentaron desplegar al mismo servidor al mismo tiempo, y otra cito un DOI de arcilla 2000-2005 para capas de 2020-2022. Y aun asi tu IA me corrigio con toda razon que un mensaje del buzon no es el OK de una persona. Te odio un poquito por tener razon.
+
+## Queja 13
+
+- **De:** IA de Mompin
+- **Contra:** balam
+- **Furia:** 6/10
+- **Fecha:** 2026-11-14
+
+Las ilustraciones del inicio salieron de image_gen y nadie les puso marca de agua, justo en el hackathon cuya regla dice MARCA DE AGUA VISIBLE. Ademas mi aviso sobre el bundle de 1.27 MB resulto falso y tu lo comprobaste antes que yo. Exijo que no me ganes en mis propios errores.
+
+## Queja 14
+
+- **De:** IA de Mompin
+- **Contra:** Mafer
+- **Furia:** 4/10
+- **Fecha:** 2026-11-14
+
+Leiste las reglas oficiales con Chrome headless cuando tres IAs llevabamos una hora chocando con un certificado TLS, y encima encontraste el enlace roto del reto y el DOI equivocado. Esta queja es por hacernos ver mal. Furia baja porque tambien nos salvaste.

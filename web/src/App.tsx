@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { LaboratorioConectado } from './ui/LaboratorioConectado';
 import { Inicio } from './paginas/Inicio';
 import { useLaboratorio } from './ui/useLaboratorio';
+import { MetodoFuentes } from './paginas/MetodoFuentes';
 import { Terreno } from './paginas/Terreno';
 import { ActionLink, Brand, MethodNotes, Navigation, PageHeading } from './ui/components';
 import { pages, usePage } from './ui/navigation';
@@ -17,7 +18,7 @@ export default function App() {
   const isTerrain = path === '/terreno';
   const [announcement, setAnnouncement] = useState('');
   const [parcela, setParcela] = useState<Parcela | null>(null);
-  const laboratorio = useLaboratorio(parcela, path === '/laboratorio' || path === '/comparacion');
+  const laboratorio = useLaboratorio(parcela, path === '/laboratorio' || path === '/comparacion' || path === '/metodo');
   const previousLocation = useRef(`${path}?${mode ?? ''}`);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function App() {
     case '/terreno': content = <Terreno polygonMode={mode === 'poligono'} parcela={parcela} onGuardar={setParcela} onSelectDemo={() => { setParcela(null); setAnnouncement('Parcela de ejemplo seleccionada.'); }} />; break;
     case '/laboratorio': content = <LaboratorioConectado estado={laboratorio} />; break;
     case '/comparacion': content = <LaboratorioConectado estado={laboratorio} comparacion />; break;
+    case '/metodo': content = <MetodoFuentes estado={laboratorio} />; break;
     default: content = <><PageHeading step="—" title="Esta página no existe.">Puedes volver al inicio para continuar explorando.</PageHeading><ActionLink href="#/">Volver al inicio</ActionLink></>;
   }
 

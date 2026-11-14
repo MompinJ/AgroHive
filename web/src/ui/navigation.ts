@@ -5,6 +5,7 @@ export const pages = [
   { path: '/terreno', label: 'Terreno', step: '02' },
   { path: '/laboratorio', label: 'Laboratorio', step: '03' },
   { path: '/comparacion', label: 'Comparación', step: '04' },
+  { path: '/metodo', label: 'Método y fuentes', step: '05' },
 ] as const;
 
 function readLocation() {
