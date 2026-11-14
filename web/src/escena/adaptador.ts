@@ -161,6 +161,11 @@ export function construirEscena(
   const jMin = Math.min(...parcela.celdas.map((c) => c.j));
   const filas = Math.max(...parcela.celdas.map((c) => c.i)) - iMin + 1;
   const columnas = Math.max(...parcela.celdas.map((c) => c.j)) - jMin + 1;
+  // El contrato no fija hacia donde crecen i y j: se orienta con las coordenadas
+  // de los centros para que el norte quede al fondo (-z) y el este a la derecha (+x),
+  // igual que en el mapa. El ejemplo de contratos tiene i = 0 al norte; la
+  // cuadricula de web/src/ui/cuadricula.ts, i = 0 al sur.
+  const { iCreceAlNorte, jCreceAlOeste } = orientacion(parcela);
 
   const bloques: BloqueEscena[] = parcela.celdas.map((celda) => {
     const relieve: Relieve =
@@ -178,8 +183,8 @@ export function construirEscena(
       i: celda.i,
       j: celda.j,
       // Centrado en el origen para que la camara y los controles giren sobre la parcela.
-      x: celda.j - jMin - (columnas - 1) / 2,
-      z: celda.i - iMin - (filas - 1) / 2,
+      x: (jCreceAlOeste ? -1 : 1) * (celda.j - jMin - (columnas - 1) / 2),
+      z: (iCreceAlNorte ? -1 : 1) * (celda.i - iMin - (filas - 1) / 2),
       relieve,
       pendientePct: celda.pendientePct,
       fraccionDentro: celda.fraccionDentro ?? null,
@@ -195,4 +200,20 @@ export function construirEscena(
   });
 
   return { ...base, avisos, fecha, elevacionBaseM, filas, columnas, bloques };
+}
+
+/** Promedio de una coordenada (0 lon, 1 lat) de las celdas con un indice dado. */
+function promedio(celdas: Parcela['celdas'], campo: 'i' | 'j', valor: number, eje: 0 | 1): number {
+  const sel = celdas.filter((c) => c[campo] === valor);
+  return sel.reduce((s, c) => s + c.centro[eje], 0) / sel.length;
+}
+
+/** Hacia donde crecen las filas y columnas segun los centros (por defecto, como el ejemplo de contratos). */
+export function orientacion(parcela: Parcela): { iCreceAlNorte: boolean; jCreceAlOeste: boolean } {
+  const is = parcela.celdas.map((c) => c.i);
+  const js = parcela.celdas.map((c) => c.j);
+  const [iMin, iMax, jMin, jMax] = [Math.min(...is), Math.max(...is), Math.min(...js), Math.max(...js)];
+  const iCreceAlNorte = iMax > iMin && promedio(parcela.celdas, 'i', iMax, 1) > promedio(parcela.celdas, 'i', iMin, 1);
+  const jCreceAlOeste = jMax > jMin && promedio(parcela.celdas, 'j', jMax, 0) < promedio(parcela.celdas, 'j', jMin, 0);
+  return { iCreceAlNorte, jCreceAlOeste };
 }

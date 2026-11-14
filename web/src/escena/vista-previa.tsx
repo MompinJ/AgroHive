@@ -11,11 +11,13 @@ import resultadoEjemplo from '../../../contratos/ejemplos/resultado-celda.ejempl
 import type { Escenario, Parcela, ResultadoCeldas, SerieClima } from '../../../contratos/tipos/contratos';
 import { crearClienteMotor, type ClienteMotor } from '../motor';
 import {
+  planPrueba,
   entradasCarga,
   entradasDemo,
   fechasPlan,
   parcelaCargaSintetica,
   parcelaConTerrenoDemo,
+  parcelaCuadriculaBalam,
   ROTACIONES_PRUEBA,
   type ModoSuelo,
   type RotacionPrueba,
@@ -30,7 +32,7 @@ declare global {
 }
 import { EscenaParcela } from './EscenaParcela';
 
-type Fuente = 'motor' | 'carga' | 'ejemplo';
+type Fuente = 'motor' | 'cuadricula' | 'carga' | 'ejemplo';
 
 const ESCENARIOS: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 const FECHAS = fechasPlan();
@@ -49,9 +51,20 @@ function VistaPrevia() {
 
   const parcelaMotor = useMemo(() => parcelaConTerrenoDemo(), []);
   const parcelaCarga = useMemo(() => parcelaCargaSintetica(), []);
-  const parcela = fuente === 'motor' ? parcelaMotor : fuente === 'carga' ? parcelaCarga : (parcelaEjemplo as unknown as Parcela);
-  const conMotor = fuente !== 'ejemplo';
+  const [parcelaBalam, setParcelaBalam] = useState<Parcela | null>(null);
+  const parcela =
+    fuente === 'motor' ? parcelaMotor : fuente === 'carga' ? parcelaCarga : fuente === 'cuadricula' ? (parcelaBalam ?? parcelaMotor) : (parcelaEjemplo as unknown as Parcela);
+  const conMotor = fuente !== 'ejemplo' && (fuente !== 'cuadricula' || parcelaBalam !== null);
   const idRotacion: RotacionPrueba = fuente === 'carga' ? 'R1' : rotacion;
+
+  useEffect(() => {
+    if (fuente !== 'cuadricula' || parcelaBalam) return;
+    setEstado('Generando la cuadricula y pidiendo la elevacion...');
+    void parcelaCuadriculaBalam().then(({ parcela: p, nota }) => {
+      setParcelaBalam(p);
+      console.info(`[escena] ${nota}`);
+    });
+  }, [fuente, parcelaBalam]);
   const fecha = FECHAS[indiceFecha] ?? FECHAS[0]!;
 
   useEffect(() => {
@@ -70,7 +83,12 @@ function VistaPrevia() {
       try {
         const serie = (await import('../../../datos/demo/respuestas/serie-clima.json')).default as unknown as SerieClima;
         const sel = await cliente.escenarios(serie);
-        const entradas = fuente === 'carga' ? entradasCarga(suelo) : entradasDemo(suelo, rotacion);
+        const entradas =
+          fuente === 'carga'
+            ? entradasCarga(suelo)
+            : fuente === 'cuadricula' && parcelaBalam
+              ? { ...entradasDemo(suelo, rotacion), parcela: parcelaBalam, plan: planPrueba(parcelaBalam.id, rotacion) }
+              : entradasDemo(suelo, rotacion);
         const t0 = performance.now();
         await cliente.simular({ ...entradas, escenarios: sel.escenarios });
         console.info(`[escena] motor: simular ${entradas.parcela.celdas.length} celdas en ${Math.round(performance.now() - t0)} ms`);
@@ -82,7 +100,7 @@ function VistaPrevia() {
     return () => {
       vigente = false;
     };
-  }, [cliente, fuente, conMotor, suelo, rotacion]);
+  }, [cliente, fuente, conMotor, suelo, rotacion, parcelaBalam]);
 
   // Pide al motor el resultado por celda de la fecha y el escenario elegidos.
   useEffect(() => {
@@ -121,13 +139,14 @@ function VistaPrevia() {
             Fuente{' '}
             <select value={fuente} onChange={(e) => setFuente(e.target.value as Fuente)}>
               <option value="motor">Motor real + paquete de demo</option>
+              <option value="cuadricula">Cuadricula de balam (poligono en L) + elevacion de la API</option>
               <option value="carga">Prueba de carga: 1600 celdas sinteticas (no son datos)</option>
               <option value="ejemplo">Ejemplo de contratos (ficticio)</option>
             </select>
           </label>
           {conMotor && (
             <>
-              {fuente === 'motor' && (
+              {(fuente === 'motor' || fuente === 'cuadricula') && (
                 <label>
                   Rotacion{' '}
                   <select value={rotacion} onChange={(e) => setRotacion(e.target.value as RotacionPrueba)}>
