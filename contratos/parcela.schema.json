@@ -4,27 +4,51 @@
   "title": "Parcela",
   "description": "Parcela del usuario (demo fija o poligono libre) y su cuadricula de celdas con relieve. El clima es el mismo para toda la parcela (doc 04, resolucion); las celdas difieren por cultivo, suelo y relieve.",
   "type": "object",
-  "required": ["meta", "id", "origen", "poligono", "areaHa", "centroide", "tamanoCeldaM", "sueloId", "terreno", "celdas"],
+  "required": [
+    "meta",
+    "id",
+    "origen",
+    "poligono",
+    "areaHa",
+    "centroide",
+    "tamanoCeldaM",
+    "sueloId",
+    "terreno",
+    "celdas"
+  ],
   "properties": {
-    "meta": { "$ref": "comun.schema.json#/$defs/meta" },
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]*$"
     },
-    "nombre": { "type": "string" },
+    "nombre": {
+      "type": "string"
+    },
     "origen": {
       "description": "demo: parcela precargada. poligono_usuario: dibujada por el usuario en el mapa.",
       "type": "string",
-      "enum": ["demo", "poligono_usuario"]
+      "enum": [
+        "demo",
+        "poligono_usuario"
+      ]
     },
     "ubicacion": {
       "title": "Ubicacion",
       "description": "Referencia administrativa, solo informativa.",
       "type": "object",
       "properties": {
-        "municipio": { "type": "string" },
-        "estado": { "type": "string" },
-        "pais": { "type": "string" }
+        "municipio": {
+          "type": "string"
+        },
+        "estado": {
+          "type": "string"
+        },
+        "pais": {
+          "type": "string"
+        }
       },
       "additionalProperties": false
     },
@@ -32,7 +56,9 @@
       "description": "Anillo exterior [lon, lat] en WGS84, cerrado (el primer punto se repite al final, como en GeoJSON). Que este cerrado lo comprueba el generador de cuadricula, no el schema.",
       "type": "array",
       "minItems": 4,
-      "items": { "$ref": "comun.schema.json#/$defs/lonLat" }
+      "items": {
+        "$ref": "comun.schema.json#/$defs/lonLat"
+      }
     },
     "coordenadasIlustrativas": {
       "description": "true si el poligono no corresponde a la ubicacion real de una parcela (demo).",
@@ -42,7 +68,9 @@
       "type": "number",
       "exclusiveMinimum": 0
     },
-    "centroide": { "$ref": "comun.schema.json#/$defs/lonLat" },
+    "centroide": {
+      "$ref": "comun.schema.json#/$defs/lonLat"
+    },
     "tamanoCeldaM": {
       "description": "Lado de la celda cuadrada en metros locales (adaptativo para respetar el tope de celdas).",
       "type": "number",
@@ -56,10 +84,17 @@
       "title": "Terreno",
       "description": "Procedencia de la elevacion y la pendiente de las celdas.",
       "type": "object",
-      "required": ["estado", "fuente"],
+      "required": [
+        "estado",
+        "fuente"
+      ],
       "properties": {
-        "estado": { "$ref": "comun.schema.json#/$defs/estado" },
-        "fuente": { "$ref": "comun.schema.json#/$defs/fuente" }
+        "estado": {
+          "$ref": "comun.schema.json#/$defs/estado"
+        },
+        "fuente": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        }
       },
       "additionalProperties": false
     },
@@ -68,11 +103,15 @@
       "type": "array",
       "minItems": 1,
       "maxItems": 1600,
-      "items": { "$ref": "#/$defs/celda" }
+      "items": {
+        "$ref": "#/$defs/celda"
+      }
     },
     "advertencias": {
       "type": "array",
-      "items": { "$ref": "comun.schema.json#/$defs/advertencia" }
+      "items": {
+        "$ref": "comun.schema.json#/$defs/advertencia"
+      }
     }
   },
   "additionalProperties": false,
@@ -80,12 +119,31 @@
     "celda": {
       "title": "Celda",
       "type": "object",
-      "required": ["id", "i", "j", "centro", "elevacionM", "pendientePct"],
+      "required": [
+        "id",
+        "i",
+        "j",
+        "centro",
+        "elevacionM",
+        "pendientePct"
+      ],
       "properties": {
-        "id": { "$ref": "comun.schema.json#/$defs/idCelda" },
-        "i": { "description": "Fila.", "type": "integer", "minimum": 0 },
-        "j": { "description": "Columna.", "type": "integer", "minimum": 0 },
-        "centro": { "$ref": "comun.schema.json#/$defs/lonLat" },
+        "id": {
+          "$ref": "comun.schema.json#/$defs/idCelda"
+        },
+        "i": {
+          "description": "Fila, desde el sur: 0 es la fila mas al sur; crece hacia el norte.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "j": {
+          "description": "Columna, desde el oeste: 0 es la columna mas al oeste; crece hacia el este.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "centro": {
+          "$ref": "comun.schema.json#/$defs/lonLat"
+        },
         "fraccionDentro": {
           "description": "Fraccion del area de la celda dentro del poligono (0 a 1). Las celdas de borde pueden ser parciales.",
           "type": "number",
@@ -94,15 +152,22 @@
         },
         "elevacionM": {
           "description": "Elevacion en metros. null si no se obtuvo (se muestra el hueco, no se rellena).",
-          "type": ["number", "null"]
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "pendientePct": {
           "description": "Pendiente en porcentaje. null si no se pudo calcular.",
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "minimum": 0
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "Celda de la cuadricula. Orientacion (decidida el 14/11, igual que web/src/ui/cuadricula.ts): i es la fila y se cuenta desde el SUR (i = 0 es la fila mas al sur y crece hacia el norte); j es la columna y se cuenta desde el OESTE (j = 0 es la columna mas al oeste y crece hacia el este). El id es c-<i>-<j>."
     }
   }
 }
