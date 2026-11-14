@@ -1,8 +1,9 @@
 .app-shell-home {
   --landing-ink: #20372a;
-  --landing-fill: #1b2e22;
+  --landing-fill: #000000;
+  --landing-hero-text: #ffffff;
   --landing-cream: #f5f3e7;
-  --landing-blur: 2px;
+  --landing-blur: 3.5px;
   --landing-edge: clamp(24px, 3vw, 64px);
   --landing-radius: 20px;
   position: relative;
@@ -19,12 +20,13 @@
 .landing-hero { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-height: max(780px, 100svh); overflow: hidden; padding: 150px 24px 24px; background: #96aa68; }
 .landing-background { position: absolute; z-index: -1; inset: -8px; width: calc(100% + 16px); height: calc(100% + 16px); max-width: none; object-fit: cover; object-position: center; filter: blur(var(--landing-blur)); pointer-events: none; }
 .landing-content { width: min(100%, 900px); text-align: center; }
+.landing-content h1, .landing-question, .landing-description, .landing-disclaimer { color: var(--landing-hero-text); }
 .landing-tag { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; margin: 0 0 32px; padding: 10px 20px; border-radius: 999px; background: var(--landing-cream); font-size: 14px; line-height: 20px; font-weight: 500; text-transform: uppercase; }
 .landing-content h1 { margin: 0 0 9px; font-size: clamp(56px, 4.6vw, 80px); line-height: 1.08; letter-spacing: -.04em; font-weight: 400; text-wrap: initial; }
 .landing-question { margin-bottom: 10px; font-size: 28px; line-height: 1.25; letter-spacing: -.025em; }
 .landing-description { margin: 0 auto 24px; max-width: 650px; font-size: 20px; line-height: 1.4; letter-spacing: -.015em; }
 .landing-actions { display: flex; justify-content: center; gap: 16px; margin-bottom: 26px; }
-.landing-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-height: 60px; min-width: 278px; padding: 16px 40px; border: 1.5px solid var(--landing-ink); border-radius: var(--landing-radius); background: var(--landing-ink); color: #fff; font-size: 18px; line-height: 1.4; letter-spacing: -.02em; font-weight: 500; text-decoration: none; }
+.landing-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-height: 60px; min-width: 278px; padding: 16px 40px; border: 1.5px solid var(--landing-ink); border-radius: var(--landing-radius); background: var(--landing-fill); color: #fff; font-size: 18px; line-height: 1.4; letter-spacing: -.02em; font-weight: 500; text-decoration: none; }
 .landing-button-outline { min-width: 252px; background: #fffefa; color: var(--landing-ink); }
 .landing-disclaimer { font-size: 14px; line-height: 20px; }
 .app-shell-home .skip-link { z-index: 4; }
@@ -37,7 +39,7 @@
 .landing-dialog p { font-size: 16px; }
 @media (hover: hover) {
   .landing-navigation a:hover, .landing-navigation button:hover { text-decoration: underline; text-underline-offset: 5px; }
-  .landing-button:hover, .landing-demo:hover { background: #304c38; color: #fff; }
+  .landing-button:hover, .landing-demo:hover { background: #202020; color: #fff; }
   .landing-button-outline:hover { background: #f0eedf; color: var(--landing-ink); }
   .landing-close:hover { background: #e4e8dc; }
 }
