@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/datos/catalogos/suelos.schema.json",
+  "title": "TablaSuelos",
+  "description": "Tabla de suelos por textura (A1.6): agua disponible TAW por metro desde FAO-56 Tabla 19. Propuesta de Mafer; si el motor la consume, Mompin decide si pasa a contratos/.",
+  "type": "object",
+  "required": ["meta", "versionCatalogo", "representanteGrupo", "texturas"],
+  "properties": {
+    "meta": { "$ref": "https://agrohive.example/contratos/comun.schema.json#/$defs/meta" },
+    "versionCatalogo": { "type": "string", "minLength": 1 },
+    "representanteGrupo": {
+      "description": "Clase USDA usada por cada grupo del selector manual.",
+      "type": "object",
+      "required": ["arenoso", "franco", "arcilloso"],
+      "properties": {
+        "arenoso": { "$ref": "https://agrohive.example/contratos/suelo.schema.json#/$defs/claseTextura" },
+        "franco": { "$ref": "https://agrohive.example/contratos/suelo.schema.json#/$defs/claseTextura" },
+        "arcilloso": { "$ref": "https://agrohive.example/contratos/suelo.schema.json#/$defs/claseTextura" }
+      },
+      "additionalProperties": false
+    },
+    "notaRepresentanteGrupo": { "type": "string" },
+    "texturas": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/textura" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "rango": {
+      "type": "object",
+      "required": ["min", "max"],
+      "properties": { "min": { "type": "number", "minimum": 0 }, "max": { "type": "number", "minimum": 0 } },
+      "additionalProperties": false
+    },
+    "textura": {
+      "type": "object",
+      "required": ["clase", "grupo", "filaFao", "rangos", "tawMmPorM"],
+      "properties": {
+        "clase": { "$ref": "https://agrohive.example/contratos/suelo.schema.json#/$defs/claseTextura" },
+        "grupo": { "$ref": "https://agrohive.example/contratos/suelo.schema.json#/$defs/grupoSelector" },
+        "filaFao": { "type": ["string", "null"] },
+        "rangos": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["thetaFcM3M3", "thetaWpM3M3", "aguaDisponibleM3M3", "rewMm", "tewMm"],
+              "properties": {
+                "thetaFcM3M3": { "$ref": "#/$defs/rango" },
+                "thetaWpM3M3": { "$ref": "#/$defs/rango" },
+                "aguaDisponibleM3M3": { "$ref": "#/$defs/rango" },
+                "rewMm": { "$ref": "#/$defs/rango" },
+                "tewMm": { "$ref": "#/$defs/rango" }
+              },
+              "additionalProperties": false
+            },
+            { "type": "null" }
+          ]
+        },
+        "tawMmPorM": { "$ref": "https://agrohive.example/contratos/comun.schema.json#/$defs/valorCitado" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

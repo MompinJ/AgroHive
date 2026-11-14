@@ -1,0 +1,415 @@
+{
+  "meta": {
+    "versionContrato": "0.1.0",
+    "esEjemplo": false,
+    "aviso": "Valores tipicos por textura (FAO-56 Tabla 19), no medidos en la parcela. El suelo de la parcela siempre es SUPUESTO."
+  },
+  "versionCatalogo": "0.1.0",
+  "representanteGrupo": {
+    "arenoso": "arena_franca",
+    "franco": "franco",
+    "arcilloso": "arcilla"
+  },
+  "notaRepresentanteGrupo": "Clase USDA que usa el selector manual (arenoso, franco, arcilloso) cuando no hay mapa global. Eleccion del equipo, no de FAO.",
+  "texturas": [
+    {
+      "clase": "arena",
+      "grupo": "arenoso",
+      "filaFao": "Sand",
+      "rangos": {
+        "thetaFcM3M3": {
+          "min": 0.07,
+          "max": 0.17
+        },
+        "thetaWpM3M3": {
+          "min": 0.02,
+          "max": 0.07
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.05,
+          "max": 0.11
+        },
+        "rewMm": {
+          "min": 2,
+          "max": 7
+        },
+        "tewMm": {
+          "min": 6,
+          "max": 12
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 80.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 19 y ecuacion 82",
+          "url": "https://www.fao.org/4/x0490e/x0490e0c.htm",
+          "cita": "Tabla 19, fila 'Sand', columna (thetaFC - thetaWP)",
+          "consultado": "2026-11-14",
+          "unidades": "mm por metro de suelo",
+          "nota": "TAW = 1000 (thetaFC - thetaWP) por metro de raiz (FAO-56 ec. 82). Se usa el punto medio del rango 0.05-0.11 m3/m3 de Tabla 19; rango completo 50-110 mm/m."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "arena_franca",
+      "grupo": "arenoso",
+      "filaFao": "Loamy sand",
+      "rangos": {
+        "thetaFcM3M3": {
+          "min": 0.11,
+          "max": 0.19
+        },
+        "thetaWpM3M3": {
+          "min": 0.03,
+          "max": 0.1
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.06,
+          "max": 0.12
+        },
+        "rewMm": {
+          "min": 4,
+          "max": 8
+        },
+        "tewMm": {
+          "min": 9,
+          "max": 14
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 90.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 19 y ecuacion 82",
+          "url": "https://www.fao.org/4/x0490e/x0490e0c.htm",
+          "cita": "Tabla 19, fila 'Loamy sand', columna (thetaFC - thetaWP)",
+          "consultado": "2026-11-14",
+          "unidades": "mm por metro de suelo",
+          "nota": "TAW = 1000 (thetaFC - thetaWP) por metro de raiz (FAO-56 ec. 82). Se usa el punto medio del rango 0.06-0.12 m3/m3 de Tabla 19; rango completo 60-120 mm/m."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "franco_arenoso",
+      "grupo": "franco",
+      "filaFao": "Sandy loam",
+      "rangos": {
+        "thetaFcM3M3": {
+          "min": 0.18,
+          "max": 0.28
+        },
+        "thetaWpM3M3": {
+          "min": 0.06,
+          "max": 0.16
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.11,
+          "max": 0.15
+        },
+        "rewMm": {
+          "min": 6,
+          "max": 10
+        },
+        "tewMm": {
+          "min": 15,
+          "max": 20
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 130.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 19 y ecuacion 82",
+          "url": "https://www.fao.org/4/x0490e/x0490e0c.htm",
+          "cita": "Tabla 19, fila 'Sandy loam', columna (thetaFC - thetaWP)",
+          "consultado": "2026-11-14",
+          "unidades": "mm por metro de suelo",
+          "nota": "TAW = 1000 (thetaFC - thetaWP) por metro de raiz (FAO-56 ec. 82). Se usa el punto medio del rango 0.11-0.15 m3/m3 de Tabla 19; rango completo 110-150 mm/m."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "franco",
+      "grupo": "franco",
+      "filaFao": "Loam",
+      "rangos": {
+        "thetaFcM3M3": {
+          "min": 0.2,
+          "max": 0.3
+        },
+        "thetaWpM3M3": {
+          "min": 0.07,
+          "max": 0.17
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.13,
+          "max": 0.18
+        },
+        "rewMm": {
+          "min": 8,
+          "max": 10
+        },
+        "tewMm": {
+          "min": 16,
+          "max": 22
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 155.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 19 y ecuacion 82",
+          "url": "https://www.fao.org/4/x0490e/x0490e0c.htm",
+          "cita": "Tabla 19, fila 'Loam', columna (thetaFC - thetaWP)",
+          "consultado": "2026-11-14",
+          "unidades": "mm por metro de suelo",
+          "nota": "TAW = 1000 (thetaFC - thetaWP) por metro de raiz (FAO-56 ec. 82). Se usa el punto medio del rango 0.13-0.18 m3/m3 de Tabla 19; rango completo 130-180 mm/m."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "franco_limoso",
+      "grupo": "franco",
+      "filaFao": "Silt loam",
+      "rangos": {
+        "thetaFcM3M3": {
+          "min": 0.22,
+          "max": 0.36
+        },
+        "thetaWpM3M3": {
+          "min": 0.09,
+          "max": 0.21
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.13,
+          "max": 0.19
+        },
+        "rewMm": {
+          "min": 8,
+          "max": 11
+        },
+        "tewMm": {
+          "min": 18,
+          "max": 25
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 160.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 19 y ecuacion 82",
+          "url": "https://www.fao.org/4/x0490e/x0490e0c.htm",
+          "cita": "Tabla 19, fila 'Silt loam', columna (thetaFC - thetaWP)",
+          "consultado": "2026-11-14",
+          "unidades": "mm por metro de suelo",
+          "nota": "TAW = 1000 (thetaFC - thetaWP) por metro de raiz (FAO-56 ec. 82). Se usa el punto medio del rango 0.13-0.19 m3/m3 de Tabla 19; rango completo 130-190 mm/m."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "limo",
+      "grupo": "franco",
+      "filaFao": "Silt",
+      "rangos": {
+        "thetaFcM3M3": {
+          "min": 0.28,
+          "max": 0.36
+        },
+        "thetaWpM3M3": {
+          "min": 0.12,
+          "max": 0.22
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.16,
+          "max": 0.2
+        },
+        "rewMm": {
+          "min": 8,
+          "max": 11
+        },
+        "tewMm": {
+          "min": 22,
+          "max": 26
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 180.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 19 y ecuacion 82",
+          "url": "https://www.fao.org/4/x0490e/x0490e0c.htm",
+          "cita": "Tabla 19, fila 'Silt', columna (thetaFC - thetaWP)",
+          "consultado": "2026-11-14",
+          "unidades": "mm por metro de suelo",
+          "nota": "TAW = 1000 (thetaFC - thetaWP) por metro de raiz (FAO-56 ec. 82). Se usa el punto medio del rango 0.16-0.2 m3/m3 de Tabla 19; rango completo 160-200 mm/m."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "franco_arcillo_limoso",
+      "grupo": "arcilloso",
+      "filaFao": "Silt clay loam",
+      "rangos": {
+        "thetaFcM3M3": {
+          "min": 0.3,
+          "max": 0.37
+        },
+        "thetaWpM3M3": {
+          "min": 0.17,
+          "max": 0.24
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.13,
+          "max": 0.18
+        },
+        "rewMm": {
+          "min": 8,
+          "max": 11
+        },
+        "tewMm": {
+          "min": 22,
+          "max": 27
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 155.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 19 y ecuacion 82",
+          "url": "https://www.fao.org/4/x0490e/x0490e0c.htm",
+          "cita": "Tabla 19, fila 'Silt clay loam', columna (thetaFC - thetaWP)",
+          "consultado": "2026-11-14",
+          "unidades": "mm por metro de suelo",
+          "nota": "TAW = 1000 (thetaFC - thetaWP) por metro de raiz (FAO-56 ec. 82). Se usa el punto medio del rango 0.13-0.18 m3/m3 de Tabla 19; rango completo 130-180 mm/m."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "arcillo_limoso",
+      "grupo": "arcilloso",
+      "filaFao": "Silty clay",
+      "rangos": {
+        "thetaFcM3M3": {
+          "min": 0.3,
+          "max": 0.42
+        },
+        "thetaWpM3M3": {
+          "min": 0.17,
+          "max": 0.29
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.13,
+          "max": 0.19
+        },
+        "rewMm": {
+          "min": 8,
+          "max": 12
+        },
+        "tewMm": {
+          "min": 22,
+          "max": 28
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 160.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 19 y ecuacion 82",
+          "url": "https://www.fao.org/4/x0490e/x0490e0c.htm",
+          "cita": "Tabla 19, fila 'Silty clay', columna (thetaFC - thetaWP)",
+          "consultado": "2026-11-14",
+          "unidades": "mm por metro de suelo",
+          "nota": "TAW = 1000 (thetaFC - thetaWP) por metro de raiz (FAO-56 ec. 82). Se usa el punto medio del rango 0.13-0.19 m3/m3 de Tabla 19; rango completo 130-190 mm/m. La pagina imprime '0-30 - 0.42' para thetaFC; se interpreta como 0.30 - 0.42 (errata tipografica). No afecta a TAW, que usa la columna FC-WP."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "arcilla",
+      "grupo": "arcilloso",
+      "filaFao": "Clay",
+      "rangos": {
+        "thetaFcM3M3": {
+          "min": 0.32,
+          "max": 0.4
+        },
+        "thetaWpM3M3": {
+          "min": 0.2,
+          "max": 0.24
+        },
+        "aguaDisponibleM3M3": {
+          "min": 0.12,
+          "max": 0.2
+        },
+        "rewMm": {
+          "min": 8,
+          "max": 12
+        },
+        "tewMm": {
+          "min": 22,
+          "max": 29
+        }
+      },
+      "tawMmPorM": {
+        "estado": "EVALUABLE",
+        "valor": 160.0,
+        "unidad": "mm/m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 19 y ecuacion 82",
+          "url": "https://www.fao.org/4/x0490e/x0490e0c.htm",
+          "cita": "Tabla 19, fila 'Clay', columna (thetaFC - thetaWP)",
+          "consultado": "2026-11-14",
+          "unidades": "mm por metro de suelo",
+          "nota": "TAW = 1000 (thetaFC - thetaWP) por metro de raiz (FAO-56 ec. 82). Se usa el punto medio del rango 0.12-0.2 m3/m3 de Tabla 19; rango completo 120-200 mm/m."
+        },
+        "etiqueta": "FUENTE"
+      }
+    },
+    {
+      "clase": "franco_arcillo_arenoso",
+      "grupo": "arcilloso",
+      "filaFao": null,
+      "rangos": null,
+      "tawMmPorM": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "FAO-56 Tabla 19 no tiene fila para esta clase USDA; falta otra fuente citada."
+      }
+    },
+    {
+      "clase": "franco_arcilloso",
+      "grupo": "arcilloso",
+      "filaFao": null,
+      "rangos": null,
+      "tawMmPorM": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "FAO-56 Tabla 19 no tiene fila para esta clase USDA; falta otra fuente citada."
+      }
+    },
+    {
+      "clase": "arcillo_arenoso",
+      "grupo": "arcilloso",
+      "filaFao": null,
+      "rangos": null,
+      "tawMmPorM": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "FAO-56 Tabla 19 no tiene fila para esta clase USDA; falta otra fuente citada."
+      }
+    }
+  ]
+}
