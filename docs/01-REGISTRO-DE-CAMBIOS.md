@@ -12,6 +12,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — A4.8 sigue en curso: SMAP en el droplet responde 503 (Eduardo)
+
+- **Archivos:** `docs/14` (nota de A4.8; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** se volvio a pedir `GET /api/smap` en `https://64-23-143-102.sslip.io` (2024-06-01 a 2024-06-03). Responde 503 `ERROR_DATOS`: el servicio no tiene `EARTHDATA_TOKEN`. La variable tampoco esta en esta maquina ni en `/opt/agrohive/agrohive.env`. `web/src` no llama a SMAP. No se inventan humedades, asi que A4.8 no pasa a `[HECHO]`. A4.12 sigue sin empezar (C5 no esta cruzada). A5.4 sigue `[BLOQUEADO]` (falta hardware real).
+- **Fuente / evidencia:** respuesta publica del 14/11 noche, commit de la API `23f8a53`, contrato 0.12.2. `mediworks.mx` seguia en 200.
+- **Decisiones afectadas:** ninguna. El porcentaje de Eduardo no cambia: 16 de 19 hechas, 84 %.
+
 ### 2026-11-14 (noche) — A4.7: droplet en `23f8a53` (Eduardo)
 
 - **Archivos:** `docs/14` (A4.7 `[HECHO]`; vistas regeneradas), `api/despliegue/README.md`, `README.md`, `AgroVault/Compartido/Servidor.md`, `AgroVault/Compartido/Pendientes.md`.
