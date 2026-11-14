@@ -7,7 +7,11 @@ canvas{display:block}#ui{position:fixed;left:16px;right:16px;bottom:16px;display
 button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}
 button.on{background:var(--acc);color:#fff;border-color:transparent}
 #info{position:fixed;left:16px;top:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+#aviso{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);max-width:min(520px,calc(100% - 32px));background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;line-height:1.45}
+[hidden]{display:none!important}
 </style></head><body><div id="info"><b id="t"></b><p id="c" style="margin:4px 0 0;opacity:.6"></p></div><div id="ui"></div>
+<div id="aviso" hidden><b>El visor no llego a cargar.</b> Usa Three.js desde internet, asi que necesita conexion. Si abriste el archivo con doble clic y sigue en blanco, sirvelo en local: en la raiz del repo corre <code>python -m http.server</code> y abre <code>http://localhost:8000/</code> y la ruta de este archivo.</div>
+<script>setTimeout(function(){if(!window.__visorListo)document.getElementById("aviso").hidden=false},4000)</script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module">
 import * as THREE from 'three';import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -15,21 +19,25 @@ const DATA={"maiz_siembra":[["lomo",[-7.0,0,-5.0],[7.0,1,5.0],[0,0,0],[0,0,0],"#
 const r=new THREE.WebGLRenderer({antialias:true});r.setPixelRatio(devicePixelRatio);r.setSize(innerWidth,innerHeight);r.shadowMap.enabled=true;document.body.prepend(r.domElement);
 const dark=matchMedia('(prefers-color-scheme:dark)').matches;const scene=new THREE.Scene();scene.background=new THREE.Color(dark?0x1b2329:0xdfe9f0);
 const cam=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.1,200);const ctl=new OrbitControls(cam,r.domElement);ctl.enableDamping=true;ctl.maxPolarAngle=Math.PI*.49;
-scene.add(new THREE.HemisphereLight(0xffffff,0x8a7a6a,1.1));const sun=new THREE.DirectionalLight(0xffffff,2);sun.position.set(4,8,5);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+scene.add(new THREE.HemisphereLight(0xffffff,0x8a7a6a,1.1));const sun=new THREE.DirectionalLight(0xffffff,2);sun.position.set(4,8,5);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.bias=-.0004;sun.shadow.normalBias=.02;
 Object.assign(sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:1,far:40});scene.add(sun);
-const ground=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshLambertMaterial({color:dark?0x222c33:0xcfdde6}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshLambertMaterial({color:dark?0x222c33:0xcfdde6}));ground.rotation.x=-Math.PI/2;ground.position.y=-.14;ground.receiveShadow=true;scene.add(ground);
 const geo=new THREE.BoxGeometry(1,1,1),mats={},mat=c=>mats[c]||=new THREE.MeshLambertMaterial({color:c});
 function build(els){const g=new THREE.Group();for(const[n,f,t,o,rt,col]of els){const p=new THREE.Group();p.position.set(o[0]*U,o[1]*U,o[2]*U);
 p.rotation.set(...rt.map(THREE.MathUtils.degToRad),'ZYX');const m=new THREE.Mesh(geo,mat(col));m.scale.set((t[0]-f[0])*U,(t[1]-f[1])*U,(t[2]-f[2])*U);
 m.position.set(((f[0]+t[0])/2-o[0])*U,((f[1]+t[1])/2-o[1])*U,((f[2]+t[2])/2-o[2])*U);m.castShadow=m.receiveShadow=true;p.add(m);g.add(p)}return g}
 const G={};let gap=1.5;names.forEach(n=>{G[n]=build(DATA[n]);scene.add(G[n])});const btn={};const ui=document.getElementById('ui');
-function set(n){for(const k in btn)btn[k].classList.toggle('on',k===n);const all=n==='todos';let x=0;
-names.forEach(k=>{const v=all||k===n;G[k].visible=v;if(v){const b=new THREE.Box3().setFromObject(G[k]);const w=Math.max(b.max.x-b.min.x,.5);
-G[k].position.x=0;if(all){G[k].position.x=x-(b.min.x+b.max.x)/2;x+=w+gap*.6}}});
-const box=new THREE.Box3();names.forEach(k=>{if(G[k].visible)box.expandByObject(G[k])});const c=box.getCenter(new THREE.Vector3()),s=box.getSize(new THREE.Vector3()),R=Math.max(s.x,s.y,s.z,1);
-ctl.target.copy(c);cam.position.set(c.x+R*1.0,c.y+R*.9,c.z+R*1.3);
+const fam=k=>k.includes('_')?k.slice(0,k.lastIndexOf('_')):k;
+function set(n){for(const k in btn)btn[k].classList.toggle('on',k===n);const all=n==='todos';
+names.forEach(k=>{G[k].visible=all||k===n;G[k].position.set(0,0,0)});
+if(all){const filas=new Map();names.forEach(k=>{const q=fam(k);if(!filas.has(q))filas.set(q,[]);filas.get(q).push(k)});let z=0;
+for(const fila of filas.values()){let x=0,d=.5;for(const k of fila){const b=new THREE.Box3().setFromObject(G[k]);const w=Math.max(b.max.x-b.min.x,.5);
+G[k].position.set(x-(b.min.x+b.max.x)/2,0,z-(b.min.z+b.max.z)/2);x+=w+gap*.6;d=Math.max(d,b.max.z-b.min.z)}z+=d+gap*.6}}
+const box=new THREE.Box3();names.forEach(k=>{if(G[k].visible)box.expandByObject(G[k])});const sph=box.getBoundingSphere(new THREE.Sphere());
+const vf=cam.fov*Math.PI/180,hf=2*Math.atan(Math.tan(vf/2)*cam.aspect),dist=Math.max(sph.radius,.5)*1.25/Math.sin(Math.min(vf,hf)/2);
+ctl.target.copy(sph.center);cam.position.copy(sph.center).addScaledVector(new THREE.Vector3(1,.9,1.3).normalize(),dist);
 document.getElementById('t').textContent=all?'Todos':n;let k=0;names.forEach(q=>{if(G[q].visible)k+=DATA[q].length});document.getElementById('c').textContent=k+' cubos'}
 for(const n of[...names,'todos']){const b=document.createElement('button');b.textContent=n;b.onclick=()=>set(n);ui.append(b);btn[n]=b}
 addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();r.setSize(innerWidth,innerHeight)});
 addEventListener('keydown',e=>{const a=[...names,'todos'],i=a.findIndex(q=>btn[q].classList.contains('on'));if(e.key==='ArrowRight')set(a[(i+1)%a.length]);if(e.key==='ArrowLeft')set(a[(i+a.length-1)%a.length])});
-set('todos');(function f(){requestAnimationFrame(f);ctl.update();r.render(scene,cam)})();</script></body></html>
+set('todos');window.__visorListo=true;(function f(){requestAnimationFrame(f);ctl.update();r.render(scene,cam)})();</script></body></html>
