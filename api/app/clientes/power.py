@@ -11,7 +11,7 @@ INICIO_MINIMO = date(1981, 1, 1)
 # Lluvia por satelite GPM IMERG dentro de POWER (A4.10, probado el 14/11): sin cuenta Earthdata. Solo la entrega en UTC; en hora
 # solar local (el valor por defecto) POWER responde -999 en todo. Celda de 0.1 grados, distinta de la de MERRA-2 (0.5 x 0.625).
 IMERG_VARIABLE = "IMERG_PRECTOT"
-INICIO_IMERG = date(2000, 6, 1)
+INICIO_IMERG = date(1998, 6, 1)  # POWER: "IMERG Precipitation, 0.1 grados, diario UTC, inicio June 1, 1998" (power.larc.nasa.gov/docs/methodology/)
 NOMBRE_IMERG = "NASA POWER (GPM IMERG, IMERG_PRECTOT, hora UTC)"
 RESOLUCION_IMERG = "GPM IMERG, celda de 0.1 grados"
 NOMBRE = "NASA POWER (diario, comunidad AG)"
