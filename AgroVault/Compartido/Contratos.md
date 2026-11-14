@@ -2,12 +2,12 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: contratos/*.schema.json (v0.8.0, A1.1)
+fuente: contratos/*.schema.json (v0.9.0, A1.1)
 ---
 
 # Contratos
 
-La fuente de verdad son los JSON Schema de `contratos/` (versión `0.8.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.9.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
 - Detalle y reglas: `contratos/README.md`
 - Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`
@@ -60,6 +60,7 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 | `GET /api/cultivos` | Catálogo JSON de `datos/catalogos/cultivos.json`; sin catálogo responde `NO_EVALUABLE`. Implementado | `cultivo` |
 | `GET /api/proxima-temporada?lat=&lon=` | Banda p10 a p90 por mes, 7 meses, sin cifra única; no es predicción. Implementado (A2.13, parte del backend) | `proxima-temporada` |
 | `GET /api/suelo?lat=&lon=` | Textura y pH de 0 a 30 cm (ISRIC WCS), siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
+| `GET /api/smap?lon=&lat=&desde=&hasta=` | Humedad del suelo superficial de SMAP L3 (36 km) por día y pase AM/PM, máximo 10 días y hasta hoy menos 3. Solo contraste con el motor, `SUPUESTO`, fuera del ranking. Sin `EARTHDATA_TOKEN` responde 503 con motivo. Implementado en la rama `Eduardo-B` (A4.8) con forma **propuesta**: falta su schema en `contratos/` (lo escribe Mompin) | Propuesto: `smap` (`api/app/modelos_smap.py`) |
 
 Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 con `{estado: ERROR_DATOS, motivo}`. Detalle y cómo correr la API en `api/README.md`.
 
