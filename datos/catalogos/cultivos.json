@@ -249,10 +249,34 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
-      "ventanasSiembra": {
-        "estado": "NO_EVALUABLE",
-        "motivo": "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)."
-      },
+      "ventanasSiembra": [
+        {
+          "temporada": "primavera_verano",
+          "desdeMes": 6,
+          "hastaMes": 7,
+          "regimen": "temporal",
+          "fuente": {
+            "nombre": "INIFAP, Tecnologia de produccion de maiz de temporal en el sur de Veracruz (region del Istmo de Tehuantepec) para el ciclo de primavera-verano (C. A. Tinoco Alfaro, Campo Experimental Cotaxtla, 2022)",
+            "url": "https://www.gob.mx/cms/uploads/attachment/file/723016/Maiz_temporal_tehuantepec.pdf",
+            "cita": "Seccion Siembra, 'Fecha de siembra', pag. 9",
+            "consultado": "2026-11-14",
+            "nota": "Texto: sembrar una vez establecidas las lluvias, entre el 1 de junio y el 15 de julio. La guia cubre el DDR San Andres Tuxtla, al que pertenece Isla. SIAP: Isla siembra ~4,100 ha de maiz grano PV de temporal por anio. SIAP, cierre agricola municipal 2021-2025, Isla (Veracruz): extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv."
+          }
+        },
+        {
+          "temporada": "otono_invierno",
+          "desdeMes": 11,
+          "hastaMes": 12,
+          "regimen": "temporal",
+          "fuente": {
+            "nombre": "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
+            "url": "https://www.gob.mx/cms/uploads/attachment/file/1066118/Agenda_T_cnica_Agr_cola_-_Veracruz-compressed.pdf",
+            "cita": "Capitulo Maiz, 'Epocas de siembra', pag. 58",
+            "consultado": "2026-11-14",
+            "nota": "Texto: para siembras de riego y humedad residual se sugiere sembrar en noviembre y diciembre. Recomendacion estatal, no especifica de Isla. Se registra como temporal porque SIAP clasifica el maiz OI de Isla (~4,480 ha por anio) como temporal, sin riego. SIAP, cierre agricola municipal 2021-2025, Isla (Veracruz): extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv."
+          }
+        }
+      ],
       "modelo3d": {
         "prefijo": "maiz"
       },
@@ -501,10 +525,21 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
-      "ventanasSiembra": {
-        "estado": "NO_EVALUABLE",
-        "motivo": "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)."
-      },
+      "ventanasSiembra": [
+        {
+          "temporada": "otono_invierno",
+          "desdeMes": 9,
+          "hastaMes": 10,
+          "regimen": "temporal",
+          "fuente": {
+            "nombre": "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
+            "url": "https://www.gob.mx/cms/uploads/attachment/file/1066118/Agenda_T_cnica_Agr_cola_-_Veracruz-compressed.pdf",
+            "cita": "Capitulo Frijol, 'Epocas de siembra', pag. 40",
+            "consultado": "2026-11-14",
+            "nota": "Texto: en otono-invierno con humedad residual, sembrar del 20 de septiembre al 20 de octubre. Recomendacion estatal. SIAP: Isla siembra ~195 ha de frijol OI de temporal por anio; la agenda describe tambien el frijol en relevo con maiz en Los Tuxtlas. La ventana de verano de la agenda es solo para Las Altas Montanas y no se aplica a Isla. SIAP, cierre agricola municipal 2021-2025, Isla (Veracruz): extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv."
+          }
+        }
+      ],
       "modelo3d": {
         "prefijo": "frijol"
       },
@@ -755,7 +790,7 @@
       },
       "ventanasSiembra": {
         "estado": "NO_EVALUABLE",
-        "motivo": "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)."
+        "motivo": "SIAP no registra calabaza en Isla en 2021-2025 y la Agenda Tecnica de Veracruz no da calendario de calabaza. Sin ventana con fuente para la zona demo (V-20)."
       },
       "modelo3d": {
         "prefijo": "calabaza"

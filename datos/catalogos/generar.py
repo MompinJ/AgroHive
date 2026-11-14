@@ -60,7 +60,52 @@ MOTIVO_LLUVIA_CICLO = (
     "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm "
     "y no se convierte a lluvia del ciclo."
 )
-MOTIVO_VENTANAS = "Pendiente de A0.6 / V-20: calendario de siembra del municipio con fuente (SIAP o INIFAP)."
+# ---------------------------------------------------------------- ventanas de siembra (A0.6, V-20)
+# Isla, Veracruz = municipio 77, DDR 175 San Andres Tuxtla (SIAP). El contrato guarda meses enteros:
+# el dia exacto de la fuente se conserva en la nota.
+
+URL_INIFAP_MAIZ_SUR = "https://www.gob.mx/cms/uploads/attachment/file/723016/Maiz_temporal_tehuantepec.pdf"
+URL_AGENDA_VER = "https://www.gob.mx/cms/uploads/attachment/file/1066118/Agenda_T_cnica_Agr_cola_-_Veracruz-compressed.pdf"
+NOTA_SIAP_ISLA = (
+    "SIAP, cierre agricola municipal 2021-2025, Isla (Veracruz): extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv."
+)
+
+
+def ventana(temporada, desde, hasta, nombre, url, cita, nota):
+    return {"temporada": temporada, "desdeMes": desde, "hastaMes": hasta, "regimen": "temporal",
+            "fuente": fuente(nombre, url, cita, nota=nota)}
+
+
+VENTANAS = {
+    "maiz": [
+        ventana("primavera_verano", 6, 7,
+                "INIFAP, Tecnologia de produccion de maiz de temporal en el sur de Veracruz (region del Istmo de Tehuantepec) "
+                "para el ciclo de primavera-verano (C. A. Tinoco Alfaro, Campo Experimental Cotaxtla, 2022)",
+                URL_INIFAP_MAIZ_SUR, "Seccion Siembra, 'Fecha de siembra', pag. 9",
+                "Texto: sembrar una vez establecidas las lluvias, entre el 1 de junio y el 15 de julio. La guia cubre el DDR "
+                "San Andres Tuxtla, al que pertenece Isla. SIAP: Isla siembra ~4,100 ha de maiz grano PV de temporal por anio. "
+                + NOTA_SIAP_ISLA),
+        ventana("otono_invierno", 11, 12,
+                "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
+                URL_AGENDA_VER, "Capitulo Maiz, 'Epocas de siembra', pag. 58",
+                "Texto: para siembras de riego y humedad residual se sugiere sembrar en noviembre y diciembre. Recomendacion "
+                "estatal, no especifica de Isla. Se registra como temporal porque SIAP clasifica el maiz OI de Isla "
+                "(~4,480 ha por anio) como temporal, sin riego. " + NOTA_SIAP_ISLA),
+    ],
+    "frijol": [
+        ventana("otono_invierno", 9, 10,
+                "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
+                URL_AGENDA_VER, "Capitulo Frijol, 'Epocas de siembra', pag. 40",
+                "Texto: en otono-invierno con humedad residual, sembrar del 20 de septiembre al 20 de octubre. Recomendacion "
+                "estatal. SIAP: Isla siembra ~195 ha de frijol OI de temporal por anio; la agenda describe tambien el frijol "
+                "en relevo con maiz en Los Tuxtlas. La ventana de verano de la agenda es solo para Las Altas Montanas y no "
+                "se aplica a Isla. " + NOTA_SIAP_ISLA),
+    ],
+}
+MOTIVO_VENTANAS = {
+    "calabaza": ("SIAP no registra calabaza en Isla en 2021-2025 y la Agenda Tecnica de Veracruz no da calendario de "
+                 "calabaza. Sin ventana con fuente para la zona demo (V-20)."),
+}
 
 # Cada cultivo: fila de FAO-56 Tabla 11 (dias por etapa), Tabla 12 (Kc), Tabla 22 (Zr, p) y fila de EcoCrop.
 CULTIVOS = [
@@ -177,7 +222,7 @@ def cultivo(c):
             "lluviaAnualMaxMm": eco_val("RMAX", eco["rmax"], "mm/anio", "mm por anio", nota_lluvia),
             "tEstresCalorC": no_evaluable(MOTIVO_CALOR),
         },
-        "ventanasSiembra": no_evaluable(MOTIVO_VENTANAS),
+        "ventanasSiembra": VENTANAS.get(c["id"]) or no_evaluable(MOTIVO_VENTANAS[c["id"]]),
         "modelo3d": {"prefijo": c["modelo3d"]},
         "notas": (
             f"Ciclo y etapas de FAO-56 Tabla 11 (total {t11['total']} dias). EcoCrop da un ciclo de "
