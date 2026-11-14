@@ -9,6 +9,14 @@ fuente: investigación web del 14/11/2026, páginas oficiales de cada proveedor
 
 Investigación para decidir qué fuentes usa el backend (`api/`, FastAPI) y el motor. No cierra pendientes: aporta evidencia a V-06, V-08, V-21, V-22 y V-23 (ver [[Pendientes]]). Todo lo marcado `VERIFICAR` no se pudo confirmar en la página oficial; se prueba con una llamada real antes de escribir el cliente. Las reglas de datos siguen en [[Reglas]] y los endpoints propios en [[Contratos]].
 
+## Decisiones del 14/11 `[DECIDIDO]`
+
+- **Elevación (V-08):** Terrarium por defecto; Open-Meteo Elevation de respaldo.
+- **Suelo (V-23):** ISRIC WCS **y** OpenLandMap, los dos, para compararlos (cliente de OpenLandMap: A2.15). TAW por pedotransferencia de Saxton y Rawls (2006) desde arena, arcilla y materia orgánica (A2.16).
+- **Pronóstico estacional (V-21):** horizonte de 6 meses en la app, aunque `forecast_days=210` dé 7. Método de A2.13 aprobado.
+- **POWER `GWETROOT` (V-06):** entra al balance (condición inicial y comparación). Es fracción de saturación de MERRA-2 en ~100 cm, no de TAW: hay que convertirla. Agregar `GWETROOT` a los parámetros del cliente de POWER.
+- **Servidor (V-15 a V-17):** `sslip.io` + Let's Encrypt.
+
 ## Recomendación en una tabla
 
 | Necesidad | Primera opción | Respaldo | Llave | Veredicto |

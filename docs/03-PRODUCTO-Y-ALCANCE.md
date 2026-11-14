@@ -44,6 +44,8 @@ Filosofía: **minimizar el arrepentimiento** cuando el clima no coopera. Un plan
 | Cultivos | Se eligen el día del evento | `[EN EVENTO]` |
 
 ### Cultivos candidatos `[EN EVENTO]`
+> **14/11:** el calendario de siembra depende del lugar, no del cultivo: vive en `contratos/calendario-local.schema.json` (municipio, cultivo, temporada PV/OI, fuente SIAP o INIFAP). Un cultivo que la fuente no registra en el municipio se puede mostrar en el "what if", pero no se recomienda (ver 05, paso 2).
+
 Lista unida de las dos documentaciones anteriores, para decidir en el evento según datos disponibles (Kc, ciclos, calendario) y tiempo de modelado:
 
 - **Maíz** (presente en ambas propuestas; base del caso).

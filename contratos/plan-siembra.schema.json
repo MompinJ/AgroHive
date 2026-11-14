@@ -4,30 +4,91 @@
   "title": "PlanSiembra",
   "description": "Rotacion que arma el selector 'what if': que cultivo va en cada ciclo y, opcionalmente, en cada celda. Que los ciclos sean cronologicos y no se traslapen lo valida el motor (doc 04), no el schema.",
   "type": "object",
-  "required": ["meta", "rotacionId", "parcelaId", "ciclos", "porCelda"],
+  "required": [
+    "meta",
+    "rotacionId",
+    "parcelaId",
+    "calendarioLocal",
+    "asignacionClima",
+    "ciclos",
+    "porCelda"
+  ],
   "properties": {
-    "meta": { "$ref": "comun.schema.json#/$defs/meta" },
-    "rotacionId": { "$ref": "comun.schema.json#/$defs/idRotacion" },
-    "nombre": { "type": "string" },
-    "parcelaId": { "type": "string" },
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
+    "rotacionId": {
+      "$ref": "comun.schema.json#/$defs/idRotacion"
+    },
+    "nombre": {
+      "type": "string"
+    },
+    "parcelaId": {
+      "type": "string"
+    },
+    "calendarioLocal": {
+      "description": "Calendario local usado para sugerir las fechas, o constancia de que no hay.",
+      "oneOf": [
+        {
+          "title": "ConCalendarioLocal",
+          "type": "object",
+          "required": [
+            "calendarioId"
+          ],
+          "properties": {
+            "calendarioId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "title": "SinCalendarioLocal",
+          "type": "object",
+          "required": [
+            "sinCalendarioLocal",
+            "motivo"
+          ],
+          "properties": {
+            "sinCalendarioLocal": {
+              "const": true
+            },
+            "motivo": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
     "asignacionClima": {
-      "description": "Como se asigna clima a cada ciclo (doc 05, paso 2; decision A2.8 [EN EVENTO]). mismo_anio: todos los ciclos en el anio del escenario. ventanas_consecutivas: ventanas reales consecutivas del historico. temporada_tipica: cada ciclo en su temporada dentro del anio del escenario. null mientras no se decida.",
-      "type": ["string", "null"],
-      "enum": ["mismo_anio", "ventanas_consecutivas", "temporada_tipica", null]
+      "description": "Como se asigna clima a cada ciclo (doc 05, paso 2). Decidido el 14/11 (A2.8): temporada_tipica, cada ciclo en su temporada tipica (PV u OI) dentro del anio del escenario.",
+      "const": "temporada_tipica"
     },
     "ciclos": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/ciclo" }
+      "items": {
+        "$ref": "#/$defs/ciclo"
+      }
     },
     "porCelda": {
       "description": "Solo si se pinta por bloques ([EN EVENTO]); null si toda la parcela sigue los ciclos generales. Clave: id de celda; valor: cultivos que reemplazan a los generales en esa celda.",
-      "type": ["object", "null"],
-      "propertyNames": { "$ref": "comun.schema.json#/$defs/idCelda" },
+      "type": [
+        "object",
+        "null"
+      ],
+      "propertyNames": {
+        "$ref": "comun.schema.json#/$defs/idCelda"
+      },
       "additionalProperties": {
         "type": "array",
         "minItems": 1,
-        "items": { "$ref": "#/$defs/cicloCelda" }
+        "items": {
+          "$ref": "#/$defs/cicloCelda"
+        }
       }
     }
   },
@@ -36,13 +97,39 @@
     "ciclo": {
       "title": "Ciclo",
       "type": "object",
-      "required": ["ciclo", "cultivo", "siembra"],
+      "required": [
+        "ciclo",
+        "cultivo",
+        "temporada",
+        "siembra",
+        "porQue"
+      ],
       "properties": {
-        "ciclo": { "type": "integer", "minimum": 1 },
-        "cultivo": { "$ref": "comun.schema.json#/$defs/idCultivo" },
+        "ciclo": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "cultivo": {
+          "$ref": "comun.schema.json#/$defs/idCultivo"
+        },
         "siembra": {
-          "description": "Fecha de siembra. Con asignacionClima pendiente, el anio puede ser relativo al escenario.",
+          "description": "Fecha de siembra elegida por el usuario. El anio puede ser relativo al escenario (asignacionClima = temporada_tipica).",
           "$ref": "comun.schema.json#/$defs/fecha"
+        },
+        "temporada": {
+          "$ref": "comun.schema.json#/$defs/temporada"
+        },
+        "porQue": {
+          "description": "Explicacion visible en la interfaz de por que se sugiere o se eligio esa fecha y de donde sale (calendario local y su fuente, o eleccion libre del usuario).",
+          "type": "string",
+          "minLength": 1
+        },
+        "dentroDeVentana": {
+          "description": "true si la fecha cae en la ventana del calendario local; null si no hay calendario o ventana.",
+          "type": [
+            "boolean",
+            "null"
+          ]
         }
       },
       "additionalProperties": false
@@ -50,10 +137,18 @@
     "cicloCelda": {
       "title": "CicloCelda",
       "type": "object",
-      "required": ["ciclo", "cultivo"],
+      "required": [
+        "ciclo",
+        "cultivo"
+      ],
       "properties": {
-        "ciclo": { "type": "integer", "minimum": 1 },
-        "cultivo": { "$ref": "comun.schema.json#/$defs/idCultivo" }
+        "ciclo": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "cultivo": {
+          "$ref": "comun.schema.json#/$defs/idCultivo"
+        }
       },
       "additionalProperties": false
     }

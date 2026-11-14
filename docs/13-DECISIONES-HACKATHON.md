@@ -16,13 +16,21 @@ Estas decisiones se tomaron al iniciar el evento y **prevalecen** sobre las prop
 | Repositorio | Git con ramas: `main`, `balam`, `Mompin`, `Mafer`, `Eduardo` | "Ramas por integrante" en 08, ahora con nombres |
 | Documentación | Vive en el repo (`docs/`); Drive queda como respaldo del historial | Drive como fuente en 00 |
 | Cronograma | Se mide en **esfuerzo de IA**, no en horas (ver 14) | Opciones A y B de 09 |
-| Pronóstico | Capa opcional **"próxima temporada (aproximada)"**: anomalía del pronóstico estacional (ECMWF vía Open-Meteo) aplicada a la climatología histórica, con respaldo estadístico propio (percentiles y tendencia). Se muestra como **banda de incertidumbre**, nunca como cifra. No bloquea el MVP: va después del motor | "No predice el clima" en 03 y 10 |
+| Pronóstico | Capa opcional **"próxima temporada (aproximada)"**: anomalía del pronóstico estacional (ECMWF vía Open-Meteo) aplicada a la climatología histórica, con respaldo estadístico propio (percentiles; sin tendencia, ver "Próxima temporada" abajo). Se muestra como **banda de incertidumbre**, nunca como cifra. No bloquea el MVP: va después del motor | "No predice el clima" en 03 y 10 |
 | pH y textura | Se **estiman** por zona con mapas globales (ISRIC WCS u OpenLandMap), descargados por script y servidos desde caché; etiquetados `SUPUESTO`. Selector manual de respaldo | "No mide pH" en 00, 03, 10 |
 | Cultivos | **Catálogo propio en JSON** (6 a 8 cultivos) sembrado desde FAO EcoCrop (rangos de temperatura, lluvia y ciclo) y Kc de FAO-56, con fuente por valor. Sin API externa de cultivos: ninguna cubre bien la agronomía | Búsqueda de una API de cultivos |
 | Zona y cultivo | Zona demo en Isla, Veracruz (temporal, sin riego), **verificada en SIAP** el 14/11 (A0.6, ver V-20). Núcleo: **milpa (maíz, frijol, calabaza)**; cultivo extra vistoso (chile) si hay tiempo de modelado | Maíz, frijol y sorgo de 03 |
 | Organización | El trabajo **no se reparte por rol sino por actividad**: cada integrante toma actividades del cronograma (ver 14). R1 a R4 quedan como áreas, no como dueños | Roles por nombre (V-18) |
 | Comunicación entre sesiones | **Buzón por la red local** (`herramientas/buzon/`): servidor en la laptop de Mompin, puerto 3000; cada sesión de IA escucha en segundo plano y avisa a su usuario. Solo avisos; el código sigue por git. Se apaga y se cierra el puerto al terminar (Mompin, 14/11) | Avisos solo por GitHub |
 | Ranking | **Criterio B** (doc 05, paso 7): puntaje compuesto por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio. Pesos con fuente o iguales declarados `SUPUESTO`. Respaldo: criterio A (solo pilar hídrico) si los pilares 2 y 3 (A3.7) no llegan | Opciones A y B `[EN EVENTO]` en 05 y 11 |
+| TAW del suelo | Para cualquier textura (incluidas `franco_arcillo_arenoso`, `franco_arcilloso` y `arcillo_arenoso`, que no están en FAO-56 Tabla 19) el TAW se calcula con la pedotransferencia de Saxton y Rawls (2006), *Soil water characteristic estimates by texture and organic matter for hydrologic solutions*, Soil Science Society of America Journal 70(5): 1569-1578, doi:10.2136/sssaj2005.0117, a partir de arena, arcilla y materia orgánica de SoilGrids; etiqueta `SUPUESTO`. Mientras no esté, la demo usa el selector manual | Hueco de TAW de A1.6 |
+| Servicios de suelo (V-23) | Se usan **ambos**, ISRIC WCS y OpenLandMap, para compararlos; el contrato `suelo` lleva las dos estimaciones con su fuente y cuál alimenta el cálculo | "ISRIC WCS u OpenLandMap" |
+| Elevación (V-08) | Terrarium por defecto; Open-Meteo Elevation de respaldo | Proveedor por decidir |
+| Humedad de suelo de POWER (V-06) | La humedad de suelo de POWER (`GWETROOT`, MERRA-2) entra al balance como **condición inicial** de la cubeta al sembrar y como **comparación** contra la humedad simulada, con su resolución gruesa declarada. Es **fracción de saturación** (0 a 1, primeros ~100 cm), no fracción de TAW: se convierte con θsat, θFC y θWP del suelo (Saxton y Rawls) antes de usarla; sin esos valores, la condición inicial queda `NO_EVALUABLE` | "No usar humedad de POWER en el balance" |
+| Próxima temporada (V-21, A2.13) | Horizonte de **6 meses** (se habla en semestres), aunque el servicio dé 7. Método aprobado: distribución histórica de cada mes (20 años de POWER) desplazada por la anomalía de SEAS5, percentiles como banda, **sin tendencia** y con advertencia | Horizonte 7 o 9 meses; "percentiles y tendencia" |
+| Servidor (V-15 a V-17) | Droplet de Eduardo con `sslip.io` y certificado Let's Encrypt. Cerrado | Opciones de "Servidor sin dominio" |
+| Calendario de siembra (A0.6, V-20) | Las ventanas de siembra **dependen del lugar, no del cultivo**: salen del catálogo y van en el contrato `calendario-local` (municipio con clave INEGI, cultivo, temporada PV/OI, ventana con fuente SIAP o INIFAP; sin dato, `NO_EVALUABLE`). La fecha de siembra de cada ciclo la elige el usuario; el plan guarda el calendario usado y un `porQue`. Un cultivo que la fuente no registra en el lugar se muestra, pero no se recomienda (caso: calabaza en Isla, SIAP 2021-2025). Mafer revisa si SIAP tiene API o datos abiertos de siembras | Ventanas por cultivo en el catálogo |
+| Clima por ciclo (A2.8) | Opción (c) `temporada_tipica`: cada ciclo en su temporada típica (PV u OI) dentro del año del escenario | Opciones a/b/c abiertas en 05 |
 
 ## Consecuencias técnicas
 
@@ -31,7 +39,7 @@ Estas decisiones se tomaron al iniciar el evento y **prevalecen** sobre las prop
 - Con polígono libre el backend en vivo es obligatorio (clima y elevación dependen de la coordenada dibujada). Se mantiene además un **paquete de datos precargado** de la parcela demo para que la demo no dependa de la red.
 - Los datasets de Earthdata (SMAP, GPM, MODIS) con `earthaccess` son viables solo en Python: es la razón principal de elegir FastAPI.
 
-## Servidor sin dominio `[PROPUESTA]`
+## Servidor sin dominio `[DECIDIDO]` 14/11: opción 1 (`sslip.io` + Let's Encrypt)
 
 Sin dominio, un front en HTTPS no puede llamar a un backend en HTTP (bloqueo por *mixed content*). Opciones, de mejor a peor:
 
@@ -47,13 +55,13 @@ Reglas para el servidor compartido: AgroHive va en su propio `server` block de n
 
 | ID | Qué | Quién |
 | --- | --- | --- |
-| V-15 | Confirmar acceso SSH, usuario y firewall del droplet | Eduardo |
-| V-16 | Qué servicios y puertos ya usa `mediworks` | Eduardo |
-| V-17 | Elegir hostname (`sslip.io` u otro) y emitir certificado | Eduardo |
+| V-15 | ~~Acceso SSH, usuario y firewall del droplet~~ Cerrado (servidor decidido) | Eduardo |
+| V-16 | ~~Servicios y puertos de `mediworks`~~ Cerrado (servidor decidido) | Eduardo |
+| V-17 | ~~Hostname y certificado~~ Cerrado: `sslip.io` + Let's Encrypt | Eduardo |
 | V-18 | ~~Roles por nombre~~ Reemplazado: reparto por actividad en 14 | Equipo |
 | V-19 | ~~Ranking A o B~~ Decidido: criterio B (ver tabla de arriba). Pintura por bloques sigue `[EN EVENTO]`; cultivos: milpa decidida, falta confirmar parámetros | Equipo |
-| V-20 | ~~Cultivos y calendario del municipio en SIAP~~ Verificado (A0.6, Mafer). SIAP 2021-2025, Isla = municipio 77, DDR San Andrés Tuxtla: maíz grano de temporal en PV (~4,100 ha/año) y OI (~4,480 ha/año), frijol de temporal sobre todo en OI (~195 ha/año), chile verde en OI y PV; **no hay calabaza registrada**. Ventanas de siembra con fuente INIFAP en `datos/catalogos/cultivos.json`: maíz PV 1 jun-15 jul, maíz OI nov-dic, frijol OI 20 sep-20 oct. **Abierto para el equipo:** cómo tratar la calabaza en la demo (queda `NO_EVALUABLE` en ventanas) | Mafer / equipo |
-| V-21 | Parámetros y horizonte del pronóstico estacional de Open-Meteo (las fuentes no coinciden: 7 o 9 meses; la página oficial dice 7, ver `AgroVault/Compartido/APIs.md`; falta confirmarlo con una llamada) | Quien tome A0.7 |
+| V-20 | Cultivos y calendario del municipio en SIAP: forma decidida (contrato `calendario-local`); falta cargar los datos reales de Isla con fuente | Mafer (A0.6) |
+| V-21 | ~~Horizonte del pronóstico estacional~~ Decidido: 6 meses (ver tabla de arriba) | — |
 | V-22 | Si NASA POWER permite llamadas desde el navegador (CORS); por defecto todo pasa por el backend | Quien tome A0.7 |
-| V-23 | Qué servicio de suelo responde hoy (ISRIC WCS, OpenLandMap) y cómo se descarga la zona | Quien tome A2.14 |
+| V-23 | ~~Qué servicio de suelo~~ Decidido: ambos, ISRIC WCS y OpenLandMap (ver tabla de arriba) | — |
 | V-24 | Ajustar el discurso del pitch: "no predecimos una temporada exacta; mostramos el rango plausible" | Quien tome A5.6 |

@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "versionContrato": "0.5.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "esPrediccion": false,
+  "estado": "EXPLORATORIO",
+  "aviso": "Rango aproximado, no es una prediccion de la proxima temporada. (En este archivo, ademas, las bandas son ficticias.)",
+  "metodo": "anomalia_estacional",
+  "coordenada": [
+    -95.53,
+    18.03
+  ],
+  "emitido": "2026-11-14",
+  "horizonteMeses": 7,
+  "climatologia": {
+    "desde": "2006-01-01",
+    "hasta": "2025-12-31"
+  },
+  "banda": {
+    "percentilInferior": 10,
+    "percentilSuperior": 90
+  },
+  "fuentes": [
+    {
+      "nombre": "EJEMPLO - valores ficticios (no es una consulta a Open-Meteo estacional)",
+      "nota": "No proviene de ninguna consulta real; reemplazar con datos del backend."
+    }
+  ],
+  "meses": [
+    {
+      "mes": "2026-12",
+      "lluviaMm": {
+        "inferior": 20,
+        "superior": 90
+      },
+      "tMediaC": {
+        "inferior": 21.0,
+        "superior": 24.0
+      },
+      "climatologiaLluviaMm": null,
+      "climatologiaTMediaC": null
+    },
+    {
+      "mes": "2027-01",
+      "lluviaMm": {
+        "inferior": 10,
+        "superior": 70
+      },
+      "tMediaC": {
+        "inferior": 20.0,
+        "superior": 23.5
+      },
+      "climatologiaLluviaMm": null,
+      "climatologiaTMediaC": null
+    },
+    {
+      "mes": "2027-02",
+      "lluviaMm": {
+        "inferior": 5,
+        "superior": 60
+      },
+      "tMediaC": {
+        "inferior": 21.0,
+        "superior": 24.5
+      },
+      "climatologiaLluviaMm": null,
+      "climatologiaTMediaC": null
+    },
+    {
+      "mes": "2027-03",
+      "lluviaMm": {
+        "inferior": 0,
+        "superior": 50
+      },
+      "tMediaC": {
+        "inferior": 22.5,
+        "superior": 26.0
+      },
+      "climatologiaLluviaMm": null,
+      "climatologiaTMediaC": null
+    },
+    {
+      "mes": "2027-04",
+      "lluviaMm": {
+        "inferior": 5,
+        "superior": 70
+      },
+      "tMediaC": {
+        "inferior": 24.0,
+        "superior": 27.5
+      },
+      "climatologiaLluviaMm": null,
+      "climatologiaTMediaC": null
+    },
+    {
+      "mes": "2027-05",
+      "lluviaMm": {
+        "inferior": 30,
+        "superior": 140
+      },
+      "tMediaC": {
+        "inferior": 25.5,
+        "superior": 29.0
+      },
+      "climatologiaLluviaMm": null,
+      "climatologiaTMediaC": null
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz.",
+      "severidad": "critico"
+    },
+    {
+      "codigo": "SIN_TENDENCIA",
+      "mensaje": "El rango no incluye la tendencia del clima (metodo de A2.13).",
+      "severidad": "info"
+    }
+  ]
+}
