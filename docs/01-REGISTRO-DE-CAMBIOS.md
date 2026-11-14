@@ -112,6 +112,13 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Escenario "próxima temporada" por rotación `[DECIDIDO]`; contratos 0.8.0 (compatible)
+
+- **Archivos:** `contratos/resultado-rotacion.schema.json`, ejemplo, 5 casos inválidos, tipos, README; `13`; vault.
+- **Cambio y motivo:** Mompin decidió evaluar cada rotación en una "próxima temporada" con años análogos reales, como `EXPLORATORIO` y sin ranking. Se agrega `proximaTemporada` (opcional) con la propuesta del motor: estado (`EXPLORATORIO`, `NO_EVALUABLE` o `ERROR_DATOS`), `esPrediccion: false`, aviso, horizonte, criterio de análogos, ciclos evaluados y fuera, años análogos con sus pilares de déficit y exceso, rango entre análogos y fuentes. En `NO_EVALUABLE` o `ERROR_DATOS` el motivo es obligatorio, no hay análogos y el rango va en `null`.
+- **Fuente / evidencia:** propuesta del motor transmitida por la sesión maestra. `npm test` 63/63.
+- **Decisiones afectadas:** ninguna cambia; el ranking B sigue usando solo los tres escenarios históricos.
+
 ### 2026-11-14 (noche) — Pilar de exceso de agua `[DECIDIDO]`; contratos 0.7.0 (compatible)
 
 - **Archivos:** `contratos/resultado-rotacion.schema.json`, ejemplos, casos inválidos, tipos, README; `13`; vault.

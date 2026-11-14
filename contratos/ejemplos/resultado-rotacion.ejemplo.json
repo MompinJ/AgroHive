@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.7.0",
+    "versionContrato": "0.8.0",
     "esEjemplo": true,
     "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
   },
@@ -176,6 +176,92 @@
     "de": 3,
     "criterio": "B_minimax_arrepentimiento",
     "desempate": "promedio de puntajes entre escenarios"
+  },
+  "proximaTemporada": {
+    "estado": "EXPLORATORIO",
+    "esPrediccion": false,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Rango entre anios analogos ficticios; no es una prediccion de la proxima temporada.",
+    "emitido": "2026-11-14",
+    "horizonte": {
+      "desde": "2026-12",
+      "hasta": "2027-05"
+    },
+    "criterioAnalogos": "EJEMPLO: anios del historico cuya anomalia de lluvia de dic a may tiene el mismo signo que la anomalia SEAS5 del horizonte.",
+    "ciclosEvaluados": [
+      2
+    ],
+    "ciclosFuera": [
+      {
+        "ciclo": 1,
+        "motivo": "Se siembra antes del horizonte (PV)."
+      },
+      {
+        "ciclo": 3,
+        "motivo": "Se siembra despues del horizonte de 6 meses."
+      }
+    ],
+    "aniosAnalogos": [
+      {
+        "anioReal": 2012,
+        "mesesDentro": 6,
+        "deMeses": 6,
+        "estado": "EXPLORATORIO",
+        "deficitHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "proporcionDemandaNoCubierta": 0.22,
+          "diasDeficit": 20,
+          "diasDeficitEtapasSensibles": 5
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 30.0,
+          "diasExceso": 4,
+          "fraccionLluviaPercolada": 0.08
+        }
+      },
+      {
+        "anioReal": 2019,
+        "mesesDentro": 6,
+        "deMeses": 6,
+        "estado": "EXPLORATORIO",
+        "deficitHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "proporcionDemandaNoCubierta": 0.41,
+          "diasDeficit": 35,
+          "diasDeficitEtapasSensibles": 11
+        },
+        "excesoHidrico": {
+          "estado": "EXPLORATORIO",
+          "motivo": "Valores ficticios de ejemplo.",
+          "excesoTotalMm": 5.0,
+          "diasExceso": 1,
+          "fraccionLluviaPercolada": 0.02
+        }
+      }
+    ],
+    "rango": {
+      "proporcionDemandaNoCubierta": {
+        "inferior": 0.22,
+        "superior": 0.41
+      },
+      "fraccionLluviaPercolada": {
+        "inferior": 0.02,
+        "superior": 0.08
+      },
+      "excesoTotalMm": {
+        "inferior": 5.0,
+        "superior": 30.0
+      }
+    },
+    "fuentes": [
+      {
+        "nombre": "EJEMPLO - valores ficticios (forma de NASA POWER y del pronostico estacional SEAS5)",
+        "nota": "No proviene de ninguna consulta real."
+      }
+    ]
   },
   "advertencias": [
     {
