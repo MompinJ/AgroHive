@@ -12,6 +12,12 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 — A3.8: ficha por celda en la escena (Mompin, con balam)
+
+- **Archivos:** `web/src/escena/ficha.ts` (nuevo), `EscenaParcela.tsx`, `render/escena-three.ts`, `escena.css`, prueba `ficha.test.ts`; `docs/06`, `docs/14` (A3.8 pasa del tablero de balam al de Mompin, con balam).
+- **Cambio:** ficha con los valores del motor y de la parcela, con unidades y `NO_EVALUABLE` explicado. Se abre con clic, toque, lista de celdas, botones N/O/E/S o teclado (Enter y Escape). Con ratón hay además un globo al pasar el cursor. Marco fijo en la celda elegida. Banderín para "cultivo no recomendado en el lugar", que antes solo salía en texto. Los colores de `escena.css` pasan a variables para adaptar después el modo oscuro.
+- **Fuente / evidencia:** 184 pruebas de escena; headless en el Laboratorio con calabaza (no registrada en Isla): clic, globo, teclado, lista y cambio de fecha; 400 px sin desborde; cero errores de consola.
+
 ### 2026-11-14 — Placa de estado más chica en la escena `[DECIDIDO]` (Mompin)
 
 - **Archivos:** `web/src/escena/render/escena-three.ts`, `docs/06`.

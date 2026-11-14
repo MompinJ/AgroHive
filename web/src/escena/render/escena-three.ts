@@ -26,6 +26,8 @@ export class ErrorWebGL extends Error {
 export interface OpcionesRender {
   reducirMovimiento: boolean;
   onSeleccion?: (bloque: BloqueEscena | null) => void;
+  /** Al pasar el cursor (solo raton): bloque bajo el cursor y su posicion dentro del lienzo, en px. */
+  onHover?: (bloque: BloqueEscena | null, x: number, y: number) => void;
   /** Avisos del render (por ejemplo, modelo de respaldo o .bbmodel que no se pudo leer). */
   onAviso?: (codigo: string, mensaje: string) => void;
 }
@@ -80,6 +82,50 @@ function soportaWebGL(): boolean {
   }
 }
 
+/** Banderin (asta negra y bandera blanca con borde negro) en unidades de .bbmodel, unido en una geometria. */
+function geometriaBanderin(): THREE.BufferGeometry {
+  const caras = (i: number) => ({ north: i, south: i, east: i, west: i, up: i, down: i });
+  const modelo: ModeloVoxel = {
+    nombre: 'banderin',
+    textura: { ancho: 16, alto: 16, fuente: '' },
+    cubos: [
+      { nombre: 'asta', desde: [-0.4, 0, -0.4], hasta: [0.4, 8, 0.4], origen: [0, 0, 0], rotacion: [0, 0, 0], caras: caras(0) },
+      { nombre: 'borde', desde: [0.4, 4.5, -0.25], hasta: [5, 8, 0.25], origen: [0, 0, 0], rotacion: [0, 0, 0], caras: caras(0) },
+      { nombre: 'bandera', desde: [0.4, 5, -0.35], hasta: [4.5, 7.5, 0.35], origen: [0, 0, 0], rotacion: [0, 0, 0], caras: caras(1) },
+    ],
+  };
+  const g = unirCubos(modelo, (i) => (i === 0 ? [0, 0, 0] : [1, 1, 1]));
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(g.posiciones, 3));
+  geo.setAttribute('normal', new THREE.BufferAttribute(g.normales, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(g.colores, 3));
+  geo.computeBoundingSphere();
+  return geo;
+}
+
+/** Marco cuadrado de seleccion: anillo exterior negro y anillo interior blanco (se ve sobre cualquier suelo). */
+function crearMarco([negro, blanco]: THREE.MeshBasicMaterial[]): THREE.Group {
+  const g = new THREE.Group();
+  const anillo = (lado: number, grosor: number, alto: number, mat: THREE.Material) => {
+    const m = lado / 2;
+    for (const [x, z, ancho, fondo] of [
+      [0, -m + grosor / 2, lado, grosor],
+      [0, m - grosor / 2, lado, grosor],
+      [-m + grosor / 2, 0, grosor, lado - 2 * grosor],
+      [m - grosor / 2, 0, grosor, lado - 2 * grosor],
+    ] as const) {
+      const caja = new THREE.Mesh(new THREE.BoxGeometry(ancho, alto, fondo), mat);
+      caja.position.set(x, alto / 2, z);
+      g.add(caja);
+    }
+  };
+  anillo(1.04, 0.07, 0.05, negro!);
+  anillo(0.92, 0.05, 0.06, blanco!);
+  g.visible = false;
+  g.renderOrder = 2;
+  return g;
+}
+
 export class EscenaThree {
   private readonly renderer: THREE.WebGLRenderer;
   private readonly scene = new THREE.Scene();
@@ -99,6 +145,11 @@ export class EscenaThree {
   private opciones: OpcionesRender;
   private inicioPuntero: { x: number; y: number } | null = null;
   private ultimoCuadroMs = 0;
+  private seleccionId: string | null = null;
+  private ultimoPuntero: { x: number; y: number } | null = null;
+  private cuadroHover = 0;
+  private readonly materialesMarco = [new THREE.MeshBasicMaterial({ color: '#000000' }), new THREE.MeshBasicMaterial({ color: '#ffffff' })];
+  private readonly marco = crearMarco(this.materialesMarco);
   private cuadros = 0;
 
   constructor(private readonly lienzo: HTMLCanvasElement, opciones: OpcionesRender) {
@@ -110,7 +161,9 @@ export class EscenaThree {
       throw new ErrorWebGL();
     }
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    this.scene.background = new THREE.Color('#e9efe6');
+    // Fondo desde la variable --escena-lienzo de escena.css (un solo lugar para cambiar el tema).
+    const fondo = getComputedStyle(lienzo).getPropertyValue('--escena-lienzo').trim();
+    this.scene.background = new THREE.Color(fondo || '#e9efe6');
 
     this.camara = new THREE.OrthographicCamera(-1, 1, 1, -1, -100, 100);
     this.scene.add(this.raiz);
@@ -134,6 +187,8 @@ export class EscenaThree {
 
     lienzo.addEventListener('pointerdown', this.alBajarPuntero);
     lienzo.addEventListener('pointerup', this.alSubirPuntero);
+    lienzo.addEventListener('pointermove', this.alMoverPuntero);
+    lienzo.addEventListener('pointerleave', this.alSalirPuntero);
 
     this.observador = new ResizeObserver(() => this.ajustarTamano());
     this.observador.observe(lienzo);
@@ -186,12 +241,29 @@ export class EscenaThree {
     const version = ++this.version;
     this.limpiar();
     // Media altura visible: la parcela mas margen para las plantas altas.
-    this.extension = Math.max(modelo.filas, modelo.columnas, 2) * 0.7 + 0.8;
+    this.extension = Math.max(modelo.filas, modelo.columnas, 2) * 0.6 + 0.6;
     this.construirTerreno(modelo);
     this.ajustarTamano();
     this.restablecerVista();
     void this.construirLosas(modelo, version);
     void this.construirPlantas(modelo, version);
+    // Conserva la seleccion si la celda sigue existiendo (cambio de fecha, ciclo o escenario).
+    this.seleccionar(this.seleccionId ? (modelo.bloques.find((b) => b.celdaId === this.seleccionId) ?? null) : null);
+  }
+
+  /**
+   * Marca la celda elegida (clic, toque o teclado) con un marco blanco y negro fijo:
+   * sin parpadeo ni animacion, asi respeta reducir movimiento.
+   */
+  seleccionar(bloque: BloqueEscena | null) {
+    this.seleccionId = bloque?.celdaId ?? null;
+    if (!this.marco.parent) this.scene.add(this.marco);
+    this.marco.visible = bloque !== null;
+    if (bloque) {
+      const y = this.topeDe(bloque) + (this.losaDe(bloque) ? DETALLE_LOSA : 0) + 0.004;
+      this.marco.position.set(bloque.x, y, bloque.z);
+    }
+    this.pedirCuadro();
   }
 
   dispose() {
@@ -200,6 +272,11 @@ export class EscenaThree {
     this.observador.disconnect();
     this.lienzo.removeEventListener('pointerdown', this.alBajarPuntero);
     this.lienzo.removeEventListener('pointerup', this.alSubirPuntero);
+    this.lienzo.removeEventListener('pointermove', this.alMoverPuntero);
+    this.lienzo.removeEventListener('pointerleave', this.alSalirPuntero);
+    cancelAnimationFrame(this.cuadroHover);
+    this.marco.traverse((o) => { if (o instanceof THREE.Mesh) o.geometry.dispose(); });
+    this.materialesMarco.forEach((m) => m.dispose());
     this.controles.dispose();
     this.limpiar();
     for (const g of this.cacheGeometria.values()) void g.then((x) => x.dispose());
@@ -288,6 +365,24 @@ export class EscenaThree {
       placa.name = `placa-${estado}`;
       this.raiz.add(placa);
       this.bloquesPorMalla.set(placa, lista);
+    }
+
+    // Banderin en la esquina noroeste de las celdas con cultivo no recomendado en el lugar
+    // (el motor lo marca con noRecomendadoEnLugar y su fuente): forma, no solo color.
+    const noRecomendados = modelo.bloques.filter((b) => b.noRecomendadoEnLugar);
+    if (noRecomendados.length > 0) {
+      const geo = this.registrar(geometriaBanderin());
+      const mat = this.registrar(new THREE.MeshBasicMaterial({ vertexColors: true }));
+      const banderas = new THREE.InstancedMesh(geo, mat, noRecomendados.length);
+      noRecomendados.forEach((b, k) => {
+        m.compose(new THREE.Vector3(b.x - 0.42, this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0), b.z - 0.42), q, new THREE.Vector3(1, 1, 1));
+        banderas.setMatrixAt(k, m);
+      });
+      banderas.instanceMatrix.needsUpdate = true;
+      banderas.computeBoundingSphere();
+      banderas.name = 'banderin-no-recomendado';
+      this.raiz.add(banderas);
+      this.bloquesPorMalla.set(banderas, noRecomendados);
     }
     this.pedirCuadro();
   }
@@ -459,14 +554,38 @@ export class EscenaThree {
     const inicio = this.inicioPuntero;
     this.inicioPuntero = null;
     if (!inicio || Math.hypot(ev.clientX - inicio.x, ev.clientY - inicio.y) > 5) return; // fue arrastre
+    const bloque = this.bloqueEn(ev.clientX, ev.clientY);
+    this.seleccionar(bloque);
+    this.opciones.onSeleccion?.(bloque);
+  };
+
+  private bloqueEn(clientX: number, clientY: number): BloqueEscena | null {
     const r = this.lienzo.getBoundingClientRect();
-    const ndc = new THREE.Vector2(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+    const ndc = new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
     this.raycaster.setFromCamera(ndc, this.camara);
     const golpe = this.raycaster
       .intersectObjects([...this.bloquesPorMalla.keys()], false)
       .find((i) => i.instanceId !== undefined);
     const malla = golpe?.object as THREE.InstancedMesh | undefined;
-    const bloque = malla && golpe?.instanceId !== undefined ? this.bloquesPorMalla.get(malla)?.[golpe.instanceId] ?? null : null;
-    this.opciones.onSeleccion?.(bloque);
+    return malla && golpe?.instanceId !== undefined ? (this.bloquesPorMalla.get(malla)?.[golpe.instanceId] ?? null) : null;
+  }
+
+  // Globo al pasar el cursor: solo con raton (en tactil se usa el toque) y como mucho una vez por cuadro.
+  private readonly alMoverPuntero = (ev: PointerEvent) => {
+    if (ev.pointerType !== 'mouse' || !this.opciones.onHover || ev.buttons !== 0) return;
+    this.ultimoPuntero = { x: ev.clientX, y: ev.clientY };
+    if (this.cuadroHover) return;
+    this.cuadroHover = requestAnimationFrame(() => {
+      this.cuadroHover = 0;
+      const p = this.ultimoPuntero;
+      if (!p) return;
+      const r = this.lienzo.getBoundingClientRect();
+      this.opciones.onHover?.(this.bloqueEn(p.x, p.y), p.x - r.left, p.y - r.top);
+    });
+  };
+
+  private readonly alSalirPuntero = () => {
+    this.ultimoPuntero = null;
+    this.opciones.onHover?.(null, 0, 0);
   };
 }
