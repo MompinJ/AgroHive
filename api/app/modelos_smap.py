@@ -22,6 +22,18 @@ class DiaSmap(SinNulos):
     humedadM3M3: float | None = Field(default=None, ge=0, le=1)  # media de los pases con dato; None si ninguno
 
 
+class ProfundidadSmap(BaseModel):
+    desde: float = Field(ge=0)
+    hasta: float = Field(gt=0)
+
+
+class ProductoSmap(SinNulos):
+    nombre: str
+    resolucionKm: Literal[36, 9]
+    profundidadCm: ProfundidadSmap | None = None
+    unidad: Literal["m3/m3"] | None = None
+
+
 class CeldaSmap(BaseModel):
     fila: int
     columna: int
@@ -35,6 +47,7 @@ class Smap(SinNulos):
     etiqueta: Literal["SUPUESTO"]
     aviso: str
     coordenada: LonLat
+    producto: ProductoSmap | None = None
     celda: CeldaSmap | None = None
     fuente: Fuente
     dias: list[DiaSmap]

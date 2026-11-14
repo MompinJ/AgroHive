@@ -33,7 +33,7 @@ def simular(monkeypatch):
         def envolver(request):
             llamadas.append(str(request.url))
             return handler(request)
-        monkeypatch.setattr(http, "crear_cliente", lambda: httpx.AsyncClient(transport=httpx.MockTransport(envolver)))
+        monkeypatch.setattr(http, "crear_cliente", lambda *a, **k: httpx.AsyncClient(transport=httpx.MockTransport(envolver)))
         return llamadas
     return instalar
 

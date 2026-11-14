@@ -20,6 +20,10 @@ Orden fijo antes de una tarea que toque alcance: `docs/00-LEEME-PRIMERO.md`, `do
 | Pitch, jueces, límites | `docs/10` |
 | Saber qué sigue abierto | `docs/11` y [[Pendientes]] |
 | Anotar un cambio | `docs/01-REGISTRO-DE-CAMBIOS.md` |
+| Encontrar un archivo | [[Codigo]] |
+| Tocar el servidor | [[Servidor]] y `api/despliegue/` |
+| Avisar a otra sesión | `herramientas/buzon/README.md` |
+| Guion o README de entrega | `docs/guion-video-borrador.md` y `docs/README-borrador.md` (borradores; no sustituyen a `docs/10` ni a `README.md`) |
 
 Etiquetas, con el mismo significado que en `docs/00`:
 

@@ -14,7 +14,17 @@ from .. import cache, http
 
 STAC = "https://s3.eu-central-1.wasabisys.com/stac/openlandmap/"
 NOMBRE = "OpenLandMap-soildb (30 m, 2020-2022)"
-DOI = "https://doi.org/10.5281/zenodo.15528399"
+# DOI de cada capa 2020-2022 de 0 a 30 cm, verificados en Zenodo el 14/11 (titulo y periodo de cada registro). OJO: el campo `doi` de la
+# coleccion STAC apunta al registro 2000-2005 (el primer periodo), no al de las capas que se leen aqui: no usarlo.
+DOIS = {
+    "arcilla": ("10.5281/zenodo.15528401",),
+    "arena": ("10.5281/zenodo.15528413",),
+    "limo": ("10.5281/zenodo.15528425",),
+    "pH": ("10.5281/zenodo.15471105",),
+    "carbono organico": ("10.5281/zenodo.15535759", "10.5281/zenodo.15535761"),  # el conjunto esta partido en dos mitades en Zenodo
+}
+CITA = ("OpenLandMap-soildb 2020-2022, 0 a 30 cm, CC-BY-4.0: "
+        + "; ".join(f"{capa} " + " y ".join(f"doi:{d}" for d in dois) for capa, dois in DOIS.items()))
 SUFIJO = "_m_30m_b0cm..30cm"
 CAPAS = {  # propiedad -> (coleccion, item)
     "clay": ("clay.tot_iso.11277.2020.wpct", "clay.tot_iso.11277.2020.wpct_20200101_20221231"),

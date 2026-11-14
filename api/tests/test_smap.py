@@ -40,6 +40,29 @@ def test_celda_de_isla_coincide_con_la_verificada_contra_el_archivo():
     assert earthdata.celda(0, 89.9) is None or earthdata.celda(0, 89.9)[0] >= 0  # el polo queda en la rejilla o fuera, sin error
 
 
+def test_respuesta_cumple_el_contrato_smap(monkeypatch, validar):
+    simular(monkeypatch, datos(am=None, pm=0.1754))
+    j = cliente.get(URL).json()
+    validar(j, "smap")
+    assert j["producto"] == {"nombre": "SPL3SMP", "resolucionKm": 36, "profundidadCm": {"desde": 0, "hasta": 5}, "unidad": "m3/m3"}
+
+
+def test_dias_sin_dato_cumplen_el_contrato_y_no_llevan_humedad(monkeypatch, validar):
+    simular(monkeypatch, None)
+    j = cliente.get(URL).json()
+    validar(j, "smap")
+    assert j["dias"][0]["motivo"] and "humedadM3M3" not in j["dias"][0]
+
+
+def test_dia_con_error_de_fuente_cumple_el_contrato(monkeypatch, validar):
+    async def falso(lon, lat, dia):
+        if dia == FECHA:
+            raise http.ErrorFuente("rango rechazado")
+        return datos()
+    monkeypatch.setattr(earthdata, "humedad_dia", falso)
+    validar(cliente.get(f"/api/smap?lon={LON}&lat={LAT}&desde={FECHA}&hasta={FECHA + timedelta(days=1)}").json(), "smap")
+
+
 def test_dia_evaluable_promedia_solo_los_pases_con_dato(monkeypatch):
     simular(monkeypatch, datos(am=None, pm=0.1754))
     r = cliente.get(URL)
@@ -103,6 +126,22 @@ def test_la_cache_evita_volver_a_leer_un_dia_antiguo(monkeypatch):
 def test_parametros_invalidos_son_422(monkeypatch, consulta):
     simular(monkeypatch, datos())
     assert cliente.get(f"/api/smap?lon={LON}&lat={LAT}&{consulta}").status_code == 422
+
+
+def test_la_sesion_de_earthaccess_se_crea_una_sola_vez_aunque_haya_hilos(monkeypatch):
+    import sys
+    import threading
+    import types
+    logins = []
+    falso = types.SimpleNamespace(login=lambda strategy: (logins.append(1), types.SimpleNamespace(authenticated=True))[1],
+                                  get_requests_https_session=lambda: object())
+    monkeypatch.setitem(sys.modules, "earthaccess", falso)
+    monkeypatch.setitem(earthdata._sesion, "objeto", None)
+    sesiones = []
+    hilos = [threading.Thread(target=lambda: sesiones.append(earthdata._sesion_autenticada())) for _ in range(6)]
+    [h.start() for h in hilos]
+    [h.join() for h in hilos]
+    assert len(logins) == 1 and len({id(s) for s in sesiones}) == 1
 
 
 def test_leer_pases_respeta_el_rango_valido_y_el_relleno():

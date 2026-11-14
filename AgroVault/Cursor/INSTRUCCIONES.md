@@ -8,7 +8,7 @@ actualizado: 2026-11-14
 
 Eres un agente dentro del repo AgroHive, con herramientas de lectura, edición, terminal y, si hace falta, el navegador. El usuario (Eduardo) trabaja directo en el código. Este chat ya carga `CLAUDE.md`. Esta nota es el contexto largo.
 
-Antes de una tarea que no sea un typo, lee [[Compartido/Reglas]], [[Compartido/Resumen]] y la fila que toque en [[Compartido/Lectura]]. Si la tarea escribe o consume JSON del motor o del API, lee [[Compartido/Contratos]] y los `contratos/*.schema.json` que enlaza. Si vas a cerrar un hueco de datos, lee [[Compartido/Pendientes]] y no lo cierres.
+Antes de una tarea que no sea un typo, lee [[Compartido/Reglas]], [[Compartido/Resumen]] y [[Compartido/Codigo]]. Si la tarea escribe o consume JSON, lee [[Compartido/Contratos]] y el schema. Si vas a cerrar un hueco, lee [[Compartido/Pendientes]] y no lo cierres. El orden de `docs/` está en [[Compartido/Lectura]].
 
 ## Cómo trabajar aquí
 
@@ -24,10 +24,10 @@ Antes de una tarea que no sea un typo, lee [[Compartido/Reglas]], [[Compartido/R
 ## Qué ya está decidido y Cursor suele reabrir
 
 - Motor en `web/src/motor/`, Web Worker, TypeScript. FastAPI no calcula el balance ni el ranking.
-- Tipos de datos desde `contratos/tipos/` (generados de los JSON Schema, fuente de verdad); FastAPI respeta esos schemas con prueba; OpenAPI solo genera el cliente de las llamadas HTTP.
-- Polígono libre dentro del MVP, más paquete de demo de Isla para trabajar sin red.
-- Catálogo de cultivos en JSON, con fuente por valor. Vacío = `NO_EVALUABLE`.
-- Three.js carga `.bbmodel`. El render no elige la etapa.
+- Tipos de datos desde `contratos/tipos/` (contratos 0.10.0). OpenAPI solo cubre las llamadas HTTP.
+- Three.js 0.187 sin React Three Fiber. El render no elige la etapa. `i` crece desde el sur.
+- Escenarios de la demo: 2023, 2016 y 2024. TAW de Isla: 122.3 mm/m. No los recalcules de memoria; salen de `demo-isla.json`.
+- Polígono libre dentro del MVP, más el paquete de `datos/demo/` para trabajar sin red.
 
 ## Regla corta para `.cursor/rules/`
 
@@ -55,7 +55,8 @@ alwaysApply: true
 
 | Zona | Listo cuando |
 | --- | --- |
-| Motor | Las pruebas 1 a 6 de `docs/05` pasan, incluida `NO_EVALUABLE` y el determinismo |
-| API | `/health` y el endpoint pedido responden; un fallo de POWER deja rastro `RESPALDO_HISTORICO` o `ERROR_DATOS` |
-| UI | P0 a P3 con el flujo real; 2D y 3D muestran los mismos números |
-| Modelos | `voxelkit.py check` y un `preview` por etapa; no afirmes que Blockbench se ve bien si no lo abriste |
+| Motor | `cd web && npm test`, incluida la regresión. Si mueves un número a propósito, regenera `demo-isla.json` y anótalo en `docs/01` |
+| API | `pytest` en `api/`. Un fallo de POWER deja `RESPALDO_HISTORICO` o `ERROR_DATOS`. `/api/smap` sin token es 503 |
+| UI | El flujo que tocaste, en el navegador, con carga, error y el caso `NO_EVALUABLE`. El modo 2D (A3.6) todavía no existe |
+| Contratos | `cd contratos && npm test` y, si cambió un schema, las cuatro verificaciones de [[Compartido/Reglas]] |
+| Modelos | `voxelkit.py check` y un `preview` por etapa. No afirmes que Blockbench se ve bien si no lo abriste |

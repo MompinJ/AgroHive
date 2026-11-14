@@ -49,6 +49,8 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.11.0`, acti
 - Ranking: el criterio principal es B (`B_minimax_arrepentimiento`; `[DECIDIDO]` el 14/11). Con B, el resultado lleva `puntaje` por escenario, `arrepentimiento` y `ponderacion` (pesos, etiqueta `SUPUESTO`/`USUARIO`/`FUENTE`, pilares excluidos). A (`A_exposicion_hidrica_peor_caso`) queda de respaldo si A3.7 no llega; con A, `puntaje`, `arrepentimiento` y `ponderacion` van en `null`. Ejemplo del respaldo: `contratos/ejemplos/resultado-rotacion.respaldo-a.ejemplo.json`.
 - `plan-siembra.asignacionClima` es siempre `temporada_tipica` (A2.8 decidido). La fecha de siembra la elige el usuario y cada ciclo explica su `porQue`.
 - Un cultivo que se muestra pero no se recomienda en el lugar va en `resultado-rotacion.cultivosNoRecomendados` (motivo y fuente) y en la celda como `noRecomendadoEnLugar` con `fuenteMotivo`; la rotación queda `EXPLORATORIO`.
+- En `parcela`, `i = 0` es la fila más al sur y crece hacia el norte; `j = 0` es la columna más al oeste y crece hacia el este.
+- Si un pilar es `NO_EVALUABLE` o `ERROR_DATOS`, todos sus indicadores van en `null` y el motivo es obligatorio (0.9.0).
 
 Lo que el schema no puede comprobar (ciclos en orden cronológico, polígono cerrado, cultivos del plan presentes en el catálogo) lo valida el motor.
 
@@ -59,11 +61,13 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 | Método y ruta | Función | Contrato de la respuesta |
 | --- | --- | --- |
 | `GET /health` | Vida del API | — |
-| `GET /api/clima?lat=&lon=&desde=&hasta=` | Serie diaria del periodo con caché, POWER con respaldo Open-Meteo. **No elige escenarios** (A2.5, motor). Implementado | `serie-clima` (el motor arma `clima-escenario`) |
-| `POST /api/elevacion` | Recibe la cuadrícula ya generada por el front (`tamanoCeldaM` y `celdas` con id, i, j y centro; tope 1600) y devuelve elevación y pendiente por celda. Implementado | Campos `elevacionM`, `pendientePct` y `terreno` de `parcela` |
+| `GET /api/clima?lat=&lon=&desde=&hasta=` | Serie diaria del periodo con caché, POWER con respaldo Open-Meteo, más `lluviaSatelital` (IMERG en UTC, evidencia). **No elige escenarios**. Implementado | `serie-clima` (el motor arma `clima-escenario`) |
+| `POST /api/elevacion` | Recibe la cuadrícula ya generada por el front (`tamanoCeldaM` y `celdas` con id, i, j y centro; tope 1600) y devuelve elevación y pendiente por celda. Terrarium, respaldo Open-Meteo. Implementado | Campos `elevacionM`, `pendientePct` y `terreno` de `parcela` |
 | `GET /api/cultivos` | Catálogo JSON de `datos/catalogos/cultivos.json`; sin catálogo responde `NO_EVALUABLE`. Implementado | `cultivo` |
-| `GET /api/proxima-temporada?lat=&lon=` | Banda p10 a p90 por mes, 7 meses, sin cifra única; no es predicción. Implementado (A2.13, parte del backend) | `proxima-temporada` |
-| `GET /api/suelo?lat=&lon=` | Textura y pH de 0 a 30 cm (ISRIC WCS), siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
+| `GET /api/proxima-temporada?lat=&lon=` | Banda p10 a p90 por mes, **6 meses**, sin cifra única; no es predicción. Implementado | `proxima-temporada` |
+| `GET /api/suelo?lat=&lon=` | Textura, pH y TAW (Saxton y Rawls si hay carbono) de 0 a 30 cm. ISRIC es `estimacionUsada`; OpenLandMap va en `estimaciones` y sustituye si ISRIC falla. Siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
+| `GET /api/smap?lon=&lat=&desde=&hasta=` | Humedad superficial SMAP L3, contraste, máximo 10 días. Sin `EARTHDATA_TOKEN`: 503. Implementado. No entra al balance | `smap` |
+| `GET /api/ndvi` | Contrato listo. La ruta no existe (A4.11) | `ndvi` |
 
 Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 con `{estado: ERROR_DATOS, motivo}`. Detalle y cómo correr la API en `api/README.md`.
 

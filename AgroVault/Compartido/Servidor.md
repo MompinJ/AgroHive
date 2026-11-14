@@ -16,7 +16,7 @@ No hay contraseñas ni llaves en este vault ni en el repo. El acceso SSH lo tien
 | Cosa | Dónde |
 | --- | --- |
 | Usuario del sistema | `agrohive` (sin shell, sin sudo), carpeta `/opt/agrohive` |
-| Clon del repo | `/opt/agrohive/repo`, en la rama `main` desde la integración del 14/11 (commit `a57b98c`) |
+| Clon del repo | `/opt/agrohive/repo`, rama `main`. El último despliegue anotado en `docs/01` es el commit `d182af4` (escena en el Laboratorio, selector, banda, chile, `/api/smap`). Lo que entre a `main` después no está en el droplet hasta que Eduardo despliegue |
 | Entorno de Python | `/opt/agrohive/venv` (fastapi, uvicorn) |
 | Servicio | `agrohive-api.service` (systemd), uvicorn en `127.0.0.1:8010`, solo local |
 | App | `ExecStart` apunta a `app.main:app` con `WorkingDirectory=/opt/agrohive/repo/api`. El `stub/app.py` provisional ya no se usa |
@@ -31,7 +31,7 @@ Convivencia con `mediworks` (V-16): comparte nginx, certbot y el droplet. Usa `m
 
 1. Lo que entra a `main` en GitHub no llega solo al servidor: Eduardo lo despliega.
 2. En el droplet: `sudo -u agrohive git -C /opt/agrohive/repo pull`, luego `sudo -u agrohive /opt/agrohive/venv/bin/pip install -r /opt/agrohive/repo/api/requirements.txt` y `systemctl restart agrohive-api`.
-3. El front (`web/`) se sirve desde el mismo origen que la API (opción 2 de `docs/13`, sin CORS ni mixed content). Para actualizarlo: `SERVIDOR=root@64.23.143.102 sh api/despliegue/desplegar-front.sh`. Hoy es el esqueleto de balam (A1.2), sin llamadas a la API.
+3. El front (`web/`) se sirve desde el mismo origen que la API (opción 2 de `docs/13`, sin CORS ni mixed content). Para actualizarlo: `SERVIDOR=root@64.23.143.102 sh api/despliegue/desplegar-front.sh`. En `d182af4` el bundle ya trae la escena, los `.bbmodel` y el paquete de clima. Una sola sesión despliega, y lo anuncia antes por el buzón. No hace falta `EARTHDATA_TOKEN` para el resto de la API; sin él, `/api/smap` responde 503.
 4. Comprobar `https://64-23-143-102.sslip.io/health` (trae `commit` y `versionContrato`: ahi se ve que version corre), `/api/cultivos` y `https://mediworks.mx/` (debe seguir en 200).
 
 Logs: `journalctl -u agrohive-api`.
