@@ -156,7 +156,7 @@ export function EscenaParcela({ parcela, resultado, fecha, className = '', onEsc
           {leyenda.map((e) => (
             <li key={e.clave}>
               <MuestraEstado entrada={e} />
-              <span>
+              <span aria-hidden="true">
                 <strong>{e.etiqueta}</strong> <span className="escena-cuenta">({e.celdas})</span>
                 <span className="escena-detalle">{e.descripcionPatron}</span>
               </span>
