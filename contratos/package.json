@@ -1,6 +1,6 @@
 {
   "name": "agrohive-contratos",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "private": true,
   "description": "Contratos de datos de AgroHive (JSON Schema 2020-12), ejemplos y validador.",
   "type": "module",

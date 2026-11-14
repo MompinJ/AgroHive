@@ -225,6 +225,17 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Contratos 0.11.0: `serie-balance` para el dashboard (A4.1)
+
+- **Archivos:** nuevo `contratos/serie-balance.schema.json`, ejemplo, 8 casos inválidos, `contratos/validar.mjs` (chequeos extra), tipos, README; `13`; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.11.0, en un commit aparte).
+- **Cambio y motivo:** el borrador del motor, aprobado por Mompin para el dashboard de balam, entra con estos ajustes de convención:
+  1. Las columnas diarias admiten `null` cuando falta un dato de entrada, nunca 0, como el resto de los contratos.
+  2. Las columnas que no pueden ser negativas llevan `minimum: 0`.
+  3. Los subesquemas llevan `title`, para que los tipos tengan nombre, y cada columna lleva descripción con la ecuación de FAO-56 donde aplica (80, 85, 88).
+  4. JSON Schema no puede exigir que las columnas tengan el mismo largo. `validar.mjs` lo comprueba con un chequeo extra, junto con que la suma de días del resumen mensual cuadre.
+- **Fuente / evidencia:** propuesta del motor; FAO-56, capítulo 8. `npm test` 91/91.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Comparación por defecto de la demo: R1, R2 y R4 `[DECIDIDO]` (corrige "R1 a R4")
 
 - **Archivos:** `13` (fila "Rotaciones de la demo"), `docs/guion-video-borrador.md`, `docs/README-borrador.md`, `AgroVault/Compartido/Resumen.md`.
