@@ -26,7 +26,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 | Calabaza | *Cucurbita moschata*; FAO "Pumpkin, Winter squash", fila mediterranea (100 d) | Calabaza de milpa de tierra caliente, cosechada madura |
 | Kc ini | Valor general del grupo (cereales 0.3, cucurbitaceas 0.5, leguminosas 0.4) | Tabla 12 no da Kc ini por cultivo; con lluvia frecuente puede subir a 1.0-1.2 (nota 1) |
 | Kc end del maiz | 0.35 (de 0.60-0.35) | Cosecha tras secado en campo (nota 11) |
-| Zr | Extremo mayor del rango | Tabla 22 nota 1: para temporal o modelar estres |
+| Profundidad de raiz (Zr) | **Siempre el maximo del rango** de Tabla 22 (maiz 1.7 de 1.0-1.7; frijol 0.9 de 0.6-0.9; calabaza 1.5 de 1.0-1.5) | Tabla 22 nota 1: los valores mayores son para temporal o para modelar estres hidrico |
 | TAW | Punto medio del rango (thetaFC - thetaWP) x 1000 | La tabla da rangos; se guarda el rango completo |
 | Grupos del selector | arenoso = arena franca, franco = franco, arcilloso = arcilla | Eleccion del equipo, no de FAO |
 
