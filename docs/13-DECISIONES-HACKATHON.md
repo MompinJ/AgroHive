@@ -9,7 +9,7 @@ Estas decisiones se tomaron al iniciar el evento y **prevalecen** sobre las prop
 | Estado del evento | El hackathon **ya inició oficialmente**: se puede escribir código | Regla de "no código antes del inicio" en 00, 02, 09, 12 |
 | Motor de simulación | **TypeScript en el navegador**, dentro de un **Web Worker** | "Navegador o servidor" `[EN EVENTO]` en 08 |
 | Backend | **Python + FastAPI**: proxy y caché de APIs, cliente de datos, extras de Earthdata | Alternativas de 08 |
-| Tipos compartidos | El backend publica OpenAPI; de ahí se genera el cliente TypeScript (`openapi-typescript`) | — |
+| Tipos compartidos | Los JSON Schema de `contratos/` son la fuente de verdad de los datos: los tipos TS salen de ahí (`contratos/tipos/`) y los modelos de FastAPI deben respetarlos, con una prueba que lo verifique. El cliente generado desde OpenAPI solo cubre las llamadas HTTP. (Mompin y Eduardo, 14/11) | Primera versión del 14/11: "tipos solo desde OpenAPI" |
 | Polígono libre | **Entra al MVP** (dibujar la parcela y autogenerar la cuadrícula) | F1 "dibujo libre" `[EN EVENTO]` en 03 |
 | Servidor | Droplet de DigitalOcean de **Eduardo Oropeza** (Ubuntu 24.04, 2 vCPU, 4 GB RAM, 50 GB, región SFO3). Eduardo lo configura | Despliegue Vercel/Render en 08 |
 | Dominio | **No se compra dominio** | — |

@@ -2,12 +2,12 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: contratos/*.schema.json (v0.2.0, A1.1)
+fuente: contratos/*.schema.json (v0.3.0, A1.1)
 ---
 
 # Contratos
 
-La fuente de verdad son los JSON Schema de `contratos/` (versión `0.2.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.3.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
 - Detalle y reglas: `contratos/README.md`
 - Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`
@@ -22,7 +22,8 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.2.0`, activ
 | `comun.schema.json` | Estados de `docs/04`, `meta`, `fuente`, `valorCitado`, `lonLat`, ids | — |
 | `parcela.schema.json` | Polígono, cuadrícula y celdas con `elevacionM` y `pendientePct`; enlaza el suelo con `sueloId` | Front (polígono) + API (elevación) |
 | `suelo.schema.json` | Textura (USDA y grupo del selector) y pH estimados, siempre `SUPUESTO` | API `GET /api/suelo` (A2.14) |
-| `cultivo.schema.json` | Catálogo: ciclo, etapas y Kc de FAO-56, umbrales de EcoCrop, ventanas de siembra | `datos/catalogos/` (A1.5) |
+| `cultivo.schema.json` | Catálogo: ciclo, etapas y Kc de FAO-56, umbrales de EcoCrop (lluvia del ciclo y lluvia anual por separado), ventanas de siembra | `datos/catalogos/` (A1.5) |
+| `tabla-suelos.schema.json` | TAW por metro y rangos de humedad por clase textural (FAO-56 Tabla 19), con fuente o `NO_EVALUABLE` | `datos/catalogos/` (A1.6) |
 | `clima-escenario.schema.json` | Serie diaria de un año real (seco, habitual, lluvioso) y cómo se eligió | API `GET /api/clima` + motor (A2.5) |
 | `proxima-temporada.schema.json` | Capa "próxima temporada aproximada": solo bandas por mes | API + motor (A2.13) |
 | `plan-siembra.schema.json` | Rotación del selector: cultivo por ciclo y, si se pinta por bloques, por celda | Front (selector) |
@@ -60,4 +61,4 @@ Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 c
 
 Caché en archivo. Clave: coordenada redondeada a la celda del dataset + variable + periodo. `datos/cache/` está en `.gitignore`.
 
-Pendiente de acordar: cómo se alinean los tipos generados desde OpenAPI (decisión del 14/11) con los generados desde estos schemas. Ver [[Pendientes]].
+Tipos `[DECIDIDO]` 14/11: Los JSON Schema de `contratos/` son la fuente de verdad de los datos: los tipos TS salen de ahí (`contratos/tipos/`) y los modelos de FastAPI deben respetarlos, con una prueba que lo verifique. El cliente generado desde OpenAPI solo cubre las llamadas HTTP.

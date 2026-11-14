@@ -59,6 +59,20 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Contratos 0.3.0: lluvia anual del cultivo y tabla de suelos
+
+- **Archivos:** `contratos/cultivo.schema.json`, nuevo `contratos/tabla-suelos.schema.json`, ejemplos, casos inválidos, tipos, README; versión en la vault.
+- **Cambio y motivo:** (1) EcoCrop publica la lluvia **anual** y el catálogo solo tenía lluvia del ciclo. Se agregan `umbrales.lluviaAnualMinMm` y `lluviaAnualMaxMm` (`valorCitado`, mm/año, rango absoluto), distintos de `lluviaCicloMinMm` y `lluviaCicloMaxMm`, que siguen siendo del ciclo. No se convierten entre sí. Son obligatorios, igual que el resto de los umbrales (`NO_EVALUABLE` si no hay fuente). (2) La tabla de suelos de A1.6 pasa a `contratos/` a partir de la propuesta de Mafer (`datos/catalogos/suelos.schema.json`). Se alinea con `comun`: cada clase lleva `estado`, los rangos llevan `estado` y `fuente`, una clase sin fila en la tabla usa `{estado: NO_EVALUABLE, motivo}` en vez de `null`, y la TAW evaluable va en `mm/m`.
+- **Fuente / evidencia:** pedido de Mompin y README de `datos/catalogos/` en la rama Mafer (hueco "lluvia por ciclo"). `npm test` pasa 32/32. El `suelos.json` de Mafer valida contra el schema nuevo con los cambios de forma descritos (simulación local, sin tocar su rama).
+- **Decisiones afectadas:** ninguna. Mafer debe migrar `cultivos.json` y `suelos.json` a 0.3.0.
+
+### 2026-11-14 (noche) — Tipos: los schemas de contratos/ son la fuente de verdad `[DECIDIDO]`
+
+- **Archivos:** `AGENTS.md`, `README.md`, `08`, `13`, `14` (A1.3), `contratos/README.md`, `AgroVault/Compartido/{Reglas,Contratos,Pendientes,Resumen}.md`, `AgroVault/{Codex/AGENTS.md,Cursor/INSTRUCCIONES.md}` (`CLAUDE.md` lo actualizó la sesión maestra en 3876f60).
+- **Cambio y motivo:** Mompin y Eduardo decidieron que los JSON Schema de `contratos/` mandan sobre los datos. Los tipos TS salen de `contratos/tipos/`, los modelos de FastAPI deben respetar los schemas con una prueba que lo verifique, y el cliente generado desde OpenAPI solo cubre las llamadas HTTP. Reemplaza "tipos solo desde OpenAPI" de 13 y cierra el pendiente de tipos de la vault. Al entregable de A1.3 se le suma esa prueba.
+- **Fuente / evidencia:** decisión del equipo en el evento, transmitida por la sesión maestra el 14/11.
+- **Decisiones afectadas:** fila "Tipos compartidos" de 13.
+
 ### 2026-11-14 (noche) — docs/00 al día
 
 - **Archivos:** `00`.
