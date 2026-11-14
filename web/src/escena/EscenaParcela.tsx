@@ -3,7 +3,8 @@
 // Punto de integracion propuesto: ver web/src/escena/INTEGRACION.md.
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Advertencia, Parcela, ResultadoCeldas, Suelo } from '../../../contratos/tipos/contratos';
+import type { Advertencia, Parcela, ResultadoCeldas, SerieBalance, Suelo } from '../../../contratos/tipos/contratos';
+import { CORTES_LLUVIA, lluviaDelDia, textoLluvia } from './lluvia';
 import { construirEscena } from './adaptador';
 import type { AvisoDatos } from '../api/datosParcela';
 import { CODIGOS_TERRENO } from './avisos-datos';
@@ -26,6 +27,11 @@ export interface EscenaParcelaProps {
   suelo?: Suelo | null;
   /** Avisos de usarDatosParcela (web/src/api/): clima de respaldo, suelo SUPUESTO, proxima temporada... */
   avisosDatos?: readonly AvisoDatos[];
+  /**
+   * Serie del balance del motor (cliente.serieBalance) de la misma rotacion y escenario que
+   * `resultado`: de ahi sale la lluvia del dia que se dibuja. Sin serie, la escena no llueve.
+   */
+  serieBalance?: SerieBalance | null;
   /** Lugar de la mascota de Mafer (si existe su modelo). Por defecto, visible. */
   mascota?: boolean;
   className?: string;
@@ -52,7 +58,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], mascota = true, className = '', onEscena }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -83,6 +89,11 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     [parcela, resultado, fecha, exageracion, suelo],
   );
   const leyenda = useMemo(() => entradasLeyenda(modelo), [modelo]);
+  // La serie solo vale si es de la misma rotacion y escenario que el resultado que se dibuja.
+  const serieValida =
+    serieBalance && resultado && serieBalance.rotacionId === resultado.rotacionId && serieBalance.escenario === resultado.escenario ? serieBalance : null;
+  const lluvia = useMemo(() => lluviaDelDia(serieValida, modelo.fecha), [serieValida, modelo.fecha]);
+  const intensidadLluvia = lluvia?.estado === 'con_dato' ? lluvia.intensidad : 0;
 
   const opciones = useMemo(
     () => ({
@@ -138,6 +149,10 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     if (actual) elegir(seleccion ? vecino(modelo.bloques, actual, dx, dz) : actual);
   };
 
+  useEffect(() => {
+    escena.current?.setLluvia(intensidadLluvia);
+  }, [intensidadLluvia, modelo]);
+
   const avisos = [...modelo.avisos, ...avisosRender];
   const criticos = avisos.filter((a) => a.severidad === 'critico');
   // Los avisos del terreno van en la franja de datos, no repetidos en la lista general.
@@ -174,6 +189,11 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
               }
             }}
           />
+        )}
+        {lluvia && (
+          <p className={`escena-lluvia escena-lluvia-${lluvia.estado === 'con_dato' ? lluvia.clase : 'sin_dato'}`} role="status">
+            {textoLluvia(lluvia)}
+          </p>
         )}
         {hover && !sinWebGL && (
           <div className="escena-globo" style={{ left: hover.x, top: hover.y }} aria-hidden="true">
@@ -271,6 +291,11 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
           </p>
         )}
         <p className="escena-detalle">{textoEscalaSuelo(modelo.grupoSuelo)}</p>
+        <p className="escena-detalle">
+          Lluvia del día (serie del motor, mm/día): llovizna desde {CORTES_LLUVIA.minimaMm} mm, moderada desde {CORTES_LLUVIA.moderadaDesdeMm} mm,
+          fuerte desde {CORTES_LLUVIA.fuerteDesdeMm} mm; más gotas con más lluvia. Sin dato no se dibuja lluvia.
+          {reducirMovimiento ? ' Con reducir movimiento solo se muestra el texto, sin animación.' : ''}
+        </p>
       </div>
 
       {otros.length > 0 && (
