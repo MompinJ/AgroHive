@@ -51,5 +51,8 @@ export type PesosMotor = import('../../../contratos/tipos/contratos').PesosPilar
 /** Escenario "proxima temporada" con anios analogos ([DECIDIDO] 14/11, contratos 0.8.0). */
 export type { ProximaTemporadaRotacion, ProximaTemporadaAproximada } from '../../../contratos/tipos/contratos';
 
+/** serie-balance (A4.1, contratos 0.11.0). */
+export type { SerieBalance, CicloSerieBalance } from '../../../contratos/tipos/contratos';
+
 /** Etapas FAO-56 (Tabla 11). */
 export type EtapaFao = 'inicial' | 'desarrollo' | 'media' | 'final';

@@ -85,6 +85,9 @@ export interface CicloSimulado {
   excesoAcum: number[];
   /** tMax del dia, para el riesgo por calor; null si falta. */
   tMax: (number | null)[];
+  /** Lluvia y ET0 de cada dia del ciclo (entradas de la cubeta), para serie-balance (A4.1). */
+  lluviaMm: number[];
+  et0Mm: number[];
   condicionInicial: 'gwetroot' | 'capacidad_de_campo' | null;
 }
 
@@ -256,6 +259,8 @@ function simularEscenario(
       deficitAcum: [],
       excesoAcum: [],
       tMax: [],
+      lluviaMm: [],
+      et0Mm: [],
       condicionInicial: null,
     };
     ciclos.set(k, sim);
@@ -297,6 +302,8 @@ function simularEscenario(
       sim.condicionInicial = 'gwetroot';
     }
     const b = balanceCiclo({ cultivo: p, tawMmPorM: taw.tawMmPorM, lluviaMm: lluvia, et0Mm: et, drInicialMm: drInicial });
+    sim.lluviaMm = lluvia;
+    sim.et0Mm = et;
     sim.balance = b;
     let da = 0;
     let ea = 0;
