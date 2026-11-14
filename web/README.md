@@ -37,7 +37,22 @@ App conserva las selecciones de interfaz mientras permanece montada, incluso al 
 - Isla y 2 ha son el supuesto de la demo del doc 06; la verificación de zona está pendiente según doc 13. La ilustración es decorativa, sin datos geográficos.
 - El mapa (A2.10), cuadrícula (A2.9), escena y motor se integrarán después. No hay botones que simulen calcular, cambiar a 3D ni dibujar polígonos.
 - **Worker pendiente de coordinación con Mompin:** ubicación propuesta `src/motor/motor.worker.ts`; comprobación de disponibilidad propuesta `{ type: 'PING' }` → `{ type: 'READY' }`. No se creó este archivo ni se enviaron mensajes. Contrato de simulación pendiente de A1.1. La interfaz permanece independiente del Worker.
-- Método y fuentes se consultan mediante un acordeón nativo sin perder selecciones. El enlace a NASA POWER solo se abre por acción explícita.
+- En P0, Cómo funciona y Recursos abren diálogos nativos; en P1–P3, método y fuentes se consultan mediante un acordeón nativo sin perder selecciones. El enlace a NASA POWER solo se abre por acción explícita.
+
+## Inicio — iteración visual con referencia Duna
+
+Referencia principal: captura de AgroHive entregada por Balam y `DESIGN.md` de Duna compartido en el chat. La composición aprobada tiene navegación transparente, título centrado en la parte baja, etiqueta y dos acciones. Los colores y textos siguen la captura de AgroHive.
+
+- Asset original proporcionado por el usuario en `src/ui/assets/inicio-campo.png`, conservado sin editar. Es una ilustración decorativa, no un mapa ni una representación científica del terreno.
+- `src/ui/inicio.css` define los tokens y el tratamiento exclusivo de P0: fondo a pantalla completa con `object-fit: cover`, blur de **2 px** aplicado solo a la imagen y sin degradado blanco inferior ni velo adicional. El contraste del texto sobre la ilustración no se ha certificado como WCAG AA; el blur conserva la composición solicitada, pero no equivale a una superficie uniforme detrás del texto.
+- Cabecera en `src/ui/InicioHeader.tsx`. Producto lleva al laboratorio; Soluciones, a comparación; Cómo funciona y Recursos abren diálogos con cierre por Escape y restauración del foco. Los botones de demo y polígono conservan sus destinos.
+- `src/App.tsx` selecciona la cabecera y el contenedor de inicio. P1–P3 mantienen la disposición anterior. Se retiraron de `styles.css` las reglas sin uso del inicio previo.
+- Fuente del sistema (Arial/Helvetica); GT America no fue proporcionada. No se agregó una fuente remota ni una dependencia.
+- En móvil, la navegación ocupa una segunda fila y los botones se apilan. El contenido puede desplazarse en pantallas bajas; la imagen se recorta al centro.
+
+Verificación de esta iteración: build y TypeScript; Chromium con Playwright a 1662×946, 1440×900, 1024×768, 768×1024, 390×844 y 320×700. Asset cargado, sin desbordamiento horizontal ni superposición de cabecera/título, filtro `blur(2px)` solo en la imagen, sin gradiente de fondo, navegación y diálogos comprobados, cero errores de consola y cero solicitudes externas durante el flujo. No se realizó revisión con lector de pantalla.
+
+Capturas: [inicio de escritorio](evidencia/P0.png), [inicio móvil](evidencia/P0-mobile-390.png). Resultados: [revisión del inicio](evidencia/inicio.json). La evidencia de A1.2 de la sección siguiente corresponde a la base inicial, antes de esta iteración.
 
 ## Revisión manual
 
@@ -45,7 +60,7 @@ App conserva las selecciones de interfaz mientras permanece montada, incluso al 
 2. En P2 elegir R1, ciclo 2 y escenario seco; el cultivo seleccionado debe decir Frijol. Cambiar el cultivo y abrir P3; volver y confirmar que conserva la selección.
 3. Recargar cada ruta y probar atrás/adelante; abrir una ruta desconocida.
 4. Revisar 1440, 1024, 768, 390 y 320 px: contenido sin desbordamiento y controles accesibles.
-5. Usar Tab, Enter, Espacio y flechas en radios; comprobar foco y enlace Saltar al contenido. Revisar movimiento reducido.
+5. Usar Tab, Enter, Espacio y flechas en radios; comprobar foco y enlace Saltar al contenido. En P0 probar Cómo funciona/Recursos y cerrar con Escape. Revisar movimiento reducido.
 6. Revisar consola y red: sin errores de la app ni llamadas externas; todos los indicadores siguen NO_EVALUABLE.
 
 Fuentes técnicas: [Vite](https://vite.dev/guide/) y [React useEffect](https://react.dev/reference/react/useEffect).

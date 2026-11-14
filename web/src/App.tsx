@@ -6,11 +6,13 @@ import { Terreno } from './paginas/Terreno';
 import { ActionLink, Brand, MethodNotes, Navigation, PageHeading } from './ui/components';
 import { pages, usePage } from './ui/navigation';
 import { demo } from './ui/demo';
+import { InicioHeader } from './ui/InicioHeader';
 import { initialRotations } from './ui/selections';
 import type { Crop, Cycle, RotationChoices, RotationId, Scenario } from './ui/selections';
 
 export default function App() {
   const { path, mode } = usePage();
+  const isHome = path === '/';
   const [rotation, setRotation] = useState<RotationId>('R1');
   const [cycle, setCycle] = useState<Cycle>(1);
   const [scenario, setScenario] = useState<Scenario>('Habitual');
@@ -47,12 +49,14 @@ export default function App() {
     default: content = <><PageHeading step="—" title="Esta página no existe.">Puedes volver al inicio para continuar explorando.</PageHeading><ActionLink href="#/">Volver al inicio</ActionLink></>;
   }
 
-  return <>
+  return <div className={isHome ? 'app-shell app-shell-home' : 'app-shell'}>
     <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
-    <header className="site-header"><div className="header-inner"><Brand /><Navigation path={path} /><span className="prototype-badge"><span aria-hidden="true" />Prototipo A1.2</span></div></header>
-    <div className="prototype-strip"><div className="wrap"><strong>Interfaz de demostración</strong><span>Sin conexión a datos NASA ni al motor de simulación.</span><span>{demo.notice}</span></div></div>
-    <main id="contenido" className="wrap main-content" tabIndex={-1}>{content}<MethodNotes /></main>
+    {isHome ? <InicioHeader /> : <>
+      <header className="site-header"><div className="header-inner"><Brand /><Navigation path={path} /><span className="prototype-badge"><span aria-hidden="true" />Prototipo A1.2</span></div></header>
+      <div className="prototype-strip"><div className="wrap"><strong>Interfaz de demostración</strong><span>Sin conexión a datos NASA ni al motor de simulación.</span><span>{demo.notice}</span></div></div>
+    </>}
+    <main id="contenido" className={isHome ? 'landing-main' : 'wrap main-content'} tabIndex={-1}>{content}{!isHome && <MethodNotes />}</main>
     <div className="sr-only" role="status">{announcement}</div>
-    <footer className="site-footer wrap"><p>AgroHive <span aria-hidden="true">/</span> Code Hive · NASA Space Apps 2026</p><p>Apoya la decisión del agricultor. No reemplaza asesoría agronómica.</p></footer>
-  </>;
+    {!isHome && <footer className="site-footer wrap"><p>AgroHive <span aria-hidden="true">/</span> Code Hive · NASA Space Apps 2026</p><p>Apoya la decisión del agricultor. No reemplaza asesoría agronómica.</p></footer>}
+  </div>;
 }
