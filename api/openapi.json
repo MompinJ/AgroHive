@@ -1,0 +1,774 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AgroHive API",
+    "description": "Proxy y cache de NASA POWER, Open-Meteo y elevacion. No simula ni rankea: el motor vive en el navegador.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/clima": {
+      "get": {
+        "tags": [
+          "clima"
+        ],
+        "summary": "Clima",
+        "description": "Serie diaria de NASA POWER con cache; respaldo Open-Meteo (estado RESPALDO_HISTORICO).",
+        "operationId": "clima_api_clima_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Primer dia, desde 1981-01-01 (limite de NASA POWER)",
+              "title": "Desde"
+            },
+            "description": "Primer dia, desde 1981-01-01 (limite de NASA POWER)"
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Ultimo dia; no puede ser futuro",
+              "title": "Hasta"
+            },
+            "description": "Ultimo dia; no puede ser futuro"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SerieClima"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDatos"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/elevacion": {
+      "post": {
+        "tags": [
+          "terreno"
+        ],
+        "summary": "Elevacion",
+        "description": "Elevacion y pendiente por celda para una cuadricula ya generada por el front (tope 1600 celdas).",
+        "operationId": "elevacion_api_elevacion_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerrenoEntrada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TerrenoRespuesta"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDatos"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cultivos": {
+      "get": {
+        "tags": [
+          "cultivos"
+        ],
+        "summary": "Cultivos",
+        "description": "Catalogo propio (A1.5, de Mafer) leido de datos/catalogos/cultivos.json. Sin catalogo no se inventa nada.",
+        "operationId": "cultivos_api_cultivos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "salud"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Advertencia": {
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$",
+            "title": "Codigo"
+          },
+          "mensaje": {
+            "type": "string",
+            "title": "Mensaje"
+          },
+          "severidad": {
+            "type": "string",
+            "enum": [
+              "info",
+              "aviso",
+              "critico"
+            ],
+            "title": "Severidad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "codigo",
+          "mensaje",
+          "severidad"
+        ],
+        "title": "Advertencia"
+      },
+      "CeldaEntrada": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^c-\\d+-\\d+$",
+            "title": "Id"
+          },
+          "i": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "I"
+          },
+          "j": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "J"
+          },
+          "centro": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Centro"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "i",
+          "j",
+          "centro"
+        ],
+        "title": "CeldaEntrada"
+      },
+      "CeldaTerreno": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "elevacionM": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevacionm"
+          },
+          "pendientePct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pendientepct"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "elevacionM",
+          "pendientePct"
+        ],
+        "title": "CeldaTerreno"
+      },
+      "DiaClima": {
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha"
+          },
+          "lluviaMm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lluviamm"
+          },
+          "tMaxC": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tmaxc"
+          },
+          "tMinC": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tminc"
+          },
+          "tMediaC": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tmediac"
+          },
+          "radiacionMjM2Dia": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Radiacionmjm2Dia"
+          },
+          "humedadRelativaPct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Humedadrelativapct"
+          },
+          "vientoMS": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vientoms"
+          },
+          "et0Mm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Et0Mm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fecha",
+          "lluviaMm",
+          "tMaxC",
+          "tMinC"
+        ],
+        "title": "DiaClima"
+      },
+      "ErrorDatos": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "const": "ERROR_DATOS",
+            "title": "Estado",
+            "default": "ERROR_DATOS"
+          },
+          "motivo": {
+            "type": "string",
+            "title": "Motivo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "motivo"
+        ],
+        "title": "ErrorDatos"
+      },
+      "Fuente": {
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "coordenada": {
+            "anyOf": [
+              {
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coordenada"
+          },
+          "periodo": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Periodo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unidades": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unidades"
+          },
+          "consultado": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consultado"
+          },
+          "resolucion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolucion"
+          },
+          "nota": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nota"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nombre"
+        ],
+        "title": "Fuente"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Meta": {
+        "properties": {
+          "versionContrato": {
+            "type": "string",
+            "title": "Versioncontrato"
+          },
+          "esEjemplo": {
+            "type": "boolean",
+            "title": "Esejemplo",
+            "default": false
+          },
+          "generado": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generado"
+          }
+        },
+        "type": "object",
+        "required": [
+          "versionContrato"
+        ],
+        "title": "Meta"
+      },
+      "Periodo": {
+        "properties": {
+          "desde": {
+            "type": "string",
+            "format": "date",
+            "title": "Desde"
+          },
+          "hasta": {
+            "type": "string",
+            "format": "date",
+            "title": "Hasta"
+          }
+        },
+        "type": "object",
+        "required": [
+          "desde",
+          "hasta"
+        ],
+        "title": "Periodo"
+      },
+      "SerieClima": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "respaldo": {
+            "type": "boolean",
+            "title": "Respaldo"
+          },
+          "coordenada": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Coordenada"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "diario": {
+            "items": {
+              "$ref": "#/components/schemas/DiaClima"
+            },
+            "type": "array",
+            "title": "Diario"
+          },
+          "advertencias": {
+            "items": {
+              "$ref": "#/components/schemas/Advertencia"
+            },
+            "type": "array",
+            "title": "Advertencias",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "estado",
+          "respaldo",
+          "coordenada",
+          "fuente",
+          "diario"
+        ],
+        "title": "SerieClima",
+        "description": "Serie diaria de un periodo, sin elegir escenario. El motor (A2.5) corta los anios de cada escenario."
+      },
+      "Terreno": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estado",
+          "fuente"
+        ],
+        "title": "Terreno"
+      },
+      "TerrenoEntrada": {
+        "properties": {
+          "tamanoCeldaM": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Tamanoceldam"
+          },
+          "celdas": {
+            "items": {
+              "$ref": "#/components/schemas/CeldaEntrada"
+            },
+            "type": "array",
+            "maxItems": 1600,
+            "minItems": 1,
+            "title": "Celdas"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tamanoCeldaM",
+          "celdas"
+        ],
+        "title": "TerrenoEntrada"
+      },
+      "TerrenoRespuesta": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "terreno": {
+            "$ref": "#/components/schemas/Terreno"
+          },
+          "celdas": {
+            "items": {
+              "$ref": "#/components/schemas/CeldaTerreno"
+            },
+            "type": "array",
+            "title": "Celdas"
+          },
+          "advertencias": {
+            "items": {
+              "$ref": "#/components/schemas/Advertencia"
+            },
+            "type": "array",
+            "title": "Advertencias",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "terreno",
+          "celdas"
+        ],
+        "title": "TerrenoRespuesta"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
