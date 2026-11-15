@@ -1,5 +1,5 @@
 1
-00:00:00,300 --> 00:00:03,000
+00:00:00,300 --> 00:00:02,900
 What if next season is a dry one?
 
 2
@@ -12,16 +12,16 @@ AgroHive tests your crop rotation
 against 20 years of real NASA climate.
 
 4
-00:00:12,100 --> 00:00:16,800
+00:00:12,100 --> 00:00:16,850
 Dry year, normal year, wet year.
 Watch your field react.
 
 5
-00:00:17,000 --> 00:00:20,900
+00:00:16,950 --> 00:00:20,700
 It ranks rotations by their worst year,
 not their best.
 
 6
-00:00:26,200 --> 00:00:28,600
+00:00:26,200 --> 00:00:28,900
 AgroHive. Plan for the bad year.
 
