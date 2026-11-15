@@ -8,6 +8,7 @@ import { useSerieBalance } from '../useSerieBalance';
 import { rangoDelCiclo } from '../tiempo';
 import { aplicarAcomodando, colorCultivo, cultivoDeCelda, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
 import { EventoPantalla } from './EventoPantalla';
+import { tocar } from '../sonido';
 import { rangosTemperatura } from '../../escena/clima-vista';
 import { problemasPorCultivo } from '../../escena/problemas';
 import { eventosAlAvanzar, PAUSA_EXTRA_EVENTO_MS, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
@@ -140,6 +141,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     if (!plan || !visible || !ids.length) return;
     setProteccion(proteger(proteccion, plan.rotacionId, visible.ciclo, ids));
     setRociado({ celdas: ids, clave: Date.now() });
+    tocar('rociar');
   }, [plan, visible, proteccion, setProteccion]);
   const riesgos = useMemo(() => (plan && visible ? riesgosDelPlan(plan, celdasZona, presentes, proteccion).filter((r) => r.ciclo === visible.ciclo) : []), [plan, visible, celdasZona, presentes, proteccion]);
   const plagasEscena = useMemo(() => (resultado && plan ? mapaPlagas(resultado.registros.filter((r) => zonaPlaga.has(r.celdaId)), presentes, proteccion, plan.rotacionId) : undefined), [resultado, plan, presentes, proteccion, zonaPlaga]);
@@ -177,6 +179,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     const clave = `${plan.rotacionId}:${visible.ciclo}:${escenario}`;
     const anterior = fechaPrevia.current?.clave === clave ? fechaPrevia.current.fecha : null;
     fechaPrevia.current = { clave, fecha };
+    if (anterior !== null && anterior !== fecha) tocar('semana'); // un golpecito por cada paso del tiempo
     const nuevos = eventosAlAvanzar({ anterior, actual: fecha, rango, clave, cosecha: datosEvento.current.cosecha, plaga: datosEvento.current.plaga });
     if (nuevos.length) setCola((c) => [...c, ...nuevos]);
   }, [paso, fecha, rango, plan?.rotacionId, visible?.ciclo, escenario]);
@@ -201,6 +204,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
         setNota(textoMovidos(r.movidos));
         setPendientes((p) => { const m = new Map(p); for (const id of ids) m.set(id, color); return m; });
         estado.actualizar(r.plan);
+        tocar('pintar');
       },
     };
   }, [paso, herramienta, plan, visible, datos, cultivoActivo, tamano, estado, rociar]);
