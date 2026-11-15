@@ -42,7 +42,7 @@ App conserva las selecciones de interfaz mientras permanece montada, incluso al 
 - Isla y 2 ha son el supuesto de la demo del doc 06; la verificación de zona está pendiente según doc 13. La ilustración es decorativa, sin datos geográficos.
 - El mapa (A2.10), cuadrícula (A2.9), escena y motor se integrarán después. No hay botones que simulen calcular, cambiar a 3D ni dibujar polígonos.
 - **Worker integrado:** `src/motor/worker.ts` y `crearClienteMotor()` de Mompin. A1.2 comprueba respuesta mediante `olvidar`; A3.4 ejecuta planes y consulta celdas mediante el protocolo existente. No se usa PING/READY.
-- En P0, Cómo funciona y Recursos abren diálogos nativos; en P1–P3, método y fuentes se consultan mediante un acordeón nativo sin perder selecciones. El enlace a NASA POWER solo se abre por acción explícita.
+- En P1–P3, método y fuentes se consultan mediante un acordeón nativo sin perder selecciones. El enlace a NASA POWER solo se abre por acción explícita.
 
 ## Inicio — iteración visual con referencia Duna
 
@@ -50,7 +50,7 @@ Referencia principal: captura de AgroHive entregada por Balam y `DESIGN.md` de D
 
 - Asset original proporcionado por el usuario en `src/ui/assets/inicio-campo.png`, conservado sin editar. Es una ilustración decorativa, no un mapa ni una representación científica del terreno.
 - `src/ui/inicio.css` define los tokens y el tratamiento exclusivo de P0: fondo a pantalla completa con `object-fit: cover`, blur de **3,5 px** aplicado solo a la imagen y sin degradado blanco inferior ni velo adicional. Según las anotaciones de Balam, el título, la pregunta, la descripción y el aviso son blancos; las acciones principales tienen fondo negro y hover gris oscuro. Se aplica en todas las anchuras, sin alterar los breakpoints. El contraste del texto sobre la ilustración no se ha certificado como WCAG AA.
-- Cabecera en `src/ui/InicioHeader.tsx`. Producto lleva al laboratorio; Soluciones, a comparación; Cómo funciona y Recursos abren diálogos con cierre por Escape y restauración del foco. Los botones de demo y polígono conservan sus destinos.
+- P0 (landing) no tiene menú ni enlace a la demo: solo centra el texto y el botón "Dibujar un terreno" (`src/paginas/Inicio.tsx`, `src/ui/inicio.css`).
 - `src/App.tsx` selecciona la cabecera y el contenedor de inicio. P1–P3 mantienen la disposición anterior. Se retiraron de `styles.css` las reglas sin uso del inicio previo.
 - Fuente del sistema (Arial/Helvetica); GT America no fue proporcionada. No se agregó una fuente remota ni una dependencia.
 - En móvil, la navegación ocupa una segunda fila y los botones se apilan. El contenido puede desplazarse en pantallas bajas; la imagen se recorta al centro.

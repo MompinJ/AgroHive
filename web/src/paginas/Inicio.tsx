@@ -10,8 +10,7 @@ export function Inicio() {
       <p className="landing-question">¿Y si cambias lo que siembras?</p>
       <p className="landing-description">Explora rotaciones de cultivos con la historia climática de NASA<br className="landing-desktop-break" /> y compara cómo responden en distintos escenarios.</p>
       <div className="landing-actions">
-        <a className="landing-button" href="#/terreno">Explorar parcela demo</a>
-        <a className="landing-button landing-button-outline" href="#/terreno?modo=poligono">Dibujar un terreno</a>
+        <a className="landing-button" href="#/terreno?modo=poligono">Dibujar un terreno</a>
       </div>
       <p className="landing-disclaimer">Prototipo de demostración · Los datos ilustrativos no son predicciones agrícolas.</p>
     </div>

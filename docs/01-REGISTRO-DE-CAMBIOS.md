@@ -17,6 +17,13 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — Landing sin menú ni demo, contenido centrado (Eduardo)
+
+- **Archivos:** `web/src/paginas/Inicio.tsx`, `web/src/ui/inicio.css`, `web/src/App.tsx`; eliminado `web/src/ui/InicioHeader.tsx` (menú, enlace "Explorar demo" y diálogo de Cómo funciona/Recursos); `web/README.md`, `docs/06`.
+- **Cambio:** la landing ya no muestra el encabezado con menú ni los botones de demo. El bloque de texto y el botón "Dibujar un terreno" van centrados verticalmente. La demo sigue en la página de terreno.
+- **Evidencia:** `tsc` sin errores; pruebas del front 3267 en verde. No se revisó visualmente en el navegador.
+- **Decisiones afectadas:** ninguna de alcance del MVP; es un cambio de presentación pedido por el equipo.
+
 ### 2026-11-15 — Arreglo: rotaciones guardadas de otra parcela en parcelas dibujadas (Eduardo)
 
 - **Archivos:** `web/src/ui/planes.ts` (`reconstruirPlan`, `claveDeParcela`) y su prueba, `web/src/ui/useLaboratorio.ts`, `web/src/ui/lab/Laboratorio.tsx`.

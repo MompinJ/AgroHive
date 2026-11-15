@@ -25,7 +25,7 @@ La disposición exacta (qué panel va a la izquierda) es `[PROPUESTA]`. En móvi
 
 | ID | Vista | Propósito |
 | --- | --- | --- |
-| **P0** | Inicio | Qué hace AgroHive, aviso de que usa historia y no predice. Botón "Explorar". Sin cuentas. |
+| **P0** | Inicio | Qué hace AgroHive, aviso de que usa historia y no predice. Un solo botón, "Dibujar un terreno", centrado; sin menú superior ni acceso directo a la demo. Sin cuentas. |
 | **P1** | Caso / terreno | Parcela de demo (Isla, 2 ha ficticias) o, si entra, dibujar polígono propio. Qué viene de NASA, qué es supuesto. |
 | **P2** | Laboratorio | La pantalla de tres paneles. Aquí se juega el "what if". |
 | **P3** | Comparación y conclusión | Tabla de rotaciones: evaluabilidad, peor caso, habitual, pilares disponibles, evidencia y riesgos. |
