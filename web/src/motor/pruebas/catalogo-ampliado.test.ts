@@ -49,6 +49,14 @@ const SIEMBRA = { PV: '2016-06-15', OI: '2016-11-01' } as const;
 const casos = catalogo.cultivos.flatMap((c) => (['PV', 'OI'] as const).map((t) => [c.id, t] as const));
 
 describe('catalogo ampliado: todos los cultivos se simulan con estados honestos', () => {
+  it('ids unicos y sin modelo3d en los cultivos de la ampliacion', () => {
+    const ids = catalogo.cultivos.map((c) => c.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    const i = ids.indexOf('soya');
+    expect(i).toBeGreaterThan(0);
+    for (const c of catalogo.cultivos.slice(i)) expect(c.modelo3d, c.id).toBeUndefined();
+  });
+
   it('cada cultivo tiene sus parametros esenciales con fuente', () => {
     for (const c of catalogo.cultivos) expect(parametrosCultivo(c).ok, c.id).toBe(true);
   });
