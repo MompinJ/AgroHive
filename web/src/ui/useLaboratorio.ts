@@ -46,6 +46,9 @@ export function conLimite<T>(promesa: Promise<T>, ms = 120000): Promise<T> {
     promesa.then((r) => { clearTimeout(reloj); resolve(r); }, (e: unknown) => { clearTimeout(reloj); reject(e); });
   });
 }
+/** Id del suelo de una parcela cuyo lugar no tiene datos de suelo: el contrato pide un id, y el suelo en si va `null` (NO_EVALUABLE). */
+export const SUELO_SIN_DATOS = 'sin-datos-de-suelo';
+
 export function useLaboratorio(parcela: Parcela | null, habilitado: boolean, ejemploId: string = EJEMPLO_INICIAL) {
   const [rotacion, setRotacion] = useState('R1');
   const [ciclo, setCiclo] = useState(1);
@@ -79,9 +82,8 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean, eje
         const tab = await import('../../../datos/catalogos/suelos.json');
         const respuesta = datosRemotos;
         if (!respuesta.clima.ok) throw new Error(respuesta.clima.error.motivo);
-        if (!respuesta.suelo.ok) throw new Error(respuesta.suelo.error.motivo);
         if (!respuesta.cultivos.ok) throw new Error(respuesta.cultivos.error.motivo);
-        siguiente = { esDemo: false, parcela: { ...parcela, sueloId: respuesta.suelo.datos.id }, serie: respuesta.clima.datos, suelo: respuesta.suelo.datos, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: respuesta.calendario?.ok ? respuesta.calendario.datos : null, avisos: [...remotos.avisos.map((a) => a.mensaje), ...(respuesta.calendario?.ok ? [] : ['Sin calendario local verificado para esta parcela.'])], avisosDatos: remotos.avisos };
+        siguiente = { esDemo: false, parcela: { ...parcela, sueloId: respuesta.suelo.ok ? respuesta.suelo.datos.id : SUELO_SIN_DATOS }, serie: respuesta.clima.datos, suelo: respuesta.suelo.ok ? respuesta.suelo.datos : null, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: respuesta.calendario?.ok ? respuesta.calendario.datos : null, avisos: [...remotos.avisos.map((a) => a.mensaje), ...(respuesta.calendario?.ok ? [] : ['Sin calendario local verificado para esta parcela.'])], avisosDatos: remotos.avisos };
       }
       if (activo) setDatos({ clave: claveParcela, datos: siguiente });
     }

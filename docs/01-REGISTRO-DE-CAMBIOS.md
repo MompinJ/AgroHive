@@ -230,6 +230,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — Dibujar el terreno en cualquier lugar, con la información que haya (Eduardo)
+
+- **Archivos:** `web/src/api/datosParcela.ts` y su prueba, `web/src/ui/useLaboratorio.ts`, `web/src/api/README.md`.
+- **Cambio:** pedido del equipo: el terreno se puede dibujar en cualquier posición y solo se toma la información que haya de ese lugar o país. El mapa y el dibujo no tenían límites geográficos; la restricción estaba después: el laboratorio se detenía con un error si el lugar no tenía datos de **suelo** (SoilGrids no cubre océano, hielo ni algunos desiertos). Ahora solo el clima y el catálogo de cultivos son obligatorios (sin ellos no hay simulación); el suelo pasa a opcional, con el aviso `SUELO_NO_DISPONIBLE` (lo que depende del suelo, como el balance de agua, queda `NO_EVALUABLE`; el clima, las fechas, las plagas y las vistas de luz y temperatura siguen) y el id de suelo `sin-datos-de-suelo`. El calendario local, la próxima temporada, las plagas y los extras ya eran opcionales.
+- **Evidencia:** prueba nueva con un lugar sin dato de suelo (mar abierto): `fallaObligatoria` es nula y sale el aviso con el motivo del servidor; la prueba de falla obligatoria ahora usa el clima. El motor con `suelo: null` devuelve la rotación `NO_EVALUABLE` con motivo, sin lanzar error (pruebas existentes `motor.test.ts` y `hallazgos-back.test.ts`).
+- **Límites:** sin suelo la rotación queda `NO_EVALUABLE` en el ranking, así que en esos lugares la comparación no ordena nada; no hay selector manual de suelo en la interfaz. Sin clima de NASA POWER ni de Open-Meteo tampoco hay simulación. No se probó en el navegador.
+- **Decisiones afectadas:** ninguna de alcance del MVP.
+
 ### 2026-11-15 — Arreglo del sonido: el audio se despierta en el primer gesto (Eduardo)
 
 - **Archivos:** `web/src/ui/sonido.ts` y `sonido.test.ts`; `docs/06`.
