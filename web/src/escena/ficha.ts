@@ -21,7 +21,7 @@ export interface Ficha {
   filas: FilaFicha[];
 }
 
-const NOMBRES_CULTIVO: Record<string, string> = {
+export const NOMBRES_CULTIVO_ESCENA: Record<string, string> = {
   maiz: 'Maíz',
   frijol: 'Frijol',
   calabaza: 'Calabaza',
@@ -65,7 +65,7 @@ const NOMBRES_CULTIVO: Record<string, string> = {
   rabano: 'Rábano',
   betabel: 'Betabel',
 };
-const NOMBRES_ETAPA: Record<string, string> = {
+export const NOMBRES_ETAPA_ESCENA: Record<string, string> = {
   suelo_desnudo: 'Suelo desnudo',
   siembra: 'Siembra',
   brote: 'Brote',
@@ -73,7 +73,7 @@ const NOMBRES_ETAPA: Record<string, string> = {
   madurez: 'Madurez',
 };
 
-export const nombreCultivo = (id: string) => NOMBRES_CULTIVO[id] ?? id;
+export const nombreCultivo = (id: string) => NOMBRES_CULTIVO_ESCENA[id] ?? id;
 
 const numero = (n: number, decimales: number) =>
   n.toLocaleString('es-MX', { minimumFractionDigits: decimales, maximumFractionDigits: decimales });
@@ -106,7 +106,7 @@ export function fichaBloque(b: BloqueEscena): Ficha {
   filas.push({ etiqueta: 'Cultivo', valor: cultivo ?? 'Sin cultivo' });
   filas.push(
     b.etapa
-      ? { etiqueta: 'Etapa', valor: NOMBRES_ETAPA[b.etapa] ?? b.etapa }
+      ? { etiqueta: 'Etapa', valor: NOMBRES_ETAPA_ESCENA[b.etapa] ?? b.etapa }
       : r
         ? { etiqueta: 'Etapa', ...falta('sin parámetros del cultivo para saber su etapa') }
         : { etiqueta: 'Etapa', ...falta() },

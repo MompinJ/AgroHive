@@ -12,7 +12,7 @@
 | Sí hay relieve | Equipo, 13/11 |
 | El equipo son 4 integrantes | Equipo, 13/11 |
 | MVP primero; extras en fase 1 y fase 2 | Reunión |
-| 3D en el MVP, con motor independiente y modo 2D de respaldo | Reunión, v0.2 y v1.2 |
+| 3D en el MVP, con motor independiente y modo 2D de respaldo. El modo 2D se retiró el 15/11 a pedido de Eduardo (06, "Vistas de la base"); confirmar con Mompin | Reunión, v0.2 y v1.2 |
 | UI y modelos hechos por el equipo, sin plantillas | Reunión |
 | Modelos en Blockbench (`.bbmodel`), generados por el agente `modelador-voxel` | Equipo, 13/11 |
 | Documentación en el repo (`docs/`); Drive queda como respaldo del historial (13) | Equipo, 13/11; corregido en el evento (13) |
@@ -98,7 +98,7 @@ Del plan de trabajo: decididas D1 (Eduardo lleva el rediseño del front), D4 (se
 | Riesgo | Impacto | Mitigación |
 | --- | --- | --- |
 | Sobrealcance (relieve + selector + 3D + pilares) | Alto | Prioridades y puntos de corte (09) |
-| El 3D consume demasiado tiempo | Alto | Motor independiente, modo 2D, plantas procedurales |
+| El 3D consume demasiado tiempo | Alto | Motor independiente, plantas procedurales (el modo 2D se retiró el 15/11) |
 | APIs lentas o caídas en la sede | Alto | Caché, parcelas precargadas, Open-Meteo |
 | La demo falla en vivo | Alto | Video grabado, parcela probada, copia sin internet |
 | Humedad de POWER mal interpretada (fracción de saturación tomada como fracción de TAW) | Medio | Convertir con θsat, θFC y θWP de Saxton y Rawls; sin ellos, condición inicial `NO_EVALUABLE` |
@@ -110,7 +110,7 @@ Del plan de trabajo: decididas D1 (Eduardo lleva el rediseño del front), D4 (se
 | Parámetros agronómicos mal citados | Medio | Citar fuentes, marcar supuestos, aviso de validación |
 | Conflictos de código por convenciones | Medio | Contratos de datos en la hora 0 |
 | Quedarse sin cupo de IA | Medio | Repartir uso, reservar para lo crítico |
-| Rendimiento pobre en equipos modestos | Medio | Tope de celdas, instancing, modo 2D |
+| Rendimiento pobre en equipos modestos | Medio | Tope de celdas, instancing y render bajo demanda. Sin modo 2D desde el 15/11: sin WebGL no se ve la parcela, solo las cifras |
 | Ediciones simultáneas en Drive | Bajo | Un archivo por responsable; registrar en 01 |
 | Percepción de "plantilla de IA" | Bajo | Arte y UI propios |
 | Los años seco / habitual / lluvioso dependen de la fuente de lluvia: con IMERG serían 2019, 2024 y 2017 en vez de 2023, 2016 y 2024 (`features/imerg/`, 14/11) | Medio | Se mantiene `PRECTOTCORR` (decisión vigente, 05 paso 1) y se declara el hallazgo en método y pitch; IMERG se muestra como contraste (A4.10); validar contra una estación del SMN si se consigue `[VERIFICAR]` |

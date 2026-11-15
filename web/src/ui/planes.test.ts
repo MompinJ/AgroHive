@@ -29,7 +29,7 @@ describe('planes del selector', () => {
   });
   it('guarda la comprobación de ventana del motor junto con la fecha', () => {
     const planes = planesIniciales(parcela, calendarioIsla);
-    expect(planes.find((p) => p.rotacionId === 'R4')!.ciclos.every((c) => c.dentroDeVentana === true)).toBe(true);
+    expect(planes.find((p) => p.rotacionId === 'R3')!.ciclos.every((c) => c.dentroDeVentana === true)).toBe(true);
     expect(planes[0]!.ciclos[1]!.dentroDeVentana).toBe(false);
   });
   it('R1 ciclo 2 seco entrega frijol desde el motor con fechas del selector', () => {
@@ -95,5 +95,41 @@ describe('brocha y fechas derivadas', () => {
     expect(frijol.ciclos[1]!.siembra).toBe('2026-11-01');
     // Sin ventana con fuente (calabaza), tambien se conserva la fecha.
     expect(rellenarCiclo(r1(), parcela, 3, 'calabaza', calendarioIsla, cat).ciclos[2]!.siembra).toBe('2027-06-15');
+  });
+});
+
+describe('paleta de cultivos', () => {
+  it('agrupa el catalogo por tipo sin perder ni repetir cultivos', async () => {
+    const { agruparCultivos } = await import('./planes');
+    const cultivos = (catalogo as CatalogoCultivos).cultivos;
+    const grupos = agruparCultivos(cultivos);
+    const ids = grupos.flatMap((g) => g.cultivos.map((c) => c.id));
+    expect(ids.sort()).toEqual(cultivos.map((c) => c.id).sort());
+    expect(grupos.find((g) => g.nombre === 'Leguminosas')!.cultivos.every((c) => c.esLeguminosa === true)).toBe(true);
+    expect(grupos[0]!.nombre).toBe('Cereales');
+  });
+});
+
+describe('rotaciones sin limite de ciclos', () => {
+  it('agrega un ciclo despues del ultimo, sin traslapes, y lo puede quitar renumerando', async () => {
+    const { agregarCiclo, quitarCiclo, nuevaRotacion, nombreRotacion } = await import('./planes');
+    const cat = catalogo as CatalogoCultivos;
+    const planes = planesIniciales(parcela, calendarioIsla);
+    expect(planes.map((p) => p.rotacionId)).toEqual(['R1', 'R2', 'R3']);
+    const r1 = planes[0]!;
+    const con4 = agregarCiclo(r1, parcela, calendarioIsla, cat);
+    expect(con4.ciclos).toHaveLength(4);
+    expect(con4.ciclos[3]!.cultivo).toBe('frijol');
+    expect(conflictosPlan(con4, cat)).toEqual([]);
+    // No espera casi un anio a la siguiente ventana.
+    expect(Date.parse(con4.ciclos[3]!.siembra) - Date.parse(con4.ciclos[2]!.siembra)).toBeLessThan(250 * 86400000);
+    const pintado = pintarCeldas(con4, parcela, 4, [parcela.celdas[0]!.id], 'maiz', calendarioIsla);
+    const sin2 = quitarCiclo(pintado, parcela, 2, calendarioIsla);
+    expect(sin2.ciclos.map((c) => c.ciclo)).toEqual([1, 2, 3]);
+    expect(sin2.porCelda?.[parcela.celdas[0]!.id]).toEqual([{ ciclo: 3, cultivo: 'maiz' }]);
+    const nueva = nuevaRotacion(r1, planes, parcela, calendarioIsla);
+    expect(nueva.rotacionId).toBe('R4');
+    expect(nombreRotacion('R3', [...planes, nueva])).toBe('Rotación 3');
+    expect(validadorContrato('plan-siembra')(con4)).toEqual([]);
   });
 });

@@ -153,3 +153,34 @@
 .escena-hud-barra .escena-brujula { position: relative; width: 44px; padding: 0; display: grid; place-items: center; overflow: visible; }
 .escena-brujula svg { transition: transform 120ms linear; }
 @media (prefers-reduced-motion: reduce) { .escena-brujula svg { transition: none; } }
+
+/* Vistas de la base (modo fondo): cultivo, validacion y agua. */
+.escena-globo-vista { display: grid; gap: 2px; max-width: 280px; padding: 8px 10px; border-radius: 10px; background: rgb(17 34 26 / 92%); }
+.escena-globo-vista strong { font-size: .8rem; }
+.escena-globo-vista span { font-size: .72rem; opacity: .9; }
+.escena-hud-globo { display: grid; gap: 4px; font-size: .8rem; }
+.escena-hud-globo strong { font-size: .9rem; color: var(--escena-tinta); }
+.escena-hud-globo span { color: var(--escena-tenue); }
+.escena-hud-ficha { padding: 12px 14px; }
+.escena-escala { gap: 8px; padding: 12px 14px; }
+.escena-escala-titulo { margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--escena-tenue); }
+.escena-escala-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 12px; }
+.escena-escala-lista li { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; }
+.escena-escala-muestra { width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1px rgb(0 0 0 / 15%); }
+.escena-escala-pasos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); height: 12px; border-radius: 6px; overflow: hidden; }
+.escena-escala-degradado { height: 12px; border-radius: 6px; }
+.escena-escala-extremos { display: flex; justify-content: space-between; font-size: .72rem; color: var(--escena-tenue); }
+.escena-hud-barra .escena-vista-icono { display: inline-block; width: 12px; height: 12px; margin-right: 6px; border-radius: 3px; vertical-align: -1px; box-shadow: inset 0 0 0 1px rgb(0 0 0 / 12%); }
+.escena-vista-cultivo { background: conic-gradient(#d9a62e 0 33%, #8a4b2f 0 66%, #3f8a52 0); }
+.escena-vista-validacion { background: linear-gradient(90deg, #bf3326, #e2bf3a, #2f8a4e); }
+.escena-vista-agua { background: linear-gradient(90deg, #c9cdd1, #0b2a5b); }
+.escena-hud-barra button[aria-pressed="true"] .escena-vista-icono { box-shadow: 0 0 0 1.5px #fff; }
+@media (max-width: 760px) { .escena-escala .escena-detalle { display: none; } .escena-escala { gap: 6px; padding: 10px 12px; } }
+
+/* Cielo del entorno (modo fondo): el lienzo es transparente y este degradado queda detras.
+   Celeste arriba, horizonte calido abajo; saturacion baja para no competir con los datos. */
+.escena-fondo .escena-lienzo-caja {
+  background:
+    radial-gradient(120% 70% at 70% 8%, rgb(255 255 255 / 55%) 0%, rgb(255 255 255 / 0%) 60%),
+    linear-gradient(180deg, #a9d4ef 0%, #c7e4f4 38%, #e6f1ee 66%, #f3e9cf 88%, #ead9b3 100%);
+}

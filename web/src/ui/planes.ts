@@ -5,13 +5,11 @@ import version from '../../../contratos/package.json';
 import { dentroDeVentana } from '../motor/pilares';
 
 export const calendarioIsla = calendarioJson as CalendarioLocal;
-export const nombresCultivos: Record<string, string> = { maiz: 'Maíz', frijol: 'Frijol', calabaza: 'Calabaza', chile: 'Chile', sorgo: 'Sorgo', sandia: 'Sandía', camote: 'Camote', cacahuate: 'Cacahuate' };
-/**
- * Color de la brocha por cultivo. Solo identifica lo que pinta el usuario mientras el motor
- * lo evalua; no es un estado ni un indicador. Tonos tierra de saturacion media.
- */
-export const coloresCultivo: Record<string, string> = { maiz: '#d9a62e', frijol: '#8a4b2f', calabaza: '#d9772b', chile: '#b73a2e', sorgo: '#9a5470', sandia: '#3f8a52', camote: '#74539c', cacahuate: '#b08a5c' };
-export const colorCultivo = (cultivo: string) => coloresCultivo[cultivo] ?? '#6b7a72';
+/** Nombres con acentos: una sola fuente, la de la escena (ficha.ts). */
+import { NOMBRES_CULTIVO_ESCENA } from '../escena/ficha';
+export const nombresCultivos: Record<string, string> = NOMBRES_CULTIVO_ESCENA;
+/** Colores por cultivo: los define la escena (base de los bloques y brocha). */
+export { COLORES_CULTIVO as coloresCultivo, colorCultivo } from '../escena/vistas';
 export function referenciaSiembra(cultivo: string, temporada: Ciclo['temporada'], calendario: CalendarioLocal | null) {
   return calendario?.entradas.find((e) => e.cultivo === cultivo && e.temporada === temporada && e.regimen === 'temporal');
 }
@@ -38,7 +36,7 @@ export function planesIniciales(parcela: Parcela, calendario: CalendarioLocal | 
   const definiciones: Record<string, [string, string, Ciclo['temporada']][]> = {
     R1: [['maiz', '2026-06-15', 'PV'], ['frijol', '2026-11-01', 'OI'], ['maiz', '2027-06-15', 'PV']],
     R2: [['maiz', '2026-06-15', 'PV'], ['maiz', '2027-06-15', 'PV']],
-    R4: [['maiz', '2026-06-01', 'PV'], ['frijol', '2026-10-10', 'OI'], ['maiz', '2027-06-01', 'PV']],
+    R3: [['maiz', '2026-06-01', 'PV'], ['frijol', '2026-10-10', 'OI'], ['maiz', '2027-06-01', 'PV']],
   };
   return Object.entries(definiciones).map(([id, lista]) => armarPlan(id, parcela, lista.map(([cultivo, siembra, temporada], i) => ({ ciclo: i + 1, cultivo, siembra, temporada, porQue: 'Plan de demostración editable, no recomendación.' })), calendario));
 }
@@ -183,8 +181,94 @@ export function cambiarSiembra(plan: PlanSiembra, parcela: Parcela, ciclo: numbe
   return armarPlan(plan.rotacionId, parcela, plan.ciclos.map((c) => c.ciclo === ciclo ? { ...c, siembra, temporada: temporadaDeFecha(siembra) } : c), calendario, plan.porCelda);
 }
 
+/**
+ * Ventana local por cultivo y ciclo, para la vista de validacion: usa la fecha del ciclo del
+ * plan (los cultivos pintados comparten la fecha de su ciclo) y la misma regla que el motor.
+ */
+export function ventanaDelPlan(plan: PlanSiembra, calendario: CalendarioLocal | null) {
+  return (cultivo: string, ciclo: number): boolean | null => {
+    const c = plan.ciclos.find((x) => x.ciclo === ciclo);
+    const v = c ? referenciaSiembra(cultivo, c.temporada, calendario)?.ventana : undefined;
+    return c && v?.estado === 'EVALUABLE' ? dentroDeVentana(c.siembra, v) : null;
+  };
+}
+
 /** Fecha a mitad del ciclo: en el paso de cultivos se ven las plantas crecidas, no recien sembradas. */
 export function fechaParaVer(siembra: string, cultivo: string, catalogo: CatalogoCultivos): string {
   const dias = diasCultivo(cultivo, catalogo);
   return dias ? deDia(aDia(siembra) + Math.round(dias * 0.6)) : siembra;
+}
+
+/**
+ * Grupos de la paleta (solo para ordenar la interfaz, no es un dato agronomico del catalogo).
+ * Las leguminosas salen del campo esLeguminosa del catalogo; lo que no esta en la lista va en "Otros".
+ */
+const GRUPOS_PALETA: [string, string[]][] = [
+  ['Cereales', ['maiz', 'maiz_dulce', 'sorgo', 'trigo', 'cebada', 'avena']],
+  ['Cucurbitáceas', ['calabaza', 'calabacita', 'sandia', 'melon', 'pepino']],
+  ['Raíces y tubérculos', ['camote', 'yuca', 'papa', 'zanahoria', 'rabano', 'betabel']],
+  ['Hortalizas', ['chile', 'tomate', 'cebolla', 'lechuga', 'berenjena', 'brocoli', 'col', 'coliflor', 'espinaca']],
+  ['Industriales y oleaginosas', ['cana', 'ajonjoli', 'girasol', 'algodon', 'cartamo', 'higuerilla']],
+];
+export function agruparCultivos<T extends { id: string; esLeguminosa?: boolean | null }>(cultivos: readonly T[]): { nombre: string; cultivos: T[] }[] {
+  const leguminosas = cultivos.filter((c) => c.esLeguminosa === true);
+  const resto = cultivos.filter((c) => c.esLeguminosa !== true);
+  const grupos = [
+    { nombre: 'Cereales', cultivos: resto.filter((c) => GRUPOS_PALETA[0]![1].includes(c.id)) },
+    { nombre: 'Leguminosas', cultivos: leguminosas },
+    ...GRUPOS_PALETA.slice(1).map(([nombre, ids]) => ({ nombre, cultivos: resto.filter((c) => ids.includes(c.id)) })),
+  ];
+  const agrupados = new Set(grupos.flatMap((g) => g.cultivos.map((c) => c.id)));
+  grupos.push({ nombre: 'Otros', cultivos: resto.filter((c) => !agrupados.has(c.id)) });
+  return grupos.filter((g) => g.cultivos.length > 0);
+}
+
+/** Nombre visible de una rotacion: su lugar en la lista ("Rotacion 1", "Rotacion 2"...). */
+export function nombreRotacion(id: string, planes: readonly Pick<PlanSiembra, 'rotacionId'>[]): string {
+  const i = planes.findIndex((p) => p.rotacionId === id);
+  return `Rotación ${i >= 0 ? i + 1 : id.replace(/^R/, '')}`;
+}
+
+/** Rotacion nueva: copia de la elegida con el siguiente id libre (R1, R2...). */
+export function nuevaRotacion(base: PlanSiembra, planes: readonly PlanSiembra[], parcela: Parcela, calendario: CalendarioLocal | null): PlanSiembra {
+  const siguiente = Math.max(0, ...planes.map((p) => Number(p.rotacionId.slice(1)) || 0)) + 1;
+  return armarPlan(`R${siguiente}`, parcela, base.ciclos, calendario, base.porCelda);
+}
+
+/**
+ * Agrega un ciclo al final: alterna con el cultivo de dos ciclos atras (o repite el ultimo) y
+ * se siembra al terminar el ciclo anterior, en el inicio de la ventana local si la hay despues.
+ */
+export function agregarCiclo(plan: PlanSiembra, parcela: Parcela, calendario: CalendarioLocal | null, catalogo: CatalogoCultivos): PlanSiembra {
+  const ciclos = [...plan.ciclos].sort((a, b) => a.ciclo - b.ciclo);
+  const ultimo = ciclos[ciclos.length - 1]!;
+  const cultivo = ciclos[ciclos.length - 2]?.cultivo ?? ultimo.cultivo;
+  const dias = Math.max(1, ...cultivosDelCiclo(plan, ultimo.ciclo).map((c) => diasCultivo(c, catalogo) ?? 0));
+  const libre = aDia(ultimo.siembra) + dias + 1;
+  // Si el dia libre ya cae en una ventana local, se siembra ahi; si la siguiente ventana empieza
+  // pronto (90 dias o menos), se espera a ella; si no, se siembra al quedar libre la parcela.
+  const ventanas = (calendario?.entradas ?? []).flatMap((e) => (e.cultivo === cultivo && e.regimen === 'temporal' && e.ventana.estado === 'EVALUABLE' ? [e.ventana] : []));
+  const fechaLibre = deDia(libre);
+  const anio = Number(fechaLibre.slice(0, 4));
+  const proxima = ventanas.flatMap((v) => [anio, anio + 1].map((a) => inicioDeVentana(v, a))).filter((f) => aDia(f) >= libre).sort()[0];
+  const siembra = ventanas.some((v) => dentroDeVentana(fechaLibre, v)) ? fechaLibre
+    : proxima && aDia(proxima) - libre <= 90 ? proxima : fechaLibre;
+  const nuevo: Ciclo = { ciclo: ultimo.ciclo + 1, cultivo, siembra, temporada: temporadaDeFecha(siembra), porQue: 'Ciclo agregado en el selector.' };
+  return armarPlan(plan.rotacionId, parcela, [...ciclos, nuevo], calendario, plan.porCelda);
+}
+
+/** Quita un ciclo (queda al menos uno) y renumera los siguientes, tambien en lo pintado. */
+export function quitarCiclo(plan: PlanSiembra, parcela: Parcela, ciclo: number, calendario: CalendarioLocal | null): PlanSiembra {
+  if (plan.ciclos.length <= 1) return plan;
+  const ciclos = plan.ciclos.filter((c) => c.ciclo !== ciclo).map((c) => (c.ciclo > ciclo ? { ...c, ciclo: c.ciclo - 1 } : c));
+  let porCelda: PlanSiembra['porCelda'] = null;
+  if (plan.porCelda) {
+    const salida: NonNullable<PlanSiembra['porCelda']> = {};
+    for (const [celda, lista] of Object.entries(plan.porCelda)) {
+      const resto = lista.filter((x) => x.ciclo !== ciclo).map((x) => (x.ciclo > ciclo ? { ...x, ciclo: x.ciclo - 1 } : x));
+      if (resto.length) salida[celda] = resto as typeof lista;
+    }
+    porCelda = salida;
+  }
+  return armarPlan(plan.rotacionId, parcela, ciclos, calendario, porCelda);
 }

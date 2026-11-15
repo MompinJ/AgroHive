@@ -158,6 +158,8 @@ En el carril de Balam, video y presentación quedan canceladas por su petición 
 
 ## A3.6: vista 2D ligera
 
+> Retirada el 15/11 a pedido de Eduardo; se conserva como historial. Ver `docs/06`, "Vistas de la base y retiro del 2D".
+
 El laboratorio ofrece 2D/3D con el mismo ResultadoCeldas guardado: alternar no simula ni consulta datos. La vista 2D carga diferida, sin Three.js ni canvas; comparte adaptador, placas, leyenda y ficha con la escena. Celdas cuadradas de 80 px con icono de cultivo y placa de estado, norte arriba, flechas, Inicio/Fin y selector nativo; hasta 1600 celdas con desplazamiento interno. Sin WebGL2 al abrir, activa 2D automáticamente. Se conservan los datos faltantes y sus motivos.
 
 Verificado en producción: R1/ciclo 2/seco muestra frijol; alternar conserva métricas y no añade mensajes al Worker ni peticiones. Sin WebGL no carga EscenaParcela. A 320 px sin desborde horizontal; axe sin incidencias en WCAG A/AA revisadas. Pruebas de ficha NO_EVALUABLE, parcela incorrecta y cuadrícula de 1600 celdas orientada al norte. Capturas: evidencia/a3-6-2d-320.png y a3-6-2d-sin-webgl.png. La medición en hardware real, rendimiento y pérdida posterior del contexto sigue en A5.4 (Eduardo).
@@ -173,5 +175,7 @@ QA en Chrome: R1 pasa de siembra a crecimiento al avanzar un mes; abrir gráfica
 Vite construye index.html y medir.html. Tras desplegar dist, la herramienta de A5.4 se abre en /medir.html (con ?auto=0 espera al botón de inicio). Build y preview de producción verificados el 14/11: ambos HTML presentes; página de medición con respuesta 200 y control de inicio. Esto no confirma despliegue ni medición en hardware real. Instrucciones en herramientas/medir-escena/README.md.
 
 ## Iconos de cultivo en 2D
+
+> Desde el 15/11 ya no hay vista 2D; los íconos se usan en la paleta de la brocha.
 
 Parcela2D consume los 20 SVG originales de modelos/iconos2d mediante ui/iconosCultivo2D.ts, sin copiar archivos ni importar Three.js. Cultivo/etapa del motor a 32 px y placa de estado completa debajo en celda cuadrada de 80 px. Sin datos, suelo desnudo o recurso desconocido no se inventa planta. Podrida solo por estado explícito. Ficha, leyenda y teclado se conservan. QA en producción sin WebGL: maíz/frijol y etapa al cambiar fecha, 320 px sin desborde, axe sin incidencias; captura evidencia/iconos-2d-frijol-320.png. Las condiciones de IA y revisión humana del arte permanecen en el README de origen.

@@ -245,6 +245,8 @@ export class CamaraGranja {
   private readonly alBajarTecla = (ev: KeyboardEvent) => {
     if (ev.altKey || ev.ctrlKey || ev.metaKey) return;
     const k = ev.key.toLowerCase();
+    // Mayusculas + flechas eligen la celda vecina (EscenaParcela), no mueven la camara.
+    if (ev.shiftKey && k.startsWith('arrow')) return;
     if (TECLAS_MOVER[k]) {
       ev.preventDefault();
       if (!this.teclas.has(k)) { this.teclas.add(k); this.ultimoPaso = 0; this.pedirCuadro(); }

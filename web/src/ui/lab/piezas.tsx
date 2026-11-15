@@ -1,6 +1,6 @@
 // Piezas pequenas de los paneles flotantes del laboratorio.
 import type { ReactNode } from 'react';
-import type { Fuente, PlanSiembra } from '../../../../contratos/tipos/contratos';
+import type { PlanSiembra } from '../../../../contratos/tipos/contratos';
 import { colorCultivo, nombresCultivos } from '../planes';
 import { iconoDeCultivo } from '../iconosCultivo2D';
 import { pasos } from '../navigation';
@@ -15,11 +15,11 @@ export function fechaCorta(fecha: string): string {
 }
 export const nombreCultivo = (id: string) => nombresCultivos[id] ?? id;
 export const nombreTemporada = (t: string) => (t === 'PV' ? 'Primavera–verano' : 'Otoño–invierno');
-export const nombreEscenario: Record<string, string> = { seco: 'Seco', habitual: 'Habitual', lluvioso: 'Lluvioso' };
-
-export function FuenteVisible({ fuente }: { fuente: Fuente }) {
-  return <span className="lab-fuente">Fuente: {fuente.url ? <a href={fuente.url} target="_blank" rel="noreferrer">{fuente.nombre}</a> : fuente.nombre}{fuente.cita ? ` · ${fuente.cita}` : ''}</span>;
+/** 1 jun – 15 jul (ventana del calendario, sin anio). */
+export function rangoVentana(v: { desdeMes: number; desdeDia?: number; hastaMes: number; hastaDia?: number }): string {
+  return `${v.desdeDia ?? 1} ${meses[v.desdeMes - 1]} – ${v.hastaDia ?? 'fin de'} ${meses[v.hastaMes - 1]}`;
 }
+export const nombreEscenario: Record<string, string> = { seco: 'Año seco', habitual: 'Año normal', lluvioso: 'Año lluvioso' };
 
 export function IconoCultivo({ cultivo, tamano = 28 }: { cultivo: string; tamano?: number }) {
   const url = iconoDeCultivo(cultivo);

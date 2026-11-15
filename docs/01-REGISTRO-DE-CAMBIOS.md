@@ -2,6 +2,33 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Mascota en pantalla con consejos, NDVI y SMAP en el front, entorno 3D y más color (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/` (`Mascota.tsx`, `consejos.ts` y su prueba, `useEvidencia.ts`, `Laboratorio.tsx`, `lab.css`), `web/src/api/cliente.ts` (`obtenerNdvi`, `obtenerSmap`), `web/src/ui/useLaboratorio.ts` (`esDemo`), `web/src/ui/tokens.css`; `web/src/escena/render/retrato.ts` y `entorno.ts` (nuevos), `escena-three.ts`, `EscenaParcela.tsx`, `escena.css`; `docs/06`.
+- **Cambio:** la mascota sale de la parcela y aparece en la pantalla con consejos por paso; el front usa por primera vez NDVI (verdor de la zona) y SMAP (humedad del suelo reciente) como evidencia en esos consejos; la escena del laboratorio tiene cielo, isla de pasto, árboles y luz cálida; colores un poco más vivos. Detalle en 06, "Mascota en pantalla, consejos y evidencia satelital".
+- **Por qué:** pedido de Eduardo.
+- **Fuente:** NDVI MOD13Q1 V061 (paquete de demo o `/api/ndvi`) y SMAP L3 (`/api/smap`); evidencia, no entra al motor ni al ranking. Hoy SMAP en Isla trae los últimos días con calidad baja y sin humedad válida, así que ese consejo no aparece.
+- **Decisiones afectadas:** ninguna de alcance; cortes de NDVI y SMAP como `[PROPUESTA]`.
+
+### 2026-11-15 — Terreno, rotaciones sin límite, laboratorio sin fuentes y comparación directa (Eduardo)
+
+- **Archivos:** `web/src/paginas/Terreno.tsx`, `ui/MapaParcela.tsx`, `ui/DibujarParcela.tsx`, `ui/terreno.css`, `ui/system.css`; `ui/planes.ts` y `planes.test.ts`, `ui/useLaboratorio.ts`, `ui/ControlTiempo.tsx`, `ui/DashboardBalance.tsx`, `ui/lab/` (`PanelCultivos`, `PanelEscenarios`, `PanelComparacion`, `Laboratorio`, `piezas`, `lab.css`, nuevos `iconos.tsx` y `Globo.tsx`); `escena/render/escena-three.ts`, `escena/EscenaParcela.tsx`; `docs/06`.
+- **Cambio:** dibujo de parcela con vértices arrastrables y barra de íconos; rotaciones 1, 2, 3 con ciclos ilimitados guardadas en el navegador; herramientas con íconos y globo; sin fuentes en el laboratorio; escenarios con nombres simples; pasto en celdas sin cultivo; línea de tiempo que aplica al soltar; comparación por tarjetas con debilidades. Detalle en 06, "Terreno, rotaciones sin límite y comparación directa".
+- **Por qué:** pedido de Eduardo; front a su cargo (D1) y control administrativo dado por Mompin.
+- **Pendiente:** la consulta real de elevación desde el editor nuevo no se probó en vivo; mover vértices con flechas del teclado.
+- **Decisiones afectadas:** ninguna de alcance. Las fuentes siguen completas en Método y fuentes.
+- **Integración con `main`:** se conserva el selector de escala de celda de Mompin (bordes diagonales, parte 3) dentro del editor nuevo, plegado en la tarjeta final; el mapa dibuja los `contornos` diagonales. `ui/Parcela2D.tsx` vuelve solo para la vista previa de la escena (`escena.html?vista=2d`, capturas de Mompin); el laboratorio sigue sin modo 2D.
+
+### 2026-11-15 — Vistas de la base (cultivos, validación, agua) y retiro del modo 2D (Eduardo)
+
+- **Archivos:** `web/src/escena/vistas.ts` y `vistas.test.ts` (nuevos), `escena/EscenaParcela.tsx`, `escena/render/escena-three.ts`, `escena/render/camara.ts`, `escena/ficha.ts`, `escena/escena.css`; `ui/lab/Laboratorio.tsx`, `ui/lab/PanelCultivos.tsx`, `ui/lab/lab.css`, `ui/planes.ts`, `ui/useLaboratorio.ts`; se borran `ui/Parcela2D.tsx`, `ui/Parcela2D.test.tsx` y `ui/parcela2d.css`; `docs/06`, `docs/11`, `web/README.md`, `AgroVault/Compartido/{Reglas,Resumen}.md`.
+- **Cambio:** el panel de abajo a la derecha queda con tres vistas que colorean la base de los bloques (por cultivo; validación de verde a rojo; necesidad de agua de gris a azul marino) y un globo con información de cada vista. Se quita el modo 2D. Detalle en 06, "Vistas de la base y retiro del 2D".
+- **Por qué:** pedido de Eduardo.
+- **Fuente:** los colores salen del registro de celda del motor (`estadoPlanta`, `etcMm`, `estresCalor`, `noRecomendadoEnLugar`) y de la ventana del calendario local; sin dato no hay color.
+- **Catálogo de 40 cultivos (tras integrar `main`):** paleta con sugeridos, buscador y grupos por tipo; color estable para cada cultivo; `NOMBRES_CULTIVO_ESCENA` con los 40 nombres con acentos (única fuente, la interfaz ya no tiene su propia tabla).
+- **Pendiente:** confirmar con Mompin el retiro del 2D (era respaldo decidido en la reunión; B1 y B3 de `docs/16` mencionan la vista 2D) y los cortes de validación y agua (`[PROPUESTA]`).
+- **Decisiones afectadas:** "3D en el MVP ... con modo 2D de respaldo" (11).
+
 ### 2026-11-15 — Modelos de la ampliación del catálogo, tanda E: cebolla, pepino, melón, lechuga y zanahoria (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
 
 - **Archivos:** `modelos/cultivos/{cebolla,pepino,melon,lechuga,zanahoria}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; ayudas `espaldera`, `poste`, `colgado`, `al_pie`, `roseta`, `abanico`, `hombro`, `fronda`); `iconos2d.py` (25 SVG; ayudas `espaldera` y `pluma`) y su README; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; pruebas con 33 cultivos; `docs/07` (tabla) y `docs/16` (M7). La paleta no cambia (sus colores, 191 a 205, entraron con la tanda D).

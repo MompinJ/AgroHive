@@ -9,10 +9,11 @@ import { construirEscena } from './adaptador';
 import type { AvisoDatos } from '../api/datosParcela';
 import { CODIGOS_TERRENO } from './avisos-datos';
 import { AvisosDatos } from './AvisosDatos';
-import { bloqueCentral, fichaBloque, vecino } from './ficha';
+import { bloqueCentral, fichaBloque, NOMBRES_CULTIVO_ESCENA, vecino } from './ficha';
 import { describirBloque, entradasLeyenda, type EntradaLeyenda } from './leyenda';
 import { EXAGERACION_VERTICAL_DEFECTO, type BloqueEscena } from './modelo';
 import { huellaPincel, type PincelEscena } from './pincel';
+import { AGUA_MAX_MM, colorAgua, colorCultivo, coloresBase, detalleVista, NIVELES_VALIDACION, type DentroDeVentana, type VistaBase } from './vistas';
 import { rgbaPlaca } from './placa';
 import { EscenaThree, ErrorWebGL } from './render/escena-three';
 import { textoEscalaSuelo } from './suelo';
@@ -52,7 +53,16 @@ export interface EscenaParcelaProps {
   marcas?: ReadonlyMap<string, string>;
   /** Corrimiento del centro de la vista en px (paneles encima del lienzo). */
   desplazamiento?: { x: number; y: number };
+  /** Ventana local de siembra por cultivo y ciclo, para la vista de validacion (modo fondo). */
+  dentroDeVentana?: DentroDeVentana | undefined;
 }
+
+const NOMBRE_VISTA: Record<VistaBase, string> = { cultivo: 'Cultivos', validacion: 'Validación', agua: 'Agua' };
+const AYUDA_VISTA: Record<VistaBase, string> = {
+  cultivo: 'Colorea la base de cada bloque con el color de su cultivo',
+  validacion: 'De verde (muy buena) a rojo (muy mala idea) según el motor',
+  agua: 'De gris (casi nada) a azul marino (mucha agua) según la demanda del día',
+};
 
 const SIN_MARCAS: ReadonlyMap<string, string> = new Map();
 
@@ -75,7 +85,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -127,7 +137,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   const pincelRef = useRef(pincel);
   const modeloRef = useRef<typeof modelo | null>(null);
   pincelRef.current = pincel;
-  const [abierto, setAbierto] = useState<'celdas' | 'leyenda' | 'vista' | null>(null);
+  const [vista, setVista] = useState<VistaBase | null>(null);
   const [azimut, setAzimut] = useState(45);
   const onPintar = useMemo(
     () => (bloque: BloqueEscena | null, fase: 'inicio' | 'trazo' | 'fin') => {
@@ -156,11 +166,10 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       pincel: !!pincel,
       onPintar,
       onAzimut: setAzimut,
+      pastoSinCultivo: modo === 'fondo',
+      entorno: modo === 'fondo',
       ...(desplazamiento ? { desplazamiento } : {}),
-      onSeleccion: (b: BloqueEscena | null) => {
-        setSeleccion(b);
-        if (b) setAbierto('celdas');
-      },
+      onSeleccion: setSeleccion,
       onContexto: (estado: 'perdido' | 'restaurado') => setContexto(estado),
       onHover: (bloque: BloqueEscena | null, x: number, y: number) => setHover(bloque ? { bloque, x, y } : null),
       onAviso: (codigo: string, mensaje: string) =>
@@ -228,6 +237,12 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     escena.current?.marcarPintura(todas);
   }, [marcas, trazo, colorPincel, modelo]);
 
+  // Vista de la base: solo en modo fondo; sin vista, el suelo vuelve a su color por humedad.
+  const coloresVista = useMemo(() => (modo === 'fondo' && vista ? coloresBase(modelo.bloques, vista, dentroDeVentana) : null), [modo, vista, modelo, dentroDeVentana]);
+  useEffect(() => {
+    escena.current?.colorearBase(coloresVista);
+  }, [coloresVista]);
+
   // Teclado con pincel: Enter o espacio pintan alrededor de la celda elegida.
   const pintarConTeclado = () => {
     const actual = seleccion ?? bloqueCentral(modelo.bloques);
@@ -261,8 +276,8 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
           tabIndex={0}
           aria-label={
             pincel
-              ? 'Parcela en 3D, modo brocha. Arrastra para pintar celdas; clic derecho o dos dedos para girar, rueda o pellizca para acercar. Teclado: W A S D o flechas desplazan, Q y E giran, mas y menos acercan, Inicio restablece; Enter pinta alrededor de la celda elegida.'
-              : 'Parcela en 3D. Arrastra para desplazar, clic derecho o dos dedos para girar, rueda o pellizca para acercar, doble clic para ir a una celda. Teclado: W A S D o flechas desplazan, Q y E giran, mas y menos acercan, Inicio restablece. Toca un bloque o pulsa Enter para ver su estado; Escape quita la seleccion. La lista de celdas permite elegir cualquier celda.'
+              ? 'Parcela en 3D, modo brocha. Arrastra para pintar celdas; clic derecho o dos dedos para girar, rueda o pellizca para acercar. Teclado: W A S D o flechas desplazan, Q y E giran, mas y menos acercan, Inicio restablece; Enter pinta alrededor de la celda elegida; Mayúsculas y flechas eligen la celda vecina.'
+              : 'Parcela en 3D. Arrastra para desplazar, clic derecho o dos dedos para girar, rueda o pellizca para acercar, doble clic para ir a una celda. Teclado: W A S D o flechas desplazan, Q y E giran, mas y menos acercan, Inicio restablece. Toca un bloque o pulsa Enter para ver su estado; Mayúsculas y flechas eligen la celda vecina; Escape quita la seleccion. La lista de celdas permite elegir cualquier celda.'
           }
           onKeyDown={(e) => {
             if ((e.key === 'Enter' || e.key === ' ') && pincel) {
@@ -273,6 +288,13 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
               elegir(seleccion ?? bloqueCentral(modelo.bloques));
             } else if (e.key === 'Escape') {
               elegir(null);
+            } else if (e.shiftKey && e.key.startsWith('Arrow')) {
+              // Mayusculas + flechas: celda vecina (las flechas solas desplazan la camara).
+              e.preventDefault();
+              e.stopPropagation();
+              const d: Record<string, [number, number]> = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] };
+              const [dx, dz] = d[e.key] ?? [0, 0];
+              mover(dx, dz);
             }
           }}
         />
@@ -282,7 +304,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
           {textoLluvia(lluvia)}
         </p>
       )}
-      {hover && !sinWebGL && (
+      {hover && !sinWebGL && !fondo && (
         <div className="escena-globo" style={{ left: hover.x, top: hover.y }} aria-hidden="true">
           <strong>{hover.bloque.celdaId}</strong> {fichaBloque(hover.bloque).resumen}
         </div>
@@ -415,45 +437,71 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   );
 
   if (fondo) {
-    const alternar = (panel: 'celdas' | 'leyenda' | 'vista') => setAbierto((a) => (a === panel ? null : panel));
+    const presentes = vista === 'cultivo' ? [...new Set(modelo.bloques.map((b) => b.cultivo).filter((c): c is string => !!c))] : [];
+    const sinDato = vista ? modelo.bloques.length - (coloresVista?.size ?? 0) : 0;
+    const globo = (b: BloqueEscena) => {
+      const d = vista ? detalleVista(b, vista, dentroDeVentana) : { titulo: fichaBloque(b).resumen, lineas: [`Celda ${b.celdaId}`] };
+      return <><strong>{d.titulo}</strong>{d.lineas.map((l) => <span key={l}>{l}</span>)}</>;
+    };
     return (
       <section className={`escena escena-fondo ${className}`} aria-label="Escena 3D de la parcela" style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
         {lienzoCaja}
+        {hover && !sinWebGL && (
+          <div className={`escena-globo escena-globo-vista${vista ? ` escena-globo-${vista}` : ''}`} style={{ left: hover.x, top: hover.y }} aria-hidden="true">
+            {globo(hover.bloque)}
+          </div>
+        )}
         {hud && (
           <div className="escena-hud">
-            {abierto && (
-              <div className="escena-hud-panel" role="region" aria-labelledby="escena-hud-titulo">
+            {seleccion && !pincel && (
+              <div className="escena-hud-panel escena-hud-ficha" role="region" aria-label="Celda elegida" aria-live="polite">
                 <div className="escena-hud-cabeza">
-                  <p id="escena-hud-titulo">{abierto === 'celdas' ? 'Ficha de la celda' : abierto === 'leyenda' ? 'Leyenda y avisos' : 'Opciones de vista'}</p>
-                  <button type="button" className="escena-hud-cerrar" onClick={() => setAbierto(null)} aria-label="Cerrar panel">×</button>
+                  <p>Celda {seleccion.celdaId}</p>
+                  <button type="button" className="escena-hud-cerrar" onClick={() => elegir(null)} aria-label="Cerrar ficha">×</button>
                 </div>
-                {abierto === 'celdas' && fichaPanel}
-                {abierto === 'leyenda' && (
-                  <>
-                    {avisosCriticos}
-                    <AvisosDatos avisos={avisosDatos} advertenciasParcela={parcela.advertencias ?? []} />
-                    {leyendaPanel}
-                    {avisosOtros}
-                    {listaCeldas}
-                  </>
-                )}
-                {abierto === 'vista' && controles}
+                <div className="escena-hud-globo">{globo(seleccion)}</div>
               </div>
             )}
-            <div className="escena-hud-barra" role="toolbar" aria-label="Escena">
-              <button type="button" aria-pressed={abierto === 'celdas'} onClick={() => alternar('celdas')}>Celda</button>
-              <button type="button" aria-pressed={abierto === 'leyenda'} onClick={() => alternar('leyenda')}>
-                Leyenda{criticos.length + otros.length > 0 ? <span className="escena-hud-punto" aria-label=" (hay avisos)" /> : null}
-              </button>
-              <button type="button" aria-pressed={abierto === 'vista'} onClick={() => alternar('vista')}>Vista</button>
+            {vista && (
+              <div className="escena-hud-panel escena-escala" role="region" aria-label={`Escala de la vista ${NOMBRE_VISTA[vista]}`}>
+                <p className="escena-escala-titulo">{NOMBRE_VISTA[vista]}</p>
+                {vista === 'cultivo' && (
+                  <ul className="escena-escala-lista">
+                    {presentes.map((c) => <li key={c}><span className="escena-escala-muestra" style={{ background: colorCultivo(c) }} />{NOMBRES_CULTIVO_ESCENA[c] ?? c}</li>)}
+                    {presentes.length === 0 && <li>Sin cultivos en esta fecha.</li>}
+                  </ul>
+                )}
+                {vista === 'validacion' && (
+                  <>
+                    <ul className="escena-escala-pasos">
+                      {[...NIVELES_VALIDACION].reverse().map((n) => <li key={n.nivel} style={{ background: n.color }} title={n.etiqueta} />)}
+                    </ul>
+                    <div className="escena-escala-extremos"><span>Muy mala idea</span><span>Muy buena</span></div>
+                    <p className="escena-detalle">Estado de la planta del motor; baja con siembra fuera de ventana, calor o cultivo no registrado en el lugar.</p>
+                  </>
+                )}
+                {vista === 'agua' && (
+                  <>
+                    <div className="escena-escala-degradado" style={{ background: `linear-gradient(90deg, ${colorAgua(0)}, ${colorAgua(AGUA_MAX_MM)})` }} />
+                    <div className="escena-escala-extremos"><span>0 mm/día</span><span>{AGUA_MAX_MM}+ mm/día</span></div>
+                    <p className="escena-detalle">Demanda de agua del cultivo ese día (ETc del motor).</p>
+                  </>
+                )}
+                {sinDato > 0 && <p className="escena-detalle">Sin color: {sinDato} {sinDato === 1 ? 'celda' : 'celdas'} sin dato del motor.</p>}
+              </div>
+            )}
+            <div className="escena-hud-barra" role="toolbar" aria-label="Vistas de la parcela">
+              {(['cultivo', 'validacion', 'agua'] as const).map((v) => (
+                <button key={v} type="button" aria-pressed={vista === v} onClick={() => setVista((a) => (a === v ? null : v))} title={AYUDA_VISTA[v]}>
+                  <span className={`escena-vista-icono escena-vista-${v}`} aria-hidden="true" />{NOMBRE_VISTA[v]}
+                </button>
+              ))}
               <span className="escena-hud-separador" aria-hidden="true" />
-              <button type="button" onClick={() => escena.current?.girar(-45)} disabled={sinWebGL} aria-label="Girar a la izquierda (Q)" title="Girar a la izquierda (Q)">↺</button>
-              <button type="button" className="escena-brujula" onClick={() => escena.current?.restablecerVista(true)} disabled={sinWebGL} aria-label={`Restablecer vista (Inicio). Norte a ${azimut} grados`} title="Restablecer vista (Inicio)">
+              <button type="button" className="escena-brujula" onClick={() => escena.current?.restablecerVista(true)} disabled={sinWebGL} aria-label={`Restablecer vista (Inicio). Norte a ${azimut} grados. Q y E giran.`} title="Restablecer vista (Inicio). Q y E giran">
                 <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style={{ transform: `rotate(${azimut}deg)` }}>
                   <path d="M12 3 15.5 12H8.5Z" fill="#b5452f" /><path d="M12 21 8.5 12h7Z" fill="currentColor" opacity=".45" /><circle cx="12" cy="12" r="1.6" fill="#fff" />
                 </svg>
               </button>
-              <button type="button" onClick={() => escena.current?.girar(45)} disabled={sinWebGL} aria-label="Girar a la derecha (E)" title="Girar a la derecha (E)">↻</button>
             </div>
           </div>
         )}

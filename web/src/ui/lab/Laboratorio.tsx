@@ -6,16 +6,21 @@ import type { ResultadoCeldas } from '../../../../contratos/tipos/contratos';
 import { conLimite, type LaboratorioEstado } from '../useLaboratorio';
 import { useSerieBalance } from '../useSerieBalance';
 import { rangoDelCiclo } from '../tiempo';
-import { colorCultivo, conflictosPlan, fechaParaVer, pintarCeldas } from '../planes';
+import { colorCultivo, conflictosPlan, fechaParaVer, pintarCeldas, ventanaDelPlan } from '../planes';
 import type { PincelEscena } from '../../escena/pincel';
 import { PanelCultivos, type Herramienta } from './PanelCultivos';
 import { PanelEscenarios } from './PanelEscenarios';
 import { PanelComparacion } from './PanelComparacion';
 import { Aviso } from './piezas';
+import { Globo } from './Globo';
+import { Mascota } from './Mascota';
+import { consejos } from './consejos';
+import { useEvidencia } from './useEvidencia';
+import { ordenarRotaciones } from '../ordenRotaciones';
+import { nombreRotacion } from '../planes';
 import './lab.css';
 
 const Escena = lazy(() => import('../../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
-const Parcela2D = lazy(() => import('../Parcela2D').then((m) => ({ default: m.Parcela2D })));
 
 export type PasoLab = 'cultivos' | 'escenarios' | 'comparacion';
 
@@ -41,9 +46,8 @@ function useVentana() {
 }
 
 export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEstado; paso: PasoLab; onAvanzar: (destino: PasoLab) => void }) {
-  const { rotacion, ciclo, escenario, fechaElegida, setFecha, vista, setVista } = estado.seleccion;
+  const { rotacion, ciclo, escenario, fechaElegida, setFecha } = estado.seleccion;
   const [webglDisponible] = useState(puedeUsarWebGL);
-  const vistaVisible = webglDisponible ? vista : '2d';
   const [celdas, setCeldas] = useState<{ clave: string; valor: ResultadoCeldas } | null>(null);
   const [falloCeldas, setFalloCeldas] = useState<{ clave: string; motivo: string } | null>(null);
   const [intentoCeldas, setIntentoCeldas] = useState(0);
@@ -99,13 +103,14 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     return () => clearTimeout(t);
   }, [aviso]);
 
-  // En Cultivos la escena conserva el ultimo resultado mientras el motor recalcula, para que
-  // pintar no deje la parcela vacia; lo pintado se cubre con su marca hasta que llega lo nuevo.
-  // En Escenarios y Comparacion solo se muestra el resultado vigente.
-  const ultimo = useRef<{ rotacion: string; ciclo: number; valor: ResultadoCeldas } | null>(null);
-  if (celdasListas && plan && visible) ultimo.current = { rotacion: plan.rotacionId, ciclo: visible.ciclo, valor: celdas!.valor };
-  const resultado = celdasListas ? celdas!.valor
-    : paso === 'cultivos' && ultimo.current && ultimo.current.rotacion === plan?.rotacionId && ultimo.current.ciclo === visible?.ciclo ? ultimo.current.valor : null;
+  // La escena conserva el ultimo resultado de la misma rotacion y ciclo mientras llega el nuevo
+  // (otra fecha, escenario o plan recalculado), para que no parpadee vacia; lo pintado se cubre
+  // con su marca hasta que llega lo nuevo. Las cifras de los paneles solo usan el vigente.
+  const ultimo = useRef<{ rotacion: string; ciclo: number; fecha: string; valor: ResultadoCeldas } | null>(null);
+  if (celdasListas && plan && visible) ultimo.current = { rotacion: plan.rotacionId, ciclo: visible.ciclo, fecha, valor: celdas!.valor };
+  const previo = !celdasListas && ultimo.current && ultimo.current.rotacion === plan?.rotacionId && ultimo.current.ciclo === visible?.ciclo ? ultimo.current : null;
+  const resultado = celdasListas ? celdas!.valor : previo?.valor ?? null;
+  const fechaEscena = previo?.fecha ?? fecha;
 
   const cultivoActivo = cultivoPincel ?? visible?.cultivo ?? null;
   const pincel: PincelEscena | null = useMemo(() => {
@@ -126,24 +131,29 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     };
   }, [paso, herramienta, plan, visible, datos, cultivoActivo, tamano, estado]);
 
-  const fondo = datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
-    {vistaVisible === '2d'
-      ? <div className="lab-fondo-2d"><Parcela2D parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} resultado={resultado} fecha={fecha} pincel={pincel} marcas={pendientes} compacta /></div>
-      : <Escena modo="fondo" hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fecha} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} />}
-  </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
+  const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
+  const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
+    : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
+      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} />
+    </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
 
   const comun = { estado, onAvanzar };
+  const evidencia = useEvidencia(datos?.parcela.centroide ?? null, datos?.esDemo ?? false);
+  const leguminosas = useMemo(() => new Set((datos?.catalogo.cultivos ?? []).filter((c) => c.esLeguminosa === true).map((c) => c.id)), [datos]);
+  const listaConsejos = useMemo(() => consejos({
+    paso, plan: plan ?? null, ciclo, calendario: datos?.calendario ?? null, escenario,
+    resultado: estado.calculo?.ranking.rotaciones.find((r) => r.rotacionId === plan?.rotacionId) ?? null,
+    ordenadas: ordenarRotaciones(estado.calculo?.ranking.rotaciones ?? []),
+    nombreRotacion: (id) => nombreRotacion(id, estado.planes), leguminosas, ndvi: evidencia.ndvi, smap: evidencia.smap,
+  }), [paso, plan, ciclo, datos, escenario, estado.calculo, estado.planes, leguminosas, evidencia]);
   return <div className={`lab lab-paso-${paso}`}>
+    <Globo />
+    {datos && paso !== 'comparacion' && <Mascota consejos={listaConsejos} paso={paso} />}
     <div className="lab-fondo">{fondo}</div>
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
-    {datos && <div className="lab-vista" role="radiogroup" aria-label="Vista de la parcela">
-      <button type="button" role="radio" aria-checked={vistaVisible === '3d'} disabled={!webglDisponible} onClick={() => setVista('3d')}>3D</button>
-      <button type="button" role="radio" aria-checked={vistaVisible === '2d'} onClick={() => setVista('2d')}>2D</button>
-    </div>}
     {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} tamano={tamano} setTamano={setTamano} calculando={!estado.calculo || !celdasListas} />}
-    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}:${vistaVisible}`} />}
+    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} />}
     {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} />}
-    {!webglDisponible && <p className="lab-toast lab-toast-info" role="status">WebGL no está disponible: mostramos la vista 2D con los mismos resultados del motor.</p>}
     {aviso && <Aviso tipo="error" className="lab-toast" onCerrar={() => setAviso('')}>{aviso}</Aviso>}
     {paso !== 'cultivos' && errorCeldas && <Aviso tipo="error" className="lab-toast" accion={{ texto: 'Reintentar', onClick: () => setIntentoCeldas((n) => n + 1) }}>{errorCeldas}</Aviso>}
   </div>;

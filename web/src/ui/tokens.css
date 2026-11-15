@@ -1,12 +1,12 @@
 :root {
   /* Paleta AgroHive: verdes de campo profundos, neutros salvia y un acento trigo. Saturacion baja. */
   --color-forest-950: #11221a;
-  --color-forest-800: #184a37;
-  --color-forest-700: #1f5a43;
-  --color-forest-100: #e1ece5;
+  --color-forest-800: #1b5e3e;
+  --color-forest-700: #23784f;
+  --color-forest-100: #dbefe2;
   --color-sage-25: #fafbf8;
-  --color-sage-50: #f3f5f0;
-  --color-sage-100: #e8ede5;
+  --color-sage-50: #f1f6ed;
+  --color-sage-100: #e3eedc;
   --color-sage-150: #eef1eb;
   --color-ink-700: #3c4a43;
   --color-ink-500: #5b6961;

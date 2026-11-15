@@ -135,14 +135,72 @@
   .app-shell-terrain .navigation a[aria-current], .terrain-status { outline: 1px solid CanvasText; }
 }
 
-.parcel-editor { margin: 32px 0; padding: clamp(16px, 3vw, 32px); background: var(--terrain-panel, #fff); border-radius: 24px; color: var(--color-text); }
-.parcel-editor h2 { font-size: clamp(28px, 4vw, 40px); }
-.parcel-map { height: min(60vh, 520px); min-height: 300px; margin-block: 24px; border-radius: 16px; isolation: isolate; z-index: 0; background: #e7eadf; }
-.parcel-coordinate-form, .parcel-actions, .parcel-summary { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin-block: 16px; }
-.parcel-coordinate-form label { display: grid; gap: 6px; flex: 1 1 160px; }
-.parcel-coordinate-form input { min-width: 0; width: 100%; padding: 12px; border: 1px solid var(--color-control-border); border-radius: 8px; background: #fff; color: var(--color-action); }
-.parcel-editor button { background: var(--color-action); color: white; padding: 12px 18px; border-radius: 8px; min-height: 44px; border: 1px solid var(--color-action); cursor: pointer; }
-.parcel-editor button:disabled { opacity: .5; cursor: default; }
-.parcel-editor :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
-.parcel-summary p { flex-basis: 100%; }
-.parcel-editor details ol { max-height: 180px; overflow: auto; }
+/* Editor del contorno: mapa grande con capas de vidrio encima (barra de iconos, resumen, accion). */
+.terrain-editor { scroll-margin-top: 84px; }
+.dibujo { margin: 32px 0 8px; display: grid; gap: 16px; }
+.dibujo-cabeza { display: grid; gap: 6px; }
+.dibujo-cabeza h2 { font-size: clamp(26px, 3vw, 36px); letter-spacing: -.03em; font-weight: 500; }
+.dibujo-cabeza h2:focus { outline: none; }
+.dibujo-cabeza p { color: var(--color-text-body); font-size: 15px; max-width: 70ch; }
+.mapa-dibujo { position: relative; height: min(72vh, 640px); min-height: 380px; border-radius: 22px; overflow: hidden; isolation: isolate; background: #dfe7db; box-shadow: var(--shadow-float); }
+.mapa-dibujo-carga { display: grid; place-items: center; color: var(--color-text-muted); }
+.mapa-dibujo-lienzo { position: absolute; inset: 0; z-index: 0; cursor: crosshair; }
+.mapa-dibujo-lienzo.leaflet-container { font: inherit; background: #dfe7db; }
+.mapa-capa {
+  position: absolute; z-index: 500; margin: 0;
+  background: rgb(255 255 255 / 88%); backdrop-filter: saturate(1.5) blur(14px); -webkit-backdrop-filter: saturate(1.5) blur(14px);
+  box-shadow: 0 1px 2px rgb(17 34 26 / 8%), 0 10px 28px -8px rgb(17 34 26 / 28%); color: var(--color-text);
+}
+.mapa-capa-vista { top: 14px; left: 14px; display: flex; gap: 2px; padding: 3px; border-radius: 999px; }
+.mapa-capa-vista button { min-height: 36px; min-width: 76px; padding: 4px 14px; border: 0; border-radius: 999px; background: transparent; font: inherit; font-size: 14px; font-weight: 500; color: var(--color-text-body); cursor: pointer; }
+.mapa-capa-vista button[aria-checked="true"] { background: var(--color-forest-700); color: #fff; }
+.mapa-aviso { top: 64px; left: 14px; padding: 6px 12px; border-radius: 10px; font-size: 13px; }
+.dibujo-barra { top: 14px; right: 14px; display: flex; flex-direction: column; gap: 2px; padding: 4px; border-radius: 16px; }
+.dibujo-herramienta { position: relative; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 12px; background: transparent; color: var(--color-forest-950); cursor: pointer; }
+.dibujo-herramienta:hover:not(:disabled), .dibujo-herramienta[aria-pressed="true"] { background: var(--color-forest-100); color: var(--color-forest-800); }
+.dibujo-herramienta:disabled { opacity: .35; cursor: not-allowed; }
+.dibujo-herramienta:focus-visible { outline: 3px solid var(--color-forest-700); outline-offset: 1px; }
+.dibujo-tooltip {
+  position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%); white-space: nowrap; pointer-events: none;
+  padding: 5px 10px; border-radius: 8px; background: rgb(17 34 26 / 92%); color: #fff; font-size: 13px; opacity: 0; transition: opacity 120ms ease;
+}
+.dibujo-herramienta:hover .dibujo-tooltip, .dibujo-herramienta:focus-visible .dibujo-tooltip { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .dibujo-tooltip { transition: none; } }
+.dibujo-pop { z-index: 520; top: 14px; right: 70px; width: min(260px, calc(100% - 100px)); display: grid; gap: 10px; padding: 14px; border-radius: 16px; font-size: 14px; }
+.dibujo-pop label { display: grid; gap: 4px; font-size: 13px; color: var(--color-text-body); }
+.dibujo-pop input { min-height: 40px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--color-line); background: #fff; font-size: 15px; }
+.dibujo-pop p { margin: 0; font-size: 13px; line-height: 1.45; }
+.dibujo-pop [role="alert"] { color: var(--color-clay); }
+.dibujo-ayuda { gap: 6px; }
+.dibujo-chip { left: 14px; bottom: 14px; padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; max-width: calc(100% - 28px); }
+.dibujo-final { right: 14px; bottom: 14px; display: grid; justify-items: end; gap: 8px; padding: 12px; border-radius: 18px; max-width: min(360px, calc(100% - 28px)); }
+.dibujo-error { margin: 0; font-size: 13px; line-height: 1.45; color: var(--color-clay); }
+.dibujo-boton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; padding: 10px 20px; border: 0; border-radius: 999px; background: var(--color-forest-700); color: #fff; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+.dibujo-boton:hover:not(:disabled) { background: var(--color-forest-800); }
+.dibujo-boton:disabled { background: #aebbb3; cursor: progress; }
+.dibujo-usar { box-shadow: 0 6px 16px -6px rgb(31 90 67 / 60%); }
+.dibujo-enlace { border: 0; background: transparent; padding: 4px 0; font: inherit; font-size: 13px; color: var(--color-text-body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.dibujo-separador { height: 1px; margin: 3px 8px; background: rgb(17 34 26 / 12%); }
+.mapa-dibujo .leaflet-control-attribution { font-size: 10px; background: rgb(255 255 255 / 70%); }
+/* Vertices y puntos medios (Leaflet divIcon). */
+.mapa-vertice { border-radius: 50%; background: #fff; border: 3px solid var(--color-forest-700); box-shadow: 0 1px 4px rgb(0 0 0 / 40%); cursor: grab; }
+.mapa-vertice:hover, .mapa-vertice:focus-visible { transform-origin: center; border-color: #e9c46a; outline: none; }
+.mapa-vertice.leaflet-drag-target, .mapa-vertice:active { cursor: grabbing; }
+.mapa-medio { border-radius: 50%; background: rgb(255 255 255 / 75%); border: 2px dashed var(--color-forest-700); cursor: copy; }
+.mapa-medio:hover { background: #fff; }
+@media (max-width: 700px) {
+  .mapa-dibujo { height: 70svh; min-height: 340px; border-radius: 16px; }
+  .mapa-capa-vista { top: 10px; left: 10px; }
+  .mapa-capa-vista button { min-width: 64px; padding-inline: 10px; }
+  .dibujo-barra { top: 10px; right: 10px; }
+  .dibujo-pop { top: 10px; right: 62px; width: calc(100% - 82px); }
+  .dibujo-chip { left: 10px; bottom: 82px; font-size: 13px; }
+  .dibujo-final { left: 10px; right: 10px; bottom: 10px; max-width: none; justify-items: stretch; }
+  .dibujo-tooltip { display: none; }
+}
+@media (forced-colors: active) { .mapa-capa { border: 1px solid CanvasText; } }
+.dibujo-nota { margin: 0; font-size: .78rem; color: var(--color-text-muted); max-width: 300px; }
+.dibujo-escala { font-size: .8rem; color: var(--color-text-body); }
+.dibujo-escala > summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
+.dibujo-escala .parcel-scale { display: grid; gap: 6px; padding-top: 6px; max-width: 300px; }
+.dibujo-escala select { min-height: 38px; border-radius: 10px; border: 1px solid var(--color-line); background: #fff; }

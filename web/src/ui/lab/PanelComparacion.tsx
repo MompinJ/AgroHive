@@ -1,94 +1,118 @@
-// Paso 4: ranking por robustez del motor, explicacion de cada rotacion, graficas de agua y
-// banda exploratoria de la proxima temporada. Nada se recalcula aqui.
-import { lazy, Suspense, useState } from 'react';
+// Paso 4: comparacion directa. Una tarjeta por rotacion, en el orden del ranking del motor:
+// su lugar, sus cultivos, cuanta agua le falto en cada anio y, primero, sus debilidades (los
+// riesgos que redacta el motor). Nada se recalcula aqui.
+import { lazy, Suspense } from 'react';
 import type { Escenario } from '../../../../contratos/tipos/contratos';
 import type { LaboratorioEstado } from '../useLaboratorio';
 import type { EstadoSerieBalance } from '../useSerieBalance';
 import { ordenarRotaciones } from '../ordenRotaciones';
-import { TarjetasRotacion } from '../TarjetasRotacion';
-import { Aviso, Cargando, EncabezadoPanel, FuenteVisible, Secuencia, nombreEscenario, numero } from './piezas';
+import { nombreRotacion } from '../planes';
+import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, nombreCultivo, nombreEscenario, numero } from './piezas';
+import { IconoInfo } from './iconos';
 import { nombresPilares } from './PanelEscenarios';
 import type { PasoLab } from './Laboratorio';
 
 const DashboardBalance = lazy(() => import('../DashboardBalance'));
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
-type Pestana = 'explicacion' | 'agua' | 'proxima';
 
-export function PanelComparacion({ estado, serie, setGraficas }: {
+export function PanelComparacion({ estado, onAvanzar, serie, setGraficas }: {
   estado: LaboratorioEstado; onAvanzar: (d: PasoLab) => void; serie: EstadoSerieBalance; setGraficas: (v: boolean) => void;
 }) {
-  const [pestana, setPestana] = useState<Pestana>('explicacion');
-  const { rotacion, setRotacion, setMostrarBanda } = estado.seleccion;
+  const { rotacion, setRotacion, setCiclo, setEscenario, setMostrarBanda } = estado.seleccion;
   const ranking = estado.calculo?.ranking;
   const ordenadas = ordenarRotaciones(ranking?.rotaciones ?? []);
   const resultado = ranking?.rotaciones.find((r) => r.rotacionId === rotacion);
-  const elegir = (p: Pestana) => { setPestana(p); setGraficas(p === 'agua'); setMostrarBanda(p === 'proxima'); };
-  const criterio = ranking ? ranking.mensaje ?? `${ranking.criterio?.startsWith('B') ? 'Menor arrepentimiento máximo entre escenarios' : ranking.criterio ? 'Menor déficit en el peor escenario' : 'Sin ranking evaluable'}.` : '';
+  const maximo = Math.max(1, ...ordenadas.flatMap((r) => escenarios.map((e) => r.porEscenario[e].pilares.deficitHidrico.deficitTotalMm ?? 0)));
+  const limites = [...new Set(ordenadas.flatMap((r) => r.explicacion?.huecos ?? []))];
+  const comoSeOrdena = ranking?.ponderacion
+    ? `Gana la que menos sufre en su peor año. Se toma en cuenta: ${Object.keys(ranking.ponderacion.pesos).map((p) => (nombresPilares[p] ?? p).toLowerCase()).join(', ')}.`
+    : 'Gana la que menos sufre en su peor año.';
+
+  const ir = (id: string, destino: PasoLab, escenario?: Escenario) => {
+    setRotacion(id); setCiclo(1);
+    if (escenario) setEscenario(escenario);
+    onAvanzar(destino);
+  };
 
   return <section className="panel panel-ancho" aria-label="Comparación">
-    <EncabezadoPanel indice={3} titulo="Compara las rotaciones">Ordenadas por robustez: la que mejor aguanta su peor año, no la que más rinde en un año ideal.</EncabezadoPanel>
+    <EncabezadoPanel indice={3} titulo="Compara tus rotaciones" />
+    <div className="lab-etiqueta-fila">
+      <p className="panel-intro">La mejor no es la que más rinde en un buen año, sino la que menos sufre en uno malo.</p>
+      <span className="lab-tip lab-info" tabIndex={0} data-tip={comoSeOrdena} aria-label={comoSeOrdena}><IconoInfo /></span>
+    </div>
 
-    {!ranking ? (estado.error ? <Aviso tipo="error" accion={{ texto: 'Reintentar', onClick: estado.reintentar }}>{estado.error}</Aviso> : <Cargando>El motor está ordenando las rotaciones…</Cargando>) : <>
-      <p className="panel-ayuda">{criterio} {ranking.ponderacion ? `Pesos ${ranking.ponderacion.etiqueta}.` : ''}</p>
-      <ol className="lab-ranking">
+    {!ranking ? (estado.error ? <Aviso tipo="error" accion={{ texto: 'Reintentar', onClick: estado.reintentar }}>{estado.error}</Aviso> : <Cargando>Comparando…</Cargando>) : <>
+      <ol className="cmp-tarjetas">
         {ordenadas.map((r) => {
           const plan = estado.planes.find((p) => p.rotacionId === r.rotacionId);
-          const primera = r.ranking?.posicion === 1;
-          return <li key={r.rotacionId} className={`${primera ? 'lab-ranking-primera' : ''}${r.rotacionId === rotacion ? ' lab-ranking-actual' : ''}`}>
-            <button type="button" aria-pressed={r.rotacionId === rotacion} onClick={() => setRotacion(r.rotacionId)}>
-              <span className="lab-ranking-pos" aria-label={r.ranking?.posicion ? `Posición ${r.ranking.posicion}` : 'Sin posición'}>{r.ranking?.posicion ?? '—'}</span>
-              <span className="lab-ranking-cuerpo">
-                <span className="lab-ranking-titulo"><strong>{r.rotacionId}</strong>{primera && <span className="lab-insignia">Más robusta</span>}<span className="lab-ranking-estado">{r.estado}</span></span>
-                {plan && <Secuencia plan={plan} />}
-                <span className="lab-ranking-escenarios">
-                  {escenarios.map((e) => <span key={e} className={r.peorCaso?.escenario === e ? 'lab-peor' : ''}>{nombreEscenario[e]} {r.porEscenario[e].anioReal ?? '—'}: {numero(r.porEscenario[e].pilares.deficitHidrico.deficitTotalMm, ' mm')}{r.peorCaso?.escenario === e ? ' · peor caso' : ''}</span>)}
-                </span>
-              </span>
-            </button>
+          const pos = r.ranking?.posicion ?? null;
+          const debilidades = r.explicacion?.riesgos ?? [];
+          const fortalezas = r.explicacion?.beneficios ?? [];
+          const peor = r.peorCaso?.escenario;
+          return <li key={r.rotacionId} className={`cmp-tarjeta${pos === 1 ? ' cmp-primera' : ''}${r.rotacionId === rotacion ? ' cmp-actual' : ''}`}>
+            <header className="cmp-cabeza">
+              <span className="cmp-pos" aria-label={pos ? `Lugar ${pos}` : 'Sin lugar'}>{pos ?? '—'}</span>
+              <h2>{nombreRotacion(r.rotacionId, estado.planes)}</h2>
+              {pos === 1 && <span className="lab-insignia">La más robusta</span>}
+              {r.estado !== 'EVALUABLE' && <span className="cmp-estado lab-tip" data-tip={r.explicacion?.porQue ?? r.estado}>{r.estado === 'EXPLORATORIO' ? 'Solo para explorar' : 'Sin evaluar'}</span>}
+            </header>
+
+            {plan && <ol className="cmp-cultivos" aria-label="Cultivos por ciclo">
+              {plan.ciclos.map((c) => <li key={c.ciclo} className="lab-tip" data-tip={`Ciclo ${c.ciclo}: ${nombreCultivo(c.cultivo)}`}><IconoCultivo cultivo={c.cultivo} tamano={24} /><span className="sr-only">Ciclo {c.ciclo}: {nombreCultivo(c.cultivo)}</span></li>)}
+            </ol>}
+
+            <div className="cmp-barras" role="img" aria-label={`Agua que faltó: ${escenarios.map((e) => `${nombreEscenario[e]} ${numero(r.porEscenario[e].pilares.deficitHidrico.deficitTotalMm, ' mm')}`).join(', ')}`}>
+              {escenarios.map((e) => {
+                const mm = r.porEscenario[e].pilares.deficitHidrico.deficitTotalMm;
+                return <div key={e} className={`cmp-barra cmp-barra-${e}${peor === e ? ' cmp-peor' : ''}`}>
+                  <span className="cmp-valor">{mm == null ? '—' : `${Math.round(mm)} mm`}</span>
+                  <span className="cmp-columna"><span style={{ height: `${mm == null ? 0 : Math.max(4, (mm / maximo) * 100)}%` }} /></span>
+                  <span className="cmp-anio">{nombreEscenario[e]!.replace('Año ', '')}</span>
+                </div>;
+              })}
+              <p className="cmp-leyenda">Agua que le faltó al cultivo</p>
+            </div>
+            {peor && <p className="cmp-peor-anio">Su peor año: <strong>{nombreEscenario[peor]!.toLowerCase()} ({r.porEscenario[peor].anioReal ?? '—'})</strong></p>}
+
+            <div className="cmp-lista cmp-debil">
+              <h3>Debilidades</h3>
+              {debilidades.length ? <ul>{debilidades.slice(0, 2).map((t, i) => <li key={i}>{t}</li>)}</ul> : <p>Ninguna fuerte en los años probados.</p>}
+            </div>
+            {fortalezas.length > 0 && <div className="cmp-lista cmp-fuerte">
+              <h3>Fortalezas</h3>
+              <ul>{fortalezas.slice(0, 1).map((t, i) => <li key={i}>{t}</li>)}</ul>
+            </div>}
+
+            <footer className="cmp-acciones">
+              <button type="button" className="lab-boton lab-boton-suave" onClick={() => ir(r.rotacionId, 'escenarios', peor)}>Ver su peor año</button>
+              <button type="button" className="lab-boton lab-boton-suave" onClick={() => ir(r.rotacionId, 'cultivos')}>Mejorarla</button>
+            </footer>
           </li>;
         })}
       </ol>
-      {ranking.noOrdenadas.map((r) => <p className="panel-ayuda" key={r.rotacionId}>{r.rotacionId}: {r.motivo}</p>)}
+      {ranking.noOrdenadas.map((r) => <p className="panel-ayuda" key={r.rotacionId}>{nombreRotacion(r.rotacionId, estado.planes)}: {r.motivo}</p>)}
 
-      <details className="panel-bloque">
-        <summary><span className="panel-etiqueta">Cómo se ordenó</span></summary>
-        <p className="panel-ayuda">{ranking.ponderacion?.nota}</p>
-        <p className="panel-ayuda">Un pilar entra solo si todas las rotaciones comparadas tienen datos para evaluarlo.</p>
-        <ul className="lab-lista">{Object.entries(ranking.ponderacion?.pesos ?? {}).map(([id, peso]) => <li key={id}>{nombresPilares[id] ?? id}: incluido, peso {numero(peso)}.</li>)}{ranking.ponderacion?.pilaresExcluidos.map((id) => {
-          const motivos = [...new Set(ranking.rotaciones.flatMap((r) => escenarios.map((e) => r.porEscenario[e].pilares[id]?.motivo).filter((m): m is string => !!m)))];
-          return <li key={id}>{nombresPilares[id] ?? id}: excluido. {motivos.join(' ') || ranking.ponderacion?.nota}</li>;
-        })}</ul>
-        {ranking.advertencias.map((a, i) => <p className="panel-ayuda" key={i}>{a.mensaje}</p>)}
-        {resultado?.advertencias?.map((a, i) => <p className="panel-ayuda" key={`r${i}`}>{a.mensaje}</p>)}
+      <details className="panel-bloque" onToggle={(e) => setGraficas((e.target as HTMLDetailsElement).open)}>
+        <summary><span className="panel-etiqueta">Agua mes a mes de la {nombreRotacion(rotacion, estado.planes).toLowerCase()}</span></summary>
+        <Suspense fallback={<Cargando>Cargando gráficas…</Cargando>}><DashboardBalance serie={serie} /></Suspense>
       </details>
 
-      <div className="lab-pestanas" role="tablist" aria-label="Detalle">
-        {([['explicacion', 'Qué explica cada una'], ['agua', 'Gráficas de agua'], ['proxima', 'Próxima temporada']] as const).map(([id, texto]) => <button type="button" role="tab" key={id} id={`tab-${id}`} aria-selected={pestana === id} aria-controls={`panel-${id}`} onClick={() => elegir(id)}>{texto}</button>)}
-      </div>
-      <div className="lab-pestana" role="tabpanel" id={`panel-${pestana}`} aria-labelledby={`tab-${pestana}`}>
-        {pestana === 'explicacion' && <TarjetasRotacion rotaciones={ordenadas} />}
-        {pestana === 'agua' && <Suspense fallback={<Cargando>Cargando gráficas…</Cargando>}><DashboardBalance serie={serie} /></Suspense>}
-        {pestana === 'proxima' && <div className="ui-flow">
-          <Aviso tipo="aviso">Exploratorio: no es una predicción de cosecha ni de una temporada exacta.</Aviso>
-          <p>{estado.calculo!.proxima.aviso} · {estado.calculo!.proxima.estado}</p><p className="panel-ayuda">{estado.calculo!.proxima.motivo}</p>
-          <div className="ui-table-wrap" role="region" aria-label="Bandas mensuales aproximadas" tabIndex={0}><table><caption>Rango mensual; los extremos no se suman entre meses</caption><thead><tr><th>Mes</th><th>Lluvia (mm)</th><th>Temperatura (°C)</th></tr></thead><tbody>{estado.calculo!.proxima.meses.map((m) => <tr key={m.mes}><th scope="row">{m.mes}</th><td>{numero(m.lluviaMm.inferior)} – {numero(m.lluviaMm.superior)}</td><td>{numero(m.tMediaC.inferior)} – {numero(m.tMediaC.superior)}</td></tr>)}</tbody></table></div>
-          {resultado?.proximaTemporada && <>
-            <p>{resultado.proximaTemporada.aviso}</p><p className="panel-ayuda">{resultado.proximaTemporada.estado} · {resultado.proximaTemporada.motivo}</p>
-            <p className="panel-ayuda">{resultado.proximaTemporada.criterioAnalogos}</p>
-            <p>Años análogos: {resultado.proximaTemporada.aniosAnalogos.map((a) => a.anioReal).join(', ') || 'Sin años evaluables'}</p>
-            <p>Demanda no cubierta entre análogos: {numero(resultado.proximaTemporada.rango.proporcionDemandaNoCubierta.inferior)} – {numero(resultado.proximaTemporada.rango.proporcionDemandaNoCubierta.superior)}</p>
-            {resultado.proximaTemporada.ciclosFuera?.map((c) => <p className="panel-ayuda" key={c.ciclo}>Ciclo {c.ciclo}: {c.motivo}</p>)}
-          </>}
-          {estado.calculo!.proxima.advertencias.map((a, i) => <p className="panel-ayuda" key={i}>{a.mensaje}</p>)}
-          {estado.calculo!.proxima.fuentes.map((f, i) => <p key={i}><FuenteVisible fuente={f} /></p>)}
-        </div>}
-      </div>
+      <details className="panel-bloque" onToggle={(e) => setMostrarBanda((e.target as HTMLDetailsElement).open)}>
+        <summary><span className="panel-etiqueta">Próxima temporada (aproximada)</span></summary>
+        <p className="panel-ayuda">No es un pronóstico: es el rango de lo que pasó en años parecidos.</p>
+        <div className="ui-table-wrap" role="region" aria-label="Rango mensual aproximado" tabIndex={0}><table><thead><tr><th>Mes</th><th>Lluvia (mm)</th><th>Temperatura (°C)</th></tr></thead><tbody>{estado.calculo!.proxima.meses.map((m) => <tr key={m.mes}><th scope="row">{m.mes}</th><td>{numero(m.lluviaMm.inferior)} – {numero(m.lluviaMm.superior)}</td><td>{numero(m.tMediaC.inferior)} – {numero(m.tMediaC.superior)}</td></tr>)}</tbody></table></div>
+        {resultado?.proximaTemporada && resultado.proximaTemporada.aniosAnalogos.length > 0 && <p className="panel-ayuda">Años parecidos: {resultado.proximaTemporada.aniosAnalogos.map((a) => a.anioReal).join(', ')}.</p>}
+      </details>
+
+      {limites.length > 0 && <details className="panel-bloque">
+        <summary><span className="panel-etiqueta">Lo que este cálculo no ve</span></summary>
+        <ul className="lab-lista">{limites.map((t, i) => <li key={i}>{t}</li>)}</ul>
+      </details>}
     </>}
 
     <footer className="panel-pie">
       <a className="lab-boton lab-boton-suave" href="#/escenarios"><span aria-hidden="true">←</span> Escenarios</a>
-      <a className="lab-boton lab-boton-suave" href="#/metodo">Método y fuentes</a>
     </footer>
-    <p className="panel-legal">La decisión final es del agricultor. AgroHive no predice cosechas ni reemplaza a un agrónomo.</p>
+    <p className="panel-legal">La decisión final es tuya. AgroHive no predice cosechas ni reemplaza a un agrónomo.</p>
   </section>;
 }
