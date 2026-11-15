@@ -55,7 +55,7 @@ describe('tarjetas de la demo (R1 a R4, suelo real de Isla)', () => {
   it('R4, la milpa sembrada en ventana, es la sugerida por el ranking y su tarjeta lo explica con los anios reales', () => {
     expect(t.R4!.ranking?.posicion).toBe(1);
     expect(t.R4!.explicacion.porQue).toMatch(/^Es la opción más robusta de las 4 rotaciones comparadas/);
-    expect(t.R4!.explicacion.porQue).toContain('año seco 2023, año habitual 2016, año lluvioso 2024');
+    expect(t.R4!.explicacion.porQue).toContain('año seco 2023, año normal 2016, año lluvioso 2024');
     expect(t.R4!.explicacion.beneficios).toContain('Fechas: todas las siembras caen en las ventanas recomendadas por INIFAP para la zona.');
     expect(t.R4!.explicacion.beneficios.some((b) => b.includes('leguminosa (frijol)'))).toBe(true);
   });

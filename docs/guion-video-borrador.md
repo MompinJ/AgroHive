@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | 1 | El problema | 0:15 |
 | 2 | Qué es AgroHive | 0:15 |
-| 3 | P0 a P1: la parcela de Isla | 0:20 |
+| 3 | P0 a P1: elegir una parcela de ejemplo o dibujar la propia | 0:20 |
 | 4 | Datos reales de la parcela | 0:20 |
 | 5 | P2: escena 3D y selector | 0:25 |
 | 6 | P3: ranking y por qué | 0:25 |
@@ -36,11 +36,11 @@
 - **Voz:** "AgroHive es un simulador 'qué pasaría si'. Pones tus rotaciones de cultivos contra veinte años de clima real de la NASA y ves cuál aguanta mejor el peor año. La decisión sigue siendo tuya."
 - **Fuente:** `docs/00`, `docs/06` (P0).
 
-### 3. P0 a P1: la parcela de Isla (0:20)
+### 3. P0 a P1: elegir una parcela de ejemplo o dibujar la propia (0:20)
 
-- **En pantalla:** P1. Se dibuja el contorno en el mapa y aparece la cuadrícula de celdas (A2.10 y A2.9 hechas). Rótulo: "Isla, Veracruz. Parcela de 2 ha ficticia".
-- **Voz:** "Dibujamos la parcela en el mapa y AgroHive la divide en bloques. Para la demo usamos una parcela de ejemplo de dos hectáreas en Isla, Veracruz. La parcela es ficticia; los datos de esa coordenada son reales."
-- **Fuente:** `docs/06` (P1), `datos/demo/LEEME.md`.
+- **En pantalla:** P1. La lista de ejemplos mundiales (Bajío, Mato Grosso, Rift Valley, Punjab, Castilla y León, Iowa) y la opción de dibujar el contorno en el mapa, que aparece dividido en celdas (A2.10 y A2.9 hechas). Rótulo: "Parcela de ejemplo, no es un levantamiento".
+- **Voz:** "Elegimos un lugar de ejemplo, o dibujamos nuestra parcela, y AgroHive la divide en bloques. Las parcelas de ejemplo son ficticias; los datos de cada coordenada son reales."
+- **Fuente:** `docs/06` (P1), `datos/demo/ejemplos/LEEME.md` (`docs/13`, "Demo mundial", 15/11: Isla ya no es la demo).
 
 ### 4. Datos reales de la parcela (0:20)
 
@@ -89,7 +89,7 @@
 ## Antes de grabar
 
 - [ ] Confirmar formato, duración y reglas de IA, marca e imágenes (V-03, V-04).
-- [ ] Regenerar o revisar el paquete de demo y volver a leer las cifras de `demo-isla.json`.
+- [ ] Las cifras de las secciones 4 a 6 son de Isla (`demo-isla.json`), que ya no es la demo (`docs/13`, "Demo mundial"): elegir el ejemplo mundial que se mostrará y leer sus cifras de `web/src/motor/pruebas/regresion/ejemplos/<id>.json`.
 - [ ] Revisar qué piezas están en la interfaz (A4.3 tarjetas, A4.10 IMERG, A4.11 NDVI, A4.8 SMAP) y quitar del guion lo que no se vea.
 - [ ] Grabar con la comparación por defecto (R1, R2 y R4).
 - [ ] Grabar un respaldo sin internet (A5.8).

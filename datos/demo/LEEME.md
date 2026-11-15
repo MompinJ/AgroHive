@@ -1,5 +1,7 @@
 # datos/demo/
 
+> **Desde el 15/11 Isla ya no es la demo** (`docs/13`, "Demo mundial"). La demo y el respaldo sin red son las parcelas de ejemplo mundiales de [`ejemplos/`](ejemplos/LEEME.md). Este paquete de Isla se conserva como **prueba interna** del motor y de la API (`web/src/motor/pruebas/regresion.test.ts`, `api/tests/test_contratos_api.py`, `test_demo.py`) y para las vistas previas de la escena.
+
 Paquete de demo sin internet (A2.4, base de A5.8). Tiene dos formas del mismo contenido:
 
 | Carpeta | Para que sirve |

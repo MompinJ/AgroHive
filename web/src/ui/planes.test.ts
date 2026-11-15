@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { armarPlan, calendarioIsla, cambiarSiembra, conflictosPlan, conteoPintado, cultivoDeCelda, explicarFecha, pintarCeldas, planesIniciales, rellenarCiclo, temporadaDeFecha } from './planes';
+import { armarPlan, cambiarSiembra, conflictosPlan, conteoPintado, cultivoDeCelda, explicarFecha, pintarCeldas, planesIniciales, rellenarCiclo, temporadaDeFecha } from './planes';
 import { parcelaConTerrenoDemo } from '../escena/demo-motor';
 import { seleccionarEscenarios } from '../motor/escenarios';
 import { simularRotacion } from '../motor/motor';
@@ -8,6 +8,10 @@ import catalogo from '../../../datos/catalogos/cultivos.json';
 import tabla from '../../../datos/catalogos/suelos.json';
 import suelo from '../../../datos/demo/respuestas/suelo.json';
 import type { CatalogoCultivos, Suelo, TablaSuelos } from '../../../contratos/tipos/contratos';
+import calendarioJson from '../../../datos/catalogos/calendario-isla.json';
+import type { CalendarioLocal as CalendarioPrueba } from '../../../contratos/tipos/contratos';
+/** Calendario SIAP/INIFAP de Isla: fixture de prueba (la app ya no lo usa como demo). */
+const calendarioIsla = calendarioJson as unknown as CalendarioPrueba;
 
 const parcela = parcelaConTerrenoDemo();
 describe('planes del selector', () => {

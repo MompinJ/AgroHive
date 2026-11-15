@@ -149,6 +149,11 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
     {nota && <Aviso tipo="info" onCerrar={() => setNota('')}>{nota}</Aviso>}
     {local?.presencia.estado === 'no_registrado' && <Aviso tipo="aviso"><strong>{nombreCultivo(visible.cultivo)}</strong> casi no se siembra en esta zona.</Aviso>}
     <div className="lab-datos"><AvisosDatos avisos={datos.avisosDatos} advertenciasParcela={datos.parcela.advertencias ?? []} /></div>
+    {datos.ejemplo && <details className="lab-ejemplo">
+      <summary>Parcela de ejemplo: {datos.ejemplo.nombre}, {datos.ejemplo.pais}</summary>
+      <p className="panel-ayuda">{datos.ejemplo.porQue}</p>
+      <ul>{datos.avisos.map((a, i) => <li key={i}>{a}</li>)}</ul>
+    </details>}
 
     <footer className="panel-pie">
       {estado.error ? <Aviso tipo="error" accion={{ texto: 'Reintentar', onClick: estado.reintentar }}>{estado.error}</Aviso>

@@ -83,7 +83,7 @@ export function PanelComparacion({ estado, onAvanzar, serie, setGraficas, plagas
               <span className="cmp-pos" aria-label={pos ? `Lugar ${pos}` : 'Sin lugar'}>{pos ?? '—'}</span>
               <h2>{nombreRotacion(r.rotacionId, estado.planes)}</h2>
               {pos === 1 && <span className="lab-insignia">La más robusta</span>}
-              {r.estado !== 'EVALUABLE' && <span className="cmp-estado lab-tip" data-tip={r.explicacion?.porQue ?? r.estado}>{r.estado === 'EXPLORATORIO' ? 'Solo para explorar' : 'Sin evaluar'}</span>}
+              {r.estado !== 'EVALUABLE' && <span className="cmp-estado lab-tip" data-tip={r.explicacion?.porQue ?? r.estado}>{r.estado === 'EXPLORATORIO' ? 'Solo para explorar' : r.estado === 'RESPALDO_HISTORICO' ? 'Con datos de respaldo' : 'Sin evaluar'}</span>}
             </header>
 
             {plan && <ol className="cmp-cultivos" aria-label="Cultivos por ciclo">
@@ -124,12 +124,12 @@ export function PanelComparacion({ estado, onAvanzar, serie, setGraficas, plagas
 
       <details className="panel-bloque" onToggle={(e) => setGraficas((e.target as HTMLDetailsElement).open)}>
         <summary><span className="panel-etiqueta">Agua mes a mes de la {nombreRotacion(rotacion, estado.planes).toLowerCase()}</span></summary>
-        <Suspense fallback={<Cargando>Cargando gráficas…</Cargando>}><DashboardBalance serie={serie} /></Suspense>
+        <Suspense fallback={<Cargando>Cargando gráficas…</Cargando>}><DashboardBalance serie={serie} nombre={nombreRotacion(rotacion, estado.planes)} /></Suspense>
       </details>
 
       <details className="panel-bloque" onToggle={(e) => setMostrarBanda((e.target as HTMLDetailsElement).open)}>
         <summary><span className="panel-etiqueta">Próxima temporada (aproximada)</span></summary>
-        <p className="panel-ayuda">No es un pronóstico: es el rango de lo que pasó en años parecidos.</p>
+        <p className="panel-ayuda">{estado.datos?.capa?.metodo === 'anomalia_estacional' ? 'No es un pronóstico: es lo que pasó en los últimos 20 años, corrido según la tendencia del pronóstico estacional.' : 'No es un pronóstico: es el rango de lo que pasó en los últimos 20 años.'}</p>
         <div className="ui-table-wrap" role="region" aria-label="Rango mensual aproximado" tabIndex={0}><table><thead><tr><th>Mes</th><th>Lluvia (mm)</th><th>Temperatura (°C)</th></tr></thead><tbody>{estado.calculo!.proxima.meses.map((m) => <tr key={m.mes}><th scope="row">{m.mes}</th><td>{numero(m.lluviaMm.inferior)} – {numero(m.lluviaMm.superior)}</td><td>{numero(m.tMediaC.inferior)} – {numero(m.tMediaC.superior)}</td></tr>)}</tbody></table></div>
         {resultado?.proximaTemporada && resultado.proximaTemporada.aniosAnalogos.length > 0 && <p className="panel-ayuda">Años parecidos: {resultado.proximaTemporada.aniosAnalogos.map((a) => a.anioReal).join(', ')}.</p>}
       </details>

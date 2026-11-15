@@ -72,7 +72,7 @@ export interface EscenaParcelaProps {
   rociado?: { celdas: readonly string[]; clave: number } | null | undefined;
   /** Nombres de plaga para el globo; por defecto, genericos por tipo. */
   nombresPlaga?: Partial<Record<TipoPlaga, string>> | undefined;
-  /** Bioma del entorno decorativo (modo fondo). Por defecto, tropical humedo (demo de Isla). */
+  /** Bioma del entorno decorativo (modo fondo): sale de Koppen-Geiger en el laboratorio; templado si no hay clima evaluable. */
   bioma?: Bioma | undefined;
   /** Serie climatica real de la parcela y rangos de temperatura por cultivo (FAO EcoCrop): con ellas, en el paso Escenarios, hay vistas de luz y temperatura. */
   serieClima?: SerieClima | null | undefined;

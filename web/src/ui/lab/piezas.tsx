@@ -23,6 +23,10 @@ export function textoMovidos(movidos: readonly { ciclo: number; despues: string 
 export const nombreTemporada = (t: string) => (t === 'PV' ? 'Primavera–verano' : 'Otoño–invierno');
 /** 1 jun – 15 jul (ventana del calendario, sin anio). */
 export function rangoVentana(v: { desdeMes: number; desdeDia?: number; hastaMes: number; hastaDia?: number }): string {
+  const mismoMes = v.desdeMes === v.hastaMes;
+  // GGCMI da un solo dia tipico de siembra; MIRCA, solo el mes.
+  if (mismoMes && v.desdeDia != null && v.desdeDia === v.hastaDia) return `cerca del ${v.desdeDia} ${meses[v.desdeMes - 1]}`;
+  if (mismoMes && v.desdeDia == null && v.hastaDia == null) return `en ${meses[v.desdeMes - 1]}`;
   return `${v.desdeDia ?? 1} ${meses[v.desdeMes - 1]} – ${v.hastaDia ?? 'fin de'} ${meses[v.hastaMes - 1]}`;
 }
 export const nombreEscenario: Record<string, string> = { seco: 'Año seco', habitual: 'Año normal', lluvioso: 'Año lluvioso' };

@@ -416,6 +416,11 @@
 }
 
 .mascota-nombre { margin: 0 0 2px; font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .7; }
+/* Parcela de ejemplo (E10): lugar, por que se eligio y lo que no se grabo. */
+.lab-ejemplo { font-size: .8rem; padding: 8px 10px; border-radius: 10px; background: var(--color-sage-50); }
+.lab-ejemplo summary { cursor: pointer; font-weight: 600; }
+.lab-ejemplo .panel-ayuda { margin: 6px 0 0; }
+.lab-ejemplo ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; color: var(--color-text-body); }
 
 /* Mini marca de problema en la seccion de un cultivo (icono del ciclo y nombre). */
 .lab-iconos button { position: relative; }

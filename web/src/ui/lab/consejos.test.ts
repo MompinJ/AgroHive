@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { Ndvi, Smap } from '../../../../contratos/tipos/contratos';
-import { calendarioIsla, planesIniciales } from '../planes';
+import { planesIniciales } from '../planes';
 import { parcelaConTerrenoDemo } from '../../escena/demo-motor';
 import ndviDemo from '../../../../datos/demo/respuestas/ndvi.json';
 import { consejos, ndviDelAnio, nivelNdvi, nivelSmap, ultimaHumedad, ultimoNdvi } from './consejos';
+import calendarioJson from '../../../../datos/catalogos/calendario-isla.json';
+import type { CalendarioLocal as CalendarioPrueba } from '../../../../contratos/tipos/contratos';
+/** Calendario SIAP/INIFAP de Isla: fixture de prueba (la app ya no lo usa como demo). */
+const calendarioIsla = calendarioJson as unknown as CalendarioPrueba;
 
 const plan = planesIniciales(parcelaConTerrenoDemo(), calendarioIsla)[0]!;
 const base = { plan, ciclo: 1, calendario: calendarioIsla, escenario: 'seco' as const, resultado: null, ordenadas: [], nombreRotacion: (id: string) => `Rotación ${id.slice(1)}`, leguminosas: new Set(['frijol']), ndvi: null, smap: null };

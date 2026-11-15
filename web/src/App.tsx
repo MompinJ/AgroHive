@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Inicio } from './paginas/Inicio';
-import { useLaboratorio } from './ui/useLaboratorio';
+import { EJEMPLO_INICIAL, useLaboratorio } from './ui/useLaboratorio';
 import { MetodoFuentes } from './paginas/MetodoFuentes';
 import { Terreno } from './paginas/Terreno';
 import { ActionLink, MethodNotes, PageHeading } from './ui/components';
@@ -19,9 +19,11 @@ export default function App() {
   const pasoLab = pasoDeRuta[path];
   const [announcement, setAnnouncement] = useState('');
   const [parcela, setParcela] = useState<Parcela | null>(null);
+  // Parcela de ejemplo elegida en Terreno (demo/ejemplos.ts); se usa mientras no haya una parcela dibujada.
+  const [ejemplo, setEjemplo] = useState(EJEMPLO_INICIAL);
   // Paso mas lejano abierto (indice en `pasos`). Avanzar exige completar el anterior.
   const [progreso, setProgreso] = useState(0);
-  const laboratorio = useLaboratorio(parcela, !!pasoLab || path === '/metodo');
+  const laboratorio = useLaboratorio(parcela, !!pasoLab || path === '/metodo', ejemplo);
   const previousLocation = useRef(`${path}?${mode ?? ''}`);
   const indice = indicePaso(path);
   const bloqueado = indice > progreso;
@@ -45,9 +47,11 @@ export default function App() {
     }
   }, [path, mode]);
 
-  const elegirDemo = () => {
-    if (parcela) setProgreso(1); else setProgreso((p) => Math.max(p, 1));
+  const elegirEjemplo = (id: string) => {
+    // Cambiar de parcela reinicia los pasos siguientes; volver a la misma conserva el avance.
+    if (parcela || id !== ejemplo) setProgreso(1); else setProgreso((p) => Math.max(p, 1));
     setParcela(null);
+    setEjemplo(id);
     setAnnouncement('Parcela de ejemplo seleccionada.');
   };
   const guardarParcela = (p: Parcela) => { setParcela(p); setProgreso(1); };
@@ -71,7 +75,7 @@ export default function App() {
 
   let content;
   switch (path) {
-    case '/terreno': content = <Terreno polygonMode={mode === 'poligono'} parcela={parcela} onGuardar={guardarParcela} onSelectDemo={elegirDemo} />; break;
+    case '/terreno': content = <Terreno polygonMode={mode === 'poligono'} parcela={parcela} ejemplo={parcela ? null : ejemplo} onGuardar={guardarParcela} onElegirEjemplo={elegirEjemplo} />; break;
     case '/metodo': content = <MetodoFuentes estado={laboratorio} />; break;
     default: content = <><PageHeading step="—" title="Esta página no existe.">Puedes volver al inicio para continuar explorando.</PageHeading><ActionLink href="#/">Volver al inicio</ActionLink></>;
   }

@@ -1,0 +1,27 @@
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
+import { traducir } from './diccionarios';
+import type { ClaveTexto, Idioma } from './diccionarios';
+import { esIdioma, guardarIdioma, leerIdioma } from './preferencia';
+
+type Traducir = (clave: ClaveTexto, valores?: Readonly<Record<string, string | number>>) => string;
+interface EstadoIdioma { idioma: Idioma; cambiarIdioma: (idioma: Idioma) => void; t: Traducir }
+const ContextoIdioma = createContext<EstadoIdioma | null>(null);
+
+export function ProveedorIdioma({ children, idiomaInicial }: { children: ReactNode; idiomaInicial?: Idioma }) {
+  const [idioma, setIdioma] = useState<Idioma>(() => idiomaInicial ?? leerIdioma());
+  const cambiarIdioma = useCallback((siguiente: Idioma) => {
+    if (!esIdioma(siguiente)) return;
+    guardarIdioma(siguiente);
+    setIdioma(siguiente);
+  }, []);
+  useEffect(() => { document.documentElement.lang = idioma; }, [idioma]);
+  const valor = useMemo<EstadoIdioma>(() => ({ idioma, cambiarIdioma, t: (clave, valores) => traducir(idioma, clave, valores) }), [idioma, cambiarIdioma]);
+  return <ContextoIdioma.Provider value={valor}>{children}</ContextoIdioma.Provider>;
+}
+
+export function useIdioma(): EstadoIdioma {
+  const idioma = useContext(ContextoIdioma);
+  if (!idioma) throw new Error('useIdioma requiere ProveedorIdioma.');
+  return idioma;
+}

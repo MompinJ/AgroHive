@@ -2,13 +2,14 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 import { Card, DataState } from './components';
 import type { EstadoSerieBalance } from './useSerieBalance';
 import { nombresCultivos } from './planes';
+import { nombreEscenario } from './lab/piezas';
 
 const formato = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 });
-export default function DashboardBalance({ serie }: { serie: EstadoSerieBalance }) {
+export default function DashboardBalance({ serie, nombre }: { serie: EstadoSerieBalance; nombre?: string }) {
   const datos = serie.datos;
   if (!datos) return <Card title="Dashboard de agua"><DataState state={serie.error ? 'error' : 'loading'}>{serie.error || 'Consultando las series del motor.'}</DataState>{serie.error && <button className="ui-action" onClick={serie.reintentar}>Reintentar series</button>}</Card>;
   return <section className="ui-flow" aria-labelledby="dashboard-titulo">
-    <h2 id="dashboard-titulo">Dashboard de agua · {datos.rotacionId} · {datos.escenario} {datos.anioReal}</h2>
+    <h2 id="dashboard-titulo">Agua mes a mes · {nombre ?? `Rotación ${datos.rotacionId.replace(/^R/, '')}`} · {nombreEscenario[datos.escenario] ?? datos.escenario}{datos.anioReal ? ` (${datos.anioReal})` : ''}</h2>
     <p>{datos.estado}{datos.motivo ? ` · ${datos.motivo}` : ''}. Las fechas de las gráficas son las del plan; la tabla identifica el mes climático real.</p>
     {datos.meta.esEjemplo && <p className="ui-warning">{datos.meta.aviso}</p>}
     {datos.ciclos.map((c, indice) => <Card key={`${c.ciclo}:${indice}`} title={`Ciclo ${c.ciclo} · ${nombresCultivos[c.cultivo] ?? c.cultivo}`} eyebrow={c.estado}>

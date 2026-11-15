@@ -12,7 +12,7 @@
 | Sí hay relieve | Equipo, 13/11 |
 | El equipo son 4 integrantes | Equipo, 13/11 |
 | MVP primero; extras en fase 1 y fase 2 | Reunión |
-| 3D en el MVP, con motor independiente y modo 2D de respaldo. El modo 2D se retiró el 15/11 a pedido de Eduardo (06, "Vistas de la base"); confirmar con Mompin | Reunión, v0.2 y v1.2 |
+| 3D en el MVP, con motor independiente. **Sin modo 2D de respaldo:** se retiró el 15/11 a pedido de Eduardo (06, "Vistas de la base") y el equipo lo aprobó en persona (D8, 13); sin WebGL se ven solo las cifras del motor | Reunión, v0.2 y v1.2; equipo, 15/11 (D8) |
 | UI y modelos hechos por el equipo, sin plantillas | Reunión |
 | Modelos en Blockbench (`.bbmodel`), generados por el agente `modelador-voxel` | Equipo, 13/11 |
 | Documentación en el repo (`docs/`); Drive queda como respaldo del historial (13) | Equipo, 13/11; corregido en el evento (13) |
@@ -68,7 +68,7 @@ Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Al
 
 ## Decisiones abiertas del día final
 
-Del plan de trabajo: decididas D1 (Eduardo lleva el rediseño del front), D4 (se terminan sandía, camote y cacahuate) y los hallazgos H-B6, H-M1 y H-M9; abiertas D8 (respaldo sin WebGL, tras retirar el modo 2D), D9 (R4 pasa a R3 en la interfaz), D10 (fuentes fuera del laboratorio), D2 (placa, la decide Eduardo), D3 (llave SSH), D5 (cámara), D6 (A4.4 y A0.3), D7 (ramas muertas) y H-M7. Detalle en [16, sección 2](16-PLAN-DIA-FINAL.md#2-decisiones-de-mompin-para-el-plan-de-trabajo). Las de la entrega (Team Owner, portal, V-01, inglés, licencia, términos, imágenes generadas, video y presentación) quedan para la fase de entrega, que es posterior y pasa por la aprobación de todo el equipo: [16, sección 5](16-PLAN-DIA-FINAL.md#5-entrega).
+Del plan de trabajo: decididas D1 (Eduardo lleva el rediseño del front), D4 (se terminan sandía, camote y cacahuate) y los hallazgos H-B6, H-M1 y H-M9; el 15/11, en persona, el equipo decidió además el tope de 200 celdas en la interfaz, D8 (sin modo 2D ni respaldo sin WebGL), D9 (la milpa en ventana se llama R3, como en la app), D10 (las fuentes viven en "Método y fuentes") y la capa de plagas con GBIF (ilustrativa). Abiertas: D3 (llave SSH), D5 (cámara), D6 (A4.4 y A0.3), D7 (ramas muertas) y H-M7; D2 (placa) la decide Eduardo con el front (D1). Detalle en [16, sección 2](16-PLAN-DIA-FINAL.md#2-decisiones-de-mompin-para-el-plan-de-trabajo). Las de la entrega (Team Owner, portal, V-01, inglés, licencia, términos, imágenes generadas, video y presentación) quedan para la fase de entrega, que es posterior y pasa por la aprobación de todo el equipo: [16, sección 5](16-PLAN-DIA-FINAL.md#5-entrega).
 
 **Licencia del repo y FAO Crop Calendar (D, pendiente para la entrega):** desde el 15/11 la API sirve ventanas de FAO Crop Calendar tratadas como **CC BY-NC-SA 4.0** (`[DECIDIDO]` Mompin, docs/13). Viven solas en `datos/calendario/fao-crop-calendar/` con su `LICENCIA.md`. La licencia del repo debe ser compatible con NC-SA para esa carpeta (no comercial, compartir igual), o la carpeta se separa del repo: basta con quitarla, la API responde sin FAO (los cultivos que solo FAO cubre vuelven a `NO_EVALUABLE`).
 
@@ -90,7 +90,7 @@ Del plan de trabajo: decididas D1 (Eduardo lleva el rediseño del front), D4 (se
 | V-08 | ~~Acceso a elevación~~ Decidido 14/11 (13): Terrarium por defecto, Open-Meteo de respaldo | — |
 | V-09 | Kc, ciclos, umbrales y calendarios por cultivo | Citar FAO/INIFAP; si no hay, `NO_EVALUABLE` |
 | V-10 | TAW por tipo de suelo | FAO-56 |
-| V-11 | Rendimiento del 3D en hardware real | Medido el 14/11 (noche) en GPU real y por software (A5.4, `docs/06`); falta un celular o laptop modesta; modo 2D |
+| V-11 | Rendimiento del 3D en hardware real | Medido el 14/11 (noche) en GPU real y por software (A5.4, `docs/06`); falta un celular o laptop modesta. Sin modo 2D (D8): tope de 200 celdas y nivel de gráficos Bajo |
 | V-12 | Hosting (CORS, suspensión por inactividad) | Demo local y video de respaldo |
 | V-13 | Validación por profesional local | Si no hay, decir "sin validación local" |
 | V-14 | Cargar `.bbmodel` del agente en la escena real con instancing | Probar con el primer cultivo |

@@ -12,7 +12,11 @@ import { simularRotacion } from '../../motor/motor';
 import { seriePowerIsla } from '../../motor/pruebas/utiles';
 import { cargarModelo, MODELOS_DISPONIBLES } from '../../escena/voxel/fuente-modelos';
 import { iconoDeCultivo } from '../iconosCultivo2D';
-import { armarPlan, calendarioIsla, DIAS_MAX_CLIMA, diasCultivo } from '../planes';
+import { armarPlan, DIAS_MAX_CLIMA, diasCultivo } from '../planes';
+import calendarioJson from '../../../../datos/catalogos/calendario-isla.json';
+import type { CalendarioLocal as CalendarioPrueba } from '../../../../contratos/tipos/contratos';
+/** Calendario SIAP/INIFAP de Isla: fixture de prueba (la app ya no lo usa como demo). */
+const calendarioIsla = calendarioJson as unknown as CalendarioPrueba;
 
 const cat = catalogo as CatalogoCultivos;
 const ETAPAS = ['siembra', 'brote', 'crecimiento', 'madurez', 'podrida'];

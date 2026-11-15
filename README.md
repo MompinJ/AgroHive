@@ -7,9 +7,9 @@
 AgroHive es un **simulador visual "what if"** que compara **rotaciones de cultivos** con la historia climática real de **NASA**, para el reto [*Field Shift: Adapting Farms with NASA Data*](https://www.spaceappschallenge.org/2026/challenges/adapting-farms-with-nasa-data/) del NASA Space Apps Challenge 2026 (sede Boca del Río, Veracruz). Fuente: `docs/00`, `docs/02`.
 
 - **No busca la rotación de mayor rendimiento, sino la más robusta:** la que no colapsa en el peor escenario histórico (`docs/00`, `docs/05` paso 7).
-- **Arquitectura mundial, demo validada en Isla, Veracruz:** funciona en cualquier coordenada con fuentes globales. Las fuentes de un país (SIAP e INIFAP en México) se suman encima cuando la coordenada cae ahí (`docs/13`, "Alcance geográfico").
-- **Parcela de demo:** 2 ha ficticias en Isla (municipio INEGI 30/077), con coordenadas ilustrativas (`contratos/ejemplos/parcela.ejemplo.json`, `datos/demo/LEEME.md`).
-- **La demo compara por defecto R1, R2 y R4** y muestra como sugerida **R4, milpa sembrada dentro de las ventanas de INIFAP**. R3 (frijol-frijol) queda disponible en el selector (`docs/13`). El orden que se ve es el que calcula el motor.
+- **Arquitectura mundial y demo mundial:** funciona en cualquier coordenada con fuentes globales. Las fuentes de un país (SIAP e INIFAP en México) se suman encima cuando la coordenada cae ahí (`docs/13`, "Alcance geográfico").
+- **Parcelas de ejemplo en cinco continentes** (15/11, `docs/13` "Demo mundial"): Bajío (México), Sorriso (Brasil), Uasin Gishu (Kenia), Ludhiana (India), Tierra de Campos (España) e Iowa (EE. UU., con CDL y SSURGO). Polígonos ficticios de unas 2.8 ha sobre tierra de cultivo real, con datos reales grabados de la API (`datos/demo/ejemplos/LEEME.md`). El usuario elige una o dibuja la suya. Isla, Veracruz (`contratos/ejemplos/parcela.ejemplo.json`) queda como prueba interna del motor.
+- **El orden que se ve es el que calcula el motor** (ranking B, `docs/05`).
 - **La decisión final es del agricultor.** AgroHive no reemplaza a un agrónomo (`docs/00`, `docs/10`).
 - **Demo publicada:** <https://64-23-143-102.sslip.io>. El 14/11/2026 a las 23:10 (hora de la sede) `/health` informaba el commit `f56450c` y `versionContrato` 0.13.0. Está en el servidor de un integrante del equipo (`docs/13`): la dirección puede cambiar.
 
@@ -56,7 +56,7 @@ La documentación interactiva está en `/docs`. No hay llaves en el repo. `EARTH
 
 ### Demo sin internet
 
-El paquete `datos/demo/` (A2.4) trae la caché de la API para la parcela demo. Si a la API le falta su caché local, la lee de ahí, y `GET /api/clima`, `POST /api/elevacion`, `GET /api/suelo` y `GET /api/proxima-temporada` responden sin red. La web debe pedir la ventana `2005-10-01` a `2025-12-31` y el centroide de la parcela; otra zona sin red responde 503 con `ERROR_DATOS` (`datos/demo/LEEME.md`).
+Las parcelas de ejemplo (`datos/demo/ejemplos/`) son también el respaldo sin red: el front carga sus respuestas grabadas sin llamar a la API (`web/src/demo/ejemplos.ts`), y `herramientas/demo-sin-red.sh` arranca la API sin red con la caché de todos los ejemplos, así que `GET /api/clima`, `POST /api/elevacion`, `GET /api/suelo`, `GET /api/proxima-temporada`, `/api/plagas` y `/api/calendario` responden la coordenada de cada ejemplo (`docs/demo-sin-red.md`). El paquete de Isla (`datos/demo/`, A2.4) sigue como prueba interna. La web debe pedir la ventana `2005-10-01` a `2025-12-31` y el centroide de la parcela; otra zona sin red responde 503 con `ERROR_DATOS` (`datos/demo/LEEME.md`).
 
 ### Verificaciones antes de integrar
 
@@ -70,7 +70,7 @@ Todo cálculo vive en el **motor**, que corre en el navegador dentro de un Web W
 2. **Clima por ciclo:** cada ciclo se simula en su temporada típica (PV u OI) dentro del año del escenario. La fecha de siembra la elige el usuario y el selector la sugiere desde el calendario local, explicando de dónde sale (`docs/05` paso 2, `contratos/plan-siembra.schema.json`, `contratos/calendario-local.schema.json`).
 3. **Balance de agua FAO-56 por bloque:** ET0, ETc = Kc × ET0 y un balance de cubeta con agua disponible (TAW) según el suelo. La percolación profunda sigue la ecuación 88 de FAO-56. La humedad inicial puede venir de `GWETROOT` de POWER convertida a fracción de TAW (`docs/05`, `docs/13`).
 4. **Pilares por rotación y escenario:** déficit hídrico, exceso de agua, compatibilidad de ciclo, protección del suelo (índice relativo, no toneladas), riesgo por calor y aporte indirecto. Si un pilar no tiene datos, sale `NO_EVALUABLE` con sus números en `null` (`docs/05` paso 6, `contratos/resultado-rotacion.schema.json`).
-5. **Ranking B:** puntaje compuesto por escenario, robustez = peor puntaje, minimax del arrepentimiento y desempate por promedio. Los pesos son iguales y se declaran `SUPUESTO` salvo que haya fuente o prioridades del usuario. El criterio A (solo pilar hídrico) queda de respaldo (`docs/05` paso 7, `docs/13`).
+5. **Ranking B:** puntaje compuesto por escenario, robustez = peor puntaje, minimax del arrepentimiento y desempate por promedio. Los pesos son iguales y se declaran `SUPUESTO` salvo que haya fuente o prioridades del usuario. El criterio A (solo pilar hídrico) queda de respaldo (`docs/05` paso 7, `docs/13`). La app arma de inicio **Rotación 1, 2 y 3** (R1 milpa, R2 maíz-maíz y R3 milpa sembrada en las ventanas de INIFAP, la que hasta el 14/11 se llamaba R4; `docs/13`, "Nombre de las rotaciones") y con "+" se agregan más.
 6. **Próxima temporada (aproximada):** una banda p10 a p90 por mes durante 6 meses: la distribución histórica de cada mes desplazada por la anomalía del pronóstico estacional SEAS5, sin tendencia. Por rotación se usan años análogos reales. Siempre es `EXPLORATORIO`, nunca una cifra y nunca entra al ranking (`docs/13`, `contratos/proxima-temporada.schema.json`).
 7. **Explicación:** cada rotación lleva una tarjeta con por qué, evidencia (año real, cifras), beneficios, huecos y riesgos, generada por plantilla (`docs/05` paso 8).
 

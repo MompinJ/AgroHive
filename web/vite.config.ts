@@ -1,4 +1,5 @@
-import { defineConfig, type Plugin } from 'vite';
+import type { Plugin } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
 
@@ -32,4 +33,7 @@ export default defineConfig({
   base: './',
   build: { rollupOptions: { input: { main: 'index.html', medir: 'medir.html' } } },
   server: { fs: { allow: ['..'] } },
+  // Varias pruebas recorren los 40 cultivos, sus modelos o los 6 ejemplos: con la suite en
+  // paralelo pasaban de los 5 s por defecto aunque solas tarden 1 a 3 s.
+  test: { testTimeout: 30_000 },
 });

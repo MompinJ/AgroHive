@@ -1,6 +1,13 @@
 # Demo sin red (A5.8)
 
-Cómo correr la demo de Isla con la red apagada, qué funciona, qué se pierde y la evidencia. Probado el 14/11/2026 sobre `main` (2007104, contratos 0.10.0), con Chrome headless 1440 x 900 y 390 x 844.
+Cómo correr la demo con la red apagada, qué funciona, qué se pierde y la evidencia. **Desde el 15/11 la demo son las parcelas de ejemplo mundiales** (`docs/13`, "Demo mundial"; `datos/demo/ejemplos/`), que son también el respaldo sin red; Isla queda como prueba interna. La primera y la segunda pasada de abajo se hicieron con Isla (14/11, `main` 2007104 y ada213b); la tercera, con los ejemplos.
+
+## Tercera pasada (15/11): los ejemplos mundiales
+
+- **En el navegador los ejemplos no llaman a la API:** `web/src/demo/ejemplos.ts` carga del paquete grabado parcela, clima, suelo, próxima temporada, calendario, NDVI, SMAP (la foto de los 10 días anteriores a la grabación), plagas, CDL y SSURGO. Cada ejemplo es un trozo aparte del front. Falta que el front lo use (E10, Eduardo); hasta entonces el laboratorio sigue cargando Isla en modo demo.
+- **La API sin red** (`bash herramientas/demo-sin-red.sh --solo-api`, sobre `da5c238`): el script junta en una carpeta temporal la caché de los seis ejemplos y la de Isla (464 archivos) y la pasa como `AGROHIVE_DEMO_DIR`; comprobó que una URL externa falla desde ese entorno. Con `curl` al centroide de cada ejemplo, los seis respondieron 200 en `GET /api/clima` (`EVALUABLE`, ventana estándar), `/api/suelo`, `/api/proxima-temporada` (`EXPLORATORIO`), `/api/plagas`, `/api/calendario` y `POST /api/elevacion` con sus 71 celdas (`EVALUABLE`).
+- **Prueba automática:** `api/tests/test_ejemplos.py` repite lo de arriba sin red para cada ejemplo (clima idéntico al grabado, próxima temporada y la elevación de las 71 celdas igual a `parcela.json`, sin ninguna llamada a la red) y valida todo lo grabado contra `contratos/`.
+- **No se repitió en el navegador** (sin front conectado todavía) ni con el wifi apagado. SMAP en vivo sigue necesitando red y token; el grabado es solo evidencia del día de la grabación.
 
 ## Cómo correrla
 
@@ -12,7 +19,7 @@ bash herramientas/demo-sin-red.sh --solo-api   # solo la API, para probar endpoi
 bash herramientas/demo-sin-red.sh --recompilar # vuelve a compilar el front (usalo si cambió el front o el puerto)
 ```
 
-El script **no apaga el wifi ni toca la red del sistema**. Bloquea la salida solo del proceso de la API: `herramientas/sin-red/sitecustomize.py` bloquea los sockets de Python a cualquier dirección que no sea loopback, y los proxies inválidos (`HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY` a `127.0.0.1:9`, `NO_PROXY` vacío) bloquean a GDAL y libcurl. Antes de arrancar comprueba que una URL externa falla desde ese entorno y, si no falla, aborta. La caché de datos arranca vacía (directorio temporal), así que todo sale del paquete de demo (`datos/demo`, A2.4). No usa tokens: `EARTHDATA_TOKEN` se quita del entorno.
+El script **no apaga el wifi ni toca la red del sistema**. Desde el 15/11 junta la caché de todos los ejemplos (`datos/demo/ejemplos/*/cache`) y la de Isla en un solo paquete temporal para la API. Bloquea la salida solo del proceso de la API: `herramientas/sin-red/sitecustomize.py` bloquea los sockets de Python a cualquier dirección que no sea loopback, y los proxies inválidos (`HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY` a `127.0.0.1:9`, `NO_PROXY` vacío) bloquean a GDAL y libcurl. Antes de arrancar comprueba que una URL externa falla desde ese entorno y, si no falla, aborta. La caché de datos arranca vacía (directorio temporal), así que todo sale del paquete de demo (`datos/demo`, A2.4). No usa tokens: `EARTHDATA_TOKEN` se quita del entorno.
 
 El front se compila con `VITE_API_URL` apuntando a la API local. En producción front y API comparten origen y esa variable queda vacía.
 

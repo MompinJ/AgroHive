@@ -185,7 +185,7 @@
     linear-gradient(180deg, #a9d4ef 0%, #c7e4f4 38%, #e6f1ee 66%, #f3e9cf 88%, #ead9b3 100%);
 }
 
-/* Cielo por bioma (lo decide la interfaz; decorativo). El tropical humedo es la demo de Isla. */
+/* Cielo por bioma (lo decide la interfaz con Koppen-Geiger; decorativo). */
 .escena-fondo { --cielo-1: #a9d4ef; --cielo-2: #c7e4f4; --cielo-3: #e6f1ee; --cielo-4: #f3e9cf; --cielo-5: #ead9b3; }
 .escena-fondo.escena-bioma-tropical_humedo { --cielo-1: #9fd3e6; --cielo-2: #c2e8ee; --cielo-3: #def2e8; --cielo-4: #eef2d6; --cielo-5: #dfe6bf; }
 .escena-fondo.escena-bioma-tropical_seco { --cielo-1: #b6d3e4; --cielo-2: #d6e2e2; --cielo-3: #f0e9d2; --cielo-4: #f6dfb6; --cielo-5: #ebcf9c; }
