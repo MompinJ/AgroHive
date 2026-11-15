@@ -1,0 +1,4 @@
+.selector-idioma { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 6px; color: var(--color-text); font-family: var(--font-ui); }
+.selector-idioma label { font-size: .875rem; }
+.selector-idioma select { min-height: 44px; max-width: 100%; border: 1px solid var(--color-control-border); border-radius: var(--radius-pill); padding: 8px 28px 8px 12px; background: var(--color-surface); color: var(--color-text); font: inherit; font-size: 16px; cursor: pointer; }
+.selector-idioma select:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }

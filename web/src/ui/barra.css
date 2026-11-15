@@ -17,6 +17,7 @@
 }
 .barra .brand { font-size: 1.4rem; color: var(--color-forest-700); }
 .barra .brand svg { width: 30px; height: 30px; }
+.barra-acciones { display: flex; align-items: center; gap: 8px; }
 .barra-fuentes {
   font-size: .875rem; color: var(--color-text-body); text-decoration: none; padding: 10px 14px;
   border-radius: var(--radius-pill); min-height: 40px; display: inline-flex; align-items: center; white-space: nowrap;
@@ -56,6 +57,7 @@ a.stepper-enlace:hover { background: rgb(17 34 26 / 5%); }
 @media (max-width: 860px) {
   .barra-interior { grid-template-columns: auto 1fr; gap: 12px; height: auto; min-height: 60px; padding-block: 8px; }
   .barra-fuentes { display: none; }
+  .barra-acciones { grid-column: 1 / -1; justify-self: end; }
   .stepper { justify-self: end; }
   .stepper-paso:not(.stepper-actual) .stepper-texto { display: none; }
   .stepper-enlace { padding: 4px; }

@@ -11,6 +11,7 @@
   font-family: var(--font-ui);
 }
 .landing-main { margin: 0; }
+.landing-idioma { position: absolute; top: 16px; right: 24px; z-index: 2; padding: 4px 8px; border-radius: var(--radius-pill); background: var(--color-canvas); }
 .landing-hero { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: max(780px, 100svh); overflow: hidden; padding: 48px 24px; background: #96aa68; }
 .landing-background { position: absolute; z-index: -1; inset: -8px; width: calc(100% + 16px); height: calc(100% + 16px); max-width: none; object-fit: cover; object-position: center; filter: blur(var(--landing-blur)); pointer-events: none; }
 .landing-content { width: min(100%, 900px); text-align: center; }
