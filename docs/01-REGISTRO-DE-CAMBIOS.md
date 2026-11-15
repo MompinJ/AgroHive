@@ -199,6 +199,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — Plaga siempre presente en cultivos atacados y plegado animado del panel (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/plagas.ts` y su prueba, `PanelIzq.tsx`, `panelColapsable.ts`, `lab.css`, `PanelIzq.test.tsx`; `docs/06`.
+- **Cambio:** (1) reporte del equipo: "ya no hay evento de plaga ni suenan los sonidos". Causa probable de lo primero: con la zona fija por cultivo, un cultivo pintado solo fuera de su zona no tenía plaga y por tanto tampoco evento. Ahora, si ninguna celda de un cultivo atacado cae en su zona, la plaga va a su propio foco. (2) El panel izquierdo se pliega con animación (se desliza) y mueve con él la barra de herramientas y el control de tiempo.
+- **Evidencia:** en Chrome con un ejemplo (Bajío) los eventos de plaga y de cosecha salieron y no hubo errores de consola; el audio programó 29 osciladores y 2 soplidos con el contexto en `running`. Prueba nueva del cultivo plantado fuera de su zona.
+- **Límites:** **el sonido no se pudo oír** (solo se comprobó que el código lo programa), así que si sigue sin sonar en el navegador del equipo no se ha encontrado la causa; puede ser el botón de silencio, el volumen o la política de audio del navegador. La animación del plegado no se vio.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — La plaga se come las plantas y la paleta solo ofrece cultivos completos (Eduardo)
 
 - **Archivos:** `web/src/escena/render/escena-three.ts`, `ui/lab/cultivosListos.ts`, `PanelCultivos.tsx`, `cultivosListos.test.ts`; `docs/06`.
