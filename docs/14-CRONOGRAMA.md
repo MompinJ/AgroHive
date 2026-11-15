@@ -73,7 +73,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | --- | --- | --- | --- | --- | --- | --- |
 | A0.1 `[HECHO]` | Repo Git con 5 ramas y estructura de carpetas | Mompin | XS | Haiku | — | Repo remoto con `main` y 4 ramas |
 | A0.2 `[HECHO]` | Documentación consolidada en `docs/` | Mompin | S | Haiku | — | `docs/` al día, registro en 01 |
-| A0.3 | Acordar roles, cultivos iniciales y criterio de ranking (V-18, V-19) | Todos | XS | Haiku | — | Acta breve en 11 |
+| A0.3 pospuesta hasta el final: fase de revisión (Mompin, 15/11) | Acordar roles, cultivos iniciales y criterio de ranking (V-18, V-19) | Todos | XS | Haiku | — | Acta breve en 11 |
 | A0.4 `[HECHO]` | Acceso SSH, firewall y hostname del servidor (V-15 a V-17) | R3 / Eduardo | S | Sonnet | — | `https://<host>/health` responde |
 | A0.5 `[HECHO]` | Verificar reglas de entrega e IA (V-03, V-04) | R4 | XS | Haiku | — | Guías oficiales 2026 leídas en navegador; fuentes en docs/02 y 11. Cumplimiento pendiente en A5.7/A5.9; horario local V-01 |
 | A0.6 `[HECHO]` | Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) | R3 | S | Sonnet | — | Zona y cultivos confirmados en 13; calendario de Isla en `calendario-local` con fuente (SIAP o INIFAP) |
@@ -137,7 +137,7 @@ Compuerta **C3** al terminar A3.1 y A3.2.
 | A4.1 `[HECHO]` series del Worker, graficas y tabla verificadas | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | R1 | M | Sonnet | A2.7 | Gráficas reales del escenario |
 | A4.2 `[HECHO]` 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3) | Ranking de rotaciones por robustez: criterio B `[DECIDIDO]` (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega | R2 | M | Opus | A2.7 (y A3.7 para B) | Tabla ordenada con 3 o más rotaciones; pesos y criterio declarados |
 | A4.3 `[HECHO]` motor y tarjetas visibles en laboratorio y comparacion | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | R2 + R1 | M | Sonnet | A4.2 | Plantilla sin LLM funcionando |
-| A4.4 | Redacción con LLM sobre números ya calculados (opcional) | R2 | S | Sonnet | A4.3 | Con respaldo en plantilla |
+| A4.4 pospuesta hasta el final: fase de revisión (Mompin, 15/11) | Redacción con LLM sobre números ya calculados (opcional) | R2 | S | Sonnet | A4.3 | Con respaldo en plantilla |
 | A4.5 `[HECHO]` | Pantalla de método, fuentes y advertencias (A1, A3) | R1 | S | Sonnet | A4.3 | Fuentes NASA citadas en la interfaz |
 | A4.6 `[HECHO]` 14/11 noche: P0 a P3 de la demo de Isla en Chrome sin salida (año 2016 EVALUABLE; comparación criterio B con R4, R2 y R1 evaluables). API local sin red: clima 7397 días, suelo, elevación, próxima y cultivos. El despliegue de ese código quedó en A4.7 | Conectar front y API (cliente generado, estados de carga y error) | R1 + R3 | M | Opus | A2.1, A3.4 | Flujo P0 a P3 con datos reales |
 | A4.7 `[HECHO]` 14/11 noche: `https://64-23-143-102.sslip.io` en `23f8a53`. `/health` con `versionContrato` 0.12.2, front 200, `/api/calendario` y `/api/cultivos` 200, `mediworks.mx` 200. `actualizar-servidor.sh` corrido en el droplet | Despliegue en el droplet (nginx, systemd, SSL) | R3 / Eduardo | M | Sonnet | A0.4 | URL pública con la demo |
@@ -159,11 +159,19 @@ Compuerta **C4** al terminar A4.6.
 | A5.3 `[HECHO]` | Móvil y accesibilidad (táctil, teclado) | R1 | M | Sonnet | A4.6 | Cinco pantallas a 320/720/1440 px con texto base al 200%, teclado, foco estable, movimiento reducido y axe; lector de pantalla real pendiente de validación humana |
 | A5.4 `[HECHO]` 15/11: medido con `herramientas/medir-escena/medir.mjs` (518 celdas, bloques de 24 cubos, misma escena que `main`). GPU real (Apple M5 Max, WebGL2): 114.8 cuadros/s con maíz en madurez y 105.1 con la mezcla de 4 cultivos; sin GPU (SwiftShader): 9.4 cuadros/s en ambos; 191 416 triángulos, 5 a 8 draw calls, primera escena en 0.3 a 1.2 s; pérdida y recuperación del contexto WebGL probadas sin errores. Cifras y límites en `docs/06` y `docs/10`; evidencia en `docs/capturas/medicion-a5-4/`. No se midió un celular ni una laptop modesta física (queda `/medir.html` para hacerlo) y en GPU real el reposo no llega siempre a 0 cuadros (observación para Mompin) | Medición de requisitos mínimos y fallback WebGL | R1 | S | Haiku | A3.6 | Cifra documentada para jueces |
 | A5.5 `[HECHO]` 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`) | Pruebas de regresión del motor y de contratos | R2 | M | Sonnet | A4.2 | Suite en verde |
-| A5.7 `[EN CURSO]` | README con método, fuentes, límites, licencias y declaración de IA | R4 | S | Sonnet | A4.5 | README completo |
+| A5.7 `[EN CURSO]` pospuesta hasta el final: fase de revisión (Mompin, 15/11) | README con método, fuentes, límites, licencias y declaración de IA | R4 | S | Sonnet | A4.5 | README completo |
 | A5.8 `[HECHO]` 14/11 noche, segunda pasada: API con `herramientas/demo-sin-red.sh` y Chrome headless con proxy inválido. P0 a P3 y método de la demo de Isla sin peticiones externas; NDVI del paquete 200; SMAP 503 sin token; clima lejano 503. Capturas en `docs/capturas/noche-14/`. No se apagó el wifi. El mapa de polígono pide teselas de Esri | Respaldo local sin internet y capturas | R3 + R4 | S | Haiku | A2.4 | Demo corre con la red apagada |
-| A5.9 | Envío final según reglas oficiales | R4 | XS | Haiku | A5.7 | Entrega confirmada (C6) |
+| A5.9 pospuesta hasta el final: fase de revisión (Mompin, 15/11); el envío se hace solo cuando todos digan que están satisfechos | Envío final según reglas oficiales | R4 | XS | Haiku | A5.7 | Entrega confirmada (C6) |
 
 Video y presentación se definen al final, cuando el front esté conforme: quedan fuera del tablero, sin asignar y fuera del reparto y de los porcentajes `[DECIDIDO]` (Mompin, 14/11; ver 13). No están canceladas para el equipo. En el carril de Balam permanecen canceladas por su petición expresa; no se retoman sin una nueva indicación suya. Esto no cambia los requisitos externos del evento.
+
+## Fase de revisión `[DECIDIDO]` (Mompin, 15/11)
+
+El desarrollo de funciones terminó: el equipo entra en **fase de revisión**. Ahora se revisa y se valida lo que ya está en `main`, **sobre todo el frontend** (cada pantalla del recorrido P0 a P3, la vista 2D y 3D, el dashboard, las tarjetas, el método, móvil y teclado), contra lo que entrega el motor y contra las reglas oficiales (`docs/02`).
+
+- Las cuatro actividades que quedaban (A0.3, A4.4, A5.7 y A5.9) quedan **pospuestas hasta el final**, con su estado de siempre y la nota en su fila. Video y presentación (A5.6) siguen fuera del tablero y se definen al final.
+- Cada hallazgo se avisa por el buzón con la pantalla, qué pasa, quién es el dueño y su estado; se arregla en la rama del dueño y entra a `main` en verde.
+- **El envío (A5.9) se hace solo cuando todos digan que están satisfechos.**
 
 ## Fuera del tablero hasta el final
 
@@ -285,7 +293,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A2.16 | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | HECHO | (Mafer) `[HECHO]` |
 | A3.3 | Estados visuales: color + icono + patrón, leyenda | HECHO |  |
 | A3.9 | Cultivos 4 en adelante, props y mascota | HECHO |  |
-| A5.7 | README con método, fuentes, límites, licencias y declaración de IA | EN CURSO |  |
+| A5.7 | README con método, fuentes, límites, licencias y declaración de IA | EN CURSO | pospuesta hasta el final: fase de revisión (Mompin, 15/11) |
 
 ### balam
 
@@ -300,18 +308,18 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | A3.6 | Modo 2D ligero con los mismos valores del motor | HECHO |  |
 | A4.1 | Dashboard: gráficas de lluvia, demanda y balance (Recharts) | HECHO | series del Worker, graficas y tabla verificadas |
 | A4.3 | Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos | HECHO | motor y tarjetas visibles en laboratorio y comparacion |
-| A4.4 | Redacción con LLM sobre números ya calculados (opcional) | PENDIENTE |  |
+| A4.4 | Redacción con LLM sobre números ya calculados (opcional) | PENDIENTE | pospuesta hasta el final: fase de revisión (Mompin, 15/11) |
 | A4.5 | Pantalla de método, fuentes y advertencias (A1, A3) | HECHO |  |
 | A4.9 | Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción | HECHO |  |
 | A5.2 | Slider de meses | HECHO |  |
 | A5.3 | Móvil y accesibilidad (táctil, teclado) | HECHO |  |
-| A5.9 | Envío final según reglas oficiales | PENDIENTE |  |
+| A5.9 | Envío final según reglas oficiales | PENDIENTE | pospuesta hasta el final: fase de revisión (Mompin, 15/11); el envío se hace solo cuando todos digan que están satisfechos |
 
 ### Equipo (sin responsable único)
 
 | ID | Actividad | Estado | Nota |
 | --- | --- | --- | --- |
-| A0.3 | Acordar roles, cultivos iniciales y criterio de ranking (V-18, V-19) | PENDIENTE |  |
+| A0.3 | Acordar roles, cultivos iniciales y criterio de ranking (V-18, V-19) | PENDIENTE | pospuesta hasta el final: fase de revisión (Mompin, 15/11) |
 
 <!-- estado-por-persona:fin -->
 

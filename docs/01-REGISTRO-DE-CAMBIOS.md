@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Fase de revisión `[DECIDIDO]` (Mompin; registrado por la cronista)
+
+- **Archivos:** `docs/13` (filas "Fase de revisión" y "Envío cuando todos estén satisfechos"), `docs/14` (sección "Fase de revisión" y nota "pospuesta hasta el final" en A0.3, A4.4, A5.7 y A5.9; vistas regeneradas), `AgroVault/Compartido/Pendientes.md` y `Resumen.md`.
+- **Cambio:** Mompin decidió entrar en fase de revisión: ahora se revisa y valida, sobre todo el frontend. Las cuatro actividades restantes quedan pospuestas hasta el final; conservan su estado (`cronograma.py` no tiene un estado nuevo) y llevan la nota en su fila. El envío se hace solo cuando todos digan que están satisfechos. No se agregó una fase F6 al tablero: basta la sección.
+- **Evidencia:** `origin/main` 7931059; `cronograma.py`: 56 de 60 hechas, 1 en curso (A5.7) y 3 pendientes (A0.3, A4.4, A5.9).
+- **Decisiones afectadas:** A0.3, A4.4, A5.7 y A5.9 (pospuestas); A5.9 (condición de envío).
+
 ### 2026-11-14 (noche) — A4.12: se borra la propuesta `ee-uu` (Eduardo)
 
 - **Archivos:** se elimina `api/propuestas-contrato/ee-uu.schema.json` (el directorio queda vacío y también se quita); `api/app/modelos_regional.py` (docstring).

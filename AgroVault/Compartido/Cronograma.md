@@ -73,7 +73,7 @@ Proyecto completo: **56 de 60** actividades hechas (93 %), 1 en curso, 0 bloquea
 - [x] **A2.16** TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica `HECHO` — (Mafer) `[HECHO]`
 - [x] **A3.3** Estados visuales: color + icono + patrón, leyenda `HECHO`
 - [x] **A3.9** Cultivos 4 en adelante, props y mascota `HECHO`
-- [/] **A5.7** README con método, fuentes, límites, licencias y declaración de IA `EN CURSO`
+- [/] **A5.7** README con método, fuentes, límites, licencias y declaración de IA `EN CURSO` — pospuesta hasta el final: fase de revisión (Mompin, 15/11)
 
 ## balam
 
@@ -86,12 +86,12 @@ Proyecto completo: **56 de 60** actividades hechas (93 %), 1 en curso, 0 bloquea
 - [x] **A3.6** Modo 2D ligero con los mismos valores del motor `HECHO`
 - [x] **A4.1** Dashboard: gráficas de lluvia, demanda y balance (Recharts) `HECHO` — series del Worker, graficas y tabla verificadas
 - [x] **A4.3** Tarjetas de rotación: por qué, evidencia, beneficios, huecos, riesgos `HECHO` — motor y tarjetas visibles en laboratorio y comparacion
-- [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)
+- [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional) — pospuesta hasta el final: fase de revisión (Mompin, 15/11)
 - [x] **A4.5** Pantalla de método, fuentes y advertencias (A1, A3) `HECHO`
 - [x] **A4.9** Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción `HECHO`
 - [x] **A5.2** Slider de meses `HECHO`
 - [x] **A5.3** Móvil y accesibilidad (táctil, teclado) `HECHO`
-- [ ] **A5.9** Envío final según reglas oficiales
+- [ ] **A5.9** Envío final según reglas oficiales — pospuesta hasta el final: fase de revisión (Mompin, 15/11); el envío se hace solo cuando todos digan que están satisfechos
 
 ## Equipo (sin responsable único)
 
