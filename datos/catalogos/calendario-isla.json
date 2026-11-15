@@ -1495,6 +1495,630 @@
         },
         "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
       }
+    },
+    {
+      "cultivo": "cebolla",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para cebolla.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para cebolla."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "cebolla",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para cebolla.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para cebolla."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "pepino",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para pepino.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para pepino."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "pepino",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para pepino.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para pepino."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "melon",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para melon.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para melon."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "melon",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para melon.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para melon."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "lechuga",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para lechuga.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para lechuga."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "lechuga",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para lechuga.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para lechuga."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "zanahoria",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para zanahoria.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para zanahoria."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "zanahoria",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para zanahoria.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para zanahoria."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "berenjena",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para berenjena.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para berenjena."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "berenjena",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para berenjena.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para berenjena."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "brocoli",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para brocoli.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para brocoli."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "brocoli",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para brocoli.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para brocoli."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "col",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para col (repollo).",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para col (repollo)."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "col",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para col (repollo).",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para col (repollo)."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "coliflor",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para coliflor.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para coliflor."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "coliflor",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para coliflor.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para coliflor."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "espinaca",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para espinaca.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para espinaca."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "espinaca",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para espinaca.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para espinaca."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "rabano",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para rabano.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para rabano."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "rabano",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para rabano.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para rabano."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "betabel",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para betabel.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para betabel."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "betabel",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para betabel.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de siembra (INIFAP) para betabel."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
     }
   ],
   "advertencias": [

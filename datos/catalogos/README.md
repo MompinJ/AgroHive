@@ -22,6 +22,9 @@ Meta: 30 a 50 cultivos con prioridad para Mexico, el tropico humedo y las rotaci
 | --- | --- |
 | 1, leguminosas y cereales | soya, frijol caupi, haba, chicharo, lenteja, ejote, cebada, trigo, avena, maiz dulce |
 | 2, cultivos de campo del tropico y de Mexico | yuca, cana de azucar, ajonjoli, girasol, algodon, cartamo, higuerilla, jitomate, papa, calabacita |
+| 3, hortalizas | cebolla, pepino, melon, lechuga, zanahoria, berenjena, brocoli, col, coliflor, espinaca, rabano, betabel |
+
+Total: 40 cultivos (8 anteriores y 32 de la ampliacion).
 
 **Criterio de fila de Tabla 11 para la ampliacion:** (a) la fila tropical si existe; (b) si no, la de siembra mas cercana a junio (temporal PV de Isla, como maiz, frijol, chile y sorgo); (c) en empate, la region mas calida; (d) se salta una fila con etapas impresas ambiguas (por ejemplo `50/30`) o que no suman su total, si otra fila cumple. Kc ini, Zr y p siguen las reglas de la tabla de abajo; un rango de Kc sin nota que elija se resuelve con el punto medio (como el Kc medio del sorgo).
 
@@ -85,6 +88,13 @@ Meta: 30 a 50 cultivos con prioridad para Mexico, el tropico humedo y las rotaci
 | Jitomate | `Tomato`, Mediterraneo, abril/mayo: 145 d; Kc end 0.80 (punto medio de 0.70-0.90) | Empate de siembra con California (155 d); se eligio el Mediterraneo, como con la calabaza. El id es `tomate` y el nombre "Jitomate" para no confundirlo con el tomate verde |
 | Papa | `Potato`, clima continental, mayo: 130 d | Siembra mas cercana a junio; la fila (semi)arida imprime etapas ambiguas (30/45) |
 | Calabacita | `Squash, Zucchini`, Mediterraneo/Europa, mayo/junio: 90 d; EcoCrop `Vegetable marrow` (*C. pepo*) | Calabacita tierna; la calabaza de milpa madura sigue siendo `calabaza` |
+| Hortalizas pequenas (cebolla, lechuga, zanahoria, brocoli, col, coliflor, espinaca, rabano) | Kc ini 0.7 del grupo a. Small Vegetables; betabel 0.5 (Roots and Tubers), berenjena 0.6 (Solanum), melon 0.5 (Cucumber Family); el pepino trae Kc ini propio (0.6) | Mismo criterio de Kc ini de grupo que los ocho primeros |
+| Cebolla | `Onion (dry)`, Mediterraneo, abril: 150 d | Bulbo seco; la de rabo tiene otra fila |
+| Pepino | `Cucumber`, region arida, junio/agosto: 105 d; subfila `Fresh Market` | Para consumo en fresco; la de cosecha mecanica tiene Kc end 0.90 |
+| Melon | `Sweet melons`, Mediterraneo, mayo: 120 d | Fila general de *Cucumis melo*; el cantaloupe tiene fila aparte, solo de California |
+| Zanahoria y espinaca | Zanahoria: Mediterraneo, febrero/marzo (150 d). Espinaca: region arida, noviembre (100 d) | Se saltaron filas con etapas ambiguas (`50/30`; `15/25` y `60/70`), regla (d) |
+| Berenjena | `Egg plant`, region arida, octubre: 30/40/40/20 = 130 d | La fila de mayo/junio imprime total 40 y sus etapas suman 140; se salto, regla (d). La pagina imprime el total elegido como `130\1` |
+| Brocoli, col y coliflor | Unica fila de cada una: desierto de California, septiembre (135, 165 y 140 d) | Nota 1 de Tabla 11: la duracion de las cruciferas varia mucho con la variedad |
 
 ## Huecos (NO_EVALUABLE)
 
