@@ -57,16 +57,16 @@ Lista unida de las dos documentaciones anteriores, para decidir en el evento seg
 
 Regla: un cultivo **solo entra** si tiene parámetros citables (ciclo, etapas, Kc). Si falta, se muestra `NO_EVALUABLE` en lugar de inventar.
 
-### Rotaciones de ejemplo `[PROPUESTA]`
-Útiles para la demo; se ajustan cuando se elijan los cultivos:
+### Rotaciones iniciales `[DECIDIDO]`
+Las que arma la app (`web/src/ui/planes.ts`; nombre de la interfaz, D9 del equipo, 15/11; detalle en 13, "Rotaciones de la demo"):
 
 | ID | Ciclo 1 | Ciclo 2 | Ciclo 3 | Propósito |
 | --- | --- | --- | --- | --- |
-| **R0** | Maíz | Maíz | Maíz | Referencia de monocultivo (puede hacer de "rotación actual"). |
-| **R1** | Maíz | Frijol | Maíz | Alternativa con leguminosa. |
-| **R2** | Maíz | Sorgo | Frijol | Alternativa diversificada. |
+| **R1** | Maíz (15 jun, PV) | Frijol (1 nov, OI) | Maíz (15 jun, PV) | Milpa con leguminosa. |
+| **R2** | Maíz (PV) | Maíz (PV) | — | Referencia de monocultivo. |
+| **R3** | Maíz (1 jun, PV) | Frijol (10 oct, OI) | Maíz (1 jun, PV) | Milpa sembrada dentro de las ventanas de INIFAP; la sugerida. Hasta el 14/11 se llamaba R4. |
 
-Con el selector, el usuario puede armar sus propias secuencias además de estas.
+Con "+" el usuario arma sus propias rotaciones y ciclos, sin límite. Reemplaza la propuesta de v0.2 (R0 maíz-maíz-maíz, R1 maíz-frijol-maíz, R2 maíz-sorgo-frijol). Las rotaciones iniciales de los ejemplos mundiales las arma el front (E10 en 16).
 
 ## Funciones
 

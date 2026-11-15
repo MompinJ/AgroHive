@@ -23,9 +23,9 @@ Arquitectura **mundial**; desde el 15/11 la demo son **parcelas de ejemplo en ci
 
 ### Qué ya hace el producto
 
-- Parcela en mapa (Leaflet, OpenStreetMap) y polígono libre que genera la cuadrícula (Turf.js, tope 1600). Fila `i` desde el **sur**, columna `j` desde el **oeste**.
+- Parcela en mapa (Leaflet, OpenStreetMap) y polígono libre que genera la cuadrícula (Turf.js, tope de 200 celdas en la interfaz; el contrato admite 1600). Fila `i` desde el **sur**, columna `j` desde el **oeste**.
 - Relieve real: Terrarium por celda, pendiente, exageración vertical ×10 `[PROPUESTA]`.
-- Selector de rotaciones R1 a R4, cultivo y fecha por ciclo, escenario seco / habitual / lluvioso. Cambiar el plan invalida y vuelve a simular. Cambiar escenario, ciclo o la banda no vuelve a bajar NASA.
+- Rotaciones iniciales Rotación 1, 2 y 3 (R1 a R3; "+" agrega más), cultivo y fecha por ciclo, escenario seco / habitual / lluvioso. Cambiar el plan invalida y vuelve a simular. Cambiar escenario, ciclo o la banda no vuelve a bajar NASA.
 - Motor en Web Worker: balance de agua, pilares, ranking B y años análogos.
 - Escena 3D (Three.js 0.187, sin React Three Fiber) con modelos `.bbmodel`, placas de estado y losas de suelo.
 - Banda de próxima temporada, apagable, con aviso de que no es predicción (A4.9).
@@ -53,7 +53,7 @@ Ya están, además: modo 2D (A3.6, retirado el 15/11), gráficas del dashboard (
 | Historial | 2005-10-01 a 2025-12-31 (20 años agrícolas de SIAP). 2026 no es un año completo |
 | Cultivos | Maíz, frijol, calabaza y chile en catálogo y en voxel. El chile usa parámetros del **pimiento dulce** (*Capsicum annuum*); hay que revisarlo |
 | Calendario | `datos/catalogos/calendario-isla.json`. Maíz PV 1 jun–15 jul (INIFAP, DDR San Andrés Tuxtla). Maíz OI nov–dic y frijol OI 20 sep–20 oct (Agenda Técnica de Veracruz, estatal). Frijol PV, chile y calabaza: sin ventana, `NO_EVALUABLE`. Calabaza: SIAP 2021–2025 no la registra en Isla |
-| Rotaciones | R1 maíz–frijol–maíz; R2 maíz–maíz; R3 frijol–frijol; R4 milpa en ventana de INIFAP (maíz 1 jun, frijol 10 oct). La demo muestra R4 como sugerida. El orden en pantalla es el del motor |
+| Rotaciones | En la app (D9, `[DECIDIDO]` equipo 15/11): R1 maíz–frijol–maíz; R2 maíz–maíz; R3 milpa en ventana de INIFAP (maíz 1 jun, frijol 10 oct), la sugerida. La frijol–frijol ya no está entre las iniciales. En las pruebas del motor la milpa en ventana conserva el id interno `R4` y `R3` es la frijol–frijol (docs/05). El orden en pantalla es el del motor |
 | Suelo de la zona | Franco arcillo arenoso. TAW **122.3 mm/m** por Saxton y Rawls (θsat 0.454, θFC 0.293, θWP 0.171), `SUPUESTO`. Arena 48.4 %, arcilla 25.7 %, materia orgánica 2.79 % (carbono ISRIC × 1.724). pH ISRIC 5.4. OpenLandMap: misma clase, pH 5.9, carbono cerca de la mitad. FAO-56 Tabla 19 no tiene fila para esta clase |
 
 ## Cifras de la regresión (no las recalcules de memoria)
@@ -63,7 +63,7 @@ Con el paquete de demo y el suelo real de Isla (`demo-isla.json`, A5.5 y A4.3):
 | Qué | Valor |
 | --- | --- |
 | Escenarios | Seco **2023**, habitual **2016**, lluvioso **2024**. El p50 empata; gana el año más reciente (2016 sobre 2008) |
-| Ranking de la demo | R4, luego R2, luego R1, con arrepentimiento 0, 0.077 y 0.099 cuando se comparan esas tres. Con el suelo real, R4 queda primera |
+| Ranking de la demo (ids de la regresión; R4 es la Rotación 3 de la app) | R4, luego R2, luego R1, con arrepentimiento 0, 0.077 y 0.099 cuando se comparan esas tres. Con el suelo real, R4 queda primera |
 | Años análogos | 2006, 2008, 2013, 2019, 2022 y 2025 (nov 2026–abr 2027). Solo se evalúa el frijol de OI. Demanda sin cubrir de 0 a 10.6 %. Fracción percolada de 0.09 a 0.54 |
 | IMERG (evidencia) | Máximo diario en Isla hasta 241.5 mm, contra 125.4 mm de `PRECTOTCORR`. Correlación mensual 0.923. Elegiría otros años (2019, 2024, 2017). **No cambia** los escenarios |
 
@@ -100,7 +100,7 @@ Estados: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS`, `RESPALDO_H
 ```text
 Navegador (web/)
   React + Vite + TypeScript
-  Leaflet + Turf.js (i desde el sur, j desde el oeste, tope 1600)
+  Leaflet + Turf.js (i desde el sur, j desde el oeste, tope 200 en la interfaz)
   Three.js 0.187, InstancedMesh, sin React Three Fiber
   .bbmodel empaquetados con import.meta.glob
   Motor en Web Worker (web/src/motor/)

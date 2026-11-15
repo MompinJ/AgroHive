@@ -7,7 +7,7 @@
 **AgroHive** es un **simulador visual tipo "what if"** para que un agricultor compare **rotaciones de cultivos** frente a la historia climática real de **NASA**, para el reto *Field Shift: Adapting Farms with NASA Data* (NASA Space Apps Challenge 2026, sede Boca del Río, Veracruz).
 
 - **Idea central:** no buscamos la rotación de mayor rendimiento, buscamos **la más robusta**: la que no colapsa en el peor escenario histórico, aunque no sea la más rentable en un año ideal.
-- **Cómo se ve:** escena **3D low-poly estilo voxel** (tipo juego de granja) con **relieve**, con **modo 2D ligero** de respaldo.
+- **Cómo se ve:** escena **3D low-poly estilo voxel** (tipo juego de granja) con **relieve**. **Sin modo 2D de respaldo:** se retiró el 15/11 `[DECIDIDO]` (equipo, 15/11, en persona) (D8 de [16](16-PLAN-DIA-FINAL.md)); sin WebGL, la app avisa y muestra las cifras del motor sin la escena.
 - **Cómo se usa:** el usuario elige cultivos con un **selector** ("¿y si siembro esto?"), cambia de escenario (seco / habitual / lluvioso) y ve cómo reacciona su campo, con valores, evidencia y riesgos. La decisión final siempre es del agricultor.
 - **Qué NO hace:** no predice el clima de una temporada exacta (solo muestra un rango aproximado, ver 13), no predice cosechas ni ingresos, no mide pH ni fertilidad (el pH es una estimación de un modelo global), no reemplaza a un agrónomo.
 
