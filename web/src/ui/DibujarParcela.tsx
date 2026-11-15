@@ -6,6 +6,7 @@ import type { LonLat, Parcela } from '../../../contratos/tipos/contratos';
 import { obtenerTerreno } from '../api/cliente';
 import { generarCuadricula, type Cuadricula } from './cuadricula';
 import { SelectorTamanoCelda } from './SelectorTamanoCelda';
+import { describirCelda } from '../geo/escala-celda';
 import type { PedidoTamano } from '../geo/tamano-celda';
 
 const MapaParcela = lazy(() => import('./MapaParcela'));
@@ -181,7 +182,7 @@ export function DibujarParcela({ onGuardar, guardada }: { onGuardar: (p: Parcela
           {aviso && <p className="dibujo-error" role="alert">{aviso}</p>}
           {cuadricula && !cuadricula.ok && <p className="dibujo-error" role="alert">{cuadricula.motivo}</p>}
           {cuadricula?.ok && cuadricula.valor.parcela.advertencias?.[0] && <p className="dibujo-nota">{cuadricula.valor.parcela.advertencias[0].mensaje}</p>}
-          {cuadricula?.ok && <details className="dibujo-escala"><summary>Tamaño de celda: {tamano === 'auto' ? 'automático' : `${tamano} m`}</summary>
+          {cuadricula?.ok && <details className="dibujo-escala"><summary>Tamaño de celda: {tamano === 'auto' ? 'automático' : `${tamano} m`}{describirCelda(cuadricula.valor.escala.ladoM) ? ` · ${describirCelda(cuadricula.valor.escala.ladoM)!.texto}` : ''}</summary>
             <SelectorTamanoCelda valor={tamano} escala={cuadricula.valor.escala} onCambio={(t) => { peticion.current?.abort(); setEstado({ tipo: 'nada' }); setTamano(t); }} />
           </details>}
           {cuadricula?.ok && estado.tipo === 'error' && <>

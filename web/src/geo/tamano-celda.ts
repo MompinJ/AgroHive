@@ -1,10 +1,14 @@
 // Tamano de celda que elige el usuario (control de escala, [DECIDIDO] Mompin 14/11 noche).
 // Puro. "Automatico" conserva la regla de siempre (lado >= 10 m y como mucho 40 x 40 en la
 // caja envolvente); un tamano pedido se respeta mientras la cuadricula no pase del tope de
-// 1600 celdas (contrato parcela, doc 08). Si lo rebasa, el lado se sube lo justo y se avisa.
+// 200 celdas (decision del equipo 15/11: la escena se traba con muchas; el contrato parcela
+// admite hasta 1600, doc 08). Si lo rebasa, el lado se sube lo justo y se avisa. El modo
+// automatico tambien respeta el tope: sube el lado sin avisar, porque no hubo un tamano pedido.
 
-/** Tope de celdas (contrato parcela, maxItems; doc 08). */
-export const TOPE_CELDAS = 1600;
+/** Tope de celdas que genera la interfaz (decision del equipo, 15/11). */
+export const TOPE_CELDAS = 200;
+/** Maximo del contrato parcela (maxItems; doc 08): lo que la escena acepta dibujar si viene de otra fuente. */
+export const TOPE_CELDAS_CONTRATO = 1600;
 /** Lado minimo de la regla automatica, en m (unos 9 m por pixel del DEM de Terrarium z14). */
 export const LADO_MINIMO_AUTO_M = 10;
 /** Tamanos que ofrece el selector, en m `[DECIDIDO]` (Mompin). */
@@ -49,15 +53,15 @@ export function elegirLado(
   tope = TOPE_CELDAS,
 ): EscalaCelda {
   const auto = ladoAutomatico(anchoM, altoM);
-  if (pedido === 'auto') return { pedido, ladoM: auto, subido: false };
-  if (!(Number.isFinite(pedido) && pedido > 0)) throw new RangeError('El tamano de celda debe ser un numero de metros mayor que cero.');
+  if (pedido !== 'auto' && !(Number.isFinite(pedido) && pedido > 0)) throw new RangeError('El tamano de celda debe ser un numero de metros mayor que cero.');
   const redondear = (l: number) => Math.ceil(l * 10 - 1e-9) / 10;
-  let lado = Math.max(pedido, redondear(Math.sqrt(areaM2 / tope)));
+  const base = pedido === 'auto' ? auto : pedido;
+  let lado = Math.max(base, redondear(Math.sqrt(areaM2 / tope)));
   for (let intento = 0; intento < 40; intento++) {
     const n = contar(lado);
-    if (n <= tope) return { pedido, ladoM: lado, subido: lado > pedido };
+    if (n <= tope) return { pedido, ladoM: lado, subido: pedido === 'auto' ? false : lado > pedido };
     lado = redondear(Math.max(lado * Math.sqrt(n / tope) * 1.002, lado + 0.1));
   }
-  // No deberia pasar: la regla automatica siempre cabe.
-  return { pedido, ladoM: Math.max(auto, pedido), subido: Math.max(auto, pedido) > pedido };
+  // No deberia pasar: el lado crece hasta caber en el tope.
+  return { pedido, ladoM: Math.max(auto, base), subido: pedido !== 'auto' && Math.max(auto, base) > pedido };
 }

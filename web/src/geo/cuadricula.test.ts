@@ -4,7 +4,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { area, polygon } from '@turf/turf';
 import type { LonLat } from '../../../contratos/tipos/contratos';
 import { generarCuadricula } from './cuadricula';
-import { elegirLado, ladoAutomatico, TAMANOS_CELDA_M } from './tamano-celda';
+import { elegirLado, ladoAutomatico, TAMANOS_CELDA_M, TOPE_CELDAS } from './tamano-celda';
 
 const requireContratos = createRequire(new URL('../../../contratos/package.json', import.meta.url));
 const Ajv = requireContratos('ajv/dist/2020').default;
@@ -68,8 +68,8 @@ describe('cuadrícula con bordes diagonales', () => {
   it('un tamaño que rebasa el tope se sube lo justo y avisa', () => {
     const { parcela, escala } = generarCuadricula(grande, { tamanoCeldaM: 10 });
     expect(escala.subido).toBe(true);
-    expect(parcela.celdas.length).toBeLessThanOrEqual(1600);
-    expect(parcela.celdas.length).toBeGreaterThan(1500);
+    expect(parcela.celdas.length).toBeLessThanOrEqual(TOPE_CELDAS);
+    expect(parcela.celdas.length).toBeGreaterThan(150); // sube el lado lo justo: se queda cerca del tope, no muy por debajo
     expect(parcela.tamanoCeldaM).toBeGreaterThan(10);
     expect(parcela.advertencias?.[0]?.codigo).toBe('TAMANO_CELDA_AJUSTADO');
     expect(validar(parcela), JSON.stringify(validar.errors)).toBe(true);
@@ -77,10 +77,24 @@ describe('cuadrícula con bordes diagonales', () => {
 
   it('elegirLado empieza desde la cota de área y rechaza tamaños inválidos', () => {
     let llamadas = 0;
-    const r = elegirLado(1, 1000, 1000, 1e6, (l) => { llamadas++; return Math.ceil(1000 / l) ** 2; });
+    const r = elegirLado(1, 1000, 1000, 1e6, (l) => { llamadas++; return Math.ceil(1000 / l) ** 2; }, 1600);
     expect(r.ladoM).toBe(25);
     expect(llamadas).toBe(1);
     expect(() => elegirLado(0, 10, 10, 100, () => 1)).toThrow();
     expect(ladoAutomatico(4000, 100)).toBe(100);
+  });
+
+  it('el tope es de 200 celdas y tambien lo respeta el modo automatico, sin avisar', () => {
+    expect(TOPE_CELDAS).toBe(200);
+    const contar = (l: number) => Math.ceil(1000 / l) ** 2;
+    const pedido = elegirLado(10, 1000, 1000, 1e6, contar);
+    expect(contar(pedido.ladoM)).toBeLessThanOrEqual(200);
+    expect(pedido.subido).toBe(true);
+    const auto = elegirLado('auto', 1000, 1000, 1e6, contar);
+    expect(contar(auto.ladoM)).toBeLessThanOrEqual(200);
+    expect(auto.ladoM).toBeGreaterThan(ladoAutomatico(1000, 1000)); // el automatico solo (25 m) daria 1600 celdas
+    expect(auto.subido).toBe(false);
+    // Una parcela chica no se toca: 4 celdas siguen en 70.71 m como la demo.
+    expect(elegirLado('auto', 100, 100, 1e4, (l) => Math.ceil(100 / l) ** 2).ladoM).toBe(ladoAutomatico(100, 100));
   });
 });

@@ -14,6 +14,12 @@ export function fechaCorta(fecha: string): string {
   return `${Number(d)} ${meses[Number(m) - 1] ?? m} ${a}`;
 }
 export const nombreCultivo = (id: string) => nombresCultivos[id] ?? id;
+/** "Recorri el ciclo 2 al 3 feb 2027 para que no se encimen." o vacio si nada se movio. */
+export function textoMovidos(movidos: readonly { ciclo: number; despues: string }[]): string {
+  if (!movidos.length) return '';
+  const lista = movidos.map((m) => `el ciclo ${m.ciclo} al ${fechaCorta(m.despues)}`);
+  return `Recorrí ${lista.length > 1 ? `${lista.slice(0, -1).join(', ')} y ${lista.at(-1)}` : lista[0]} para que los ciclos no se encimen.`;
+}
 export const nombreTemporada = (t: string) => (t === 'PV' ? 'Primavera–verano' : 'Otoño–invierno');
 /** 1 jun – 15 jul (ventana del calendario, sin anio). */
 export function rangoVentana(v: { desdeMes: number; desdeDia?: number; hastaMes: number; hastaDia?: number }): string {

@@ -375,7 +375,7 @@
 .lab-plagas .lab-boton { min-height: 38px; font-size: .82rem; }
 .lab-protegido { margin: 0; display: flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--color-forest-700); }
 .lab-paleta button { position: relative; }
-.lab-conv-punto { position: absolute; bottom: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; }
+.lab-conv-punto { position: absolute; top: 6px; left: 6px; width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 0 2px #fff; }
 .lab-conv-buena .lab-conv-punto, .lab-conv-leyenda .lab-conv-buena { background: #2f8a4e; }
 .lab-conv-regular .lab-conv-punto, .lab-conv-leyenda .lab-conv-regular { background: #e2bf3a; }
 .lab-conv-mala .lab-conv-punto, .lab-conv-leyenda .lab-conv-mala { background: #bf3326; }
@@ -407,3 +407,17 @@
   .plan-elegido { position: absolute; inset: 0; width: auto; max-height: none; box-shadow: none; }
   .plan-pie, .plan-cabeza .lab-aviso-cerrar { display: none !important; }
 }
+.lab-ciclo-texto strong { display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 760px) {
+  .barra-herr { flex-wrap: nowrap; overflow-x: auto; max-width: calc(100% - 96px); scrollbar-width: none; }
+  .barra-herr::-webkit-scrollbar { display: none; }
+  .barra-herr button { flex: 0 0 auto; }
+  .lab-paso-cultivos .lab-toast { top: calc(var(--lab-top) + 60px); }
+}
+
+/* Zona de plagas: radio alrededor de la celda elegida. */
+.lab-zona-plaga { display: grid; gap: 6px; }
+.lab-radios { display: flex; gap: 4px; }
+.lab-radio { min-width: 44px; min-height: 36px; padding: 4px 12px; border: 1px solid var(--color-control-border, #b8c4b8); border-radius: 999px; background: transparent; color: inherit; font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
+.lab-radio[aria-checked="true"] { background: var(--color-forest-700, #1f4d38); border-color: var(--color-forest-700, #1f4d38); color: #fff; }
+.mascota-nombre { margin: 0 0 2px; font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .7; }

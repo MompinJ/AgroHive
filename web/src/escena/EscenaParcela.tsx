@@ -5,6 +5,9 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import type { Advertencia, Parcela, ResultadoCeldas, SerieBalance, Suelo } from '../../../contratos/tipos/contratos';
 import { CORTES_LLUVIA, lluviaDelDia, textoLluvia } from './lluvia';
+import { describirCelda } from '../geo/escala-celda';
+import { climaFondo, epocaRelativa, NOMBRE_CLIMA_FONDO } from './clima-fondo';
+import { AJUSTES_GRAFICOS, guardarNivel, leerNivelGuardado, NIVELES_GRAFICOS, NOMBRE_NIVEL_GRAFICOS, type NivelGraficos } from './graficos';
 import { construirEscena } from './adaptador';
 import type { AvisoDatos } from '../api/datosParcela';
 import { CODIGOS_TERRENO } from './avisos-datos';
@@ -68,6 +71,10 @@ export interface EscenaParcelaProps {
   nombresPlaga?: Partial<Record<TipoPlaga, string>> | undefined;
   /** Bioma del entorno decorativo (modo fondo). Por defecto, tropical humedo (demo de Isla). */
   bioma?: Bioma | undefined;
+  /** Avisa cual es la celda elegida (null si se cierra la ficha): centra la zona de plagas. */
+  onCeldaElegida?: ((celdaId: string | null) => void) | undefined;
+  /** Temperatura media tipica por dia del ano (climatologia de la parcela): con la lluvia del dia decide el color del cielo. */
+  tMediaDia?: readonly (number | null)[] | undefined;
 }
 
 const NOMBRE_VISTA: Record<VistaBase, string> = { cultivo: 'Cultivos', validacion: 'Validación', agua: 'Agua' };
@@ -98,7 +105,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO, onCeldaElegida, tMediaDia }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -120,6 +127,12 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     return () => consulta.removeEventListener('change', cambio);
   }, []);
   const [seleccion, setSeleccion] = useState<BloqueEscena | null>(null);
+  // Nivel de graficos: lo guarda el navegador; cambia resolucion, aves y viento y el tope de insectos, nunca los datos.
+  const [nivelGraficos, setNivelGraficos] = useState<NivelGraficos>(leerNivelGuardado);
+  const elegirNivel = (n: NivelGraficos) => { setNivelGraficos(n); guardarNivel(n); };
+  const alElegirRef = useRef(onCeldaElegida);
+  alElegirRef.current = onCeldaElegida;
+  useEffect(() => { alElegirRef.current?.(seleccion?.celdaId ?? null); }, [seleccion?.celdaId]);
   const [hover, setHover] = useState<{ bloque: BloqueEscena; x: number; y: number } | null>(null);
   const [avisosRender, setAvisosRender] = useState<Advertencia[]>([]);
   const [sinWebGL, setSinWebGL] = useState(false);
@@ -143,6 +156,11 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     serieBalance && resultado && serieBalance.rotacionId === resultado.rotacionId && serieBalance.escenario === resultado.escenario ? serieBalance : null;
   const lluvia = useMemo(() => lluviaDelDia(serieValida, modelo.fecha), [serieValida, modelo.fecha]);
   const intensidadLluvia = lluvia?.estado === 'con_dato' ? lluvia.intensidad : 0;
+  // Cielo segun el clima de la fecha: lluvia del dia y, sin lluvia, la epoca del ano frente a la propia parcela.
+  const climaDelFondo = useMemo(
+    () => climaFondo(lluvia?.estado === 'con_dato' ? lluvia.clase : null, epocaRelativa(tMediaDia, modelo.fecha)),
+    [lluvia, tMediaDia, modelo.fecha],
+  );
 
   // Brocha: el trazo en curso vive aqui; al soltar se entrega al plan (pincel.onTrazo).
   const [trazo, setTrazo] = useState<ReadonlySet<string>>(() => new Set());
@@ -183,6 +201,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       entorno: modo === 'fondo',
       enfocarAlElegir: modo === 'fondo',
       bioma,
+      nivelGraficos,
       ...(desplazamiento ? { desplazamiento } : {}),
       onSeleccion: setSeleccion,
       onContexto: (estado: 'perdido' | 'restaurado') => setContexto(estado),
@@ -191,7 +210,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
         setAvisosRender((prev) => (prev.some((a) => a.mensaje === mensaje) ? prev : [...prev, { codigo, mensaje, severidad: 'aviso' }])),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reducirMovimiento, viento, mascota, !!pincel, onPintar, desplazamiento?.x, desplazamiento?.y, bioma],
+    [reducirMovimiento, viento, mascota, !!pincel, onPintar, desplazamiento?.x, desplazamiento?.y, bioma, nivelGraficos],
   );
 
   useEffect(() => {
@@ -463,6 +482,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   );
 
   if (fondo) {
+    const leyendaCelda = describirCelda(parcela.tamanoCeldaM);
     const presentes = vista === 'cultivo' ? [...new Set(modelo.bloques.map((b) => b.cultivo).filter((c): c is string => !!c))] : [];
     const sinDato = vista ? modelo.bloques.length - (coloresVista?.size ?? 0) : 0;
     const globo = (b: BloqueEscena) => {
@@ -472,7 +492,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       return <><strong>{d.titulo}</strong>{d.lineas.map((l) => <span key={l}>{l}</span>)}{lineaPlaga && <span className={plaga!.comiendo ? 'escena-globo-plaga' : undefined}>{lineaPlaga}</span>}</>;
     };
     return (
-      <section className={`escena escena-fondo escena-bioma-${bioma} ${className}`} aria-label="Escena 3D de la parcela" style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
+      <section className={`escena escena-fondo escena-bioma-${bioma} escena-clima-${climaDelFondo} ${className}`} data-clima={NOMBRE_CLIMA_FONDO[climaDelFondo]} aria-label="Escena 3D de la parcela" style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
         {lienzoCaja}
         {hover && !sinWebGL && (
           <div className={`escena-globo escena-globo-vista${vista ? ` escena-globo-${vista}` : ''}`} style={{ left: hover.x, top: hover.y }} aria-hidden="true">
@@ -518,6 +538,15 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
                 {sinDato > 0 && <p className="escena-detalle">Sin color: {sinDato} {sinDato === 1 ? 'celda' : 'celdas'} sin dato del motor.</p>}
               </div>
             )}
+            <div className="escena-hud-graficos" role="radiogroup" aria-label="Nivel de gráficos">
+              <span>Gráficos</span>
+              {NIVELES_GRAFICOS.map((n) => (
+                <button key={n} type="button" role="radio" aria-checked={nivelGraficos === n} title={AJUSTES_GRAFICOS[n].detalle} onClick={() => elegirNivel(n)}>{NOMBRE_NIVEL_GRAFICOS[n]}</button>
+              ))}
+            </div>
+            {leyendaCelda && <p className="escena-hud-escala-celda" role="note" aria-label="Escala de la celda">
+              <span className="escena-escala-regla" aria-hidden="true" />{leyendaCelda.texto}
+            </p>}
             <div className="escena-hud-barra" role="toolbar" aria-label="Vistas de la parcela">
               {(['cultivo', 'validacion', 'agua'] as const).map((v) => (
                 <button key={v} type="button" aria-pressed={vista === v} onClick={() => setVista((a) => (a === v ? null : v))} title={AYUDA_VISTA[v]}>

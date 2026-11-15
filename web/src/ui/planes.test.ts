@@ -150,3 +150,23 @@ describe('guardado por parcela', () => {
     expect(claveDeParcela(otra, false)).not.toBe(claveDeParcela({ ...otra, centroide: [-90, 20] } as typeof parcela, false));
   });
 });
+
+describe('reacomodo de ciclos', () => {
+  it('un cultivo largo recorre los ciclos siguientes en vez de bloquearse', async () => {
+    const { acomodarCiclos, aplicarAcomodando, rellenarCiclo } = await import('./planes');
+    const cat = catalogo as CatalogoCultivos;
+    const r1 = planesIniciales(parcela, calendarioIsla)[0]!;
+    // Jitomate (145 dias) desde el 15 de junio no termina antes del 1 de noviembre.
+    const conTomate = rellenarCiclo(r1, parcela, 1, 'tomate', calendarioIsla, cat);
+    expect(conflictosPlan(conTomate, cat).length).toBeGreaterThan(0);
+    const r = aplicarAcomodando(conTomate, parcela, calendarioIsla, cat);
+    expect('error' in r).toBe(false);
+    if ('error' in r) return;
+    expect(conflictosPlan(r.plan, cat)).toEqual([]);
+    expect(r.movidos[0]!.ciclo).toBe(2);
+    expect(r.plan.ciclos[1]!.siembra > '2026-11-01').toBe(true);
+    expect(validadorContrato('plan-siembra')(r.plan)).toEqual([]);
+    // Sin conflicto no mueve nada.
+    expect(acomodarCiclos(r1, parcela, calendarioIsla, cat).movidos).toEqual([]);
+  });
+});

@@ -70,6 +70,10 @@ export class PlagasEscena {
   private readonly geo = new THREE.BoxGeometry(1, 1, 1);
   private readonly mat = new THREE.MeshLambertMaterial();
 
+  /** Tope de insectos de toda la parcela; lo fija el nivel de graficos. */
+  private tope = TOPE_INSECTOS;
+  setTope(n: number) { this.tope = Math.max(0, Math.floor(n)); }
+
   constructor() { this.grupo.name = 'plagas'; }
 
   /** Rehace los insectos de las celdas atacadas (comiendo = true); las protegidas no llevan nada. */
@@ -84,7 +88,7 @@ export class PlagasEscena {
       const plaga = plagas.get(a.celdaId);
       if (!plaga?.comiendo) continue;
       const semilla = [...a.celdaId].reduce((s, ch) => s * 31 + ch.charCodeAt(0), 7) % 9973;
-      for (let k = 0; k < CUANTOS[plaga.tipo] && n < TOPE_INSECTOS; k++, n++) {
+      for (let k = 0; k < CUANTOS[plaga.tipo] && n < this.tope; k++, n++) {
         const ang = azar(semilla + k * 17) * Math.PI * 2;
         const r = 0.12 + azar(semilla + k * 5) * 0.16;
         const base = v(a.x + Math.cos(ang) * r, a.y + ALTURA[plaga.tipo] + azar(semilla + k) * 0.08, a.z + Math.sin(ang) * r);

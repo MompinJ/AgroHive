@@ -204,3 +204,4 @@
 .dibujo-escala > summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
 .dibujo-escala .parcel-scale { display: grid; gap: 6px; padding-top: 6px; max-width: 300px; }
 .dibujo-escala select { min-height: 38px; border-radius: 10px; border: 1px solid var(--color-line); background: #fff; }
+.dibujo-escala .parcel-scale-leyenda { margin: 0; font-size: var(--text-caption); color: var(--color-text); }

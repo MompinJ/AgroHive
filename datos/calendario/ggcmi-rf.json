@@ -1,0 +1,63 @@
+{
+  "producto": "GGCMI Phase 3 crop calendar v1.01, temporal (rainfed)",
+  "doi": "10.5281/zenodo.5062513",
+  "licencia": "CC BY 4.0",
+  "cita": "Jägermeyr et al. 2021, Nature Food 2: 873-885",
+  "generado": "2026-11-15",
+  "rejilla": "0.5 grados, lat de 89.75 a -89.75, lon de -179.75 a 179.75",
+  "valores": "siembra y madurez: dia del ano 1 a 365, 0 = sin dato; fuente: indice data_source_used, 0 = sin dato",
+  "archivos": {
+    "mai": {
+      "archivo": "mai_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "30886422bdfb9d3655e8396c4f7cff41"
+    },
+    "sor": {
+      "archivo": "sor_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "aaeaa0b1586d1234544734cdf328086e"
+    },
+    "soy": {
+      "archivo": "soy_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "ff26e022c463fccbf96ceb72ce05b7a3"
+    },
+    "nut": {
+      "archivo": "nut_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "cb6a07a885f919a9f494d713fdc626b3"
+    },
+    "swh": {
+      "archivo": "swh_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "68a597731d26b1ea5f3348131413c22c"
+    },
+    "bar": {
+      "archivo": "bar_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "30ba42271958437fae7da0166ca287f9"
+    },
+    "pot": {
+      "archivo": "pot_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "679ce8117778adffa3a173aea08075cc"
+    },
+    "cas": {
+      "archivo": "cas_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "b36d502fa3f90f76b0b6b090d31d5dca"
+    },
+    "sgc": {
+      "archivo": "sgc_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "a64b4a31a2ac2a0c6c2f7e75de2a33de"
+    },
+    "sun": {
+      "archivo": "sun_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "a01664ca5088d62b38b9d5cd012bc15b"
+    },
+    "cot": {
+      "archivo": "cot_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "53f62dd882ad7a9f9ee2983dc545cbdf"
+    },
+    "pea": {
+      "archivo": "pea_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "153bda5fac15fad9d138cf389c982549"
+    },
+    "bea": {
+      "archivo": "bea_rf_ggcmi_crop_calendar_phase3_v1.01.nc4",
+      "md5": "89eb3eb98732e0274e73af0007af36f7"
+    }
+  }
+}

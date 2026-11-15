@@ -30,7 +30,11 @@ describe('conveniencia y bioma', () => {
   it('lo que no cabe o tiene plaga baja en el orden', () => {
     const noCabe = evaluar('maiz', { dias: 200 });
     expect(noCabe.noCabe).toBe(true);
-    expect(noCabe.nivel).toBe('mala');
+    expect(noCabe.demasiadoLargo).toBe(false);
+    expect(noCabe.puntos).toBe(evaluar('maiz').puntos - 1);
+    const cana = evaluar('cana', { dias: 480 });
+    expect(cana.demasiadoLargo).toBe(true);
+    expect(cana.nivel).toBe('mala');
     const conPlaga = evaluar('maiz', { plagas: [{ nombreComun: 'Gusano cogollero', cultivos: ['maiz'] }] });
     expect(conPlaga.puntos).toBe(evaluar('maiz').puntos - 1);
     expect(conPlaga.motivos.join(' ')).toContain('Gusano cogollero');

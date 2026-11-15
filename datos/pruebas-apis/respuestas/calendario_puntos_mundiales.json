@@ -1,0 +1,4227 @@
+{
+ "generado": "2026-11-15",
+ "como": "Resumen de GET /api/calendario (api/app/calendario.py) en puntos de varios continentes; ventana, fuente y presencia por cultivo y temporada. Lo usan como referencia las pruebas de api/tests/test_calendario.py.",
+ "puntos": {
+  "isla-veracruz-mx": {
+   "lat": 18.03,
+   "lon": -95.53,
+   "id": "calendario-mx-30077-ggcmi-143-168",
+   "ubicacion": {
+    "pais": "Mexico",
+    "paisIso": "MX",
+    "region": "celda GGCMI 18.25,-95.75",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "MX",
+     "nombre": "Mexico",
+     "nivel": 0
+    },
+    "claveEstadoInegi": "30",
+    "estado": "Veracruz",
+    "claveMunicipioInegi": "077",
+    "municipio": "Isla",
+    "ddr": "San Andres Tuxtla"
+   },
+   "conVentana": 18,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "cana",
+    "caupi",
+    "cebada",
+    "chicharo",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "1/6-15/7",
+     "fuente": "INIFAP, Tecnologia de produccion de maiz de temporal en el sur de Veracruz (region del Istmo de Tehuantepec) para el ciclo de primavera-verano (C. A. Tinoco Alfaro, Campo Experimental Cotaxtla, 2022)",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "1/11-fin/12",
+     "fuente": "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "registrado"
+    },
+    "frijol|OI": {
+     "ventana": "20/9-20/10",
+     "fuente": "INIFAP, Agenda Tecnica Agricola de Veracruz, 2a edicion (SAGARPA-INIFAP, 2015)",
+     "presencia": "registrado"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sorgo|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sorghum de temporal (sor_rf)",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "camote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cacahuate|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "no_registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "soya|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "no_registrado"
+    },
+    "soya|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "caupi|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "no_registrado"
+    },
+    "caupi|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "haba|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "no_registrado"
+    },
+    "haba|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "chicharo|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, field pea de temporal (pea_rf)",
+     "presencia": "no_registrado"
+    },
+    "chicharo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "lenteja|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "no_registrado"
+    },
+    "lenteja|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "ejote|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "no_registrado"
+    },
+    "ejote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebada|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebada|OI": {
+     "ventana": "1/11-1/11",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "no_registrado"
+    },
+    "trigo|PV": {
+     "ventana": "16/5-16/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, spring wheat de temporal (swh_rf)",
+     "presencia": "no_registrado"
+    },
+    "trigo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "29/5-29/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "no_registrado"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "yuca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "yuca|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "no_registrado"
+    },
+    "cana|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cana|OI": {
+     "ventana": "1/1-1/1",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "girasol|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "no_registrado"
+    },
+    "girasol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "algodon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "algodon|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "no_registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "tomate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "tomate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "papa|PV": {
+     "ventana": "1/4-1/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, potato de temporal (pot_rf)",
+     "presencia": "no_registrado"
+    },
+    "papa|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebolla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "col|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    }
+   }
+  },
+  "texcoco-mx": {
+   "lat": 19.5,
+   "lon": -98.85,
+   "id": "calendario-mx-15099-ggcmi-140-162",
+   "ubicacion": {
+    "pais": "Mexico",
+    "paisIso": "MX",
+    "region": "celda GGCMI 19.75,-98.75",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "MX",
+     "nombre": "Mexico",
+     "nivel": 0
+    },
+    "claveEstadoInegi": "15",
+    "estado": "México",
+    "claveMunicipioInegi": "099",
+    "municipio": "Texcoco"
+   },
+   "conVentana": 18,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "cana",
+    "caupi",
+    "cebada",
+    "chicharo",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "29/5-29/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "frijol|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "registrado"
+    },
+    "frijol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "sorgo|PV": {
+     "ventana": "10/5-10/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sorghum de temporal (sor_rf)",
+     "presencia": "no_registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "camote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cacahuate|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "no_registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "soya|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "no_registrado"
+    },
+    "soya|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "caupi|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "registrado"
+    },
+    "haba|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "chicharo|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, field pea de temporal (pea_rf)",
+     "presencia": "no_registrado"
+    },
+    "chicharo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "lenteja|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "no_registrado"
+    },
+    "lenteja|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "ejote|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "no_registrado"
+    },
+    "ejote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebada|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cebada|OI": {
+     "ventana": "1/11-1/11",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "no_registrado"
+    },
+    "trigo|PV": {
+     "ventana": "2/5-2/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, spring wheat de temporal (swh_rf)",
+     "presencia": "registrado"
+    },
+    "trigo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "29/5-29/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "yuca|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "no_registrado"
+    },
+    "cana|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cana|OI": {
+     "ventana": "1/1-1/1",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "no_registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "girasol|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "no_registrado"
+    },
+    "girasol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "algodon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "algodon|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "no_registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "tomate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "tomate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "papa|PV": {
+     "ventana": "1/4-1/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, potato de temporal (pot_rf)",
+     "presencia": "no_registrado"
+    },
+    "papa|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebolla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "col|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    }
+   }
+  },
+  "culiacan-mx": {
+   "lat": 24.8,
+   "lon": -107.39,
+   "id": "calendario-mx-25006-ggcmi-130-145",
+   "ubicacion": {
+    "pais": "Mexico",
+    "paisIso": "MX",
+    "region": "celda GGCMI 24.75,-107.25",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "MX",
+     "nombre": "Mexico",
+     "nivel": 0
+    },
+    "claveEstadoInegi": "25",
+    "estado": "Sinaloa",
+    "claveMunicipioInegi": "006",
+    "municipio": "Culiacán"
+   },
+   "conVentana": 18,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "cana",
+    "caupi",
+    "cebada",
+    "chicharo",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "1/7-1/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "registrado"
+    },
+    "frijol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "sorgo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "27/2-27/2",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sorghum de temporal (sor_rf)",
+     "presencia": "registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "camote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cacahuate|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "soya|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "no_registrado"
+    },
+    "soya|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "caupi|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "no_registrado"
+    },
+    "haba|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "chicharo|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, field pea de temporal (pea_rf)",
+     "presencia": "no_registrado"
+    },
+    "chicharo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "lenteja|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "no_registrado"
+    },
+    "lenteja|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "ejote|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "no_registrado"
+    },
+    "ejote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebada|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebada|OI": {
+     "ventana": "1/11-1/11",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "no_registrado"
+    },
+    "trigo|PV": {
+     "ventana": "16/5-16/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, spring wheat de temporal (swh_rf)",
+     "presencia": "no_registrado"
+    },
+    "trigo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "1/7-1/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "yuca|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "no_registrado"
+    },
+    "cana|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cana|OI": {
+     "ventana": "1/1-1/1",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "no_registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "girasol|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "no_registrado"
+    },
+    "girasol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "algodon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "algodon|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "no_registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "tomate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "tomate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "papa|PV": {
+     "ventana": "1/4-1/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, potato de temporal (pot_rf)",
+     "presencia": "no_registrado"
+    },
+    "papa|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebolla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "col|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    }
+   }
+  },
+  "cdmx-urbano-mx": {
+   "lat": 19.43,
+   "lon": -99.13,
+   "id": "calendario-ggcmi-mx-141-161",
+   "ubicacion": {
+    "pais": "Mexico",
+    "paisIso": "MX",
+    "region": "celda GGCMI 19.25,-99.25",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "MX",
+     "nombre": "Mexico",
+     "nivel": 0
+    }
+   },
+   "conVentana": 18,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "cana",
+    "caupi",
+    "cebada",
+    "chicharo",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "frijol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sorgo|PV": {
+     "ventana": "10/5-10/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sorghum de temporal (sor_rf)",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cacahuate|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "soya|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "no_registrado"
+    },
+    "soya|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "caupi|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "haba|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chicharo|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, field pea de temporal (pea_rf)",
+     "presencia": "sin_dato"
+    },
+    "chicharo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lenteja|PV": {
+     "ventana": "1/6-fin/6",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "lenteja|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ejote|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "ejote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebada|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cebada|OI": {
+     "ventana": "1/11-1/11",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "registrado"
+    },
+    "trigo|PV": {
+     "ventana": "4/5-4/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, spring wheat de temporal (swh_rf)",
+     "presencia": "no_registrado"
+    },
+    "trigo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "yuca|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "registrado"
+    },
+    "cana|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cana|OI": {
+     "ventana": "1/1-1/1",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "girasol|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "registrado"
+    },
+    "girasol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "algodon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "algodon|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "no_registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "papa|PV": {
+     "ventana": "1/4-1/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, potato de temporal (pot_rf)",
+     "presencia": "registrado"
+    },
+    "papa|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    }
+   }
+  },
+  "iowa-us": {
+   "lat": 42.0,
+   "lon": -93.5,
+   "id": "calendario-ggcmi-us-96-172",
+   "ubicacion": {
+    "pais": "United States of America",
+    "paisIso": "US",
+    "region": "celda GGCMI 41.75,-93.75",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "US",
+     "nombre": "United States of America",
+     "nivel": 0
+    }
+   },
+   "conVentana": 18,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "cana",
+    "caupi",
+    "cebada",
+    "chicharo",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "13/5-13/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "frijol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sorgo|PV": {
+     "ventana": "1/4-1/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sorghum de temporal (sor_rf)",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cacahuate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "no_registrado"
+    },
+    "soya|PV": {
+     "ventana": "28/4-28/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "registrado"
+    },
+    "soya|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "caupi|PV": {
+     "ventana": "1/5-fin/5",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "1/5-fin/5",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "haba|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chicharo|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, field pea de temporal (pea_rf)",
+     "presencia": "sin_dato"
+    },
+    "chicharo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lenteja|PV": {
+     "ventana": "1/5-fin/5",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "lenteja|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ejote|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "ejote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebada|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cebada|OI": {
+     "ventana": "1/11-1/11",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "registrado"
+    },
+    "trigo|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, spring wheat de temporal (swh_rf)",
+     "presencia": "no_registrado"
+    },
+    "trigo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "13/5-13/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "yuca|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "no_registrado"
+    },
+    "cana|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cana|OI": {
+     "ventana": "1/1-1/1",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "no_registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "girasol|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "girasol|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "no_registrado"
+    },
+    "algodon|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "no_registrado"
+    },
+    "algodon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "papa|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "papa|OI": {
+     "ventana": "19/3-19/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, potato de temporal (pot_rf)",
+     "presencia": "registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    }
+   }
+  },
+  "mato-grosso-br": {
+   "lat": -12.5,
+   "lon": -55.5,
+   "id": "calendario-ggcmi-br-204-248",
+   "ubicacion": {
+    "pais": "Brazil",
+    "paisIso": "BR",
+    "region": "celda GGCMI -12.25,-55.75",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "BR",
+     "nombre": "Brazil",
+     "nivel": 0
+    }
+   },
+   "conVentana": 18,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "cana",
+    "caupi",
+    "cebada",
+    "chicharo",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "14/2-14/2",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "frijol|OI": {
+     "ventana": "31/10-31/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sorgo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "17/3-17/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sorghum de temporal (sor_rf)",
+     "presencia": "registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cacahuate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "2/3-2/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "no_registrado"
+    },
+    "soya|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "soya|OI": {
+     "ventana": "31/10-31/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "registrado"
+    },
+    "caupi|PV": {
+     "ventana": "1/5-fin/5",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "1/5-fin/5",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "haba|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chicharo|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, field pea de temporal (pea_rf)",
+     "presencia": "sin_dato"
+    },
+    "chicharo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lenteja|PV": {
+     "ventana": "1/5-fin/5",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "lenteja|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ejote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ejote|OI": {
+     "ventana": "31/10-31/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "cebada|PV": {
+     "ventana": "15/6-15/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "no_registrado"
+    },
+    "cebada|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "trigo|PV": {
+     "ventana": "30/4-30/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, spring wheat de temporal (swh_rf)",
+     "presencia": "no_registrado"
+    },
+    "trigo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "14/2-14/2",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "1/9-1/9",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "registrado"
+    },
+    "yuca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cana|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cana|OI": {
+     "ventana": "1/1-1/1",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "girasol|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "girasol|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "registrado"
+    },
+    "algodon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "algodon|OI": {
+     "ventana": "28/12-28/12",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "papa|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, potato de temporal (pot_rf)",
+     "presencia": "no_registrado"
+    },
+    "papa|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    }
+   }
+  },
+  "kenia": {
+   "lat": -0.5,
+   "lon": 36.8,
+   "id": "calendario-ggcmi-ke-180-433",
+   "ubicacion": {
+    "pais": "Kenya",
+    "paisIso": "KE",
+    "region": "celda GGCMI -0.25,36.75",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "KE",
+     "nombre": "Kenya",
+     "nivel": 0
+    }
+   },
+   "conVentana": 23,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "camote",
+    "cana",
+    "caupi",
+    "cebada",
+    "cebolla",
+    "chicharo",
+    "col",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "tomate",
+    "trigo",
+    "yuca",
+    "zanahoria"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "17/10-17/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "10/4-10/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "frijol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sorgo|PV": {
+     "ventana": "1/8-15/9",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|PV": {
+     "ventana": "15/6-31/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "camote|OI": {
+     "ventana": "15/2-15/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "cacahuate|PV": {
+     "ventana": "1/4-1/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "15/2-1/11",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "soya|PV": {
+     "ventana": "29/5-29/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "no_registrado"
+    },
+    "soya|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "caupi|PV": {
+     "ventana": "30/6-31/8",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "1/4-fin/4",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "haba|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chicharo|PV": {
+     "ventana": "15/7-15/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "chicharo|OI": {
+     "ventana": "28/2-15/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "lenteja|PV": {
+     "ventana": "1/4-fin/4",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "lenteja|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ejote|PV": {
+     "ventana": "10/4-10/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "ejote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebada|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cebada|OI": {
+     "ventana": "17/10-17/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "registrado"
+    },
+    "trigo|PV": {
+     "ventana": "1/7-31/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "trigo|OI": {
+     "ventana": "1/3-30/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "31/7-31/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "15/2-30/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "1/4-30/9",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "yuca|OI": {
+     "ventana": "1/10-31/3",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "cana|PV": {
+     "ventana": "1/4-30/9",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "cana|OI": {
+     "ventana": "1/10-31/3",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "girasol|PV": {
+     "ventana": "31/7-31/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "girasol|OI": {
+     "ventana": "15/2-15/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "algodon|PV": {
+     "ventana": "16/5-16/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "registrado"
+    },
+    "algodon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|PV": {
+     "ventana": "31/7-15/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "tomate|OI": {
+     "ventana": "15/2-1/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "papa|PV": {
+     "ventana": "1/7-31/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "papa|OI": {
+     "ventana": "1/3-15/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|PV": {
+     "ventana": "31/7-31/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "cebolla|OI": {
+     "ventana": "15/2-1/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|OI": {
+     "ventana": "28/2-31/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|PV": {
+     "ventana": "31/7-31/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "col|OI": {
+     "ventana": "28/2-31/3",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    }
+   }
+  },
+  "madhya-pradesh-in": {
+   "lat": 23.2,
+   "lon": 77.4,
+   "id": "calendario-ggcmi-in-133-514",
+   "ubicacion": {
+    "pais": "India",
+    "paisIso": "IN",
+    "region": "celda GGCMI 23.25,77.25",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "IN",
+     "nombre": "India",
+     "nivel": 0
+    }
+   },
+   "conVentana": 18,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "cana",
+    "caupi",
+    "cebada",
+    "chicharo",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "26/6-26/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "frijol|OI": {
+     "ventana": "25/10-25/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sorgo|PV": {
+     "ventana": "1/7-1/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sorghum de temporal (sor_rf)",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cacahuate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "1/10-1/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "registrado"
+    },
+    "soya|PV": {
+     "ventana": "1/7-1/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "registrado"
+    },
+    "soya|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "caupi|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "1/10-fin/10",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|OI": {
+     "ventana": "1/10-fin/10",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "chicharo|PV": {
+     "ventana": "26/6-26/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, field pea de temporal (pea_rf)",
+     "presencia": "sin_dato"
+    },
+    "chicharo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lenteja|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lenteja|OI": {
+     "ventana": "1/10-fin/10",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "ejote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ejote|OI": {
+     "ventana": "25/10-25/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "cebada|PV": {
+     "ventana": "1/7-1/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "registrado"
+    },
+    "cebada|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "trigo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "trigo|OI": {
+     "ventana": "19/11-19/11",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, spring wheat de temporal (swh_rf)",
+     "presencia": "registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "26/6-26/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "yuca|OI": {
+     "ventana": "1/3-1/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "registrado"
+    },
+    "cana|PV": {
+     "ventana": "5/7-5/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "no_registrado"
+    },
+    "cana|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "girasol|PV": {
+     "ventana": "1/7-1/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "registrado"
+    },
+    "girasol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "algodon|PV": {
+     "ventana": "30/6-30/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "no_registrado"
+    },
+    "algodon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "papa|PV": {
+     "ventana": "1/7-1/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, potato de temporal (pot_rf)",
+     "presencia": "registrado"
+    },
+    "papa|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    }
+   }
+  },
+  "castilla-es": {
+   "lat": 40.0,
+   "lon": -4.0,
+   "id": "calendario-ggcmi-es-100-352",
+   "ubicacion": {
+    "pais": "Spain",
+    "paisIso": "ES",
+    "region": "celda GGCMI 39.75,-3.75",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "ES",
+     "nombre": "Spain",
+     "nivel": 0
+    }
+   },
+   "conVentana": 18,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "cana",
+    "caupi",
+    "cebada",
+    "chicharo",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "1/4-1/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "frijol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sorgo|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sorghum de temporal (sor_rf)",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cacahuate|PV": {
+     "ventana": "1/6-1/6",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "soya|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "no_registrado"
+    },
+    "soya|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "caupi|PV": {
+     "ventana": "1/5-fin/5",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "1/5-fin/5",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "haba|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chicharo|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, field pea de temporal (pea_rf)",
+     "presencia": "sin_dato"
+    },
+    "chicharo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lenteja|PV": {
+     "ventana": "1/5-fin/5",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "lenteja|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ejote|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "ejote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebada|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "registrado"
+    },
+    "cebada|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "trigo|PV": {
+     "ventana": "4/4-4/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, spring wheat de temporal (swh_rf)",
+     "presencia": "registrado"
+    },
+    "trigo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "1/4-1/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "no_registrado"
+    },
+    "yuca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cana|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cana|OI": {
+     "ventana": "1/1-1/1",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "girasol|PV": {
+     "ventana": "14/4-14/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "registrado"
+    },
+    "girasol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "algodon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "algodon|OI": {
+     "ventana": "26/2-26/2",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "no_registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "papa|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, potato de temporal (pot_rf)",
+     "presencia": "registrado"
+    },
+    "papa|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    }
+   }
+  },
+  "nsw-au": {
+   "lat": -33.0,
+   "lon": 148.0,
+   "id": "calendario-ggcmi-au-246-656",
+   "ubicacion": {
+    "pais": "Australia",
+    "paisIso": "AU",
+    "region": "celda GGCMI -33.25,148.25",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "AU",
+     "nombre": "Australia",
+     "nivel": 0
+    }
+   },
+   "conVentana": 18,
+   "cultivosConVentana": [
+    "algodon",
+    "cacahuate",
+    "cana",
+    "caupi",
+    "cebada",
+    "chicharo",
+    "ejote",
+    "frijol",
+    "girasol",
+    "haba",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "sorgo",
+    "soya",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "30/12-30/12",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "30/4-30/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "frijol|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sorgo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "15/10-15/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sorghum de temporal (sor_rf)",
+     "presencia": "registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sandia|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cacahuate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "31/3-31/3",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, groundnut de temporal (nut_rf)",
+     "presencia": "registrado"
+    },
+    "soya|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "soya|OI": {
+     "ventana": "30/12-30/12",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "registrado"
+    },
+    "caupi|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "1/12-fin/12",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|OI": {
+     "ventana": "1/12-fin/12",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "chicharo|PV": {
+     "ventana": "30/5-30/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, field pea de temporal (pea_rf)",
+     "presencia": "sin_dato"
+    },
+    "chicharo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lenteja|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lenteja|OI": {
+     "ventana": "1/12-fin/12",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "ejote|PV": {
+     "ventana": "30/4-30/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "ejote|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebada|PV": {
+     "ventana": "30/4-30/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, barley de temporal (bar_rf)",
+     "presencia": "registrado"
+    },
+    "cebada|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "trigo|PV": {
+     "ventana": "30/4-30/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, spring wheat de temporal (swh_rf)",
+     "presencia": "registrado"
+    },
+    "trigo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "avena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "30/12-30/12",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "no_registrado"
+    },
+    "yuca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cana|PV": {
+     "ventana": "15/7-15/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "no_registrado"
+    },
+    "cana|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "girasol|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "girasol|OI": {
+     "ventana": "15/10-15/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "registrado"
+    },
+    "algodon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "algodon|OI": {
+     "ventana": "31/10-31/10",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "no_registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cartamo|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "tomate|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "papa|PV": {
+     "ventana": "16/4-16/4",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, potato de temporal (pot_rf)",
+     "presencia": "registrado"
+    },
+    "papa|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    }
+   }
+  },
+  "marruecos": {
+   "lat": 34.0,
+   "lon": -6.8,
+   "id": "calendario-ggcmi-ma-112-346",
+   "ubicacion": {
+    "pais": "Morocco",
+    "paisIso": "MA",
+    "region": "celda GGCMI 33.75,-6.75",
+    "unidadAdministrativa": {
+     "sistema": "Natural Earth 110m",
+     "clave": "MA",
+     "nombre": "Morocco",
+     "nivel": 0
+    }
+   },
+   "conVentana": 33,
+   "cultivosConVentana": [
+    "ajonjoli",
+    "algodon",
+    "avena",
+    "berenjena",
+    "betabel",
+    "cacahuate",
+    "camote",
+    "cana",
+    "cartamo",
+    "caupi",
+    "cebada",
+    "cebolla",
+    "chicharo",
+    "col",
+    "ejote",
+    "espinaca",
+    "frijol",
+    "girasol",
+    "haba",
+    "higuerilla",
+    "lechuga",
+    "lenteja",
+    "maiz",
+    "maiz_dulce",
+    "papa",
+    "pepino",
+    "rabano",
+    "sandia",
+    "sorgo",
+    "soya",
+    "tomate",
+    "trigo",
+    "yuca"
+   ],
+   "entradas": {
+    "maiz|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "maiz|OI": {
+     "ventana": "15/2-15/2",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)",
+     "presencia": "registrado"
+    },
+    "frijol|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "frijol|OI": {
+     "ventana": "1/11-1/11",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "calabaza|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabaza|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "chile|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sorgo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "sorgo|OI": {
+     "ventana": "1/2-1/3",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "sandia|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "sandia|OI": {
+     "ventana": "1/1-28/2",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "camote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "camote|OI": {
+     "ventana": "1/3-30/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "cacahuate|PV": {
+     "ventana": "1/4-15/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "cacahuate|OI": {
+     "ventana": "1/3-15/3",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "soya|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, soybean de temporal (soy_rf)",
+     "presencia": "registrado"
+    },
+    "soya|OI": {
+     "ventana": "1/2-31/3",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "caupi|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "caupi|OI": {
+     "ventana": "1/11-fin/11",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "haba|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "haba|OI": {
+     "ventana": "1/11-fin/11",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "chicharo|PV": {
+     "ventana": "1/8-15/12",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "chicharo|OI": {
+     "ventana": "1/3-30/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "lenteja|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lenteja|OI": {
+     "ventana": "1/11-fin/11",
+     "fuente": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal",
+     "presencia": "sin_dato"
+    },
+    "ejote|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "ejote|OI": {
+     "ventana": "1/11-1/11",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, beans de temporal (bea_rf)",
+     "presencia": "sin_dato"
+    },
+    "cebada|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "cebada|OI": {
+     "ventana": "20/10-1/3",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "trigo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "registrado"
+    },
+    "trigo|OI": {
+     "ventana": "20/10-30/12",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "avena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "avena|OI": {
+     "ventana": "20/10-15/12",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|PV": {
+     "ventana": "1/8-30/9",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "maiz_dulce|OI": {
+     "ventana": "1/2-15/7",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "yuca|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cassava de temporal (cas_rf)",
+     "presencia": "no_registrado"
+    },
+    "yuca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cana|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cana|OI": {
+     "ventana": "1/1-1/1",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sugarcane de temporal (sgc_rf)",
+     "presencia": "no_registrado"
+    },
+    "ajonjoli|PV": {
+     "ventana": "1/4-31/5",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "ajonjoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "girasol|PV": {
+     "ventana": "1/5-1/5",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, sunflower de temporal (sun_rf)",
+     "presencia": "registrado"
+    },
+    "girasol|OI": {
+     "ventana": "1/12-31/3",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "algodon|PV": {
+     "ventana": "1/7-1/7",
+     "fuente": "GGCMI Phase 3 crop calendar v1.01, cotton de temporal (cot_rf)",
+     "presencia": "no_registrado"
+    },
+    "algodon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "no_registrado"
+    },
+    "cartamo|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cartamo|OI": {
+     "ventana": "1/11-31/12",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "higuerilla|OI": {
+     "ventana": "1/3-30/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "tomate|PV": {
+     "ventana": "1/8-30/9",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "tomate|OI": {
+     "ventana": "1/3-30/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "papa|PV": {
+     "ventana": "1/4-30/9",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "papa|OI": {
+     "ventana": "1/10-31/3",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "registrado"
+    },
+    "calabacita|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "calabacita|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "cebolla|PV": {
+     "ventana": "1/8-31/10",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "cebolla|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "pepino|OI": {
+     "ventana": "1/3-30/6",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "melon|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "melon|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "lechuga|OI": {
+     "ventana": "1/11-30/4",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "zanahoria|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "berenjena|OI": {
+     "ventana": "1/1-31/5",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "brocoli|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "brocoli|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "col|PV": {
+     "ventana": "1/7-30/11",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "col|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "coliflor|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "espinaca|PV": {
+     "ventana": "1/7-30/11",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "espinaca|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|PV": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    },
+    "rabano|OI": {
+     "ventana": "1/2-30/11",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "betabel|PV": {
+     "ventana": "1/4-30/6",
+     "fuente": "FAO, Crop Calendar (By Country - crop and activity)",
+     "presencia": "sin_dato"
+    },
+    "betabel|OI": {
+     "ventana": "NO_EVALUABLE",
+     "presencia": "sin_dato"
+    }
+   }
+  }
+ }
+}

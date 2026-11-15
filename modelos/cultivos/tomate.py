@@ -195,7 +195,7 @@ def siembra():
     m = Model('tomate_siembra', PAL)
     monticulo(m)
     m.box('humedo', (0.4, 2, 0.6), (6.4, 0.12, 4.0), 'suelo_humedo', yaw=10)
-    tutor(m)
+    tutor(m, alto=6.5)
     semillas = [((-1.2, 0.6), 20, 'calabaza_crema'), ((0.6, 0.2), -35, 'chile_semilla'),
                 ((1.9, 1.3), 60, 'calabaza_crema'), ((-0.2, 1.8), 5, 'chile_semilla'),
                 ((1.2, -0.9), 40, 'chile_semilla')]
@@ -210,7 +210,7 @@ def brote():
     foliolo terminal y un foliolo lateral) y la yema. 12 cubos (10 mas el lomo)."""
     m = Model('tomate_brote', PAL)
     monticulo(m)
-    tutor(m)
+    tutor(m, alto=8.5)
     top = palo(m, 'tallito', BASE, (0.15, 5.2, 0.2), 0.45, 'tomate_hoja')
     # cotiledones angostos y largos, de lado a la camara
     nudo = (0.12, 4.6, 0.18)
@@ -231,7 +231,7 @@ def crecimiento():
     tierna y 2 racimos de flores amarillas (3 y 2 flores). 30 cubos."""
     m = Model('tomate_crecimiento', PAL)
     monticulo(m)
-    tutor(m)
+    tutor(m, alto=13.5)
     nudos = tallo(m, [4.8, 8.4, 11.0], [FRENTE + 25, FRENTE - 25, FRENTE + 10], grueso=0.65)
     amarre(m, 'amarre0', nudos[1], 4.8)
     hoja(m, 'hoja0', nudos[1], FRENTE + 95, s=0.95, caida=12, diente=False)
@@ -250,10 +250,10 @@ def madurez():
     3 racimos de jitomates (5 rojos, 2 con brillo, y 2 verdes arriba) y una flor tardia. 59 cubos."""
     m = Model('tomate_madurez', PAL)
     monticulo(m)
-    tutor(m)
-    nudos = tallo(m, [5.0, 9.4, 13.4, 16.6], [FRENTE + 25, FRENTE - 25, FRENTE + 25, FRENTE - 5], grueso=0.8)
-    amarre(m, 'amarre0', nudos[1], 5.0)
-    amarre(m, 'amarre1', nudos[3], 13.4)
+    tutor(m, alto=15.0)
+    nudos = tallo(m, [3.9, 7.3, 10.5, 13.0], [FRENTE + 25, FRENTE - 25, FRENTE + 25, FRENTE - 5], grueso=0.8)
+    amarre(m, 'amarre0', nudos[1], 3.9)
+    amarre(m, 'amarre1', nudos[3], 10.5)
     hoja(m, 'hoja0', nudos[1], FRENTE + 100, s=1.15, caida=14)
     hoja(m, 'hoja1', nudos[2], FRENTE - 95, s=1.15, caida=10)
     hoja(m, 'hoja2', nudos[3], FRENTE + 165, s=1.0, caida=6, pares=1, diente=False)
@@ -280,7 +280,7 @@ def podrida():
     monticulo(m, seco=True)
     m.box('grieta1', (2.0, 2, -1.2), (4.0, 0.2, 0.5), 'suelo_grieta', yaw=25)
     m.box('grieta2', (-2.8, 2, 1.0), (0.5, 0.2, 3.0), 'suelo_grieta', yaw=-15)
-    tutor(m)
+    tutor(m, alto=13.0)
     # amarre roto colgando del tutor: lazo flojo y un cabo de cinta
     m.box('amarre_roto', punta(TUTOR, 9.0, 0, 0), (1.5, 0.45, 1.5), 'white', yaw=20)
     m.box('amarre_cabo', mover(punta(TUTOR, 9.0, 0, 0), FRENTE, 0.7), (0.4, 1.6, 0.25), 'white', tilt=170,
