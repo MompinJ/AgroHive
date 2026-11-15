@@ -59,7 +59,29 @@ export interface EstadisticasRender {
   gotas: number;
   mascota: boolean;
   contextoPerdido: boolean;
+  /** Desglose acumulado: cuadros dibujados por cada motivo que los pidio (un cuadro puede tener varios). */
+  cuadrosPorMotivo: Partial<Record<MotivoCuadro, number>>;
+  solicitudesPorMotivo: Partial<Record<MotivoCuadro, number>>;
 }
+
+export type MotivoCuadro =
+  | 'visible'
+  | 'controles'
+  | 'opciones'
+  | 'vista'
+  | 'seleccion'
+  | 'terreno'
+  | 'losas'
+  | 'plantas'
+  | 'mascota'
+  | 'pestana'
+  | 'contexto'
+  | 'lluvia'
+  | 'tamano'
+  | 'inercia'
+  | 'transicion'
+  | 'viento'
+  | 'lluvia-animada';
 
 /** Hueco de una celda sin elevacion: por debajo del punto mas bajo, nunca "a nivel cero". */
 const TOPE_HUECO = -GROSOR_BASE * 0.6;
@@ -275,6 +297,9 @@ export class EscenaThree {
   private opciones: OpcionesRender;
   private inicioPuntero: { x: number; y: number } | null = null;
   private ultimoCuadroMs = 0;
+  private readonly solicitudes: Partial<Record<MotivoCuadro, number>> = {};
+  private readonly cuadrosPorMotivo: Partial<Record<MotivoCuadro, number>> = {};
+  private readonly motivosPendientes = new Set<MotivoCuadro>();
   private seleccionId: string | null = null;
   private ultimoPuntero: { x: number; y: number } | null = null;
   private cuadroHover = 0;
@@ -322,7 +347,7 @@ export class EscenaThree {
     if (typeof IntersectionObserver !== 'undefined') {
       this.observadorVisible = new IntersectionObserver((e) => {
         this.enPantalla = e.some((x) => x.isIntersecting);
-        this.pedirCuadro();
+        this.pedirCuadro('visible');
       });
       this.observadorVisible.observe(lienzo);
     }
@@ -342,7 +367,7 @@ export class EscenaThree {
     this.controles.maxZoom = 6;
     this.controles.keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' };
     this.controles.listenToKeyEvents(lienzo);
-    this.controles.addEventListener('change', () => this.pedirCuadro());
+    this.controles.addEventListener('change', () => this.pedirCuadro('controles'));
     this.aplicarMovimiento();
 
     lienzo.addEventListener('webglcontextlost', this.alPerderContexto);
@@ -380,6 +405,8 @@ export class EscenaThree {
       gotas: this.lluvia.objeto.visible ? this.lluvia.objeto.geometry.drawRange.count / 2 : 0,
       mascota: !!this.raiz.getObjectByName('mascota'),
       contextoPerdido: this.contextoPerdido,
+      cuadrosPorMotivo: { ...this.cuadrosPorMotivo },
+      solicitudesPorMotivo: { ...this.solicitudes },
     };
   }
 
@@ -389,7 +416,7 @@ export class EscenaThree {
     this.aplicarMovimiento();
     if (opciones.reducirMovimiento) this.terminarTransiciones();
     if (mascotaAntes !== opciones.mascota && this.modeloActual) void this.construirMascota(this.modeloActual, this.version);
-    this.pedirCuadro();
+    this.pedirCuadro('opciones');
   }
 
   private aplicarMovimiento() {
@@ -406,7 +433,7 @@ export class EscenaThree {
     this.controles.target.set(0, 0, 0);
     this.camara.updateProjectionMatrix();
     this.controles.update();
-    this.pedirCuadro();
+    this.pedirCuadro('vista');
   }
 
   actualizar(modelo: EscenaModelo) {
@@ -450,7 +477,7 @@ export class EscenaThree {
       this.marco.position.set(bloque.x, y, bloque.z);
     }
     void this.aplicarDetalle();
-    this.pedirCuadro();
+    this.pedirCuadro('seleccion');
   }
 
   /**
@@ -470,7 +497,7 @@ export class EscenaThree {
     this.detalle?.removeFromParent();
     this.detalle = null;
     const id = this.seleccionId;
-    if (!id) return this.pedirCuadro();
+    if (!id) return this.pedirCuadro('seleccion');
     for (const hijo of this.raiz.children) {
       const meta = hijo instanceof THREE.InstancedMesh ? this.metaPlantas.get(hijo) : undefined;
       const k = meta ? meta.celdas.indexOf(id) : -1;
@@ -503,7 +530,7 @@ export class EscenaThree {
       this.detalle = detalle;
       break;
     }
-    this.pedirCuadro();
+    this.pedirCuadro('seleccion');
   }
 
   dispose() {
@@ -633,7 +660,7 @@ export class EscenaThree {
       this.raiz.add(banderas);
       this.bloquesPorMalla.set(banderas, noRecomendados);
     }
-    this.pedirCuadro();
+    this.pedirCuadro('terreno');
   }
 
   private topeDe(b: BloqueEscena): number {
@@ -679,7 +706,7 @@ export class EscenaThree {
       losas.name = `losa-${clave}`;
       this.raiz.add(losas);
       this.bloquesPorMalla.set(losas, lista);
-      this.pedirCuadro();
+      this.pedirCuadro('losas');
     }
   }
 
@@ -796,7 +823,7 @@ export class EscenaThree {
         this.transiciones.push({ mesh: plantas, meta, desde, hasta, inicio: performance.now(), sale: false });
       }
       if (this.seleccionId && meta.celdas.includes(this.seleccionId)) void this.aplicarDetalle();
-      this.pedirCuadro();
+      this.pedirCuadro('plantas');
     }
   }
 
@@ -864,7 +891,7 @@ export class EscenaThree {
   private async construirMascota(modelo: EscenaModelo, version: number) {
     this.raiz.getObjectByName('mascota')?.removeFromParent();
     if (this.mascotaApagada() || !MODELOS_DISPONIBLES.has('mascota_feliz') || modelo.bloques.length === 0) {
-      this.pedirCuadro();
+      this.pedirCuadro('mascota');
       return;
     }
     let geo: THREE.BufferGeometry;
@@ -882,14 +909,14 @@ export class EscenaThree {
     mascota.rotation.y = Math.PI / 4; // mira hacia la camara
     mascota.scale.setScalar(0.6); // acompana sin competir con los datos de la parcela
     this.raiz.add(mascota);
-    this.pedirCuadro();
+    this.pedirCuadro('mascota');
   }
 
   private mascotaApagada(): boolean {
     return this.opciones.mascota === false;
   }
 
-  private readonly alCambiarVisibilidad = () => this.pedirCuadro();
+  private readonly alCambiarVisibilidad = () => this.pedirCuadro('pestana');
 
   private contextoPerdido = false;
 
@@ -907,7 +934,7 @@ export class EscenaThree {
     this.cacheGeometria.clear();
     if (this.modeloActual) this.actualizar(this.modeloActual);
     this.opciones.onContexto?.('restaurado');
-    this.pedirCuadro();
+    this.pedirCuadro('contexto');
   };
 
   /**
@@ -924,7 +951,7 @@ export class EscenaThree {
     ext.restoreContext();
     await new Promise((r) => setTimeout(r, esperaMs));
     const antes = this.cuadros;
-    this.pedirCuadro();
+    this.pedirCuadro('contexto');
     await new Promise((r) => setTimeout(r, 500));
     return { extension: true, perdido, restaurado: !this.contextoPerdido && !gl.isContextLost(), cuadrosTras: this.cuadros - antes, triangulosTras: this.renderer.info.render.triangles };
   }
@@ -940,7 +967,7 @@ export class EscenaThree {
   setLluvia(intensidad: number) {
     this.intensidadLluvia = Math.min(1, Math.max(0, intensidad));
     this.lluvia.cantidad(this.intensidadLluvia);
-    this.pedirCuadro();
+    this.pedirCuadro('lluvia');
   }
 
   /** Intensidad de lluvia que se esta dibujando (0 a 1). */
@@ -965,13 +992,21 @@ export class EscenaThree {
     this.camara.top = e;
     this.camara.bottom = -e;
     this.camara.updateProjectionMatrix();
-    this.pedirCuadro();
+    this.pedirCuadro('tamano');
   }
 
-  private pedirCuadro() {
+  /**
+   * Pide un cuadro (render bajo demanda). `motivo` solo sirve para el desglose de A5.4:
+   * cuantos pedidos y cuantos cuadros dibujados hubo por cada motivo (estadisticas()).
+   */
+  private pedirCuadro(motivo: MotivoCuadro) {
+    this.solicitudes[motivo] = (this.solicitudes[motivo] ?? 0) + 1;
+    this.motivosPendientes.add(motivo);
     if (this.cuadroPendiente || this.contextoPerdido) return;
     this.cuadroPendiente = requestAnimationFrame(() => {
       this.cuadroPendiente = 0;
+      for (const m of this.motivosPendientes) this.cuadrosPorMotivo[m] = (this.cuadrosPorMotivo[m] ?? 0) + 1;
+      this.motivosPendientes.clear();
       // Con inercia, update() devuelve true mientras la camara se sigue moviendo.
       const siguioMoviendo = this.controles.enableDamping && this.controles.update();
       const ahora = performance.now();
@@ -989,7 +1024,10 @@ export class EscenaThree {
       this.ultimoCuadroMs = performance.now() - t0;
       this.cuadros++;
       // Render bajo demanda: solo se sigue dibujando mientras algo se mueve.
-      if (siguioMoviendo || this.transiciones.length > 0 || viento || lloviendo) this.pedirCuadro();
+      if (siguioMoviendo) this.pedirCuadro('inercia');
+      if (this.transiciones.length > 0) this.pedirCuadro('transicion');
+      if (viento) this.pedirCuadro('viento');
+      if (lloviendo) this.pedirCuadro('lluvia-animada');
     });
   }
 

@@ -192,6 +192,7 @@ function VistaPrevia() {
                   <select value={rotacion} onChange={(e) => setRotacion(e.target.value as RotacionPrueba)}>
                     <option value="R1">R1: maiz, frijol, maiz</option>
                     <option value="R2">R2: calabaza, frijol, maiz</option>
+                    <option value="R3">R3: sorgo, frijol, maiz</option>
                   </select>
                 </label>
               )}
