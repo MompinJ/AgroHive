@@ -24,7 +24,7 @@ Contexto resumido por herramienta: `AgroVault/` (Codex: `AgroVault/Codex/AGENTS.
 - Dia final (15/11): reglas de organizacion `[DECIDIDO]` (apartar por el buzon, duenos, ramas cortas, ventanas, 15 min, tareas de relleno, archivos calientes) y cola por persona en `docs/16-PLAN-DIA-FINAL.md`.
 - Cada vez que algo entre a `main`, haz `git merge origin/main` en tu rama antes de seguir.
 - Nunca inventes datos: un parametro faltante es `NO_EVALUABLE`, no un numero. Toda cifra cientifica o agronomica lleva fuente; las fuentes las verifica una persona.
-- El frontend no recalcula indicadores; el 3D solo representa lo que entrega el motor. Cambiar 2D/3D no vuelve a pedir datos.
+- El frontend no recalcula indicadores; el 3D solo representa lo que entrega el motor. Cambiar de vista no vuelve a pedir datos (el modo 2D se retiró el 15/11, D8).
 - Lo marcado `[EN EVENTO]`, `[DEPENDE-DATOS]` o `[VERIFICAR]` no se fija por cuenta propia.
 - Ya estamos en el evento: lo que decida Mompin es decision del equipo; registrarla como `[DECIDIDO]` (en 13 y 01).
 - Registra cambios de alcance en `docs/01-REGISTRO-DE-CAMBIOS.md`.

@@ -7,7 +7,7 @@ Todo es **propuesta** hasta confirmarlo en la hora 0 del evento. No hay código 
 ```text
 Navegador (frontend)
   - Mapa (y dibujo de polígono, si entra)
-  - Escena 3D con relieve (y modo 2D)
+  - Escena 3D con relieve (el modo 2D se retiró el 15/11, D8)
   - Selector "what if", paneles, gráficas, tarjetas
         |  HTTP (JSON), contrato versionado
         v
@@ -53,7 +53,7 @@ Reglas que no cambian:
 5. Catálogo de cultivos y suelos (archivos estáticos con fuente).
 6. Motor de simulación (05).
 7. Generador de explicaciones.
-8. Escena 3D y modo 2D.
+8. Escena 3D (el modo 2D se retiró el 15/11, D8).
 9. Interfaz: paneles, selector, tooltips, leyendas.
 10. Persistencia (extra).
 
@@ -144,11 +144,11 @@ Los `null` son huecos que se llenan con valores calculados; nunca con números i
 | `POST /api/rotaciones` | Comparación y ranking |
 
 ## Rendimiento
-- Tope de celdas (~1 600) y tamaño de celda adaptativo. Desde el 14/11 noche `[DECIDIDO]` (Mompin) el usuario puede pedir el lado (automático, 10, 20, 30, 50 o 100 m): si con ese lado pasan de 1 600 celdas, el generador lo sube lo justo (redondeado a 0.1 m) y avisa con `TAMANO_CELDA_AJUSTADO`. «Automático» conserva la regla de siempre (lado ≥ 10 m y a lo más 40 × 40 en la caja envolvente); con un lado pedido el tope cuenta las celdas que tocan el contorno, no la caja, así que una parcela larga o diagonal gana resolución (franja diagonal de unos 30 km de largo: de 92 celdas de 556 m a 1 598 de 69.4 m, en menos de 1 s). La API (`POST /api/elevacion`) ya aceptaba cualquier lado > 0 y no cambia.
+- Tope de celdas y tamaño de celda adaptativo. **La interfaz genera como máximo 200 celdas**, también en automático `[DECIDIDO]` (equipo, 15/11, en persona; `TOPE_CELDAS` en `web/src/geo/tamano-celda.ts`). **El contrato `parcela` y la API siguen aceptando hasta 1 600** como límite técnico (`TOPE_CELDAS_CONTRATO`), y la escena dibuja hasta 1 600 si vienen de otra fuente. Desde el 14/11 noche `[DECIDIDO]` (Mompin) el usuario puede pedir el lado (automático, 10, 20, 30, 50 o 100 m): si con ese lado pasan de 200 celdas, el generador lo sube lo justo (redondeado a 0.1 m) y avisa con `TAMANO_CELDA_AJUSTADO`. «Automático» conserva la regla de siempre (lado ≥ 10 m y a lo más 40 × 40 en la caja envolvente) y también respeta el tope, sin avisar; con un lado pedido el tope cuenta las celdas que tocan el contorno, no la caja, así que una parcela larga o diagonal gana resolución (medido el 14/11 con el tope de entonces, 1 600: franja diagonal de unos 30 km, de 92 celdas de 556 m a 1 598 de 69.4 m, en menos de 1 s; con 200 el lado sale mayor). La API (`POST /api/elevacion`) ya aceptaba cualquier lado > 0 y no cambia.
 - `InstancedMesh` por cultivo + etapa; geometrías unidas por modelo.
 - Recalcular solo lo que cambia (cambiar de escenario no recarga el terreno).
 - Medir FPS en la computadora más modesta del equipo.
-- **Requisitos mínimos:** medirlos y documentarlos para los jueces; modo 2D para equipos de 4 GB de RAM. No prometer cifras sin medir.
+- **Requisitos mínimos:** medirlos y documentarlos para los jueces; para equipos modestos, nivel de gráficos Bajo y tope de 200 celdas (sin modo 2D desde el 15/11, D8). No prometer cifras sin medir.
 
 ## Errores y resiliencia
 - POWER falla ⇒ Open-Meteo ⇒ caché, con aviso visible. `[DECIDIDO]` H-B6 (Mompin, 14/11 noche): 20 s por intento y 2 intentos por fuente, con un plazo total de 70 s por petición, para que la cadena quepa en los 90 s que espera el front (`api/app/http.py`).

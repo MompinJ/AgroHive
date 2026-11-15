@@ -14,7 +14,9 @@
 3. Tú a Eduardo: bordes tocó `escena-three.ts`, `DibujarParcela.tsx`, `Parcela2D.tsx` y `ui/cuadricula.ts` (detalle en docs/01); él revisa bordes con su front.
 4. Reunión corta, con los puntos de abajo. Integrar `origin/Eduardo` (`cfded82`, una línea del vault).
 
-**Qué tienes que decidir**
+**Actualización 15/11:** el equipo decidió en persona el tope de 200 celdas, D8 (sin 2D), D9 (R3), D10 (fuentes en "Método y fuentes") y las plagas con GBIF; quedan abiertas D3, D5, D6, D7 y H-M7 ([docs/16](16-PLAN-DIA-FINAL.md), sección 2).
+
+**Qué tenías que decidir**
 - D8 respaldo sin WebGL: Eduardo retiró el modo 2D de la app; varios docs dicen que existe. Aceptarlo o devolverlo.
 - D9: en la interfaz R4 pasó a llamarse R3; docs/13, docs/05 y el README dicen R4.
 - D10: el laboratorio ya no muestra fuentes (siguen en "Método y fuentes"). ¿Cumple "toda cifra se rastrea a una fuente"?

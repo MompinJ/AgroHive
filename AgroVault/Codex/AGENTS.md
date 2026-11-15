@@ -21,7 +21,7 @@ El 14/11/2026 el hackathon ya va en código. Contratos `0.10.0`, motor, API, esc
 
 ## Stack
 
-- `web/`: React, Vite, TypeScript. Motor en Web Worker, `web/src/motor/` (`crearClienteMotor`). Mapa Leaflet, cuadrícula Turf.js (tope 1600; `i` desde el sur, `j` desde el oeste), 3D con Three.js 0.187 y `InstancedMesh`, sin React Three Fiber. Modelos `.bbmodel` cargados directo. El laboratorio ya está en `web/src/ui/useLaboratorio.ts`.
+- `web/`: React, Vite, TypeScript. Motor en Web Worker, `web/src/motor/` (`crearClienteMotor`). Mapa Leaflet, cuadrícula Turf.js (tope de 200 celdas en la interfaz, 1600 en el contrato; `i` desde el sur, `j` desde el oeste), 3D con Three.js 0.187 y `InstancedMesh`, sin React Three Fiber. Modelos `.bbmodel` cargados directo. El laboratorio ya está en `web/src/ui/useLaboratorio.ts`.
 - `api/`: Python, FastAPI. Proxy y caché de NASA POWER, Open-Meteo, elevación y suelo. `GET /health`. Los modelos respetan los schemas de `contratos/`, con prueba; OpenAPI solo genera el cliente TS de las llamadas HTTP (`openapi-typescript`).
 - `contratos/`: JSON Schema, fuente de verdad de los contratos (`AgroVault/Compartido/Contratos.md` solo los resume). Ejemplos en `contratos/ejemplos/`, tipos TS en `contratos/tipos/` (son los tipos de datos del motor y del front). Solo los edita Mompin.
 - `datos/`: catálogos y demo precargada. `datos/cache/` no se commitea.
@@ -67,7 +67,7 @@ Requiere Python 3 y Pillow. La zanahoria de ejemplo no es un cultivo del proyect
 
 - Falta un parámetro ⇒ `NO_EVALUABLE`. Prohibido sustituir por 0 o por un Kc recordado.
 - Cada número citado sale de una fuente que puedas señalar.
-- El front no recalcula déficit, ETc ni ranking. 2D y 3D leen la misma salida. Cambiar de vista no llama a NASA.
+- El front no recalcula déficit, ETc ni ranking. El 3D y sus vistas de la base leen la misma salida (el modo 2D se retiró el 15/11, D8). Cambiar de vista no llama a NASA.
 - El 3D no decide etapa ni estrés.
 - No fijes filas `[EN EVENTO]` ni `[DEPENDE-DATOS]`. Ranking: criterio B, ya en `web/src/motor/ranking.ts`. Pesos iguales `SUPUESTO` si el usuario no da los suyos. Fechas de siembra de Isla: `datos/catalogos/calendario-isla.json`. No inventes otra ventana.
 - No toques nginx, systemd ni puertos de `mediworks` en el droplet.
