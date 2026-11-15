@@ -2,6 +2,22 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — A4.12 hecha: CDL y SSURGO para coordenadas de EE. UU. (Eduardo)
+
+- **Archivos:** `api/app/clientes/cropscape.py`, `api/app/clientes/sda.py`, `api/app/regional.py`, `api/app/modelos_regional.py`, `api/app/rutas/regional.py`, `api/app/main.py`; `api/tests/test_regional.py` y `conftest.py` (carga las propuestas de contrato); `api/propuestas-contrato/ee-uu.schema.json` (nuevo); `datos/pruebas-apis/respuestas/cropscape_iowa_2008_2025.json` y `sda_ssurgo_iowa.json`; `api/README.md`, `docs/11`, `docs/14`, `AgroVault/Compartido/{APIs,Contratos,Codigo,Pendientes}.md`.
+- **Cambio:** `GET /api/ee-uu/cdl` da el cultivo de cada año (2008 a 2025) en el pixel de 30 m del punto (USDA NASS CDL por CropScape, en EPSG:5070). `GET /api/ee-uu/ssurgo` da el componente dominante de SSURGO (Soil Data Access), sus horizontes y el agua disponible a 100 cm (suma de awc_r x espesor, sin extrapolar). Fuera de EE. UU. contiguos responden `NO_EVALUABLE` sin llamar. La categoría de CDL va tal cual; solo se enlaza al catálogo si el nombre coincide exacto. La interfaz no las llama; no cambian motor, contratos ni paquete de demo.
+- **Por qué ahora:** la fila decía "después de C5". Eduardo decidió el 15/11 hacerla ya porque es aditiva y el resto de sus actividades estaba cerrado.
+- **Fuente / evidencia:** respuestas reales del 14/11 en Iowa (-93.4, 42.05; punto de prueba): CDL maíz y soya alternados de 2014 a 2025 (2011 a 2013 maíz); SSURGO Webster clay loam (90 %), grupo C/D, 180 mm a 100 cm. 13 pruebas nuevas; 137 en total en `api/`.
+- **Pendiente:** Mompin pasa `api/propuestas-contrato/ee-uu.schema.json` a `contratos/` si lo acepta (las pruebas usan la de `contratos/` en cuanto exista). `VERIFICAR` términos de uso de CDL antes de redistribuir datos.
+- **Decisiones afectadas:** ninguna de alcance del MVP. Eduardo 19 de 19.
+
+### 2026-11-15 — A5.4 hecha: requisitos medidos con GPU real y sin GPU (Eduardo)
+
+- **Archivos:** `docs/06` (tabla de requisitos), `docs/10` (respuesta a jueces), `docs/11` (V-11), `docs/14`; evidencia en `docs/capturas/medicion-a5-4/`.
+- **Cambio:** se corrió `herramientas/medir-escena/medir.mjs` con la escena de `main` (518 celdas, bloques de 24 cubos). Con GPU real (Apple M5 Max, WebGL2): 114.8 cuadros/s con maíz en madurez y 105.1 con la mezcla; sin GPU (SwiftShader, mismo equipo): 9.4 en ambos. 191 416 triángulos, 5 a 8 draw calls, primera escena en 0.3 a 1.2 s. Pérdida y recuperación del contexto WebGL sin errores.
+- **Límites:** la Mac es de gama alta; no se midió un celular ni una laptop modesta física. Con GPU real el reposo no llegó siempre a 0 cuadros (demo y mezcla); con software sí. Causa no identificada; se avisa a Mompin.
+- **Decisiones afectadas:** ninguna. V-11 queda con evidencia.
+
 ### 2026-11-15 — Token de SMAP verificado, README y A5.4 corregidos (Eduardo)
 
 - **Archivos:** `README.md` (tabla de fuentes NASA), `docs/14` (A5.4; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`.

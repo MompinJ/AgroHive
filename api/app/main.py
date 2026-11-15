@@ -5,7 +5,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 
 from . import config, servicios
 from .modelos import ErrorDatos
-from .rutas import calendario, clima, cultivos, ndvi, proxima, smap, suelo, terreno
+from .rutas import calendario, clima, cultivos, ndvi, proxima, regional, smap, suelo, terreno
 
 app = FastAPI(
     title="AgroHive API",
@@ -22,6 +22,7 @@ app.include_router(suelo.router)
 app.include_router(proxima.router)
 app.include_router(ndvi.router)
 app.include_router(smap.router)
+app.include_router(regional.router)
 
 
 @app.get("/health", tags=["salud"])
