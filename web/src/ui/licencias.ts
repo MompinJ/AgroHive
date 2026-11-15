@@ -1,11 +1,13 @@
+import { tt } from './i18n/actual';
+
 export const condicionesFuentes = [
-  { id: 'power', nombre: 'NASA POWER', texto: 'Citar el proyecto POWER, servicio, versión y fecha de consulta. Su guía de referencia no declara una licencia específica; verificación humana pendiente.', url: 'https://power.larc.nasa.gov/docs/referencing/' },
-  { id: 'openmeteo', nombre: 'Open-Meteo', texto: 'Datos CC BY 4.0: atribuir y enlazar la licencia. El acceso gratuito tiene condiciones de uso no comercial; conservar también los créditos de ECMWF y Copernicus cuando correspondan.', url: 'https://open-meteo.com/en/licence' },
-  { id: 'soilgrids', nombre: 'ISRIC SoilGrids', texto: 'CC BY 4.0, con atribución a ISRIC y a la versión de SoilGrids utilizada.', url: 'https://www.isric.org/explore/soilgrids' },
-  { id: 'openlandmap', nombre: 'OpenLandMap', texto: 'CC BY 4.0 según el STAC de las capas consultadas. Los registros Zenodo de 2020–2022 son de 120 m: arcilla 15528401, arena 15528413, limo 15528425, pH 15471105 y carbono orgánico mediana 15535759 (15535762 corresponde al percentil 84). La API usa capas de 30 m: su correspondencia exacta con los registros Zenodo sigue pendiente de verificación. Los DOI del STAC para 2000–2005 no se presentan como las capas de 2020–2022.', url: 'https://zenodo.org/records/15528401' },
-  { id: 'terreno', nombre: 'Terrain Tiles / Tilezen', texto: 'Atribuir las fuentes del DEM según Tilezen. En México: INEGI, Continental relief (2016); fuentes globales NOAA ETOPO1 y USGS GMTED2010/SRTM. El proyecto no usa el servicio alojado de Mapzen; no se atribuye una licencia universal a todos los datos del DEM.', url: 'https://github.com/tilezen/joerd/blob/master/docs/attribution.md' },
-  { id: 'fao56', nombre: 'FAO 56', texto: 'Reconocer a FAO y autores. Los términos distinguen usos no comerciales y usos que requieren permiso; la adecuación del uso y la redistribución en este proyecto requieren revisión humana.', url: 'https://www.fao.org/contact-us/terms/en/' },
-  { id: 'ecocrop', nombre: 'FAO EcoCrop / Recocrop', texto: 'La copia se obtuvo de Recocrop. GPL-3.0 corresponde al código del paquete; no demuestra la licencia de los datos FAO. Licencia de los datos pendiente de revisión humana.', url: 'https://github.com/cropmodels/Recocrop' },
-  { id: 'esri', nombre: 'Esri World Imagery', texto: 'Imágenes bajo el Esri Master License Agreement, no presentadas como datos de licencia abierta. Atribución: Esri, Vantor, Earthstar Geographics y GIS User Community. No se exportan ni se almacenan para uso sin conexión. La adecuación del uso directo en esta web fuera de ArcGIS requiere revisión humana de los términos.', url: 'https://goto.arcgisonline.com/maps/World_Imagery' },
-  { id: 'osm', nombre: 'OpenStreetMap', texto: 'Datos bajo ODbL. Atribución a OpenStreetMap y sus colaboradores, enlace a la licencia y condiciones propias del servicio de teselas. Solo mapa base; no calcula indicadores.', url: 'https://www.openstreetmap.org/copyright' },
+  { id: 'power', nombre: 'NASA POWER', get texto() { return tt('licencia.power'); }, url: 'https://power.larc.nasa.gov/docs/referencing/' },
+  { id: 'openmeteo', nombre: 'Open-Meteo', get texto() { return tt('licencia.openmeteo'); }, url: 'https://open-meteo.com/en/licence' },
+  { id: 'soilgrids', nombre: 'ISRIC SoilGrids', get texto() { return tt('licencia.soilgrids'); }, url: 'https://www.isric.org/explore/soilgrids' },
+  { id: 'openlandmap', nombre: 'OpenLandMap', get texto() { return tt('licencia.openlandmap'); }, url: 'https://zenodo.org/records/15528401' },
+  { id: 'terreno', nombre: 'Terrain Tiles / Tilezen', get texto() { return tt('licencia.terreno'); }, url: 'https://github.com/tilezen/joerd/blob/master/docs/attribution.md' },
+  { id: 'fao56', nombre: 'FAO 56', get texto() { return tt('licencia.fao56'); }, url: 'https://www.fao.org/contact-us/terms/en/' },
+  { id: 'ecocrop', nombre: 'FAO EcoCrop / Recocrop', get texto() { return tt('licencia.ecocrop'); }, url: 'https://github.com/cropmodels/Recocrop' },
+  { id: 'esri', nombre: 'Esri World Imagery', get texto() { return tt('licencia.esri'); }, url: 'https://goto.arcgisonline.com/maps/World_Imagery' },
+  { id: 'osm', nombre: 'OpenStreetMap', get texto() { return tt('licencia.osm'); }, url: 'https://www.openstreetmap.org/copyright' },
 ];

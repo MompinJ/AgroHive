@@ -2,6 +2,11 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, pantalla 5: Método y fuentes, tablero del balance y piezas comunes en inglés (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/paginas/MetodoFuentes.tsx`, `web/src/ui/components.tsx` (`DataState`, `PageHeading`, `MethodNotes`, `Brand`), `web/src/ui/licencias.ts` (resumen de cada licencia, en los dos idiomas), `web/src/ui/DashboardBalance.tsx`, `web/src/ui/BotonSonido.tsx`, `web/src/ui/i18n/textos/metodo.ts` (nuevo), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
+- **Cambio:** "Método y fuentes" (respaldo R1), el tablero de agua mes a mes, las notas de método y el botón de sonido salen en inglés. Los nombres de las fuentes, sus citas y los mensajes que llegan de la API (advertencias y avisos de la parcela) no se traducen: son datos. El resumen en inglés de las licencias es una traducción del resumen del equipo, no del texto legal.
+
 ### 2026-11-15 — B7, pantalla 4: Comparación en inglés (IA de Mompin, sesión "ingles")
 
 - **Archivos:** `web/src/ui/lab/PanelComparacion.tsx`, `PlanElegido.tsx`, `armarResumen.ts`, `web/src/ui/pdf/resumenComparacion.ts` y `pdf.ts` (pie de página), `web/src/ui/i18n/textos/comparacion.ts` (nuevo), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx` (incluye el texto del PDF).
