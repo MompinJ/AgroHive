@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — MF8 y MF9: postes de chícharo y jitomate, y tono de hoja de las brásicas (Mafer)
+
+- **Archivos:** `modelos/cultivos/chicharo.py`, `tomate.py`, `brocoli.py`, `coliflor.py` y sus `.bbmodel` regenerados; `modelos/cultivos/bloques/bloques.py` y los bloques de brócoli y coliflor; `visor_<cultivo>.html` de los cuatro y `bloques/visor_bloques.html`.
+- **MF8:** el poste (tutor) ya no mide lo mismo en todas las etapas: chícharo 6, 8, 13, 14,5 y 12 (siembra a podrida; antes 18) y jitomate 6,5, 8,5, 13,5, 15 y 13 (antes 19). En madurez la planta se comprimió (nudos y zarcillo a 0,8 de su altura) para seguir trepando el poste. Altura máxima de la celda: chícharo de 20,5 a 17 y jitomate de 21,5 a 17,5. Mismos cubos (54 y 59 en madurez).
+- **MF9:** brócoli, col y coliflor compartían el verde azulado `brasica_hoja*`. Sin colores nuevos: el brócoli pasa a `chile_hoja*` (verde oscuro), la coliflor a `chicharo_hoja*` (verde claro) y la col conserva `brasica_hoja*`. Aplica al modelo detallado y a los bloques ligeros; las formas no cambian.
+- **Límites:** los 5 iconos 2D de brócoli, col y coliflor siguen con el verde azulado compartido (`BRASICA` en `iconos2d.py`), así que el tono del ícono no coincide con el del modelo; no los toqué para no mover la prueba de daltonismo. Revisado a la vista en el visor, no en Blockbench ni en la escena de la app.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Buzón: IP por defecto del hotspot de la sede (sesión "buzon")
 
 - `herramientas/buzon/enviar.sh`, `escuchar.sh`, `README.md`, `AGENTS.md` y `docs/16` (P1): la IP por defecto pasa de `192.168.0.102` (casa) a `172.20.10.3` (hotspot, `wlo1`); `BUZON_URL` sigue mandando.

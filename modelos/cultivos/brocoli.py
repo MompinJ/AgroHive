@@ -12,7 +12,7 @@ la cabeza arriba de las hojas.
 Rasgos que se respetan:
 - TALLO GRUESO y erguido, verde claro ceroso, que se engrosa al crecer; las hojas salen de el a
   distintas alturas (no es una roseta pegada al suelo como la lechuga).
-- Hojas GRANDES, oblongas y de borde ondulado, GLAUCAS (verde azulado con cera, brasica_hoja_*),
+- Hojas GRANDES, oblongas y de borde ondulado, GLAUCAS (verde azulado con cera, chile_hoja_*),
   sobre PECIOLO LARGO y abiertas hacia afuera: las de abajo casi horizontales, las de arriba mas
   paradas. Nervadura central clara.
 - En madurez, una CABEZA central de floretes verde oscuro y GRANULADA (bolitas agrupadas en domo,
@@ -40,7 +40,7 @@ Fuentes de forma (consultadas el 15/11):
 - 7 CFR 201.56-3 (plantulas de Brassica): cotiledones bilobulados.
   https://www.law.cornell.edu/cfr/text/7/201.56-3
 
-Colores solo de la paleta fija: brasica_hoja_dark/_hoja/_hoja_light (hoja glauca y tallo, compartida
+Colores solo de la paleta fija: chile_hoja_dark/_hoja/_hoja_light (hoja glauca y tallo, compartida
 con col y coliflor), brocoli_cabeza_dark/_cabeza (floretes), yellow (floracion), wood_dark y
 podrido_dark (semilla), y los marchitos compartidos (hoja_seca*, hoja_marchita, podrido*, moho*).
 Las hojas giran en los tres ejes con `marco` y `caja` de calabacita.py (rotacion Euler ZYX
@@ -65,9 +65,9 @@ from calabacita import marco, caja, en  # noqa: E402  (giros libres en Euler ZYX
 BASE = (0, 2, 0)      # anclaje del tallo: encima del monticulo (igual que el maiz)
 
 # (peciolo, lamina, punta ondulada)
-OSCURA = ('brasica_hoja_light', 'brasica_hoja_dark', 'brasica_hoja')
-MEDIA = ('brasica_hoja_light', 'brasica_hoja', 'brasica_hoja_dark')
-CLARA = ('brasica_hoja_light', 'brasica_hoja', 'brasica_hoja_light')
+OSCURA = ('chile_hoja_light', 'chile_hoja_dark', 'chile_hoja')
+MEDIA = ('chile_hoja_light', 'chile_hoja', 'chile_hoja_dark')
+CLARA = ('chile_hoja_light', 'chile_hoja', 'chile_hoja_light')
 SECA = ('hoja_seca', 'hoja_seca_dark', 'hoja_seca')
 MARCHITA = ('hoja_seca_light', 'hoja_marchita', 'hoja_seca')
 PODRIDA = ('hoja_seca_dark', 'podrido', 'hoja_seca_dark')
@@ -87,7 +87,7 @@ def hoja(m, nombre, base, yaw, pec, p_pec, L, W, p_lam, cols=MEDIA, nervio=True,
     caja(m, nombre + '_lam', en(fin, r2, (0, 0, lam / 2)), (W, grueso, lam), cols[1], r2)
     if nervio:
         caja(m, nombre + '_nervio', en(fin, r2, (0, grueso / 2 + 0.05, lam * 0.45)), (0.45, 0.12, lam * 0.85),
-             'brasica_hoja_light' if cols[1].startswith('brasica') else cols[0], r2)
+             'chile_hoja_light' if cols[1].startswith('chile') else cols[0], r2)
     tip = en(fin, r2, (0, 0, lam))
     if punta:   # orilla ondulada: un tramo final un poco mas angosto, torcido y mas caido
         r3 = marco(yaw, p_lam + 14, espin=14 if sum(map(ord, nombre)) % 2 else -14)
@@ -96,7 +96,7 @@ def hoja(m, nombre, base, yaw, pec, p_pec, L, W, p_lam, cols=MEDIA, nervio=True,
     return tip
 
 
-def tallo(m, alto, ancho, col='brasica_hoja_light', col2='brasica_hoja'):
+def tallo(m, alto, ancho, col='chile_hoja_light', col2='chile_hoja'):
     """Tallo grueso octagonal: dos prismas cuadrados, uno girado 45 grados. 2 cubos."""
     m.box('tallo', BASE, (ancho, alto, ancho), col)
     m.box('tallo2', BASE, (ancho * 0.86, alto * 0.94, ancho * 0.86), col2, yaw=45)
@@ -146,12 +146,12 @@ def brote():
     m = Model('brocoli_brote', PAL)
     monticulo(m)
     m.box('hoyo', (0, 2, 0), (3.2, 0.2, 2.6), 'suelo_humedo', yaw=-8)
-    m.box('tallito', BASE, (0.55, 2.3, 0.55), 'brasica_hoja_light')
+    m.box('tallito', BASE, (0.55, 2.3, 0.55), 'chile_hoja_light')
     top = (0, 4.2, 0)
     eje = 115
     for k, lado in enumerate((0, 180)):
         yaw = eje + lado
-        col = ('brasica_hoja', 'brasica_hoja_light')[k]
+        col = ('chile_hoja', 'chile_hoja_light')[k]
         # dos lobulos que se abren +-24 grados desde el cabito: forman el corazon con muesca en la punta
         for j, s in enumerate((-1, 1)):
             r = marco(yaw + 24 * s, -6)
@@ -179,7 +179,7 @@ def crecimiento():
     # cogollo: dos hojitas nuevas casi verticales en la punta del tallo
     for k, yaw in enumerate((60, 240)):
         r = marco(yaw, -72)
-        caja(m, f'cogollo{k}', en((0, 5.4, 0), r, (0, 0, 0.9)), (1.2, 0.3, 1.9), 'brasica_hoja_light', r)
+        caja(m, f'cogollo{k}', en((0, 5.4, 0), r, (0, 0, 0.9)), (1.2, 0.3, 1.9), 'chile_hoja_light', r)
     return m
 
 
@@ -204,7 +204,7 @@ def madurez():
     # ramitas del arbolito bajo el borde de la cabeza
     for k, yaw in enumerate((40, 160, 280)):
         r = marco(yaw, -42)
-        caja(m, f'ramita{k}', en((0, 6.8, 0), r, (0, 0, 1.4)), (0.8, 0.8, 2.6), 'brasica_hoja_light', r)
+        caja(m, f'ramita{k}', en((0, 6.8, 0), r, (0, 0, 1.4)), (0.8, 0.8, 2.6), 'chile_hoja_light', r)
     cabeza(m, 7.4)
     return m
 

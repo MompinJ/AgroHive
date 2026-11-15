@@ -1014,13 +1014,13 @@ PLANTAS = {
                                                                          (1.6, 0.75, 0.8), 1.9))),
     # brocoli (hojas glaucas grandes y erguidas; madurez: cabeza verde oscura granulada arriba al centro; podrida: hojas
     # marchitas y la cabeza pasada, florecida en amarillo o podrida con moho)
-    'brocoli_siembra': semilla(('brasica_hoja_light', 'brasica_hoja'), (0.7, 0.4, 0.7)),
-    'brocoli_brote': roseta(('brasica_hoja',), 1.4, 0.6, ('brasica_hoja_light',), 0.9, 1.0),
-    'brocoli_crecimiento': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.4, 1.4, ('brasica_hoja',), 1.7, 1.9,
-                                  arriba=('brasica_hoja_light', 'brasica_hoja')),
-    'brocoli_madurez': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.6, 1.7, ('brocoli_cabeza',), 1.5, 2.4,
+    'brocoli_siembra': semilla(('chile_hoja_light', 'chile_hoja'), (0.7, 0.4, 0.7)),
+    'brocoli_brote': roseta(('chile_hoja',), 1.4, 0.6, ('chile_hoja_light',), 0.9, 1.0),
+    'brocoli_crecimiento': roseta(('chile_hoja', 'chile_hoja_dark'), 2.4, 1.4, ('chile_hoja',), 1.7, 1.9,
+                                  arriba=('chile_hoja_light', 'chile_hoja')),
+    'brocoli_madurez': roseta(('chile_hoja', 'chile_hoja_dark'), 2.6, 1.7, ('brocoli_cabeza',), 1.5, 2.4,
                               arriba=('brocoli_cabeza_dark', 'brocoli_cabeza_dark', 'brocoli_cabeza')),
-    'brocoli_podrida': roseta(('hoja_marchita', 'hoja_seca', 'brasica_hoja_dark'), 2.4, 0.9, ('podrido', 'brocoli_cabeza_dark'),
+    'brocoli_podrida': roseta(('hoja_marchita', 'hoja_seca', 'chile_hoja_dark'), 2.4, 0.9, ('podrido', 'brocoli_cabeza_dark'),
                               1.3, 1.6, arriba=('yellow', 'moho', 'podrido_dark')),
     # col (hojas glaucas anchas y abiertas casi al ras; madurez: bola lisa verde claro; podrida: bola hundida con moho)
     'col_siembra': semilla(('brasica_hoja', 'brasica_hoja_light'), (0.75, 0.35, 0.75)),
@@ -1033,11 +1033,11 @@ PLANTAS = {
                           1.8, 1.1, arriba=('moho', 'moho_light', 'podrido_dark')),
     # coliflor (hojas glaucas erguidas que abrazan la pella; madurez: pella crema que asoma arriba; podrida: pella
     # manchada de cafe y moho)
-    'coliflor_siembra': semilla(('brasica_hoja_light', 'brasica_hoja'), (0.65, 0.45, 0.65)),
-    'coliflor_brote': roseta(('brasica_hoja_light',), 1.3, 0.7, ('brasica_hoja',), 0.8, 1.1),
-    'coliflor_crecimiento': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.2, 1.8, ('brasica_hoja',), 1.5, 2.2,
-                                   arriba=('brasica_hoja_light',)),
-    'coliflor_madurez': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.4, 2.0, ('coliflor_cabeza_dark',), 1.6, 2.4,
+    'coliflor_siembra': semilla(('chicharo_hoja_light', 'chicharo_hoja'), (0.65, 0.45, 0.65)),
+    'coliflor_brote': roseta(('chicharo_hoja_light',), 1.3, 0.7, ('chicharo_hoja',), 0.8, 1.1),
+    'coliflor_crecimiento': roseta(('chicharo_hoja', 'chicharo_hoja_dark'), 2.2, 1.8, ('chicharo_hoja',), 1.5, 2.2,
+                                   arriba=('chicharo_hoja_light',)),
+    'coliflor_madurez': roseta(('chicharo_hoja', 'chicharo_hoja_dark'), 2.4, 2.0, ('coliflor_cabeza_dark',), 1.6, 2.4,
                                arriba=('coliflor_cabeza',)),
     'coliflor_podrida': roseta(('hoja_marchita', 'hoja_seca_dark', 'hoja_seca'), 2.2, 1.0, ('coliflor_cabeza_dark', 'podrido'),
                                1.4, 1.4, arriba=('podrido', 'moho', 'moho_dark')),

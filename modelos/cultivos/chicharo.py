@@ -185,7 +185,7 @@ def siembra():
     m = Model('chicharo_siembra', PAL)
     monticulo(m)
     m.box('humedo', (0, 2, 0), (6.6, 0.12, 4.2), 'suelo_humedo', yaw=10)
-    tutor(m)
+    tutor(m, alto=6.0)
     for k, ((x, z), yaw, s) in enumerate([((-0.9, 0.9), 20, 1.15), ((0.9, 0.4), -30, 1.05), ((0.1, 1.9), 55, 1.0)]):
         m.box(f'chicharo{k + 1}', (x, 2.1, z), (s, s * 0.95, s), 'chicharo_semilla', yaw=yaw)
         m.box(f'chicharo{k + 1}_redondo', (x, 2.2, z), (s * 0.95, s * 0.75, s * 0.95), 'chicharo_hoja_light',
@@ -199,7 +199,7 @@ def brote():
     enrosca en la varita. 12 cubos (10 mas el lomo)."""
     m = Model('chicharo_brote', PAL)
     monticulo(m)
-    tutor(m)
+    tutor(m, alto=8.0)
     nudo = palo(m, 'tallito', BASE, (0.15, 4.4, 0.25), 0.45, 'chicharo_hoja')
     estipulas(m, 'estipulas', (0.1, 3.7, 0.18), FRENTE + 90, s=2.0)
     for j, lado in enumerate((1, -1)):
@@ -216,7 +216,7 @@ def crecimiento():
     en la punta y 2 flores blancas. 28 cubos."""
     m = Model('chicharo_crecimiento', PAL)
     monticulo(m)
-    tutor(m)
+    tutor(m, alto=13.0)
     nudos = tallo(m, [4.0, 7.2, 9.6], [FRENTE + 30, FRENTE - 30, FRENTE + 15], grueso=0.5)
     hoja(m, 'hoja0', nudos[1], FRENTE + 75, s=2.2, caida=12)
     hoja(m, 'hoja1', nudos[2], FRENTE - 80, s=2.2, caida=8)
@@ -235,14 +235,14 @@ def madurez():
     colgando (un par en el mismo nudo) y una vaina abierta en el lomo con 5 chicharos en fila. 55 cubos."""
     m = Model('chicharo_madurez', PAL)
     monticulo(m)
-    tutor(m)
-    nudos = tallo(m, [4.2, 8.4, 12.4, 15.6], [FRENTE + 30, FRENTE - 30, FRENTE + 30, FRENTE - 10], grueso=0.55)
+    tutor(m, alto=14.5)
+    nudos = tallo(m, [3.4, 6.7, 9.9, 12.5], [FRENTE + 30, FRENTE - 30, FRENTE + 30, FRENTE - 10], grueso=0.55)
     hoja(m, 'hoja0', nudos[1], FRENTE + 80, s=2.3, caida=14)
     hoja(m, 'hoja1', nudos[2], FRENTE - 85, s=2.4, pares=2, caida=10)
     hoja(m, 'hoja2', nudos[3], FRENTE + 85, s=2.2, caida=6)
     # punta: yema y zarcillos enroscados en lo alto de la varita
     m.box('yema', nudos[4], (0.7, 1.0, 0.6), 'chicharo_hoja_light', tilt=-10, yaw=FRENTE)
-    ini = enrosque(m, 'zarcillo_punta', 16.2, FRENTE - 50, n=3)
+    ini = enrosque(m, 'zarcillo_punta', 13.0, FRENTE - 50, n=3)
     palo(m, 'zarcillo_punta', nudos[4], ini, 0.3, 'chicharo_hoja_light')
     # flor tardia arriba
     flor(m, 'flor0', nudos[3], FRENTE - 30)
@@ -264,7 +264,7 @@ def podrida():
     m.box('grieta1', (1.8, 2, 1.2), (4.0, 0.2, 0.5), 'suelo_grieta', yaw=25)
     m.box('grieta2', (-2.6, 2, -1.0), (0.5, 0.2, 3.0), 'suelo_grieta', yaw=-15)
     inc = (5, FRENTE + 180)   # el tutor se vencio un poco hacia atras
-    tutor(m, tilt=inc[0], yaw=inc[1])
+    tutor(m, tilt=inc[0], yaw=inc[1], alto=12.0)
     # lo que quedo en el tutor: zarcillo seco enroscado y un cabo de tallo roto colgando
     ini = enrosque(m, 'zarcillo_seco', 10.0, FRENTE - 40, n=3, col='hoja_seca_dark', tilt=inc[0], yaw=inc[1])
     cabo = palo(m, 'cabo', ini, (ini[0] + 0.3, ini[1] - 3.2, ini[2] + 0.6), 0.4, 'hoja_seca')
