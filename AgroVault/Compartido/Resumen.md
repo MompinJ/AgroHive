@@ -2,7 +2,7 @@
 tipo: resumen
 audiencia: todas
 actualizado: 2026-11-14
-fuente: docs/00 a docs/14, contratos 0.10.0, docs/01
+fuente: docs/00 a docs/14, contratos 0.12.2, docs/01
 ---
 
 # Resumen de AgroHive
@@ -19,7 +19,7 @@ Persona guía: Elena, productora ficticia de temporal en Veracruz. La decisión 
 
 Rotación = secuencia en el tiempo, no sembrar todo junto. La escena muestra el cultivo **del ciclo elegido**.
 
-Arquitectura **mundial**, demo validada en **Isla**. Las fuentes globales (POWER, IMERG vía POWER, MODIS, SoilGrids, OpenLandMap, Terrarium, Open-Meteo) sirven en cualquier coordenada. SIAP e INIFAP se suman solo en México. CDL y SSURGO son extra de fase 2, solo si la coordenada cae en EE. UU. (A4.12). Fuera de México, el calendario y el pilar de compatibilidad quedan `NO_EVALUABLE` hasta A4.13 (GGCMI fase 3, después de C4). GAEZ v4 solo puede usarse como evidencia: su licencia es CC BY-NC-SA 4.0.
+Arquitectura **mundial**, demo validada en **Isla**. Las fuentes globales (POWER, IMERG vía POWER, MODIS, SoilGrids, OpenLandMap, Terrarium, Open-Meteo) sirven en cualquier coordenada. SIAP e INIFAP se suman solo en México. CDL y SSURGO son extra de fase 2, solo si la coordenada cae en EE. UU. (A4.12). Fuera de México, el calendario y el pilar de compatibilidad ya tienen respaldo para el maíz: `GET /api/calendario` devuelve la ventana de GGCMI fase 3 (A4.13 `[HECHO]`); frijol, calabaza y chile siguen `NO_EVALUABLE` y el front aún lee solo el calendario de Isla. GAEZ v4 solo puede usarse como evidencia: su licencia es CC BY-NC-SA 4.0.
 
 ### Qué ya hace el producto
 
@@ -34,7 +34,7 @@ Arquitectura **mundial**, demo validada en **Isla**. Las fuentes globales (POWER
 
 ### Qué todavía no está
 
-Modo 2D (A3.6), gráficas del dashboard (A4.1), tarjetas en pantalla (la plantilla ya existe en el motor, A4.3), tooltips por bloque (A3.8), slider de meses, pantalla de método (A4.5) y README definitivo. NDVI (A4.11) ya sale de la API como evidencia y no entra al ranking. Video y presentación se definen al final, fuera del tablero (no están canceladas). La mascota (elote) no está montada en la escena. Pintar por bloques sigue `[EN EVENTO]`.
+Ya están, además: modo 2D (A3.6), gráficas del dashboard (A4.1), tarjetas en pantalla (A4.3), tooltips por bloque (A3.8), slider de meses (A5.2), móvil y teclado (A5.3), pantalla de método (A4.5) y la mascota en la escena (A5.1). SMAP ya sale de la API con humedad real (A4.8), aunque la interfaz no lo llama. Falta: revisión humana del README (A5.7), medición en hardware real (A5.4), redacción con LLM opcional (A4.4), CDL y SSURGO después de C5 (A4.12) y el envío (A5.9). NDVI (A4.11) ya sale de la API como evidencia y no entra al ranking. Video y presentación se definen al final, fuera del tablero (no están canceladas). Pintar por bloques sigue `[EN EVENTO]`.
 
 ### Qué no hace
 
@@ -89,7 +89,7 @@ Motor (`web/src/motor/`, independiente del render):
 4. Pilares con número: déficit; exceso (percolación profunda, FAO-56 ec. 88, subpuntaje 1 − fracción percolada, normalización `SUPUESTO`); compatibilidad (fracción de siembras en ventana; si falta una ventana con fuente, el pilar es `NO_EVALUABLE`); protección del suelo (fracción del año con cultivo, por días de suelo desnudo). El índice de erosión y el estrés por calor siguen `NO_EVALUABLE`.
 5. Ranking B `[DECIDIDO]`: puntaje por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio. Pesos iguales `SUPUESTO` si el usuario no da los suyos. Un pilar entra solo si todas las rotaciones comparadas lo tienen. Respaldo A si solo hay un pilar hídrico. `EXPLORATORIO` no recibe posición.
 6. Próxima temporada: años cuya lluvia mensual cae en la banda p10–p90 de los 6 meses; si ninguno, los que caen en más meses, declarado. Sin fecha de emisión no se emite el bloque (`PROXIMA_TEMPORADA_NO_DISPONIBLE`).
-7. Tarjetas (`tarjetas.ts`): plantilla sin LLM. Cada frase sale de un número o una fuente. La UI todavía no las pinta.
+7. Tarjetas (`tarjetas.ts`): plantilla sin LLM. Cada frase sale de un número o una fuente. La UI las muestra en el laboratorio y en la comparación (`TarjetasRotacion`, A4.3).
 
 `estadoPlanta` no llega a `podrida`: no hay umbral de encharcamiento con fuente. Las etapas podridas de los modelos existen para cuando el motor lo decida.
 
@@ -104,7 +104,7 @@ Navegador (web/)
   Three.js 0.187, InstancedMesh, sin React Three Fiber
   .bbmodel empaquetados con import.meta.glob
   Motor en Web Worker (web/src/motor/)
-        | HTTP JSON, contratos 0.10.0
+        | HTTP JSON, contratos 0.12.2
         v
 FastAPI (api/)
   /health (incluye commit y versionContrato)
@@ -116,7 +116,7 @@ FastAPI (api/)
 https://64-23-143-102.sslip.io  (nginx, mismo origen, no toca mediworks)
 ```
 
-Tipos de datos: `contratos/tipos/`. OpenAPI solo describe las llamadas HTTP. Contratos 0.10.0. Los edita Mompin.
+Tipos de datos: `contratos/tipos/`. OpenAPI solo describe las llamadas HTTP. Contratos 0.12.2. Los edita Mompin.
 
 El Worker acelera el cálculo. No acelera la red ni el render.
 
@@ -130,7 +130,7 @@ Modelos en `modelos/cultivos/` (maíz, frijol, calabaza, chile: siembra, brote, 
 
 ## Equipo y ritmo
 
-El avance por persona lo genera `herramientas/cronograma.py` en [[Cronograma]] (38 de 61 hechas al regenerar desde `docs/14`). Camino crítico que falta por cerrar: `A4.6 → A5.9`. Video y presentación se definen al final, fuera del tablero (`docs/13`). C2 y C3 ya se cruzaron en código. C4 espera el cierre de A4.6.
+El avance por persona lo genera `herramientas/cronograma.py` en [[Cronograma]] (54 de 60 hechas el 14/11 a las 18:15). Del camino crítico solo falta `A5.9` (envío). Video y presentación se definen al final, fuera del tablero (`docs/13`). C2 y C3 ya se cruzaron en código. A4.6, la actividad que dispara C4, está `[HECHO]`; C5 no está cruzada.
 
 Si hay que cortar: extras A4.12, A4.11, A4.8 y A3.9, luego el slider. Después se puede quedar solo el pilar hídrico, luego el 2D con cajas, luego la parcela fija. No se sacrifican la trazabilidad de POWER, los límites en voz alta, tres rotaciones, el peor caso ni la entrega.
 

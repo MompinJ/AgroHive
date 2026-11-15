@@ -70,7 +70,8 @@ URL_AGENDA_VER = "https://www.gob.mx/cms/uploads/attachment/file/1066118/Agenda_
 CSV_SIAP_ISLA = AQUI / "fuentes" / "siap_isla_2021_2025.csv"
 PERIODO_SIAP = ("2021-01-01", "2025-12-31")
 CICLO_SIAP = {"PV": "Primavera-Verano", "OI": "Otoño-Invierno"}
-CULTIVO_SIAP = {"maiz": "Maíz grano", "frijol": "Frijol", "chile": "Chile verde", "calabaza": None}
+CULTIVO_SIAP = {"maiz": "Maíz grano", "frijol": "Frijol", "chile": "Chile verde", "calabaza": None,
+                "sorgo": "Sorgo grano", "sandia": "Sandía", "camote": "Camote", "cacahuate": "Cacahuate"}
 
 INIFAP_MAIZ_PV = ("INIFAP, Tecnologia de produccion de maiz de temporal en el sur de Veracruz (region del Istmo de "
                   "Tehuantepec) para el ciclo de primavera-verano (C. A. Tinoco Alfaro, Campo Experimental Cotaxtla, 2022)")
@@ -104,9 +105,19 @@ MOTIVO_SIN_VENTANA = {
     ("chile", "OI"): "Cultivo extra: aun no se consulta una fuente de calendario de siembra (INIFAP) para chile.",
     ("calabaza", "PV"): "SIAP no registra calabaza en Isla y la Agenda Tecnica de Veracruz no da calendario de calabaza.",
     ("calabaza", "OI"): "SIAP no registra calabaza en Isla y la Agenda Tecnica de Veracruz no da calendario de calabaza.",
+    ("sorgo", "PV"): "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sorgo.",
+    ("sorgo", "OI"): "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sorgo.",
+    ("sandia", "PV"): "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sandia.",
+    ("sandia", "OI"): "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sandia.",
+    ("camote", "PV"): "SIAP no registra camote en Isla (si en San Andres y Santiago Tuxtla, del mismo DDR) y no se consulto una fuente de calendario para el.",
+    ("camote", "OI"): "SIAP no registra camote en Isla (si en San Andres y Santiago Tuxtla, del mismo DDR) y no se consulto una fuente de calendario para el.",
+    ("cacahuate", "PV"): "SIAP no registra cacahuate en Isla (si en Catemaco, del mismo DDR) y no se consulto una fuente de calendario para el.",
+    ("cacahuate", "OI"): "SIAP no registra cacahuate en Isla (si en Catemaco, del mismo DDR) y no se consulto una fuente de calendario para el.",
 }
 ORDEN_ISLA = [("maiz", "PV"), ("maiz", "OI"), ("frijol", "PV"), ("frijol", "OI"),
-              ("chile", "PV"), ("chile", "OI"), ("calabaza", "PV"), ("calabaza", "OI")]
+              ("chile", "PV"), ("chile", "OI"), ("calabaza", "PV"), ("calabaza", "OI"),
+              ("sorgo", "PV"), ("sorgo", "OI"), ("sandia", "PV"), ("sandia", "OI"),
+              ("camote", "PV"), ("camote", "OI"), ("cacahuate", "PV"), ("cacahuate", "OI")]
 
 
 def superficie_siap_isla():
@@ -167,6 +178,9 @@ def calendario_isla():
                         "estatales de Veracruz."},
             {"codigo": "CALABAZA_NO_REGISTRADA", "severidad": "aviso",
              "mensaje": "SIAP no registra calabaza en Isla entre 2021 y 2025: se muestra en la demo, pero no es recomendable alli."},
+            {"codigo": "CAMOTE_CACAHUATE_NO_REGISTRADOS", "severidad": "aviso",
+             "mensaje": "SIAP no registra camote ni cacahuate en Isla entre 2021 y 2025 (si en municipios vecinos del mismo distrito): "
+                        "no son recomendables alli sin validar con un tecnico local."},
         ],
     }
 
@@ -248,6 +262,88 @@ CULTIVOS = [
                 "rmin": 500, "ropmn": 600, "ropmx": 1250, "rmax": 1700},
         "modelo3d": "chile",
     },
+    {
+        "id": "sorgo",
+        "nombreComun": "Sorgo",
+        "nombreCientifico": "Sorghum bicolor (L.) Moench",
+        "esLeguminosa": False,
+        "t11": {"fila": "Sorghum", "region": "USA, Pakis., Med.", "siembra": "May/June",
+                "etapas": (20, 35, 40, 30), "total": 125, "total_impreso": 130,
+                "porque": ("Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal "
+                           "primavera-verano de Isla. La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. "
+                           "Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por "
+                           "cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano).")},
+        "t12": {"fila": "Sorghum - grain",
+                "ini": (0.3, "Kc ini general del grupo i. Cereals (la fila del sorgo no da Kc ini propio)."),
+                "mid": (1.05, "Tabla 12 da el rango 1.00-1.10; 1.05 es su punto medio (eleccion del equipo, no de la fuente)."),
+                "end": (0.55, None)},
+        "t22": {"fila": "Sorghum - grain", "zr": 2.0, "zrRango": "1.0-2.0", "p": 0.55},
+        "eco": {"fila": "Sorghum (low altitude)", "sci": "Sorghum bicolor (L.) Moench", "gmin": 90, "gmax": 300,
+                "tmin": 8, "topmn": 27, "topmx": 35, "tmax": 40,
+                "rmin": 300, "ropmn": 500, "ropmx": 1000, "rmax": 3000},
+        "nota_extra": ("EcoCrop trae tres filas de la misma especie por altitud (baja, media, alta); se uso la de altitud baja por ser "
+                       "Isla zona de tierras bajas del sur de Veracruz (la altitud exacta de la parcela no se verifico). Una persona debe revisarlo."),
+    },
+    {
+        "id": "sandia",
+        "nombreComun": "Sandia",
+        "nombreCientifico": "Citrullus lanatus (Thunb.) Matsum. & Nakai",
+        "esLeguminosa": False,
+        "t11": {"fila": "Watermelon", "region": "Italy", "siembra": "April",
+                "etapas": (20, 30, 30, 30), "total": 110,
+                "porque": ("Tabla 11 no tiene fila tropical para sandia; se eligio la de Italia con siembra en abril (110 dias, clima calido). "
+                           "La otra fila es de desierto del Cercano Oriente (80 dias) y no se uso.")},
+        "t12": {"fila": "Watermelon",
+                "ini": (0.4, None),
+                "mid": (1.00, None),
+                "end": (0.75, None)},
+        "t22": {"fila": "Watermelon", "zr": 1.5, "zrRango": "0.8-1.5", "p": 0.40},
+        "eco": {"fila": "Watermelon", "sci": "Citrullus lanatus (T) Mansf", "gmin": 80, "gmax": 160,
+                "tmin": 15, "topmn": 20, "topmx": 30, "tmax": 35,
+                "rmin": 400, "ropmn": 500, "ropmx": 750, "rmax": 1800},
+    },
+    {
+        "id": "camote",
+        "nombreComun": "Camote",
+        "nombreCientifico": "Ipomoea batatas (L.) Lam.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Sweet potato", "region": "Tropical regions", "siembra": "Rainy seas.",
+                "etapas": (15, 30, 50, 30), "total": 125,
+                "porque": ("Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano de Isla. "
+                           "La otra fila es de siembra en abril en el Mediterraneo (150 dias).")},
+        "t12": {"fila": "Sweet Potato",
+                "ini": (0.5, "Kc ini general del grupo d. Roots and Tubers (la fila del camote no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.65, None)},
+        "t22": {"fila": "Sweet Potato", "zr": 1.5, "zrRango": "1.0-1.5", "p": 0.65},
+        "eco": {"fila": "Sweet potato", "sci": "Ipomoea batatas (L.) Lam.", "gmin": 80, "gmax": 170,
+                "tmin": 10, "topmn": 18, "topmx": 28, "tmax": 38,
+                "rmin": 500, "ropmn": 750, "ropmx": 1250, "rmax": 5000},
+        "nota_extra": ("SIAP no registra camote en Isla entre 2021 y 2025; si lo registra en San Andres Tuxtla y Santiago Tuxtla, del "
+                       "mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
+    },
+    {
+        "id": "cacahuate",
+        "nombreComun": "Cacahuate",
+        "nombreCientifico": "Arachis hypogaea L.",
+        "esLeguminosa": True,
+        "t11": {"fila": "Groundnut", "region": "West Africa", "siembra": "Dry season",
+                "etapas": (25, 35, 45, 25), "total": 130,
+                "porque": ("Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). "
+                           "Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias de Isla: es una analogia de ciclo, "
+                           "no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte "
+                           "las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar.")},
+        "t12": {"fila": "Groundnut (Peanut)",
+                "ini": (0.4, "Kc ini general del grupo e. Legumes (la fila del cacahuate no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.60, None)},
+        "t22": {"fila": "Groundnut (Peanut)", "zr": 1.0, "zrRango": "0.5-1.0", "p": 0.50},
+        "eco": {"fila": "Groundnut", "sci": "Arachis hypogaea L.", "gmin": 90, "gmax": 150,
+                "tmin": 10, "topmn": 22, "topmx": 32, "tmax": 45,
+                "rmin": 400, "ropmn": 600, "ropmx": 1500, "rmax": 4000},
+        "nota_extra": ("SIAP no registra cacahuate en Isla entre 2021 y 2025; si lo registra en Catemaco, del mismo distrito (DDR 175). "
+                       "Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
+    },
 ]
 
 NOTA_KC_INI = (
@@ -265,7 +361,7 @@ def cultivo(c):
                  f"Tabla 11, fila '{t11['fila']}', region '{t11['region']}', siembra '{t11['siembra']}'",
                  "dias", t11["porque"])
     etapas = dict(zip(("inicial", "desarrollo", "media", "final"), t11["etapas"]))
-    assert sum(etapas.values()) == t11["total"], c["id"]
+    assert sum(etapas.values()) == t11["total"], c["id"]  # "total" es la suma; "total_impreso" documenta una discrepancia de la fuente
 
     def kc(clave, nota_extra):
         valor, nota = t12[clave]
@@ -307,12 +403,15 @@ def cultivo(c):
             "lluviaAnualMaxMm": eco_val("RMAX", eco["rmax"], "mm/anio", "mm por anio", nota_lluvia),
             "tEstresCalorC": no_evaluable(MOTIVO_CALOR),
         },
-        "modelo3d": {"prefijo": c["modelo3d"]},
+        **({"modelo3d": {"prefijo": c["modelo3d"]}} if "modelo3d" in c else {}),
         "notas": (
-            f"Ciclo y etapas de FAO-56 Tabla 11 (total {t11['total']} dias). EcoCrop da un ciclo de "
+            f"Ciclo y etapas de FAO-56 Tabla 11 (total {t11['total']} dias"
+            + (f"; la tabla imprime {t11['total_impreso']}" if "total_impreso" in t11 else "")
+            + f"). EcoCrop da un ciclo de "
             f"{eco['gmin']} a {eco['gmax']} dias para la especie, demasiado amplio para el motor. "
             "Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
             + (" " + c["equivalencia"] if "equivalencia" in c else "")
+            + (" " + c["nota_extra"] if "nota_extra" in c else "")
         ),
     }
 

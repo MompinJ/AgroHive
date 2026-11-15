@@ -150,7 +150,7 @@ La escena recibe `avisosDatos` estructurados: directamente del hook para parcela
 
 Método agrupa las referencias por publicación sin eliminar citas/metadatos. `ui/licencias.ts` reúne condiciones y enlaces de los proveedores del README, con Esri y OpenStreetMap; permisos sin confirmar siguen visibles como no verificados. Los datos originales no se reescriben y las referencias del paquete se conservan en el detalle. Captura: `evidencia/metodo-licencias-320.png`. Revisión humana de licencias pendiente; no se declara una certificación legal.
 
-Video y presentación quedan canceladas por Balam y fuera de este flujo de implementación; el estado se conserva en docs/13 y docs/14.
+En el carril de Balam, video y presentación quedan canceladas por su petición y fuera de este flujo de implementación. Para el equipo se definen al final y no están canceladas (docs/13 y docs/14).
 
 ## A3.6: vista 2D ligera
 
