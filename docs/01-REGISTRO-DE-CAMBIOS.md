@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 — Preparación revisable de A5.9 y prerrequisitos del portal (balam)
+
+- **Archivos:** `docs/entrega-a5-9.md` (nuevo), enlace desde `docs/02` y esta entrada. No se edita el README de Mafer ni se regeneran las vistas del tablero.
+- **Cambio:** borradores de los campos oficiales en inglés, inventario de enlaces, datos del equipo sin confirmar, checklist de dependencias y registro de envío todavía vacío. Balam confirmó que aún no tenemos URL de la página oficial; pidió que Mompin modifique A5.9 para incluir ese paso previo, Team Owner y responsable (buzón #256). A5.9 no pasa a HECHO por preparar el paquete.
+- **Evidencia:** lectura pública sin sesión: repo accesible; aplicación 200; `/health` aún declara commit `23f8a53` y contratos `0.12.2`; `/medir.html?auto=0` devuelve Inicio, sin control de medición, aunque el código local incluye esa página. Eduardo fue avisado (#260). La página de Boca del Río confirma sede y Local Lead; no se obtuvo horario local verificable. Capturas del portal de equipo, demo, membresía, OK del equipo y confirmación de envío siguen pendientes.
+- **Límites:** textos sujetos a revisión científica y de A5.7, idioma y atribuciones pendientes. No se crea cuenta/equipo, no se publica, no se aceptan declaraciones y no se envía formulario.
+
 ### 2026-11-14 (noche) — A4.12: se borra la propuesta `ee-uu` (Eduardo)
 
 - **Archivos:** se elimina `api/propuestas-contrato/ee-uu.schema.json` (el directorio queda vacío y también se quita); `api/app/modelos_regional.py` (docstring).

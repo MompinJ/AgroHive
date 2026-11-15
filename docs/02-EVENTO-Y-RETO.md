@@ -45,6 +45,8 @@ NASA distingue contenido propio y de terceros; atribuir no implica aval de NASA 
 
 ### Aplicación a AgroHive y pendientes de A5.9
 
+Preparación revisable y textos del formulario en inglés: [paquete A5.9](entrega-a5-9.md). Incluye el estado real de enlaces, portal, miembros y despliegue; no es una confirmación de envío.
+
 La verificación de reglas (A0.5) está hecha; **el cumplimiento completo y la entrega no están certificados**. El equipo debe preparar los enlaces y materiales en inglés, resolver su demo obligatoria, completar declaración de IA y marcas/metadatos, confirmar originalidad y permisos, revisar membresía y obtener confirmación de envío.
 
 La interfaz y el README actuales están en español: registrar el desfase para la entrega y consultar con la sede el alcance sobre la aplicación enlazada, sin dar por concedida una excepción. Marcas de imágenes generadas, licencia propia y revisión de fuentes siguen pendientes según README/A5.7. La decisión de Balam de no realizar video/presentación en su carril no cambia la regla externa ni reasigna esa tarea. Esta revisión no publica ni envía nada al portal.
