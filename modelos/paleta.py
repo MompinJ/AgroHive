@@ -212,6 +212,35 @@ PALETA_AGROHIVE = {
     # 150-151: grano tierno de maiz dulce (elote; lo demas usa los colores del maiz)
     'maiz_dulce_grano': '#f2dc7a',
     'maiz_dulce_grano_light': '#faf0b8',
+    # 152-158: yuca (tallo lenoso con nudos, hoja palmeada en peciolo rojizo, raiz tuberosa cafe de pulpa blanca)
+    'yuca_tallo': '#8a7a62',
+    'yuca_hoja_dark': '#2d5c2f',
+    'yuca_hoja': '#4a8a3e',
+    'yuca_hoja_light': '#7cb35d',
+    'yuca_peciolo': '#a3443c',
+    'yuca_raiz': '#7a5232',
+    'yuca_pulpa': '#f1ead2',
+    # 159-162: cana de azucar (tallo segmentado verde amarillento, nudo y yema; la hoja usa maiz_hoja*)
+    'cana_tallo_dark': '#8c8a3a',
+    'cana_tallo': '#b8b54e',
+    'cana_tallo_light': '#d9d77c',
+    'cana_nudo': '#7a4f5a',
+    # 163-166: ajonjoli (hoja lanceolada, flor tubular rosa palido, capsula oblonga, semilla crema)
+    'ajonjoli_hoja': '#4e8c45',
+    'ajonjoli_flor': '#f0c6d4',
+    'ajonjoli_capsula': '#7aa24a',
+    'ajonjoli_semilla': '#efe4c4',
+    # 167-170: girasol (petalo amarillo dorado, disco cafe, hoja ancha aspera)
+    'girasol_petalo': '#f5b81c',
+    'girasol_disco_dark': '#3e2614',
+    'girasol_disco': '#6b4421',
+    'girasol_hoja': '#4f8a33',
+    # 171-175: algodon (hoja palmeada, flor crema, bellota verde, fibra blanca, capsula seca)
+    'algodon_hoja': '#3f7d3a',
+    'algodon_flor': '#f3e6a8',
+    'algodon_bellota': '#6f9a42',
+    'algodon_fibra': '#fbfbf6',
+    'algodon_capsula_seca': '#6e4c2c',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'

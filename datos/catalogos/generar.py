@@ -480,6 +480,7 @@ AMPLIACION = [
     },
     {
         "id": "ejote",
+        "modelo3d": "ejote",
         "nombreComun": "Ejote",
         "nombreCientifico": "Phaseolus vulgaris L.",
         "esLeguminosa": True,
@@ -499,6 +500,7 @@ AMPLIACION = [
     },
     {
         "id": "cebada",
+        "modelo3d": "cebada",
         "nombreComun": "Cebada",
         "nombreCientifico": "Hordeum vulgare L.",
         "esLeguminosa": False,
@@ -514,6 +516,7 @@ AMPLIACION = [
     },
     {
         "id": "trigo",
+        "modelo3d": "trigo",
         "nombreComun": "Trigo",
         "nombreCientifico": "Triticum aestivum L.",
         "esLeguminosa": False,
@@ -530,6 +533,7 @@ AMPLIACION = [
     },
     {
         "id": "avena",
+        "modelo3d": "avena",
         "nombreComun": "Avena",
         "nombreCientifico": "Avena sativa L.",
         "esLeguminosa": False,
@@ -546,6 +550,7 @@ AMPLIACION = [
     },
     {
         "id": "maiz_dulce",
+        "modelo3d": "maiz_dulce",
         "nombreComun": "Maiz dulce (elote)",
         "nombreCientifico": "Zea mays L. var. saccharata",
         "esLeguminosa": False,

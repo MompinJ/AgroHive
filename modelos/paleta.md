@@ -12,7 +12,7 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 4. Por material, 3 tonos (oscuro, base, claro). Lo claro va en tapas y puntas; lo oscuro en bajos, nudos y arrugas.
 5. Los indices 0-15 son `PALETA_BASE` de `herramientas/voxelkit.py`, en el mismo orden.
 
-## Colores (152)
+## Colores (176)
 
 | Indice | Nombre | Hex | Uso |
 | --- | --- | --- | --- |
@@ -168,6 +168,30 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 | 149 | avena_espiga_dark | #b5a46a | Espiguilla de avena en sombra, raquis |
 | 150 | maiz_dulce_grano | #f2dc7a | Grano tierno de elote, amarillo palido |
 | 151 | maiz_dulce_grano_light | #faf0b8 | Grano tierno con luz, lechoso |
+| 152 | yuca_tallo | #8a7a62 | Tallo lenoso y estaca de yuca, gris pardo con nudos |
+| 153 | yuca_hoja_dark | #2d5c2f | Hoja palmeada de yuca en sombra |
+| 154 | yuca_hoja | #4a8a3e | Lobulo de la hoja palmeada de yuca |
+| 155 | yuca_hoja_light | #7cb35d | Lobulo con luz y brote de yuca |
+| 156 | yuca_peciolo | #a3443c | Peciolo largo y rojizo de la hoja de yuca |
+| 157 | yuca_raiz | #7a5232 | Cascara cafe de la raiz tuberosa de yuca |
+| 158 | yuca_pulpa | #f1ead2 | Pulpa blanca de la yuca partida |
+| 159 | cana_tallo_dark | #8c8a3a | Tallo de cana en sombra |
+| 160 | cana_tallo | #b8b54e | Tallo segmentado de cana, verde amarillento |
+| 161 | cana_tallo_light | #d9d77c | Tallo de cana con luz, cera |
+| 162 | cana_nudo | #7a4f5a | Nudo y anillo de la cana, morado opaco |
+| 163 | ajonjoli_hoja | #4e8c45 | Hoja lanceolada de ajonjoli |
+| 164 | ajonjoli_flor | #f0c6d4 | Flor tubular de ajonjoli, rosa palido |
+| 165 | ajonjoli_capsula | #7aa24a | Capsula oblonga y verde de ajonjoli |
+| 166 | ajonjoli_semilla | #efe4c4 | Semilla chica de ajonjoli, crema |
+| 167 | girasol_petalo | #f5b81c | Petalo (lengueta) del girasol, amarillo dorado |
+| 168 | girasol_disco_dark | #3e2614 | Disco del girasol en sombra, semillas maduras |
+| 169 | girasol_disco | #6b4421 | Disco cafe del capitulo del girasol |
+| 170 | girasol_hoja | #4f8a33 | Hoja ancha y aspera del girasol |
+| 171 | algodon_hoja | #3f7d3a | Hoja palmeada de algodon |
+| 172 | algodon_flor | #f3e6a8 | Flor de algodon, crema |
+| 173 | algodon_bellota | #6f9a42 | Bellota (capsula) verde del algodon |
+| 174 | algodon_fibra | #fbfbf6 | Fibra blanca del algodon abierto |
+| 175 | algodon_capsula_seca | #6e4c2c | Capsula seca y abierta del algodon, cafe |
 
 Los hex son elegidos a ojo para el estilo voxel (no medidos de fotos). Las manchas plateadas de la hoja de calabaza y el fruto verde de C. moschata se tomaron de descripciones varietales (no de una variedad concreta).
 
@@ -182,3 +206,5 @@ Los tonos de sandia (86-93), camote (94-101) y cacahuate (102-109) son cualitati
 Los tonos de soya (110-115), frijol caupi (116-121), haba (122-127), chicharo (128-132) y lenteja (133-136) son cualitativos, elegidos a ojo (15/11 madrugada, sesion de cultivos, ampliacion del catalogo): la flor reutiliza `flor_lila` (51) o `white` (9), la mancha de la flor de haba y el ojo del caupi `black` (10), y lo seco `hoja_seca*` y `podrido*`. No estan medidos de fotos.
 
 Los tonos de ejote (137-139), hoja de cereal (140-142), cebada (143-144), trigo (145-147), avena (148-149) y grano de maiz dulce (150-151) son cualitativos, elegidos a ojo (15/11 madrugada, sesion de cultivos): el ejote reutiliza la hoja del frijol (44-46) y el maiz dulce la planta del maiz; la paja seca usa `hoja_seca*` y `espiga*`. No estan medidos de fotos.
+
+Los tonos de yuca (152-158), cana (159-162), ajonjoli (163-166), girasol (167-170) y algodon (171-175) son cualitativos, elegidos a ojo (15/11, sesion de cultivos). La hoja de la cana reutiliza la del maiz (22-24). No estan medidos de fotos. Quedan 80 indices libres para los cultivos que faltan: reutilizar antes de agregar.

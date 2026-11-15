@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Modelos de la ampliación del catálogo, tanda B: ejote, cebada, trigo, avena y maíz dulce (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{ejote,cebada,trigo,avena,maiz_dulce}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; `con_tallo` acepta `giro`); `iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (24 colores más, índices 152 a 175, para la tanda C); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; pruebas `bloques.test.ts` e `iconos2d.test.ts` (18 cultivos); `docs/07` (tabla) y `docs/16` (M7).
+- **Cambio:** cada uno con 5 detallados (de 9 a 60 cubos), 5 bloques (de 15 a 21, trazado común) y 5 iconos 2D (sobre los 90, peor par nuevo de daltonismo 13.7 %), y su prefijo. Los tres cereales son macollos que se distinguen por la espiga (cebada con aristas que cabecea, trigo compacta erguida y dorada, avena en panícula abierta); el maíz dulce sigue verde en madurez para distinguirse del maíz de grano.
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` de Mafer, con OK de Mompin; en `generar.py` solo `modelo3d`.
+- **Pendiente:** tandas C a G; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 (madrugada) — Modelos de la ampliación del catálogo, tanda A: soya, frijol caupí, haba, chícharo y lenteja (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
 
 - **Archivos:** `modelos/cultivos/{soya,caupi,haba,chicharo,lenteja}.py` con sus 25 `.bbmodel` y visores; `modelos/cultivos/bloques/bloques.py` (25 bloques); `modelos/iconos2d/iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (42 colores, índices 110 a 151: los de esta tanda y los de la siguiente, para regenerar una sola vez); todos los `.bbmodel` regenerados (solo cambia la paleta incrustada); `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; `web/src/escena/ficha.ts` (nombres de los 10 cultivos de la tanda 1 del catálogo); pruebas `voxel.test.ts` (acepta cultivos con guion bajo, como `maiz_dulce`), `bloques.test.ts` e `iconos2d.test.ts` (13 cultivos); `modelos/iconos2d/iconos2d.py` separa la etapa por el último `_`; `docs/06`, `docs/07` (tabla de la ampliación), `docs/16` (M7).

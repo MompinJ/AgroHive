@@ -89,6 +89,11 @@ La sesión "catalogo" agregó cultivos a `datos/catalogos/` sin modelo; la sesi�
 | Haba | Erguida, la más alta de las leguminosas, tallo cuadrado, hoja glauca; flor blanca con mancha negra; vainas gruesas que se ennegrecen | 8, 12, 28, 57, 41 | 15 a 21 |
 | Chícharo | Trepa por un tutor de madera con zarcillos; flor blanca; vaina abierta con los chícharos en fila | 12, 12, 30, 54, 52 | 15 a 21 |
 | Lenteja | Chica, plumosa, muchos tallitos finos; madurez color paja con vainas cortas | 11, 12, 30, 55, 40 | 15 a 21 |
+| Ejote | Mata de frijol que se cosecha verde: vainas largas verde brillante colgando; semilla crema, no negra | 10, 11, 30, 60, 46 | 15 a 21 |
+| Cebada | Macollo; espiga con aristas largas que cabecea al madurar; paja pálida | 10, 10, 27, 54, 47 | 15 a 21 |
+| Trigo | Macollo; espiga compacta y erguida, dorada | 10, 11, 29, 52, 46 | 15 a 21 |
+| Avena | Macollo; panícula abierta con espiguillas colgantes; paja clara | 9, 10, 28, 50, 51 | 15 a 21 |
+| Maíz dulce | Planta de maíz más baja que sigue verde en madurez; elote tierno con totomoxtle verde y grano pálido; id con guion bajo (`maiz_dulce`) | 11, 10, 26, 57, 45 | 15 a 21 |
 
 ## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
 

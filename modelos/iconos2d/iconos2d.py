@@ -3,8 +3,9 @@
 Correr desde la raiz del repo:
     python modelos/iconos2d/iconos2d.py
 
-Genera 65 SVG (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo y lenteja
-x siembra, brote, crecimiento, madurez, podrida) y visor_iconos.html.
+Genera 90 SVG de 18 cultivos (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba,
+chicharo, lenteja, ejote, cebada, trigo, avena y maiz dulce x siembra, brote, crecimiento, madurez, podrida) y
+visor_iconos.html. El id puede llevar guion bajo (maiz_dulce_madurez.svg): la etapa se separa con rsplit.
 Cada icono es pixel art de 16 x 16 con fondo transparente: `shape-rendering="crispEdges"` y rectangulos por tramo
 de color, asi que a 32 px (x2) y 64 px (x4) conserva los pixeles. Usa SOLO colores de modelos/paleta.py (los mismos
 de los modelos 3D): ningun color nuevo. El color nunca va solo: cada icono tiene silueta propia y un <title> en
@@ -26,7 +27,8 @@ N = 16
 ETAPAS = ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')
 NOMBRES = {'maiz': 'Maíz', 'frijol': 'Frijol', 'calabaza': 'Calabaza', 'chile': 'Chile', 'sorgo': 'Sorgo',
            'sandia': 'Sandía', 'camote': 'Camote', 'cacahuate': 'Cacahuate', 'soya': 'Soya', 'caupi': 'Frijol caupí',
-           'haba': 'Haba', 'chicharo': 'Chícharo', 'lenteja': 'Lenteja'}
+           'haba': 'Haba', 'chicharo': 'Chícharo', 'lenteja': 'Lenteja', 'ejote': 'Ejote', 'cebada': 'Cebada',
+           'trigo': 'Trigo', 'avena': 'Avena', 'maiz_dulce': 'Maíz dulce'}
 ETIQUETAS = {'siembra': 'en siembra', 'brote': 'en brote', 'crecimiento': 'en crecimiento', 'madurez': 'en madurez',
              'podrida': 'podrida'}
 
@@ -795,6 +797,392 @@ def lenteja_podrida(c):
     c.r(4, 9, 6, 10, 'moho'); c.p(5, 8, 'moho_light'); c.r(9, 11, 11, 12, 'podrido'); c.p(10, 10, 'moho_light')
     diagonal(c, 7, 9, 1, -1, 3, 'hoja_seca_dark'); diagonal(c, 12, 9, 1, -1, 2, 'hoja_seca_dark')
     c.r(1, 12, 3, 12, 'moho_dark')
+
+
+# ---------------- ayudas de ejote, cereales y maiz dulce ----------------
+def linea(c, x0, y0, x1, y1, col):
+    """Linea de pixeles de (x0, y0) a (x1, y1), con extremos incluidos: hojas finas y tallos de los cereales."""
+    n = max(abs(x1 - x0), abs(y1 - y0))
+    for i in range(n + 1):
+        c.p(round(x0 + (x1 - x0) * i / n) if n else x0, round(y0 + (y1 - y0) * i / n) if n else y0, col)
+
+
+# ---------------- ejote ----------------
+EJOTE = {'l': 'frijol_hoja_light', 'h': 'frijol_hoja', 'd': 'frijol_hoja_dark', 'L': 'ejote_vaina_light',
+         'v': 'ejote_vaina', 'D': 'ejote_vaina_dark', 'w': 'white', 'c': 'calabaza_crema', 'f': 'flor_lila',
+         's': 'hoja_seca', 'S': 'hoja_seca_dark', 'q': 'hoja_seca_light', 'm': 'hoja_marchita', 'p': 'podrido',
+         'P': 'podrido_dark', 'o': 'moho', 'O': 'moho_light', 'k': 'moho_dark'}
+
+
+def ejote_siembra(c):
+    c.suelo('suelo_humedo')
+    mapa(c, 0, 6, (
+        '..........www...',
+        '.........wwwwc..',
+        '..www.....cc....',
+        '.wwwwc..........',
+        '..cc....www.....',
+        '.......wwwwc....',
+        '..www...cc..www.',
+    ), EJOTE)
+    c.r(1, 13, 4, 13, 'white'); c.r(12, 13, 14, 13, 'calabaza_crema')
+
+
+def ejote_brote(c):
+    c.suelo()
+    mapa(c, 0, 2, (
+        '......l.l.......',
+        '.......l........',
+        '.......D........',
+        '..lhh..D..hhl...',
+        '.lhhhhdDdhhhhl..',
+        '..dhh..D..hhd...',
+        '.......D........',
+        '.....wwDcw......',
+        '......cDc.......',
+        '.......D........',
+        '.......D........',
+    ), EJOTE)
+
+
+def ejote_crecimiento(c):
+    c.suelo()
+    mapa(c, 0, 2, (
+        '......lll.......',
+        '...ll.lhhl.ll...',
+        '..lhhlhhhhlhhl..',
+        '.lhhdhhwhhdhhhl.',
+        '.hhhhdhhhhhhwhh.',
+        '..dhhhhdhhdhhd..',
+        '...dd.LdDd.d....',
+        '......L.D.L.....',
+        '........D.v.....',
+        '........D.......',
+        '.......dDd......',
+    ), EJOTE)
+
+
+def ejote_madurez(c):
+    c.suelo()
+    mapa(c, 0, 0, (
+        '.....dhhd.......',
+        '..dhhhdlhhd.hd..',
+        '.dhhwhhdhhhhlhd.',
+        '.dhdhhhddhdhhwd.',
+        '..dLdhdddhdLdd..',
+        '..Lv.LvddLvLv...',
+        '..Lv.LvddLv.Lv..',
+        '..Lv.Lvdd.Lv.Lv.',
+        '..Lv..LvdLv..Lv.',
+        '...D..Ldd.D...D.',
+        '.......Dd.......',
+        '.......dd.......',
+        '.......dd.......',
+    ), EJOTE)
+
+
+def ejote_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 5, (
+        '..qs............',
+        '.sSsq.....S.....',
+        'sSssSs...S......',
+        '.p.Sp.sSS.......',
+        '.p..pSS.....O...',
+        '.P..p.S...pppoo.',
+        '.p..PS...pPpPpP.',
+        'kk..kS..kpPpPp..',
+    ), EJOTE)
+
+
+# ---------------- cereales: cebada, trigo y avena ----------------
+CEREAL = {'l': 'cereal_hoja_light', 'g': 'cereal_hoja', 'd': 'cereal_hoja_dark', 'e': 'cebada_espiga',
+          'a': 'cebada_arista', 't': 'trigo_espiga', 'T': 'trigo_espiga_dark', 'L': 'trigo_espiga_light',
+          'v': 'avena_espiga', 'V': 'avena_espiga_dark', 'q': 'hoja_seca_light', 's': 'hoja_seca',
+          'S': 'hoja_seca_dark', 'c': 'calabaza_crema', 'm': 'hoja_marchita', 'p': 'podrido', 'P': 'podrido_dark',
+          'o': 'moho', 'O': 'moho_light', 'k': 'moho_dark'}
+
+
+def cebada_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((0, 5), (6, 7), (10, 4), (2, 9), (10, 9)):
+        c.p(x, y, 'cebada_arista'); c.p(x + 1, y + 1, 'cebada_arista')
+        c.r(x + 2, y + 2, x + 3, y + 2, 'cebada_espiga'); c.r(x + 3, y + 3, x + 4, y + 3, 'cebada_espiga')
+        c.p(x + 4, y + 3, 'calabaza_crema')
+
+
+def cebada_brote(c):
+    c.suelo()
+    linea(c, 7, 12, 2, 3, 'cereal_hoja'); c.p(1, 3, 'cereal_hoja_light')
+    linea(c, 8, 12, 13, 3, 'cereal_hoja'); c.p(14, 3, 'cereal_hoja_light')
+    linea(c, 7, 11, 7, 2, 'cereal_hoja_light'); c.p(8, 12, 'cereal_hoja_dark')
+    linea(c, 7, 10, 4, 4, 'cereal_hoja_light'); linea(c, 8, 10, 11, 4, 'cereal_hoja_light')
+
+
+def cebada_crecimiento(c):
+    c.suelo()
+    for x1, y1 in ((0, 3), (3, 1), (12, 1), (15, 3)):
+        linea(c, 7 if x1 < 8 else 8, 12, x1, y1, 'cereal_hoja_light')
+    for x1, y1, xc in ((1, 6, 0), (14, 6, 15)):
+        linea(c, 7 if x1 < 8 else 8, 11, x1, y1, 'cereal_hoja'); c.p(xc, y1 + 1, 'cereal_hoja')
+    linea(c, 7, 12, 6, 0, 'cereal_hoja_light'); linea(c, 8, 12, 9, 0, 'cereal_hoja_light')
+    c.r(7, 9, 8, 12, 'cereal_hoja')
+
+
+def cebada_madurez(c):
+    c.suelo()
+    mapa(c, 0, 0, (
+        '...qq.....qqq...',
+        '..q..e...q...e..',
+        '..q..ee..q...ee.',
+        '..q..eea.q...eea',
+        '..q...ea.q...aea',
+        '..q..a.a.q...a.a',
+        '..q..a...q..a...',
+        '...q....sq......',
+        '...q...s.q.s....',
+        '....q.s..qs.....',
+        '.....q...qs.....',
+        '......q.q.......',
+        '.......qq.......',
+    ), CEREAL)
+
+
+def cebada_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 5, (
+        '................',
+        '..........ssSS..',
+        '.......ssSSppPO.',
+        '....sssSqqpPpO..',
+        '..sSSqq...SpkO..',
+        '.sSq.......ss...',
+        'ss...........ss.',
+        'S..........oOO..',
+    ), CEREAL)
+
+
+def trigo_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((0, 10), (4, 8), (8, 10), (12, 7), (11, 11), (2, 6)):
+        mapa(c, x, y, ('.Lt.', 'tLtt', '.tT.'), CEREAL)
+
+
+def trigo_brote(c):
+    c.suelo()
+    c.r(6, 5, 6, 12, 'cereal_hoja_dark'); c.p(5, 4, 'cereal_hoja_dark'); c.p(5, 3, 'cereal_hoja')
+    c.r(8, 2, 8, 12, 'cereal_hoja'); c.p(8, 1, 'cereal_hoja_light')
+    c.r(10, 5, 10, 12, 'cereal_hoja_dark'); c.p(11, 4, 'cereal_hoja_dark'); c.p(11, 3, 'cereal_hoja')
+    c.r(7, 8, 7, 12, 'cereal_hoja_dark'); c.r(9, 7, 9, 12, 'cereal_hoja_dark')
+
+
+def trigo_crecimiento(c):
+    c.suelo()
+    for x in (4, 6, 8, 10, 12):
+        top = {4: 4, 6: 1, 8: 0, 10: 2, 12: 5}[x]
+        c.r(x, top, x, 12, 'cereal_hoja_dark')
+        c.p(x, top, 'cereal_hoja')
+    for x in (5, 7, 9, 11):
+        c.r(x, 7, x, 12, 'cereal_hoja')
+    c.r(8, 2, 9, 4, 'cereal_hoja'); c.p(9, 2, 'cereal_hoja_light')
+    linea(c, 4, 7, 1, 4, 'cereal_hoja'); linea(c, 12, 8, 15, 5, 'cereal_hoja')
+
+
+def trigo_madurez(c):
+    c.suelo()
+    mapa(c, 0, 0, (
+        '......L..L......',
+        '..L..LtLLtL..L..',
+        '.LtL.tTttTt.LtL.',
+        '.tTt.TttTtt.tTt.',
+        '.ttT.tTttTt.tTt.',
+        '.tTt.ttTttT.ttT.',
+        '..t...t..t...t..',
+        '..t...t..t...t..',
+        '..Tt..t..t..tT..',
+        '...t..tT.t..t...',
+        '...Tt.t..tTt....',
+        '....t.tt.t.T....',
+        '.....ttTTtt.....',
+    ), CEREAL)
+
+
+def trigo_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 4, (
+        '..........SS....',
+        '.........S..S...',
+        '........S....T..',
+        '........S...pPp.',
+        '........S...pPpO',
+        '.......S.....pO.',
+        '..O....S.....P..',
+        '.pPpP.S.........',
+        'OpPpPSSs....k...',
+        '.k..sSSSs..kOk..',
+    ), CEREAL)
+
+
+def avena_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((0, 8), (6, 8), (12, 8), (3, 10), (9, 10), (0, 12), (6, 12), (12, 12)):
+        c.p(x, y, 'avena_espiga_dark'); c.r(x + 1, y, x + 3, y, 'avena_espiga')
+        if y < 12:
+            c.r(x + 1, y + 1, x + 2, y + 1, 'hoja_seca_light')
+
+
+def avena_brote(c):
+    c.suelo()
+    mapa(c, 0, 3, (
+        '......gg........',
+        '....gglgg.......',
+        '..ggl..g.lgg....',
+        '.gl....g...lgg..',
+        '.g.....g.....gg.',
+        '.d.....g......d.',
+        '.......g........',
+        '......dgd.......',
+        '.......gd.......',
+        '.......dd.......',
+    ), CEREAL)
+
+
+def avena_crecimiento(c):
+    c.suelo()
+    mapa(c, 0, 0, (
+        '.......l........',
+        '.......l........',
+        '...ggg.g.ggg....',
+        '.gglllgggllgg...',
+        'gl....gg.....lgg',
+        'g.....gg......lg',
+        'd...gglgg......d',
+        '..ggl.gg.lgg....',
+        '.gl...gg...lg...',
+        '.d....gg....d...',
+        '......gg........',
+        '.....dggd.......',
+        '......dd........',
+    ), CEREAL)
+
+
+def avena_madurez(c):
+    c.suelo()
+    mapa(c, 0, 0, (
+        '.......q........',
+        '.....q.q.q......',
+        '....q.vqv.q.....',
+        '...vq.VqV.qv....',
+        '..qVq..q..qVq...',
+        '.q..v..q..v..q..',
+        'v...V.qq..V...v.',
+        'V...q..q.q....V.',
+        '...v...q.v......',
+        '...V...q.V......',
+        '......sq........',
+        '.......qs.......',
+        '......sqq.......',
+    ), CEREAL)
+
+
+def avena_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 6, (
+        '................',
+        '...........s....',
+        '..O.p.P.....s...',
+        '.pkpPpOp.....S..',
+        'p.P.Pk.P.SSSSSS.',
+        '.p.p.pSSSSq.....',
+        '..k.SSq.........',
+    ), CEREAL)
+
+
+# ---------------- maiz dulce ----------------
+MAIZ = {'s': 'maiz_tallo', 'S': 'maiz_tallo_dark', 'T': 'maiz_tallo_light', 'h': 'maiz_hoja', 'd': 'maiz_hoja_dark',
+        'l': 'maiz_hoja_light', 't': 'totomoxtle', 'x': 'totomoxtle_dark', 'c': 'cabello', 'C': 'cabello_light',
+        'k': 'maiz_dulce_grano', 'K': 'maiz_dulce_grano_light', 'e': 'espiga', 'E': 'espiga_dark',
+        'q': 'hoja_seca_light', 'z': 'hoja_seca', 'Z': 'hoja_seca_dark', 'm': 'hoja_marchita', 'p': 'podrido',
+        'P': 'podrido_dark', 'o': 'moho', 'O': 'moho_light', 'w': 'moho_dark', 'r': 'calabaza_crema'}
+
+
+def maiz_dulce_siembra(c):
+    c.suelo('suelo_humedo')
+    mapa(c, 0, 5, (
+        '............Kk..',
+        '....Kk.....krkK.',
+        '.Kk.krK.....kk..',
+        'krKk.kk.........',
+        '.kk....Kk.......',
+        '......krkK......',
+        '.......kk....Kk.',
+        '...........krkK.',
+    ), MAIZ)
+
+
+def maiz_dulce_brote(c):
+    c.suelo()
+    mapa(c, 0, 4, (
+        '...lll......l...',
+        '..l...l....lh...',
+        '.l.....h..lh....',
+        '.d......hlh.....',
+        '.d.......T......',
+        '........sT......',
+        '........sT......',
+        '.......dsT......',
+        '........ST......',
+    ), MAIZ)
+
+
+def maiz_dulce_crecimiento(c):
+    c.suelo()
+    mapa(c, 0, 2, (
+        '.......ll.......',
+        '...lll.hl.lll...',
+        '.ll...lshl...ll.',
+        'l.....dsTd.....l',
+        'd....h.sT.h....d',
+        '...ll..sT..ll...',
+        '.ll...dsT.d..ll.',
+        'd......sT......d',
+        '......dsTd......',
+        '.......sT.......',
+        '.......ST.......',
+    ), MAIZ)
+
+
+def maiz_dulce_madurez(c):
+    c.suelo()
+    mapa(c, 0, 2, (
+        '.......e.e......',
+        '..c.C...E.......',
+        '.cCKK...sT.lll..',
+        '..KkKt..sTl...l.',
+        '..kKkxt.sTh....l',
+        '...xkkxtsT......',
+        '....txxtsT.hh...',
+        '.....tttsT...hh.',
+        '..dd..tdsT.....d',
+        '.d....d.sT......',
+        '.......dST......',
+    ), MAIZ)
+
+
+def maiz_dulce_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 3, (
+        '...........ZZ...',
+        '..........Z..z..',
+        '.........Z....q.',
+        '........ZZ....z.',
+        '........Z...m...',
+        '.......ZZ..m....',
+        '..O.o..Z........',
+        '.OpPpw.Z........',
+        'mpPkpPpZ...qzz..',
+        '.mpppPmZZ.zz....',
+    ), MAIZ)
 
 
 DIBUJOS = {f'{cultivo}_{etapa}': globals()[f'{cultivo}_{etapa}'] for cultivo in NOMBRES for etapa in ETAPAS}

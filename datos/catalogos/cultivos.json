@@ -3473,6 +3473,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "ejote"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 75 dias). EcoCrop da un ciclo de 50 a 270 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Misma especie que el frijol, cosechada en vaina verde: EcoCrop no separa el ejote y se usa la fila del frijol comun."
     },
     {
@@ -3717,6 +3720,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "cebada"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 90 a 240 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
@@ -3963,6 +3969,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "trigo"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 90 a 250 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa trigo de primavera (Spring Wheat): las filas de trigo de invierno de Tabla 12 suponen suelos helados o latencia invernal."
     },
     {
@@ -4208,6 +4217,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "avena"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 110 a 270 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Avena para grano: la avena forrajera de corte no tiene fila propia en FAO-56."
     },
     {
@@ -4452,6 +4464,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "maiz_dulce"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 80 dias). EcoCrop da un ciclo de 65 a 100 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Maiz dulce cosechado en fresco. El elote de maiz criollo que se cosecha tierno no es esta variedad: para el se usaria la fila del maiz de grano con otra fecha de cosecha, que FAO-56 no publica."
     },

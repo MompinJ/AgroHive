@@ -3,8 +3,10 @@
 Correr desde la raiz del repo:
     python modelos/cultivos/bloques/bloques.py
 
-Genera los 65 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo y
-lenteja x siembra, brote, crecimiento, madurez, podrida) y visor_bloques.html.
+Genera los 90 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo,
+lenteja, ejote, cebada, trigo, avena y maiz_dulce x siembra, brote, crecimiento, madurez, podrida) y visor_bloques.html.
+El nombre es <cultivo>_<etapa>_bloque y el cultivo puede llevar guion bajo (maiz_dulce): la etapa es el penultimo
+tramo, nunca el segundo.
 
 En la escena cada bloque (celda de 10 x 10 m) usa uno de estos modelos en lugar de la planta detallada, que se
 queda para la celda seleccionada. Es una representacion visual, NO a escala: el numero de plantas, su tamano y la
@@ -22,8 +24,8 @@ Trazado comun (para que una parcela de bloques pegados se lea continua): 3 surco
 por surco con esa misma separacion (x = -16/3, 0, 16/3), tambien continuas entre bloques. Los lomos ocupan x[-8, 8].
 
 Para agregar un cultivo/etapa: agregar su planta (1 o 2 cubos) a PLANTAS con las ayudas con_tallo/hoja/pieza/semilla
-(o, para rastreras y matas bajas, guia/mata/esqueje/al_lado/encima; para leguminosas, en_v/costado/vaina_costado/con_tutor) y la pareja
-a CULTIVOS_ETAPAS.
+(o, para rastreras y matas bajas, guia/mata/esqueje/al_lado/encima; para leguminosas, en_v/costado/vaina_costado/con_tutor;
+para cereales de grano chico, cereal; para el maiz dulce, elote) y la pareja a CULTIVOS_ETAPAS.
 """
 import math
 import os
@@ -142,11 +144,12 @@ def semilla(cols, tam):
     return planta
 
 
-def con_tallo(col, alto, grueso, resto, tilt=None):
-    """Planta de 2 cubos: un tallo (derecho, o acamado si tilt=(min, max)) y lo que dibuje resto() en su lugar."""
+def con_tallo(col, alto, grueso, resto, tilt=None, giro=0):
+    """Planta de 2 cubos: un tallo (derecho, o acamado si tilt=(min, max)) y lo que dibuje resto() en su lugar.
+    giro=90 orienta hojas y acame a lo largo del surco (x), con menos abanico, para no salir del lomo en z."""
     def planta(m, nombre, base, rng, escala):
         h = alto * escala
-        yaw = lado_hoja(rng)
+        yaw = r3(giro + rng.choice((0, 180)) + rng.uniform(-15, 15)) if giro else lado_hoja(rng)
         if tilt:
             caja_ajustada(m, nombre + '_tallo', base, (grueso, h, grueso), col, tilt=r3(rng.uniform(*tilt)), yaw=yaw)
         else:
@@ -353,6 +356,43 @@ def con_tutor(alto_tutor, cols, ancho, alto, tilt=None):
     return planta
 
 
+# ---------------- ejote, cebada, trigo, avena y maiz dulce (ampliacion, tanda 2, 15/11) ----------------
+def pinta_cara(m, e, cara, col):
+    """Otro color de la paleta en una sola cara del cubo (p. ej. el cabello en la punta del elote)."""
+    i = m.names.index(col)
+    e['faces'][cara]['uv'] = [i % 16, i // 16, i % 16 + 1, i // 16 + 1]
+
+
+def cereal(cols_tallo, alto, ancho, fondo, cols_esp, tam_esp, t_esp, tilt=(0, 6), punta_col=None):
+    """Cereal de grano chico (2 cubos): un macollo (los tallos juntos en 1 cubo) que se inclina a lo largo del surco
+    (x), hacia el centro del bloque, y en su punta una espiga u hoja (1 cubo) que sigue esa direccion con t_esp
+    grados de mas: casi 0 erguida (trigo), 15-30 cabeceando (avena), 100 o mas doblada (cebada madura).
+    tilt=(55, 75) acama la planta (podrida). La espiga se calcula desde la punta real del macollo.
+    punta_col: color de la cara 'up' de la espiga (aristas claras de la cebada)."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = 90 * hacia_centro(base, rng) + rng.uniform(-15, 15)
+        e = caja_ajustada(m, nombre + '_macollo', base, (ancho, alto * escala, fondo), rng.choice(cols_tallo),
+                          tilt=r3(rng.uniform(*tilt)), yaw=r3(yaw))
+        t, y = e.get('rotation', [0, 0, 0])[:2]
+        tip = punta(base, e['to'][1] - e['from'][1], t, y)
+        w, h, d = tam_esp
+        esp = caja_ajustada(m, nombre + '_espiga', tuple(r3(v) for v in tip), (w, h * escala, d), rng.choice(cols_esp),
+                            tilt=r3(t + rng.uniform(*t_esp)), yaw=r3(y))
+        if punta_col:
+            pinta_cara(m, esp, 'up', punta_col)
+    return planta
+
+
+def elote(cols, f, grueso, largo, t0, t1, cabello, giro=180):
+    """Elote pegado al tallo a la fraccion f, inclinado entre t0 y t1, con el cabello pintado en su cara de arriba
+    (la punta, porque va inclinado): 1 cubo."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        e = caja_ajustada(m, nombre + '_elote', a_lo_alto(base, f * h), (grueso, largo * escala, grueso),
+                          rng.choice(cols), tilt=r3(rng.uniform(t0, t1)), yaw=yaw + giro)
+        pinta_cara(m, e, 'up', cabello)
+    return resto
+
+
 PLANTAS = {
     # maiz
     'maiz_siembra': semilla(('grano', 'grano_dark', 'grano_light'), (1.0, 0.7, 1.2)),
@@ -489,10 +529,58 @@ PLANTAS = {
         nada)),
     'lenteja_podrida': mata(('podrido', 'hoja_seca_dark'), 1.4, 0.9, 1.4,
                             al_lado(('moho', 'podrido_dark'), (0.9, 0.4, 0.6), 1.1)),
+    # ejote (mata de frijol en domo verde; vainas largas verde brillante colgando; semilla blanca o crema)
+    'ejote_siembra': semilla(('white', 'calabaza_crema'), (0.8, 0.6, 1.1)),
+    'ejote_brote': con_tallo('frijol_hoja_dark', 1.6, 0.5, hoja_plana('frijol_hoja_light', 2.0, 1.2)),
+    'ejote_crecimiento': mata(('frijol_hoja', 'frijol_hoja_light'), 2.3, 2.2, 2.1, alterna(
+        encima('white', 0.5), encima('white', 0.5), nada)),
+    'ejote_madurez': mata(('frijol_hoja_dark', 'frijol_hoja_dark', 'frijol_hoja'), 2.6, 2.3, 2.3,
+                          vaina_costado(('ejote_vaina_light', 'ejote_vaina_light', 'ejote_vaina'), 0.05, 0.5, 2.7, 1.35, -8, 8)),
+    'ejote_podrida': mata(('hoja_seca_dark', 'podrido', 'hoja_marchita'), 2.3, 1.0, 2.0,
+                          al_lado(('moho', 'podrido_dark', 'ejote_vaina_dark'), (1.9, 0.45, 0.55), 1.9)),
+    # cebada (macollo de tallos finos; espiga con aristas largas que se dobla al madurar; paja palida)
+    'cebada_siembra': semilla(('cebada_espiga', 'espiga'), (0.6, 0.4, 0.9)),
+    'cebada_brote': cereal(('cereal_hoja_light',), 1.4, 0.8, 0.6, ('cereal_hoja_light',), (0.5, 1.4, 0.25), (28, 42)),
+    'cebada_crecimiento': cereal(('cereal_hoja', 'cereal_hoja_dark'), 2.8, 1.0, 0.8, ('cereal_hoja_light',),
+                                 (0.55, 1.8, 0.55), (0, 8)),
+    'cebada_madurez': cereal(('hoja_seca',), 3.9, 0.9, 0.7, ('cebada_espiga',), (0.65, 2.2, 0.65), (95, 115),
+                             punta_col='cebada_arista'),
+    'cebada_podrida': cereal(('hoja_seca_dark', 'podrido'), 3.6, 0.9, 0.7, ('podrido', 'moho'), (0.6, 2.0, 0.6), (15, 30),
+                             tilt=(55, 72), punta_col='moho_dark'),
+    # trigo (macollo; espiga compacta y erguida; madurez dorada intensa)
+    'trigo_siembra': semilla(('trigo_espiga_dark', 'trigo_espiga'), (0.6, 0.4, 0.9)),
+    'trigo_brote': cereal(('cereal_hoja',), 1.5, 0.8, 0.6, ('cereal_hoja_light',), (0.5, 1.3, 0.25), (22, 36)),
+    'trigo_crecimiento': cereal(('cereal_hoja', 'cereal_hoja_dark'), 2.8, 1.0, 0.8, ('cereal_hoja_light',),
+                                (0.8, 1.3, 0.8), (0, 5)),
+    'trigo_madurez': cereal(('trigo_espiga_dark',), 3.7, 0.9, 0.7, ('trigo_espiga', 'trigo_espiga_light'), (0.9, 1.7, 0.9),
+                            (0, 5), punta_col='trigo_espiga_light'),
+    'trigo_podrida': cereal(('hoja_seca_dark', 'podrido'), 3.6, 0.9, 0.7, ('trigo_espiga_dark', 'moho_dark'), (0.9, 1.6, 0.9),
+                            (5, 15), tilt=(55, 72), punta_col='moho'),
+    # avena (macollo; panicula abierta y ancha, que cabecea, con espiguillas colgantes; madurez paja clara)
+    'avena_siembra': semilla(('avena_espiga', 'avena_espiga_dark'), (0.5, 0.4, 1.0)),
+    'avena_brote': cereal(('cereal_hoja_light',), 1.6, 0.8, 0.6, ('cereal_hoja',), (0.55, 1.5, 0.25), (30, 45)),
+    'avena_crecimiento': cereal(('cereal_hoja', 'cereal_hoja_dark'), 3.0, 1.0, 0.8, ('cereal_hoja_light',),
+                                (0.45, 1.8, 1.4), (6, 14)),
+    'avena_madurez': cereal(('avena_espiga_dark',), 3.9, 0.9, 0.7, ('avena_espiga',), (0.5, 2.2, 2.0), (15, 28),
+                            punta_col='avena_espiga_dark'),
+    'avena_podrida': cereal(('hoja_seca_dark', 'podrido'), 3.8, 0.9, 0.7, ('avena_espiga_dark', 'moho'), (0.5, 2.0, 1.7),
+                            (10, 25), tilt=(55, 72), punta_col='moho_dark'),
+    # maiz dulce (planta de maiz mas baja que sigue VERDE en madurez; elote de totomoxtle verde con cabello)
+    'maiz_dulce_siembra': semilla(('maiz_dulce_grano', 'grano_light'), (0.9, 0.5, 1.1)),
+    'maiz_dulce_brote': con_tallo('maiz_tallo_light', 2.2, 0.6, hoja('maiz_hoja_light', 0.6, 1.0, 2.4, 40, 55), giro=90),
+    'maiz_dulce_crecimiento': con_tallo('maiz_tallo', 4.4, 0.8, hoja('maiz_hoja', 0.55, 1.5, 3.0, 48, 60), giro=90),
+    'maiz_dulce_madurez': con_tallo('maiz_tallo', 6.2, 0.8, alterna(
+        elote(('totomoxtle', 'totomoxtle', 'totomoxtle_dark'), 0.5, 1.2, 2.3, 20, 28, 'cabello'),
+        elote(('totomoxtle', 'totomoxtle', 'totomoxtle_dark'), 0.5, 1.2, 2.3, 20, 28, 'cabello_light'),
+        hoja('maiz_hoja', 0.62, 1.5, 3.4, 50, 62)), giro=90),
+    'maiz_dulce_podrida': con_tallo('hoja_seca_dark', 3.8, 0.8, alterna(
+        elote(('podrido', 'podrido_dark'), 0.0, 1.2, 2.0, 70, 82, 'moho'),
+        hoja('hoja_marchita', 0.3, 1.3, 2.6, 95, 110, 180)), tilt=(20, 32), giro=90),
 }
 
 CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate',
-                                    'soya', 'caupi', 'haba', 'chicharo', 'lenteja')
+                                    'soya', 'caupi', 'haba', 'chicharo', 'lenteja',
+                                    'ejote', 'cebada', 'trigo', 'avena', 'maiz_dulce')
                    for e in ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')]
 
 
