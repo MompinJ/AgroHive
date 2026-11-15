@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — MF10 (D10): cifras visibles y su fuente en «Método y fuentes» (Mafer)
+
+- **Archivos:** `web/evidencia/cifras-visibles-d10.md` (nuevo).
+- **Cambio:** revisión de solo lectura, sin tocar código: se recorrió la demo (Terreno, Cultivos con los 6 consejos de Esquilote, Escenarios, Comparación, dashboard, próxima temporada y Método) y se cruzó cada cifra visible con las fuentes que lista Método. Hallazgos principales: las cifras de SMAP y NDVI de los consejos y las plagas (GBIF y hospederos) no tienen fuente ni licencia en Método; la leyenda de Validación dice «calor» pero el motor no lo evalúa; Método promete pesos y exclusiones que la comparación no muestra; dos tarjetas con los mismos cultivos dan resultados distintos sin explicar por qué; el aviso del dashboard dice «no son datos reales» con clima real. Incluye 6 propuestas para Eduardo.
+- **Límites:** solo la parcela demo de Isla, en escritorio y con el plan por defecto; no se probó una parcela propia ni fuera de México (R9), ni móvil, ni todos los cultivos de «Ver más». Se hizo con Chrome sin pantalla y leyendo el texto del DOM.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — R12: rejillas de los 40 bloques ligeros vistos a distancia de escena (Mafer)
 
 - **Archivos:** `docs/capturas/rejilla-bloques-madurez.png`, `rejilla-bloques-crecimiento.png` y `rejilla-bloques-podrida.png`.
