@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException, Query
 from .. import cache, http, servicios
 from ..clientes import earthdata
 from ..modelos import Advertencia, ErrorDatos, Fuente, Periodo
-from ..modelos_smap import CeldaSmap, DiaSmap, PaseSmap, ProductoSmap, ProfundidadSmap, Smap
+from ..modelos_smap import CeldaSmap, DiaSmap, PaseSmap, ProductoSmap, ProfundidadSmap, Smap, clasificar_calidad
 
 router = APIRouter(prefix="/api", tags=["smap"])
 
@@ -26,7 +26,7 @@ def _meta() -> dict:
 def _dia_desde(fecha: date, datos: dict | None) -> DiaSmap:
     if datos is None:
         return DiaSmap(fecha=fecha, estado="NO_EVALUABLE", motivo="SMAP no tiene granulo para ese dia en la celda (hueco de orbita o aun no publicado)")
-    pases = [PaseSmap(**p) for p in datos["pases"]]
+    pases = [PaseSmap(**p, calidad=clasificar_calidad(p.get("banderaCalidad"))) for p in datos["pases"]]  # calidad se calcula al responder: la cache guarda solo lo leido
     validos = [p.humedadM3M3 for p in pases if p.humedadM3M3 is not None]
     if not validos:
         return DiaSmap(fecha=fecha, estado="NO_EVALUABLE", granulo=datos["granulo"], pases=pases,

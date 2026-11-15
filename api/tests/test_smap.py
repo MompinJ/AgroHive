@@ -179,3 +179,22 @@ def test_archivo_por_rangos_lee_bloques_alineados(monkeypatch):
     f.seek(960)
     assert f.read(10) == contenido[960:970]  # ya esta en cache
     assert pedidos == ["bytes=0-0", "bytes=0-999", "bytes=1000-1999"]
+
+
+@pytest.mark.parametrize("bandera,esperada", [
+    (0, "alta"), (8, "alta"),  # la guia de SMAP L3: 0 u 8 son recuperaciones de alta calidad
+    (1, "baja"), (7, "baja"), (9, "baja"), (15, "baja"),  # bit 0 en 1: calidad no recomendada (9 = el vecino con dato; 15 = relleno)
+    (2, "desconocida"), (4, "desconocida"), (10, "desconocida"), (None, "desconocida"),
+])
+def test_calidad_de_la_bandera_segun_el_contrato(bandera, esperada):
+    from app.modelos_smap import clasificar_calidad
+    assert clasificar_calidad(bandera) == esperada
+
+
+def test_pases_traen_calidad_y_la_respuesta_cumple_el_contrato(monkeypatch, validar):
+    simular(monkeypatch, {"granulo": "SMAP_L3_SM_P_X.h5", "celda": [140, 226], "centro": [-95.415, 17.937],
+                          "pases": [{"pase": "AM", "humedadM3M3": None, "banderaCalidad": 7}, {"pase": "PM", "humedadM3M3": 0.1754, "banderaCalidad": 8}]})
+    j = cliente.get(URL).json()
+    validar(j, "smap")
+    am, pm = j["dias"][0]["pases"]
+    assert (am["calidad"], am["banderaCalidad"]) == ("baja", 7) and (pm["calidad"], pm["banderaCalidad"]) == ("alta", 8)
