@@ -1,6 +1,7 @@
 // Generador minimo de PDF, sin dependencias: texto con las fuentes estandar de PDF (Helvetica y Helvetica-Bold, sin incrustar),
 // acentos del espanol (codificacion WinAnsi), parrafos con salto de linea, tablas, barras y paginacion con pie en cada pagina.
 // No comprime el contenido: los resumenes son cortos y asi el archivo es facil de revisar. Puro: devuelve los bytes.
+import { tt } from '../i18n/actual';
 
 export type Color = readonly [number, number, number];
 const A4 = { ancho: 595.28, alto: 841.89 };
@@ -214,7 +215,7 @@ export class DocumentoPdf {
       const ops = [...p.ops];
       ops.push(`${rgb([0.7, 0.75, 0.71])} RG 0.5 w ${MARGEN} ${PIE_Y + 12} m ${num(A4.ancho - MARGEN)} ${PIE_Y + 12} l S`);
       ops.push(`BT /F1 7.5 Tf ${rgb(GRIS)} rg 1 0 0 1 ${MARGEN} ${PIE_Y} Tm (${escapar(comoCadena(this.opciones.pie))}) Tj ET`);
-      const pagina = `Página ${i + 1} de ${total}`;
+      const pagina = tt('pdf.pagina', { n: i + 1, total });
       ops.push(`BT /F1 7.5 Tf ${rgb(GRIS)} rg 1 0 0 1 ${num(A4.ancho - MARGEN - anchoTexto(pagina, 7.5))} ${PIE_Y} Tm (${escapar(comoCadena(pagina))}) Tj ET`);
       return ops.join('\n');
     });

@@ -139,3 +139,24 @@ describe('B7, HUD de la escena en ingles', () => {
     expect(textos).toContain('High');
   });
 });
+
+import { construirResumenPdf } from '../pdf/resumenComparacion';
+import { armarDatosResumen } from '../lab/armarResumen';
+
+describe('B7, Comparacion en ingles (T5): resumen en PDF', () => {
+  it('el PDF en ingles no deja espanol (fuera de lo que redacta el motor, que llega ya en ingles)', () => {
+    const texto = enIngles(() => {
+      const r = { rotacionId: 'R1', estado: 'EVALUABLE', ranking: { posicion: 1 }, peorCaso: { escenario: 'seco' }, explicacion: { riesgos: ['Its worst year is the dry year (2009).'], beneficios: ['Water: even in the dry year (2009) the soil gave the crop 78.9% of the water it needed.'] },
+        porEscenario: Object.fromEntries((['seco', 'habitual', 'lluvioso'] as const).map((e) => [e, { anioReal: 2009, pilares: { deficitHidrico: { deficitTotalMm: 181 } } }])) } as never;
+      const plan = { rotacionId: 'R1', ciclos: [{ ciclo: 1, cultivo: 'maiz', siembra: '2016-06-20', temporada: 'PV' }], porCelda: null } as never;
+      const datos = armarDatosResumen({ ordenadas: [r], planes: [plan], catalogo: { cultivos: [] } as never, nombreRotacion: (id) => nombreRotacion(id, [{ rotacionId: id }]),
+        plagasDe: () => [{ ciclo: 1, plaga: nombrePlaga('Gusano cogollero'), cultivo: nombreCultivo('maiz'), bloques: 2 }], parcela: { nombre: 'Bajío, Guanajuato', areaHa: 2.8, celdas: [], tamanoCeldaM: 20 } as never,
+        esDemo: false, ponderacion: 'The winner is the one that suffers least in its worst year.', limites: [], hechos: [], elegida: 'R1', fecha: new Date('2026-11-15T12:00:00Z') });
+      const bytes = construirResumenPdf(datos);
+      return [...new TextDecoder('latin1').decode(bytes).matchAll(/\((.*?)\) Tj/g)].map((m) => m[1]!.replace(/\\\(/g, '(').replace(/\\\)/g, ')'));
+    });
+    expect(texto).toContain('AgroHive · Comparison summary');
+    expect(texto.join(' ')).toContain('Rank 1');
+    expect(sinEspanol(texto.filter((x) => !/Bajío|Guanajuato/.test(x)))).toEqual([]);
+  });
+});

@@ -3,11 +3,12 @@ import type { CatalogoCultivos, Escenario, Parcela, PlanSiembra, ResultadoRotaci
 import { diasCultivo } from '../planes';
 import { nombreCultivo, nombreEscenario } from './piezas';
 import type { Hecho } from './historial';
+import { tt } from '../i18n/actual';
 import type { DatosResumen, RotacionResumen } from '../pdf/resumenComparacion';
 
 const ESCENARIOS: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 const sumarDias = (f: string, d: number) => new Date(Date.parse(`${f}T00:00:00Z`) + d * 86400000).toISOString().slice(0, 10);
-const bloques = (n: number) => `${n} ${n === 1 ? 'bloque' : 'bloques'}`;
+const bloques = (n: number) => (n === 1 ? tt('cultivos.bloque') : tt('cultivos.bloques'));
 
 export interface EntradaResumen {
   /** Rotaciones en el orden del ranking del motor. */
@@ -40,7 +41,7 @@ export function armarDatosResumen(e: EntradaResumen): DatosResumen {
         return {
           ciclo: c.ciclo, cultivo: nombreCultivo(c.cultivo), siembra: c.siembra, dias,
           cosecha: dias ? sumarDias(c.siembra, dias) : null,
-          plagas: plagas.filter((p) => p.ciclo === c.ciclo).map((p) => `${p.plaga}: ${bloques(p.bloques)} de ${p.cultivo.toLowerCase()} sin insecticida`),
+          plagas: plagas.filter((p) => p.ciclo === c.ciclo).map((p) => tt('pdf.plagaCiclo', { plaga: p.plaga, n: p.bloques, bloques: bloques(p.bloques), cultivo: p.cultivo.toLowerCase() })),
         };
       }),
       anios: ESCENARIOS.map((s) => ({ nombre: nombreEscenario[s]!, anioReal: r.porEscenario[s].anioReal ?? null, mm: r.porEscenario[s].pilares.deficitHidrico.deficitTotalMm ?? null })),
@@ -51,7 +52,7 @@ export function armarDatosResumen(e: EntradaResumen): DatosResumen {
   });
   return {
     fecha: e.fecha,
-    parcela: { nombre: e.parcela.nombre ?? 'Tu parcela', areaHa: e.parcela.areaHa ?? null, celdas: e.parcela.celdas.length, tamanoCeldaM: e.parcela.tamanoCeldaM, esDemo: e.esDemo },
+    parcela: { nombre: e.parcela.nombre ?? tt('pdf.tuParcelaNombre'), areaHa: e.parcela.areaHa ?? null, celdas: e.parcela.celdas.length, tamanoCeldaM: e.parcela.tamanoCeldaM, esDemo: e.esDemo },
     ponderacion: e.ponderacion, rotaciones, elegida: e.elegida, limites: e.limites, hechos: e.hechos,
   };
 }

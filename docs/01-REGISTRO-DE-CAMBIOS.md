@@ -2,6 +2,11 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, pantalla 4: Comparación en inglés (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/ui/lab/PanelComparacion.tsx`, `PlanElegido.tsx`, `armarResumen.ts`, `web/src/ui/pdf/resumenComparacion.ts` y `pdf.ts` (pie de página), `web/src/ui/i18n/textos/comparacion.ts` (nuevo), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx` (incluye el texto del PDF).
+- **Cambio:** el ranking ("The most robust", "Its worst year", barras Dry / Normal / Wet, debilidades y fortalezas que ya redacta el motor), el plan elegido, la próxima temporada y el resumen en PDF salen en inglés (toma T5). El PDF ya no busca los años por su nombre en español: usa el nombre del idioma activo. `TarjetasRotacion.tsx` no se tocó (la app no la usa).
+
 ### 2026-11-15 — B7, pantalla 3: Laboratorio en inglés, parte de la interfaz (IA de Mompin, sesión "ingles")
 
 - **Archivos:** `web/src/ui/tutorial/Tutorial.tsx` (usa el tutorial en inglés `TUTORIALES_EN`, mismos pasos, resaltes e iconos), `web/src/ui/lab/` (`Laboratorio.tsx`, `BarraHerramientas.tsx`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `PanelIzq.tsx`, `EventoPantalla.tsx`, `eventos.ts`, `Mascota.tsx`, `consejos.ts`, `historial.ts`, `PanelHistorial.tsx`, `piezas.tsx`, `conveniencia.ts`), `web/src/ui/ControlTiempo.tsx`, `web/src/ui/planes.ts` (nombre de la rotación y mensajes de ciclos encimados), `web/src/ui/i18n/textos/tutorial.ts` y `laboratorio.ts` (nuevos), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.

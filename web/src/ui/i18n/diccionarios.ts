@@ -3,6 +3,7 @@ import { terrenoEn, terrenoEs } from './textos/terreno';
 import { tutorialEn, tutorialEs } from './textos/tutorial';
 import { laboratorioEn, laboratorioEs } from './textos/laboratorio';
 import { escenaEn, escenaEs } from './textos/escena';
+import { comparacionEn, comparacionEs } from './textos/comparacion';
 
 const es = {
   'idioma.etiqueta': 'Idioma',
@@ -42,6 +43,7 @@ const es = {
   ...tutorialEs,
   ...laboratorioEs,
   ...escenaEs,
+  ...comparacionEs,
 } as const;
 
 export type ClaveTexto = keyof typeof es;
@@ -84,6 +86,7 @@ const en: Record<ClaveTexto, string> = {
   ...tutorialEn,
   ...laboratorioEn,
   ...escenaEn,
+  ...comparacionEn,
 };
 
 export const diccionarios: Record<Idioma, Record<ClaveTexto, string>> = { es, en };
