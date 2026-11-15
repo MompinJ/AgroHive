@@ -28,6 +28,10 @@ FUENTES_GGCMI = {
     6: "ChinCropPhen", 7: "IndiaAgStat", 8: "Brazil CONAB", 9: "Australia ABARES",
 }
 
+URL_ISIMIP_CROPS = "https://github.com/ISI-MIP/isimip-protocol-3/blob/main/definitions/crop.yaml"
+BEA_SUPUESTO = (f"SUPUESTO: GGCMI bea_rf es 'Beans' segun el protocolo ISIMIP3 ({URL_ISIMIP_CROPS}), sin especie: la fuente "
+                "no distingue Phaseolus vulgaris de otras leguminosas llamadas frijol.")
+
 # Cultivo de AgroHive -> (codigo de GGCMI, nombre del cultivo en GGCMI, equivalencia SUPUESTO o None).
 # Una equivalencia es un calendario de otro producto de la misma especie: se declara en la respuesta y en
 # datos/calendario/LEEME.md, y la entrada sigue EXPLORATORIO. Lo que no esta aqui no tiene fuente mundial.
@@ -47,16 +51,31 @@ GGCMI = {
                  "verde de la misma especie (Pisum sativum). Se toma el mismo dia de siembra."),
     "maiz_dulce": ("mai", "maize", "SUPUESTO: GGCMI no separa el maiz dulce; se toma el dia de siembra del maiz de grano "
                    "(misma especie, Zea mays)."),
+    # [DECIDIDO] Mompin, 15/11: bea se toma como frijol y ejote, declarado. El protocolo ISIMIP3 lo define como "Beans".
+    "frijol": ("bea", "beans", BEA_SUPUESTO),
+    "ejote": ("bea", "beans", BEA_SUPUESTO + " El ejote es frijol (Phaseolus vulgaris) cosechado en verde; se toma el mismo dia de siembra."),
 }
 
 # Motivo de NO_EVALUABLE para los cultivos del catalogo sin fuente mundial con licencia abierta.
-MOTIVO_BEA = ("GGCMI fase 3 publica bea_rf, pero ni el NetCDF ni la ficha de Zenodo (doi:10.5281/zenodo.5062513) dicen "
-              "que bea sea frijol. Queda NO_EVALUABLE.")
-MOTIVO_SIN_FUENTE_MUNDIAL = ("Ninguna fuente mundial con licencia abierta cargada (GGCMI fase 3) publica calendario de "
-                             "siembra para este cultivo. Queda NO_EVALUABLE.")
+MOTIVO_SIN_FUENTE_MUNDIAL = ("Ninguna fuente mundial con licencia abierta cargada (GGCMI fase 3, MIRCA2000) publica calendario de "
+                             "siembra para este cultivo; MIRCA2000 lo agrupa en 'Others annual', sin separar. Queda NO_EVALUABLE.")
+
+# MIRCA2000 v1.1 (CC BY 4.0): calendario de la clase agregada Pulses para leguminosas que GGCMI no trae, y presencia
+# (area cosechada de temporal en la celda, hacia 2000) para los cultivos que GGCMI mapea de forma directa.
+CITA_MIRCA = ("Portmann, Siebert y Döll 2010, Global Biogeochemical Cycles 24, GB1011, doi:10.1029/2008GB003435. "
+              "MIRCA2000 v1.1, CC BY 4.0, doi:10.5281/zenodo.7422506")
+URL_MIRCA = "https://doi.org/10.5281/zenodo.7422506"
+CONSULTADO_MIRCA = "2026-11-15"
+MESES = ("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre")
+PULSES_SUPUESTO = {
+    "caupi": "frijol caupi (Vigna unguiculata)",
+    "haba": "haba (Vicia faba)",
+    "lenteja": "lenteja (Lens culinaris)",
+}
+MIRCA_PRESENCIA = {"maiz": "maize", "trigo": "wheat", "cebada": "barley", "sorgo": "sorghum", "soya": "soybeans",
+                   "girasol": "sunflower", "papa": "potatoes", "yuca": "cassava", "cana": "sugar_cane",
+                   "cacahuate": "groundnuts", "algodon": "cotton"}
 MOTIVOS_SIN_GGCMI = {
-    "frijol": MOTIVO_BEA,
-    "ejote": MOTIVO_BEA + " El ejote es la misma especie (Phaseolus vulgaris) y queda igual.",
     "betabel": ("GGCMI fase 3 trae remolacha azucarera (sgb), no betabel de mesa: mismo genero y especie, pero otro "
                 "producto y otro ciclo. No se usa como equivalencia. Queda NO_EVALUABLE."),
     "avena": "GGCMI fase 3 no trae avena. " + MOTIVO_SIN_FUENTE_MUNDIAL,
@@ -110,6 +129,13 @@ def _siap() -> tuple[np.ndarray, tuple, dict]:
 def _ggcmi() -> dict:
     """Extracto de `datos/calendario/extraer_ggcmi.py`: enteros sin signo, 0 = sin dato (unos 10 MB en memoria)."""
     with np.load(config.CALENDARIO_DIR / "ggcmi-rf.npz") as z:
+        return {k: z[k] for k in z.files}
+
+
+@lru_cache(maxsize=1)
+def _mirca() -> dict:
+    """Extracto de `datos/calendario/extraer_mirca.py` (unos 20 MB en memoria)."""
+    with np.load(config.CALENDARIO_DIR / "mirca-rf.npz") as z:
         return {k: z[k] for k in z.files}
 
 
@@ -296,30 +322,103 @@ def _entradas_ggcmi(cultivo: str, celda: tuple[int, int, float, float]) -> list[
     return [con_dato, _entrada_no(cultivo, otra, motivo_otra, fuente)] if temporada == "PV" else [_entrada_no(cultivo, otra, motivo_otra, fuente), con_dato]
 
 
+def _fuente_mirca(lon: float, lat: float, nota: str) -> dict:
+    return {"nombre": "MIRCA2000 v1.1, calendario por celda de 30 minutos, temporal", "url": URL_MIRCA, "cita": CITA_MIRCA,
+            "coordenada": [lon, lat], "unidades": "mes de inicio del periodo de crecimiento; hectareas cosechadas",
+            "consultado": CONSULTADO_MIRCA, "resolucion": "0.5 grados", "nota": nota}
+
+
+def _entradas_pulses(cultivo: str, celda: tuple[int, int, float, float]) -> list[dict]:
+    """PV y OI desde los subcultivos de Pulses de MIRCA. La ventana es el mes de inicio entero. Equivalencia SUPUESTO."""
+    i, j, lat_c, lon_c = celda
+    m = _mirca()
+    subs = [(int(m["pulses_inicio"][k, i, j]), int(m["pulses_fin"][k, i, j]), float(m["pulses_area"][k, i, j]))
+            for k in range(m["pulses_inicio"].shape[0]) if m["pulses_inicio"][k, i, j]]
+    equivalencia = (f"SUPUESTO: MIRCA2000 no separa {PULSES_SUPUESTO[cultivo]}; se toma el calendario de la clase agregada "
+                    "Pulses (todas las leguminosas de grano de la celda), que puede corresponder a otra leguminosa.")
+    base = f"Celda {lat_c:.2f} N, {lon_c:.2f} E. {equivalencia}"
+    salida = []
+    for t in TEMPORADAS:
+        de_t = sorted((s for s in subs if (s[0] in PV) == (t == "PV")), key=lambda s: -s[2])
+        if not de_t:
+            motivo = base + (" MIRCA2000 no registra Pulses de temporal en esta celda." if not subs
+                             else f" MIRCA2000 no registra un periodo de Pulses de temporal que empiece en {t} en esta celda.")
+            salida.append(_entrada_no(cultivo, t, motivo, _fuente_mirca(lon_c, lat_c, motivo)))
+            continue
+        ini, fin, ha = de_t[0]
+        nota = (base + f" Periodo de crecimiento de Pulses de temporal: de {MESES[ini - 1]} a {MESES[fin - 1]}, {ha:,.0f} ha cosechadas "
+                "hacia el ano 2000. La ventana es el mes de inicio entero; MIRCA da meses, no dias.")
+        if len(de_t) > 1:
+            nota += " Otros periodos en esta temporada: " + "; ".join(f"{MESES[a - 1]} a {MESES[b - 1]} ({h:,.0f} ha)" for a, b, h in de_t[1:]) + "."
+        fuente = _fuente_mirca(lon_c, lat_c, nota)
+        salida.append({
+            "cultivo": cultivo, "temporada": t, "regimen": "temporal", "estado": "EXPLORATORIO",
+            "motivo": "MIRCA2000 da el mes de inicio del periodo de crecimiento de la clase Pulses. " + equivalencia,
+            "ventana": {"estado": "EVALUABLE", "desdeMes": ini, "hastaMes": ini, "fuente": fuente},
+            "presencia": {"estado": "sin_dato", "fuente": fuente,
+                          "nota": f"MIRCA2000 registra Pulses en la celda, no {PULSES_SUPUESTO[cultivo]} en particular."},
+        })
+    return salida
+
+
+def _presencia_mirca(entradas: list, celda: tuple[int, int, float, float]) -> list:
+    """Presencia de MIRCA2000 (area cosechada de temporal en la celda, hacia 2000) donde la base trae sin_dato."""
+    i, j, lat_c, lon_c = celda
+    m = _mirca()
+    salida = []
+    for e in entradas:
+        clase = MIRCA_PRESENCIA.get(e["cultivo"])
+        if not clase or e["presencia"]["estado"] != "sin_dato":
+            salida.append(e)
+            continue
+        ha = float(m[f"area_{clase}"][i, j])
+        fuente = _fuente_mirca(lon_c, lat_c, f"Clase {clase}, temporal. Area cosechada en la celda de 0.5 grados, hacia el ano 2000; "
+                                             "no separa temporada.")
+        fuente["unidades"] = "hectareas cosechadas (temporal)"
+        if ha > 0:
+            presencia = {"estado": "registrado", "fuente": fuente,
+                         "nota": f"MIRCA2000 registra {ha:,.0f} ha cosechadas de {clase} de temporal en la celda, hacia el ano 2000."}
+        else:
+            presencia = {"estado": "no_registrado", "fuente": fuente,
+                         "nota": (f"MIRCA2000 no registra {clase} de temporal en la celda hacia el ano 2000: se muestra, pero no se "
+                                  "recomienda sin validar en el lugar.")}
+        salida.append({**e, "presencia": presencia})
+    return salida
+
+
 def _base_mundial(celda: tuple[int, int, float, float]) -> tuple[list, list]:
     """Entradas PV y OI de todos los cultivos del catalogo, en su orden, y las advertencias de la base."""
     entradas = []
     for cultivo in _ids_catalogo():
         if cultivo in GGCMI:
             entradas.extend(_entradas_ggcmi(cultivo, celda))
+        elif cultivo in PULSES_SUPUESTO:
+            entradas.extend(_entradas_pulses(cultivo, celda))
         else:
             motivo = MOTIVOS_SIN_GGCMI.get(cultivo, MOTIVO_SIN_FUENTE_MUNDIAL)
             entradas.extend(_entrada_no(cultivo, t, motivo, _fuente_sin_dato(motivo)) for t in TEMPORADAS)
+    entradas = _presencia_mirca(entradas, celda)
     con = sorted({e["cultivo"] for e in entradas if e["ventana"]["estado"] == "EVALUABLE"})
     sin = [c for c in _ids_catalogo() if c not in con]
-    equivalencias = sorted(c for c, (_, _, eq) in GGCMI.items() if eq and c in con)
+    equivalencias = sorted({c for c, (_, _, eq) in GGCMI.items() if eq and c in con} | {c for c in PULSES_SUPUESTO if c in con})
     adv = [
         {"codigo": "CALENDARIO_BASE_MUNDIAL", "severidad": "info",
-         "mensaje": (f"Base mundial GGCMI fase 3 (celda de 0.5 grados): {len(con)} de {len(_ids_catalogo())} cultivos con dia de siembra. "
-                     f"Sin fuente mundial: {', '.join(sin)}.")},
+         "mensaje": (f"Base mundial GGCMI fase 3 y MIRCA2000 (celda de 0.5 grados): {len(con)} de {len(_ids_catalogo())} cultivos con "
+                     f"ventana en esta celda. Sin ventana: {', '.join(sin)}.")},
         {"codigo": "GGCMI_UN_SOLO_CICLO", "severidad": "aviso",
          "mensaje": "GGCMI fase 3 publica un solo ciclo de temporal por celda y cultivo. La otra temporada no tiene dato."},
-        {"codigo": "GGCMI_NO_ES_CENSO", "severidad": "aviso",
-         "mensaje": "La presencia queda sin_dato: el calendario extrapola fuera de las zonas cultivadas y no dice si ahi se siembra."},
+        {"codigo": "PRESENCIA_MIRCA2000", "severidad": "aviso",
+         "mensaje": ("Fuera de Mexico la presencia sale de MIRCA2000 (area cosechada de temporal en la celda de 0.5 grados, hacia el "
+                     "ano 2000) para los cultivos que tienen clase propia; en Mexico la reemplaza SIAP. GGCMI extrapola fuera de las zonas "
+                     "cultivadas, asi que su dia de siembra no dice si ahi se siembra.")},
     ]
+    if {"frijol", "ejote"} & set(con):
+        adv.append({"codigo": "FRIJOL_SIN_ESPECIE", "severidad": "aviso",
+                    "mensaje": ("El calendario de frijol y ejote sale de GGCMI bea_rf ('Beans' en el protocolo ISIMIP3): la fuente no "
+                                "distingue la especie. Es una equivalencia SUPUESTO (decidida por el equipo el 15/11).")})
     if equivalencias:
-        adv.append({"codigo": "GGCMI_EQUIVALENCIA_SUPUESTO", "severidad": "aviso",
-                    "mensaje": f"Calendario tomado de otro producto de la misma especie (SUPUESTO): {', '.join(equivalencias)}. Ver el motivo de cada entrada."})
+        adv.append({"codigo": "CALENDARIO_EQUIVALENCIA_SUPUESTO", "severidad": "aviso",
+                    "mensaje": f"Calendario tomado de otro producto o de una clase agregada (SUPUESTO): {', '.join(equivalencias)}. Ver el motivo de cada entrada."})
     return entradas, adv
 
 
@@ -371,8 +470,8 @@ def armar(lon: float, lat: float) -> dict:
     elif lugar["iso"] == "MX":
         adv.insert(0, {"codigo": "SIAP_SIN_MUNICIPIO", "severidad": "aviso",
                        "mensaje": ("El punto no cae en un municipio con pareja en SIAP (zona urbana sin agricultura registrada, "
-                                   "nombre ambiguo o fuera de la rejilla): la presencia queda sin_dato. Ver sinPareja en "
-                                   "datos/calendario/siap-mexico.json.")})
+                                   "nombre ambiguo o fuera de la rejilla): no se aplica la presencia de SIAP; queda la de MIRCA2000 "
+                                   "donde el cultivo tiene clase propia, o sin_dato. Ver sinPareja en datos/calendario/siap-mexico.json.")})
     adv.append({"codigo": "PAIS_NATURAL_EARTH_110M", "severidad": "info",
                 "mensaje": "El pais sale de Natural Earth 1:110m. En la costa el limite es grueso."})
     adv.extend(_aviso_cercania(lugar))

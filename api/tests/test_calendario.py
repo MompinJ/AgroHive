@@ -11,8 +11,10 @@ from app.main import app
 cliente = TestClient(app)
 DOI = "10.5281/zenodo.5062513"
 CON_GGCMI = {"maiz", "sorgo", "soya", "cacahuate", "trigo", "cebada", "papa", "yuca", "cana", "girasol", "algodon",
-             "chicharo", "maiz_dulce"}
-EQUIVALENCIAS = {"chicharo", "maiz_dulce"}
+             "chicharo", "maiz_dulce", "frijol", "ejote"}
+PULSES = {"caupi", "haba", "lenteja"}  # MIRCA2000, clase agregada Pulses
+EQUIVALENCIAS = {"chicharo", "maiz_dulce", "frijol", "ejote"} | PULSES
+MIRCA_PRESENCIA = {"maiz", "trigo", "cebada", "sorgo", "soya", "girasol", "papa", "yuca", "cana", "cacahuate", "algodon"}
 
 
 def _entrada(cuerpo, cultivo, temporada):
@@ -52,29 +54,46 @@ def test_base_mundial_en_varios_continentes(nombre, validar):
     claves = [(e["cultivo"], e["temporada"]) for e in cuerpo["entradas"]]
     assert len(claves) == len(set(claves)) == 2 * len(_ids_catalogo())
     con = _con_ventana(cuerpo)
-    assert set(con) == CON_GGCMI
+    assert set(con) == CON_GGCMI | PULSES  # todos los puntos de prueba tienen Pulses de temporal en MIRCA2000
     for cultivo, e in con.items():
         assert e["estado"] == "EXPLORATORIO"
-        assert DOI in e["ventana"]["fuente"]["cita"]
-        assert e["presencia"]["estado"] == ("sin_dato" if iso != "MX" or nombre == "mexico-cdmx" else e["presencia"]["estado"])
+        assert (DOI if cultivo in CON_GGCMI else "10.5281/zenodo.7422506") in e["ventana"]["fuente"]["cita"]
         assert ("SUPUESTO" in e["motivo"]) == (cultivo in EQUIVALENCIAS)
-        # Un solo ciclo por celda: la otra temporada no tiene dato.
-        otra = _entrada(cuerpo, cultivo, "OI" if e["temporada"] == "PV" else "PV")
-        assert otra["estado"] == "NO_EVALUABLE" and otra["ventana"]["estado"] == "NO_EVALUABLE"
+        if cultivo in CON_GGCMI:  # un solo ciclo por celda: la otra temporada no tiene dato
+            otra = _entrada(cuerpo, cultivo, "OI" if e["temporada"] == "PV" else "PV")
+            assert otra["estado"] == "NO_EVALUABLE" and otra["ventana"]["estado"] == "NO_EVALUABLE"
+        else:  # MIRCA da meses: la ventana es el mes de inicio entero
+            assert e["ventana"]["desdeMes"] == e["ventana"]["hastaMes"] and "desdeDia" not in e["ventana"]
+        # Presencia: SIAP en municipios de Mexico, MIRCA2000 en el resto para las clases propias, nunca para equivalencias.
+        if cultivo in EQUIVALENCIAS:
+            assert e["presencia"]["estado"] == "sin_dato" or "SIAP" in e["presencia"]["fuente"]["nombre"]
+        elif iso != "MX" or nombre == "mexico-cdmx":
+            assert e["presencia"]["estado"] in ("registrado", "no_registrado") and "MIRCA2000" in e["presencia"]["fuente"]["nombre"]
     maiz = _entrada(cuerpo, "maiz", temporada)
     assert (maiz["ventana"]["desdeMes"], maiz["ventana"]["desdeDia"]) == (mes, dia)
     assert maiz["ventana"]["desdeMes"] == maiz["ventana"]["hastaMes"] and maiz["ventana"]["desdeDia"] == maiz["ventana"]["hastaDia"]
     assert "Madurez" in maiz["ventana"]["fuente"]["nota"]
     # Sin fuente mundial: NO_EVALUABLE con motivo, nunca el calendario de otro cultivo.
-    for cultivo in set(_ids_catalogo()) - CON_GGCMI:
+    for cultivo in set(_ids_catalogo()) - CON_GGCMI - PULSES:
         for t in ("PV", "OI"):
             e = _entrada(cuerpo, cultivo, t)
             assert e["estado"] == "NO_EVALUABLE" and e["motivo"]
-    assert all("bea" in e["motivo"] for e in cuerpo["entradas"] if e["cultivo"] in ("frijol", "ejote"))
+    assert all("bea_rf" in e["motivo"] and "Beans" in e["motivo"] for e in cuerpo["entradas"] if e["cultivo"] in ("frijol", "ejote") and e["estado"] != "NO_EVALUABLE")
     assert any(a["codigo"] == "CALENDARIO_BASE_MUNDIAL" for a in cuerpo["advertencias"])
 
 
-def test_iowa_conserva_el_dia_de_ggcmi_y_no_inventa_frijol(validar):
+def test_india_lenteja_de_rabi_y_maiz_registrado_en_mirca(validar):
+    cuerpo = cliente.get("/api/calendario", params={"lat": 23.2, "lon": 77.4}).json()
+    validar(cuerpo, "calendario-local#")
+    lenteja = _entrada(cuerpo, "lenteja", "OI")
+    assert lenteja["ventana"]["estado"] == "EVALUABLE" and lenteja["ventana"]["desdeMes"] == 10
+    assert "Pulses" in lenteja["motivo"] and "SUPUESTO" in lenteja["motivo"]
+    assert _entrada(cuerpo, "lenteja", "PV")["estado"] == "NO_EVALUABLE"
+    maiz = _entrada(cuerpo, "maiz", "PV")
+    assert maiz["presencia"]["estado"] == "registrado" and "ha cosechadas" in maiz["presencia"]["nota"]
+
+
+def test_iowa_conserva_el_dia_de_ggcmi_y_declara_el_frijol(validar):
     cuerpo = cliente.get("/api/calendario", params={"lat": 42.0, "lon": -93.5}).json()
     validar(cuerpo, "calendario-local#")
     pv = _entrada(cuerpo, "maiz", "PV")
@@ -82,7 +101,10 @@ def test_iowa_conserva_el_dia_de_ggcmi_y_no_inventa_frijol(validar):
     assert "Duracion" in pv["ventana"]["fuente"]["nota"]
     soya = _entrada(cuerpo, "soya", "PV")
     assert soya["ventana"]["estado"] == "EVALUABLE" and "(soy_rf)" in soya["ventana"]["fuente"]["nombre"]
-    assert all(e["estado"] == "NO_EVALUABLE" for e in cuerpo["entradas"] if e["cultivo"] in ("frijol", "calabaza", "chile"))
+    assert all(e["estado"] == "NO_EVALUABLE" for e in cuerpo["entradas"] if e["cultivo"] in ("calabaza", "chile"))
+    frijol = next(e for e in cuerpo["entradas"] if e["cultivo"] == "frijol" and e["ventana"]["estado"] == "EVALUABLE")
+    assert "(bea_rf)" in frijol["ventana"]["fuente"]["nombre"] and "no distingue" in frijol["motivo"]
+    assert _entrada(cuerpo, "maiz", "PV")["presencia"]["estado"] == "registrado"
 
 
 def test_isla_suma_siap_e_inifap_encima_de_la_base_mundial(validar):

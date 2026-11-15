@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Calendario MUNDIAL, parte 3: MIRCA2000 y frijol desde GGCMI `bea`; 18 de 40 cultivos con ventana (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
+
+- **Decisiones:** `[DECIDIDO]` Mompin, 15/11, registradas en `docs/13`: (1) frijol y ejote se toman de GGCMI `bea` ("Beans" en el protocolo ISIMIP3, sin especie) como equivalencia `SUPUESTO`, con la advertencia `FRIJOL_SIN_ESPECIE`; (2) FAO Crop Calendar entra con la licencia más restrictiva (CC BY-NC-SA), en carpeta separada (parte 4).
+- **Archivos:** `api/app/calendario.py`, `api/tests/test_calendario.py`, `datos/calendario/extraer_mirca.py` (nuevo), `mirca-rf.npz` (1.3 MB) y `mirca-rf.json` (nuevos), `datos/calendario/LEEME.md`, `docs/04`, `docs/13`, `datos/catalogos/README.md`, `api/README.md`, `AgroVault/Compartido/APIs.md` y `Resumen.md`.
+- **Cambio:** ventana para frijol y ejote (GGCMI `bea_rf`) y para caupí, haba y lenteja (mes de inicio de la clase Pulses de temporal de MIRCA2000; hasta 3 subcultivos por celda, uno por temporada; `SUPUESTO`). Fuera de México la presencia de 11 cultivos sale del área cosechada de temporal de MIRCA2000 en la celda (`registrado` / `no_registrado`); en México sigue mandando SIAP. Advertencias nuevas: `PRESENCIA_MIRCA2000`, `FRIJOL_SIN_ESPECIE`, `CALENDARIO_EQUIVALENCIA_SUPUESTO` (reemplaza a `GGCMI_EQUIVALENCIA_SUPUESTO`); se quita `GGCMI_NO_ES_CENSO`.
+- **Fuente / evidencia:** MIRCA2000 v1.1, doi:10.5281/zenodo.7422506, CC BY 4.0 (Portmann, Siebert y Döll 2010, GBC 24, GB1011). SAGE (Sacks et al. 2010) descartada: no publica licencia. Prueba nueva: centro de la India, lenteja OI (octubre, rabi) y maíz registrado en MIRCA. Conteo: 18/40 con ventana en los 8 puntos de prueba (México, EE. UU., Brasil, Kenia, India, España, Australia).
+
 ### 2026-11-15 — Calendario MUNDIAL, parte 2: presencia de SIAP en todos los municipios de México (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
 
 - **Archivos:** `api/app/calendario.py`, `api/tests/test_calendario.py`, `datos/calendario/extraer_siap_mexico.py` (nuevo), `siap-mexico.npz` y `siap-mexico.json` (nuevos, 165 KB y 790 KB), `datos/calendario/LEEME.md`; se quita `datos/calendario/isla-recuadro.json` (Isla se reconoce por su clave INEGI); `docs/04`, `docs/13`, `datos/catalogos/README.md`, `api/README.md`, `AgroVault/Compartido/APIs.md`.
