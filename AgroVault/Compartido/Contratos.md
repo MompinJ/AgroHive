@@ -2,12 +2,12 @@
 tipo: contratos
 audiencia: todas
 actualizado: 2026-11-14
-fuente: contratos/*.schema.json (v0.13.0, A1.1)
+fuente: contratos/*.schema.json (v0.14.0, A1.1)
 ---
 
 # Contratos
 
-La fuente de verdad son los JSON Schema de `contratos/` (versión `0.13.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
+La fuente de verdad son los JSON Schema de `contratos/` (versión `0.14.0`, actividad A1.1). Esta nota **resume y enlaza; no redefine campos**. Si algo aquí no coincide con un `*.schema.json`, manda el schema. Los ejemplos de `docs/08` quedaron como antecedente: varios nombres cambiaron (ver abajo).
 
 - Detalle y reglas: `contratos/README.md`
 - Ejemplos válidos (ficticios, parcela demo de Isla, 2 ha, coordenadas ilustrativas): `contratos/ejemplos/<contrato>.ejemplo.json`
@@ -51,6 +51,7 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.13.0`, acti
 - `plan-siembra.asignacionClima` es siempre `temporada_tipica` (A2.8 decidido). La fecha de siembra la elige el usuario y cada ciclo explica su `porQue`.
 - Un cultivo que se muestra pero no se recomienda en el lugar va en `resultado-rotacion.cultivosNoRecomendados` (motivo y fuente) y en la celda como `noRecomendadoEnLugar` con `fuenteMotivo`; la rotación queda `EXPLORATORIO`.
 - En `parcela`, `i = 0` es la fila más al sur y crece hacia el norte; `j = 0` es la columna más al oeste y crece hacia el este.
+- Desde 0.14.0 la celda puede traer `forma` (`completa`, `NE`, `NO`, `SE`, `SO`): cómo se dibuja una celda de borde (medio cuadrado cortado por la diagonal, nombrado por la esquina del ángulo recto). Es solo dibujo: en el motor pesa `fraccionDentro`. `tamanoCeldaM` puede ser el que pide el usuario (subido si rebasa 1600 celdas, con la advertencia `TAMANO_CELDA_AJUSTADO`).
 - Si un pilar es `NO_EVALUABLE` o `ERROR_DATOS`, todos sus indicadores van en `null` y el motivo es obligatorio (0.9.0).
 
 Lo que el schema no puede comprobar (ciclos en orden cronológico, polígono cerrado, cultivos del plan presentes en el catálogo) lo valida el motor.

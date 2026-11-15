@@ -615,7 +615,7 @@ export interface Parcela {
   areaHa: number;
   centroide: LonLat;
   /**
-   * Lado de la celda cuadrada en metros locales (adaptativo para respetar el tope de celdas).
+   * Lado de la celda cuadrada en metros locales: automatico o el que pide el usuario, subido si hace falta para respetar el tope de celdas (advertencia TAMANO_CELDA_AJUSTADO).
    */
   tamanoCeldaM: number;
   /**
@@ -665,6 +665,10 @@ export interface Celda {
    * Fraccion del area de la celda dentro del poligono (0 a 1). Las celdas de borde pueden ser parciales.
    */
   fraccionDentro?: number;
+  /**
+   * Forma de DIBUJO de la celda (0.14.0, opcional): completa o medio cuadrado cortado por la diagonal, nombrado por la esquina del angulo recto, que es la mitad que se conserva (SO: mitad suroeste, diagonal de la esquina NO a la SE; SE: mitad sureste; NE: mitad noreste; NO: mitad noroeste). Solo dice como se dibuja el borde: lo que pesa en el motor es fraccionDentro. Sin el campo, la celda se dibuja completa. La calcula el generador de cuadricula (web/src/geo/forma-celda.ts).
+   */
+  forma?: "completa" | "NE" | "NO" | "SE" | "SO";
   /**
    * Elevacion en metros. null si no se obtuvo (se muestra el hueco, no se rellena).
    */
