@@ -12,10 +12,10 @@ import type { PasoLab } from './Laboratorio';
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 export const nombresPilares: Record<string, string> = { deficitHidrico: 'Déficit hídrico', excesoHidrico: 'Exceso de agua', compatibilidadCiclo: 'Compatibilidad de fechas', proteccionSuelo: 'Protección del suelo', riesgoCalor: 'Riesgo por calor', aporteIndirecto: 'Aporte indirecto' };
 
-export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdasListas, errorCeldas, onFecha, claveTiempo }: {
+export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdasListas, errorCeldas, onFecha, claveTiempo, retener = false }: {
   estado: LaboratorioEstado; onAvanzar: (d: PasoLab) => void;
   fecha: string; rango: RangoTiempo | null; serie: EstadoSerieBalance; celdasListas: boolean; errorCeldas: string;
-  onFecha: (f: string) => void; claveTiempo: string;
+  onFecha: (f: string) => void; claveTiempo: string; retener?: boolean;
 }) {
   const { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario } = estado.seleccion;
   const plan = estado.planes.find((p) => p.rotacionId === rotacion) ?? estado.planes[0];
@@ -68,7 +68,7 @@ export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdas
     </aside>
 
     <section className="lab-dock" aria-label="Recorrido en el tiempo">
-      <ControlTiempo key={claveTiempo} fecha={fecha} rango={rango} listo={!!estado.calculo && celdasListas} fallo={!!errorCeldas} onFecha={onFecha} />
+      <ControlTiempo key={claveTiempo} fecha={fecha} rango={rango} listo={!!estado.calculo && celdasListas} fallo={!!errorCeldas} retener={retener} onFecha={onFecha} />
       {serie.error && <Aviso tipo="error" accion={{ texto: 'Reintentar', onClick: serie.reintentar }}>No se pudo cargar el recorrido en el tiempo.</Aviso>}
     </section>
   </>;

@@ -2,15 +2,17 @@
 .esquilote { position: fixed; z-index: 60; font-family: var(--font-ui, system-ui, sans-serif); }
 .esquilote-tarjeta {
   left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; align-items: flex-end; gap: 12px;
-  width: min(560px, calc(100% - 24px)); padding: 14px 18px 14px 12px; border-radius: 22px;
+  width: min(580px, calc(100% - 24px)); padding: 14px 18px 14px 12px; border-radius: 22px;
   background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); border: 1px solid var(--color-border, #cfd8cf);
   box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 18px 48px -12px rgb(17 34 26 / 35%);
 }
-.esquilote-dibujo { flex-shrink: 0; overflow: visible; }
+.esquilote-dibujo { flex-shrink: 0; display: inline-block; transform-origin: 50% 100%; }
+.esquilote-dibujo img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.esquilote-tarjeta .esquilote-dibujo { align-self: flex-end; margin-bottom: -4px; }
 .esquilote-cuerpo { display: grid; gap: 6px; min-width: 0; }
 .esquilote-nombre { margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-muted, #5a6b5e); }
 .esquilote-cuerpo h2 { margin: 0; font-size: 1.1rem; line-height: 1.25; }
-.esquilote-cuerpo p:not(.esquilote-nombre) { margin: 0; font-size: .92rem; line-height: 1.45; }
+.esquilote-cuerpo p:not(.esquilote-nombre) { margin: 0; font-size: .92rem; line-height: 1.5; min-height: 3em; cursor: default; }
 .esquilote-acciones { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 6px; }
 .esquilote-acciones button, .esquilote-boton { font: inherit; cursor: pointer; }
 .esquilote-acciones button { min-height: 40px; padding: 6px 16px; border-radius: 999px; font-size: .88rem; font-weight: 600; }
@@ -22,20 +24,28 @@
   background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); border: 1px solid var(--color-border, #cfd8cf);
   box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 10px 28px -10px rgb(17 34 26 / 35%); font-size: .85rem; font-weight: 700;
 }
-.esquilote-boton .esquilote-dibujo { height: 66px; }
-.esquilote-resalte { outline: 3px solid #f4c631; outline-offset: 3px; border-radius: 12px; }
-@media (prefers-reduced-motion: no-preference) {
-  .esquilote-saluda { animation: esquilote-rebote 1.6s ease-in-out 2; transform-origin: 50% 100%; }
-  .esquilote-resalte { animation: esquilote-latido 1.4s ease-in-out infinite; }
+
+/* Iconos de las herramientas dentro del texto: los mismos de la barra. */
+.icono-en-texto { display: inline-flex; vertical-align: -.32em; align-items: center; justify-content: center; width: 1.7em; height: 1.7em; margin-inline: .12em; border-radius: 8px; background: var(--color-forest-100, #e3efe6); color: var(--color-forest-700, #1f4d38); }
+.icono-en-texto svg { width: 1.15em; height: 1.15em; }
+
+/* Anillo que encierra e ilumina el componente del que habla Esquilote; el resto de la pantalla se atenua. */
+.esquilote-anillo {
+  position: fixed; z-index: 58; pointer-events: none; border: 3px solid #f4c631; border-radius: 16px;
+  box-shadow: 0 0 0 9999px rgb(12 24 16 / 42%), 0 0 22px 6px rgb(244 198 49 / 55%), inset 0 0 14px rgb(244 198 49 / 35%);
+  transition: left .25s ease, top .25s ease, width .25s ease, height .25s ease;
 }
+@media (prefers-reduced-motion: no-preference) {
+  .esquilote-anillo { animation: esquilote-latido 1.5s ease-in-out infinite; }
+  .esquilote-saluda { animation: esquilote-rebote 1.6s ease-in-out 2; }
+  /* Habla: se achata y se estira como si abriera y cerrara la boca, al ritmo del texto. */
+  .esquilote-habla { animation: esquilote-hablar .34s ease-in-out infinite alternate; }
+}
+@media (prefers-reduced-motion: reduce) { .esquilote-anillo { transition: none; } }
 @keyframes esquilote-rebote { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px) rotate(-3deg); } 70% { transform: translateY(0) rotate(2deg); } }
-@keyframes esquilote-latido { 0%, 100% { outline-color: #f4c631; } 50% { outline-color: rgb(244 198 49 / 35%); } }
+@keyframes esquilote-hablar { from { transform: scale(1, 1) rotate(-1.5deg); } to { transform: scale(1.04, .94) rotate(1.5deg); } }
+@keyframes esquilote-latido { 0%, 100% { border-color: #f4c631; box-shadow: 0 0 0 9999px rgb(12 24 16 / 42%), 0 0 22px 6px rgb(244 198 49 / 55%), inset 0 0 14px rgb(244 198 49 / 35%); } 50% { border-color: #ffe27a; box-shadow: 0 0 0 9999px rgb(12 24 16 / 42%), 0 0 34px 12px rgb(244 198 49 / 80%), inset 0 0 22px rgb(244 198 49 / 55%); } }
+.esquilote-guia .mascota { display: none; }
 @media (max-width: 520px) {
   .esquilote-tarjeta { gap: 6px; padding: 10px 12px 10px 6px; }
-  .esquilote-tarjeta .esquilote-dibujo { width: 54px; height: 81px; }
 }
-
-.esquilote-retrato { object-fit: contain; }
-.esquilote-tarjeta .esquilote-retrato { align-self: flex-end; margin-bottom: -4px; }
-.esquilote-boton .esquilote-retrato { height: 56px; width: 56px; }
-.esquilote-guia .mascota { display: none; }

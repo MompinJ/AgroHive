@@ -18,15 +18,16 @@ export const TUTORIALES: Record<IdTutorial, readonly PasoTutorial[]> = {
     { titulo: 'Tamaño de celda', texto: 'Tu terreno se parte en celdas, hasta 200. Cerca del selector te digo cuánto equivale cada una en el terreno real.', destacar: '.dibujo-escala' },
   ],
   cultivos: [
-    { titulo: 'Aquí siembras', texto: 'Elige un cultivo y pinta las celdas con la brocha (B). La goma (X) las devuelve al cultivo general.', destacar: '.barra-herr' },
-    { titulo: 'Cuidado con las plagas', texto: 'Si hay registros de plagas cerca, verás insectos en las celdas atacadas. Usa el insecticida (I) o "Proteger los bloques en riesgo". Aquí el insecticida no cuesta ni cambia el rendimiento: el simulador no lo modela.', destacar: '.lab-plagas' },
+    { titulo: 'Aquí siembras', texto: 'Elige un cultivo y pinta las celdas con la brocha {brocha} (B). La goma {goma} (X) las devuelve al cultivo general.', destacar: '.barra-herr' },
+    { titulo: 'Mueve y corrige', texto: 'La mano {mover} (M) mueve la vista. Si te equivocas, deshaz {deshacer} o rehaz {rehacer} tus cambios.', destacar: '.barra-herr' },
+    { titulo: 'Cuidado con las plagas', texto: 'Si hay registros de plagas cerca, verás insectos {bicho} en las celdas atacadas. Usa el insecticida {insecticida} (I) o "Proteger los bloques en riesgo". Aquí el insecticida no cuesta ni cambia el rendimiento: el simulador no lo modela.', destacar: '.lab-plagas' },
     { titulo: 'La zona de plagas', texto: 'Los insectos solo aparecen alrededor de la celda que elijas. Cambia el radio o toca otra celda para mover la zona.', destacar: '.lab-zona-plaga' },
     { titulo: 'Si se traba', texto: 'Abajo a la derecha puedes bajar el nivel de gráficos. Cambia la resolución, las aves, el viento y cuántos insectos se dibujan; no cambia tus resultados.', destacar: '.escena-hud-graficos' },
     { titulo: 'Sigue con los escenarios', texto: 'Cuando termines de sembrar, avanza al siguiente paso.' },
   ],
   escenarios: [
     { titulo: 'Años de prueba', texto: 'Mira cómo le iría a tu plan en un año seco, uno habitual y uno lluvioso, con clima real de NASA.', destacar: '.lab-escenarios' },
-    { titulo: 'Mueve el tiempo', texto: 'Al mover la fecha cambian las plantas y el cielo: se pone gris cuando llueve, y cálido o fresco según la época del año de tu parcela. En el último día del ciclo verás la cosecha; si quedan plagas sin insecticida, a la mitad del ciclo verás una ilustración de plaga.' },
+    { titulo: 'Semana a semana', texto: 'Cada paso de la línea de tiempo {calendario} es una semana. Al moverla cambian las plantas y el cielo: se pone gris cuando llueve, y cálido o fresco según la época del año de tu parcela. En el último día del ciclo verás la cosecha; si quedan plagas sin insecticida, a la mitad del ciclo verás una ilustración de plaga.' },
     { titulo: 'Sigue con la comparación', texto: 'Cuando hayas visto tus años de prueba, avanza para comparar tus rotaciones.' },
   ],
   comparacion: [

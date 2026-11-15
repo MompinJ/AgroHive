@@ -8,7 +8,7 @@ import { useSerieBalance } from '../useSerieBalance';
 import { rangoDelCiclo } from '../tiempo';
 import { aplicarAcomodando, colorCultivo, cultivoDeCelda, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
 import { EventoPantalla } from './EventoPantalla';
-import { eventosAlAvanzar, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
+import { eventosAlAvanzar, PAUSA_EXTRA_EVENTO_MS, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
 import type { PincelEscena } from '../../escena/pincel';
 import { PanelCultivos } from './PanelCultivos';
 import { BarraHerramientas, type Herramienta } from './BarraHerramientas';
@@ -155,6 +155,14 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     const r = [...riesgos].sort((a, b) => b.sinProteger.length - a.sinProteger.length)[0];
     return r ? { plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length } : null;
   }, [riesgos]);
+  // Con un aviso o una animacion en pantalla, la reproduccion espera; y unos segundos mas despues, para que se alcance a leer.
+  const [retener, setRetener] = useState(false);
+  useEffect(() => {
+    if (cola.length > 0) { setRetener(true); return; }
+    if (!retener) return;
+    const t = window.setTimeout(() => setRetener(false), PAUSA_EXTRA_EVENTO_MS);
+    return () => window.clearTimeout(t);
+  }, [cola.length, retener]);
   const datosEvento = useRef({ cosecha: cultivosDelCiclo, plaga: plagaActiva });
   datosEvento.current = { cosecha: cultivosDelCiclo, plaga: plagaActiva };
   const fechaPrevia = useRef<{ clave: string; fecha: string } | null>(null);
@@ -230,7 +238,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     {paso === 'cultivos' && datos && <BarraHerramientas herramienta={herramienta} setHerramienta={setHerramienta} tamano={tamano} setTamano={setTamano}
       onSembrarTodo={sembrarTodo} sembrarTexto={`Sembrar ${nombresCultivos[cultivoActivo ?? ''] ?? cultivoActivo ?? ''} en toda la parcela`}
       onRociarTodo={presentes.length ? rociarTodo : null} deshacer={estado.deshacer} rehacer={estado.rehacer} puedeDeshacer={estado.puedeDeshacer} puedeRehacer={estado.puedeRehacer} />}
-    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} />}
+    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} retener={retener} />}
     {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} plagasDe={(id) => {
       const p = estado.planes.find((x) => x.rotacionId === id);
       return p ? riesgosDelPlan(p, celdasZona, presentes, proteccion).map((r) => ({ ciclo: r.ciclo, plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })) : [];
