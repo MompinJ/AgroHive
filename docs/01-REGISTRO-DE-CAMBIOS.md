@@ -543,6 +543,17 @@ Decisiones afectadas:
 
 ## Historial
 
+### 2026-11-14 (noche) — Contratos 0.13.0: `ee-uu` (CDL y SSURGO, A4.12)
+
+- **Archivos:** nuevo `contratos/ee-uu.schema.json`, ejemplos (`ee-uu.ejemplo.json` para CDL y `ee-uu.ssurgo.ejemplo.json`), 7 casos inválidos, tipos, README; `13`; vault; `api/tests/test_regional.py` (sin el `skip`, y sin el `import pytest` que quedaba sin uso); `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.13.0, en un commit aparte).
+- **Cambio y motivo:** la propuesta de Eduardo (`api/propuestas-contrato/ee-uu.schema.json`) entra con sus `$defs` `cdl` y `ssurgo` sin cambios de forma, más:
+  1. Una raíz `oneOf` con las dos formas, para que el ejemplo y los casos inválidos de `npm test` validen algo: la propuesta solo traía `$defs` y aceptaba cualquier documento.
+  2. Las reglas de comun: si el documento es `NO_EVALUABLE` o `ERROR_DATOS`, el motivo es obligatorio; un año de CDL sin dato lleva motivo y `codigo`, `categoria` y `cultivoCatalogo` en `null`; un `agua` no evaluable lleva `tawMm` en `null`.
+  3. Títulos en los subesquemas, para los tipos.
+  Las 13 pruebas de `test_regional.py` pasan con la salida real (respuestas guardadas de CropScape y SDA). La propuesta queda en `api/` hasta que Eduardo acepte borrarla.
+- **Fuente / evidencia:** propuesta de Eduardo; `npm test` 101/101; `pytest tests/test_regional.py` 13 de 13.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Contratos 0.12.2: fuente principal de NDVI en Microsoft Planetary Computer
 
 - **Archivos:** `contratos/ndvi.schema.json` (descripciones), ejemplo e inválidos de NDVI, tipos, README; fila de MODIS en `04`; `docs/README-borrador.md`; vault; `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.12.2, en un commit aparte).

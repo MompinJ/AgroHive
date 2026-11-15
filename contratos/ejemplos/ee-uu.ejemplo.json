@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "versionContrato": "0.13.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar el contrato (un punto ilustrativo en EE. UU.)."
+  },
+  "estado": "EXPLORATORIO",
+  "motivo": "Valores ficticios de ejemplo.",
+  "aviso": "Clasificacion satelital de un pixel de 30 m: no es la parcela del usuario ni entra al ranking. (Ejemplo ficticio.)",
+  "coordenada": [
+    -93.4,
+    42.05
+  ],
+  "anioDesde": 2022,
+  "anioHasta": 2024,
+  "fuente": {
+    "nombre": "EJEMPLO - estructura de USDA NASS Cropland Data Layer (CropScape), valores ficticios",
+    "nota": "No proviene de ninguna consulta real."
+  },
+  "limites": [
+    "PIXEL_NO_ES_LA_PARCELA",
+    "CLASIFICACION_CON_ERROR",
+    "SOLO_EE_UU",
+    "NO_ENTRA_AL_RANKING"
+  ],
+  "anios": [
+    {
+      "anio": 2022,
+      "codigo": 1,
+      "categoria": "Corn",
+      "cultivoCatalogo": null,
+      "estado": "EXPLORATORIO",
+      "motivo": "Valor ficticio de ejemplo."
+    },
+    {
+      "anio": 2023,
+      "codigo": 5,
+      "categoria": "Soybeans",
+      "cultivoCatalogo": null,
+      "estado": "EXPLORATORIO",
+      "motivo": "Valor ficticio de ejemplo."
+    },
+    {
+      "anio": 2024,
+      "codigo": null,
+      "categoria": null,
+      "cultivoCatalogo": null,
+      "estado": "ERROR_DATOS",
+      "motivo": "EJEMPLO: la fuente no respondio ese anio; no se rellena."
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar el contrato (un punto ilustrativo en EE. UU.).",
+      "severidad": "critico"
+    }
+  ]
+}
