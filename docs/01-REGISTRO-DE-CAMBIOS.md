@@ -9,6 +9,12 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **A0.5:** guías oficiales de entrega/evaluación de 2026, publicadas el 13/11, leídas directamente en Chrome el 14/11; búsqueda daba 502. Reglas y fuentes centralizadas en docs/02; V-03/V-04 documentadas, A0.5 hecha como verificación de reglas. El cumplimiento, revisión humana de permisos, inglés, demo del equipo y envío siguen pendientes en A5.7/A5.9; horario de juicio local V-01 no confirmado. No se reactiva video/presentación en el carril de Balam.
 - **Evidencia:** build genera ambos HTML; `medir.html?auto=0` en preview de producción devuelve 200 y muestra el control de inicio. Fuentes enlazadas en docs/02: guías 2026, FAQ, respuestas GO Team #1849/#1916 y guía NASA de medios. No se marca el proyecto como conforme ni enviado.
 
+### 2026-11-14 — Los 20 bloques de Mafer en la escena, medidos (Mompin)
+
+- **Archivos:** `web/src/escena/voxel/bloque.ts` (tope de 24; el provisional queda solo de respaldo), `medir/medir.tsx` (caso nuevo: mezcla de los 4 cultivos con `plan.porCelda`); `docs/06`.
+- **Medido (518 celdas, SwiftShader):** maíz en madurez, 191 416 triángulos y 6.7 cuadros/s; antes 449 380 y 3.2 con el detallado. Mezcla de 4 cultivos: 8 draw calls y 6.5 cuadros/s; reposo 0. Los 20 bloques revisados uno por uno y en la escena; la celda elegida sigue resaltando.
+- **Observación para Mompin:** con bloques bajos, las placas de estado dominan la vista de lejos.
+
 ### 2026-11-14 — A5.2 y A5.3: tiempo compartido, móvil y accesibilidad (balam)
 
 - **Archivos:** `web/src/ui/ControlTiempo.tsx`, `tiempo.ts`, `useSerieBalance.ts`, `tiempo.css` y pruebas; `LaboratorioConectado`, `DashboardBalance`, `InicioHeader`, `system.css`, `terreno.css`; `docs/06`, `docs/14`, vistas del tablero y `web/README.md`.
@@ -26,6 +32,14 @@ Cambio y motivo:
 Fuente / evidencia:
 Decisiones afectadas:
 ```
+
+### 2026-11-14 (noche) — Iconos 2D de los cultivos, encargo #198 punto 1 (Mafer)
+
+- **Archivos:** `modelos/iconos2d/` (`iconos2d.py`, 20 `<cultivo>_<etapa>.svg`, `visor_iconos.html`, `README.md`); `web/src/escena/pruebas/iconos2d.test.ts`.
+- **Cambio:** un sprite plano de 16 × 16 por cultivo y etapa (maíz, frijol, calabaza, chile × 5), con la paleta compartida y sin colores nuevos, legible a 32 y 64 px (escalas enteras). Cada SVG lleva `<title>` en español, sin scripts ni imágenes externas.
+- **Pruebas:** paleta, tamaño, suelo en la última fila, y que todo par de los 20 iconos se distinga en al menos 12 % de sus píxeles (dE ≥ 15) bajo visión normal, protanopia, deuteranopia y tritanopia, con `daltonismo.ts`. El 12 % y el dE de 15 son `[PROPUESTA]` (el 15 es el de `estilos-estado.ts`); ajustar si el equipo prefiere otro. 65 pruebas del archivo en verde.
+- **Pendiente:** ninguna pantalla los carga aún; dónde se muestran en `ui/Parcela2D.tsx` es de balam. Revisión visual humana. El punto 2 del encargo (ampliar el catálogo) no se ha empezado.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — A4.8 sigue en curso: SMAP en el droplet responde 503 (Eduardo)
 
