@@ -2,6 +2,12 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Tarjetas del motor: «año habitual» pasa a «año normal» (Mompin)
+
+- **Archivos:** `web/src/motor/tarjetas.ts`, `web/src/motor/pruebas/tarjetas.test.ts`, `web/src/motor/pruebas/regresion/demo-isla.json` (regenerada con `ACTUALIZAR_REGRESION=1`).
+- **Cambio:** el nombre visible del escenario en las tarjetas pasa a «año normal», igual que el selector de la interfaz (pendiente que dejó Eduardo en E10). La clave interna sigue siendo `habitual`. En la regresión solo cambian esos textos y `versionContrato` (0.11.0 a 0.15.0); ninguna cifra.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — E10: el front arranca con los ejemplos mundiales; Isla deja de ser la demo; hallazgos B6 (Eduardo)
 
 - **Archivos:** `web/src/App.tsx`, `web/src/paginas/Terreno.tsx`, `web/src/ui/terreno.css`, `web/src/ui/useLaboratorio.ts`, `web/src/ui/planes.ts`, `web/src/ui/lab/` (`Laboratorio.tsx`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `PanelComparacion.tsx`, `useEvidencia.ts`, `usePlagas.ts`, `conveniencia.ts`, `consejos.ts`, `piezas.tsx`, `lab.css`), `web/src/ui/DashboardBalance.tsx`, `web/src/ui/components.tsx`, `web/src/ui/tutorial/pasos.ts`, `web/src/paginas/MetodoFuentes.tsx`, comentarios en `escena/EscenaParcela.tsx`, `escena/escena.css` y `api/cliente.ts`; prueba nueva `web/src/ui/ejemplos-front.test.ts`. Borrados por no usarse: `paginas/Laboratorio.tsx`, `paginas/Comparacion.tsx`, `ui/selections.tsx`, `ui/demo.ts`.
