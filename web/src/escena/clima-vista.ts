@@ -11,6 +11,7 @@
 // Luz: es la misma para toda la parcela (POWER tiene celdas de 0.5 x 0.625 grados) y el catalogo no trae necesidades de luz por cultivo, asi que
 // la vista pinta todas las celdas igual y lo dice; no se inventa una diferencia por celda ni por cultivo.
 
+import { tt } from '../ui/i18n/actual';
 import type { CatalogoCultivos, SerieClima } from '../../../contratos/tipos/contratos';
 
 export interface ClimaSemana {
@@ -66,11 +67,11 @@ export type NivelTemperatura = 'helada' | 'fresca' | 'optima' | 'calida' | 'exce
 
 /** De mas frio a mas calor. Azules, verde, naranja y rojo: se distinguen tambien por la leyenda y el texto del globo. */
 export const NIVELES_TEMPERATURA: readonly { nivel: NivelTemperatura; etiqueta: string; color: string }[] = [
-  { nivel: 'helada', etiqueta: 'Demasiado frío', color: '#3b66b0' },
-  { nivel: 'fresca', etiqueta: 'Fresca', color: '#8cc3e6' },
-  { nivel: 'optima', etiqueta: 'Ideal', color: '#58a868' },
-  { nivel: 'calida', etiqueta: 'Cálida', color: '#f0a23c' },
-  { nivel: 'excesiva', etiqueta: 'Demasiado calor', color: '#c4412b' },
+  { nivel: 'helada', get etiqueta() { return tt('temp.frio'); }, color: '#3b66b0' },
+  { nivel: 'fresca', get etiqueta() { return tt('temp.fresca'); }, color: '#8cc3e6' },
+  { nivel: 'optima', get etiqueta() { return tt('temp.ideal'); }, color: '#58a868' },
+  { nivel: 'calida', get etiqueta() { return tt('temp.calida'); }, color: '#f0a23c' },
+  { nivel: 'excesiva', get etiqueta() { return tt('temp.calor'); }, color: '#c4412b' },
 ];
 export const colorNivelTemperatura = (n: NivelTemperatura) => NIVELES_TEMPERATURA.find((x) => x.nivel === n)!.color;
 export const etiquetaNivelTemperatura = (n: NivelTemperatura) => NIVELES_TEMPERATURA.find((x) => x.nivel === n)!.etiqueta;
@@ -113,5 +114,5 @@ export function colorLuz(mj: number | null | undefined): string | null {
   return `#${c.map((x) => x.toString(16).padStart(2, '0')).join('')}`;
 }
 
-export const grados = (n: number | null | undefined) => (n == null ? 'sin dato' : `${n.toLocaleString('es-MX', { maximumFractionDigits: 1 })} °C`);
-export const megajoules = (n: number | null | undefined) => (n == null ? 'sin dato' : `${n.toLocaleString('es-MX', { maximumFractionDigits: 1 })} MJ/m² al día`);
+export const grados = (n: number | null | undefined) => (n == null ? tt('det.sinDatoCorto') : `${n.toLocaleString('es-MX', { maximumFractionDigits: 1 })} °C`);
+export const megajoules = (n: number | null | undefined) => (n == null ? tt('det.sinDatoCorto') : tt('esc3d.mj', { n: n.toLocaleString('es-MX', { maximumFractionDigits: 1 }) }));

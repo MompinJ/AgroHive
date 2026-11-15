@@ -6,7 +6,7 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
 - **Archivos:** `web/src/ui/tutorial/Tutorial.tsx` (usa el tutorial en inglés `TUTORIALES_EN`, mismos pasos, resaltes e iconos), `web/src/ui/lab/` (`Laboratorio.tsx`, `BarraHerramientas.tsx`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `PanelIzq.tsx`, `EventoPantalla.tsx`, `eventos.ts`, `Mascota.tsx`, `consejos.ts`, `historial.ts`, `PanelHistorial.tsx`, `piezas.tsx`, `conveniencia.ts`), `web/src/ui/ControlTiempo.tsx`, `web/src/ui/planes.ts` (nombre de la rotación y mensajes de ciclos encimados), `web/src/ui/i18n/textos/tutorial.ts` y `laboratorio.ts` (nuevos), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
 - **Cambio:** el tutorial de Esquilote, la brocha y la barra de herramientas, la paleta y su conveniencia, las plagas y el insecticida, los años Dry / Normal / Wet, la línea de tiempo, los avisos de cosecha, plaga y plantas muertas, el historial y los consejos de la mascota salen en inglés (tomas T3b, T4a, T4b y T4c). Las plagas llevan su nombre común en inglés (Entomological Society of America para cinco; el chapulín de la milpa, *Sphenarium purpurascens*, sin nombre en esa lista, como "Chapulín grasshopper"). `nombreEscenario`, `nombresPilares` y `NOMBRE_TIPO_HECHO` se siguen leyendo igual (`nombreEscenario[e]`) y dan el texto del idioma activo. Sin cambios visuales.
-- **Pendiente (fuera de lo autorizado, `web/src/escena/`):** el HUD de la escena (gráficos, leyenda de cultivos), la ficha de la celda, las marcas de problema y sus textos (`problemas.ts`) y los avisos de datos (`AvisosDatos.tsx`). Lo que el historial guardó antes de cambiar de idioma queda en el idioma en que se escribió.
+- **Escena y `App.tsx` (Mompin aprobó lo que pidió la maestra, 15/11):** `web/src/escena/EscenaParcela.tsx` (HUD en modo fondo: vistas, leyendas, gráficos, ficha, brújula), `graficos.ts`, `vistas.ts`, `clima-vista.ts`, `ficha.ts`, `estilos-estado.ts`, `problemas.ts`, `avisos-datos.ts`, `AvisosDatos.tsx`, `render/plagas.ts` y el pie, el enlace "Saltar al contenido" y la página 404 de `web/src/App.tsx`, con sus textos en `web/src/ui/i18n/textos/escena.ts`. Las tablas de nombres (`NOMBRE_NIVEL_GRAFICOS`, `NIVELES_VALIDACION`, `ESTILOS_ESTADO`...) se leen igual y devuelven el texto del idioma activo. El modo panel de la escena (vista previa de desarrollo) queda en español. Lo que el historial guardó antes de cambiar de idioma queda en el idioma en que se escribió; los mensajes de la API dentro de los avisos de datos (plegados) llegan en español.
 
 ### 2026-11-15 — B7, pantalla 2: Terreno en inglés (IA de Mompin, sesión "ingles")
 
@@ -198,6 +198,15 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** la protección guardaba ids de celda que cambian con el tamaño de celda (mismo problema que el plan `porCelda`), y el botón anterior protegía celdas sin plaga, lo que no reflejaba una decisión.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
+
+### 2026-11-15 — Dominio propio agrohive.space (Eduardo)
+
+- **Archivos:** `api/despliegue/agrohive.nginx.conf` (copia de la configuración real), `README.md`, `AgroVault/Compartido/Servidor.md`. En el droplet: `/etc/nginx/sites-available/agrohive`, `/opt/agrohive/agrohive.env`, certificado `agrohive-space`.
+- **Cambio:** el dominio `agrohive.space` (Namecheap) apunta al droplet con dos registros A (`@` y `www`; se borraron la redirección URL y el CNAME de estacionamiento). nginx sirve `agrohive.space` y `www.agrohive.space` con un certificado de Let's Encrypt nuevo (`agrohive-space`, vence 2027-02-13, renovación automática, con un correo de contacto del dueño del servidor para los avisos); HTTP redirige a HTTPS. Se agregó el dominio a `AGROHIVE_CORS_ORIGINS` y se reinició la API. El hostname `sslip.io` sigue funcionando.
+- **Por qué:** una red con FortiGuard bloqueaba `sslip.io` como "Dynamic DNS" y la demo quedaba inaccesible; un dominio propio no cae en esa categoría.
+- **Evidencia:** desde fuera, `agrohive.space` y `www` responden 200 en `/`, `/health`, `/api/cultivos` y `/medir.html` con el certificado de Let's Encrypt (CN=agrohive.space); `http` redirige 301 a `https`; `mediworks.mx` y `sslip.io` siguen en 200. Copias de seguridad de la configuración de nginx y del `.env` en `/root/respaldo-nginx/`.
+- **Límites:** no se probó el dominio desde la red con FortiGuard (un dominio nuevo puede clasificarse como "Newly Registered Domain" por un tiempo); el dominio vence según Namecheap y hay que renovarlo; la contraseña de root del droplet sigue sin cambiarse.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-15 — Plaga siempre presente en cultivos atacados y plegado animado del panel (Eduardo)
 
