@@ -56,6 +56,6 @@ def agua(estimacion: dict) -> dict | None:
         return {"tawMmPorM": {"estado": "NO_EVALUABLE", "motivo": "El servicio de suelo no entrego carbono organico para estimar la materia organica que pide Saxton y Rawls."}}
     arena, arcilla = _evaluable(frac["arena"], fuente), _evaluable(frac["arcilla"], fuente)
     fuente_mo = {**fuente, "nombre": f"{fuente['nombre']} (carbono organico convertido a materia organica)", "cita": CITA_FACTOR,
-                 "unidades": "% de materia organica", "consultado": fuente.get("consultado") or date.today(), "url": URL_FACTOR,
+                 "unidades": "% de materia organica", "consultado": fuente.get("consultado") or config.hoy(), "url": URL_FACTOR,
                  "nota": "El factor 1.724 es un promedio: con 2.0 la materia organica seria mayor y el TAW algo distinto (ver docs/01, A2.16 conectada)."}
     return mod.agua_pedotransferencia(estimacion["id"], arena, arcilla, _evaluable(materia_organica_pct(oc), fuente_mo))

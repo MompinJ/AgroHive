@@ -36,7 +36,7 @@ async def _tile(cliente: httpx.AsyncClient, z: int, x: int, y: int, sem: asyncio
             try:
                 datos = (await http.get(cliente, URL.format(z=z, x=x, y=y))).content
             except http.ErrorFuente as e:
-                if "404" in str(e):
+                if str(e).endswith("respondio 404"):  # no `"404" in`: la URL del tile puede traer 404 en x o y (p. ej. .../14/4040/...)
                     return None
                 raise
         ruta.parent.mkdir(parents=True, exist_ok=True)

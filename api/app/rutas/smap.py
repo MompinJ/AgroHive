@@ -4,7 +4,7 @@ from datetime import date, datetime, timedelta, timezone
 
 from fastapi import APIRouter, HTTPException, Query
 
-from .. import cache, http, servicios
+from .. import cache, config, http, servicios
 from ..clientes import earthdata
 from ..modelos import Advertencia, ErrorDatos, Fuente, Periodo
 from ..modelos_smap import CeldaSmap, DiaSmap, PaseSmap, ProductoSmap, ProfundidadSmap, Smap, clasificar_calidad
@@ -72,7 +72,7 @@ async def serie(lon: float, lat: float, desde: date, hasta: date) -> Smap:
         coordenada=(lon, lat), producto=ProductoSmap(nombre=earthdata.PRODUCTO, resolucionKm=36, profundidadCm=ProfundidadSmap(desde=0, hasta=5), unidad="m3/m3"),
         celda=CeldaSmap(fila=sitio[0], columna=sitio[1], centro=centro),
         fuente=Fuente(nombre=earthdata.NOMBRE, url=earthdata.URL, coordenada=centro, periodo=Periodo(desde=desde, hasta=hasta),
-                      unidades=earthdata.UNIDADES, consultado=datetime.now(timezone.utc).date(), resolucion=earthdata.RESOLUCION,
+                      unidades=earthdata.UNIDADES, consultado=config.hoy(), resolucion=earthdata.RESOLUCION,
                       nota="Valor por pase (AM y PM) del algoritmo DCA; la bandera de calidad se entrega tal cual, sin interpretarla."),
         dias=list(dias), advertencias=advertencias)
 

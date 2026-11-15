@@ -170,6 +170,60 @@
         }
       }
     },
+    "/api/calendario": {
+      "get": {
+        "tags": [
+          "calendario"
+        ],
+        "summary": "Obtener Calendario",
+        "description": "Calendario de siembra del punto. En Mexico, SIAP/INIFAP (hoy solo Isla). Fuera, maiz de temporal de GGCMI fase 3.",
+        "operationId": "obtener_calendario_api_calendario_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/suelo": {
       "get": {
         "tags": [
@@ -308,7 +362,7 @@
           "ndvi"
         ],
         "summary": "Obtener Ndvi",
-        "description": "NDVI de MODIS MOD13Q1 (250 m, 16 dias) en el punto, de ORNL DAAC. **Evidencia**: no entra al ranking. Maximo 400 dias por consulta.",
+        "description": "NDVI de MODIS MOD13Q1 V061 (250 m, 16 dias) en el punto, leido de Planetary Computer. **Evidencia**: no entra al ranking. Maximo 400 dias por consulta.",
         "operationId": "obtener_ndvi_api_ndvi_get",
         "parameters": [
           {
@@ -460,6 +514,155 @@
         }
       }
     },
+    "/api/ee-uu/cdl": {
+      "get": {
+        "tags": [
+          "regional EE. UU."
+        ],
+        "summary": "Obtener Cdl",
+        "description": "Rotacion real por anio (USDA NASS CDL, 30 m) en el punto. Solo EE. UU. contiguos; fuera de ahi, NO_EVALUABLE. **Contraste**: no entra al ranking.",
+        "operationId": "obtener_cdl_api_ee_uu_cdl_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2025,
+              "minimum": 2008,
+              "default": 2008,
+              "title": "Desde"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2025,
+              "minimum": 2008,
+              "default": 2025,
+              "title": "Hasta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cdl"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDatos"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Anios invalidos"
+          }
+        }
+      }
+    },
+    "/api/ee-uu/ssurgo": {
+      "get": {
+        "tags": [
+          "regional EE. UU."
+        ],
+        "summary": "Obtener Ssurgo",
+        "description": "Suelo de campo de USDA (SSURGO, componente dominante) en el punto. Solo EE. UU. contiguos; fuera de ahi, NO_EVALUABLE. **Contraste**.",
+        "operationId": "obtener_ssurgo_api_ee_uu_ssurgo_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ssurgo"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDatos"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -511,6 +714,53 @@
         ],
         "title": "Advertencia"
       },
+      "AguaSsurgo": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "tawMm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tawmm"
+          },
+          "profundidadCubiertaCm": {
+            "type": "integer",
+            "title": "Profundidadcubiertacm"
+          },
+          "hastaCm": {
+            "type": "integer",
+            "title": "Hastacm"
+          },
+          "metodo": {
+            "type": "string",
+            "title": "Metodo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estado",
+          "tawMm",
+          "profundidadCubiertaCm",
+          "hastaCm",
+          "metodo"
+        ],
+        "title": "AguaSsurgo"
+      },
       "AguaSuelo": {
         "properties": {
           "tawMmPorM": {
@@ -550,6 +800,84 @@
           "tawMmPorM"
         ],
         "title": "AguaSuelo"
+      },
+      "AnioCdl": {
+        "properties": {
+          "anio": {
+            "type": "integer",
+            "title": "Anio"
+          },
+          "codigo": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Codigo"
+          },
+          "categoria": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Categoria"
+          },
+          "cultivoCatalogo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "maiz",
+                  "frijol",
+                  "calabaza",
+                  "chile"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cultivocatalogo"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "anio",
+          "codigo",
+          "categoria",
+          "cultivoCatalogo",
+          "estado"
+        ],
+        "title": "AnioCdl"
       },
       "CatalogoCultivos": {
         "properties": {
@@ -592,6 +920,102 @@
         ],
         "title": "CatalogoCultivos",
         "description": "Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, NO_EVALUABLE."
+      },
+      "Cdl": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "aviso": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Aviso"
+          },
+          "coordenada": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Coordenada"
+          },
+          "anioDesde": {
+            "type": "integer",
+            "title": "Aniodesde"
+          },
+          "anioHasta": {
+            "type": "integer",
+            "title": "Aniohasta"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "limites": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Limites"
+          },
+          "anios": {
+            "items": {
+              "$ref": "#/components/schemas/AnioCdl"
+            },
+            "type": "array",
+            "title": "Anios"
+          },
+          "advertencias": {
+            "items": {
+              "$ref": "#/components/schemas/Advertencia"
+            },
+            "type": "array",
+            "title": "Advertencias",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "estado",
+          "aviso",
+          "coordenada",
+          "anioDesde",
+          "anioHasta",
+          "fuente",
+          "limites",
+          "anios"
+        ],
+        "title": "Cdl"
       },
       "CeldaEntrada": {
         "properties": {
@@ -703,6 +1127,41 @@
           "pendientePct"
         ],
         "title": "CeldaTerreno"
+      },
+      "ComponenteSsurgo": {
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "porcentaje": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Porcentaje"
+          },
+          "grupoHidrologico": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grupohidrologico"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nombre"
+        ],
+        "title": "ComponenteSsurgo"
       },
       "DatoNdvi": {
         "properties": {
@@ -1313,6 +1772,100 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "HorizonteSsurgo": {
+        "properties": {
+          "nombre": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombre"
+          },
+          "profundidadCm": {
+            "$ref": "#/components/schemas/RangoCm"
+          },
+          "arenaPct": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arenapct"
+          },
+          "limoPct": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limopct"
+          },
+          "arcillaPct": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arcillapct"
+          },
+          "materiaOrganicaPct": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Materiaorganicapct"
+          },
+          "awcCmCm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Awccmcm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nombre",
+          "profundidadCm",
+          "arenaPct",
+          "limoPct",
+          "arcillaPct",
+          "materiaOrganicaPct",
+          "awcCmCm"
+        ],
+        "title": "HorizonteSsurgo"
+      },
       "HumedadSuelo": {
         "properties": {
           "variable": {
@@ -1645,6 +2198,22 @@
               }
             ],
             "title": "Banderacalidad"
+          },
+          "calidad": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "alta",
+                  "baja",
+                  "desconocida"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calidad"
           }
         },
         "type": "object",
@@ -1716,6 +2285,17 @@
             "title": "Nombre",
             "default": "MOD13Q1"
           },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
           "banda": {
             "type": "string",
             "minLength": 1,
@@ -1746,6 +2326,50 @@
         ],
         "title": "ProductoNdvi"
       },
+      "ProductoSmap": {
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "resolucionKm": {
+            "type": "integer",
+            "enum": [
+              36,
+              9
+            ],
+            "title": "Resolucionkm"
+          },
+          "profundidadCm": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProfundidadSmap"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unidad": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "m3/m3"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unidad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nombre",
+          "resolucionKm"
+        ],
+        "title": "ProductoSmap"
+      },
       "ProfundidadCm": {
         "properties": {
           "desdeCm": {
@@ -1763,6 +2387,26 @@
           "hastaCm"
         ],
         "title": "ProfundidadCm"
+      },
+      "ProfundidadSmap": {
+        "properties": {
+          "desde": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Desde"
+          },
+          "hasta": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Hasta"
+          }
+        },
+        "type": "object",
+        "required": [
+          "desde",
+          "hasta"
+        ],
+        "title": "ProfundidadSmap"
       },
       "ProximaTemporada": {
         "properties": {
@@ -1905,6 +2549,26 @@
           "superior"
         ],
         "title": "Rango"
+      },
+      "RangoCm": {
+        "properties": {
+          "desde": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Desde"
+          },
+          "hasta": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Hasta"
+          }
+        },
+        "type": "object",
+        "required": [
+          "desde",
+          "hasta"
+        ],
+        "title": "RangoCm"
       },
       "RetencionAgua": {
         "properties": {
@@ -2072,6 +2736,16 @@
             "minItems": 2,
             "title": "Coordenada"
           },
+          "producto": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProductoSmap"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "celda": {
             "anyOf": [
               {
@@ -2113,6 +2787,122 @@
         ],
         "title": "Smap",
         "description": "Humedad del suelo superficial de SMAP en la celda de 36 km del punto. Contraste: nunca es una medicion de la parcela."
+      },
+      "Ssurgo": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "aviso": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Aviso"
+          },
+          "coordenada": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Coordenada"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "limites": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Limites"
+          },
+          "unidad": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UnidadSsurgo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "componente": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ComponenteSsurgo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "horizontes": {
+            "items": {
+              "$ref": "#/components/schemas/HorizonteSsurgo"
+            },
+            "type": "array",
+            "title": "Horizontes"
+          },
+          "agua": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AguaSsurgo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advertencias": {
+            "items": {
+              "$ref": "#/components/schemas/Advertencia"
+            },
+            "type": "array",
+            "title": "Advertencias",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "estado",
+          "aviso",
+          "coordenada",
+          "fuente",
+          "limites",
+          "horizontes"
+        ],
+        "title": "Ssurgo"
       },
       "Suelo": {
         "properties": {
@@ -2441,6 +3231,24 @@
           "fraccionesPct"
         ],
         "title": "TexturaEstimada"
+      },
+      "UnidadSsurgo": {
+        "properties": {
+          "mukey": {
+            "type": "string",
+            "title": "Mukey"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mukey",
+          "nombre"
+        ],
+        "title": "UnidadSsurgo"
       },
       "ValidationError": {
         "properties": {

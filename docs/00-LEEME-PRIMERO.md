@@ -33,6 +33,7 @@
 | [Agente `modelador-voxel`](agente-modelador-voxel-README.md) | Cómo funciona el agente de modelos 3D (definición en `.claude/agents/`, librería en `herramientas/voxelkit.py`). |
 | [Buzón del equipo](../herramientas/buzon/README.md) | Mensajes entre las sesiones de IA por la red local del evento (servidor en la laptop de Mompin). No reemplaza a git. |
 | [`AgroVault/`](../AgroVault/Bienvenido.md) | Vault de Obsidian: resumen para Claude, Codex y Cursor, APIs investigadas y pendientes. Resume `docs/` y `contratos/`, no decide. |
+| [Hallazgos del back](hallazgos-back.md) | Auditoría de fallos de `api/`, motor y contratos (14/11 noche): qué se arregló, qué se propone y qué falta decidir. |
 | [`contratos/`](../contratos/README.md) | Contratos de datos (JSON Schema), ejemplos y tipos TS. Fuente de verdad de los formatos. |
 
 ## Orden de lectura sugerido
