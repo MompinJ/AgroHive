@@ -96,5 +96,7 @@ describe('medio cuadrado de un modelo voxel', () => {
         expect(g.vertices, ruta).toBeLessThanOrEqual(entera.vertices + m.cubos.length * 6);
       }
     }
-  });
+    // Recorre todos los .bbmodel del repo (crece con cada cultivo): con la suite en
+    // paralelo pasa de los 5 s por defecto aunque sola tarde unos 2 s.
+  }, 60_000);
 });
