@@ -1,193 +1,194 @@
-# AgroHive (Code Hive)
+# AgroHive · Code Hive
 
 Versión en español · [English version](README.en.md)
 
-> **Estado de este documento (15/11/2026).** Las licencias y las reglas del reto se contrastaron con sus páginas oficiales, y quien las leyó fue una sesión de IA, no una persona. **Falta la revisión humana de las licencias y de la declaración de IA.** Lo que no se pudo verificar va marcado `[VERIFICAR]` y está resumido al final, en "Lo que falta verificar".
+Simulador visual **«what if» de rotaciones de cultivos** para [Field Shift: Adapting Farms with NASA Data](https://www.spaceappschallenge.org/2026/challenges/adapting-farms-with-nasa-data/), NASA Space Apps Challenge 2026, sede Boca del Río, Veracruz.
 
-## Qué es
+AgroHive compara alternativas frente a años históricos reales de NASA y muestra demanda de agua, compatibilidad de siembra y cobertura del suelo. Busca alternativas robustas ante escenarios adversos. **No predice cosechas, ingresos ni una temporada exacta y no reemplaza a un agrónomo.** La decisión final pertenece al agricultor.
 
-AgroHive es un **simulador visual "what if"** que compara **rotaciones de cultivos** con la historia climática real de **NASA**, para el reto [*Field Shift: Adapting Farms with NASA Data*](https://www.spaceappschallenge.org/2026/challenges/adapting-farms-with-nasa-data/) del NASA Space Apps Challenge 2026 (sede Boca del Río, Veracruz). Fuente: `docs/00`, `docs/02`.
+**[Abrir la demo](https://agrohive.space)** · [Método del motor](docs/05-MOTOR-SIMULACION.md) · [Documentación](docs/00-LEEME-PRIMERO.md)
 
-- **No busca la rotación de mayor rendimiento, sino la más robusta:** la que no colapsa en el peor escenario histórico (`docs/00`, `docs/05` paso 7).
-- **Arquitectura mundial y demo mundial:** funciona en cualquier coordenada con fuentes globales. Las fuentes de un país (SIAP e INIFAP en México) se suman encima cuando la coordenada cae ahí (`docs/13`, "Alcance geográfico").
-- **Parcelas de ejemplo en cinco continentes** (15/11, `docs/13` "Demo mundial"): Bajío (México), Sorriso (Brasil), Uasin Gishu (Kenia), Ludhiana (India), Tierra de Campos (España) e Iowa (EE. UU., con CDL y SSURGO). Polígonos ficticios de unas 2.8 ha sobre tierra de cultivo real, con datos reales grabados de la API (`datos/demo/ejemplos/LEEME.md`). El usuario elige una o dibuja la suya. Isla, Veracruz (`contratos/ejemplos/parcela.ejemplo.json`) queda como prueba interna del motor.
-- **Catálogo de 40 cultivos**, cada uno con modelo 3D de cinco etapas, bloque ligero e icono 2D (`datos/catalogos/`, `modelos/`). Los parámetros salen de FAO-56 y FAO EcoCrop, con fuente por valor (`datos/catalogos/README.md`). El calendario de siembra tiene una base mundial (GGCMI fase 3, MIRCA2000 y FAO Crop Calendar) y, en México, SIAP e INIFAP encima (`docs/04`, `docs/13`).
-- **El orden que se ve es el que calcula el motor** (ranking B, `docs/05`).
-- **La decisión final es del agricultor.** AgroHive no reemplaza a un agrónomo (`docs/00`, `docs/10`).
-- **Demo publicada:** <https://agrohive.space> (también <https://www.agrohive.space>; el hostname anterior <https://64-23-143-102.sslip.io> sigue funcionando, pero algunos filtros de red lo bloquean por ser DNS dinámico). El último despliegue anotado en `docs/01` (15/11/2026) es `main` `9fd83a9` (comprobado en `/health` el 15/11), con `/health` en `versionContrato` 0.15.0; lo que entró después puede no estar publicado todavía. Está en el servidor de un integrante del equipo (`docs/13`): la dirección puede cambiar.
+Estado observado el **15/11/2026**: la [API publicada](https://agrohive.space/health) respondió `status: ok`, commit `47f6d35` y contrato `0.16.0`. Esto identifica la API en ese momento, no la compilación de todos los archivos web. El servicio se aloja en el servidor de un integrante del equipo y su dirección puede cambiar.
 
-## Estructura
+## Qué puedes hacer
+
+- Elegir una de **seis parcelas de ejemplo**: Bajío (México), Sorriso (Brasil), Uasin Gishu (Kenia), Ludhiana (India), Tierra de Campos (España) e Iowa (EE. UU.). Son contornos ficticios de unas 2.8 ha sobre tierra de cultivo real, con respuestas grabadas de la API; cada parcela tiene 71 celdas.
+- Dibujar tu parcela y consultar fuentes globales de clima, suelo y elevación. La cobertura y disponibilidad dependen de cada proveedor; los datos ausentes conservan su motivo y estado, nunca se sustituyen por cero.
+- Seleccionar entre **40 cultivos**, modificar fechas y secuencias y comparar rotaciones. Los ejemplos comienzan con dos o tres alternativas según sus cultivos sugeridos; Iowa comienza con dos. Se pueden añadir más.
+- Explorar años secos, habituales y lluviosos, ver resultados en una escena voxel 3D y consultar evidencia, supuestos y fuentes.
+- Consultar una banda exploratoria de próxima temporada y evidencia regional de vegetación, humedad y presencia de plagas.
+
+El catálogo incluye cinco modelos de etapa, cinco bloques ligeros y cinco iconos por cultivo: **200 modelos detallados, 200 bloques y 200 iconos**. La interfaz limita las parcelas a 200 celdas. Sin WebGL se conservan las cifras del motor; no hay modo 2D de respaldo en el flujo principal. Isla, Veracruz se conserva como prueba interna del motor.
+
+## Ejecutar el proyecto
+
+Requisitos: **Node.js `^20.19.0 || >=22.12.0`** y **Python 3.12**.
+
+```bash
+git clone https://github.com/MompinJ/AgroHive.git
+cd AgroHive/web
+npm ci
+npm run dev
+```
+
+Abre `http://127.0.0.1:5173`. En desarrollo, la web usa la API pública por defecto. Para una API local configura `VITE_API_URL` desde `web/`:
+
+```bash
+# Bash (Linux/macOS)
+VITE_API_URL=http://127.0.0.1:8010 npm run dev
+```
+
+```powershell
+# PowerShell (Windows)
+$env:VITE_API_URL = 'http://127.0.0.1:8010'
+npm run dev
+```
+
+### API local
+
+En otra terminal, desde la raíz del repositorio:
+
+```bash
+# Bash (Linux/macOS)
+cd api
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -m uvicorn app.main:app --reload --port 8010
+```
+
+```powershell
+# PowerShell (Windows)
+cd api
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8010
+```
+
+La documentación interactiva queda en `http://127.0.0.1:8010/docs`. `EARTHDATA_TOKEN` se configura exclusivamente en el entorno del servicio para consultas SMAP; no se incorpora al frontend ni al repositorio. Consulta [API](api/README.md) y [cliente web](web/src/api/README.md).
+
+### Ejemplos sin internet
+
+Los [seis ejemplos](datos/demo/ejemplos/LEEME.md) cargan respuestas locales incluidas en la compilación web, sin consultar la API. Sirve la web localmente con sus archivos disponibles; abrir una URL pública por primera vez requiere conexión. Los mapas base, el buscador y los enlaces externos dependen de internet.
+
+En Linux/macOS, `bash herramientas/demo-sin-red.sh` combina las cachés de los ejemplos y arranca la API con su salida a internet bloqueada. El script usa rutas de entorno virtual Unix; no es un lanzador PowerShell. Las respuestas cubren coordenadas y periodos concretos, como `2005-10-01` a `2025-12-31` para el clima: una parcela arbitraria no queda cubierta por ese respaldo. Véanse [script](herramientas/demo-sin-red.sh) y [guía de respaldo](docs/demo-sin-red.md); esta última conserva también resultados históricos del paquete de Isla.
+
+## Cómo calcula la comparación
+
+1. **Escenarios históricos.** Selecciona años reales cercanos a p10, p50 y p90 de lluvia de las temporadas PV + OI, con las ventanas SIAP que aplica el método. Los ejemplos contienen 20 años agrícolas completos en la serie 2005-10 a 2025-12. Conserva el año real; no es un pronóstico.
+2. **Fechas y calendario.** El usuario elige las siembras. El calendario combina GGCMI, MIRCA2000 y FAO Crop Calendar, con SIAP e INIFAP en México. Identifica las ventanas regionales y las equivalencias de cultivo.
+3. **Balance FAO-56.** ETc = Kc × ET0 y balance diario de cubeta por bloque, con TAW según el suelo, estrés hídrico y percolación profunda basada en la ecuación 88. `GWETROOT` es fracción de saturación regional y se convierte antes de usarse como humedad inicial. El balance actual no incluye riego, escurrimiento ni ascenso capilar.
+4. **Pilares.** Déficit hídrico, exceso/percolación, compatibilidad de siembra y protección del suelo. La protección usa **días de suelo desnudo**: el índice de erosión permanece en `null` por ausencia de intensidad subdiaria y factores locales con fuente. Calor y aporte indirecto son complementarios y no entran al puntaje; calor es `NO_EVALUABLE` por falta de umbrales con fuente.
+5. **Ranking B.** Compone puntajes con los pilares comparables. Ordena por **menor arrepentimiento máximo**, desempata por mayor promedio y después por identificador. También informa la robustez como peor puntaje. Los pesos iguales y la normalización del exceso se declaran `SUPUESTO`. El criterio A, basado en déficit, es el respaldo cuando solo ese pilar permite comparar. Las alternativas `EXPLORATORIO` muestran métricas sin posición de recomendación.
+6. **Próxima temporada.** Banda mensual p10–p90 durante seis meses: distribución histórica desplazada por la anomalía SEAS5, sin tendencia, y evaluación con años análogos reales. Es `EXPLORATORIO` y no entra al ranking. No se deben sumar los extremos de las bandas mensuales.
+7. **Explicación.** Tarjetas y consejos de Esquilote usan plantillas sobre los datos disponibles. NDVI, SMAP, IMERG y plagas aportan contexto; no alteran el balance ni el ranking.
+
+Los indicadores se calculan en un **Web Worker del navegador**. La interfaz y la escena representan sus resultados. Estados: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS` y `RESPALDO_HISTORICO`. Un indicador ausente no se transforma en un número válido. Detalle: [motor](docs/05-MOTOR-SIMULACION.md) y [contratos](contratos/).
+
+## Datos NASA y citas
+
+| Fuente | Uso y referencia |
+| --- | --- |
+| **NASA POWER** | Base del motor: lluvia, temperaturas, radiación, humedad, viento y `GWETROOT`. POWER Project, NASA Langley Research Center, financiado por NASA Earth Science Division. Respuestas registradas: **Daily API v2.10.3**, consulta 14/11/2026. Citar servicio, versión y fecha según la [guía POWER](https://power.larc.nasa.gov/docs/referencing/). |
+| **GPM IMERG vía POWER** | Evidencia de precipitación, `IMERG_PRECTOT`: suma diaria UTC de datos de media hora a 0.1°. POWER combina **Final Run y Late Run** según la antigüedad; no se identifica toda la serie como un único producto diario Final. Su [metodología](https://power.larc.nasa.gov/docs/methodology/data/sources_meteorology/) describe esa combinación y su [historial](https://power.larc.nasa.gov/docs/release-guide/) registra IMERG v7B. Citar también POWER. |
+| **SMAP SPL3SMP v9** | Humedad superficial regional a 36 km, evidencia informativa. O'Neill, Chan, Njoku, Jackson, Bindlish y Chaubell (2023), NASA NSIDC DAAC, [doi:10.5067/4XXOGX0OOW1S](https://doi.org/10.5067/4XXOGX0OOW1S). La consulta al proveedor requiere Earthdata; los ejemplos incluyen respuestas grabadas. [Guía de cita NSIDC](https://nsidc.org/data/data-programs/nsidc-daac/citing-nsidc-daac). |
+| **MODIS MOD13Q1 V061** | NDVI regional mediante Planetary Computer, colección `modis-13Q1-061`, y datos grabados. Didan (2021), *MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061*, [doi:10.5067/MODIS/MOD13Q1.061](https://doi.org/10.5067/MODIS/MOD13Q1.061). ORNL REST se usó para contraste de cuatro fechas, no como proveedor en vivo: [doi:10.3334/ORNLDAAC/1600](https://doi.org/10.3334/ORNLDAAC/1600). |
+
+Los datos conservan las condiciones de su producto y proveedor; los servicios de acceso tienen sus propios términos. Véase la [guía de uso de Earthdata](https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance). Usar datos NASA no implica respaldo de NASA a AgroHive.
+
+## Otras fuentes y condiciones
+
+Las condiciones de terceros se aplican a sus materiales, independientemente de la licencia del código propio. Las referencias concretas, coordenadas, fechas y unidades acompañan los datos guardados.
+
+| Fuente | Aporte y condiciones documentadas |
+| --- | --- |
+| **ISRIC SoilGrids** | Estimaciones de textura, pH y carbono orgánico, 250 m, integradas a 0–30 cm. [CC BY 4.0](https://www.isric.org/explore/soilgrids). Son `SUPUESTO`, no mediciones de campo. |
+| **OpenLandMap-soildb** | Segunda estimación de suelo: capas 30 m, 2020–2022. Las colecciones STAC consultadas declaran CC BY 4.0. Los registros Zenodo de 120 m no se presentan como DOI de las capas 30 m. Procedencia y cliente: [API](api/README.md). |
+| **Terrain Tiles / Terrarium** | Elevación por defecto; no es un producto NASA directo. [Atribución Tilezen](https://github.com/tilezen/joerd/blob/master/docs/attribution.md): INEGI Continental relief 2016 en México, NOAA ETOPO1 y USGS 3DEP/GMTED2010/SRTM según cobertura. |
+| **Open-Meteo / ECMWF / Copernicus** | Respaldo climático ERA5, elevación GLO-90 y pronóstico estacional SEAS5. Datos [CC BY 4.0](https://open-meteo.com/en/licence), con atribución y enlace de licencia. El acceso gratuito al servicio tiene condiciones de uso no comercial; licencia de datos y acceso al servicio son distintos. |
+| **Esri World Imagery** | Mapa satelital sujeto a términos de Esri. El ítem acredita Esri, Vantor, Earthstar Geographics y GIS User Community. [Capa y condiciones](https://goto.arcgisonline.com/maps/World_Imagery). No se incluye en el respaldo sin red. |
+| **OpenStreetMap** | Mapa de calles: © OpenStreetMap contributors, datos [ODbL](https://www.openstreetmap.org/copyright). El control de esta rama incluye «contributors». El servicio de teselas se rige además por su [política de uso](https://operations.osmfoundation.org/policies/tiles/); no se redistribuye una descarga masiva. |
+| **GeoNames** | Lugares del buscador mediante Open-Meteo, [CC BY](https://www.geonames.org/). El control del mapa identifica ambos proveedores. |
+| **FAO-56** | Allen, Pereira, Raes y Smith (1998), *Crop evapotranspiration*, tablas 11, 12, 19 y 22; ecuaciones 52, 58, 80, 82–85 y 88. [Publicación](https://www.fao.org/4/x0490e/x0490e00.htm) y [términos FAO](https://www.fao.org/contact-us/terms/en/). El catálogo registra tabla y fila por parámetro. |
+| **FAO EcoCrop / Recocrop** | Rangos de temperatura y lluvia, copia de [Recocrop](https://github.com/cropmodels/Recocrop), commit `3a01315`. La licencia GPL-3.0 del código de Recocrop no otorga por sí misma permisos sobre los datos FAO. |
+| **Saxton y Rawls** | Pedotransferencia de retención y TAW: (2006), *Soil Sci. Soc. Am. J.* 70:1569–1578, [doi:10.2136/sssaj2005.0117](https://doi.org/10.2136/sssaj2005.0117). Tablas 1 y 3; cálculo etiquetado `SUPUESTO`. |
+| **WoSIS** | Batjes y van Oostrum (2023), *WoSIS Procedures Manual*, ISRIC Report 2023/01, p. 25: factor 1.724 para convertir carbono orgánico en materia orgánica. |
+| **SIAP** | Cierre agrícola municipal 2021–2025 y presencia de cultivos. [Datos abiertos](https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php): reconocimiento de fuente y conservación de condiciones al redistribuir. [Procedencia del extracto](datos/catalogos/fuentes/LEEME.md). |
+| **INIFAP** | Guía de maíz de temporal de Cotaxtla (Tinoco Alfaro, 2022) y Agenda Técnica Agrícola de Veracruz (2015). Se extraen fechas citadas; no se redistribuyen los textos como contenido propio. |
+| **GGCMI fase 3** | Calendario mundial de temporal a 0.5°. Jägermeyr et al. (2021), [doi:10.5281/zenodo.5062513](https://doi.org/10.5281/zenodo.5062513), CC BY 4.0. |
+| **MIRCA2000 v1.1** | Inicio de ciclos y presencia por superficie de temporal. Portmann, Siebert y Döll (2010), [doi:10.5281/zenodo.7422506](https://doi.org/10.5281/zenodo.7422506), CC BY 4.0. |
+| **FAO Crop Calendar** | Ventanas por país y cultivo en 57 países. El equipo trata el extracto como **CC BY-NC-SA 4.0**, separado en [su carpeta y aviso](datos/calendario/fao-crop-calendar/LICENCIA.md). Esa restricción no se elimina al licenciar el código. |
+| **geoBoundaries gbOpen** | Límites mexicanos para emparejar SIAP; ADM2 CC BY 4.0 y ADM1 CC BY 3.0 IGO, según metadatos de los extractos. |
+| **GBIF / EPPO** | Presencia regional y hospederos de plagas, capa ilustrativa. Cita por consulta: GBIF.org (fecha), *GBIF Occurrence Search*. Cada registro conserva la licencia de su publicador. Para *Sphenarium purpurascens*: Quesada-Béjar et al. (2017), *Rev. Mex. Cienc. Agríc.* 8(6):1357–1370. |
+| **ESA WorldCover 2021 v200** | Tierra de cultivo, clase 40, 10 m. Zanaga et al. (2022), [doi:10.5281/zenodo.7254221](https://doi.org/10.5281/zenodo.7254221), [CC BY 4.0](https://esa-worldcover.org/en/data-access). © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. |
+| **USDA CDL / NRCS SSURGO** | Cultivos y suelo para Iowa. CDL es de [dominio público y redistribución libre](https://catalog.data.gov/dataset/cropland-data-layer); citar USDA NASS y año de la capa. El [registro SSURGO](https://catalog.data.gov/dataset/soil-survey-geographic-database-ssurgo) declara dominio público. [Cita NRCS](https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo): Soil Survey Staff, NRCS, USDA, *Web Soil Survey*, con fecha de acceso. |
+| **Köppen-Geiger** | Clasificación desde normales POWER con reglas de Peel, Finlayson y McMahon (2007). El bioma de la escena es decorativo. |
+| **Fotografías de ejemplos** | Autor, URL, licencia y modificaciones por fotografía en [créditos](web/src/ui/assets/lugares/creditos.json). Son materiales de terceros, distintos de las ilustraciones generadas. |
+
+## Límites científicos
+
+- El clima es regional; las parcelas de ejemplo comparten una serie entre sus celdas. La resolución meteorológica de POWER es aproximadamente 0.5 × 0.625 grados; IMERG tiene otra resolución.
+- Las diferencias del balance entre bloques provienen de cultivos, fechas y parámetros de suelo disponibles. **La pendiente no modifica el balance actual**; la elevación media se usa en ET0 cuando corresponde.
+- Textura, pH y TAW son estimaciones, no un análisis de laboratorio. `GWETROOT` representa una zona de raíces regional de aproximadamente un metro, no humedad medida en cada bloque.
+- El modelo no estima erosión, rendimiento, precios, costos ni daño por plagas. La percolación no equivale a un umbral validado de encharcamiento. El 3D representa estados cualitativos, no biomasa ni altura real.
+- Se usan parámetros generales FAO-56/EcoCrop, raíz en el extremo superior del rango y equivalencias explícitas, como chile con parámetros de pimiento dulce. Las duraciones son la suma de etapas, incluso cuando el total impreso de la tabla difiere. [Detalle de parámetros y elecciones](datos/catalogos/README.md).
+- El calendario mundial usa celdas de 0.5° y equivalencias `SUPUESTO` para determinados cultivos. FAO Crop Calendar combina zonas agroecológicas del país sin límites espaciales publicados; las ventanas mexicanas pueden ser estatales o distritales.
+- La búsqueda de plagas usa una caja de ±1.5°; su extensión en kilómetros cambia con la latitud. Presencia histórica desde 2000 no equivale a riesgo o pérdida de la próxima temporada.
+- El modelo no tiene calibración agronómica local para presentar sus alternativas como recomendaciones de campo. Se requiere criterio profesional antes de tomar decisiones agrícolas.
+
+## Uso de IA y derechos
+
+Según el registro del equipo, la idea central proviene de una propuesta humana. Claude, Codex, Cursor, ChatGPT, Gemini y Copilot se usaron como asistentes para código, pruebas y documentación. La extracción de parámetros FAO-56/EcoCrop contó con asistencia de IA; cada valor mantiene su fuente. Las pruebas de software no equivalen a validación agronómica.
+
+Los modelos voxel e iconos se generaron mediante código asistido por IA y las herramientas `voxelkit.py` e `iconos2d.py`. Las ilustraciones `terreno-hero`, `terreno-demo` y `terreno-poligono` se generaron con IA; se conservan sus [prompts](web/src/ui/assets/terreno-prompts.md). El guion y los subtítulos del [tráiler](docs/trailer-30s.md) están en el repositorio; la voz inglesa usa ElevenLabs TTS (`eleven_v4`, Brian) vía Krea y declara su generación en los metadatos de los archivos de voz.
+
+El [guion de la presentación de siete diapositivas](docs/presentacion.md), sus notas del orador y su diseño se redactaron con asistencia de Claude a partir de la documentación y las regresiones del motor. El guion incluye una declaración de IA en la última diapositiva; utiliza texto, formas y capturas de la aplicación.
+
+Dentro de la aplicación, las explicaciones son plantillas deterministas: ningún LLM decide indicadores ni completa datos científicos ausentes. La [guía de entrega](https://www.spaceappschallenge.org/resources/project-submission-guide/) exige marcas visibles en imágenes/video generados y reconocimiento en texto y metadatos para audio, código y datos.
+
+**El repositorio no incluye un archivo de licencia para el código propio.** Los materiales de terceros conservan sus condiciones. Las [condiciones de Space Apps](https://www.spaceappschallenge.org/legal/) establecen contenido original libre o bajo licencia OSI y distribución Apache 2.0 por NASA si no se especifica una licencia OSI. Eso no relicencia datos FAO ni otros materiales de terceros, ni acredita por sí solo la elegibilidad del paquete completo.
+
+## Entrega de Space Apps
+
+La [guía oficial](https://www.spaceappschallenge.org/resources/project-submission-guide/) solicita nombre, resumen, URL de demo, URL final del proyecto, descripción detallada, declaración SI/IA, datos NASA y referencias de otros proveedores. El formulario y los materiales enlazados deben estar en inglés. La demo puede ser un video de **hasta 30 segundos** o una presentación de **hasta siete diapositivas**, incluidas portada e introducción; un video hablado en otro idioma requiere subtítulos en inglés. Los enlaces deben ser públicos y accesibles sin autenticación.
+
+La entrega se confirma en el portal con **Submit for Judging** y su confirmación; guardar progreso no equivale a enviar. Este README documenta el proyecto y no es un comprobante de envío. Véanse [reglas y sede](docs/02-EVENTO-Y-RETO.md) y [borrador del formulario](docs/entrega-a5-9.md), que conserva un corte anterior del proyecto.
+
+## Estructura y comprobaciones
 
 | Carpeta | Contenido |
 | --- | --- |
-| `web/` | Frontend React + Vite + TypeScript; motor de simulación en Web Worker |
-| `api/` | Backend FastAPI (Python): proxy y caché de NASA POWER, Open-Meteo, elevación, suelo |
-| `contratos/` | Contratos de datos (JSON Schema), ejemplos y tipos TS generados: fuente de verdad de los formatos |
-| `datos/` | Catálogos (cultivos, suelos, calendario local), calendario mundial (extractos de GGCMI, MIRCA2000, SIAP y FAO Crop Calendar), plagas, parcelas de ejemplo mundiales (`demo/ejemplos/`) y el paquete de Isla (prueba interna) |
-| `modelos/` | Modelos 3D `.bbmodel` de los 40 cultivos (cinco etapas y bloque ligero cada uno), losas de suelo y mascota, e iconos 2D (`iconos2d/`); generados con código por agentes de IA, incluido `modelador-voxel` |
-| `docs/` | Documentación vigente |
-| `herramientas/` | `voxelkit.py`, `ejemplos/` (graba las parcelas de ejemplo), `buzon/` (mensajes entre sesiones de IA por la red local), `prueba-movimiento/` (prueba de accesibilidad de la escena en Chrome) y utilidades |
+| `web/` | React, Vite, TypeScript; interfaz, Worker del motor y escena Three.js con InstancedMesh |
+| `api/` | FastAPI; proxy, caché y clientes de proveedores |
+| `contratos/` | JSON Schema, ejemplos y tipos TS generados; fuente de verdad de formatos |
+| `datos/` | Catálogos, calendarios, extractos y respuestas de ejemplos |
+| `modelos/` | Modelos Blockbench, bloques ligeros, iconos y generadores |
+| `docs/` | Método, decisiones, organización y materiales de entrega |
+| `herramientas/` | Generación voxel, grabación de datos, respaldo sin red y buzón del equipo |
 
-Ramas: `main` (estable), `balam`, `Mompin`, `Mafer`, `Eduardo`. Se trabaja en la rama propia y se integra a `main`; un archivo, un responsable.
-
-## Cómo correrlo
-
-Requisitos: Node.js 20.19+ o 22.12+ y Python 3.12 (`web/package.json`, `api/README.md`).
-
-### Web (interfaz y motor)
+Desde la raíz, ejecutar antes de integrar:
 
 ```bash
-cd web
-npm install
-npm run dev          # abre http://127.0.0.1:5173
-npm test             # pruebas del motor y de la interfaz
-npm run build        # comprueba tipos y genera dist/
+npm ci --prefix contratos
+npm test --prefix contratos
+node datos/catalogos/validar.mjs
+npm test --prefix web -- --maxWorkers=1
+npm run build --prefix web
 ```
 
-En desarrollo, la web llama a la API pública. Para usar una API local se define `VITE_API_URL` (por ejemplo `VITE_API_URL=http://127.0.0.1:8010 npm run dev`); ver `web/src/api/README.md`.
-
-### API (datos)
+Pruebas Python desde la raíz, tras instalar el entorno de la API:
 
 ```bash
-cd api
-python3.12 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/uvicorn app.main:app --reload --port 8010
-.venv/bin/python -m pytest -q        # sin red: usa respuestas reales guardadas
+# Bash
+api/.venv/bin/python -m pytest -q api
+api/.venv/bin/python -m unittest discover -s datos/catalogos
 ```
 
-La documentación interactiva está en `/docs`. No hay llaves en el repo. `EARTHDATA_TOKEN` solo hace falta para `/api/smap` y va en el entorno del servicio, nunca en un archivo del repo (`api/README.md`).
+```powershell
+# PowerShell
+.\api\.venv\Scripts\python.exe -m pytest -q api
+.\api\.venv\Scripts\python.exe -m unittest discover -s datos/catalogos
+```
 
-### Demo sin internet
+`--maxWorkers=1` reduce el consumo simultáneo de memoria en Vitest. Un build exitoso no sustituye las pruebas. Cada responsable trabaja en su rama; solo Mompin integra a `main`, conforme a [AGENTS.md](AGENTS.md) y al [plan vigente](docs/16-PLAN-DIA-FINAL.md).
 
-Las parcelas de ejemplo (`datos/demo/ejemplos/`) son también el respaldo sin red: el front carga sus respuestas grabadas sin llamar a la API (`web/src/demo/ejemplos.ts`), y `herramientas/demo-sin-red.sh` arranca la API sin red con la caché de todos los ejemplos, así que `GET /api/clima`, `POST /api/elevacion`, `GET /api/suelo`, `GET /api/proxima-temporada`, `/api/plagas` y `/api/calendario` responden la coordenada de cada ejemplo (`docs/demo-sin-red.md`). El paquete de Isla (`datos/demo/`, A2.4) sigue como prueba interna. La web debe pedir la ventana `2005-10-01` a `2025-12-31` y el centroide de la parcela; otra zona sin red responde 503 con `ERROR_DATOS` (`datos/demo/LEEME.md`).
-
-### Verificaciones antes de integrar
-
-`npm test` en `contratos/`, `pytest` en `api/`, `node datos/catalogos/validar.mjs`, `python -m unittest discover -s datos/catalogos`, y `npm test` y `npm run build` en `web/` (`CLAUDE.md`).
-
-## Método
-
-Todo cálculo vive en el **motor**, que corre en el navegador dentro de un Web Worker (`web/src/motor/`). La interfaz y el 3D solo muestran lo que entrega el motor (`docs/05`, `docs/08`, `docs/13`).
-
-1. **Escenarios históricos:** años reales seco, normal y lluvioso, cerca de los percentiles p10, p50 y p90 de la lluvia de las temporadas PV + OI de SIAP, en 20 años agrícolas (2005-10 a 2025-12). Siempre se muestra el año real. No son una predicción (`docs/04`, `docs/05` paso 1, `contratos/clima-escenario.schema.json`).
-2. **Clima por ciclo:** cada ciclo se simula en su temporada típica (PV u OI) dentro del año del escenario. La fecha de siembra la elige el usuario y el selector la sugiere desde el calendario (base mundial de GGCMI, MIRCA2000 y FAO Crop Calendar, y SIAP e INIFAP encima en México), explicando de dónde sale; un cultivo sin fuente en el lugar se muestra sin ventana (`docs/05` paso 2, `contratos/plan-siembra.schema.json`, `contratos/calendario-local.schema.json`).
-3. **Balance de agua FAO-56 por bloque:** ET0, ETc = Kc × ET0 y un balance de cubeta con agua disponible (TAW) según el suelo. La percolación profunda sigue la ecuación 88 de FAO-56. La humedad inicial puede venir de `GWETROOT` de POWER convertida a fracción de TAW (`docs/05`, `docs/13`).
-4. **Pilares por rotación y escenario:** déficit hídrico, exceso de agua, compatibilidad de ciclo, protección del suelo (índice relativo, no toneladas), riesgo por calor (hoy `NO_EVALUABLE`: el catálogo no tiene un umbral de estrés por calor con fuente para todos los cultivos) y aporte indirecto. Si un pilar no tiene datos, sale `NO_EVALUABLE` con sus números en `null` (`docs/05` paso 6, `contratos/resultado-rotacion.schema.json`).
-5. **Ranking B:** puntaje compuesto por escenario, robustez = peor puntaje, minimax del arrepentimiento y desempate por promedio. Los pesos son iguales y se declaran `SUPUESTO` salvo que haya fuente o prioridades del usuario. El criterio A (solo pilar hídrico) queda de respaldo (`docs/05` paso 7, `docs/13`). La interfaz arma de inicio **Rotación 1, 2 y 3** con los cultivos sugeridos del ejemplo elegido (la R3 es la que hasta el 14/11 se llamaba R4; `docs/03`, `docs/13`, "Nombre de las rotaciones") y con "+" se agregan más. La parcela genera como máximo 200 celdas.
-6. **Próxima temporada (aproximada):** una banda p10 a p90 por mes durante 6 meses: la distribución histórica de cada mes desplazada por la anomalía del pronóstico estacional SEAS5, sin tendencia. Por rotación se usan años análogos reales. Siempre es `EXPLORATORIO`, nunca una cifra y nunca entra al ranking (`docs/13`, `contratos/proxima-temporada.schema.json`).
-7. **Explicación:** cada rotación lleva una tarjeta con por qué, evidencia (año real, cifras), beneficios, huecos y riesgos, generada por plantilla (`docs/05` paso 8).
-8. **Capas de apoyo que no entran al motor ni al ranking:** los consejos de Esquilote (con NDVI y humedad SMAP como evidencia regional), la capa ilustrativa de plagas y la lluvia satelital IMERG (`docs/06`, `docs/13`).
-
-Estados de cada resultado: `EVALUABLE`, `NO_EVALUABLE`, `EXPLORATORIO`, `ERROR_DATOS`, `RESPALDO_HISTORICO`. Un dato faltante nunca se convierte en cero (`docs/04`).
-
-## Datos de NASA que usa AgroHive
-
-El reto pide detallar qué datos NASA se usaron, y para un premio global hace falta al menos uno. Todos los de la lista están entre los que el reto menciona (SMAP, GPM, MODIS, NASA POWER...). Estado al 15/11/2026, según `docs/14` y `docs/01`:
-
-| Dato NASA | Para qué | Estado |
-| --- | --- | --- |
-| **NASA POWER** (API diaria, comunidad AG) | Lluvia, temperaturas, radiación, humedad, viento y `GWETROOT`. **Es la base del cálculo** | **En uso** |
-| **GPM IMERG** (variable `IMERG_PRECTOT`, vía POWER) | Lluvia satelital diaria como evidencia; no entra al balance ni a los escenarios (A4.10) | **En uso** (evidencia). POWER devuelve datos desde 1998-01-01 (medido el 14/11/2026 en la parcela demo; antes responde `-999`) |
-| **SMAP L3** (`SPL3SMP`, 36 km) | Humedad del suelo superficial, como contraste (A4.8) | **En la API pública** (`GET /api/smap`, token de Earthdata solo en el entorno del servicio; 14/11 respondió 200 con humedad real en la parcela demo). Evidencia informativa: no entra al ranking; el front la usa en los consejos de Esquilote (humedad reciente, dato regional) y los ejemplos la traen grabada |
-| **MODIS MOD13Q1** (NDVI) | NDVI como evidencia (A4.11) | **En uso** (evidencia): `GET /api/ndvi` por Microsoft Planetary Computer y el paquete de demo (`datos/demo/respuestas/ndvi.json`, 454 compuestos de Terra, estado `EXPLORATORIO`). No entra al ranking; el front lo usa en los consejos de Esquilote (verdor de la zona) y los ejemplos lo traen grabado |
-| **Elevación** | Relieve de la parcela. El proveedor por defecto es AWS Terrain Tiles (Terrarium), no un producto NASA directo | En uso; ver fuentes del DEM abajo |
-
-### Cómo se cita cada uno
-
-Reconocimiento de NASA como fuente, y cita del dato usado. Todo verificado el 14/11/2026 en las páginas oficiales indicadas.
-
-| Fuente | Cita | Licencia o condiciones de uso |
-| --- | --- | --- |
-| **NASA POWER** | *The data was obtained from National Aeronautics and Space Administration (NASA) Langley Research Center's Prediction Of Worldwide Energy Resources (POWER) project funded through the NASA Earth Science Division.* Con el servicio, la versión y la fecha: **POWER Daily API v2.10.3** (versión de las respuestas guardadas en `datos/pruebas-apis/`), consultada el 14/11/2026 ([guía de referencia](https://power.larc.nasa.gov/docs/referencing/)) | La guía de referencia de POWER **no declara una licencia** `[VERIFICAR]` |
-| **GPM IMERG** | Huffman, G.J., Stocker, E.F., Bolvin, D.T., Nelkin, E.J. y Tan, J. (2023). *GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07* (GPM_3IMERGDF). GES DISC. [doi:10.5067/GPM/IMERGDF/DAY/07](https://doi.org/10.5067/GPM/IMERGDF/DAY/07) (registro del catálogo CMR de NASA, que da cobertura desde 1998-01-01). Se obtiene a través de POWER: citar también a POWER. `[VERIFICAR]` que `IMERG_PRECTOT` de POWER sea este producto (Final, V07, diario) | Guía de uso y cita de datos NASA (abajo); instrucciones de cita del GES DISC en <https://disc.gsfc.nasa.gov/data-guidelines> |
-| **SMAP L3** (cuando se use) | O'Neill, P., Chan, S., Njoku, E., Jackson, T., Bindlish, R. y Chaubell, J. (2023). *SMAP L3 Radiometer Global Daily 36 km EASE-Grid Soil Moisture, Version 9*. NASA NSIDC DAAC. [doi:10.5067/4XXOGX0OOW1S](https://doi.org/10.5067/4XXOGX0OOW1S) (autores y año según los metadatos del DOI en DataCite; la página de cita recomendada que indica el catálogo, `nsidc.org/about/use_copyright.html`, respondió 404) | El catálogo dice: *freely, openly, and fully available to use without restrictions, provided that you cite the data according to the recommended citation*. Requiere iniciar sesión en Earthdata |
-| **MODIS MOD13Q1** | Didan, K. (2021). *MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061*. NASA LP DAAC. [doi:10.5067/MODIS/MOD13Q1.061](https://doi.org/10.5067/MODIS/MOD13Q1.061). Datos servidos por Microsoft Planetary Computer (colección `modis-13Q1-061`); el servicio REST de ORNL DAAC ([doi:10.3334/ORNLDAAC/1600](https://doi.org/10.3334/ORNLDAAC/1600)) solo se usó para validar 4 fechas y no se llama en vivo (`docs/13`). Términos de Planetary Computer `[VERIFICAR]` (V-25) | Política de uso de datos de NASA (abajo) |
-
-**Política de uso de datos de NASA** ([guía de Earthdata](https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance)): *Unless the content is marked with a use restriction or license, data provided from a NASA-led mission are licensed as Creative Commons Zero (CC0)*; hay que reconocer a NASA como fuente, y se pide citar el dato. *Non-NASA data available through the ESDIS project is subject to the license arrangements of the sponsoring organization.* No se debe sugerir que NASA avala el proyecto, ni usar su marca.
-
-## Otras fuentes y licencias
-
-| Fuente | Qué aporta | Licencia, cita y estado de la verificación |
-| --- | --- | --- |
-| **ISRIC SoilGrids** (WCS) | Textura, pH y carbono orgánico de 0 a 30 cm, 250 m, siempre `SUPUESTO` | **CC BY 4.0**, verificado en [isric.org/explore/soilgrids](https://www.isric.org/explore/soilgrids): *publicly available ... under the CC-BY 4.0 License* |
-| **OpenLandMap-soildb** | Segunda estimación de suelo a 30 m (arcilla, arena, limo, pH y carbono orgánico, 0-30 cm, 2020-2022), para comparar con ISRIC | **CC BY 4.0**, que declara la colección STAC de la que lee la API, en cada una de las cinco capas (versión de 30 m), y que también declaran los registros de Zenodo, que guardan la versión de **120 m**: arcilla `15528401`, arena `15528413`, limo `15528425`, pH `15471105` y carbono orgánico, mediana, `15535759` (el `15535762` es el percentil 84). Los DOI que el STAC cita para cada colección (`15528399`, `15528411`, `15528423`, `15471103` y `15535756`) son registros de **2000-2005**, no de las capas de 2020-2022 que se leen. Autores del conjunto: Consoli, Tian, Isik, Simoes, Hengl y otros (OpenGeoHub, Land & Carbon Lab). `[VERIFICAR]` qué registro de Zenodo corresponde a cada capa de 30 m (Eduardo, que mantiene el cliente) |
-| **AWS Terrain Tiles (Terrarium)** | Elevación por defecto | Su registro remite a la [guía de atribución de Tilezen](https://github.com/tilezen/joerd/blob/master/docs/attribution.md), que exige atribuir las fuentes del DEM. La atribución a Mapzen solo se exige al usar *el servicio alojado de Mapzen*, que no usamos. Las que aplican a una parcela en México y al mundo: *Mexico terrain data source: INEGI, Continental relief, 2016*; *Global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration*; *United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey* |
-| **Open-Meteo** | Respaldo de clima (ERA5), respaldo de elevación (Copernicus GLO-90) y pronóstico estacional (ECMWF SEAS5) | Su página de licencia dice: *API data are offered under Attribution 4.0 International (CC BY 4.0)* (hay que dar crédito y enlazar la licencia). Su README declara acceso gratuito *for non-commercial use*. Cita los datos de ECMWF (CC-BY) y de Copernicus C3S para el reanálisis y la elevación |
-| **Esri World Imagery** | Mapa base satelital, el que la interfaz muestra por defecto | El ítem oficial de la capa dice *This work is licensed under the Esri Master License Agreement* y declara estos créditos, que la interfaz muestra: *Esri, Vantor, Earthstar Geographics, and the GIS User Community*. Advierte que la capa no es para exportar tiles ni usarla sin conexión. `[VERIFICAR]` por una persona que el uso directo de los tiles desde esta web, que no es una aplicación de ArcGIS, cumple los términos de Esri: no pude leer el texto del acuerdo y el ítem menciona expresamente el uso en aplicaciones ArcGIS |
-| **OpenStreetMap** | Mapa base de calles (opción «calles» de la interfaz) | **ODbL** de la OpenStreetMap Foundation: *You are free to copy, distribute, transmit and adapt our data, as long as you credit OpenStreetMap and its contributors*; si se modifican los datos, el resultado se distribuye con la misma licencia ([copyright](https://www.openstreetmap.org/copyright)). Su [política de tiles](https://operations.osmfoundation.org/policies/tiles/) exige atribución visible (*Typically: © OpenStreetMap contributors*), la URL oficial, prohíbe descargar tiles en bloque y pide no restringir el `Referrer-Policy`; no encontré un `Referrer-Policy` en `web/` ni en `api/despliegue/`. **La interfaz muestra «© OpenStreetMap» sin «contributors»** `[VERIFICAR]` (balam) |
-| **FAO-56** (Allen, Pereira, Raes y Smith, 1998) | Kc y etapas (Tablas 11 y 12), agua del suelo (Tabla 19), Zr y p (Tabla 22), TAW (ec. 82), percolación (ec. 88) | Los [términos de FAO](https://www.fao.org/contact-us/terms/en/) permiten copiar, imprimir y descargar el contenido para *research and teaching purposes, and for use in non-commercial products or services* (la frase empieza con fines de estudio privado), con reconocimiento de la FAO como fuente y titular de los derechos, sin sugerir su aval. **El uso comercial requiere permiso de la FAO.** `[VERIFICAR]` por una persona que este uso encaja |
-| **FAO EcoCrop** | Rangos de temperatura y lluvia anual por cultivo | `ecocrop.fao.org` no respondía (HTTP 503), así que se usó la copia de la base en el paquete R [Recocrop](https://github.com/cropmodels/Recocrop) (commit `3a01315`), cuyo **código** es GPL-3.0. El paquete no declara licencia para los datos; son de la FAO y aplican sus términos (arriba) `[VERIFICAR]` |
-| **Saxton y Rawls (2006)** | TAW y retención (θsat, θFC, θWP) por pedotransferencia para cualquier textura | *Soil Sci. Soc. Am. J.* 70(5): 1569-1578, [doi:10.2136/sssaj2005.0117](https://doi.org/10.2136/sssaj2005.0117). Las ecuaciones se copiaron de su Tabla 1 y se verificaron contra su Tabla 3 |
-| **WoSIS Procedures Manual** (Batjes y van Oostrum, 2023) | Factor 1.724 de carbono orgánico a materia orgánica | ISRIC Report 2023/01, p. 25 (`docs/01`) |
-| **SIAP** | Cierre agrícola municipal 2021-2025 de todos los municipios de México: presencia de cultivos y temporadas PV/OI (años agrícolas de los escenarios) | [Portal de datos abiertos](https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php). Dice que son información que *cualquier persona puede usar, reutilizar y compartir libremente*, sujeta a *el reconocimiento de la fuente que los publica y la obligación de mantener las mismas condiciones de uso al momento de redistribuirlos*. El repo redistribuye un extracto (`datos/catalogos/fuentes/`): ver su `LEEME.md` |
-| **INIFAP** | Ventanas de siembra del sur de Veracruz: guía de maíz de temporal (Tinoco Alfaro, C. E. Cotaxtla, 2022) y Agenda Técnica Agrícola de Veracruz (2.ª ed., 2015) | La agenda lleva impreso *© Secretaría de Agricultura, Ganadería, Desarrollo Rural, Pesca y Alimentación*. No encontré en los PDF condiciones de reproducción. Se toman las fechas (datos) con su cita, no el texto `[VERIFICAR]` |
-| **GGCMI fase 3** (calendario de cultivos) | Base mundial del calendario de siembra: día de siembra de temporal a 0.5°, también en México, para 15 de los 40 cultivos. Frijol y ejote (`bea`, sin especie), chícharo y maíz dulce son equivalencias `SUPUESTO` | Jägermeyr et al. (2021), *Nature Food* 2: 873-885, [doi:10.5281/zenodo.5062513](https://doi.org/10.5281/zenodo.5062513), **CC BY 4.0** (`docs/04`) |
-| **MIRCA2000 v1.1** | Mes de inicio de la clase *Pulses* (caupí, haba, lenteja, `SUPUESTO`) y presencia de 11 cultivos fuera de México por área cosechada de temporal | Portmann, Siebert y Döll (2010), [doi:10.5281/zenodo.7422506](https://doi.org/10.5281/zenodo.7422506), **CC BY 4.0** (`docs/04`) |
-| **FAO Crop Calendar** | Periodos de siembra por país y cultivo en 57 países (África, Asia, Andes), encima de GGCMI y MIRCA | Tratado como **CC BY-NC-SA 4.0** (`[DECIDIDO]` Mompin, 15/11: un registro de FAO dice CC BY 4.0 y otro CC BY-NC-SA). Carpeta aparte `datos/calendario/fao-crop-calendar/` con su `LICENCIA.md`. **Condiciona la licencia del repositorio** (`docs/11`) |
-| **geoBoundaries gbOpen** | Límites de municipios y estados de México para emparejar los datos de SIAP | CC BY 4.0 (ADM2) y CC BY 3.0 IGO (ADM1), según `docs/01` |
-| **GBIF** (Occurrence Search) y **EPPO** | Plagas registradas cerca de la parcela (presencia desde 2000, caja de ±1.5°, unos 165 km) y sus cultivos hospederos (EPPO Global Database; para el chapulín, Quesada-Béjar et al. 2017, *Rev. Mex. Cienc. Agríc.* 8(6): 1357-1370) | Capa **ilustrativa**: un registro de presencia no es un pronóstico de daño y no entra al motor ni al ranking. Cita por consulta: *GBIF.org (fecha) GBIF Occurrence Search*. La licencia de cada registro es la de su publicador `[VERIFICAR]` |
-| **ESA WorldCover 10 m 2021 v200** | Ubicar los polígonos ficticios de los ejemplos donde todos los píxeles son cultivo (clase 40) | Zanaga et al. (2022), [doi:10.5281/zenodo.7254221](https://doi.org/10.5281/zenodo.7254221). Licencia `[VERIFICAR]` |
-| **USDA CDL y NRCS SSURGO** | Solo en EE. UU. (ejemplo de Iowa): cultivo sembrado y suelo, encima de las fuentes mundiales (contrato `ee-uu`, A4.12) | Cita y licencia `[VERIFICAR]` |
-| **Köppen-Geiger** (reglas de Peel, Finlayson y McMahon, 2007) | Clima de cada ejemplo, calculado desde las normales de la serie de POWER; el bioma de la escena es decorativo `[PROPUESTA]` | Reglas publicadas, aplicadas por el equipo (`docs/01`) |
-
-Modelos 3D propios, generados con el agente `modelador-voxel` del equipo (`docs/07`).
-
-## Límites y supuestos declarados
-
-Fuente: `docs/00` ("Qué NO afirmar nunca"), `docs/04`, `docs/10` ("Límites científicos"), `docs/11` (riesgos).
-
-- **No predice una temporada exacta.** Los escenarios son años históricos reales y la próxima temporada es un rango aproximado, nunca una cifra.
-- **No predice cosechas, rendimientos ni ganancias.**
-- **No mide pH ni fertilidad.** Textura, pH y TAW son estimaciones de mapas globales o de pedotransferencia, siempre `SUPUESTO`.
-- **Resolución gruesa del clima:** la parcela cabe en una celda de POWER (0.5 × 0.625 grados), así que el clima es igual en toda la parcela. Las diferencias entre bloques vienen de cultivo, suelo y relieve.
-- **`GWETROOT` es fracción de saturación** (~1 m, regional), no fracción de TAW: se convierte antes de usarse, y sin la retención del suelo no se usa.
-- **El 3D es cualitativo:** muestra etapas y estados, no alturas ni biomasa.
-- **Simplificaciones:** cubeta de agua, índice relativo de erosión, parámetros de tablas generales, pesos iguales `SUPUESTO` en el ranking y normalización del exceso de agua `SUPUESTO`.
-- **Parámetros elegidos por el equipo** que una persona debe revisar: filas de FAO-56, **el chile usa los parámetros del pimiento dulce** (misma especie; FAO-56 y EcoCrop no traen chile verde), raíz en el máximo del rango y grupos del selector (`datos/catalogos/README.md`). Tres de esas elecciones (chícharo en fresco, Kc final del trigo en 0.25 y el chile) las revisó una persona del equipo el 15/11 y se mantienen; falta una revisión agronómica.
-- **Totales impresos de FAO-56 que no cuadran:** sorgo (las etapas suman 125, total 130), caupí (100 contra 110), ajonjolí (110 contra 100) y la fila de mayo/junio de la berenjena (140 contra 40). Se guardan las etapas y el ciclo es su suma. Se cotejó con la edición web de FAO-56 (el desajuste está en la fuente); falta compararlo con el PDF.
-- **El calor no se evalúa** (sin umbral de estrés con fuente para todos los cultivos) y **no se consideran precios, costos, rendimiento ni plagas** en el cálculo.
-- **Calendario mundial:** base a 0.5° con un solo ciclo por celda; frijol, ejote, chícharo, maíz dulce, caupí, haba y lenteja entran por equivalencias `SUPUESTO`; FAO Crop Calendar une las zonas agroecológicas del país porque no publica sus límites.
-- **Plagas:** solo presencia registrada en GBIF a unos 165 km; no estima daño ni pérdida.
-- **Un cultivo que la fuente local no registra en el lugar** se muestra, pero no se recomienda (por ejemplo, la calabaza en Isla, donde SIAP no la registra).
-- **Las ventanas de siembra de maíz OI y frijol OI** son recomendaciones del estado de Veracruz, no de Isla; solo el maíz de primavera-verano tiene una guía que cubre el distrito de Isla.
-- **IMERG y POWER difieren** en tormentas y en años recientes. Los escenarios usan POWER; con IMERG serían otros años (riesgo declarado en `docs/11`).
-- **Sin validación local** mientras no la haya: toda recomendación requiere validación en campo con un técnico.
-
-## Declaración de uso de IA
-
-El reto permite el uso de IA (en su guía la llama «Super Intelligence (SI)»), con condiciones: no se usa para idear la solución, el contenido generado no puede usar branding de NASA, y hay que indicar dónde y cómo se usó. Para imágenes y video pide marca de agua visible; para audio, código y datos, reconocerlo en texto y metadatos ([guía de entrega](https://www.spaceappschallenge.org/resources/project-submission-guide/), leída el 14/11/2026). **Esta sección está pendiente de revisión humana.**
-
-| Parte | Cómo se usó la IA | Estado |
-| --- | --- | --- |
-| **La idea** | La idea central (probar cada rotación contra años históricos reales y buscar la más robusta) viene de un video de un compañero del equipo (`docs/11`), no de una herramienta de IA | `[VERIFICAR]` que el equipo lo confirme |
-| **Código** | Los integrantes usaron asistentes de IA (según `docs/14`: Claude, Codex, Cursor, ChatGPT, Gemini y Copilot) para escribir código, pruebas y documentación. Varios commits llevan la marca `Co-Authored-By` de la herramienta; **no todos** (el equipo no los marcó de forma uniforme), por eso queda aquí por escrito | Reconocido en este texto |
-| **Datos** | Los valores del catálogo de cultivos y suelos los extrajo un asistente de IA de las tablas originales de FAO-56 y de EcoCrop, con fuente por valor. Una persona aprobó las elecciones (qué fila usar); **la comprobación cifra por cifra contra la fuente queda pendiente** (el 15/11 se cotejaron con la edición web de FAO-56 seis filas dudosas; el PDF no se leyó) | `[VERIFICAR]` |
-| **Modelos 3D e iconos** | Los modelos `.bbmodel` (40 cultivos con cinco etapas y bloque ligero, suelos y mascota) y los iconos 2D los generaron agentes y sesiones de IA que escriben código con `voxelkit.py` y `iconos2d.py`; se revisaron a la vista en los visores de `modelos/` (15/11) | Reconocido en este texto |
-| **Ilustraciones de la interfaz** | `terreno-hero`, `terreno-demo` y `terreno-poligono` se generaron con una herramienta de generación de imágenes (prompts en `web/src/ui/assets/terreno-prompts.md`). El origen de `inicio-campo.png` no está registrado | **La guía pide marca de agua visible** en imágenes generadas con IA: `[DECIDIR]` cómo se cumple. No comprobé si la interfaz ya la muestra |
-| **Video y audio de la demo** | Trailer de 30 s (`docs/trailer-30s.md`). **La voz en inglés es generada con IA**: ElevenLabs TTS (`eleven_v4`, voz Brian) vía Krea, 15/11/2026, sobre un guion del equipo; el archivo (`docs/trailer-30s/voz/`) lo declara en sus metadatos. Las tomas son grabaciones de pantalla de la app. Si la música también se genera, se agrega aquí | Voz: reconocida en este texto y en los metadatos; falta la línea visible en el cartón final del video |
-| **Presentación de 7 diapositivas** | Texto, notas del orador y diseño redactados con un asistente de IA (Claude) a partir de `docs/` y de las regresiones del motor, para revisión del equipo (`docs/presentacion.md`). Sin imágenes generadas: solo texto, formas y capturas de la app. La última diapositiva lleva la declaración de IA | Reconocida en este texto y en el deck |
-| **Branding de NASA** | No se encontraron logos de NASA entre los archivos del repo (revisión por nombre, 14/11/2026). El contenido generado no debe usarlos | `[VERIFICAR]` en las capturas y el video |
-| **Dentro de la aplicación** | Ningún modelo de lenguaje decide ni inventa datos. Si se usa uno, solo redacta sobre números ya calculados, y hay plantilla de respaldo sin LLM (`docs/05` paso 8). La demo usa plantilla. Los consejos de Esquilote son plantillas con números ya calculados | Hecho |
-
-Las decisiones, las fuentes y la revisión son humanas (`docs/14`; `AGENTS.md`). Las cifras científicas llevan fuente, y una persona debe verificarlas (`AGENTS.md`).
-
-## Licencia del proyecto
-
-**El repositorio no tiene archivo de licencia** al 15/11/2026, así que el código propio no declara bajo qué términos se puede reutilizar. `[DECIDIR]` (equipo). Las fuentes de arriba conservan sus propias licencias y condiciones. **El calendario mundial incluye datos de FAO Crop Calendar tratados como CC BY-NC-SA 4.0** (`datos/calendario/fao-crop-calendar/`), que limitan el uso comercial y condicionan la licencia que se elija (`docs/11`).
-
-## Lo que falta verificar
-
-Todo lo siguiente es `[VERIFICAR]` y necesita a una persona:
-
-1. **Licencias y condiciones de uso** de la tabla de fuentes: POWER (no declara licencia), FAO-56 y EcoCrop (uso no comercial con reconocimiento; copia de Recocrop), INIFAP (sin condiciones encontradas), SIAP (redistribución con las mismas condiciones), FAO Crop Calendar (CC BY-NC-SA; un registro de FAO dice CC BY), GBIF (por publicador), ESA WorldCover, USDA CDL y NRCS SSURGO (licencia y cita sin comprobar). El texto legal lo valida una persona.
-2. **Citas incompletas:** que la variable `IMERG_PRECTOT` de POWER sea el producto IMERG Final V07 diario; qué registro de Zenodo corresponde a cada capa de 30 m de OpenLandMap.
-3. **Mapas base:** si el uso directo de los tiles de Esri World Imagery cumple los términos de Esri, y completar la atribución de OpenStreetMap con «contributors».
-4. **Declaración de IA:** que el equipo confirme la idea humana, cómo se cumple la marca de agua en las imágenes generadas y en el video, y la comprobación de las cifras del catálogo.
-5. **Reglas del reto:** confirmarlas en el navegador (se leyeron con una herramienta de IA).
-6. **Licencia del código propio** del repositorio.
-7. **Sin validación local:** ningún técnico agrícola ha revisado los parámetros ni las recomendaciones.
-8. **«Método y fuentes» está incompleta:** todavía no lista las fuentes de la humedad SMAP, el NDVI de MODIS ni las plagas de GBIF, que la interfaz usa en los consejos de Esquilote y en la capa de plagas (MF10, `web/evidencia/cifras-visibles-d10.md`).
-
-## Equipo
-
-Code Hive: Mompin, Eduardo, Mafer y balam (`docs/14`, tablero de reparto).
+**Equipo Code Hive:** Mompin, Eduardo, Mafer y balam.

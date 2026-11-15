@@ -1,0 +1,22 @@
+.mapa-editor { min-inline-size: 0; }
+.mapa-editor .mapa-dibujo { min-block-size: 480px; }
+.mapa-buscador { position: absolute; inset-block-start: 14px; inset-inline-start: 14px; z-index: 550; inline-size: min(400px, calc(100% - 28px)); border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-surface); min-inline-size: 0; box-shadow: var(--shadow-float); }
+.mapa-buscador-fila { display: flex; align-items: center; padding-inline: 4px; }
+.mapa-buscador-form { display: flex; align-items: center; flex: 1 1 0; min-inline-size: 0; }
+.mapa-buscador-form input { flex: 1 1 0; min-inline-size: 0; inline-size: 100%; font-size: 1rem; border: 0; border-radius: var(--radius-input); background: transparent; padding-inline: 10px 4px; }
+.mapa-buscador:has(input:focus-visible) { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.mapa-buscador-form input:focus-visible { outline: none; }
+.mapa-buscador button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -4px; }
+.mapa-buscador button { display: inline-grid; place-items: center; flex: 0 0 44px; inline-size: 44px; min-block-size: 44px; border: 0; border-radius: var(--radius-input); padding: 0; font: inherit; cursor: pointer; background: transparent; color: var(--color-text); }
+.mapa-buscador .mapa-ubicar { color: var(--color-forest-700); }
+.mapa-buscador button:disabled { opacity: .65; cursor: progress; }
+.mapa-buscador-estado { margin: 0; padding: 8px 14px; font-size: .875rem; line-height: 1.5; color: var(--color-text-body); border-block-start: 1px solid var(--color-border); }
+.mapa-lugares { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-1); max-block-size: 240px; overflow-y: auto; }
+.mapa-lugares button { display: grid; justify-items: start; gap: var(--space-1); inline-size: 100%; padding: 8px 14px; text-align: start; color: var(--color-text); background: var(--color-surface); }
+.mapa-lugares strong { font-weight: 500; }
+.mapa-lugares span { font-size: .8125rem; line-height: 1.5; color: var(--color-text-muted); }
+.mapa-editor .mapa-capa-vista { top: 76px; }
+.mapa-editor .dibujo-barra { top: 76px; }
+.mapa-editor .dibujo-pop { top: 76px; }
+.mapa-editor .mapa-aviso { top: 126px; }
+@media (hover: hover) { .mapa-buscador button:hover { background: var(--color-panel); } }

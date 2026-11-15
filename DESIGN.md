@@ -475,6 +475,7 @@ The page uses a max-width 1200px centered column on a full-bleed Linen canvas. T
 Referencia visual incorporada por solicitud de Balam el 14/11/2026. Las descripciones de Duna se usan como referencia de interfaz; las decisiones funcionales y científicas vigentes siguen en docs/13 y contratos/.
 
 - Fuente única de valores: `web/src/ui/tokens.css`. Componentes consumen roles semánticos (`--color-text`, `--color-canvas`, `--color-action`, `--color-border`) en vez de crear paletas por pantalla.
+- Fondo global blanco puro (`#FFFFFF`), solicitado por Balam el 15/11: `--color-canvas` usa `--color-paper-white`, también en el fondo de la cabecera. Tipografía compartida: base `1rem`/400, interlineado de lectura `--leading-body: 1.6` y encabezados secundarios `--leading-heading: 1.3`; se conserva la familia existente. Las ilustraciones y el entorno 3D mantienen su representación propia.
 - Reglas reutilizables: `web/src/ui/system.css`; disposición propia del laboratorio en `laboratorio.css`. Las variables antiguas se mantienen como alias para compatibilidad; Inicio y Terreno apuntan a la misma fuente.
 - GT America no fue proporcionada. Se usa la pila declarada con Arial/Helvetica del sistema, sin descargas ni fuentes licenciadas añadidas.
 - La escena 3D y sus colores semánticos se conservan por decisión del proyecto. El texto, las superficies y los controles que la rodean consumen el sistema común. El color nunca es el único indicador.
