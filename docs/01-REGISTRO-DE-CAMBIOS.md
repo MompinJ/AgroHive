@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Modelos de la ampliación del catálogo, tanda C: yuca, caña de azúcar, ajonjolí, girasol y algodón (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{yuca,cana,ajonjoli,girasol,algodon}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; `EXTRAS` para piezas fuera de las plantas, hoy solo las 3 raíces de `yuca_madurez`); `iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (15 colores más, índices 176 a 190, para la tanda D; quedan 65 libres); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; `web/src/escena/ficha.ts` (nombres de los 22 cultivos de las tandas 2 y 3 del catálogo); pruebas con 23 cultivos; `docs/07` (tabla) y `docs/16` (M7).
+- **Cambio:** cada uno con 5 detallados (de 9 a 60 cubos), 5 bloques (de 15 a 24) y 5 iconos 2D (sobre los 115, peor par nuevo de daltonismo 16.8 %), y su prefijo. La yuca y la caña se siembran por estaca y por trozo de tallo; el girasol usa giros en z, que la escena y el recorte de bordes ya admiten.
+- **Para "bordes":** `yuca_madurez_bloque` lleva 3 cubos de raíz sobre el lomo, fuera de las 9 plantas; `media.test.ts` pasa con ellos. Si estorban al recorte, se quita su entrada de `EXTRAS`.
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` de Mafer, con OK de Mompin; en `generar.py` solo `modelo3d`.
+- **Pendiente:** tandas D a G; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Modelos de la ampliación del catálogo, tanda B: ejote, cebada, trigo, avena y maíz dulce (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
 
 - **Archivos:** `modelos/cultivos/{ejote,cebada,trigo,avena,maiz_dulce}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; `con_tallo` acepta `giro`); `iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (24 colores más, índices 152 a 175, para la tanda C); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; pruebas `bloques.test.ts` e `iconos2d.test.ts` (18 cultivos); `docs/07` (tabla) y `docs/16` (M7).

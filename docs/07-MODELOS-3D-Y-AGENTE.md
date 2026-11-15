@@ -94,6 +94,11 @@ La sesión "catalogo" agregó cultivos a `datos/catalogos/` sin modelo; la sesi�
 | Trigo | Macollo; espiga compacta y erguida, dorada | 10, 11, 29, 52, 46 | 15 a 21 |
 | Avena | Macollo; panícula abierta con espiguillas colgantes; paja clara | 9, 10, 28, 50, 51 | 15 a 21 |
 | Maíz dulce | Planta de maíz más baja que sigue verde en madurez; elote tierno con totomoxtle verde y grano pálido; id con guion bajo (`maiz_dulce`) | 11, 10, 26, 57, 45 | 15 a 21 |
+| Yuca | Arbusto ralo de tallo leñoso con nudos, hoja palmeada en peciolo rojizo; siembra por estaca; raíces cafés de pulpa blanca | 9, 12, 29, 60, 58 | 15 a 24 (en madurez, 3 raíces sobre el lomo fuera de las plantas: `EXTRAS` de `bloques.py`) |
+| Caña de azúcar | Macollo de tallos gruesos segmentados con nudos morados, desnudos abajo; siembra por trozo; la más alta | 11, 12, 29, 57, 45 | 21 a 24 |
+| Ajonjolí | Tallo único recto con cápsulas paradas en fila y flores tubulares rosa pálido | 12, 9, 27, 60, 42 | 15 a 21 |
+| Girasol | Tallo único con hojas anchas y capítulo de disco café y pétalos amarillos que se inclina; usa giros en z | 12, 10, 29, 46, 48 | 15 a 21 |
+| Algodón | Arbusto piramidal de hoja palmeada; madurez con motas blancas en cápsulas cafés | 12, 11, 29, 52, 48 | 15 a 21 |
 
 ## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
 

@@ -12,7 +12,7 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 4. Por material, 3 tonos (oscuro, base, claro). Lo claro va en tapas y puntas; lo oscuro en bajos, nudos y arrugas.
 5. Los indices 0-15 son `PALETA_BASE` de `herramientas/voxelkit.py`, en el mismo orden.
 
-## Colores (176)
+## Colores (191)
 
 | Indice | Nombre | Hex | Uso |
 | --- | --- | --- | --- |
@@ -192,6 +192,21 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 | 173 | algodon_bellota | #6f9a42 | Bellota (capsula) verde del algodon |
 | 174 | algodon_fibra | #fbfbf6 | Fibra blanca del algodon abierto |
 | 175 | algodon_capsula_seca | #6e4c2c | Capsula seca y abierta del algodon, cafe |
+| 176 | cartamo_hoja | #6f8f5a | Hoja espinosa de cartamo, verde grisaceo |
+| 177 | cartamo_flor | #f08a1c | Flor de cartamo en cabezuela, naranja intenso |
+| 178 | higuerilla_hoja | #55703c | Hoja palmeada grande de higuerilla, verde bronce |
+| 179 | higuerilla_tallo | #7a2a33 | Tallo y nervaduras rojo vino de la higuerilla |
+| 180 | higuerilla_capsula | #b8343c | Capsula espinosa roja de la higuerilla |
+| 181 | higuerilla_semilla | #8a6a52 | Semilla moteada de higuerilla (venenosa: solo se dibuja) |
+| 182 | tomate_hoja_dark | #2f6a2c | Hoja de jitomate en sombra, tallo |
+| 183 | tomate_hoja | #4c9a3c | Foliolo dentado de jitomate |
+| 184 | tomate_fruto | #d8322a | Jitomate maduro, rojo |
+| 185 | tomate_verde | #8cbf4a | Jitomate verde, sin madurar |
+| 186 | papa_hoja | #4a8a40 | Foliolo de la hoja compuesta de papa |
+| 187 | papa_tuberculo | #c9a46e | Papa (tuberculo) beige |
+| 188 | papa_tuberculo_dark | #8f6c44 | Ojos y sombra de la papa |
+| 189 | calabacita_fruto | #3f7a3a | Calabacita (fruto alargado), verde medio |
+| 190 | calabacita_fruto_light | #8fbf6c | Motas claras de la calabacita |
 
 Los hex son elegidos a ojo para el estilo voxel (no medidos de fotos). Las manchas plateadas de la hoja de calabaza y el fruto verde de C. moschata se tomaron de descripciones varietales (no de una variedad concreta).
 
@@ -207,4 +222,6 @@ Los tonos de soya (110-115), frijol caupi (116-121), haba (122-127), chicharo (1
 
 Los tonos de ejote (137-139), hoja de cereal (140-142), cebada (143-144), trigo (145-147), avena (148-149) y grano de maiz dulce (150-151) son cualitativos, elegidos a ojo (15/11 madrugada, sesion de cultivos): el ejote reutiliza la hoja del frijol (44-46) y el maiz dulce la planta del maiz; la paja seca usa `hoja_seca*` y `espiga*`. No estan medidos de fotos.
 
-Los tonos de yuca (152-158), cana (159-162), ajonjoli (163-166), girasol (167-170) y algodon (171-175) son cualitativos, elegidos a ojo (15/11, sesion de cultivos). La hoja de la cana reutiliza la del maiz (22-24). No estan medidos de fotos. Quedan 80 indices libres para los cultivos que faltan: reutilizar antes de agregar.
+Los tonos de yuca (152-158), cana (159-162), ajonjoli (163-166), girasol (167-170) y algodon (171-175) son cualitativos, elegidos a ojo (15/11, sesion de cultivos). La hoja de la cana reutiliza la del maiz (22-24). No estan medidos de fotos. 
+
+Los tonos de cartamo (176-177), higuerilla (178-181), jitomate (182-185), papa (186-188) y calabacita (189-190) son cualitativos, elegidos a ojo (15/11, sesion de cultivos); la calabacita reutiliza la hoja de la calabaza (52-55). No estan medidos de fotos. Quedan 65 indices libres: reutilizar antes de agregar.

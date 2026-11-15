@@ -241,6 +241,26 @@ PALETA_AGROHIVE = {
     'algodon_bellota': '#6f9a42',
     'algodon_fibra': '#fbfbf6',
     'algodon_capsula_seca': '#6e4c2c',
+    # 176-177: cartamo (hoja espinosa verde grisaceo, cabezuela tipo cardo naranja; lo demas reutiliza orange, red, white)
+    'cartamo_hoja': '#6f8f5a',
+    'cartamo_flor': '#f08a1c',
+    # 178-181: higuerilla (hoja palmeada bronce, tallo rojo vino, capsula espinosa, semilla moteada)
+    'higuerilla_hoja': '#55703c',
+    'higuerilla_tallo': '#7a2a33',
+    'higuerilla_capsula': '#b8343c',
+    'higuerilla_semilla': '#8a6a52',
+    # 182-185: jitomate (hoja compuesta dentada, fruto rojo con brillo, fruto verde; la flor usa yellow)
+    'tomate_hoja_dark': '#2f6a2c',
+    'tomate_hoja': '#4c9a3c',
+    'tomate_fruto': '#d8322a',
+    'tomate_verde': '#8cbf4a',
+    # 186-188: papa (hoja compuesta, tuberculo beige con ojos; la flor usa white o flor_lila con centro yellow)
+    'papa_hoja': '#4a8a40',
+    'papa_tuberculo': '#c9a46e',
+    'papa_tuberculo_dark': '#8f6c44',
+    # 189-190: calabacita (fruto alargado verde moteado; hoja y flor reutilizan calabaza_hoja*, calabaza_mancha, yellow y orange)
+    'calabacita_fruto': '#3f7a3a',
+    'calabacita_fruto_light': '#8fbf6c',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'

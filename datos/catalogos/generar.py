@@ -571,6 +571,7 @@ AMPLIACION = [
     # -- tanda 2: cultivos de campo del tropico y de Mexico (raices, cana, oleaginosas, algodon, tomate, papa, calabacita)
     {
         "id": "yuca",
+        "modelo3d": "yuca",
         "nombreComun": "Yuca",
         "nombreCientifico": "Manihot esculenta Crantz",
         "esLeguminosa": False,
@@ -592,6 +593,7 @@ AMPLIACION = [
     },
     {
         "id": "cana",
+        "modelo3d": "cana",
         "nombreComun": "Cana de azucar",
         "nombreCientifico": "Saccharum officinarum L.",
         "esLeguminosa": False,
@@ -615,6 +617,7 @@ AMPLIACION = [
     },
     {
         "id": "ajonjoli",
+        "modelo3d": "ajonjoli",
         "nombreComun": "Ajonjoli",
         "nombreCientifico": "Sesamum indicum L.",
         "esLeguminosa": False,
@@ -636,6 +639,7 @@ AMPLIACION = [
     },
     {
         "id": "girasol",
+        "modelo3d": "girasol",
         "nombreComun": "Girasol",
         "nombreCientifico": "Helianthus annuus L.",
         "esLeguminosa": False,
@@ -653,6 +657,7 @@ AMPLIACION = [
     },
     {
         "id": "algodon",
+        "modelo3d": "algodon",
         "nombreComun": "Algodon",
         "nombreCientifico": "Gossypium hirsutum L.",
         "esLeguminosa": False,
