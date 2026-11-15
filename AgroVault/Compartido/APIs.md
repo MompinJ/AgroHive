@@ -158,7 +158,7 @@ Regla: cualquiera de las dos queda `SUPUESTO`; el selector manual FAO-56 sigue d
 - **AppEEARS** ([API](https://appeears.earthdatacloud.nasa.gov/api/)): inicio de sesión `POST /api/login` (Basic con Earthdata, devuelve token Bearer de unas 48 h); muestras puntuales con `POST /api/task` (`task_type: "point"`, `params.dates`, `params.layers`, `params.coordinates` en EPSG:4326). Respuesta 202 con `task_id`; consultar `GET /api/task/{id}`. Para NDVI MODIS, `MOD13Q1.061` con capa `_250m_16_days_NDVI` (`VERIFICAR`: el nombre de capa vino de un resumen, no del texto literal). Es asíncrono; no sirve para el flujo en vivo del polígono.
 - **GIBS / Worldview**: capas WMTS sin llave, ejemplo `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/{fecha}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`. Hubo un reporte de tiles negros en la capa de color verdadero. `VERIFICAR` el ID de la capa de precipitación en el documento de capacidades. Decoración de mapa solamente; no alimenta el motor.
 
-## Orden sugerido de pruebas (los pasos 1, 2, 3 y 5 ya se hicieron en A0.7, ver `datos/pruebas-apis/LEEME.md`; quedan el 4 y el 6)
+## Orden sugerido de pruebas (los pasos 1, 2, 3 y 5 ya se hicieron en A0.7, ver `datos/pruebas-apis/LEEME.md`; el 4 se hizo en A2.14 y el 6 con el paquete de demo de A2.4)
 
 1. POWER diario puntual con los 7 parámetros de arriba: unidades reales, `GWETROOT` en AG, un navegador con `fetch` para CORS.
 2. Open-Meteo archivo con ERA5: nombres diarios exactos de lluvia y humedad de suelo; contar llamadas gastadas.

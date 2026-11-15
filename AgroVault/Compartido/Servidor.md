@@ -7,7 +7,7 @@ fuente: A0.4, configurado por Eduardo con Claude
 
 # Servidor (droplet de Eduardo)
 
-URL pública: **https://64-23-143-102.sslip.io** (certificado de Let's Encrypt, vence 2027-02-12, renovación automática de certbot). Prueba: `GET /health` devuelve `{"status":"ok","servicio":"agrohive-api","version":"0.1.0"}`. Desde A1.3 el servicio corre la API real de `api/` (clima, elevación, suelo, cultivos).
+URL pública: **https://64-23-143-102.sslip.io** (certificado de Let's Encrypt, vence 2027-02-12, renovación automática de certbot). Prueba: `GET /health` devuelve `{"status":"ok","servicio":"agrohive-api","version":"0.1.0","versionContrato":"0.12.2","commit":"23f8a53"}` (consultado el 14/11 a las 18:04). Desde A1.3 el servicio corre la API real de `api/` (clima, elevación, suelo, cultivos).
 
 No hay contraseñas ni llaves en este vault ni en el repo. El acceso SSH lo tiene Eduardo; si necesitas desplegar, pídeselo.
 
@@ -44,4 +44,4 @@ Logs: `journalctl -u agrohive-api`.
 - El certificado de AgroHive se pidió sin correo de contacto, así que Let's Encrypt no avisa si falla la renovación.
 - `VERIFICAR` límites de emisión de Let's Encrypt para `sslip.io` (dominio compartido) si hay que volver a emitir.
 
-Registro: V-15, V-16 y V-17 tienen ya evidencia; el equipo las cierra en `docs/11` y `docs/13`.
+Registro: V-15, V-16 y V-17 están cerradas en `docs/13`.
