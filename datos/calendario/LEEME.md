@@ -4,7 +4,7 @@ Lo sirve `GET /api/calendario`. No se inventan ventanas. `[DECIDIDO]` Mompin, 15
 
 | Archivo | Que es | Licencia |
 | --- | --- | --- |
-| `paises-110m.json` | Paises de Natural Earth 1:110m, v5.1.2 (solo iso, nombre y geometria). Consultado el 2026-11-14 | Dominio publico. https://www.naturalearthdata.com/ |
+| `paises-110m.json` | Paises de Natural Earth 1:110m, v5.1.2 (solo iso, nombre y geometria), 175 paises. Lo escribe `extraer_paises.py`. El codigo es `ISO_A2`; donde Natural Earth pone -99 (Francia, Noruega, Kosovo) se usa su `ISO_A2_EH`, y Taiwan sale como TW (su `ISO_A2` es CN-TW, fuera del patron del contrato). Chipre del Norte y Somalilandia no tienen codigo en ninguno de los dos campos: se suman al pais ISO que los contiene (CY, SO; regla de AgroHive, campo `unidos`). Hasta el 15/11 se filtraba por `ISO_A2` y Francia daba 422 (R9). Consultado el 2026-11-14 | Dominio publico. https://www.naturalearthdata.com/ |
 | `siap-mexico.npz` | Rejilla de 0.01 grados (3200 x 1840) con el indice del municipio de SIAP en cada celda de Mexico; 0 = sin municipio o sin pareja (unos 165 KB, 12 MB en memoria). Lo genera `extraer_siap_mexico.py` | Limites de geoBoundaries gbOpen MEX ADM2 (municipios, ano 2012, CC BY 4.0) y ADM1 (estados, CC BY 3.0 IGO) |
 | `siap-mexico.json` | Por municipio (clave INEGI y nombre): superficie sembrada de temporal por cultivo de AgroHive, temporada y ano, 2021-2025; el nombre SIAP de cada cultivo y los municipios de geoBoundaries que no se emparejaron (`sinPareja`) | SIAP, datos abiertos: uso libre con reconocimiento de la fuente y mismas condiciones al redistribuir (`[VERIFICAR]`, como el extracto de Isla) |
 | `extraer_siap_mexico.py` | Descarga los 5 cierres anuales de SIAP (unos 30 MB) y los limites de geoBoundaries (unos 21 MB) a `datos/cache/siap/` y escribe el extracto | - |
@@ -14,6 +14,7 @@ Lo sirve `GET /api/calendario`. No se inventan ventanas. `[DECIDIDO]` Mompin, 15
 | `mirca-rf.npz` | Extracto de MIRCA2000 v1.1, temporal, celda de 0.5 grados: area cosechada de 12 clases y hasta 3 subcultivos de Pulses con mes de inicio y fin (unos 1.3 MB). Lo genera `extraer_mirca.py` | CC BY 4.0. doi:10.5281/zenodo.7422506. Portmann, Siebert y Döll 2010, Global Biogeochemical Cycles 24, GB1011 |
 | `mirca-rf.json` | Que archivo de MIRCA2000 se leyo, clases y rejilla | (metadatos) |
 | `fao-crop-calendar/` | **Carpeta aparte, CC BY-NC-SA 4.0** (ver su `LICENCIA.md`): `fao-crop-calendar.json`, ventanas de FAO Crop Calendar por pais y cultivo (288 KB), y `extraer_fao.py` | CC BY-NC-SA 4.0 (`[DECIDIDO]` Mompin, 15/11) |
+| `extraer_paises.py` | Escribe `paises-110m.json` desde el GeoJSON de Natural Earth (sin dependencias) y falla si algun pais queda sin codigo de dos letras | - |
 | `extraer_mirca.py` | Lee de Zenodo, por rangos HTTP, solo `CELL_SPECIFIC_CROPPING_CALENDARS_30MN.TXT.gz` (8.7 MB) del zip de 172 MB (zipfile comprueba el CRC32) y escribe el extracto | - |
 
 ## Como se regenera
@@ -28,6 +29,8 @@ python datos/calendario/extraer_mirca.py            # 8.7 MB por rangos a datos/
 python datos/calendario/extraer_mirca.py --sin-red
 python datos/calendario/fao-crop-calendar/extraer_fao.py            # CSV de FAO (1.4 MB) a datos/cache/fao/ -> fao-crop-calendar.json
 python datos/calendario/fao-crop-calendar/extraer_fao.py --sin-red
+python datos/calendario/extraer_paises.py            # Natural Earth 110m v5.1.2 (0.8 MB) a datos/cache/natural-earth/ -> paises-110m.json
+python datos/calendario/extraer_paises.py --sin-red
 ```
 
 Los NetCDF originales **no** van al repo (quedan en `datos/cache/`, ignorada por git). El extracto si, porque el servidor se actualiza con `git pull` y las pruebas no deben depender de la red. En memoria, GGCMI son unos 17 MB (13 productos x 3 capas de 360 x 720 enteros), SIAP unos 15 MB y MIRCA unos 17 MB, cargados una vez por proceso: medido el 15/11, la API pasa de 92 a 126 MB de RSS y la llamada tarda 1 ms despues de la primera. Cabe de sobra en el droplet de 2 GB.

@@ -2,9 +2,9 @@
 
 > **Qué es:** la presentación de AgroHive en inglés, de 7 diapositivas contando portada e introducción, que la regla de la entrega permite en lugar del video de 30 s (`docs/02`, A0.5). Parte del esquema de "Presentación de respaldo (7 diapositivas)" de [`trailer-30s.md`](trailer-30s.md) y lo sustituye como texto vigente.
 >
-> **Deck:** <https://claude.ai/artifact/9at5wxSRsVZGkQNNBeDDnv> (tipo Slides de Claude, privado hasta que Mompin lo comparta desde su menú Share; se descarga como PDF o PPTX). Este archivo guarda el mismo texto (diapositivas y notas del orador) para revisarlo en el repo.
+> **Deck:** <https://claude.ai/artifact/9at5wxSRsVZGkQNNBeDDnv> (tipo Slides de Claude, privado hasta que Mompin lo comparta desde su menú Share; se descarga como PDF o PPTX). Este archivo guarda el mismo texto (diapositivas y notas del orador) para revisarlo en el repo. **Versión en español:** [`presentacion-es.md`](presentacion-es.md) (deck aparte, no se entrega).
 >
-> **Estado (15/11):** borrador para revisión del equipo. Faltan las capturas de la app (huecos marcados abajo) y la aprobación de todo el equipo antes de enviarla (`docs/13`, "Reglas de organización del día final").
+> **Estado (15/11):** borrador para revisión del equipo. Falta la captura de Comparison (hueco marcado abajo) y la aprobación de todo el equipo antes de enviarla (`docs/13`, "Reglas de organización del día final").
 
 ## Reglas que cumple
 
@@ -20,15 +20,19 @@
 - Tipografía: Inter Tight para títulos e Inter para texto (la app usa GT America con Inter de sustituto). Escala 120 / 64 / 40 / 30 / 24 px.
 - Cada diapositiva: etiqueta arriba (tema), título en una línea y una idea; pie con "AgroHive · Field Shift challenge" y número de página.
 
-## Capturas que faltan
+## Capturas
 
-Se ponen en el deck sustituyendo el recuadro punteado (subir la imagen y reemplazar el recuadro). Grabar con la app en inglés (B7), ventana de 1920 x 1080 y gráficos en Alto, como en la lista de tomas de [`trailer-30s.md`](trailer-30s.md).
+Sacadas sin pantalla el 15/11 desde `main` c4b6543 (app en inglés): Chrome `--headless=new` con SwiftShader conducido por CDP, ventana de 1920 x 1080, gráficos en Alto, tutoriales cerrados, ejemplo Bajío elegido en Land (método de la memoria del proyecto, "capturas de la escena sin pantalla"; los ejemplos vienen grabados en el front y no piden la API). Archivos en [`capturas/presentacion/`](capturas/presentacion/).
 
-| Diapositiva | Pantalla (nombre en la app en inglés) | Ejemplo | Qué se ve |
-| --- | --- | --- | --- |
-| 1 Cover | Scenarios | Bajío | Campo 3D a pantalla completa, Normal 2016, interfaz oculta (`toma.ocultar()` de `trailer-30s.md`) |
-| 3 What it is | Crops | Bajío | Brocha pintando maíz, sorgo y frijol en el 3D; Esquilote en la esquina |
-| 4 How it works | Comparison | Bajío | Ranking por robustez con la primera fila y la columna del peor escenario. **El orden se lee de la captura**, no de este archivo: las rotaciones iniciales las arma el front (E10) |
+| Diapositiva | Pantalla (nombre en la app en inglés) | Ejemplo | Archivo | Estado |
+| --- | --- | --- | --- | --- |
+| 1 Cover | Scenarios, Normal year 2016, semana 11 de 19, interfaz oculta | Bajío | `scenarios-bajio-normal-2016.png` (completa) y `portada-scenarios-bajio-recorte.png` (recorte de 1040 x 1080 que va en el deck) | Puesta |
+| 3 What it is | Crops, rotación 1 (maíz, sorgo, maíz), Esquilote con su primer consejo | Bajío | `crops-bajio.png` | Puesta |
+| 4 How it works | Comparison, ranking por robustez con la primera fila y la columna del peor escenario | Bajío | Pendiente: espera a que entre la pantalla 4 en inglés | Hueco punteado en el deck |
+
+**El orden del ranking se lee de la captura**, no de este archivo: las rotaciones iniciales las arma el front (E10).
+
+**Hallazgo al capturar (para B7):** en Scenarios, al pasar el cursor sobre la escena, el aviso de lluvia sale en español ("Lluvia: 1.4 mm, llovizna, el 2026-08-12 (clima real del 2016-08-12). Fuente: NASA POWER (diario, comunidad AG)"). La portada usa la escena sin interfaz, así que no se ve.
 
 ## Diapositivas y notas del orador
 
@@ -41,7 +45,7 @@ Duración de las notas: entre 25 y 40 s cada una a ritmo normal; unos 3.5 min en
 - Plan for the bad year.
 - A what-if simulator that tests a crop rotation against 20 years of real NASA climate data.
 - Explores real climate history. Does not forecast yields, income or the weather. The farmer decides.
-- Hueco: *Screenshot: Scenarios · Bajío example* (3D field at full screen, Normal year 2016, graphics on High, interface hidden).
+- Imagen: escena 3D del Bajío en el año normal 2016, sin interfaz (`capturas/presentacion/portada-scenarios-bajio-recorte.png`).
 
 **Notes:** Hi, we are Team Code Hive, and this is AgroHive, our answer to the Field Shift challenge. Our motto is “plan for the bad year.” AgroHive is a what-if simulator: you paint a crop rotation on a 3D field and test it against twenty years of real NASA climate data. One thing up front, because it matters: AgroHive does not forecast yields, income or next season’s weather. It shows how a plan would have held up in real years, and the farmer makes the decision.
 
@@ -61,7 +65,7 @@ Duración de las notas: entre 25 y 40 s cada una a ritmo normal; unos 3.5 min en
 - 2 · Paint the crops: Paint a rotation on a 3D voxel field with relief. The catalog has 40 crops.
 - 3 · Test it: Switch between a real dry, normal and wet year and watch each block react.
 - It does not forecast yields, income or an exact season. The farmer decides.
-- Hueco: *Screenshot: Crops · Bajío example* (painting maize, sorghum and beans with the brush on the 3D field; Esquilote, the mascot, in the corner).
+- Imagen: pantalla Crops del Bajío (`capturas/presentacion/crops-bajio.png`), con el pie "Crops screen, Bajío example: rotation 1 is maize, sorghum, maize."
 
 **Notes:** AgroHive is a what-if simulator. It does not try to guess the weather. You choose your land: one of six sample farms around the world, or you draw your own field on the map. You paint your crops on a 3D voxel field with real relief; the catalog has forty crops. Then you switch between a real dry, normal and wet year and watch how every block of your field reacts. It does not forecast yields or income, and it does not replace an agronomist. It makes the risk visible before planting, and the decision stays with the farmer.
 
@@ -119,7 +123,7 @@ Duración de las notas: entre 25 y 40 s cada una a ritmo normal; unos 3.5 min en
 
 - **Plan for the bad year.**
 - What AgroHive does not claim: It does not forecast yields, income or an exact season. · Climate is regional: one POWER cell (0.5° × 0.625°) covers the whole field. · The 3D scene is qualitative: stages and states, not real heights. · Every result needs field validation with local agronomists.
-- Try it: <https://64-23-143-102.sslip.io>
+- Try it: <https://agrohive.space>
 - Team Code Hive: Mompin, Eduardo, Mafer and balam
 - **AI use.** The idea comes from a teammate’s video, not from AI. AI assistants (Claude, Codex, Cursor, ChatGPT, Gemini, Copilot) helped write code, tests, docs and this deck; AI agents built the 3D models in code with our voxel library; some interface illustrations and the trailer voice (ElevenLabs via Krea) are AI-generated. NASA data is used as a source; this is not endorsed by NASA.
 
@@ -140,13 +144,14 @@ Duración de las notas: entre 25 y 40 s cada una a ritmo normal; unos 3.5 min en
 | Celda de POWER de 0.5 x 0.625 grados | `README.en.md`, "Declared limits and assumptions" |
 | GBIF en unos 165 km (caja de ±1.5°) | `README.en.md`, "Other sources and licenses"; `docs/13`, "Plagas con GBIF" |
 | Estado de cada fuente (en uso, evidencia, `SUPUESTO`, `NO_EVALUABLE`) | `README.en.md`, "NASA data used by AgroHive" y "Other sources and licenses"; calor y erosión `NO_EVALUABLE` en "Method", paso 4, y `docs/13`, "Pilares 2 y 3" |
-| Enlace de la app | `docs/trailer-30s.md`, "Enlace del cierre" `[DECIDIDO]` |
+| Enlace de la app | Dominio propio `agrohive.space` (`README.md`, "Demo publicada"; `docs/01`, 15/11). Comprobado el 15/11: `/health` responde `ok` con contrato 0.16.0. El hostname anterior `64-23-143-102.sslip.io` sigue activo como respaldo |
 | Equipo y declaración de IA | `README.en.md`, "Team" y "AI-use statement" (pendiente de revisión humana, igual que en el README) |
 
 ## Pendientes antes de enviarla
 
-- [ ] Poner las tres capturas (tabla de arriba) con la app en inglés.
-- [ ] Revisar en el deck que ningún texto se salga de su caja con las fuentes cargadas (las alturas se calcularon a mano; no se pudo previsualizar sin pantalla).
+- [x] Capturas de Scenarios y Crops puestas.
+- [ ] Captura de Comparison cuando entre la pantalla 4 en inglés.
+- [x] Revisión a ojo de las 7 diapositivas con las fuentes cargadas (vista previa local en Chrome sin pantalla, 15/11): nada se sale de su caja.
 - [ ] Que el equipo confirme la declaración de IA (la idea humana, la marca de las ilustraciones de la interfaz) como pide el README.
 - [ ] Compartir el deck con enlace público (menú Share del deck) o exportarlo a PDF y subirlo donde no pida registro ni permisos (`docs/02`).
 - [ ] Aprobación de todo el equipo.

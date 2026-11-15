@@ -41,7 +41,22 @@ PUNTOS = {
     "india-madhya-pradesh": (23.2, 77.4, "IN", (6, 26, "PV")),
     "espana-castilla": (40.0, -4.0, "ES", (4, 1, "PV")),
     "australia-nsw": (-33.0, 148.0, "AU", (12, 30, "OI")),
+    "francia": (48.5, 2.0, "FR", (4, 1, "PV")),  # R9: ISO_A2 = -99 en Natural Earth, antes 422
 }
+
+
+def test_paises_sin_codigo_menos_99():
+    """R9: Francia, Noruega y Kosovo traen ISO_A2 = -99 en Natural Earth 110m; salen de ISO_A2_EH. Ningun codigo queda
+    fuera del patron del contrato (paisIso, ISO 3166-1 alfa-2) ni repetido."""
+    paises = json.loads((calendario.config.CALENDARIO_DIR / "paises-110m.json").read_text(encoding="utf-8"))
+    codigos = [p["iso"] for p in paises]
+    assert len(codigos) == len(set(codigos))
+    assert all(len(c) == 2 and c.isascii() and c.isupper() for c in codigos)
+    assert {"FR", "NO", "XK", "TW"} <= set(codigos)
+    for lat, lon, iso in ((59.5, 10.5, "NO"), (42.6, 20.9, "XK"), (23.5, 120.6, "TW"), (9.5, 44.0, "SO"), (35.25, 33.6, "CY")):
+        r = cliente.get("/api/calendario", params={"lat": lat, "lon": lon})
+        assert r.status_code == 200, (iso, r.json())
+        assert r.json()["ubicacion"]["paisIso"] == iso
 
 
 @pytest.mark.parametrize("nombre", PUNTOS)
