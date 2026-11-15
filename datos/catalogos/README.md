@@ -9,7 +9,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 
 | Archivo | Contrato | Contenido |
 | --- | --- | --- |
-| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa (maiz, frijol, calabaza) y chile (cultivo extra de la demo) |
+| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa (maiz, frijol, calabaza), chile (cultivo extra de la demo) y, del encargo #198, sorgo y sandia (aun sin modelo 3D: no declaran `modelo3d`) |
 | `suelos.json` | `contratos/tabla-suelos.schema.json` | TAW por clase USDA, FAO-56 Tabla 19 |
 | `calendario-isla.json` | `contratos/calendario-local.schema.json` | Ventanas de siembra y presencia en SIAP de Isla, por cultivo y temporada |
 | `saxton_rawls.py` | `agua` de `contratos/suelo.schema.json` | TAW y retencion (θsat, θFC, θWP) por pedotransferencia de Saxton y Rawls (2006) para cualquier textura; pruebas contra la Tabla 3 del articulo con `python -m unittest discover -s datos/catalogos` |
@@ -37,6 +37,10 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 | TAW | Punto medio del rango (thetaFC - thetaWP) x 1000 | La tabla da rangos; se guarda el rango completo |
 | **Chile = pimiento dulce** | Todos los parametros del chile salen del **pimiento dulce** (FAO-56 `Sweet peppers (bell)`, EcoCrop `Sweet pepper`, *Capsicum annuum*): 125 d (30/35/40/20, Tabla 11 abril/junio; la etapa inicial se imprime `25/30` y el total solo cuadra con 30), Kc 0.6/1.05/0.90, raiz 1.0 m, p 0.30, temperaturas 8/17/30/35 C | FAO-56 y EcoCrop no traen chile verde. Es una **equivalencia de la misma especie, no un dato medido en chile serrano o jalapeno: una persona debe revisarla**. `Hot pepper` de EcoCrop es otra especie (*C. frutescens*) y no se uso |
 | Regimen de las ventanas OI | `temporal` (la agenda dice "riego y humedad residual") | SIAP clasifica el maiz y frijol OI de Isla como temporal, sin riego |
+| Sorgo, fila de Tabla 11 | `Sorghum`, siembra mayo/junio (USA, Pakistan, Med.): etapas 20/35/40/30, ciclo 125 d | La fila imprime total 130 pero las etapas suman 125; se guardan las etapas impresas y el ciclo es la suma. Cotejar con el PDF de FAO-56 |
+| Sorgo, Kc medio | 1.05, punto medio de 1.00-1.10 (Tabla 12) | La tabla da un rango; el punto medio es eleccion del equipo |
+| Sorgo, EcoCrop | Fila `Sorghum (low altitude)` | EcoCrop trae tres filas por altitud; la altitud de la parcela no se verifico |
+| Sandia, fila de Tabla 11 | `Watermelon`, Italia, abril: 20/30/30/30 = 110 d | No hay fila tropical; la otra es de desierto (80 d) |
 | Grupos del selector | arenoso = arena franca, franco = franco, arcilloso = arcilla | Eleccion del equipo, no de FAO |
 
 ## Huecos (NO_EVALUABLE)

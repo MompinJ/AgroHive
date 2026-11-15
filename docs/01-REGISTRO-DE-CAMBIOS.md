@@ -26,6 +26,16 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Catálogo: sorgo y sandía (encargo #198 punto 2, Mafer)
+
+- **Archivos:** `datos/catalogos/generar.py`, `cultivos.json` (6 cultivos), `calendario-isla.json` (12 entradas), `README.md`; `web/src/motor/pruebas/series.test.ts` y `tarjetas.test.ts` (ver abajo).
+- **Cambio:** se agregan sorgo (*Sorghum bicolor*) y sandía (*Citrullus lanatus*) con ciclo, etapas, Kc, raíz, p y umbrales de FAO-56 (Tablas 11, 12 y 22) y EcoCrop (copia Recocrop, mismo commit y hash que el resto), y su presencia en Isla según SIAP (sorgo solo primavera-verano, unas 49 ha por año; sandía en los dos ciclos). Sin ventana de siembra (no se ha consultado INIFAP): `NO_EVALUABLE` con motivo. No declaran `modelo3d` hasta que existan sus modelos (la escena usa la planta de respaldo). Lluvia por ciclo y estrés por calor siguen `NO_EVALUABLE`, como en los demás.
+- **Elecciones que una persona debe revisar:** sorgo, Tabla 11: la fila imprime 20/35/40/30 pero total 130 (las etapas suman 125); se guardan las etapas impresas y el ciclo es 125, y la diferencia queda por cotejar contra el PDF (no pude bajarlo: la URL devuelve HTML). Sorgo, Kc medio 1.05 = punto medio de 1.00-1.10. Sorgo, EcoCrop: fila de altitud baja (hay tres filas por altitud; la altitud de la parcela no se verificó). Sandía: fila de Italia (110 d), sin fila tropical. Raíz en el máximo del rango, como el resto (sorgo 2.0 de 1.0-2.0; sandía 1.5 de 0.8-1.5). Kc inicial del sorgo: valor del grupo cereales (0.3), como el maíz.
+- **Cambio fuera de mi carpeta:** `series.test.ts` y `tarjetas.test.ts` (del motor) usaban `sorgo` como ejemplo de cultivo fuera del catálogo; ahora que está, usan `quinua`. Solo cambia el nombre en 4 líneas.
+- **Pruebas:** `validar.mjs` y unittest de catálogos en verde; `contratos` 92; `web` 581 en verde, `tsc` y `build` bien; pytest de `api` no corre en esta máquina (no encontré pruebas que cuenten cultivos o entradas del calendario, pero no lo verifiqué ejecutándolas).
+- **Pendiente:** camote y cacahuate; modelos 3D, bloques e íconos 2D de sorgo y sandía.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Candidatos para ampliar el catálogo: SIAP de Veracruz y FAO-56 (Mafer)
 
 - **Archivos:** `datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv` (nuevo), `fuentes/LEEME.md`.

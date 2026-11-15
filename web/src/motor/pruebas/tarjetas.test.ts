@@ -106,8 +106,8 @@ describe('tarjetas fuera del ranking', () => {
     expect(validar(t.R5)).toEqual([]);
   });
   it('NO_EVALUABLE (cultivo fuera del catalogo): lo dice y no inventa cifras', () => {
-    const t = tarjetas([PLANES[3]!, plan('R6', [['sorgo', '2026-06-15', 'PV']])]);
-    expect(t.R6!.explicacion.porQue).toMatch(/^No se puede evaluar esta rotación: .*sorgo/);
+    const t = tarjetas([PLANES[3]!, plan('R6', [['quinua', '2026-06-15', 'PV']])]);
+    expect(t.R6!.explicacion.porQue).toMatch(/^No se puede evaluar esta rotación: .*quinua/);
     expect(t.R6!.explicacion.evidencia).toEqual([]);
     expect(t.R6!.explicacion.beneficios).toEqual([]);
     expect(validar(t.R6)).toEqual([]);

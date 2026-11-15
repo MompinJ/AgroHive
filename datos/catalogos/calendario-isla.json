@@ -247,6 +247,110 @@
         },
         "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
       }
+    },
+    {
+      "cultivo": "sorgo",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sorgo.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sorgo."
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2024-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Superficie sembrada de temporal por anio: 2021: 48 ha, 2022: 49 ha, 2023: 50 ha, 2024: 49 ha."
+      }
+    },
+    {
+      "cultivo": "sorgo",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sorgo.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sorgo."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "sandia",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sandia.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sandia."
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2024-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Superficie sembrada de temporal por anio: 2021: 323 ha, 2022: 325 ha, 2023: 327 ha, 2024: 329 ha."
+      }
+    },
+    {
+      "cultivo": "sandia",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sandia.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sandia."
+      },
+      "presencia": {
+        "estado": "registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Superficie sembrada de temporal por anio: 2021: 102 ha, 2022: 101 ha, 2023: 102 ha, 2024: 104 ha, 2025: 103 ha."
+      }
     }
   ],
   "advertencias": [

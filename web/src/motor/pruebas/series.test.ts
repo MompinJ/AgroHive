@@ -88,11 +88,11 @@ describe('serie-balance de R4 en los tres escenarios (paquete de demo, suelo rea
 
 describe('estados y Worker', () => {
   it('un ciclo sin parametros va sin series y con motivo; sin anio real no hay documento', () => {
-    const r = simularRotacion(entradas(plan('R6', [['sorgo', '2026-06-15', 'PV']])));
+    const r = simularRotacion(entradas(plan('R6', [['quinua', '2026-06-15', 'PV']])));
     const s = serieBalance(r, 'seco')!;
     expect(s.ciclos[0]).toMatchObject({ estado: 'NO_EVALUABLE', tawMm: null, fechaClima: null, mensual: [] });
     expect(s.ciclos[0]!.dias.deficitMm).toEqual([]);
-    expect(s.ciclos[0]!.motivo).toMatch(/sorgo/);
+    expect(s.ciclos[0]!.motivo).toMatch(/quinua/);
     expect(s.motivo).toBeTruthy();
     expect(validar(s)).toEqual([]);
     const sinClima = simularRotacion(entradas(R4, { escenarios: { seco: sel.escenarios.seco! } }));
