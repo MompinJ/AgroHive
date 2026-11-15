@@ -58,9 +58,9 @@ Presentar los límites como fortaleza: la honestidad científica es parte de lo 
 7. Alternar a 2D y mostrar que los números no cambian.
 
 ## Video demo
-- Duración y requisitos exactos: verificar en las reglas de entrega. `[VERIFICAR]`
-- Guion: problema, solución, demostración, límites, cierre.
-- Cuidar audio y ritmo; mostrar la escena 3D en movimiento.
+- Reglas verificadas (`docs/02`, A0.5): hasta 30 s o siete diapositivas, en inglés o con subtítulos en inglés.
+- Trailer de 30 s con voz en inglés y subtítulos en inglés y español, lista de tomas y esquema de 7 diapositivas: [`trailer-30s.md`](trailer-30s.md). El guion largo (`guion-video-borrador.md`) queda como referencia.
+- Mostrar la escena 3D en movimiento; decir el límite en pantalla (no predice cosechas, ingresos ni el clima de una temporada).
 
 ## Entrega
 Verificar en el sitio oficial qué se sube (descripción, enlace, video, código, uso de datos NASA) y con el organizador local si hay presentación ante jueces. `[VERIFICAR]`
