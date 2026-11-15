@@ -106,6 +106,19 @@ La mascota es un **elote con cara feliz** (la "verdura con cara feliz" del doc 0
 
 **Pendiente (fuera de `modelos/`):** la escena todavía no la muestra. Mompin dejó dicho que va a reservar un lugar opcional para ella. Una prueba (`web/src/escena/pruebas/props.test.ts`) verifica paleta, huella y que se apoye en el suelo.
 
+## Medio cuadrado para las celdas de borde (bordes diagonales, 14/11 noche) `[DECIDIDO]`
+
+Las celdas de borde donde el polígono corta en diagonal se dibujan como medio cuadrado (triángulo con el ángulo recto en la esquina `SO`, `SE`, `NE` o `NO`; campo `forma` de la celda, contrato `parcela` 0.14.0). **No se modela cada cultivo dos veces:** se decidió recortar en el render (pedido de Mompin: elegir lo que se vea mejor y escale a 30 a 50 cultivos).
+
+| Pieza | Cómo se hace |
+| --- | --- |
+| Bloque de cultivo (`<cultivo>_<etapa>_bloque`), losa de suelo y cualquier otro `.bbmodel` | `web/src/escena/voxel/media.ts` corta **cada cubo** exactamente con el plano vertical de la diagonal de la celda (también los cubos girados) y tapa el corte con el color de una cara lateral del mismo cubo. Lo que cae en la otra mitad se descarta. Sirve para cualquier modelo con las convenciones de arriba, sin configurarlo por cultivo: los cultivos nuevos entran solos |
+| Columna de suelo y hueco sin elevación | Prisma triangular en código (`web/src/escena/render/media-celda.ts`), el mismo para las 4 orientaciones, girado en pasos de 90° |
+| Placa de estado | La misma textura, a 0.42 de la celda en vez de 0.6, corrida hacia la esquina del ángulo recto para que quede dentro del triángulo `[PROPUESTA]` |
+| Banderín de "no recomendado" | En la esquina del ángulo recto, con la bandera hacia adentro (en celda completa sigue en la noroeste) |
+
+Por qué así: el corte exacto coincide con el prisma de suelo (el borde se ve como una sola diagonal), no agrega archivos, y el presupuesto se mantiene (la mitad pesa a lo más el modelo entero más una tapa por cubo cortado; en la práctica, menos). Una prueba (`web/src/escena/pruebas/media.test.ts`) recorta todos los bloques y losas que haya en `modelos/` en las 4 orientaciones y comprueba que nada salga de la mitad, que ninguna cara quede al revés y ese presupuesto. Las mitades no usan el giro de 0° o 180° de los surcos (giraría la mitad equivocada): los surcos de una celda de borde quedan en la orientación base. El agente `modelador-voxel` no hizo falta para esto; si algún modelo se viera mal cortado, se ajusta su `.bbmodel` con el agente.
+
 ## Carga en la web
 
 - El proyecto **carga el `.bbmodel` directo en Three.js**, sin pasar a glTF. El visor de ejemplo lo hace en pocas líneas: lee cada elemento (`from`, `to`, `origin`, `rotation`) y su color de la paleta, y crea una caja.

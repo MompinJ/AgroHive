@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 (madrugada) — Bordes diagonales, parte 2: piezas de medio cuadrado por recorte en el render `[DECIDIDO]` (Mompin; IA de Mompin, sesión "bordes", rama `Mompin-motor`)
+
+- **Archivos nuevos:** `web/src/escena/voxel/media.ts` (recorte de cualquier `.bbmodel` por la diagonal, con tapa), `web/src/escena/render/media-celda.ts` (prisma de suelo, giro por forma, placa y banderín en medio cuadrado), `web/src/escena/pruebas/media.test.ts` y `media-celda.test.ts`.
+- **Archivos cambiados:** `web/src/escena/voxel/geometria.ts` (exporta `esquinasCara`, `aplicar` y `Mat3`), `web/src/escena/modelo.ts` y `adaptador.ts` (`BloqueEscena.forma`, copiada del contrato, `completa` si falta), `docs/07` (sección "Medio cuadrado para las celdas de borde").
+- **Cambio:** se decidió recortar en el render en vez de modelar dos veces cada cultivo: cada cubo se corta exacto con el plano de la diagonal y el corte se tapa con el color de su cara lateral; la columna de suelo es un prisma triangular. Sirve para cualquier bloque sin configurarlo por cultivo (la prueba recorta los 42 bloques y 9 losas del repo en las 4 orientaciones). Todavía no se dibuja: la conexión con `escena-three.ts` y la vista 2D va en la parte 3.
+- **Evidencia:** `contratos/` 102/102, `api/` 162, catálogos en verde, `tsc --noEmit` limpio, `vitest` 976 (1 `todo`).
+
 ### 2026-11-14 (noche) — Bordes diagonales y escala de celda, parte 1: geometría y contrato 0.14.0 `[DECIDIDO]` (Mompin; IA de Mompin, sesión "bordes", rama `Mompin-motor`)
 
 - **Archivos nuevos:** `web/src/geo/forma-celda.ts` (forma de dibujo de una celda frente al polígono, pura y con pruebas), `web/src/geo/tamano-celda.ts` (tamaño pedido y tope), `web/src/geo/cuadricula.ts` (el generador, movido desde `web/src/ui/cuadricula.ts`), `web/src/geo/forma-celda.test.ts`, `web/src/geo/cuadricula.test.ts`, `contratos/pruebas/invalidos/parcela.forma-desconocida.json`.

@@ -7,7 +7,7 @@
 import { UNIDADES_BBMODEL_POR_CELDA } from '../modelo';
 import type { CuboVoxel, ModeloVoxel, NombreCara, Vec3 } from './bbmodel';
 
-type Mat3 = [number, number, number, number, number, number, number, number, number];
+export type Mat3 = [number, number, number, number, number, number, number, number, number];
 
 export function matrizRotacionZYX(grados: Vec3): Mat3 {
   const [x, y, z] = grados.map((g) => (g * Math.PI) / 180) as Vec3;
@@ -22,7 +22,7 @@ export function matrizRotacionZYX(grados: Vec3): Mat3 {
   ];
 }
 
-function aplicar(m: Mat3, v: Vec3): Vec3 {
+export function aplicar(m: Mat3, v: Vec3): Vec3 {
   return [
     m[0] * v[0] + m[1] * v[1] + m[2] * v[2],
     m[3] * v[0] + m[4] * v[1] + m[5] * v[2],
@@ -31,7 +31,7 @@ function aplicar(m: Mat3, v: Vec3): Vec3 {
 }
 
 /** Esquinas de cada cara en orden antihorario visto desde fuera, con su normal. */
-function esquinasCara(cara: NombreCara, a: Vec3, b: Vec3): { esquinas: Vec3[]; normal: Vec3 } {
+export function esquinasCara(cara: NombreCara, a: Vec3, b: Vec3): { esquinas: Vec3[]; normal: Vec3 } {
   const [x0, y0, z0] = a;
   const [x1, y1, z1] = b;
   switch (cara) {
