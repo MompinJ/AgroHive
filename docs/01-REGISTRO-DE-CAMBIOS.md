@@ -11,6 +11,13 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Pendiente:** revisión con lector de pantalla y táctil real.
 - **Decisiones afectadas:** "Asignación de cultivos" y "Disposición exacta de paneles" en 11 pasan a decididas.
 
+### 2026-11-14 — Preparación revisable de A5.9 y prerrequisitos del portal (balam)
+
+- **Archivos:** `docs/entrega-a5-9.md` (nuevo), enlace desde `docs/02` y esta entrada. No se edita el README de Mafer ni se regeneran las vistas del tablero.
+- **Cambio:** borradores de los campos oficiales en inglés, inventario de enlaces, datos del equipo sin confirmar, checklist de dependencias y registro de envío todavía vacío. Balam confirmó que aún no tenemos URL de la página oficial; pidió que Mompin modifique A5.9 para incluir ese paso previo, Team Owner y responsable (buzón #256). A5.9 no pasa a HECHO por preparar el paquete.
+- **Evidencia:** lectura pública sin sesión: repo accesible; aplicación 200; `/health` aún declara commit `23f8a53` y contratos `0.12.2`; `/medir.html?auto=0` devuelve Inicio, sin control de medición, aunque el código local incluye esa página. Eduardo fue avisado (#260). La página de Boca del Río confirma sede y Local Lead; no se obtuvo horario local verificable. Capturas del portal de equipo, demo, membresía, OK del equipo y confirmación de envío siguen pendientes.
+- **Límites:** textos sujetos a revisión científica y de A5.7, idioma y atribuciones pendientes. No se crea cuenta/equipo, no se publica, no se aceptan declaraciones y no se envía formulario.
+
 ### 2026-11-14 (noche) — Fase de revisión `[DECIDIDO]` (Mompin; registrado por la cronista)
 
 - **Archivos:** `docs/13` (filas "Fase de revisión" y "Envío cuando todos estén satisfechos"), `docs/14` (sección "Fase de revisión" y nota "pospuesta hasta el final" en A0.3, A4.4, A5.7 y A5.9; vistas regeneradas), `AgroVault/Compartido/Pendientes.md` y `Resumen.md`.
