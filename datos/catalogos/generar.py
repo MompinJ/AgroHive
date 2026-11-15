@@ -71,7 +71,7 @@ CSV_SIAP_ISLA = AQUI / "fuentes" / "siap_isla_2021_2025.csv"
 PERIODO_SIAP = ("2021-01-01", "2025-12-31")
 CICLO_SIAP = {"PV": "Primavera-Verano", "OI": "Otoño-Invierno"}
 CULTIVO_SIAP = {"maiz": "Maíz grano", "frijol": "Frijol", "chile": "Chile verde", "calabaza": None,
-                "sorgo": "Sorgo grano", "sandia": "Sandía"}
+                "sorgo": "Sorgo grano", "sandia": "Sandía", "camote": "Camote", "cacahuate": "Cacahuate"}
 
 INIFAP_MAIZ_PV = ("INIFAP, Tecnologia de produccion de maiz de temporal en el sur de Veracruz (region del Istmo de "
                   "Tehuantepec) para el ciclo de primavera-verano (C. A. Tinoco Alfaro, Campo Experimental Cotaxtla, 2022)")
@@ -109,10 +109,15 @@ MOTIVO_SIN_VENTANA = {
     ("sorgo", "OI"): "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sorgo.",
     ("sandia", "PV"): "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sandia.",
     ("sandia", "OI"): "Cultivo nuevo (encargo #198): aun no se consulta una fuente de calendario de siembra (INIFAP) para sandia.",
+    ("camote", "PV"): "SIAP no registra camote en Isla (si en San Andres y Santiago Tuxtla, del mismo DDR) y no se consulto una fuente de calendario para el.",
+    ("camote", "OI"): "SIAP no registra camote en Isla (si en San Andres y Santiago Tuxtla, del mismo DDR) y no se consulto una fuente de calendario para el.",
+    ("cacahuate", "PV"): "SIAP no registra cacahuate en Isla (si en Catemaco, del mismo DDR) y no se consulto una fuente de calendario para el.",
+    ("cacahuate", "OI"): "SIAP no registra cacahuate en Isla (si en Catemaco, del mismo DDR) y no se consulto una fuente de calendario para el.",
 }
 ORDEN_ISLA = [("maiz", "PV"), ("maiz", "OI"), ("frijol", "PV"), ("frijol", "OI"),
               ("chile", "PV"), ("chile", "OI"), ("calabaza", "PV"), ("calabaza", "OI"),
-              ("sorgo", "PV"), ("sorgo", "OI"), ("sandia", "PV"), ("sandia", "OI")]
+              ("sorgo", "PV"), ("sorgo", "OI"), ("sandia", "PV"), ("sandia", "OI"),
+              ("camote", "PV"), ("camote", "OI"), ("cacahuate", "PV"), ("cacahuate", "OI")]
 
 
 def superficie_siap_isla():
@@ -173,6 +178,9 @@ def calendario_isla():
                         "estatales de Veracruz."},
             {"codigo": "CALABAZA_NO_REGISTRADA", "severidad": "aviso",
              "mensaje": "SIAP no registra calabaza en Isla entre 2021 y 2025: se muestra en la demo, pero no es recomendable alli."},
+            {"codigo": "CAMOTE_CACAHUATE_NO_REGISTRADOS", "severidad": "aviso",
+             "mensaje": "SIAP no registra camote ni cacahuate en Isla entre 2021 y 2025 (si en municipios vecinos del mismo distrito): "
+                        "no son recomendables alli sin validar con un tecnico local."},
         ],
     }
 
@@ -293,6 +301,48 @@ CULTIVOS = [
         "eco": {"fila": "Watermelon", "sci": "Citrullus lanatus (T) Mansf", "gmin": 80, "gmax": 160,
                 "tmin": 15, "topmn": 20, "topmx": 30, "tmax": 35,
                 "rmin": 400, "ropmn": 500, "ropmx": 750, "rmax": 1800},
+    },
+    {
+        "id": "camote",
+        "nombreComun": "Camote",
+        "nombreCientifico": "Ipomoea batatas (L.) Lam.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Sweet potato", "region": "Tropical regions", "siembra": "Rainy seas.",
+                "etapas": (15, 30, 50, 30), "total": 125,
+                "porque": ("Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano de Isla. "
+                           "La otra fila es de siembra en abril en el Mediterraneo (150 dias).")},
+        "t12": {"fila": "Sweet Potato",
+                "ini": (0.5, "Kc ini general del grupo d. Roots and Tubers (la fila del camote no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.65, None)},
+        "t22": {"fila": "Sweet Potato", "zr": 1.5, "zrRango": "1.0-1.5", "p": 0.65},
+        "eco": {"fila": "Sweet potato", "sci": "Ipomoea batatas (L.) Lam.", "gmin": 80, "gmax": 170,
+                "tmin": 10, "topmn": 18, "topmx": 28, "tmax": 38,
+                "rmin": 500, "ropmn": 750, "ropmx": 1250, "rmax": 5000},
+        "nota_extra": ("SIAP no registra camote en Isla entre 2021 y 2025; si lo registra en San Andres Tuxtla y Santiago Tuxtla, del "
+                       "mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
+    },
+    {
+        "id": "cacahuate",
+        "nombreComun": "Cacahuate",
+        "nombreCientifico": "Arachis hypogaea L.",
+        "esLeguminosa": True,
+        "t11": {"fila": "Groundnut", "region": "West Africa", "siembra": "Dry season",
+                "etapas": (25, 35, 45, 25), "total": 130,
+                "porque": ("Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). "
+                           "Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias de Isla: es una analogia de ciclo, "
+                           "no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte "
+                           "las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar.")},
+        "t12": {"fila": "Groundnut (Peanut)",
+                "ini": (0.4, "Kc ini general del grupo e. Legumes (la fila del cacahuate no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.60, None)},
+        "t22": {"fila": "Groundnut (Peanut)", "zr": 1.0, "zrRango": "0.5-1.0", "p": 0.50},
+        "eco": {"fila": "Groundnut", "sci": "Arachis hypogaea L.", "gmin": 90, "gmax": 150,
+                "tmin": 10, "topmn": 22, "topmx": 32, "tmax": 45,
+                "rmin": 400, "ropmn": 600, "ropmx": 1500, "rmax": 4000},
+        "nota_extra": ("SIAP no registra cacahuate en Isla entre 2021 y 2025; si lo registra en Catemaco, del mismo distrito (DDR 175). "
+                       "Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
     },
 ]
 

@@ -40,6 +40,15 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Catálogo: camote y cacahuate (encargo #198 punto 2, Mafer)
+
+- **Archivos:** `datos/catalogos/generar.py`, `cultivos.json` (8 cultivos), `calendario-isla.json` (16 entradas), `README.md`.
+- **Cambio:** se agregan camote (*Ipomoea batatas*) y cacahuate (*Arachis hypogaea*) con FAO-56 (Tablas 11, 12 y 22, copiadas de la página oficial el 14/11/2026) y EcoCrop (misma copia, mismo hash). Camote: fila tropical de la Tabla 11 (temporada de lluvias, 15/30/50/30 = 125 d), Kc 0.5 (grupo Roots and Tubers) / 1.15 / 0.65, raíz 1.5 m (máximo de 1.0-1.5), p 0.65. Cacahuate: fila de África Occidental (25/35/45/25 = 130 d), Kc 0.4 (grupo Legumes) / 1.15 / 0.60, raíz 1.0 m (máximo de 0.5-1.0), p 0.50. Sin ventana de siembra (`NO_EVALUABLE`) y sin `modelo3d` hasta que existan sus modelos. SIAP no los registra en Isla (sí en San Andrés y Santiago Tuxtla el camote y en Catemaco el cacahuate, del mismo DDR): aviso `CAMOTE_CACAHUATE_NO_REGISTRADOS` en el calendario.
+- **A revisar por una persona:** la fila del cacahuate: la Tabla 11 no tiene fila tropical etiquetada, se usó África Occidental, cuya fecha impresa es temporada seca (no el temporal de lluvias de Isla), y la página parte las fechas en celdas, así que la asignación es una lectura que hay que cotejar con el PDF. El Kc inicial de ambos es el del grupo, como el maíz.
+- **Pruebas:** `validar.mjs` y unittest de catálogos en verde; `contratos` 92; `web` 581 en verde, `tsc` y `build` bien; pytest de `api` no corre en esta máquina.
+- **Pendiente:** modelos 3D, bloques e íconos 2D de los cuatro cultivos nuevos; lo de sorgo y sandía de la entrada anterior.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Catálogo: sorgo y sandía (encargo #198 punto 2, Mafer)
 
 - **Archivos:** `datos/catalogos/generar.py`, `cultivos.json` (6 cultivos), `calendario-isla.json` (12 entradas), `README.md`; `web/src/motor/pruebas/series.test.ts` y `tarjetas.test.ts` (ver abajo).

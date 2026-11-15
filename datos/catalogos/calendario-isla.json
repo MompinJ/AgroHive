@@ -351,6 +351,110 @@
         },
         "nota": "Superficie sembrada de temporal por anio: 2021: 102 ha, 2022: 101 ha, 2023: 102 ha, 2024: 104 ha, 2025: 103 ha."
       }
+    },
+    {
+      "cultivo": "camote",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "SIAP no registra camote en Isla (si en San Andres y Santiago Tuxtla, del mismo DDR) y no se consulto una fuente de calendario para el.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "SIAP no registra camote en Isla (si en San Andres y Santiago Tuxtla, del mismo DDR) y no se consulto una fuente de calendario para el."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "camote",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "SIAP no registra camote en Isla (si en San Andres y Santiago Tuxtla, del mismo DDR) y no se consulto una fuente de calendario para el.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "SIAP no registra camote en Isla (si en San Andres y Santiago Tuxtla, del mismo DDR) y no se consulto una fuente de calendario para el."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "cacahuate",
+      "temporada": "PV",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "SIAP no registra cacahuate en Isla (si en Catemaco, del mismo DDR) y no se consulto una fuente de calendario para el.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "SIAP no registra cacahuate en Isla (si en Catemaco, del mismo DDR) y no se consulto una fuente de calendario para el."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
+    },
+    {
+      "cultivo": "cacahuate",
+      "temporada": "OI",
+      "regimen": "temporal",
+      "estado": "NO_EVALUABLE",
+      "motivo": "SIAP no registra cacahuate en Isla (si en Catemaco, del mismo DDR) y no se consulto una fuente de calendario para el.",
+      "ventana": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "SIAP no registra cacahuate en Isla (si en Catemaco, del mismo DDR) y no se consulto una fuente de calendario para el."
+      },
+      "presencia": {
+        "estado": "no_registrado",
+        "periodo": {
+          "desde": "2021-01-01",
+          "hasta": "2025-12-31"
+        },
+        "fuente": {
+          "nombre": "SIAP, cierre agricola municipal (datos abiertos)",
+          "url": "https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php",
+          "cita": "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
+          "consultado": "2026-11-14",
+          "unidades": "hectareas sembradas (temporal)"
+        },
+        "nota": "Sin superficie sembrada de este cultivo en este ciclo en Isla, 2021-2025."
+      }
     }
   ],
   "advertencias": [
@@ -363,6 +467,11 @@
       "codigo": "CALABAZA_NO_REGISTRADA",
       "severidad": "aviso",
       "mensaje": "SIAP no registra calabaza en Isla entre 2021 y 2025: se muestra en la demo, pero no es recomendable alli."
+    },
+    {
+      "codigo": "CAMOTE_CACAHUATE_NO_REGISTRADOS",
+      "severidad": "aviso",
+      "mensaje": "SIAP no registra camote ni cacahuate en Isla entre 2021 y 2025 (si en municipios vecinos del mismo distrito): no son recomendables alli sin validar con un tecnico local."
     }
   ]
 }
