@@ -1,7 +1,7 @@
 // Plagas en el simulador (capa ilustrativa): con los registros de presencia de GBIF cerca de la
-// parcela (/api/plagas) y la tabla de cultivos hospederos con fuente, marca que celdas tienen un
-// cultivo que una plaga registrada en la zona ataca. Si el usuario no aplica insecticida en esa
-// celda y ciclo, la escena la dibuja comiendose la planta. No cambia el motor ni el ranking: un
+// parcela (/api/plagas) y la tabla de cultivos hospederos con fuente, marca en que celdas hay plaga: en cada
+// grupo de celdas del mismo cultivo que una plaga registrada ataca, solo cerca del 20 % (un foco). Si el usuario
+// no aplica insecticida en esa celda y ciclo, la escena la dibuja comiendose la planta. No cambia el motor ni el ranking: un
 // registro de presencia no es un pronostico de dano.
 import type { PlanSiembra } from '../../../../contratos/tipos/contratos';
 import { cultivoDeCelda } from '../planes';
@@ -42,36 +42,62 @@ export function celdasEnRiesgo(riesgos: readonly { sinProteger: readonly string[
   return [...new Set(riesgos.flatMap((r) => r.sinProteger))];
 }
 
-/** Radios de la zona de plagas, en celdas. null = toda la parcela. */
-export const RADIOS_PLAGA = [1, 2, 3] as const;
-export const RADIO_PLAGA_INICIAL = 2;
 type CeldaIJ = { id: string; i: number; j: number };
 
-/** Celda del medio de la parcela (la mas cercana al promedio de filas y columnas): centro por defecto de la zona. */
-export function celdaCentral(celdas: readonly CeldaIJ[]): string | null {
-  if (!celdas.length) return null;
-  const mi = celdas.reduce((s, c) => s + c.i, 0) / celdas.length;
-  const mj = celdas.reduce((s, c) => s + c.j, 0) / celdas.length;
-  let mejor = celdas[0]!;
-  let d = Infinity;
-  for (const c of celdas) {
-    const x = (c.i - mi) ** 2 + (c.j - mj) ** 2;
-    if (x < d) { d = x; mejor = c; }
-  }
-  return mejor.id;
+/** Fraccion de las celdas de un grupo (mismo cultivo) donde aparece la plaga: no ataca toda la parcela de golpe. */
+export const FRACCION_CON_PLAGA = 0.2;
+
+/** Cuantas celdas de un grupo de `n` llevan la plaga: el 20 % redondeado y, si hay grupo, al menos una. */
+export function cuantasConPlaga(n: number, fraccion = FRACCION_CON_PLAGA): number {
+  return n <= 0 ? 0 : Math.min(n, Math.max(1, Math.round(n * fraccion)));
+}
+
+function hash(texto: string): number {
+  let h = 0x811c9dc5; // FNV-1a de 32 bits: reparte la semilla, no es seguridad
+  for (let k = 0; k < texto.length; k++) { h ^= texto.charCodeAt(k); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h;
 }
 
 /**
- * Celdas de la zona de plagas: las que estan a `radio` celdas o menos de la celda elegida (circulo: di2 + dj2 <= (radio + 0.5)2).
- * Sin celda elegida usa la central. radio null = toda la parcela. Una celda elegida que ya no existe cae a la central.
- * La escena solo dibuja insectos aqui: menos modelos cargados y una zona que el usuario puede ver y proteger.
+ * Las celdas de un grupo donde aparece la plaga: un foco de celdas contiguas. Una celda de arranque la fija `semilla` (misma semilla y mismo
+ * grupo, mismo foco: los insectos no saltan de una celda a otra al recalcular) y se suman las mas cercanas hasta llegar al 20 % del grupo.
+ * No depende del orden en que lleguen las celdas.
  */
-export function celdasEnRadio(celdas: readonly CeldaIJ[], centroId: string | null, radio: number | null): ReadonlySet<string> {
-  if (radio === null) return new Set(celdas.map((c) => c.id));
-  const centro = celdas.find((c) => c.id === centroId) ?? celdas.find((c) => c.id === celdaCentral(celdas));
-  if (!centro) return new Set();
-  const limite = (radio + 0.5) ** 2;
-  return new Set(celdas.filter((c) => (c.i - centro.i) ** 2 + (c.j - centro.j) ** 2 <= limite).map((c) => c.id));
+export function focoDelGrupo(grupo: readonly CeldaIJ[], semilla: string, fraccion = FRACCION_CON_PLAGA): string[] {
+  const k = cuantasConPlaga(grupo.length, fraccion);
+  if (k === 0) return [];
+  const ordenado = [...grupo].sort((a, b) => a.i - b.i || a.j - b.j);
+  const arranque = ordenado[hash(semilla) % ordenado.length]!;
+  return ordenado
+    .map((c) => ({ c, d: (c.i - arranque.i) ** 2 + (c.j - arranque.j) ** 2 }))
+    .sort((x, y) => x.d - y.d || x.c.i - y.c.i || x.c.j - y.c.j)
+    .slice(0, k)
+    .map((x) => x.c.id);
+}
+
+/**
+ * Celdas con plaga en un ciclo: por cada cultivo que una plaga registrada ataca, solo el 20 % de sus celdas (un foco). Menos modelos
+ * cargados y una infestacion creible en vez de toda la parcela a la vez. Es ilustrativo: ni el motor ni el ranking lo usan.
+ */
+export function celdasConPlaga(plan: PlanSiembra, celdas: readonly CeldaIJ[], presentes: readonly PlagaZona[], ciclo: number): Set<string> {
+  const grupos = new Map<string, { plaga: PlagaZona; celdas: CeldaIJ[] }>();
+  for (const c of celdas) {
+    const cultivo = cultivoDeCelda(plan, c.id, ciclo);
+    const plaga = plagaDeCultivo(presentes, cultivo);
+    if (!plaga || !cultivo) continue;
+    const g = grupos.get(cultivo) ?? { plaga, celdas: [] };
+    g.celdas.push(c);
+    grupos.set(cultivo, g);
+  }
+  const salida = new Set<string>();
+  for (const [cultivo, g] of grupos) for (const id of focoDelGrupo(g.celdas, `${plan.rotacionId}:${ciclo}:${cultivo}:${g.plaga.id}`)) salida.add(id);
+  return salida;
+}
+
+/** Los focos de un plan por ciclo, con cache: `focos(ciclo)` da las celdas con plaga en ese ciclo. */
+export function focosDelPlan(plan: PlanSiembra, celdas: readonly CeldaIJ[], presentes: readonly PlagaZona[]): (ciclo: number) => ReadonlySet<string> {
+  const cache = new Map<number, Set<string>>();
+  return (ciclo) => { let f = cache.get(ciclo); if (!f) { f = celdasConPlaga(plan, celdas, presentes, ciclo); cache.set(ciclo, f); } return f; };
 }
 
 export function protegidas(proteccion: Proteccion, rotacion: string, ciclo: number): ReadonlySet<string> {
@@ -100,11 +126,13 @@ export function mapaPlagas(
 }
 
 /** Por ciclo: que plaga ataca y cuantas celdas quedan sin insecticida en el plan. */
-export function riesgosDelPlan(plan: PlanSiembra, celdas: readonly string[], presentes: readonly PlagaZona[], proteccion: Proteccion) {
+export function riesgosDelPlan(plan: PlanSiembra, celdas: readonly string[], presentes: readonly PlagaZona[], proteccion: Proteccion, focos?: (ciclo: number) => ReadonlySet<string>) {
   return plan.ciclos.flatMap((c) => {
     const porPlaga = new Map<string, { plaga: PlagaZona; cultivo: string; sinProteger: string[] }>();
     const prot = protegidas(proteccion, plan.rotacionId, c.ciclo);
+    const foco = focos?.(c.ciclo);
     for (const celda of celdas) {
+      if (foco && !foco.has(celda)) continue; // la plaga solo esta en su foco
       const cultivo = cultivoDeCelda(plan, celda, c.ciclo);
       const plaga = plagaDeCultivo(presentes, cultivo);
       if (!plaga || !cultivo || prot.has(celda)) continue;

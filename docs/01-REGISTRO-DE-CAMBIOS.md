@@ -88,6 +88,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — La plaga en el 20 % de cada grupo de cultivo, en lugar del radio (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/plagas.ts` (`cuantasConPlaga`, `focoDelGrupo`, `celdasConPlaga`, `focosDelPlan`; se quita `celdasEnRadio`), `Laboratorio.tsx`, `PanelCultivos.tsx`, `BarraHerramientas.tsx`, `escena/EscenaParcela.tsx` (ya no avisa la celda elegida), `ui/tutorial/pasos.ts`, `lab.css`, `plagas.test.ts`; `docs/06`.
+- **Cambio:** el equipo aclaró que "radio" no era una selección: lo que se quiere es que, en un grupo de celdas del mismo cultivo, solo el 20 % lleve la plaga. Se quitó el control de radio y la celda elegida como centro. Ahora, por cada cultivo y ciclo atacado por una plaga registrada, cerca del 20 % de sus celdas (al menos una) lleva la plaga, juntas, con un foco fijo por plan, ciclo, cultivo y plaga. El aviso de riesgos, "Proteger los N bloques en riesgo" y "Tu plan" cuentan solo ese foco; el insecticida de la barra vuelve a cubrir toda la parcela.
+- **Evidencia:** pruebas nuevas de la proporción, la contigüidad, la estabilidad y el orden de las celdas; suite del front 3407 en verde. En la demo (4 celdas de maíz) el panel dice "1 bloque sin insecticida" y "Proteger los 1 bloque" deja el ciclo protegido.
+- **Límites:** ilustrativo; no cambia el motor ni el ranking. El 20 % es una decisión de dibujo del equipo, no un dato de GBIF. Solo se vio con la demo de 4 celdas; con parcelas grandes se prueba con mallas de 8 × 8 y 10 × 10.
+- **Decisiones afectadas:** ninguna de alcance del MVP. Reemplaza lo de "zona de plagas por radio" de la entrada anterior.
+
 ### 2026-11-15 — Esquilote con iconos y anillo, tiempo por semanas, luz y temperatura, marcas por cultivo, sonido, historial y PDF (Eduardo)
 
 - **Archivos:** `web/src/ui/tutorial/` (`texto.ts`, `TextoConIconos.tsx`, `useEscribir.ts`, `Resalte.tsx`, `Esquilote.tsx`, `Tutorial.tsx`, CSS); `ui/tiempo.ts`, `ControlTiempo.tsx`, `lab/PanelEscenarios.tsx`; `escena/clima-vista.ts`, `problemas.ts`, `MarcaProblema.tsx`, `vistas.ts`, `EscenaParcela.tsx`; `ui/sonido.ts`, `BotonSonido.tsx`; `ui/lab/historial.ts`, `useHistorial.ts`, `PanelHistorial.tsx`, `armarResumen.ts`, `Mascota.tsx`, `consejos.ts`, `Laboratorio.tsx`, `PanelComparacion.tsx`, `PlanElegido.tsx`; `ui/pdf/` (`pdf.ts`, `resumenComparacion.ts`, `descargar.ts`); pruebas de cada pieza; `docs/06`.
