@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import type { Advertencia, Parcela, ResultadoCeldas, SerieBalance, Suelo } from '../../../contratos/tipos/contratos';
 import { CORTES_LLUVIA, lluviaDelDia, textoLluvia } from './lluvia';
 import { describirCelda } from '../geo/escala-celda';
+import { climaFondo, epocaRelativa, NOMBRE_CLIMA_FONDO } from './clima-fondo';
 import { construirEscena } from './adaptador';
 import type { AvisoDatos } from '../api/datosParcela';
 import { CODIGOS_TERRENO } from './avisos-datos';
@@ -71,6 +72,8 @@ export interface EscenaParcelaProps {
   bioma?: Bioma | undefined;
   /** Avisa cual es la celda elegida (null si se cierra la ficha): centra la zona de plagas. */
   onCeldaElegida?: ((celdaId: string | null) => void) | undefined;
+  /** Temperatura media tipica por dia del ano (climatologia de la parcela): con la lluvia del dia decide el color del cielo. */
+  tMediaDia?: readonly (number | null)[] | undefined;
 }
 
 const NOMBRE_VISTA: Record<VistaBase, string> = { cultivo: 'Cultivos', validacion: 'Validación', agua: 'Agua' };
@@ -101,7 +104,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO, onCeldaElegida }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO, onCeldaElegida, tMediaDia }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -149,6 +152,11 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     serieBalance && resultado && serieBalance.rotacionId === resultado.rotacionId && serieBalance.escenario === resultado.escenario ? serieBalance : null;
   const lluvia = useMemo(() => lluviaDelDia(serieValida, modelo.fecha), [serieValida, modelo.fecha]);
   const intensidadLluvia = lluvia?.estado === 'con_dato' ? lluvia.intensidad : 0;
+  // Cielo segun el clima de la fecha: lluvia del dia y, sin lluvia, la epoca del ano frente a la propia parcela.
+  const climaDelFondo = useMemo(
+    () => climaFondo(lluvia?.estado === 'con_dato' ? lluvia.clase : null, epocaRelativa(tMediaDia, modelo.fecha)),
+    [lluvia, tMediaDia, modelo.fecha],
+  );
 
   // Brocha: el trazo en curso vive aqui; al soltar se entrega al plan (pincel.onTrazo).
   const [trazo, setTrazo] = useState<ReadonlySet<string>>(() => new Set());
@@ -479,7 +487,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       return <><strong>{d.titulo}</strong>{d.lineas.map((l) => <span key={l}>{l}</span>)}{lineaPlaga && <span className={plaga!.comiendo ? 'escena-globo-plaga' : undefined}>{lineaPlaga}</span>}</>;
     };
     return (
-      <section className={`escena escena-fondo escena-bioma-${bioma} ${className}`} aria-label="Escena 3D de la parcela" style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
+      <section className={`escena escena-fondo escena-bioma-${bioma} escena-clima-${climaDelFondo} ${className}`} data-clima={NOMBRE_CLIMA_FONDO[climaDelFondo]} aria-label="Escena 3D de la parcela" style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
         {lienzoCaja}
         {hover && !sinWebGL && (
           <div className={`escena-globo escena-globo-vista${vista ? ` escena-globo-${vista}` : ''}`} style={{ left: hover.x, top: hover.y }} aria-hidden="true">

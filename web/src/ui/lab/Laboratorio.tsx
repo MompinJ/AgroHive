@@ -175,7 +175,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
   const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
     : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
-      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} onCeldaElegida={setCentroPlaga} rociado={rociado} bioma={bioma ?? undefined} />
+      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} onCeldaElegida={setCentroPlaga} tMediaDia={clima.tMediaDia} rociado={rociado} bioma={bioma ?? undefined} />
     </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
 
   const comun = { estado, onAvanzar };

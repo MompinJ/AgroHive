@@ -207,3 +207,19 @@
   color: var(--escena-tinta); font-size: .78rem; font-weight: 600; white-space: nowrap;
 }
 .escena-escala-regla { width: 22px; height: 8px; border: 2px solid var(--escena-tinta); border-top: 0; flex-shrink: 0; }
+
+/* Cielo segun el clima de la fecha (decorativo; lo decide clima-fondo.ts). Las variables se registran como colores
+   para que el cielo cambie de forma suave al mover la fecha; sin @property o con "reducir movimiento", cambia de golpe. */
+@property --cielo-1 { syntax: '<color>'; inherits: true; initial-value: #a9d4ef; }
+@property --cielo-2 { syntax: '<color>'; inherits: true; initial-value: #c7e4f4; }
+@property --cielo-3 { syntax: '<color>'; inherits: true; initial-value: #e6f1ee; }
+@property --cielo-4 { syntax: '<color>'; inherits: true; initial-value: #f3e9cf; }
+@property --cielo-5 { syntax: '<color>'; inherits: true; initial-value: #ead9b3; }
+@media (prefers-reduced-motion: no-preference) {
+  .escena-fondo { transition: --cielo-1 .9s ease, --cielo-2 .9s ease, --cielo-3 .9s ease, --cielo-4 .9s ease, --cielo-5 .9s ease; }
+}
+.escena-fondo.escena-clima-calido { --cielo-1: #f0cd9a; --cielo-2: #f5dbb3; --cielo-3: #f8e8c9; --cielo-4: #f6dfb2; --cielo-5: #ebc68b; }
+.escena-fondo.escena-clima-fresco { --cielo-1: #a3bdd6; --cielo-2: #bfd2e3; --cielo-3: #dbe6ef; --cielo-4: #e7edf0; --cielo-5: #d7e1e6; }
+.escena-fondo.escena-clima-llovizna { --cielo-1: #9db0bf; --cielo-2: #b6c5d0; --cielo-3: #cfdae0; --cielo-4: #dce2df; --cielo-5: #ced7d1; }
+.escena-fondo.escena-clima-lluvia { --cielo-1: #7e93a6; --cielo-2: #98adbc; --cielo-3: #b3c3cd; --cielo-4: #c4cfd1; --cielo-5: #b7c5c0; }
+.escena-fondo.escena-clima-tormenta { --cielo-1: #4f6174; --cielo-2: #697f91; --cielo-3: #879cab; --cielo-4: #9eafb7; --cielo-5: #92a4a5; }
