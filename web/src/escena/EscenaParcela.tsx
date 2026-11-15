@@ -13,6 +13,8 @@ import { bloqueCentral, fichaBloque, NOMBRES_CULTIVO_ESCENA, vecino } from './fi
 import { describirBloque, entradasLeyenda, type EntradaLeyenda } from './leyenda';
 import { EXAGERACION_VERTICAL_DEFECTO, type BloqueEscena } from './modelo';
 import { huellaPincel, type PincelEscena } from './pincel';
+import { NOMBRES_PLAGA, type PlagaCelda, type TipoPlaga } from './render/plagas';
+import { BIOMA_DEFECTO, type Bioma } from './render/entorno';
 import { AGUA_MAX_MM, colorAgua, colorCultivo, coloresBase, detalleVista, NIVELES_VALIDACION, type DentroDeVentana, type VistaBase } from './vistas';
 import { rgbaPlaca } from './placa';
 import { EscenaThree, ErrorWebGL } from './render/escena-three';
@@ -55,6 +57,17 @@ export interface EscenaParcelaProps {
   desplazamiento?: { x: number; y: number };
   /** Ventana local de siembra por cultivo y ciclo, para la vista de validacion (modo fondo). */
   dentroDeVentana?: DentroDeVentana | undefined;
+  /**
+   * Plagas ilustrativas por celda (modo fondo): con `comiendo` se dibujan insectos y hojas
+   * mordidas; protegidas, nada. No cambian datos del motor.
+   */
+  plagas?: ReadonlyMap<string, PlagaCelda> | null | undefined;
+  /** Nube de insecticida: se lanza cada vez que cambia `clave`. */
+  rociado?: { celdas: readonly string[]; clave: number } | null | undefined;
+  /** Nombres de plaga para el globo; por defecto, genericos por tipo. */
+  nombresPlaga?: Partial<Record<TipoPlaga, string>> | undefined;
+  /** Bioma del entorno decorativo (modo fondo). Por defecto, tropical humedo (demo de Isla). */
+  bioma?: Bioma | undefined;
 }
 
 const NOMBRE_VISTA: Record<VistaBase, string> = { cultivo: 'Cultivos', validacion: 'Validación', agua: 'Agua' };
@@ -85,7 +98,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -168,6 +181,8 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       onAzimut: setAzimut,
       pastoSinCultivo: modo === 'fondo',
       entorno: modo === 'fondo',
+      enfocarAlElegir: modo === 'fondo',
+      bioma,
       ...(desplazamiento ? { desplazamiento } : {}),
       onSeleccion: setSeleccion,
       onContexto: (estado: 'perdido' | 'restaurado') => setContexto(estado),
@@ -176,7 +191,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
         setAvisosRender((prev) => (prev.some((a) => a.mensaje === mensaje) ? prev : [...prev, { codigo, mensaje, severidad: 'aviso' }])),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reducirMovimiento, viento, mascota, !!pincel, onPintar, desplazamiento?.x, desplazamiento?.y],
+    [reducirMovimiento, viento, mascota, !!pincel, onPintar, desplazamiento?.x, desplazamiento?.y, bioma],
   );
 
   useEffect(() => {
@@ -212,7 +227,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
 
   const elegir = (b: BloqueEscena | null) => {
     setSeleccion(b);
-    escena.current?.seleccionar(b);
+    escena.current?.elegirCelda(b);
   };
   const ficha = seleccion ? fichaBloque(seleccion) : null;
   const noRecomendados = modelo.bloques.filter((b) => b.noRecomendadoEnLugar).length;
@@ -242,6 +257,17 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   useEffect(() => {
     escena.current?.colorearBase(coloresVista);
   }, [coloresVista]);
+
+  // Plagas ilustrativas y nube de insecticida (solo modo fondo).
+  useEffect(() => {
+    escena.current?.setPlagas(modo === 'fondo' ? plagas : null);
+  }, [plagas, modo]);
+  const claveRociado = rociado?.clave;
+  useEffect(() => {
+    if (modo === 'fondo' && rociado && rociado.celdas.length) escena.current?.rociar(rociado.celdas);
+    // Solo cuando cambia la clave: las mismas celdas no se rocian dos veces.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [claveRociado]);
 
   // Teclado con pincel: Enter o espacio pintan alrededor de la celda elegida.
   const pintarConTeclado = () => {
@@ -441,10 +467,12 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     const sinDato = vista ? modelo.bloques.length - (coloresVista?.size ?? 0) : 0;
     const globo = (b: BloqueEscena) => {
       const d = vista ? detalleVista(b, vista, dentroDeVentana) : { titulo: fichaBloque(b).resumen, lineas: [`Celda ${b.celdaId}`] };
-      return <><strong>{d.titulo}</strong>{d.lineas.map((l) => <span key={l}>{l}</span>)}</>;
+      const plaga = plagas?.get(b.celdaId) as (PlagaCelda & { nombre?: string }) | undefined;
+      const lineaPlaga = plaga ? `Plaga: ${plaga.nombre ?? nombresPlaga?.[plaga.tipo] ?? NOMBRES_PLAGA[plaga.tipo]} (${plaga.comiendo ? 'sin tratar' : 'tratada'})` : null;
+      return <><strong>{d.titulo}</strong>{d.lineas.map((l) => <span key={l}>{l}</span>)}{lineaPlaga && <span className={plaga!.comiendo ? 'escena-globo-plaga' : undefined}>{lineaPlaga}</span>}</>;
     };
     return (
-      <section className={`escena escena-fondo ${className}`} aria-label="Escena 3D de la parcela" style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
+      <section className={`escena escena-fondo escena-bioma-${bioma} ${className}`} aria-label="Escena 3D de la parcela" style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
         {lienzoCaja}
         {hover && !sinWebGL && (
           <div className={`escena-globo escena-globo-vista${vista ? ` escena-globo-${vista}` : ''}`} style={{ left: hover.x, top: hover.y }} aria-hidden="true">

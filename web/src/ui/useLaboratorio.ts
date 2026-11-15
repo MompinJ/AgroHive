@@ -47,6 +47,8 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
   const [datos, setDatos] = useState<{ clave: string; datos: DatosLaboratorio } | null>(null);
   const [error, setError] = useState('');
   const [planesEditados, setPlanes] = useState<{ clave: string; planes: PlanSiembra[] } | null>(null);
+  // Deshacer y rehacer cambios del plan (pintar, sembrar, fechas, ciclos, rotaciones): hasta 50 pasos.
+  const [historia, setHistoria] = useState<{ clave: string; atras: PlanSiembra[][]; adelante: PlanSiembra[][] }>({ clave: '', atras: [], adelante: [] });
   const [calculo, setCalculo] = useState<Calculo | null>(null);
   const [errorMotor, setErrorMotor] = useState('');
   const [revision, setRevision] = useState(0);
@@ -87,7 +89,28 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
     const guardados = leerPlanes(claveGuardado)?.filter((p) => p.parcelaId === actual.parcela.id);
     return guardados?.length ? guardados : planesIniciales(actual.parcela, actual.calendario);
   }, [actual, planesEditados, claveParcela, claveGuardado]);
-  const fijarPlanes = (lista: PlanSiembra[]) => { guardarPlanes(claveGuardado, lista); setPlanes({ clave: claveParcela, planes: lista }); };
+  const aplicarPlanes = (lista: PlanSiembra[]) => { guardarPlanes(claveGuardado, lista); setPlanes({ clave: claveParcela, planes: lista }); };
+  const pila = historia.clave === claveParcela ? historia : { clave: claveParcela, atras: [], adelante: [] };
+  const fijarPlanes = (lista: PlanSiembra[]) => {
+    setHistoria({ clave: claveParcela, atras: [...pila.atras, planes].slice(-50), adelante: [] });
+    aplicarPlanes(lista);
+  };
+  const volverA = (lista: PlanSiembra[]) => {
+    aplicarPlanes(lista);
+    if (!lista.some((p) => p.rotacionId === rotacion)) { setRotacion(lista[0]!.rotacionId); setCiclo(1); }
+  };
+  const deshacer = () => {
+    const previo = pila.atras.at(-1);
+    if (!previo) return;
+    setHistoria({ clave: claveParcela, atras: pila.atras.slice(0, -1), adelante: [planes, ...pila.adelante] });
+    volverA(previo);
+  };
+  const rehacer = () => {
+    const siguiente = pila.adelante[0];
+    if (!siguiente) return;
+    setHistoria({ clave: claveParcela, atras: [...pila.atras, planes], adelante: pila.adelante.slice(1) });
+    volverA(siguiente);
+  };
   const clave = JSON.stringify([claveParcela, planes, revision, intento]);
   useEffect(() => {
     if (!actual || !planes.length) return;
@@ -105,6 +128,7 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
     return () => { activo = false; cliente?.terminar(); };
   }, [actual, planes, clave]);
   return { seleccion: { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda }, datos: actual, planes, calculo: calculo?.clave === clave && actual ? calculo : null, error: parcela && remotos.state === 'error' ? remotos.error.motivo : error || errorMotor, actualizar: (plan: PlanSiembra) => fijarPlanes(planes.map((p) => p.rotacionId === plan.rotacionId ? plan : p)),
+    deshacer, rehacer, puedeDeshacer: pila.atras.length > 0, puedeRehacer: pila.adelante.length > 0,
     agregarRotacion: (plan: PlanSiembra) => { fijarPlanes([...planes, plan]); setRotacion(plan.rotacionId); setCiclo(1); },
     quitarRotacion: (id: string) => {
       if (planes.length <= 1) return;

@@ -1,0 +1,126 @@
+{
+  "version": "1.0.0",
+  "descripcion": "Plagas que AgroHive busca en GBIF alrededor de la parcela (A6, 15/11). Los cultivos hospederos solo se ponen con fuente; sin fuente verificada la lista va vacia.",
+  "taxones": {
+    "nombre": "GBIF Backbone Taxonomy",
+    "url": "https://api.gbif.org/v1/species/match",
+    "consultado": "2026-11-15",
+    "nota": "taxonKey verificado con species/match (matchType EXACT, status ACCEPTED, rank SPECIES) el 15/11/2026."
+  },
+  "plagas": [
+    {
+      "id": "gusano_cogollero",
+      "nombreComun": "Gusano cogollero",
+      "nombreCientifico": "Spodoptera frugiperda",
+      "tipoVisual": "gusano",
+      "taxonKey": 5109855,
+      "cultivos": [
+        "maiz",
+        "maiz_dulce",
+        "sorgo",
+        "cana",
+        "algodon",
+        "soya"
+      ],
+      "fuenteHospederos": {
+        "nombre": "EPPO Global Database, Spodoptera frugiperda (LAPHFR): Host plants",
+        "url": "https://gd.eppo.int/taxon/LAPHFR/hosts",
+        "cita": "EPPO (2026) EPPO Global Database (available online). https://gd.eppo.int, Spodoptera frugiperda (LAPHFR), pagina Host plants.",
+        "consultado": "2026-11-15",
+        "nota": "Solo se toman las plantas que EPPO clasifica como 'Major host' y que estan en el catalogo de AgroHive (40 cultivos). Zea mays incluye el maiz dulce y Phaseolus vulgaris el ejote."
+      }
+    },
+    {
+      "id": "gusano_elotero",
+      "nombreComun": "Gusano elotero",
+      "nombreCientifico": "Helicoverpa zea",
+      "tipoVisual": "gusano",
+      "taxonKey": 1792564,
+      "cultivos": [
+        "maiz",
+        "maiz_dulce",
+        "sorgo",
+        "frijol",
+        "ejote",
+        "chile",
+        "tomate",
+        "berenjena",
+        "algodon"
+      ],
+      "fuenteHospederos": {
+        "nombre": "EPPO Global Database, Helicoverpa zea (HELIZE): Host plants",
+        "url": "https://gd.eppo.int/taxon/HELIZE/hosts",
+        "cita": "EPPO (2026) EPPO Global Database (available online). https://gd.eppo.int, Helicoverpa zea (HELIZE), pagina Host plants.",
+        "consultado": "2026-11-15",
+        "nota": "Solo se toman las plantas que EPPO clasifica como 'Major host' y que estan en el catalogo de AgroHive (40 cultivos). Zea mays incluye el maiz dulce y Phaseolus vulgaris el ejote."
+      }
+    },
+    {
+      "id": "mosca_blanca",
+      "nombreComun": "Mosca blanca",
+      "nombreCientifico": "Bemisia tabaci",
+      "tipoVisual": "mosca",
+      "taxonKey": 2012126,
+      "cultivos": [
+        "tomate",
+        "algodon",
+        "camote",
+        "yuca"
+      ],
+      "fuenteHospederos": {
+        "nombre": "EPPO Global Database, Bemisia tabaci (BEMITA): Host plants",
+        "url": "https://gd.eppo.int/taxon/BEMITA/hosts",
+        "cita": "EPPO (2026) EPPO Global Database (available online). https://gd.eppo.int, Bemisia tabaci (BEMITA), pagina Host plants.",
+        "consultado": "2026-11-15",
+        "nota": "Solo se toman las plantas que EPPO clasifica como 'Major host' y que estan en el catalogo de AgroHive (40 cultivos). Zea mays incluye el maiz dulce y Phaseolus vulgaris el ejote."
+      }
+    },
+    {
+      "id": "chapulin",
+      "nombreComun": "Chapulín de la milpa",
+      "nombreCientifico": "Sphenarium purpurascens",
+      "tipoVisual": "chapulin",
+      "taxonKey": 1727733,
+      "cultivos": [
+        "maiz"
+      ],
+      "fuenteHospederos": {
+        "nombre": "Quesada-Béjar, V., Nájera R., M. B., Reyes-Novelo, E. y González-Esquivel, C. E. (2017). Ortópteros (Caelifera) y sus hongos entomopatógenos en agroecosistemas de maíz en Erongarícuaro, Michoacán. Revista Mexicana de Ciencias Agrícolas 8(6): 1357-1370",
+        "url": "https://www.redalyc.org/pdf/2631/263153306010.pdf",
+        "cita": "Resumen: 'Los saltamontes son una plaga importante del maíz'; Sphenarium purpurascens purpurascens fue la especie dominante (97.8 % de la abundancia) en los maizales estudiados.",
+        "consultado": "2026-11-15",
+        "nota": "Solo se asocia el maiz: el articulo documenta a la especie como plaga del maiz. Otros hospederos (frijol, calabaza) no se agregan sin fuente. La ficha de CABI (doi:10.1079/cabicompendium.51033) sigue sin revisar."
+      }
+    },
+    {
+      "id": "diabrotica",
+      "nombreComun": "Diabrótica",
+      "nombreCientifico": "Diabrotica balteata",
+      "tipoVisual": "escarabajo",
+      "taxonKey": 1048505,
+      "cultivos": [],
+      "fuenteHospederos": {
+        "nombre": "Sin lista de hospederos verificada para Diabrotica balteata",
+        "url": "https://doi.org/10.1079/cabicompendium.18618",
+        "cita": "CABI Compendium, Diabrotica balteata (doi:10.1079/cabicompendium.18618); la ficha no se pudo leer (acceso restringido) y EPPO no publica hospederos de esta especie.",
+        "consultado": "2026-11-15",
+        "nota": "[VERIFICAR] Una persona revisa la ficha de CABI antes de asociar esta plaga a cultivos. Mientras tanto se informa su presencia en la zona, pero no se dice que dane ningun cultivo."
+      }
+    },
+    {
+      "id": "pulgon_algodon",
+      "nombreComun": "Pulgón del algodón",
+      "nombreCientifico": "Aphis gossypii",
+      "tipoVisual": "pulgon",
+      "taxonKey": 9083295,
+      "cultivos": [],
+      "fuenteHospederos": {
+        "nombre": "Sin lista de hospederos verificada para Aphis gossypii",
+        "url": "https://doi.org/10.1079/cabicompendium.6204",
+        "cita": "CABI Compendium, Aphis gossypii (doi:10.1079/cabicompendium.6204); la ficha no se pudo leer (acceso restringido) y EPPO no publica hospederos de esta especie.",
+        "consultado": "2026-11-15",
+        "nota": "[VERIFICAR] Una persona revisa la ficha de CABI antes de asociar esta plaga a cultivos. Mientras tanto se informa su presencia en la zona, pero no se dice que dane ningun cultivo."
+      }
+    }
+  ]
+}

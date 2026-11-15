@@ -524,6 +524,72 @@
         }
       }
     },
+    "/api/plagas": {
+      "get": {
+        "tags": [
+          "plagas"
+        ],
+        "summary": "Obtener Plagas",
+        "description": "Plagas de la tabla datos/plagas/plagas.json con registros de presencia en GBIF alrededor del punto (caja de 1.5 grados, desde 2000).\n**Evidencia**: un registro no es un pronostico de dano; cero registros no prueba ausencia. No entra al motor ni al ranking.",
+        "operationId": "obtener_plagas_api_plagas_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Plagas"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDatos"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/ee-uu/cdl": {
       "get": {
         "tags": [
@@ -2263,6 +2329,200 @@
           "fuente"
         ],
         "title": "PhEstimado"
+      },
+      "Plaga": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "title": "Id"
+          },
+          "nombreComun": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Nombrecomun"
+          },
+          "nombreCientifico": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Nombrecientifico"
+          },
+          "tipoVisual": {
+            "type": "string",
+            "enum": [
+              "chapulin",
+              "gusano",
+              "mosca",
+              "escarabajo",
+              "pulgon"
+            ],
+            "title": "Tipovisual"
+          },
+          "taxonKey": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Taxonkey"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "presente",
+              "sin_registros",
+              "NO_EVALUABLE"
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "registros": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registros"
+          },
+          "ultimoAnio": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1800.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ultimoanio"
+          },
+          "cultivos": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cultivos"
+          },
+          "fuenteHospederos": {
+            "$ref": "#/components/schemas/Fuente"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "nombreComun",
+          "nombreCientifico",
+          "tipoVisual",
+          "taxonKey",
+          "estado",
+          "registros",
+          "ultimoAnio",
+          "cultivos",
+          "fuenteHospederos"
+        ],
+        "title": "Plaga",
+        "description": "Una plaga de la tabla: presencia en la region segun GBIF. `registros` y `ultimoAnio` null siempre se envian; `motivo` se omite vacio."
+      },
+      "Plagas": {
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "EVALUABLE",
+              "NO_EVALUABLE",
+              "EXPLORATORIO",
+              "ERROR_DATOS",
+              "RESPALDO_HISTORICO"
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "aviso": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Aviso"
+          },
+          "coordenada": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Coordenada"
+          },
+          "radioGrados": {
+            "type": "number",
+            "maximum": 5.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Radiogrados"
+          },
+          "periodo": {
+            "$ref": "#/components/schemas/Periodo"
+          },
+          "fuente": {
+            "$ref": "#/components/schemas/Fuente"
+          },
+          "plagas": {
+            "items": {
+              "$ref": "#/components/schemas/Plaga"
+            },
+            "type": "array",
+            "title": "Plagas"
+          },
+          "advertencias": {
+            "items": {
+              "$ref": "#/components/schemas/Advertencia"
+            },
+            "type": "array",
+            "title": "Advertencias",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "estado",
+          "aviso",
+          "coordenada",
+          "radioGrados",
+          "periodo",
+          "fuente",
+          "plagas"
+        ],
+        "title": "Plagas",
+        "description": "Plagas registradas en la region: evidencia de presencia, no pronostico de dano. No entra al motor ni al ranking."
       },
       "ProductoNdvi": {
         "properties": {

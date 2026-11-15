@@ -1,29 +1,31 @@
 // Paso 2: que se siembra en cada ciclo. Solo se elige el cultivo y se pinta; la temporada y
 // la fecha salen del calendario local (SIAP/INIFAP o GGCMI via API) y se pueden ajustar.
-import { useState } from 'react';
-import type { Cultivo } from '../../../../contratos/tipos/contratos';
+import { useMemo, useState } from 'react';
 import type { LaboratorioEstado } from '../useLaboratorio';
-import { agregarCiclo, agruparCultivos, cambiarSiembra, conflictosPlan, conteoPintado, cultivosDelCiclo, diasCultivo, inicioDeVentana, nombreRotacion, nuevaRotacion, quitarCiclo, referenciaSiembra, rellenarCiclo } from '../planes';
+import { agregarCiclo, cambiarSiembra, conflictosPlan, conteoPintado, diasCultivo, inicioDeVentana, nombreRotacion, nuevaRotacion, quitarCiclo, referenciaSiembra } from '../planes';
+import { climatologia, conveniencia } from './conveniencia';
+import type { PlagaZona, riesgosDelPlan } from './plagas';
 import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, fechaCorta, nombreCultivo, rangoVentana } from './piezas';
-import { IconoBrocha, IconoCalendario, IconoCubeta, IconoGoma, IconoInfo, IconoMano, IconoMas, IconoQuitar, IconoBasura, IconoTamano } from './iconos';
+import { IconoBasura, IconoBicho, IconoCalendario, IconoEscudo, IconoInfo, IconoInsecticida, IconoMas, IconoQuitar } from './iconos';
+import type { Herramienta } from './BarraHerramientas';
 import type { PasoLab } from './Laboratorio';
 import { AvisosDatos } from '../../escena/AvisosDatos';
 
-export type Herramienta = 'brocha' | 'goma' | 'mover';
+export type { Herramienta } from './BarraHerramientas';
 
-const tamanos = [{ valor: 1, texto: 'Fina', ayuda: '1 bloque' }, { valor: 2, texto: 'Media', ayuda: '3 × 3 bloques' }, { valor: 3, texto: 'Ancha', ayuda: '5 × 5 bloques' }] as const;
-
-export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, cultivoActivo, setCultivoPincel, tamano, setTamano, calculando }: {
+export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, cultivoActivo, setCultivoPincel, calculando, riesgos, hayPlagas, onRociarTodo, presentes }: {
   estado: LaboratorioEstado; onAvanzar: (d: PasoLab) => void;
   herramienta: Herramienta; setHerramienta: (h: Herramienta) => void;
   cultivoActivo: string | null; setCultivoPincel: (c: string | null) => void;
-  tamano: number; setTamano: (n: number) => void; calculando: boolean;
+  calculando: boolean;
+  riesgos: ReturnType<typeof riesgosDelPlan>; hayPlagas: boolean; onRociarTodo: () => void; presentes: readonly PlagaZona[];
 }) {
   const { rotacion, setRotacion, ciclo, setCiclo } = estado.seleccion;
   const [errorFecha, setErrorFecha] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const [verTodos, setVerTodos] = useState(false);
   const datos = estado.datos;
+  const clima = useMemo(() => climatologia(datos?.serie), [datos?.serie]);
   const plan = estado.planes.find((p) => p.rotacionId === rotacion) ?? estado.planes[0];
   const visible = plan?.ciclos.find((c) => c.ciclo === ciclo) ?? plan?.ciclos[0];
   const encabezado = <EncabezadoPanel indice={1} titulo="Pinta tus cultivos">Elige un cultivo y pinta los bloques de tu parcela.</EncabezadoPanel>;
@@ -43,22 +45,15 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
   const inicioVentana = ventana ? inicioDeVentana(ventana, Number(visible.siembra.slice(0, 4))) : null;
   const disponibles = siguiente ? Math.round((Date.parse(siguiente.siembra) - Date.parse(visible.siembra)) / 86400000) : null;
 
-  // Paleta: sugeridos (los del plan, el de la brocha y los que la fuente local registra aqui),
-  // busqueda por nombre o todos agrupados por tipo. El orden del catalogo se conserva.
+  // Paleta ordenada de mas a menos conveniente para la tierra y la fecha del ciclo (conveniencia.ts).
+  // Se ven los 8 primeros; "Ver mas" despliega el resto en el mismo orden. La busqueda filtra.
   const normal = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  const gruposPaleta: { nombre: string; cultivos: Cultivo[] }[] = (() => {
-    const todos = datos.catalogo.cultivos;
-    if (busqueda.trim()) {
-      const q = normal(busqueda.trim());
-      const hallados = todos.filter((c) => normal(nombreCultivo(c.id)).includes(q) || normal(c.nombreComun).includes(q) || normal(c.nombreCientifico ?? '').includes(q));
-      return hallados.length ? [{ nombre: '', cultivos: hallados }] : [];
-    }
-    if (verTodos) return agruparCultivos(todos);
-    const enPlan = new Set(plan!.ciclos.flatMap((c) => cultivosDelCiclo(plan!, c.ciclo)));
-    const sugeridos = todos.filter((c) => enPlan.has(c.id) || c.id === cultivoActivo || referenciaSiembra(c.id, visible!.temporada, datos.calendario)?.presencia.estado === 'registrado');
-    const base = sugeridos.length >= 4 ? sugeridos : [...sugeridos, ...todos.filter((c) => !sugeridos.includes(c))].slice(0, 8);
-    return [{ nombre: '', cultivos: base.slice(0, 12) }];
-  })();
+  const evaluados = datos.catalogo.cultivos.map((c, orden) => ({ c, orden, v: conveniencia(c, {
+    clima, siembra: visible.siembra, temporada: visible.temporada, dias: diasCultivo(c.id, datos.catalogo), disponibles, calendario: datos.calendario, plagas: presentes,
+  }) })).sort((x, y) => y.v.puntos - x.v.puntos || x.orden - y.orden);
+  const q = normal(busqueda.trim());
+  const filtrados = q ? evaluados.filter(({ c }) => normal(nombreCultivo(c.id)).includes(q) || normal(c.nombreComun).includes(q) || normal(c.nombreCientifico ?? '').includes(q)) : evaluados;
+  const visibles = q || verTodos ? filtrados : filtrados.slice(0, 8);
 
   function aplicar(nuevo: typeof plan) {
     const conflictos = conflictosPlan(nuevo!, datos!.catalogo);
@@ -111,45 +106,30 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
     <div className="panel-bloque">
       <p className="panel-etiqueta" id="paleta-etiqueta">Cultivo de la brocha</p>
       <input className="lab-buscar" type="search" placeholder={`Buscar entre ${datos.catalogo.cultivos.length} cultivos`} aria-label="Buscar cultivo" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
-      {gruposPaleta.map((g) => <div key={g.nombre} className="lab-paleta-grupo">
-        {g.nombre && <p className="lab-paleta-titulo">{g.nombre}</p>}
-        <div className="lab-paleta" role="radiogroup" aria-labelledby="paleta-etiqueta">
-        {g.cultivos.map((c) => {
-          const dias = diasCultivo(c.id, datos.catalogo);
-          const noCabe = disponibles != null && dias != null && dias > disponibles;
-          const presencia = referenciaSiembra(c.id, visible.temporada, datos.calendario)?.presencia;
-          const noRegistrado = presencia?.estado === 'no_registrado';
-          const motivo = noCabe ? `Tarda ${dias} días: no termina antes del ciclo ${siguiente?.ciclo}` : noRegistrado ? 'Casi no se siembra en esta zona' : dias ? `Tarda ${dias} días` : 'Duración desconocida';
-          return <button type="button" role="radio" key={c.id} className="lab-tip" data-tip={motivo} aria-checked={cultivoActivo === c.id && herramienta !== 'goma'} aria-disabled={noCabe}
-            onClick={() => { if (noCabe) return; setCultivoPincel(c.id); if (herramienta !== 'brocha') setHerramienta('brocha'); }}>
+      <div className="lab-paleta" role="radiogroup" aria-labelledby="paleta-etiqueta">
+        {visibles.map(({ c, v }) => {
+          const tip = `${nombreCultivo(c.id)}: ${v.nivel === 'buena' ? 'buena opción' : v.nivel === 'regular' ? 'opción regular' : 'mala opción'}. ${v.motivos.join(' ')}`;
+          return <button type="button" role="radio" key={c.id} className={`lab-tip lab-conv-${v.nivel}`} data-tip={tip} aria-checked={cultivoActivo === c.id && herramienta !== 'goma'} aria-disabled={v.noCabe}
+            onClick={() => { if (v.noCabe) return; setCultivoPincel(c.id); if (herramienta !== 'brocha') setHerramienta('brocha'); }}>
             <IconoCultivo cultivo={c.id} tamano={30} />
             <span>{nombreCultivo(c.id)}</span>
-            {noRegistrado && <span className="lab-marca-aviso" aria-label="Casi no se siembra aquí">!</span>}
-            <span className="sr-only">. {motivo}</span>
+            <span className="lab-conv-punto" aria-hidden="true" />
+            <span className="sr-only">. {tip}</span>
           </button>;
         })}
-        </div>
-      </div>)}
-      {gruposPaleta.length === 0 && <p className="panel-ayuda">Ningún cultivo coincide con “{busqueda}”.</p>}
-      {!busqueda && <button type="button" className="lab-enlace" aria-expanded={verTodos} onClick={() => setVerTodos((v) => !v)}>{verTodos ? 'Ver solo los sugeridos' : `Ver los ${datos.catalogo.cultivos.length} cultivos por tipo`}</button>}
+      </div>
+      {filtrados.length === 0 && <p className="panel-ayuda">Ningún cultivo coincide con “{busqueda}”.</p>}
+      {!q && filtrados.length > 8 && <button type="button" className="lab-enlace" aria-expanded={verTodos} onClick={() => setVerTodos((x) => !x)}>{verTodos ? 'Ver menos' : `Ver más (${filtrados.length - 8})`}</button>}
+      <p className="lab-conv-leyenda" aria-hidden="true"><span className="lab-conv-buena" /> buena <span className="lab-conv-regular" /> regular <span className="lab-conv-mala" /> mala, para tu tierra y fecha</p>
     </div>
 
-    <div className="panel-bloque lab-herramientas">
-      <div className="lab-iconos" role="radiogroup" aria-label="Herramienta">
-        {([['brocha', 'Brocha: pinta bloques', <IconoBrocha key="b" />], ['goma', 'Goma: regresa al cultivo del ciclo', <IconoGoma key="g" />], ['mover', 'Mover la cámara', <IconoMano key="m" />]] as const).map(([id, tip, icono]) =>
-          <button type="button" role="radio" key={id} className="lab-tip" data-tip={tip} aria-label={tip} aria-checked={herramienta === id} onClick={() => setHerramienta(id)}>{icono}</button>)}
-        <span className="lab-iconos-separador" aria-hidden="true" />
-        {tamanos.map((t) => <button type="button" role="radio" key={t.valor} className="lab-tip" data-tip={`Brocha ${t.texto.toLowerCase()} (${t.ayuda})`} aria-label={`Brocha ${t.texto.toLowerCase()}, ${t.ayuda}`} aria-checked={tamano === t.valor} disabled={herramienta === 'mover'} onClick={() => setTamano(t.valor)}><IconoTamano nivel={t.valor} /></button>)}
-        {cultivoActivo && cultivoActivo !== visible.cultivo && herramienta !== 'goma' && <>
-          <span className="lab-iconos-separador" aria-hidden="true" />
-          <button type="button" className="lab-tip" data-tip={`Sembrar ${nombreCultivo(cultivoActivo)} en toda la parcela`} aria-label={`Sembrar ${nombreCultivo(cultivoActivo)} en toda la parcela`} onClick={() => {
-            const nuevo = rellenarCiclo(plan, datos.parcela, visible.ciclo, cultivoActivo, datos.calendario, datos.catalogo);
-            if (aplicar(nuevo)) setCultivoPincel(null);
-          }}><IconoCubeta /></button>
-        </>}
-      </div>
-      {pintado.size > 0 && <p className="panel-ayuda">Pintadas: {[...pintado].map(([c, n]) => `${nombreCultivo(c)} ${n}`).join(' · ')}. El resto lleva {nombreCultivo(visible.cultivo)}.</p>}
-    </div>
+    {pintado.size > 0 && <p className="panel-ayuda">Pintadas: {[...pintado].map(([c, n]) => `${nombreCultivo(c)} ${n}`).join(' · ')}. El resto lleva {nombreCultivo(visible.cultivo)}.</p>}
+    {riesgos.length > 0 && <div className="lab-plagas" role="status">
+      <p className="lab-plagas-titulo"><IconoBicho /> Plagas en tu zona</p>
+      <ul>{riesgos.map((r) => <li key={`${r.plaga.id}:${r.cultivo}`}><strong>{r.plaga.nombreComun}</strong> ataca tu {nombreCultivo(r.cultivo).toLowerCase()}: {r.sinProteger.length} {r.sinProteger.length === 1 ? 'bloque' : 'bloques'} sin insecticida.</li>)}</ul>
+      <button type="button" className="lab-boton lab-boton-suave lab-boton-ancho" onClick={onRociarTodo}><IconoInsecticida /> Echar insecticida en todo el ciclo</button>
+    </div>}
+    {riesgos.length === 0 && hayPlagas && <p className="lab-protegido"><IconoEscudo /> Este ciclo está protegido de las plagas registradas en tu zona.</p>}
 
     <details className="panel-bloque lab-siembra">
       <summary>

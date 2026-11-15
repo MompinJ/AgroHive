@@ -1,7 +1,7 @@
 // Paso 4: comparacion directa. Una tarjeta por rotacion, en el orden del ranking del motor:
 // su lugar, sus cultivos, cuanta agua le falto en cada anio y, primero, sus debilidades (los
 // riesgos que redacta el motor). Nada se recalcula aqui.
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import type { Escenario } from '../../../../contratos/tipos/contratos';
 import type { LaboratorioEstado } from '../useLaboratorio';
 import type { EstadoSerieBalance } from '../useSerieBalance';
@@ -11,14 +11,19 @@ import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, nombreCultivo, nombreEs
 import { IconoInfo } from './iconos';
 import { nombresPilares } from './PanelEscenarios';
 import type { PasoLab } from './Laboratorio';
+import { PlanElegido } from './PlanElegido';
 
 const DashboardBalance = lazy(() => import('../DashboardBalance'));
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 
-export function PanelComparacion({ estado, onAvanzar, serie, setGraficas }: {
+export function PanelComparacion({ estado, onAvanzar, serie, setGraficas, plagasDe }: {
   estado: LaboratorioEstado; onAvanzar: (d: PasoLab) => void; serie: EstadoSerieBalance; setGraficas: (v: boolean) => void;
+  /** Por rotacion: plagas registradas en la zona que atacan sus cultivos y bloques sin insecticida. */
+  plagasDe: (rotacionId: string) => readonly { ciclo: number; plaga: string; cultivo: string; bloques: number }[];
 }) {
   const { rotacion, setRotacion, setCiclo, setEscenario, setMostrarBanda } = estado.seleccion;
+  const [elegido, setElegido] = useState<string | null>(null);
+  const planElegido = elegido ? estado.planes.find((p) => p.rotacionId === elegido) : undefined;
   const ranking = estado.calculo?.ranking;
   const ordenadas = ordenarRotaciones(ranking?.rotaciones ?? []);
   const resultado = ranking?.rotaciones.find((r) => r.rotacionId === rotacion);
@@ -46,7 +51,8 @@ export function PanelComparacion({ estado, onAvanzar, serie, setGraficas }: {
         {ordenadas.map((r) => {
           const plan = estado.planes.find((p) => p.rotacionId === r.rotacionId);
           const pos = r.ranking?.posicion ?? null;
-          const debilidades = r.explicacion?.riesgos ?? [];
+          const plagas = plagasDe(r.rotacionId).map((p) => `Plaga sin controlar: ${p.plaga.toLowerCase()} puede atacar tu ${p.cultivo.toLowerCase()} del ciclo ${p.ciclo} (${p.bloques} ${p.bloques === 1 ? 'bloque' : 'bloques'} sin insecticida).`);
+          const debilidades = [...plagas.slice(0, 1), ...(r.explicacion?.riesgos ?? [])];
           const fortalezas = r.explicacion?.beneficios ?? [];
           const peor = r.peorCaso?.escenario;
           return <li key={r.rotacionId} className={`cmp-tarjeta${pos === 1 ? ' cmp-primera' : ''}${r.rotacionId === rotacion ? ' cmp-actual' : ''}`}>
@@ -84,6 +90,7 @@ export function PanelComparacion({ estado, onAvanzar, serie, setGraficas }: {
             </div>}
 
             <footer className="cmp-acciones">
+              <button type="button" className="lab-boton lab-boton-primario" onClick={() => { setRotacion(r.rotacionId); setElegido(r.rotacionId); }}>Elegir este plan</button>
               <button type="button" className="lab-boton lab-boton-suave" onClick={() => ir(r.rotacionId, 'escenarios', peor)}>Ver su peor año</button>
               <button type="button" className="lab-boton lab-boton-suave" onClick={() => ir(r.rotacionId, 'cultivos')}>Mejorarla</button>
             </footer>
@@ -114,5 +121,7 @@ export function PanelComparacion({ estado, onAvanzar, serie, setGraficas }: {
       <a className="lab-boton lab-boton-suave" href="#/escenarios"><span aria-hidden="true">←</span> Escenarios</a>
     </footer>
     <p className="panel-legal">La decisión final es tuya. AgroHive no predice cosechas ni reemplaza a un agrónomo.</p>
+    {elegido && planElegido && estado.datos && <PlanElegido nombre={nombreRotacion(elegido, estado.planes)} plan={planElegido} resultado={ranking?.rotaciones.find((x) => x.rotacionId === elegido)}
+      catalogo={estado.datos.catalogo} plagas={plagasDe(elegido)} onCerrar={() => setElegido(null)} />}
   </section>;
 }

@@ -22,3 +22,7 @@ export function IconoTamano({ nivel }: { nivel: number }) {
   const r = 2.5 + nivel * 2;
   return <Icono><circle cx="12" cy="12" r={r} fill="currentColor" stroke="none" /></Icono>;
 }
+export const IconoRehacer = () => <Icono><path d="M15 14l5-5-5-5" /><path d="M20 9H10a6 6 0 0 0 0 12h3" /></Icono>;
+export const IconoInsecticida = () => <Icono><rect x="5" y="9" width="8" height="12" rx="2" /><path d="M7 9V6h4v3M11 6h4l2-2" /><path d="M19 7.5h.01M21 5.5h.01M21 9.5h.01M17.5 10.5h.01" /></Icono>;
+export const IconoEscudo = () => <Icono tamano={16}><path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z" /><path d="m9 12 2 2 4-4" /></Icono>;
+export const IconoBicho = () => <Icono tamano={16}><ellipse cx="12" cy="13" rx="4" ry="6" /><path d="M12 7V4M9 4l1.5 2M15 4l-1.5 2M8 11H4M8 15H4M16 11h4M16 15h4" /></Icono>;

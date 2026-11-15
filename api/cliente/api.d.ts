@@ -165,6 +165,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/plagas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener Plagas
+         * @description Plagas de la tabla datos/plagas/plagas.json con registros de presencia en GBIF alrededor del punto (caja de 1.5 grados, desde 2000).
+         *     **Evidencia**: un registro no es un pronostico de dano; cero registros no prueba ausencia. No entra al motor ni al ranking.
+         */
+        get: operations["obtener_plagas_api_plagas_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/ee-uu/cdl": {
         parameters: {
             query?: never;
@@ -708,6 +729,71 @@ export interface components {
             /** Valor */
             valor: number;
             fuente: components["schemas"]["Fuente"];
+        };
+        /**
+         * Plaga
+         * @description Una plaga de la tabla: presencia en la region segun GBIF. `registros` y `ultimoAnio` null siempre se envian; `motivo` se omite vacio.
+         */
+        Plaga: {
+            /** Id */
+            id: string;
+            /** Nombrecomun */
+            nombreComun: string;
+            /** Nombrecientifico */
+            nombreCientifico: string;
+            /**
+             * Tipovisual
+             * @enum {string}
+             */
+            tipoVisual: "chapulin" | "gusano" | "mosca" | "escarabajo" | "pulgon";
+            /** Taxonkey */
+            taxonKey: number;
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "presente" | "sin_registros" | "NO_EVALUABLE";
+            /** Motivo */
+            motivo?: string | null;
+            /** Registros */
+            registros: number | null;
+            /** Ultimoanio */
+            ultimoAnio: number | null;
+            /** Cultivos */
+            cultivos: string[];
+            fuenteHospederos: components["schemas"]["Fuente"];
+        };
+        /**
+         * Plagas
+         * @description Plagas registradas en la region: evidencia de presencia, no pronostico de dano. No entra al motor ni al ranking.
+         */
+        Plagas: {
+            meta: components["schemas"]["Meta"];
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+            /** Motivo */
+            motivo?: string | null;
+            /** Aviso */
+            aviso: string;
+            /** Coordenada */
+            coordenada: [
+                number,
+                number
+            ];
+            /** Radiogrados */
+            radioGrados: number;
+            periodo: components["schemas"]["Periodo"];
+            fuente: components["schemas"]["Fuente"];
+            /** Plagas */
+            plagas: components["schemas"]["Plaga"][];
+            /**
+             * Advertencias
+             * @default []
+             */
+            advertencias: components["schemas"]["Advertencia"][];
         };
         /** ProductoNdvi */
         ProductoNdvi: {
@@ -1383,6 +1469,47 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDatos"];
+                };
+            };
+        };
+    };
+    obtener_plagas_api_plagas_get: {
+        parameters: {
+            query: {
+                lat: number;
+                lon: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Plagas"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
             /** @description Service Unavailable */
             503: {

@@ -6,9 +6,13 @@ import type { ResultadoCeldas } from '../../../../contratos/tipos/contratos';
 import { conLimite, type LaboratorioEstado } from '../useLaboratorio';
 import { useSerieBalance } from '../useSerieBalance';
 import { rangoDelCiclo } from '../tiempo';
-import { colorCultivo, conflictosPlan, fechaParaVer, pintarCeldas, ventanaDelPlan } from '../planes';
+import { colorCultivo, conflictosPlan, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
 import type { PincelEscena } from '../../escena/pincel';
-import { PanelCultivos, type Herramienta } from './PanelCultivos';
+import { PanelCultivos } from './PanelCultivos';
+import { BarraHerramientas, type Herramienta } from './BarraHerramientas';
+import { mapaPlagas, plagasPresentes, proteger, riesgosDelPlan } from './plagas';
+import { usePlagasZona, useProteccion } from './usePlagas';
+import { biomaDe, climatologia, NOMBRE_BIOMA } from './conveniencia';
 import { PanelEscenarios } from './PanelEscenarios';
 import { PanelComparacion } from './PanelComparacion';
 import { Aviso } from './piezas';
@@ -57,6 +61,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const [pendientes, setPendientes] = useState<ReadonlyMap<string, string>>(() => new Map());
   const [aviso, setAviso] = useState('');
   const [graficas, setGraficas] = useState(false);
+  const [rociado, setRociado] = useState<{ celdas: string[]; clave: number } | null>(null);
   const ventana = useVentana();
   // Mismos anchos que lab.css: panel izquierdo de 372 px (336 px hasta 1180 px) y hoja inferior en movil.
   const desplazamiento = useMemo(() => {
@@ -113,8 +118,22 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const fechaEscena = previo?.fecha ?? fecha;
 
   const cultivoActivo = cultivoPincel ?? visible?.cultivo ?? null;
+  // Plagas registradas en la zona y proteccion con insecticida (por rotacion y ciclo).
+  const plagasZona = usePlagasZona(datos?.parcela.centroide ?? null, datos?.esDemo ?? false);
+  const presentes = useMemo(() => plagasPresentes(plagasZona), [plagasZona]);
+  const [proteccion, setProteccion] = useProteccion(datos?.parcela.id ?? null);
+  const rociar = useCallback((ids: string[]) => {
+    if (!plan || !visible || !ids.length) return;
+    setProteccion(proteger(proteccion, plan.rotacionId, visible.ciclo, ids));
+    setRociado({ celdas: ids, clave: Date.now() });
+  }, [plan, visible, proteccion, setProteccion]);
+  const celdasParcela = useMemo(() => datos?.parcela.celdas.map((c) => c.id) ?? [], [datos]);
+  const riesgos = useMemo(() => (plan && visible ? riesgosDelPlan(plan, celdasParcela, presentes, proteccion).filter((r) => r.ciclo === visible.ciclo) : []), [plan, visible, celdasParcela, presentes, proteccion]);
+  const plagasEscena = useMemo(() => (resultado && plan ? mapaPlagas(resultado.registros, presentes, proteccion, plan.rotacionId) : undefined), [resultado, plan, presentes, proteccion]);
+
   const pincel: PincelEscena | null = useMemo(() => {
     if (paso !== 'cultivos' || herramienta === 'mover' || !plan || !visible || !datos) return null;
+    if (herramienta === 'insecticida') return { tamano, color: '#7cc3ea', onTrazo: rociar };
     const cultivo = herramienta === 'goma' ? null : cultivoActivo;
     const color = cultivo ? colorCultivo(cultivo) : colorCultivo(visible.cultivo);
     return {
@@ -129,12 +148,23 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
         estado.actualizar(nuevo);
       },
     };
-  }, [paso, herramienta, plan, visible, datos, cultivoActivo, tamano, estado]);
+  }, [paso, herramienta, plan, visible, datos, cultivoActivo, tamano, estado, rociar]);
 
+  const sembrarTodo = plan && visible && datos && cultivoActivo && cultivoActivo !== visible.cultivo && herramienta === 'brocha' ? () => {
+    const nuevo = rellenarCiclo(plan, datos.parcela, visible.ciclo, cultivoActivo, datos.calendario, datos.catalogo);
+    const conflictos = conflictosPlan(nuevo, datos.catalogo);
+    if (conflictos.length) { setAviso(conflictos[0]!); return; }
+    estado.actualizar(nuevo);
+    setCultivoPincel(null);
+  } : null;
+  const rociarTodo = () => rociar(celdasParcela);
+
+  const clima = useMemo(() => climatologia(datos?.serie), [datos?.serie]);
+  const bioma = useMemo(() => biomaDe(clima), [clima]);
   const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
   const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
     : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
-      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} />
+      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} rociado={rociado} bioma={bioma ?? undefined} />
     </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
 
   const comun = { estado, onAvanzar };
@@ -145,15 +175,23 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     resultado: estado.calculo?.ranking.rotaciones.find((r) => r.rotacionId === plan?.rotacionId) ?? null,
     ordenadas: ordenarRotaciones(estado.calculo?.ranking.rotaciones ?? []),
     nombreRotacion: (id) => nombreRotacion(id, estado.planes), leguminosas, ndvi: evidencia.ndvi, smap: evidencia.smap,
-  }), [paso, plan, ciclo, datos, escenario, estado.calculo, estado.planes, leguminosas, evidencia]);
+    bioma: bioma ? { nombre: NOMBRE_BIOMA[bioma], tMedia: clima.tMediaAnual, lluvia: clima.lluviaAnualMm } : null,
+    riesgos: riesgos.map((r) => ({ plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })),
+  }), [paso, plan, ciclo, datos, escenario, estado.calculo, estado.planes, leguminosas, evidencia, riesgos, bioma, clima]);
   return <div className={`lab lab-paso-${paso}`}>
     <Globo />
     {datos && paso !== 'comparacion' && <Mascota consejos={listaConsejos} paso={paso} />}
     <div className="lab-fondo">{fondo}</div>
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
-    {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} tamano={tamano} setTamano={setTamano} calculando={!estado.calculo || !celdasListas} />}
+    {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} calculando={!estado.calculo || !celdasListas} riesgos={riesgos} hayPlagas={presentes.some((p) => plan?.ciclos.some((c) => p.cultivos.includes(c.cultivo)))} onRociarTodo={rociarTodo} presentes={presentes} />}
+    {paso === 'cultivos' && datos && <BarraHerramientas herramienta={herramienta} setHerramienta={setHerramienta} tamano={tamano} setTamano={setTamano}
+      onSembrarTodo={sembrarTodo} sembrarTexto={`Sembrar ${nombresCultivos[cultivoActivo ?? ''] ?? cultivoActivo ?? ''} en toda la parcela`}
+      onRociarTodo={presentes.length ? rociarTodo : null} deshacer={estado.deshacer} rehacer={estado.rehacer} puedeDeshacer={estado.puedeDeshacer} puedeRehacer={estado.puedeRehacer} />}
     {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} />}
-    {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} />}
+    {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} plagasDe={(id) => {
+      const p = estado.planes.find((x) => x.rotacionId === id);
+      return p ? riesgosDelPlan(p, celdasParcela, presentes, proteccion).map((r) => ({ ciclo: r.ciclo, plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })) : [];
+    }} />}
     {aviso && <Aviso tipo="error" className="lab-toast" onCerrar={() => setAviso('')}>{aviso}</Aviso>}
     {paso !== 'cultivos' && errorCeldas && <Aviso tipo="error" className="lab-toast" accion={{ texto: 'Reintentar', onClick: () => setIntentoCeldas((n) => n + 1) }}>{errorCeldas}</Aviso>}
   </div>;

@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Plagas con GBIF (contratos 0.15.0), barra de herramientas, vida y biomas en la escena, paleta por conveniencia y "Tu plan" (Eduardo)
+
+- **Archivos:** `contratos/plagas.schema.json`, ejemplo, casos inválidos, tipos y README (0.15.0, compatible); `api/app/plagas.py`, `clientes/gbif.py`, `modelos_plagas.py`, `rutas/plagas.py`, `main.py`, `config.py`, `openapi.json`, `cliente/api.d.ts`, `tests/test_plagas.py`, `README.md`; `datos/plagas/plagas.json` y `datos/demo/respuestas/plagas.json` (nuevos); `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.15.0), `web/src/api/cliente.ts`; `web/src/ui/lab/` (`BarraHerramientas`, `plagas`, `usePlagas`, `conveniencia`, `PlanElegido` y sus pruebas, más `Laboratorio`, `PanelCultivos`, `PanelComparacion`, `consejos`, `iconos`, `lab.css`), `web/src/ui/useLaboratorio.ts`; `web/src/escena/render/` (`vida.ts`, `plagas.ts` nuevos; `entorno.ts`, `camara.ts`, `escena-three.ts`), `EscenaParcela.tsx`, `escena.css`; `docs/06`.
+- **Cambio:** detalle en 06, "Herramientas flotantes, plagas, vida en la escena, biomas y Tu plan". Contrato `plagas` nuevo (compatible): presencia de plagas en la región según GBIF, con hospederos citados.
+- **Por qué:** pedido de Eduardo.
+- **Fuente:** GBIF Occurrence Search (conteos reales del 15/11 para Isla en el paquete de demo); hospederos de EPPO y, para el chapulín, Quesada-Béjar et al. (2017), Revista Mexicana de Ciencias Agrícolas 8(6):1357-1370. Rangos de cultivo de FAO EcoCrop (catálogo) y clima de NASA POWER para la paleta y el bioma.
+- **Pendiente:** revisar la ficha de CABI del chapulín y fuentes de hospederos para diabrótica y pulgón; los cortes de conveniencia y bioma son `[PROPUESTA]`.
+- **Decisiones afectadas:** ninguna de alcance; las plagas son una capa ilustrativa que no entra al motor ni al ranking.
+
 ### 2026-11-15 — Mascota en pantalla con consejos, NDVI y SMAP en el front, entorno 3D y más color (Eduardo)
 
 - **Archivos:** `web/src/ui/lab/` (`Mascota.tsx`, `consejos.ts` y su prueba, `useEvidencia.ts`, `Laboratorio.tsx`, `lab.css`), `web/src/api/cliente.ts` (`obtenerNdvi`, `obtenerSmap`), `web/src/ui/useLaboratorio.ts` (`esDemo`), `web/src/ui/tokens.css`; `web/src/escena/render/retrato.ts` y `entorno.ts` (nuevos), `escena-three.ts`, `EscenaParcela.tsx`, `escena.css`; `docs/06`.

@@ -6,7 +6,9 @@
 
 import * as THREE from 'three';
 import { CamaraGranja } from './camara';
-import { crearEntorno, LUZ_ENTORNO } from './entorno';
+import { BIOMA_DEFECTO, BIOMAS, crearEntorno, type Bioma } from './entorno';
+import { Ambiente } from './vida';
+import { DURACION_ROCIADO_MS, PlagasEscena, Rociado, type ApoyoCelda, type PlagaCelda } from './plagas';
 import { ESTILO_SIN_ELEVACION, ESTILOS_ESTADO } from '../estilos-estado';
 import { GROSOR_BASE, type BloqueEscena, type EscenaModelo, type EstadoVisual } from '../modelo';
 import { rgbaPlaca } from '../placa';
@@ -64,6 +66,13 @@ export interface OpcionesRender {
    * arboles y luz mas calida. Solo decoracion; se lee al crear la escena. Por defecto, no.
    */
   entorno?: boolean;
+  /** Bioma del entorno (colores, vegetacion y luz); lo decide la interfaz. Por defecto, tropical humedo. */
+  bioma?: Bioma;
+  /**
+   * Al elegir una celda con clic (sin pincel) la camara vuela y acerca a ella; al deseleccionar
+   * vuelve a la vista de antes. Por defecto, no (escena.html y pruebas sin cambios).
+   */
+  enfocarAlElegir?: boolean;
   /** Azimut de la camara en grados (para la brujula); se avisa solo cuando cambia. */
   onAzimut?: (grados: number) => void;
   onPintar?: (bloque: BloqueEscena | null, fase: 'inicio' | 'trazo' | 'fin') => void;
@@ -112,7 +121,10 @@ export type MotivoCuadro =
   | 'viento'
   | 'lluvia-animada'
   | 'pintura'
-  | 'camara';
+  | 'camara'
+  | 'ambiente'
+  | 'plagas'
+  | 'rociado';
 
 /** Lados de tierra de las celdas con pasto (sin cultivo): no dicen humedad. */
 const TIERRA_PASTO = '#6e5038';
@@ -374,6 +386,14 @@ export class EscenaThree {
   private cuadroPintura = 0;
   private marcas: THREE.InstancedMesh | null = null;
   private marcasActuales: ReadonlyMap<string, string> = new Map();
+  private readonly luzHemi: THREE.HemisphereLight;
+  private readonly luzSol: THREE.DirectionalLight;
+  // Vida (aves y viento), plagas ilustrativas y nube de insecticida: solo decoracion.
+  private ambiente: Ambiente | null = null;
+  private relojAmbiente = 0;
+  private readonly plagas = new PlagasEscena();
+  private readonly rociado = new Rociado();
+  private plagasActuales: ReadonlyMap<string, PlagaCelda> | null = null;
   // Vista de la base (por cultivo, validacion o agua): color por celda o null (suelo por humedad).
   private coloresBase: ReadonlyMap<string, string> | null = null;
   private azulejosBase: THREE.InstancedMesh | null = null;
@@ -397,6 +417,8 @@ export class EscenaThree {
     this.scene.add(this.raiz);
     this.scene.add(this.salida);
     this.scene.add(this.lluvia.objeto);
+    this.scene.add(this.plagas.grupo);
+    this.scene.add(this.rociado.grupo);
     // El viento solo corre con la escena a la vista y la pestana visible.
     if (typeof IntersectionObserver !== 'undefined') {
       this.observadorVisible = new IntersectionObserver((e) => {
@@ -406,11 +428,11 @@ export class EscenaThree {
       this.observadorVisible.observe(lienzo);
     }
     document.addEventListener('visibilitychange', this.alCambiarVisibilidad);
-    const e = opciones.entorno ? LUZ_ENTORNO : null;
-    this.scene.add(e ? new THREE.HemisphereLight(e.cielo, e.suelo, e.hemisferica) : new THREE.HemisphereLight('#ffffff', '#6b5a45', 1.6));
-    const sol = e ? new THREE.DirectionalLight(e.sol, e.intensidadSol) : new THREE.DirectionalLight('#ffffff', 1.4);
-    sol.position.set(4, 8, 3);
-    this.scene.add(sol);
+    this.luzHemi = new THREE.HemisphereLight('#ffffff', '#6b5a45', 1.6);
+    this.luzSol = new THREE.DirectionalLight('#ffffff', 1.4);
+    this.luzSol.position.set(4, 8, 3);
+    this.scene.add(this.luzHemi, this.luzSol);
+    if (opciones.entorno) this.aplicarLuzBioma(opciones.bioma ?? BIOMA_DEFECTO);
 
     // Camara de juego de granja (camara.ts): desplazar, girar en pasos, zoom con inclinacion.
     this.camaraGranja = new CamaraGranja(this.camara, lienzo, () => this.pedirCuadro('controles'), (g) => this.opciones.onAzimut?.(g));
@@ -457,8 +479,19 @@ export class EscenaThree {
     };
   }
 
+  /** Luz mas calida y del color de cada bioma (solo con entorno). */
+  private aplicarLuzBioma(bioma: Bioma) {
+    const l = (BIOMAS[bioma] ?? BIOMAS[BIOMA_DEFECTO]).luz;
+    this.luzHemi.color.set(l.cielo);
+    this.luzHemi.groundColor.set(l.suelo);
+    this.luzHemi.intensity = l.hemisferica;
+    this.luzSol.color.set(l.sol);
+    this.luzSol.intensity = l.intensidadSol;
+  }
+
   setOpciones(opciones: OpcionesRender) {
     const mascotaAntes = this.opciones.mascota;
+    const biomaAntes = this.opciones.bioma ?? BIOMA_DEFECTO;
     const desplazamientoAntes = this.opciones.desplazamiento;
     this.opciones = opciones;
     if (desplazamientoAntes?.x !== opciones.desplazamiento?.x || desplazamientoAntes?.y !== opciones.desplazamiento?.y) this.ajustarTamano();
@@ -466,6 +499,14 @@ export class EscenaThree {
     this.aplicarMovimiento();
     if (opciones.reducirMovimiento) this.terminarTransiciones();
     if (mascotaAntes !== opciones.mascota && this.modeloActual) void this.construirMascota(this.modeloActual, this.version);
+    // Otro bioma: cambian luz y entorno (sus recursos viejos se liberan en el siguiente limpiar()).
+    const bioma = opciones.bioma ?? BIOMA_DEFECTO;
+    if (opciones.entorno && bioma !== biomaAntes) {
+      this.aplicarLuzBioma(bioma);
+      const m = this.modeloActual;
+      this.raiz.getObjectByName('entorno')?.removeFromParent();
+      if (m && m.bloques.length > 0) this.raiz.add(crearEntorno(m, (r) => this.registrar(r), bioma));
+    }
     this.pedirCuadro('opciones');
   }
 
@@ -544,7 +585,9 @@ export class EscenaThree {
     if (this.opciones.entorno) this.extension = this.extension * 1.15 + 0.9;
     this.lluvia.caja(modelo.columnas, Math.max(modelo.filas, modelo.columnas) * 0.8 + 2, modelo.filas);
     this.construirTerreno(modelo);
-    if (this.opciones.entorno && modelo.bloques.length > 0) this.raiz.add(crearEntorno(modelo, (r) => this.registrar(r)));
+    if (this.opciones.entorno && modelo.bloques.length > 0) this.raiz.add(crearEntorno(modelo, (r) => this.registrar(r), this.opciones.bioma ?? BIOMA_DEFECTO));
+    this.construirAmbiente(modelo);
+    this.plagas.construir(this.apoyos(modelo), this.plagasActuales);
     this.camaraGranja.fijarLimites(modelo.columnas, modelo.filas);
     this.ajustarTamano();
     // La camara solo vuelve a la vista inicial si cambia la parcela, no al cambiar fecha o escenario.
@@ -560,6 +603,57 @@ export class EscenaThree {
     this.seleccionar(this.seleccionId ? (modelo.bloques.find((b) => b.celdaId === this.seleccionId) ?? null) : null);
     if (this.marcasActuales.size > 0) this.marcarPintura(this.marcasActuales);
     if (this.coloresBase || this.opciones.pastoSinCultivo) this.colorearBase(this.coloresBase);
+  }
+
+  // ------------------------------------------------------------------ vida y plagas (decorativo)
+
+  /** Centro y cara superior (con losa) de cada celda: donde se posan insectos y nubes. */
+  private apoyos(modelo: EscenaModelo, solo?: ReadonlySet<string>): ApoyoCelda[] {
+    return modelo.bloques
+      .filter((b) => !solo || solo.has(b.celdaId))
+      .map((b) => ({ celdaId: b.celdaId, x: b.x, y: this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0), z: b.z }));
+  }
+
+  /** Aves y viento a la medida de la parcela (solo con entorno). */
+  private construirAmbiente(modelo: EscenaModelo) {
+    this.ambiente?.dispose();
+    this.ambiente = null;
+    if (!this.opciones.entorno || modelo.bloques.length === 0) return;
+    const radioParcela = Math.hypot(Math.max(modelo.columnas, 1) / 2, Math.max(modelo.filas, 1) / 2);
+    const radio = radioParcela * 1.12 + 1.35;
+    const escala = THREE.MathUtils.clamp(radioParcela / 3, 0.42, 2.2);
+    this.ambiente = new Ambiente(radio, Math.max(2.4, radioParcela * 1.1 + 1.6), escala);
+    this.scene.add(this.ambiente.grupo);
+    this.pedirCuadro('ambiente');
+  }
+
+  /** Aves y viento se mueven solo con entorno, sin reducir movimiento, a la vista y con la pestana visible. */
+  private ambienteActivo(): boolean {
+    return !!this.ambiente && !this.opciones.reducirMovimiento && this.enPantalla && document.visibilityState === 'visible';
+  }
+
+  /** Los insectos se mueven con las mismas condiciones que el ambiente. */
+  private plagasMoviendose(): boolean {
+    return this.plagas.hayInsectos() && !this.opciones.reducirMovimiento && this.enPantalla && document.visibilityState === 'visible';
+  }
+
+  /**
+   * Plagas ilustrativas por celda (la interfaz decide cuales; no cambian datos del motor). Las
+   * que estan comiendo dibujan insectos y hojas mordidas; las protegidas, nada. null las quita.
+   */
+  setPlagas(plagas: ReadonlyMap<string, PlagaCelda> | null) {
+    this.plagasActuales = plagas;
+    if (this.modeloActual) this.plagas.construir(this.apoyos(this.modeloActual), plagas);
+    this.pedirCuadro('plagas');
+  }
+
+  /** Nube breve de insecticida sobre esas celdas (con reducir movimiento, quieta y breve). */
+  rociar(celdas: readonly string[]) {
+    if (!this.modeloActual || celdas.length === 0) return;
+    this.rociado.empezar(this.apoyos(this.modeloActual, new Set(celdas)), performance.now(), this.opciones.reducirMovimiento);
+    this.pedirCuadro('rociado');
+    // Con reducir movimiento la nube queda quieta: un solo cuadro al final la quita.
+    if (this.opciones.reducirMovimiento) window.setTimeout(() => this.pedirCuadro('rociado'), DURACION_ROCIADO_MS + 20);
   }
 
   /**
@@ -704,6 +798,11 @@ export class EscenaThree {
     cancelAnimationFrame(this.cuadroPintura);
     this.marcarPintura(new Map());
     this.colorearBase(null);
+    clearTimeout(this.relojAmbiente);
+    this.ambiente?.dispose();
+    this.ambiente = null;
+    this.plagas.dispose();
+    this.rociado.dispose();
     this.observadorVisible?.disconnect();
     document.removeEventListener('visibilitychange', this.alCambiarVisibilidad);
     this.terminarTransiciones();
@@ -1197,6 +1296,15 @@ export class EscenaThree {
       }
       const viento = this.vientoActivo();
       const lloviendo = this.lluviaActiva();
+      // Vida decorativa: aves y viento solo con movimiento permitido; si no, ocultos.
+      const ambiente = this.ambienteActivo();
+      if (this.ambiente) {
+        this.ambiente.grupo.visible = ambiente;
+        if (ambiente) this.ambiente.actualizar(ahora / 1000);
+      }
+      const insectos = this.plagasMoviendose();
+      this.plagas.animar(ahora / 1000, insectos);
+      const rociando = this.rociado.avanzar(ahora);
       this.lluvia.objeto.visible = this.intensidadLluvia > 0 && !this.opciones.reducirMovimiento;
       if (lloviendo) this.lluvia.uniformes.uTiempo.value = ahora / 1000;
       this.uniformesViento.uAmplitud.value = viento ? AMPLITUD_VIENTO : 0;
@@ -1210,6 +1318,14 @@ export class EscenaThree {
       if (this.transiciones.length > 0) this.pedirCuadro('transicion');
       if (viento) this.pedirCuadro('viento');
       if (lloviendo) this.pedirCuadro('lluvia-animada');
+      if (rociando && !this.opciones.reducirMovimiento) this.pedirCuadro('rociado');
+      // Aves, viento e insectos: a ~30 cuadros/s, no a la tasa de la pantalla.
+      if ((ambiente || insectos) && !this.relojAmbiente) {
+        this.relojAmbiente = window.setTimeout(() => {
+          this.relojAmbiente = 0;
+          if (this.ambienteActivo() || this.plagasMoviendose()) this.pedirCuadro(this.ambienteActivo() ? 'ambiente' : 'plagas');
+        }, 33);
+      }
     });
   }
 
@@ -1236,12 +1352,31 @@ export class EscenaThree {
     if (!inicio || Math.hypot(ev.clientX - inicio.x, ev.clientY - inicio.y) > 5) return; // fue arrastre
     const bloque = this.bloqueEn(ev.clientX, ev.clientY);
     this.seleccionar(bloque);
+    this.enfocarSeleccion(bloque);
     this.opciones.onSeleccion?.(bloque);
   };
 
+  /** Con enfocarAlElegir: acerca la camara a la celda elegida o vuelve a la vista de antes. */
+  private enfocarSeleccion(bloque: BloqueEscena | null) {
+    if (!this.opciones.enfocarAlElegir || this.opciones.pincel) return;
+    if (bloque) this.camaraGranja.enfocarCelda(new THREE.Vector3(bloque.x, this.topeDe(bloque), bloque.z));
+    else this.camaraGranja.volverVista();
+    this.pedirCuadro('camara');
+  }
+
+  /**
+   * Eleccion de celda desde la interfaz (lista, flechas, Escape, cerrar ficha): marca la celda
+   * y, con enfocarAlElegir, mueve la camara como el clic.
+   */
+  elegirCelda(bloque: BloqueEscena | null) {
+    this.seleccionar(bloque);
+    this.enfocarSeleccion(bloque);
+  }
+
   // Doble clic: volar hacia la celda (con pincel el doble clic pinta, no mueve la camara).
   private readonly alDobleClic = (ev: MouseEvent) => {
-    if (this.opciones.pincel) return;
+    // Con enfocarAlElegir el clic ya enfoca la celda: el doble clic no hace nada extra.
+    if (this.opciones.pincel || this.opciones.enfocarAlElegir) return;
     const b = this.bloqueEn(ev.clientX, ev.clientY);
     if (!b) return;
     this.camaraGranja.enfocar(new THREE.Vector3(b.x, this.topeDe(b), b.z));

@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/plagas.schema.json",
+  "title": "Plagas",
+  "description": "Respuesta de GET /api/plagas (0.15.0): para una lista corta de plagas de cultivos (datos/plagas/plagas.json), si GBIF tiene registros de presencia en una caja alrededor del punto. Es EVIDENCIA de presencia en la region: un registro no es un pronostico de dano, no mide la parcela ni su manejo, y no entra al motor ni al ranking. Los cultivos hospederos de cada plaga salen de una fuente citada; sin fuente verificada la lista va vacia y no se asocia a ningun cultivo.",
+  "type": "object",
+  "required": [
+    "meta",
+    "estado",
+    "aviso",
+    "coordenada",
+    "radioGrados",
+    "periodo",
+    "fuente",
+    "plagas"
+  ],
+  "properties": {
+    "meta": {
+      "$ref": "comun.schema.json#/$defs/meta"
+    },
+    "estado": {
+      "type": "string",
+      "enum": [
+        "EVALUABLE",
+        "NO_EVALUABLE",
+        "ERROR_DATOS"
+      ],
+      "description": "EVALUABLE si al menos una plaga se pudo consultar; ERROR_DATOS si GBIF no respondio para ninguna; NO_EVALUABLE si no habia nada que consultar."
+    },
+    "motivo": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aviso": {
+      "type": "string",
+      "minLength": 1
+    },
+    "coordenada": {
+      "$ref": "comun.schema.json#/$defs/lonLat"
+    },
+    "radioGrados": {
+      "description": "Medio lado de la caja de busqueda en grados (lat y lon), centrada en el punto. 1.5 grados son unos 165 km de norte a sur; GBIF tiene pocos registros de plagas agricolas y una caja menor casi siempre sale vacia.",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 5
+    },
+    "periodo": {
+      "description": "Anios de los registros que se cuentan (fecha del evento en GBIF).",
+      "$ref": "comun.schema.json#/$defs/periodo"
+    },
+    "fuente": {
+      "description": "GBIF (Global Biodiversity Information Facility), API de ocurrencias. Cita: GBIF.org (fecha) GBIF Occurrence Search, https://www.gbif.org.",
+      "$ref": "comun.schema.json#/$defs/fuente"
+    },
+    "plagas": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/plaga"
+      }
+    },
+    "advertencias": {
+      "type": "array",
+      "items": {
+        "$ref": "comun.schema.json#/$defs/advertencia"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "description": "Sin resultado general: motivo obligatorio.",
+      "if": {
+        "properties": {
+          "estado": {
+            "enum": [
+              "NO_EVALUABLE",
+              "ERROR_DATOS"
+            ]
+          }
+        },
+        "required": [
+          "estado"
+        ]
+      },
+      "then": {
+        "required": [
+          "motivo"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "plaga": {
+      "title": "PlagaZona",
+      "type": "object",
+      "required": [
+        "id",
+        "nombreComun",
+        "nombreCientifico",
+        "tipoVisual",
+        "taxonKey",
+        "estado",
+        "registros",
+        "ultimoAnio",
+        "cultivos",
+        "fuenteHospederos"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "nombreComun": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nombreCientifico": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tipoVisual": {
+          "description": "Como la dibuja la escena (solo dibujo).",
+          "type": "string",
+          "enum": [
+            "chapulin",
+            "gusano",
+            "mosca",
+            "escarabajo",
+            "pulgon"
+          ]
+        },
+        "taxonKey": {
+          "description": "Clave de la especie en el GBIF Backbone Taxonomy.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "estado": {
+          "description": "presente: GBIF tiene al menos un registro en la caja y el periodo. sin_registros: la consulta respondio con cero (no prueba ausencia). NO_EVALUABLE: la consulta fallo; motivo obligatorio.",
+          "type": "string",
+          "enum": [
+            "presente",
+            "sin_registros",
+            "NO_EVALUABLE"
+          ]
+        },
+        "motivo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registros": {
+          "description": "Registros de presencia en la caja y el periodo; null si no se pudo consultar.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "ultimoAnio": {
+          "description": "Anio del registro mas reciente; null sin registros o sin consulta.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1800
+        },
+        "cultivos": {
+          "description": "Cultivos del catalogo que la fuente de hospederos reconoce. Vacia si no hay fuente verificada: entonces no se asocia a ningun cultivo.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "comun.schema.json#/$defs/idCultivo"
+          }
+        },
+        "fuenteHospederos": {
+          "$ref": "comun.schema.json#/$defs/fuente"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "presente: al menos un registro.",
+          "if": {
+            "properties": {
+              "estado": {
+                "const": "presente"
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "properties": {
+              "registros": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        {
+          "description": "sin_registros: cero registros y sin anio.",
+          "if": {
+            "properties": {
+              "estado": {
+                "const": "sin_registros"
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "properties": {
+              "registros": {
+                "const": 0
+              },
+              "ultimoAnio": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "description": "NO_EVALUABLE: sin conteo inventado y con motivo.",
+          "if": {
+            "properties": {
+              "estado": {
+                "const": "NO_EVALUABLE"
+              }
+            },
+            "required": [
+              "estado"
+            ]
+          },
+          "then": {
+            "required": [
+              "motivo"
+            ],
+            "properties": {
+              "registros": {
+                "type": "null"
+              },
+              "ultimoAnio": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

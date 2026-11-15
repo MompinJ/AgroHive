@@ -134,6 +134,7 @@ export interface ContratosAgroHive {
   "ee-uu"?: FuentesRegionalesEEUU;
   ndvi?: Ndvi;
   parcela?: Parcela;
+  plagas?: Plagas;
   "plan-siembra"?: PlanSiembra;
   "proxima-temporada"?: ProximaTemporadaAproximada;
   "resultado-celda"?: ResultadoCeldas;
@@ -677,6 +678,58 @@ export interface Celda {
    * Pendiente en porcentaje. null si no se pudo calcular.
    */
   pendientePct: number | null;
+}
+/**
+ * Respuesta de GET /api/plagas (0.15.0): para una lista corta de plagas de cultivos (datos/plagas/plagas.json), si GBIF tiene registros de presencia en una caja alrededor del punto. Es EVIDENCIA de presencia en la region: un registro no es un pronostico de dano, no mide la parcela ni su manejo, y no entra al motor ni al ranking. Los cultivos hospederos de cada plaga salen de una fuente citada; sin fuente verificada la lista va vacia y no se asocia a ningun cultivo.
+ */
+export interface Plagas {
+  meta: Meta;
+  /**
+   * EVALUABLE si al menos una plaga se pudo consultar; ERROR_DATOS si GBIF no respondio para ninguna; NO_EVALUABLE si no habia nada que consultar.
+   */
+  estado: "EVALUABLE" | "NO_EVALUABLE" | "ERROR_DATOS";
+  motivo?: string;
+  aviso: string;
+  coordenada: LonLat;
+  /**
+   * Medio lado de la caja de busqueda en grados (lat y lon), centrada en el punto. 1.5 grados son unos 165 km de norte a sur; GBIF tiene pocos registros de plagas agricolas y una caja menor casi siempre sale vacia.
+   */
+  radioGrados: number;
+  periodo: Periodo;
+  fuente: Fuente;
+  plagas: PlagaZona[];
+  advertencias?: Advertencia[];
+}
+export interface PlagaZona {
+  id: string;
+  nombreComun: string;
+  nombreCientifico: string;
+  /**
+   * Como la dibuja la escena (solo dibujo).
+   */
+  tipoVisual: "chapulin" | "gusano" | "mosca" | "escarabajo" | "pulgon";
+  /**
+   * Clave de la especie en el GBIF Backbone Taxonomy.
+   */
+  taxonKey: number;
+  /**
+   * presente: GBIF tiene al menos un registro en la caja y el periodo. sin_registros: la consulta respondio con cero (no prueba ausencia). NO_EVALUABLE: la consulta fallo; motivo obligatorio.
+   */
+  estado: "presente" | "sin_registros" | "NO_EVALUABLE";
+  motivo?: string;
+  /**
+   * Registros de presencia en la caja y el periodo; null si no se pudo consultar.
+   */
+  registros: number | null;
+  /**
+   * Anio del registro mas reciente; null sin registros o sin consulta.
+   */
+  ultimoAnio: number | null;
+  /**
+   * Cultivos del catalogo que la fuente de hospederos reconoce. Vacia si no hay fuente verificada: entonces no se asocia a ningun cultivo.
+   */
+  cultivos: IdCultivo[];
+  fuenteHospederos: Fuente;
 }
 /**
  * Rotacion que arma el selector 'what if': que cultivo va en cada ciclo y, opcionalmente, en cada celda. Que los ciclos sean cronologicos y no se traslapen lo valida el motor (doc 04), no el schema.

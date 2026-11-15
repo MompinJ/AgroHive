@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "versionContrato": "0.15.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Conteos ficticios para probar el contrato; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "estado": "ERROR_DATOS",
+  "aviso": "Registros de presencia de GBIF en una caja de unos 165 km alrededor del punto: dicen que la plaga se ha visto en la region, no que vaya a danar la parcela ni cuanto. No entra al motor ni al ranking.",
+  "coordenada": [
+    -95.53,
+    18.03
+  ],
+  "radioGrados": 1.5,
+  "periodo": {
+    "desde": "2000-01-01",
+    "hasta": "2025-12-31"
+  },
+  "fuente": {
+    "nombre": "GBIF Occurrence Search API",
+    "url": "https://api.gbif.org/v1/occurrence/search",
+    "cita": "GBIF.org (15 November 2026) GBIF Occurrence Download/Search, https://www.gbif.org",
+    "consultado": "2026-11-15",
+    "resolucion": "caja de 1.5 grados alrededor del punto",
+    "unidades": "registros de presencia (conteo)"
+  },
+  "plagas": [
+    {
+      "id": "gusano_cogollero",
+      "nombreComun": "Gusano cogollero",
+      "nombreCientifico": "Spodoptera frugiperda",
+      "tipoVisual": "gusano",
+      "taxonKey": 5109855,
+      "estado": "presente",
+      "registros": 2,
+      "ultimoAnio": 2020,
+      "cultivos": [
+        "maiz",
+        "maiz_dulce",
+        "sorgo",
+        "cana",
+        "algodon",
+        "soya"
+      ],
+      "fuenteHospederos": {
+        "nombre": "EPPO Global Database, Spodoptera frugiperda (LAPHFR): Host plants",
+        "url": "https://gd.eppo.int/taxon/LAPHFR/hosts",
+        "cita": "EPPO (2026) EPPO Global Database (available online). https://gd.eppo.int, Spodoptera frugiperda (LAPHFR), pagina Host plants.",
+        "consultado": "2026-11-15",
+        "nota": "Solo se toman las plantas que EPPO clasifica como 'Major host' y que estan en el catalogo de AgroHive (40 cultivos). Zea mays incluye el maiz dulce y Phaseolus vulgaris el ejote."
+      }
+    },
+    {
+      "id": "mosca_blanca",
+      "nombreComun": "Mosca blanca",
+      "nombreCientifico": "Bemisia tabaci",
+      "tipoVisual": "mosca",
+      "taxonKey": 2012126,
+      "estado": "sin_registros",
+      "registros": 0,
+      "ultimoAnio": null,
+      "cultivos": [
+        "tomate",
+        "algodon",
+        "camote",
+        "yuca"
+      ],
+      "fuenteHospederos": {
+        "nombre": "EPPO Global Database, Bemisia tabaci (BEMITA): Host plants",
+        "url": "https://gd.eppo.int/taxon/BEMITA/hosts",
+        "cita": "EPPO (2026) EPPO Global Database (available online). https://gd.eppo.int, Bemisia tabaci (BEMITA), pagina Host plants.",
+        "consultado": "2026-11-15",
+        "nota": "Solo se toman las plantas que EPPO clasifica como 'Major host' y que estan en el catalogo de AgroHive (40 cultivos). Zea mays incluye el maiz dulce y Phaseolus vulgaris el ejote."
+      }
+    },
+    {
+      "id": "chapulin",
+      "nombreComun": "Chapulín de la milpa",
+      "nombreCientifico": "Sphenarium purpurascens",
+      "tipoVisual": "chapulin",
+      "taxonKey": 1727733,
+      "estado": "NO_EVALUABLE",
+      "registros": null,
+      "ultimoAnio": null,
+      "cultivos": [],
+      "fuenteHospederos": {
+        "nombre": "Sin lista de hospederos verificada para Sphenarium purpurascens",
+        "url": "https://doi.org/10.1079/cabicompendium.51033",
+        "cita": "CABI Compendium, Sphenarium purpurascens (doi:10.1079/cabicompendium.51033); la ficha no se pudo leer (acceso restringido) y EPPO no publica hospederos de esta especie.",
+        "consultado": "2026-11-15",
+        "nota": "[VERIFICAR] Una persona revisa la ficha de CABI antes de asociar esta plaga a cultivos. Mientras tanto se informa su presencia en la zona, pero no se dice que dane ningun cultivo."
+      },
+      "motivo": "GBIF no respondio para esta especie (ejemplo)."
+    }
+  ],
+  "advertencias": [
+    {
+      "codigo": "PLAGAS_EVIDENCIA",
+      "mensaje": "Presencia en la region segun registros de GBIF; no es un pronostico de dano.",
+      "severidad": "info"
+    }
+  ]
+}
