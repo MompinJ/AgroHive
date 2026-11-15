@@ -8,6 +8,7 @@ import { describirBloque, entradasLeyenda } from '../escena/leyenda';
 import { ESTILOS_ESTADO, ESTILO_SIN_ELEVACION, type EstiloEstado } from '../escena/estilos-estado';
 import { rgbaPlaca } from '../escena/placa';
 import type { BloqueEscena } from '../escena/modelo';
+import { iconoCultivo2D } from './iconosCultivo2D';
 import './parcela2d.css';
 
 // Los mismos píxeles de las placas 3D, en símbolos SVG compartidos por todas las
@@ -75,15 +76,19 @@ export function Parcela2D({ parcela, resultado, fecha, suelo = null, avisosDatos
         botones.current.get(b.celdaId)?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
       }
     }}>{bloques.map((b) => <option key={b.celdaId} value={b.celdaId}>{b.celdaId} · {ESTILOS_ESTADO[b.estadoVisual].etiqueta}</option>)}</select></>}
-    <p id={`${id}-ayuda`} className="quiet-note">Toca una celda para ver su ficha. Con teclado: flechas para moverte, Inicio y Fin para ir a los extremos. Desplaza la cuadrícula para ver toda la parcela; también puedes elegir una celda en la lista.</p>
+    <p id={`${id}-ayuda`} className="quiet-note">El dibujo superior indica cultivo y etapa; la placa inferior indica su estado. Toca una celda para ver su ficha. Con teclado: flechas para moverte, Inicio y Fin para ir a los extremos. Desplaza la cuadrícula para ver toda la parcela; también puedes elegir una celda en la lista.</p>
     {bloques.length > 0 && <div className="parcela2d-ventana" role="region" aria-label="Cuadrícula de celdas, norte arriba" aria-describedby={`${id}-ayuda`}>
-      <div className="parcela2d-cuadricula" style={{ gridTemplateColumns: `repeat(${modelo.columnas}, 48px)`, gridTemplateRows: `repeat(${modelo.filas}, 48px)` }}>
-        {bloques.map((b) => <button key={b.celdaId} type="button" className="parcela2d-celda" ref={(n) => { if (n) botones.current.set(b.celdaId, n); else botones.current.delete(b.celdaId); }}
+      <div className="parcela2d-cuadricula" style={{ gridTemplateColumns: `repeat(${modelo.columnas}, 80px)`, gridTemplateRows: `repeat(${modelo.filas}, 80px)` }}>
+        {bloques.map((b) => {
+          const icono = iconoCultivo2D(b);
+          return <button key={b.celdaId} type="button" className="parcela2d-celda" ref={(n) => { if (n) botones.current.set(b.celdaId, n); else botones.current.delete(b.celdaId); }}
           style={{ gridColumn: Math.round(b.x + (modelo.columnas - 1) / 2) + 1, gridRow: Math.round(b.z + (modelo.filas - 1) / 2) + 1 }}
           tabIndex={actual?.celdaId === b.celdaId ? 0 : -1} aria-pressed={actual?.celdaId === b.celdaId}
           aria-label={describirBloque(b)} title={describirBloque(b)} onFocus={() => elegir(b)} onClick={() => elegir(b)} onKeyDown={(e) => tecla(e, b)}>
-          {muestra(b.estadoVisual)}{b.relieve.tipo === 'sin_elevacion' && <span className="parcela2d-hueco" aria-hidden="true">?</span>}
-        </button>)}
+          <span className="parcela2d-visual">{icono && <img className="parcela2d-cultivo" data-icono={icono.clave} src={icono.url} width={32} height={32} alt="" loading="lazy" decoding="async" />}{muestra(b.estadoVisual)}</span>
+          {b.relieve.tipo === 'sin_elevacion' && <span className="parcela2d-hueco" aria-hidden="true">?</span>}
+        </button>;
+        })}
       </div>
     </div>}
     <ul className="parcela2d-leyenda" aria-label="Leyenda de estados">{leyenda.map((e) => <li key={e.clave}>{muestra(e.clave)}<span>{e.etiqueta} · {e.celdas} celdas<span className="quiet-note">{e.descripcion}</span></span></li>)}</ul>

@@ -10,5 +10,5 @@ Nombre del archivo: `<cultivo>_<etapa>.svg`, igual que los modelos 3D de `modelo
   protanopia, deuteranopia y tritanopia con `daltonismo.ts`; umbral del 12 % de los pixeles `[PROPUESTA]`).
 - Los iconos no sustituyen la etiqueta de texto ni el estado del motor: el estado (color, patron, icono de estado) lo
   sigue dando `estilos-estado.ts`. Estos sprites solo dicen QUE cultivo y en que etapa.
-- Todavia no los carga ninguna pantalla: donde y como se muestran en `ui/Parcela2D.tsx` lo decide balam.
+- Integrados por balam en `web/src/ui/Parcela2D.tsx` mediante `iconosCultivo2D.ts`: URLs emitidas por Vite desde esta carpeta, sin copiar SVG. Cultivo/etapa a 32 px y placa de estado completa debajo, en celdas cuadradas de 80 px. Se mantiene ficha textual y navegación por teclado; sin dato, cultivo desconocido o suelo desnudo no se inventa planta. `podrida` se elige solo si lo declara el motor.
 - Hecho con IA (Claude) a partir del codigo; revision visual humana pendiente.

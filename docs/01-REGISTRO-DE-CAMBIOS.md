@@ -2,6 +2,12 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 — Iconos de Mafer conectados a la vista 2D (balam)
+
+- **Archivos:** `web/src/ui/iconosCultivo2D.ts` (nuevo), `Parcela2D.tsx`, `parcela2d.css` y pruebas; `modelos/iconos2d/README.md`, `docs/06`, `web/README.md` y captura en `web/evidencia/`.
+- **Cambio:** los 20 SVG de Mafer se consumen desde su carpeta original como recursos compartidos. El cultivo/etapa sale del motor; `podrida` solo cuando lo declara su estado. No se dibuja planta con NO_EVALUABLE, ERROR_DATOS, sin resultado, suelo desnudo o recurso desconocido. Icono a 32 px sobre placa completa de 32 px, sin solaparse, en celda cuadrada de 80 px. Se conservan leyenda, ficha, huecos y navegación.
+- **Evidencia:** pruebas de los 20 recursos y los casos sin dato; navegador de producción sin WebGL: maíz en siembra, R1/ciclo 2/seco frijol, cambio de fecha a crecimiento; solo consulta de celdas, sin API ni Three.js. 320 px sin desborde, flechas de teclado y axe sin incidencias en criterios revisados; captura `web/evidencia/iconos-2d-frijol-320.png`. Los SVG y su generador no se modifican.
+
 ### 2026-11-14 (noche) — Documentación al día con `main` (cronista)
 
 - **Archivos:** `docs/00`, `docs/11`, `docs/13`, `docs/14` (nota de C2, fuera de las tablas); `AgroVault/Compartido/{Resumen,Pendientes,Codigo,Contratos,Servidor,APIs}.md`; `README.md`, `docs/README-borrador.md`, `web/README.md`, `api/README.md`.
