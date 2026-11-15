@@ -678,6 +678,7 @@ AMPLIACION = [
     },
     {
         "id": "cartamo",
+        "modelo3d": "cartamo",
         "nombreComun": "Cartamo",
         "nombreCientifico": "Carthamus tinctorius L.",
         "esLeguminosa": False,
@@ -697,6 +698,7 @@ AMPLIACION = [
     },
     {
         "id": "higuerilla",
+        "modelo3d": "higuerilla",
         "nombreComun": "Higuerilla",
         "nombreCientifico": "Ricinus communis L.",
         "esLeguminosa": False,
@@ -714,6 +716,7 @@ AMPLIACION = [
     },
     {
         "id": "tomate",
+        "modelo3d": "tomate",
         "nombreComun": "Jitomate",
         "nombreCientifico": "Solanum lycopersicum L.",
         "esLeguminosa": False,
@@ -732,6 +735,7 @@ AMPLIACION = [
     },
     {
         "id": "papa",
+        "modelo3d": "papa",
         "nombreComun": "Papa",
         "nombreCientifico": "Solanum tuberosum L.",
         "esLeguminosa": False,
@@ -751,6 +755,7 @@ AMPLIACION = [
     },
     {
         "id": "calabacita",
+        "modelo3d": "calabacita",
         "nombreComun": "Calabacita",
         "nombreCientifico": "Cucurbita pepo L.",
         "esLeguminosa": False,

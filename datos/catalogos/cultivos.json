@@ -5953,6 +5953,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "cartamo"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 120 a 245 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. EcoCrop escribe 'Carthamus tinctoius' (errata de la base); el nombre correcto es Carthamus tinctorius."
     },
     {
@@ -6197,6 +6200,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "higuerilla"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 135 dias). EcoCrop da un ciclo de 140 a 210 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
@@ -6443,6 +6449,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "tomate"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 145 dias). EcoCrop da un ciclo de 70 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
     {
@@ -6688,6 +6697,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "papa"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 90 a 160 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
     {
@@ -6932,6 +6944,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "calabacita"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 40 a 100 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Calabacita tierna (zucchini), cosechada inmadura; la calabaza de milpa madura es el cultivo 'calabaza'."
     },

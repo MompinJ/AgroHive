@@ -28,6 +28,15 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Catálogo de 40 cultivos (tras integrar `main`):** paleta con sugeridos, buscador y grupos por tipo; color estable para cada cultivo; `NOMBRES_CULTIVO_ESCENA` con los 40 nombres con acentos (única fuente, la interfaz ya no tiene su propia tabla).
 - **Pendiente:** confirmar con Mompin el retiro del 2D (era respaldo decidido en la reunión; B1 y B3 de `docs/16` mencionan la vista 2D) y los cortes de validación y agua (`[PROPUESTA]`).
 - **Decisiones afectadas:** "3D en el MVP ... con modo 2D de respaldo" (11).
+
+### 2026-11-15 — Modelos de la ampliación del catálogo, tanda D: cártamo, higuerilla, jitomate, papa y calabacita (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{cartamo,higuerilla,tomate,papa,calabacita}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; ayudas `con_arriba` y `punta_color`, `mata` con `arriba` opcional); `iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (15 colores más, índices 191 a 205, para la tanda E; quedan 50 libres); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; pruebas con 28 cultivos; `docs/07` (tabla) y `docs/16` (M7).
+- **Cambio:** cada uno con 5 detallados (de 10 a 60 cubos), 5 bloques (de 15 a 24, sin piezas fuera de las plantas) y 5 iconos 2D (sobre los 140, peor par nuevo de daltonismo 14.5 %), y su prefijo. El id del jitomate es `tomate` (así está en el catálogo). Higuerilla y calabacita usan rotaciones en los tres ejes.
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` de Mafer, con OK de Mompin; en `generar.py` solo `modelo3d`.
+- **Pendiente:** tandas E a G; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Modelos de la ampliación del catálogo, tanda C: yuca, caña de azúcar, ajonjolí, girasol y algodón (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
 
 - **Archivos:** `modelos/cultivos/{yuca,cana,ajonjoli,girasol,algodon}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; `EXTRAS` para piezas fuera de las plantas, hoy solo las 3 raíces de `yuca_madurez`); `iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (15 colores más, índices 176 a 190, para la tanda D; quedan 65 libres); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; `web/src/escena/ficha.ts` (nombres de los 22 cultivos de las tandas 2 y 3 del catálogo); pruebas con 23 cultivos; `docs/07` (tabla) y `docs/16` (M7).

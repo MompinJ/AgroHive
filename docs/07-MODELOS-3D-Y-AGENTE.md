@@ -99,6 +99,11 @@ La sesión "catalogo" agregó cultivos a `datos/catalogos/` sin modelo; la sesi�
 | Ajonjolí | Tallo único recto con cápsulas paradas en fila y flores tubulares rosa pálido | 12, 9, 27, 60, 42 | 15 a 21 |
 | Girasol | Tallo único con hojas anchas y capítulo de disco café y pétalos amarillos que se inclina; usa giros en z | 12, 10, 29, 46, 48 | 15 a 21 |
 | Algodón | Arbusto piramidal de hoja palmeada; madurez con motas blancas en cápsulas cafés | 12, 11, 29, 52, 48 | 15 a 21 |
+| Cártamo | Erguido y ramificado en candelabro, hoja espinosa verde grisáceo; cabezuelas tipo cardo con penacho naranja | 10, 12, 28, 55, 50 | 15 a 21 |
+| Higuerilla | Arbusto de tallo rojo vino, hoja grande en estrella; racimo de cápsulas rojas espinosas | 12, 12, 30, 60, 52 | 15 a 21 |
+| Jitomate | Amarrado a un tutor de madera, hoja compuesta dentada; racimos de jitomates rojos con cáliz | 11, 12, 30, 59, 51 | 15 a 21 |
+| Papa | Mata redondeada de hoja compuesta; siembra con papa semilla brotada; madurez con la mata que amarillea y papas asomando | 12, 12, 30, 60, 48 | 20 a 24 |
+| Calabacita | Mata compacta sin guías, hoja grande con manchas plateadas, flor de trompeta; frutos alargados moteados en la base | 10, 11, 30, 58, 50 | 15 a 21 |
 
 ## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
 
