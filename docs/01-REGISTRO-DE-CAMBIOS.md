@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — README en inglés (Mafer)
+
+- **Archivos:** `README.en.md` (nuevo) y una línea de enlace al inicio de `README.md`.
+- **Cambio:** traducción completa del README al inglés, con la misma estructura y las mismas tablas; las rutas, los campos de la API, los códigos de estado y las marcas del equipo (`[VERIFICAR]`, `[DECIDIR]`, `[DECIDIDO]`, `[PROPUESTA]`, `SUPUESTO`) se dejan en español para poder buscarlos en los dos archivos, con una nota al inicio que las explica. Cubre el punto «Inglés del README» de `docs/16`.
+- **Límites:** la versión en español es la de referencia; hay que mantener los dos archivos al día. Quedan fuera «la página del portal» y «la app», que también lista `docs/16`. La traducción la hizo una IA; conviene que una persona la lea.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — README al día con el alcance mundial y lo hecho el 15/11 (Mafer)
 
 - **Archivos:** `README.md`.
