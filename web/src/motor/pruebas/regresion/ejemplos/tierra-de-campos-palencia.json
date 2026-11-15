@@ -1,0 +1,366 @@
+{
+  "versionContrato": "0.15.0",
+  "grabado": "2026-11-15T16:27:17+00:00",
+  "clima": {
+    "clase": "Csb",
+    "bioma": "templado",
+    "MAT": 12,
+    "MAP": 465.4,
+    "Thot": 21.7,
+    "Tcold": 3.5,
+    "verano": "AMJJAS"
+  },
+  "escenarios": {
+    "seco": {
+      "anioReal": 2022,
+      "percentil": 336.6,
+      "temporadas": {
+        "pv": 133.1,
+        "oi": 206,
+        "total": 339.1,
+        "fuente": {
+          "nombre": "SIAP (Servicio de Informacion Agroalimentaria y Pesquera), Normatividad Tecnica para la Generacion de Estadistica Basica Agropecuaria 2022",
+          "url": "https://www.gob.mx/cms/uploads/attachment/file/789519/NTGEBAP_2022.pdf",
+          "cita": "p. 10 (anio agricola de 18 meses: OI inicia con las siembras de octubre, PV con las de abril), p. 20 (Cuadro No. 1, Estructura del anio agricola) y p. 46 (siembras OI concluidas en marzo, PV en septiembre)",
+          "consultado": "2026-11-14"
+        }
+      }
+    },
+    "habitual": {
+      "anioReal": 2023,
+      "percentil": 485.1,
+      "temporadas": {
+        "pv": 171.9,
+        "oi": 311.9,
+        "total": 483.8,
+        "fuente": {
+          "nombre": "SIAP (Servicio de Informacion Agroalimentaria y Pesquera), Normatividad Tecnica para la Generacion de Estadistica Basica Agropecuaria 2022",
+          "url": "https://www.gob.mx/cms/uploads/attachment/file/789519/NTGEBAP_2022.pdf",
+          "cita": "p. 10 (anio agricola de 18 meses: OI inicia con las siembras de octubre, PV con las de abril), p. 20 (Cuadro No. 1, Estructura del anio agricola) y p. 46 (siembras OI concluidas en marzo, PV en septiembre)",
+          "consultado": "2026-11-14"
+        }
+      }
+    },
+    "lluvioso": {
+      "anioReal": 2010,
+      "percentil": 584.8,
+      "temporadas": {
+        "pv": 180.9,
+        "oi": 403.2,
+        "total": 584.1,
+        "fuente": {
+          "nombre": "SIAP (Servicio de Informacion Agroalimentaria y Pesquera), Normatividad Tecnica para la Generacion de Estadistica Basica Agropecuaria 2022",
+          "url": "https://www.gob.mx/cms/uploads/attachment/file/789519/NTGEBAP_2022.pdf",
+          "cita": "p. 10 (anio agricola de 18 meses: OI inicia con las siembras de octubre, PV con las de abril), p. 20 (Cuadro No. 1, Estructura del anio agricola) y p. 46 (siembras OI concluidas en marzo, PV en septiembre)",
+          "consultado": "2026-11-14"
+        }
+      }
+    }
+  },
+  "rotaciones": {
+    "R1": {
+      "estado": "EVALUABLE",
+      "filtroClima": null,
+      "pilares": {
+        "seco": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.4412,
+            "diasDeficit": 85,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 340.5,
+            "excesoTotalMm": 0
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 0,
+            "diasExceso": 0,
+            "fraccionLluviaPercolada": 0
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 85
+          }
+        },
+        "habitual": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.4164,
+            "diasDeficit": 104,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 302.8,
+            "excesoTotalMm": 185.7
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 185.7,
+            "diasExceso": 38,
+            "fraccionLluviaPercolada": 0.2843
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 85
+          }
+        },
+        "lluvioso": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.2703,
+            "diasDeficit": 60,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 181.3,
+            "excesoTotalMm": 243.1
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 243.1,
+            "diasExceso": 54,
+            "fraccionLluviaPercolada": 0.3036
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 85
+          }
+        }
+      }
+    },
+    "R2": {
+      "estado": "EVALUABLE",
+      "filtroClima": null,
+      "pilares": {
+        "seco": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.6182,
+            "diasDeficit": 102,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 474.7,
+            "excesoTotalMm": 0
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 0,
+            "diasExceso": 0,
+            "fraccionLluviaPercolada": 0
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); lenteja OI (Celda 41.75 N, -4.75 E. SUPUESTO: MIRCA2000 no separa lenteja (Lens culinaris); se toma el calendario de la clase agregada Pulses (todas las leguminosas de grano de la celda), que puede corresponder a otra leguminosa. MIRCA2000 no registra un periodo de Pulses de temporal que empiece en OI en esta celda.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 65
+          }
+        },
+        "habitual": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.6017,
+            "diasDeficit": 122,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 430,
+            "excesoTotalMm": 92.9
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 92.9,
+            "diasExceso": 19,
+            "fraccionLluviaPercolada": 0.2486
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); lenteja OI (Celda 41.75 N, -4.75 E. SUPUESTO: MIRCA2000 no separa lenteja (Lens culinaris); se toma el calendario de la clase agregada Pulses (todas las leguminosas de grano de la celda), que puede corresponder a otra leguminosa. MIRCA2000 no registra un periodo de Pulses de temporal que empiece en OI en esta celda.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 65
+          }
+        },
+        "lluvioso": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.4619,
+            "diasDeficit": 91,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 302.4,
+            "excesoTotalMm": 135.2
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 135.2,
+            "diasExceso": 32,
+            "fraccionLluviaPercolada": 0.2671
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); lenteja OI (Celda 41.75 N, -4.75 E. SUPUESTO: MIRCA2000 no separa lenteja (Lens culinaris); se toma el calendario de la clase agregada Pulses (todas las leguminosas de grano de la celda), que puede corresponder a otra leguminosa. MIRCA2000 no registra un periodo de Pulses de temporal que empiece en OI en esta celda.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 65
+          }
+        }
+      }
+    },
+    "R3": {
+      "estado": "EVALUABLE",
+      "filtroClima": null,
+      "pilares": {
+        "seco": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0,
+            "diasDeficit": 0,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 0,
+            "excesoTotalMm": 0
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 0,
+            "diasExceso": 0,
+            "fraccionLluviaPercolada": 0
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 215
+          }
+        },
+        "habitual": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0,
+            "diasDeficit": 0,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 0,
+            "excesoTotalMm": 185.7
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 185.7,
+            "diasExceso": 38,
+            "fraccionLluviaPercolada": 0.3317
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 215
+          }
+        },
+        "lluvioso": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0,
+            "diasDeficit": 0,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 0,
+            "excesoTotalMm": 243.1
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 243.1,
+            "diasExceso": 54,
+            "fraccionLluviaPercolada": 0.3548
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 215
+          }
+        }
+      }
+    }
+  },
+  "ranking": {
+    "criterio": "B_minimax_arrepentimiento",
+    "orden": [
+      {
+        "rotacionId": "R1",
+        "arrepentimiento": 0.0283,
+        "peorEscenario": "habitual"
+      },
+      {
+        "rotacionId": "R3",
+        "arrepentimiento": 0.0457,
+        "peorEscenario": "lluvioso"
+      },
+      {
+        "rotacionId": "R2",
+        "arrepentimiento": 0.0691,
+        "peorEscenario": "habitual"
+      }
+    ]
+  },
+  "proximaTemporada": {
+    "analogos": [
+      2010
+    ],
+    "ciclosEvaluados": [
+      2
+    ],
+    "rango": {
+      "proporcionDemandaNoCubierta": {
+        "inferior": 0.3818,
+        "superior": 0.3818
+      },
+      "fraccionLluviaPercolada": {
+        "inferior": 0,
+        "superior": 0
+      },
+      "excesoTotalMm": {
+        "inferior": 0,
+        "superior": 0
+      }
+    }
+  },
+  "rankingCumpleContrato": true
+}

@@ -27,7 +27,8 @@ Complementa [[Resumen]]. Si esta nota y el archivo discrepan, manda el archivo.
 | `src/motor/escenarios.ts` | Años seco / habitual / lluvioso |
 | `src/motor/et0.ts`, `balance.ts`, `cultivo.ts`, `suelo.ts` | ET0, cubeta, Kc, TAW |
 | `src/motor/pilares.ts`, `ranking.ts`, `analogos.ts`, `proxima.ts`, `tarjetas.ts` | Pilares, ranking B, análogos, banda, explicación |
-| `src/motor/pruebas/regresion/demo-isla.json` | Cifras congeladas de la demo |
+| `src/motor/pruebas/regresion/demo-isla.json` | Cifras congeladas de Isla (prueba interna; Isla dejó de ser la demo el 15/11) |
+| `src/motor/pruebas/regresion/ejemplos/` | Cifras congeladas de cada parcela de ejemplo mundial (`regresion-ejemplos.test.ts`) |
 | `src/escena/` | Three.js: relieve, `.bbmodel`, placas, losas. `EscenaParcela.tsx` es el componente que monta el laboratorio |
 | `src/ui/useLaboratorio.ts` | Carga demo o API, arma R1–R4 y llama al Worker |
 | `src/ui/planes.ts` | Definición de R1–R4 y calendario de Isla |
@@ -35,6 +36,8 @@ Complementa [[Resumen]]. Si esta nota y el archivo discrepan, manda el archivo.
 | `src/ui/BarraPasos.tsx` | Stepper obligatorio Terreno → Cultivos → Escenarios → Comparación |
 | `src/ui/cuadricula.ts` | Polígono → celdas. `i` crece al norte desde el sur |
 | `src/api/` | Cliente de la API: `cliente.ts`, `datosParcela.ts`, `usarDatosParcela.ts` |
+| `src/demo/ejemplos.ts` | Parcelas de ejemplo mundiales: `listarEjemplos()` y `cargarEjemplo(id)` desde `datos/demo/ejemplos/` (15/11) |
+| `src/geo/koppen.ts` | Clima de Köppen-Geiger (Peel et al. 2007) de la serie de POWER y bioma decorativo de la escena (15/11) |
 | `src/paginas/` | Inicio, Terreno, Laboratorio, Comparación |
 | `escena.html` | Vista previa de la escena, aparte de la app |
 

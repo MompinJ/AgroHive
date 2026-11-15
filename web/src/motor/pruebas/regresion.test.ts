@@ -1,5 +1,7 @@
-// A5.5: regresion del motor y de contratos. Fija los numeros clave de la demo (paquete A2.4, suelo real de Isla) para
-// que nadie los cambie sin darse cuenta. Si un cambio los mueve A PROPOSITO, se regenera la referencia con
+// A5.5: regresion del motor y de contratos. Fija los numeros clave de la parcela de Isla (paquete A2.4, suelo real de Isla) para
+// que nadie los cambie sin darse cuenta. Desde el 15/11 Isla ya NO es la demo (la demo son las parcelas de ejemplo mundiales,
+// con su propia regresion en regresion-ejemplos.test.ts): esta queda como prueba interna del motor, con sus calendarios
+// SIAP/INIFAP, la unica parcela con calendario local completo. Si un cambio los mueve A PROPOSITO, se regenera la referencia con
 //   ACTUALIZAR_REGRESION=1 npx vitest run src/motor/pruebas/regresion.test.ts
 // y el diff de pruebas/regresion/demo-isla.json se revisa y se explica en docs/01 en el mismo commit.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -124,7 +126,7 @@ function resumen() {
   };
 }
 
-describe('A5.5 regresion de la demo (paquete A2.4, suelo real de Isla)', () => {
+describe('A5.5 regresion interna de Isla (paquete A2.4, suelo real de Isla; ya no es la demo)', () => {
   const actual = JSON.parse(JSON.stringify(resumen()));
   if (process.env.ACTUALIZAR_REGRESION === '1') {
     writeFileSync(RUTA, `${JSON.stringify(actual, null, 2)}\n`);
