@@ -33,8 +33,8 @@ describe('historial de hechos', () => {
   it('escribe los textos con singular y plural', () => {
     expect(textoHecho({ id: 1, tipo: 'siembra', cuando: 0, celdas: 1, sujeto: 'Maíz', ciclo: 1 })).toBe('Sembraste Maíz en 1 celda (ciclo 1)');
     expect(textoHecho({ id: 1, tipo: 'siembra', cuando: 0, celdas: 2, sujeto: null, ciclo: 3 })).toBe('Devolviste 2 celdas al cultivo general (ciclo 3)');
-    expect(textoHecho({ id: 1, tipo: 'insecticida', cuando: 0, celdas: 1 })).toBe('Insecticida en 1 bloque');
-    expect(textoHecho({ id: 1, tipo: 'insecticida', cuando: 0, celdas: 4, ciclo: 1 })).toBe('Insecticida en 4 bloques (ciclo 1)');
+    expect(textoHecho({ id: 1, tipo: 'insecticida', cuando: 0, celdas: 1 })).toBe('Aplicaste insecticida en 1 bloque');
+    expect(textoHecho({ id: 1, tipo: 'insecticida', cuando: 0, celdas: 4, ciclo: 1 })).toBe('Aplicaste insecticida en 4 bloques (ciclo 1)');
     expect(textoHecho({ id: 1, tipo: 'plaga', cuando: 0, titulo: 'Chapulín se está comiendo tu maíz' })).toBe('Chapulín se está comiendo tu maíz');
     expect(textoHecho({ id: 1, tipo: 'problema', cuando: 0 })).toBe('Problema'); // sin titulo, el nombre del tipo: no inventa texto
   });

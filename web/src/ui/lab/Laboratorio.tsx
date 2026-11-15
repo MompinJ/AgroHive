@@ -273,7 +273,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
       onSembrarTodo={sembrarTodo} sembrarTexto={`Sembrar ${nombresCultivos[cultivoActivo ?? ''] ?? cultivoActivo ?? ''} en toda la parcela`}
       onRociarTodo={presentes.length ? rociarTodo : null} deshacer={estado.deshacer} rehacer={estado.rehacer} puedeDeshacer={estado.puedeDeshacer} puedeRehacer={estado.puedeRehacer} />}
     {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} retener={retener} problemas={problemasCultivos} />}
-    {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} plagasDe={(id) => {
+    {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} hechos={historial.hechos} plagasDe={(id) => {
       const p = estado.planes.find((x) => x.rotacionId === id);
       return p ? riesgosDelPlan(p, celdasZona, presentes, proteccion).map((r) => ({ ciclo: r.ciclo, plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })) : [];
     }} />}

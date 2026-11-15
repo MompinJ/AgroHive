@@ -148,7 +148,7 @@ select { width: 100%; min-height: 44px; border: 1px solid #718075; border-radius
   .segmented input:checked + span { outline: 2px solid Highlight; outline-offset: -2px; }
 }
 
-/* Boton de sonido: abajo a la izquierda, sobre el boton del tutorial. */
-.boton-sonido { position: fixed; z-index: 59; left: 16px; bottom: 92px; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1px solid var(--color-border, #cfd8cf); background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 10px 24px -10px rgb(17 34 26 / 35%); cursor: pointer; }
+/* Boton de sonido: a la derecha, debajo de la mascota y del historial (no tapa el panel de la izquierda). */
+.boton-sonido { position: fixed; z-index: 59; right: 16px; top: 292px; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1px solid var(--color-border, #cfd8cf); background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 10px 24px -10px rgb(17 34 26 / 35%); cursor: pointer; }
 .boton-sonido[aria-pressed="false"] { color: var(--color-text-muted, #5a6b5e); }
 @media (hover: hover) { .boton-sonido:hover { background: var(--color-panel, #eef3ee); } }

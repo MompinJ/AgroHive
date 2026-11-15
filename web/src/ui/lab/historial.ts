@@ -40,7 +40,7 @@ export function textoHecho(h: Hecho): string {
   }
   if (h.tipo === 'insecticida') {
     const n = h.celdas ?? 0;
-    return `Insecticida en ${n} ${n === 1 ? 'bloque' : 'bloques'}${h.ciclo != null ? ` (ciclo ${h.ciclo})` : ''}`;
+    return `Aplicaste insecticida en ${n} ${n === 1 ? 'bloque' : 'bloques'}${h.ciclo != null ? ` (ciclo ${h.ciclo})` : ''}`;
   }
   return h.titulo ?? NOMBRE_TIPO_HECHO[h.tipo];
 }

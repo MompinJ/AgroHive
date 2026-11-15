@@ -432,11 +432,11 @@
   .mascota-habla { transform-origin: 50% 100%; animation: esquilote-hablar .34s ease-in-out infinite alternate; }
 }
 
-/* Historial de hechos: boton sobre el de sonido y panel a la izquierda. */
-.boton-historial { position: fixed; z-index: 59; left: 16px; bottom: 144px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px 0 12px; border-radius: 999px; border: 1px solid var(--color-border, #cfd8cf); background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); font: inherit; font-size: .85rem; font-weight: 700; box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 10px 24px -10px rgb(17 34 26 / 35%); cursor: pointer; }
+/* Historial de hechos: boton a la derecha, debajo de la mascota, y panel que se abre hacia la izquierda. */
+.boton-historial { position: fixed; z-index: 59; right: 16px; top: 236px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px 0 12px; border-radius: 999px; border: 1px solid var(--color-border, #cfd8cf); background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); font: inherit; font-size: .85rem; font-weight: 700; box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 10px 24px -10px rgb(17 34 26 / 35%); cursor: pointer; }
 .boton-historial svg { width: 18px; height: 18px; }
 .boton-historial-cuenta { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--color-action, #1f4d38); color: var(--color-on-action, #fff); font-size: .72rem; line-height: 20px; text-align: center; }
-.historial { position: fixed; z-index: 59; left: 16px; bottom: 198px; width: min(400px, calc(100% - 32px)); max-height: min(56vh, 520px); display: flex; flex-direction: column; border-radius: 18px; background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); border: 1px solid var(--color-border, #cfd8cf); box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 18px 48px -12px rgb(17 34 26 / 35%); overflow: hidden; }
+.historial { position: fixed; z-index: 59; right: 72px; top: 236px; width: min(400px, calc(100% - 96px)); max-height: min(60vh, 520px); display: flex; flex-direction: column; border-radius: 18px; background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); border: 1px solid var(--color-border, #cfd8cf); box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 18px 48px -12px rgb(17 34 26 / 35%); overflow: hidden; }
 .historial-cabeza { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 8px 16px; }
 .historial-cabeza h2 { margin: 0; font-size: 1rem; }
 .historial-cerrar { width: 36px; height: 36px; border: 0; border-radius: 50%; background: transparent; color: inherit; font-size: 1.3rem; cursor: pointer; }
