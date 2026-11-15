@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Vistas de la base (cultivos, validación, agua) y retiro del modo 2D (Eduardo)
+
+- **Archivos:** `web/src/escena/vistas.ts` y `vistas.test.ts` (nuevos), `escena/EscenaParcela.tsx`, `escena/render/escena-three.ts`, `escena/render/camara.ts`, `escena/ficha.ts`, `escena/escena.css`; `ui/lab/Laboratorio.tsx`, `ui/lab/PanelCultivos.tsx`, `ui/lab/lab.css`, `ui/planes.ts`, `ui/useLaboratorio.ts`; se borran `ui/Parcela2D.tsx`, `ui/Parcela2D.test.tsx` y `ui/parcela2d.css`; `docs/06`, `docs/11`, `web/README.md`, `AgroVault/Compartido/{Reglas,Resumen}.md`.
+- **Cambio:** el panel de abajo a la derecha queda con tres vistas que colorean la base de los bloques (por cultivo; validación de verde a rojo; necesidad de agua de gris a azul marino) y un globo con información de cada vista. Se quita el modo 2D. Detalle en 06, "Vistas de la base y retiro del 2D".
+- **Por qué:** pedido de Eduardo.
+- **Fuente:** los colores salen del registro de celda del motor (`estadoPlanta`, `etcMm`, `estresCalor`, `noRecomendadoEnLugar`) y de la ventana del calendario local; sin dato no hay color.
+- **Pendiente:** confirmar con Mompin el retiro del 2D (era respaldo decidido en la reunión) y los cortes de validación y agua (`[PROPUESTA]`).
+- **Decisiones afectadas:** "3D en el MVP ... con modo 2D de respaldo" (11).
+
 ### 2026-11-14 (noche) — Cámara de juego de granja en la escena 3D (Eduardo)
 
 - **Archivos:** `web/src/escena/render/camara.ts` y `camara.test.ts` (nuevos), `escena/render/escena-three.ts`, `escena/EscenaParcela.tsx`, `escena/escena.css`, `ui/lab/PanelCultivos.tsx`; `docs/06`.

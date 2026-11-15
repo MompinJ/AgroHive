@@ -346,6 +346,9 @@ export class EscenaThree {
   private cuadroPintura = 0;
   private marcas: THREE.InstancedMesh | null = null;
   private marcasActuales: ReadonlyMap<string, string> = new Map();
+  // Vista de la base (por cultivo, validacion o agua): color por celda o null (suelo por humedad).
+  private coloresBase: ReadonlyMap<string, string> | null = null;
+  private azulejosBase: THREE.InstancedMesh | null = null;
 
   constructor(private readonly lienzo: HTMLCanvasElement, opciones: OpcionesRender) {
     if (!soportaWebGL()) throw new ErrorWebGL();
@@ -521,6 +524,56 @@ export class EscenaThree {
     // Conserva la seleccion si la celda sigue existiendo (cambio de fecha, ciclo o escenario).
     this.seleccionar(this.seleccionId ? (modelo.bloques.find((b) => b.celdaId === this.seleccionId) ?? null) : null);
     if (this.marcasActuales.size > 0) this.marcarPintura(this.marcasActuales);
+    if (this.coloresBase) this.colorearBase(this.coloresBase);
+  }
+
+  /**
+   * Vistas de la base: pinta la columna de cada bloque y un azulejo encima con el color de la
+   * vista, y oculta las placas de estado (su informacion pasa al globo). null vuelve al suelo
+   * coloreado por humedad del motor. Las celdas que no estan en el mapa conservan su suelo.
+   */
+  colorearBase(colores: ReadonlyMap<string, string> | null) {
+    this.coloresBase = colores;
+    const modelo = this.modeloActual;
+    if (this.azulejosBase) {
+      this.azulejosBase.removeFromParent();
+      this.azulejosBase.geometry.dispose();
+      (this.azulejosBase.material as THREE.Material).dispose();
+      this.azulejosBase.dispose();
+      this.azulejosBase = null;
+    }
+    const color = new THREE.Color();
+    for (const hijo of this.raiz.children) {
+      if (hijo.name.startsWith('placa-')) hijo.visible = !colores;
+      if (hijo.name !== 'suelo' || !(hijo instanceof THREE.InstancedMesh) || !modelo) continue;
+      const bloques = this.bloquesPorMalla.get(hijo) ?? [];
+      bloques.forEach((b, k) => {
+        const propio = colores?.get(b.celdaId);
+        if (propio) color.set(propio);
+        else {
+          const [r, g, bl] = colorSuelo(b.registro?.humedad ?? null, modelo.grupoSuelo);
+          color.setRGB(r / 255, g / 255, bl / 255, THREE.SRGBColorSpace);
+        }
+        hijo.setColorAt(k, color);
+      });
+      if (hijo.instanceColor) hijo.instanceColor.needsUpdate = true;
+    }
+    const conColor = colores && modelo ? modelo.bloques.filter((b) => colores.has(b.celdaId)) : [];
+    if (conColor.length > 0) {
+      const geo = new THREE.BoxGeometry(LADO_BLOQUE, 0.04, LADO_BLOQUE);
+      const mat = new THREE.MeshLambertMaterial();
+      const malla = new THREE.InstancedMesh(geo, mat, conColor.length);
+      const m = new THREE.Matrix4();
+      conColor.forEach((b, k) => {
+        m.makeTranslation(b.x, this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0) + 0.02, b.z);
+        malla.setMatrixAt(k, m);
+        malla.setColorAt(k, color.set(colores!.get(b.celdaId)!));
+      });
+      malla.name = 'base-vista';
+      this.scene.add(malla);
+      this.azulejosBase = malla;
+    }
+    this.pedirCuadro('terreno');
   }
 
   /**
@@ -605,6 +658,7 @@ export class EscenaThree {
     cancelAnimationFrame(this.cuadroHover);
     cancelAnimationFrame(this.cuadroPintura);
     this.marcarPintura(new Map());
+    this.colorearBase(null);
     this.observadorVisible?.disconnect();
     document.removeEventListener('visibilitychange', this.alCambiarVisibilidad);
     this.terminarTransiciones();
@@ -661,6 +715,7 @@ export class EscenaThree {
       suelo.instanceMatrix.needsUpdate = true;
       if (suelo.instanceColor) suelo.instanceColor.needsUpdate = true;
       suelo.computeBoundingSphere();
+      suelo.name = 'suelo';
       this.raiz.add(suelo);
       this.bloquesPorMalla.set(suelo, medidos);
     }

@@ -22,9 +22,9 @@ Aplican a Cursor, Codex y Claude. El detalle de producto está en [[Resumen]].
 
 ## Código
 
-- El frontend no recalcula indicadores. El 3D, el 2D y las tarjetas leen la salida del motor.
+- El frontend no recalcula indicadores. El 3D, sus vistas de la base y las tarjetas leen la salida del motor (el modo 2D se retiró el 15/11).
 - El motor vive en TypeScript, dentro de un Web Worker en `web/`. FastAPI no simula: hace de proxy, caché y cliente de APIs.
-- Cambiar 2D/3D no vuelve a pedir datos a NASA ni cambia métricas.
+- Cambiar de vista (cultivos, validación, agua) no vuelve a pedir datos a NASA ni cambia métricas.
 - Cambiar cultivo o rotación invalida el resultado anterior hasta recalcular.
 - Mismos datos y mismo plan ⇒ mismo resultado.
 - Sin emojis en el código. Sin llaves ni tokens en el repo (variables de entorno).

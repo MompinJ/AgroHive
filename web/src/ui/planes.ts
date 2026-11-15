@@ -6,12 +6,8 @@ import { dentroDeVentana } from '../motor/pilares';
 
 export const calendarioIsla = calendarioJson as CalendarioLocal;
 export const nombresCultivos: Record<string, string> = { maiz: 'Maíz', frijol: 'Frijol', calabaza: 'Calabaza', chile: 'Chile', sorgo: 'Sorgo', sandia: 'Sandía', camote: 'Camote', cacahuate: 'Cacahuate' };
-/**
- * Color de la brocha por cultivo. Solo identifica lo que pinta el usuario mientras el motor
- * lo evalua; no es un estado ni un indicador. Tonos tierra de saturacion media.
- */
-export const coloresCultivo: Record<string, string> = { maiz: '#d9a62e', frijol: '#8a4b2f', calabaza: '#d9772b', chile: '#b73a2e', sorgo: '#9a5470', sandia: '#3f8a52', camote: '#74539c', cacahuate: '#b08a5c' };
-export const colorCultivo = (cultivo: string) => coloresCultivo[cultivo] ?? '#6b7a72';
+/** Colores por cultivo: los define la escena (base de los bloques y brocha). */
+export { COLORES_CULTIVO as coloresCultivo, colorCultivo } from '../escena/vistas';
 export function referenciaSiembra(cultivo: string, temporada: Ciclo['temporada'], calendario: CalendarioLocal | null) {
   return calendario?.entradas.find((e) => e.cultivo === cultivo && e.temporada === temporada && e.regimen === 'temporal');
 }
@@ -181,6 +177,18 @@ export function pintarCeldas(plan: PlanSiembra, parcela: Parcela, ciclo: number,
 /** Cambia la fecha de siembra de un ciclo; la temporada se deduce de la fecha. */
 export function cambiarSiembra(plan: PlanSiembra, parcela: Parcela, ciclo: number, siembra: string, calendario: CalendarioLocal | null): PlanSiembra {
   return armarPlan(plan.rotacionId, parcela, plan.ciclos.map((c) => c.ciclo === ciclo ? { ...c, siembra, temporada: temporadaDeFecha(siembra) } : c), calendario, plan.porCelda);
+}
+
+/**
+ * Ventana local por cultivo y ciclo, para la vista de validacion: usa la fecha del ciclo del
+ * plan (los cultivos pintados comparten la fecha de su ciclo) y la misma regla que el motor.
+ */
+export function ventanaDelPlan(plan: PlanSiembra, calendario: CalendarioLocal | null) {
+  return (cultivo: string, ciclo: number): boolean | null => {
+    const c = plan.ciclos.find((x) => x.ciclo === ciclo);
+    const v = c ? referenciaSiembra(cultivo, c.temporada, calendario)?.ventana : undefined;
+    return c && v?.estado === 'EVALUABLE' ? dentroDeVentana(c.siembra, v) : null;
+  };
 }
 
 /** Fecha a mitad del ciclo: en el paso de cultivos se ven las plantas crecidas, no recien sembradas. */

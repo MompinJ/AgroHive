@@ -22,7 +22,6 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
   const [escenario, setEscenario] = useState<Escenario>('habitual');
   const [fechaElegida, setFecha] = useState<{ clave: string; fecha: string } | null>(null);
   const [mostrarBanda, setMostrarBanda] = useState(false);
-  const [vista, setVista] = useState<'2d' | '3d'>('3d');
   const [iniciado, setIniciado] = useState(habilitado);
   const remotos = usarDatosParcela(iniciado && parcela ? parcela.centroide : null);
   const datosRemotos = remotos.state === 'ready' ? remotos.datos : null;
@@ -79,6 +78,6 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
     void simular().catch((e: unknown) => { if (activo) { setErrorMotor(e instanceof Error ? e.message : 'No se pudo simular.'); cliente?.terminar(); } });
     return () => { activo = false; cliente?.terminar(); };
   }, [actual, planes, clave]);
-  return { seleccion: { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda, vista, setVista }, datos: actual, planes, calculo: calculo?.clave === clave && actual ? calculo : null, error: parcela && remotos.state === 'error' ? remotos.error.motivo : error || errorMotor, actualizar: (plan: PlanSiembra) => setPlanes({ clave: claveParcela, planes: planes.map((p) => p.rotacionId === plan.rotacionId ? plan : p) }), reintentar: () => { setDatos(null); remotos.reintentar(); setIntento((n) => n + 1); setRevision((n) => n + 1); } };
+  return { seleccion: { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda }, datos: actual, planes, calculo: calculo?.clave === clave && actual ? calculo : null, error: parcela && remotos.state === 'error' ? remotos.error.motivo : error || errorMotor, actualizar: (plan: PlanSiembra) => setPlanes({ clave: claveParcela, planes: planes.map((p) => p.rotacionId === plan.rotacionId ? plan : p) }), reintentar: () => { setDatos(null); remotos.reintentar(); setIntento((n) => n + 1); setRevision((n) => n + 1); } };
 }
 export type LaboratorioEstado = ReturnType<typeof useLaboratorio>;

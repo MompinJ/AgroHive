@@ -5,6 +5,7 @@ import type { LaboratorioEstado } from '../useLaboratorio';
 import { cambiarSiembra, conflictosPlan, conteoPintado, diasCultivo, explicarFecha, inicioDeVentana, referenciaSiembra, rellenarCiclo } from '../planes';
 import { Aviso, Cargando, EncabezadoPanel, FuenteVisible, IconoCultivo, fechaCorta, nombreCultivo, nombreTemporada } from './piezas';
 import type { PasoLab } from './Laboratorio';
+import { AvisosDatos } from '../../escena/AvisosDatos';
 
 export type Herramienta = 'brocha' | 'goma' | 'mover';
 
@@ -130,6 +131,7 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
 
     <details className="panel-bloque lab-datos">
       <summary><span className="panel-etiqueta">Sobre estos datos</span></summary>
+      <AvisosDatos avisos={datos.avisosDatos} advertenciasParcela={datos.parcela.advertencias ?? []} />
       <p className="panel-ayuda">{datos.parcela.meta.aviso}</p>
       {datos.avisos.map((m) => <p className="panel-ayuda" key={m}>{m}</p>)}
       <p className="panel-ayuda">Clima: {datos.serie.estado} · <FuenteVisible fuente={datos.serie.fuente} /></p>

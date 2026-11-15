@@ -12,9 +12,8 @@
 /* Fondo: escena 3D o vista 2D a pantalla completa. */
 .lab-fondo { position: absolute; inset: 0; z-index: 0; background: radial-gradient(120% 90% at 60% 35%, #f4f7f1 0%, #e3eadf 55%, #d3ddd0 100%); }
 .lab-fondo-carga { position: absolute; inset: 0; }
-.lab-fondo-2d { position: absolute; inset: var(--lab-top) var(--lab-borde) var(--lab-borde) calc(var(--lab-izq) + 2 * var(--lab-borde)); display: grid; place-items: center; overflow: auto; }
-.lab-fondo-2d .parcela2d { max-width: 100%; max-height: 100%; padding: 12px; border-radius: var(--radius-panel); background: var(--lab-vidrio); box-shadow: var(--shadow-float); }
-.lab-fondo-2d .parcela2d-ventana { max-height: calc(100svh - var(--lab-top) - 200px); }
+.lab-sin-webgl { position: absolute; top: 50%; left: calc(50% + var(--lab-izq) / 2); transform: translate(-50%, -50%); width: min(420px, calc(100% - 2 * var(--lab-borde))); padding: 20px; border-radius: var(--radius-panel); background: #fff; box-shadow: var(--shadow-float); text-align: center; display: grid; gap: 8px; }
+.lab-sin-webgl p { margin: 0; font-size: .9rem; color: var(--color-text-body); }
 .lab-velo { position: absolute; inset: 0; z-index: 1; background: rgb(243 245 240 / 45%); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
 
 /* Panel flotante base. */
@@ -131,12 +130,6 @@
 .lab-toast { position: absolute; z-index: 40; top: var(--lab-top); left: 50%; transform: translateX(-50%); width: min(520px, calc(100% - 2 * var(--lab-borde))); box-shadow: var(--shadow-float); }
 .lab-toast-info { margin: 0; padding: 10px 14px; border-radius: 12px; background: #fff; font-size: .85rem; }
 
-/* Selector 2D / 3D. */
-.lab-vista { position: absolute; z-index: 12; top: var(--lab-top); right: var(--lab-borde); display: flex; padding: 3px; gap: 2px; border-radius: var(--radius-pill); background: var(--lab-vidrio); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: var(--shadow-float); }
-.lab-vista button { min-width: 44px; min-height: 36px; border: 0; border-radius: var(--radius-pill); background: transparent; font: inherit; font-size: .8rem; font-weight: 600; color: var(--color-text-body); cursor: pointer; }
-.lab-vista button[aria-checked="true"] { background: var(--color-forest-700); color: #fff; }
-.lab-vista button:disabled { opacity: .4; cursor: not-allowed; }
-.lab-paso-comparacion .lab-vista { display: none; }
 
 /* Paso Escenarios. */
 .lab-escenarios { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
@@ -223,16 +216,19 @@
 /* Movil: el panel del paso se vuelve hoja inferior; el tiempo queda arriba. */
 @media (max-width: 760px) {
   .lab { --lab-top: 72px; --lab-borde: 8px; }
+  .lab-sin-webgl { top: calc(var(--lab-top) + 16px); left: 50%; transform: translateX(-50%); }
   .panel-izq { top: auto; bottom: var(--lab-borde); left: var(--lab-borde); right: var(--lab-borde); width: auto; max-height: 48svh; padding: 16px; gap: 14px; }
   .panel-pie { bottom: -16px; margin: auto -16px -16px; padding: 12px 16px 14px; }
   .panel-cabeza h1 { font-size: 1.2rem; }
   .panel-intro { display: none; }
   .panel-ancho { bottom: var(--lab-borde); }
   .lab-dock { top: var(--lab-top); bottom: auto; left: var(--lab-borde); right: var(--lab-borde); width: auto; min-width: 0; padding: 8px 12px; }
-  .lab-paso-escenarios .lab-vista { top: auto; bottom: calc(48svh + 2 * var(--lab-borde)); right: auto; left: var(--lab-borde); }
-  .lab-fondo-2d { inset: var(--lab-top) var(--lab-borde) calc(48svh + 2 * var(--lab-borde)) var(--lab-borde); }
   .lab-paleta { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .lab-metricas dd { font-size: .95rem; }
 }
 @media (forced-colors: active) { .panel, .lab-dock { border: 1px solid CanvasText; } }
 .lab-ciclo-extra { color: var(--color-forest-700) !important; font-weight: 600; }
+
+.lab-datos .escena-datos { font-size: .8rem; padding: 8px 10px; border-radius: 10px; background: var(--color-sage-50); }
+.lab-datos .escena-datos ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; }
+.lab-datos .escena-etiqueta { display: inline-block; margin: 2px 4px 2px 0; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--color-line); font-size: .72rem; }

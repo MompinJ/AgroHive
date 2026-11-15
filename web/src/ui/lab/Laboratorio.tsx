@@ -6,7 +6,7 @@ import type { ResultadoCeldas } from '../../../../contratos/tipos/contratos';
 import { conLimite, type LaboratorioEstado } from '../useLaboratorio';
 import { useSerieBalance } from '../useSerieBalance';
 import { rangoDelCiclo } from '../tiempo';
-import { colorCultivo, conflictosPlan, fechaParaVer, pintarCeldas } from '../planes';
+import { colorCultivo, conflictosPlan, fechaParaVer, pintarCeldas, ventanaDelPlan } from '../planes';
 import type { PincelEscena } from '../../escena/pincel';
 import { PanelCultivos, type Herramienta } from './PanelCultivos';
 import { PanelEscenarios } from './PanelEscenarios';
@@ -15,7 +15,6 @@ import { Aviso } from './piezas';
 import './lab.css';
 
 const Escena = lazy(() => import('../../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
-const Parcela2D = lazy(() => import('../Parcela2D').then((m) => ({ default: m.Parcela2D })));
 
 export type PasoLab = 'cultivos' | 'escenarios' | 'comparacion';
 
@@ -41,9 +40,8 @@ function useVentana() {
 }
 
 export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEstado; paso: PasoLab; onAvanzar: (destino: PasoLab) => void }) {
-  const { rotacion, ciclo, escenario, fechaElegida, setFecha, vista, setVista } = estado.seleccion;
+  const { rotacion, ciclo, escenario, fechaElegida, setFecha } = estado.seleccion;
   const [webglDisponible] = useState(puedeUsarWebGL);
-  const vistaVisible = webglDisponible ? vista : '2d';
   const [celdas, setCeldas] = useState<{ clave: string; valor: ResultadoCeldas } | null>(null);
   const [falloCeldas, setFalloCeldas] = useState<{ clave: string; motivo: string } | null>(null);
   const [intentoCeldas, setIntentoCeldas] = useState(0);
@@ -126,24 +124,19 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     };
   }, [paso, herramienta, plan, visible, datos, cultivoActivo, tamano, estado]);
 
-  const fondo = datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
-    {vistaVisible === '2d'
-      ? <div className="lab-fondo-2d"><Parcela2D parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} resultado={resultado} fecha={fecha} pincel={pincel} marcas={pendientes} compacta /></div>
-      : <Escena modo="fondo" hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fecha} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} />}
-  </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
+  const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
+  const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
+    : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
+      <Escena modo="fondo" hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fecha} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} />
+    </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
 
   const comun = { estado, onAvanzar };
   return <div className={`lab lab-paso-${paso}`}>
     <div className="lab-fondo">{fondo}</div>
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
-    {datos && <div className="lab-vista" role="radiogroup" aria-label="Vista de la parcela">
-      <button type="button" role="radio" aria-checked={vistaVisible === '3d'} disabled={!webglDisponible} onClick={() => setVista('3d')}>3D</button>
-      <button type="button" role="radio" aria-checked={vistaVisible === '2d'} onClick={() => setVista('2d')}>2D</button>
-    </div>}
     {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} tamano={tamano} setTamano={setTamano} calculando={!estado.calculo || !celdasListas} />}
-    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}:${vistaVisible}`} />}
+    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} />}
     {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} />}
-    {!webglDisponible && <p className="lab-toast lab-toast-info" role="status">WebGL no está disponible: mostramos la vista 2D con los mismos resultados del motor.</p>}
     {aviso && <Aviso tipo="error" className="lab-toast" onCerrar={() => setAviso('')}>{aviso}</Aviso>}
     {paso !== 'cultivos' && errorCeldas && <Aviso tipo="error" className="lab-toast" accion={{ texto: 'Reintentar', onClick: () => setIntentoCeldas((n) => n + 1) }}>{errorCeldas}</Aviso>}
   </div>;
