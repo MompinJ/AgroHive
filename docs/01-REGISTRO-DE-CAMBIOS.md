@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — Cultivos nuevos con modelo, prefijos, catálogos 0.13.0 y prueba de movimiento en verde (MF1, MF2, MF4, M4 y M5; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `datos/catalogos/generar.py` (prefijos y `VERSION_CONTRATO`) y los tres JSON regenerados; `modelos/paleta.py` y `paleta.md` (24 colores, índices 86 a 109); `modelos/cultivos/sandia.py`, `camote.py`, `cacahuate.py` con sus 15 `.bbmodel` y visores; `modelos/cultivos/bloques/bloques.py` (15 bloques, y ahora regenera `visor_bloques.html`); `modelos/iconos2d/iconos2d.py` (15 SVG) y su README; todos los `.bbmodel` existentes regenerados (solo cambia la paleta incrustada); `web/src/escena/voxel/bloque.ts`; `web/src/escena/pruebas/bloques.test.ts` e `iconos2d.test.ts` (8 cultivos); `herramientas/prueba-movimiento/movimiento.mjs` y su README; `docs/06`, `docs/07`, `docs/16`, `docs/hallazgos-back.md`; capturas en `docs/capturas/cultivos-nuevos/`.
+- **Cambio:** MF1, el sorgo declara `modelo3d.prefijo`. MF2, sandía, camote y cacahuate con 5 detallados, 5 bloques (de 15 a 24 cubos) y 5 iconos 2D cada uno, y su prefijo. M5, la escena y la vista 2D los toman solos (glob de `modelos/`): no hizo falta tocar `catalogo.ts` ni `web/src/ui/`; revisados en la vista previa, las 15 combinaciones cargan su `.bbmodel` sin respaldo. MF4 (H-B9), los catálogos declaran `versionContrato` 0.13.0 y validan sin cambiar datos (todo por `generar.py`, sin editar el JSON a mano). M4, `prueba-movimiento` 33 de 33: A2 y G1b fallaban porque el día por defecto de la vista previa (2016-07-16, 19.9 mm) tiene lluvia y la lluvia anima a propósito; la prueba ahora la apaga antes de medir el reposo, como `medir.html`, y agrega L1 a L3 (la lluvia anima, el reposo sin ella es 0, con reducir no hay gotas). Arreglo de paso: el bloque provisional de respaldo medía la altura del detallado sin sus rotaciones y con las hojas tendidas de la sandía salía más alto que la planta.
+- **Por qué:** reparto de Mompin para esta noche (`docs/16`, D4 `[DECIDIDO]`: los cultivos nuevos se terminan).
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` son de Mafer; los hizo la IA de Mompin con OK de Mompin porque Mafer no estaba trabajando. No se tocó la escena de Eduardo (`EscenaParcela.tsx`, `escena-three.ts`, `camara.ts`) ni `web/src/ui/`.
+- **Pendiente:** mirar los modelos en Blockbench; B1 (aviso en el selector de cultivos no registrados en Isla) sigue con su dueño. Los colores nuevos son a ojo, no medidos.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Decisiones y reparto del día final: D1, D4, H-B6, H-M1, H-M9 `[DECIDIDO]` (Mompin; sesión "estado")
 
 - **Archivos:** `docs/13` (seis filas nuevas), `docs/16` (sección 2 con decididas y abiertas; sección 3 con el reparto sobre `main` `582e482`), `docs/11` (resumen de decisiones).

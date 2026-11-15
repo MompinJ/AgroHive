@@ -126,6 +126,39 @@ PALETA_AGROHIVE = {
     'chile_semilla': '#ecdca2',
     # 85: mejilla rosada de la mascota (elote feliz)
     'mascota_mejilla': '#f0857f',
+    # 86-88: hoja de sandia (lobulada, verde grisaceo)
+    'sandia_hoja_dark': '#2f5a34',
+    'sandia_hoja': '#4f7f4a',
+    'sandia_hoja_light': '#82a872',
+    # 89-91: cascara de sandia (rayas oscuras sobre verde claro)
+    'sandia_cascara_dark': '#1e4526',
+    'sandia_cascara': '#3f7a38',
+    'sandia_cascara_light': '#9cc37a',
+    # 92-93: pulpa roja y corteza blanca de la sandia (la semilla usa 'black', 10; la flor 'yellow', 12)
+    'sandia_pulpa': '#e2474f',
+    'sandia_corteza': '#e9efc4',
+    # 94-96: hoja de camote (acorazonada, verde oscuro)
+    'camote_hoja_dark': '#244f27',
+    'camote_hoja': '#3a7a34',
+    'camote_hoja_light': '#69a649',
+    # 97-98: guia y peciolo morado del camote, flor lila palida
+    'camote_morado': '#6a3a6c',
+    'camote_flor': '#d9b8e8',
+    # 99-101: raiz tuberosa del camote (piel rosa morada, pulpa naranja)
+    'camote_piel_dark': '#73304a',
+    'camote_piel': '#a6506c',
+    'camote_pulpa': '#e8893c',
+    # 102-104: hoja de cacahuate (foliolos verde medio)
+    'cacahuate_hoja_dark': '#3c6f2e',
+    'cacahuate_hoja': '#5f9c3e',
+    'cacahuate_hoja_light': '#93c562',
+    # 105-107: vaina de cacahuate (beige reticulada)
+    'cacahuate_vaina_dark': '#9c7a4c',
+    'cacahuate_vaina': '#c8a674',
+    'cacahuate_vaina_light': '#e4cc98',
+    # 108-109: semilla de cacahuate (tegumento rojizo) y clavo (ginoforo) que baja al suelo
+    'cacahuate_semilla': '#b5634a',
+    'cacahuate_clavo': '#d8cfa2',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'

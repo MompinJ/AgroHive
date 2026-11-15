@@ -7,7 +7,7 @@ Corte de esta auditoría: sábado 14/11, 23:10 (hora de la sede), sobre `origin/
 - **`main` en verde** (corrido el 14/11, 23:00): `contratos/` 101/101, `api/` 148 pruebas, catálogos en verde, `tsc --noEmit` en `web/` sin errores; además `vitest` 663 pruebas (1 `todo`) y `cronograma.py --revisar` al día.
 - **Despliegue al día:** `https://64-23-143-102.sslip.io/health` responde commit `f56450c` y contratos 0.13.0; `/medir.html` ya sirve la herramienta de medición y `/api/cultivos` responde 200.
 - **Funciona:** motor FAO-56 en Web Worker, escenarios seco / habitual / lluvioso, ranking B con cuatro pilares, tarjetas por plantilla, próxima temporada `EXPLORATORIO`, recorrido Terreno → Cultivos → Escenarios → Comparación (laboratorio por pasos con escena 3D de fondo y brocha), vista 2D, dashboard, método, demo sin red, API con POWER, IMERG, NDVI, SMAP, suelo, elevación, calendario (SIAP/INIFAP y GGCMI) y CDL/SSURGO.
-- **No funciona o está incompleto:** `herramientas/prueba-movimiento` falla A2 y G1b (la lluvia animada de la vista previa no deja la escena en reposo; ya fallaba antes de la cámara de Eduardo). Sandía, camote y cacahuate están en el catálogo pero sin modelo 3D, bloque ni icono 2D; el sorgo tiene modelos e icono, pero `cultivos.json` no declara su `modelo3d.prefijo`. No hay medición en un celular ni en una laptop modesta física.
+- **No funciona o está incompleto:** ~~`herramientas/prueba-movimiento` falla A2 y G1b; sandía, camote y cacahuate sin modelo 3D, bloque ni icono 2D; el sorgo sin `modelo3d.prefijo`~~ (arreglado en `Mompin-escena`, M4, MF1 y MF2, falta integrar). No hay medición en un celular ni en una laptop modesta física.
 - **Frontend:** el flujo y el aspecto no convencen al equipo. Queda como **área abierta a rediseño**, a cargo de Eduardo (D1, sección 3); este documento no propone el diseño.
 - **Pospuesto hasta el final** (fase de revisión, `docs/13`): A0.3 (acta), A4.4 (redacción con LLM, opcional), A5.7 (README, en curso con Mafer) y A5.9 (envío). Lo que toca a la entrega está en la sección 5, fuera de este plan.
 
@@ -68,8 +68,8 @@ Estado: `LISTA` (se puede empezar), `ESPERA` (depende de algo), `EN CURSO`, `HEC
 | M1 | Decidir D1 a D7 y anunciarlas | `docs/13`, `docs/01` | — | EN CURSO (D1 y D4 tomadas; D3, D5, D6 y D7 abiertas; D2 pasa a Eduardo) |
 | M2 | Integrar `origin/balam`, `origin/Eduardo`, `Mompin-docs` y `Mompin-fallos`; regenerar el cronograma | `main` | 4 suites en verde | HECHA (`582e482`) |
 | M3 | Ventanas de integración cada hora en punto (regla 4) | `main` | Avisos "listo para integrar" | EN CURSO |
-| M4 | Arreglar A2 y G1b de `prueba-movimiento`: la lluvia animada de la vista previa no deja la escena en reposo | `web/src/escena/` | — | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
-| M5 | Registrar en la escena sorgo, sandía, camote y cacahuate | `web/src/escena/voxel/catalogo.ts` | MF1, MF2 | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
+| M4 | Arreglar A2 y G1b de `prueba-movimiento`: la lluvia animada de la vista previa no deja la escena en reposo | `herramientas/prueba-movimiento/` | — | HECHA en `Mompin-escena` (falta integrar): la lluvia anima a propósito; la prueba la apaga antes de medir el reposo, como `medir.html`, y la comprueba aparte (L1 a L3). 33 de 33 |
+| M5 | Registrar en la escena sorgo, sandía, camote y cacahuate | `web/src/escena/voxel/catalogo.ts` | MF1, MF2 | HECHA en `Mompin-escena` (falta integrar): la escena y la vista 2D toman los `.bbmodel` y los SVG solos, sin código nuevo; revisado en la vista previa (`docs/capturas/cultivos-nuevos/`) |
 | M6 | Hallazgos del motor: H-M1 y H-M9 (decididos), H-M2 (fin del ciclo por duración del catálogo), H-M4 (fecha inválida), H-M5 (errores del Worker), H-M6, H-M7, H-M8, H-M10 y H-M11 (fuente de la ventana en la tarjeta; cambia la regresión A5.5) | `web/src/motor/` | — | EN CURSO (cazafallos, `Mompin-fallos`) |
 
 ### Eduardo (rediseño del front, `api/`, `datos/` salvo catálogos, servidor; único con SSH)
@@ -89,10 +89,10 @@ MF1, MF2 y la versión de los catálogos tocan archivos de Mafer: las hace la IA
 
 | # | Tarea | Archivos | Depende de | Estado |
 | --- | --- | --- | --- | --- |
-| MF1 | Declarar `modelo3d.prefijo` del sorgo en el catálogo (sus modelos e icono ya existen) | `datos/catalogos/cultivos.json` | — | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
-| MF2 | Sandía, camote y cacahuate: modelo detallado, bloque de 24 cubos, icono 2D y prefijo (D4) | `modelos/`, `datos/catalogos/cultivos.json` | — | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
+| MF1 | Declarar `modelo3d.prefijo` del sorgo en el catálogo (sus modelos e icono ya existen) | `datos/catalogos/cultivos.json` | — | HECHA en `Mompin-escena` (falta integrar), por `generar.py` |
+| MF2 | Sandía, camote y cacahuate: modelo detallado, bloque de 24 cubos, icono 2D y prefijo (D4) | `modelos/`, `datos/catalogos/cultivos.json` | — | HECHA en `Mompin-escena` (falta integrar): 15 detallados, 15 bloques, 15 iconos, 24 colores nuevos y sus prefijos (`docs/07`) |
 | MF3 | Cotejar con el PDF de FAO-56 los datos marcados (sorgo 125 contra 130; fila de cacahuate de África Occidental) | `datos/catalogos/` | — | LISTA |
-| MF4 | `versionContrato` real en los catálogos (H-B9) | `datos/catalogos/*.json` | — | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
+| MF4 | `versionContrato` real en los catálogos (H-B9) | `datos/catalogos/*.json` | — | HECHA en `Mompin-escena` (falta integrar): 0.13.0 desde `generar.py`, valida sin cambiar datos |
 
 ### balam
 

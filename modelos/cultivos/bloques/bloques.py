@@ -3,6 +3,9 @@
 Correr desde la raiz del repo:
     python modelos/cultivos/bloques/bloques.py
 
+Genera los 40 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote y cacahuate x siembra, brote, crecimiento,
+madurez, podrida) y visor_bloques.html.
+
 En la escena cada bloque (celda de 10 x 10 m) usa uno de estos modelos en lugar de la planta detallada, que se
 queda para la celda seleccionada. Es una representacion visual, NO a escala: el numero de plantas, su tamano y la
 separacion de surcos son cualitativos.
@@ -19,7 +22,7 @@ Trazado comun (para que una parcela de bloques pegados se lea continua): 3 surco
 por surco con esa misma separacion (x = -16/3, 0, 16/3), tambien continuas entre bloques. Los lomos ocupan x[-8, 8].
 
 Para agregar un cultivo/etapa: agregar su planta (1 o 2 cubos) a PLANTAS con las ayudas con_tallo/hoja/pieza/semilla
-y la pareja a CULTIVOS_ETAPAS.
+(o, para rastreras y matas bajas, guia/mata/esqueje/al_lado/encima) y la pareja a CULTIVOS_ETAPAS.
 """
 import math
 import os
@@ -33,7 +36,7 @@ sys.path.insert(0, os.path.join(RAIZ, 'herramientas'))
 sys.path.insert(0, os.path.join(RAIZ, 'modelos'))
 sys.path.insert(0, CULTIVOS)
 
-from voxelkit import Model  # noqa: E402
+from voxelkit import Model, build_visor  # noqa: E402
 from paleta import PALETA_AGROHIVE as PAL  # noqa: E402
 from maiz import esquinas, punta  # noqa: E402
 
@@ -207,6 +210,98 @@ def alterna_plantas(*plantas):
     return planta
 
 
+# ---------------- sandia, camote y cacahuate (rastreras y mata baja) ----------------
+def hacia_centro(base, rng):
+    """+1 o -1 en x apuntando al centro del bloque (lo de la orilla crece hacia adentro y no sale de la huella)."""
+    if base[0] > 0.5:
+        return -1
+    if base[0] < -0.5:
+        return 1
+    return rng.choice((-1, 1))
+
+
+def guia(col, largo, resto):
+    """Rastrera: una guia tendida sobre el lomo, a lo largo del surco (x), y lo que dibuje resto() encima o en su punta."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = r3(rng.uniform(-25, 25))
+        caja_ajustada(m, nombre + '_guia', base, (largo * escala, 0.4, 0.5), col, yaw=yaw)
+        resto(m, nombre, base, rng, escala, 0.4, yaw)
+    return planta
+
+
+def hoja_plana(col, ancho, fondo, f=1.0):
+    """Hoja (o par de cotiledones) casi plana, mas ancha que honda, en lo alto del tallo."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        caja_ajustada(m, nombre + '_hoja', a_lo_alto(base, f * h), (ancho * escala, 0.3, fondo * escala), col,
+                      tilt=r3(rng.uniform(-10, 10)), yaw=yaw + 90)
+    return resto
+
+
+def al_lado(cols, size, dist):
+    """Una pieza tendida sobre el lomo junto a la planta, hacia el centro del bloque (fruto, raiz, vaina, guia)."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        lado = hacia_centro(base, rng)
+        sitio = (r3(base[0] + lado * dist * escala), base[1], r3(base[2] + rng.uniform(-0.4, 0.4)))
+        caja_ajustada(m, nombre + '_lado', sitio, tuple(t * escala for t in size), rng.choice(cols),
+                      yaw=r3(rng.uniform(-25, 25)))
+    return resto
+
+
+def encima(col, tam, f=1.0):
+    """Una flor (cubito) sobre la mata, un poco fuera del centro."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        sitio = (r3(base[0] + rng.uniform(-0.6, 0.6)), r3(base[1] + f * h), r3(base[2] + rng.uniform(-0.5, 0.5)))
+        m.box(nombre + '_flor', sitio, (tam, tam, tam), col, yaw=r3(rng.uniform(0, 90)))
+    return resto
+
+
+def nada(m, nombre, base, rng, escala, h, yaw):
+    """Planta sin segundo cubo (para mezclar con alterna)."""
+
+
+def mata(cols, ancho, alto, fondo, resto=nada):
+    """Mata baja y densa (1 cubo de follaje, mas ancho que alto) y lo que dibuje resto()."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = r3(rng.uniform(-30, 30))
+        h = alto * escala
+        caja_ajustada(m, nombre + '_mata', base, (ancho * escala, h, fondo * escala), rng.choice(cols), yaw=yaw)
+        resto(m, nombre, base, rng, escala, h, yaw)
+    return planta
+
+
+def esqueje(col, largo, tilt, col_hoja, tam_hoja):
+    """Camote: trozo de guia clavado en el lomo, inclinado hacia el centro, con una hoja en la punta (2 cubos)."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = 90 * hacia_centro(base, rng) + rng.uniform(-25, 25)
+        e = caja_ajustada(m, nombre + '_tallo', base, (0.4, largo * escala, 0.4), col, tilt=r3(rng.uniform(*tilt)), yaw=yaw)
+        t, y = e['rotation'][0], e['rotation'][1]
+        tip = punta(base, e['to'][1] - e['from'][1], t, y)
+        caja_ajustada(m, nombre + '_hoja', tuple(r3(v) for v in tip), (tam_hoja * escala, 0.3, tam_hoja * 0.85 * escala),
+                      col_hoja, tilt=r3(rng.uniform(-12, 12)), yaw=r3(y))
+    return planta
+
+
+def fruto_rayado(cols, raya, largo, alto, fondo):
+    """Sandia: fruto ovalado tendido sobre el lomo y una raya oscura a lo largo, con el mismo giro (2 cubos)."""
+    def planta(m, nombre, base, rng, escala):
+        e = caja_ajustada(m, nombre + '_fruto', base, (largo * escala, alto * escala, fondo * escala), rng.choice(cols),
+                          yaw=r3(rng.uniform(-20, 20)))
+        w, h, d = (e['to'][i] - e['from'][i] for i in range(3))
+        m.box(nombre + '_raya', base, (r3(w + 0.1), r3(h + 0.1), r3(d * 0.35)), raya, yaw=e.get('rotation', [0, 0, 0])[1])
+    return planta
+
+
+def fruto_largo_podrido(largo, alto, fondo):
+    """Sandia podrida: fruto hundido (bajo y oscuro) con una mancha de moho encima (2 cubos)."""
+    def planta(m, nombre, base, rng, escala):
+        a = alto * escala
+        e = caja_ajustada(m, nombre + '_fruto', base, (largo * escala, a, fondo * escala), rng.choice(('podrido', 'podrido_dark')),
+                          yaw=r3(rng.uniform(-20, 20)))
+        m.box(nombre + '_moho', (r3(base[0] + rng.uniform(-0.6, 0.6)), r3(base[1] + a), base[2]),
+              (r3(largo * 0.4), 0.4, r3(fondo * 0.6)), rng.choice(('moho', 'moho_light')), yaw=e.get('rotation', [0, 0, 0])[1])
+    return planta
+
+
 PLANTAS = {
     # maiz
     'maiz_siembra': semilla(('grano', 'grano_dark', 'grano_light'), (1.0, 0.7, 1.2)),
@@ -256,9 +351,45 @@ PLANTAS = {
     'chile_podrida': con_tallo('hoja_seca_dark', 3.6, 0.7, alterna(
         pieza(('podrido',), 0.5, 0.7, 2.2, 140, 155, 70),
         hoja('hoja_marchita', 0.4, 1.6, 2.0, 95, 115, 160)), tilt=(20, 32)),
+    # sandia (rastrera: guias con hoja lobulada verde grisaceo, flor amarilla, fruto ovalado con rayas)
+    'sandia_siembra': semilla(('black',), (0.8, 0.3, 1.3)),
+    'sandia_brote': con_tallo('sandia_hoja_dark', 1.2, 0.5, hoja_plana('sandia_hoja_light', 2.4, 1.0)),
+    'sandia_crecimiento': guia('sandia_hoja_dark', 3.4, alterna(
+        hoja_sobre_peciolo('sandia_hoja', 2.3, 1.0),
+        hoja_sobre_peciolo('sandia_hoja_light', 2.0, 1.0),
+        al_lado(('yellow',), (0.8, 0.8, 0.8), 1.4))),
+    'sandia_madurez': alterna_plantas(
+        fruto_rayado(('sandia_cascara_light',), 'sandia_cascara_dark', 3.2, 2.0, 2.1),
+        guia('sandia_hoja_dark', 3.4, hoja_sobre_peciolo('sandia_hoja', 2.4, 1.0))),
+    'sandia_podrida': alterna_plantas(
+        fruto_largo_podrido(3.0, 1.0, 2.0),
+        guia('hoja_seca_dark', 3.0, hoja_sobre_peciolo('hoja_seca', 2.0, 1.0))),
+    # camote (rastrero y bajo: guia morada, hoja acorazonada verde oscuro, raiz rosa morada de pulpa naranja)
+    'camote_siembra': esqueje('camote_morado', 2.6, (62, 72), 'camote_hoja', 1.1),
+    'camote_brote': esqueje('camote_morado', 2.0, (18, 30), 'camote_hoja_light', 1.7),
+    'camote_crecimiento': mata(('camote_hoja', 'camote_hoja_dark'), 2.8, 1.1, 2.6, alterna(
+        encima('camote_flor', 0.8),
+        al_lado(('camote_morado',), (2.6, 0.4, 0.5), 2.2))),
+    'camote_madurez': mata(('camote_hoja', 'camote_hoja_dark'), 3.0, 1.3, 2.8, alterna(
+        al_lado(('camote_piel', 'camote_piel_dark'), (2.2, 0.9, 1.0), 2.9),
+        al_lado(('camote_piel', 'camote_piel_dark'), (2.2, 0.9, 1.0), 2.9),
+        al_lado(('camote_pulpa',), (1.4, 0.9, 1.0), 2.5))),
+    'camote_podrida': mata(('hoja_marchita', 'hoja_seca'), 2.6, 0.6, 2.4,
+                           al_lado(('podrido', 'podrido_dark', 'moho'), (2.0, 0.8, 1.0), 2.6)),
+    # cacahuate (mata baja mas ancha que alta, foliolos verde medio, flor amarilla, vainas beige en el suelo)
+    'cacahuate_siembra': semilla(('cacahuate_semilla', 'cacahuate_semilla', 'cacahuate_vaina'), (0.8, 0.6, 1.1)),
+    'cacahuate_brote': con_tallo('cacahuate_hoja_dark', 1.6, 0.5, hoja_plana('cacahuate_hoja_light', 1.9, 1.5)),
+    'cacahuate_crecimiento': mata(('cacahuate_hoja', 'cacahuate_hoja_light'), 2.6, 1.5, 2.6, alterna(
+        encima('yellow', 0.6), encima('yellow', 0.6), nada)),
+    'cacahuate_madurez': mata(('cacahuate_hoja', 'cacahuate_hoja_dark'), 3.2, 2.0, 3.0, alterna(
+        al_lado(('cacahuate_vaina', 'cacahuate_vaina_light'), (1.5, 0.6, 0.8), 2.6),
+        al_lado(('cacahuate_vaina', 'cacahuate_vaina_light'), (1.5, 0.6, 0.8), 2.6),
+        encima('yellow', 0.6))),
+    'cacahuate_podrida': mata(('hoja_seca', 'hoja_seca_dark'), 2.8, 0.9, 2.6,
+                              al_lado(('cacahuate_vaina_dark', 'podrido', 'moho'), (1.5, 0.6, 0.8), 2.4)),
 }
 
-CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo')
+CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate')
                    for e in ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')]
 
 
@@ -270,5 +401,5 @@ def modelo(cultivo, etapa):
 MODELOS = [(f'{c}_{e}_bloque', (lambda c=c, e=e: modelo(c, e))) for c, e in CULTIVOS_ETAPAS]
 
 if __name__ == '__main__':
-    for nombre, f in MODELOS:
-        guardar(f(), nombre)
+    rutas = [guardar(f(), nombre) for nombre, f in MODELOS]
+    print(build_visor(os.path.join(AQUI, 'visor_bloques.html'), rutas), 'cubos en visor_bloques.html')

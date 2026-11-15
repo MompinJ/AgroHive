@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
-VERSION_CONTRATO = "0.6.0"
+VERSION_CONTRATO = "0.13.0"
 VERSION_CATALOGO = "0.1.0"
 CONSULTADO = "2026-11-14"
 
@@ -283,6 +283,7 @@ CULTIVOS = [
                 "rmin": 300, "ropmn": 500, "ropmx": 1000, "rmax": 3000},
         "nota_extra": ("EcoCrop trae tres filas de la misma especie por altitud (baja, media, alta); se uso la de altitud baja por ser "
                        "Isla zona de tierras bajas del sur de Veracruz (la altitud exacta de la parcela no se verifico). Una persona debe revisarlo."),
+        "modelo3d": "sorgo",
     },
     {
         "id": "sandia",
@@ -301,6 +302,7 @@ CULTIVOS = [
         "eco": {"fila": "Watermelon", "sci": "Citrullus lanatus (T) Mansf", "gmin": 80, "gmax": 160,
                 "tmin": 15, "topmn": 20, "topmx": 30, "tmax": 35,
                 "rmin": 400, "ropmn": 500, "ropmx": 750, "rmax": 1800},
+        "modelo3d": "sandia",
     },
     {
         "id": "camote",
@@ -321,6 +323,7 @@ CULTIVOS = [
                 "rmin": 500, "ropmn": 750, "ropmx": 1250, "rmax": 5000},
         "nota_extra": ("SIAP no registra camote en Isla entre 2021 y 2025; si lo registra en San Andres Tuxtla y Santiago Tuxtla, del "
                        "mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
+        "modelo3d": "camote",
     },
     {
         "id": "cacahuate",
@@ -343,6 +346,7 @@ CULTIVOS = [
                 "rmin": 400, "ropmn": 600, "ropmx": 1500, "rmax": 4000},
         "nota_extra": ("SIAP no registra cacahuate en Isla entre 2021 y 2025; si lo registra en Catemaco, del mismo distrito (DDR 175). "
                        "Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
+        "modelo3d": "cacahuate",
     },
 ]
 
