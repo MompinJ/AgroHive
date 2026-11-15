@@ -20,6 +20,10 @@ npm run preview
 
 ## Vistas y estado
 
+En Terreno, los seis ejemplos ocupan el ancho disponible: tres columnas en escritorio, dos hasta 960 px y una hasta 520 px. Se retiró la tarjeta informativa «Tu propio terreno»; el botón superior «Dibujar mi parcela» sigue abriendo el editor de contorno.
+
+Cada tarjeta muestra a la derecha una fotografía real de su zona, guardada localmente en `src/ui/assets/lugares/` para funcionar también sin conexión. Son referencias visuales, no fotos de las parcelas ficticias. Autor, licencia, URL original y fecha de consulta están en `creditos.json` y en el desplegable «Créditos de fotografías», fuera de las tarjetas. Las fotos se presentan con recorte CSS, sin modificar los originales; conservan sus licencias individuales (CC BY, CC BY-SA o CC0).
+
 ### Navegación del mapa de Terreno (15/11/2026)
 
 `ui/MapaParcela.tsx` combina Esri World Imagery con la capa transparente [World Boundaries and Places](https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer), debajo de los polígonos y sin capturar clics. Al cambiar a OpenStreetMap se retira esa capa para evitar nombres duplicados. Las atribuciones quedan en el control de Leaflet.

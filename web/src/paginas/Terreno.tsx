@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { AVISO_EJEMPLOS, listarEjemplos } from '../demo/ejemplos';
 import { nombresCultivos } from '../ui/planes';
+import { fotoPorEjemplo, fotosEjemplos } from '../ui/fotosEjemplos';
 import type { Parcela } from '../../../contratos/tipos/contratos';
 import { DibujarParcela } from '../ui/DibujarParcela';
 import hero from '../ui/assets/terreno-hero-v1.png';
-import polygon from '../ui/assets/terreno-poligono-v1.png';
 import '../ui/terreno.css';
 
 const ejemplos = listarEjemplos();
@@ -57,22 +57,21 @@ export function Terreno({ polygonMode, onElegirEjemplo, ejemplo, parcela, onGuar
           <ul className="terrain-ejemplos-lista">
             {ejemplos.map((e) => <li key={e.id}>
               <a className="terrain-ejemplo" href="#/laboratorio" aria-current={ejemplo === e.id ? 'true' : undefined} onClick={() => onElegirEjemplo(e.id)}>
+                <span className="terrain-ejemplo-texto">
                 <strong>{e.nombre}</strong>
                 <span className="terrain-ejemplo-lugar">{e.pais}{e.clima ? ` · clima ${e.clima.descripcion}` : ''}</span>
                 <span className="terrain-ejemplo-cultivos">{e.cultivosSugeridos.map(nombreCultivo).join(', ')}</span>
+                </span>
+                {fotoPorEjemplo[e.id] && <span className="terrain-ejemplo-imagen"><img src={fotoPorEjemplo[e.id]!.src} alt={fotoPorEjemplo[e.id]!.alt} width="500" height="375" loading="lazy" decoding="async" /></span>}
               </a>
             </li>)}
           </ul>
           <p className="terrain-ejemplos-aviso">{AVISO_EJEMPLOS}</p>
-        </div>
-      </section>
-      <section className={`terrain-option terrain-option-custom${polygonMode ? ' terrain-option-selected' : ''}`} aria-labelledby="poligono-titulo">
-        <img className="terrain-option-image" src={polygon} alt="" width="1254" height="1254" />
-        <div className="terrain-option-copy">
-          <p className="terrain-eyebrow">Polígono personalizado</p>
-          <h2 id="poligono-titulo">Tu propio terreno</h2>
-          <span className="terrain-status">Contorno y cuadrícula</span>
-          <p>Dibuja los límites, revisa la cuadrícula y consulta la elevación. El relieve faltante se muestra como no evaluable.</p>
+          <details className="terrain-foto-creditos">
+            <summary>Créditos de fotografías</summary>
+            <p>Fotografías de las zonas de referencia; no representan las parcelas de ejemplo. Se muestran recortadas para adaptarse a las tarjetas.</p>
+            <ul>{fotosEjemplos.map((foto) => <li key={foto.id}><a href={foto.fuente} target="_blank" rel="noreferrer">{foto.alt}</a> {foto.autor} · <a href={foto.licenciaUrl} target="_blank" rel="noreferrer">{foto.licencia}</a>.</li>)}</ul>
+          </details>
         </div>
       </section>
     </div>
