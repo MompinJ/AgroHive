@@ -275,10 +275,9 @@ class ProximaTemporada(BaseModel):
 
 
 class CultivoCatalogo(BaseModel):
-    """Un cultivo de contratos/cultivo.schema.json. Se tipan los nombres; el resto (parametros citados) pasa tal cual."""
+    """Un cultivo de contratos/cultivo.schema.json. Pasa tal cual (lo valida el contrato en las pruebas); se declara el campo
+    nuevo de 0.16.0 para que quede en OpenAPI y en el cliente generado."""
     model_config = ConfigDict(extra="allow")
-    id: str = Field(min_length=1)
-    nombreComun: str = Field(min_length=1)
     # 0.16.0: nombre comun en ingles, opcional (catalogos viejos sin el campo siguen siendo validos; sin el, se omite).
     nombreComunEn: str | None = Field(default=None, min_length=1)
 
