@@ -7,7 +7,7 @@ fuente: A0.4, configurado por Eduardo con Claude
 
 # Servidor (droplet de Eduardo)
 
-URL pública: **https://64-23-143-102.sslip.io** (certificado de Let's Encrypt, vence 2027-02-12, renovación automática de certbot). Prueba: `GET /health` devuelve `{"status":"ok","servicio":"agrohive-api","version":"0.1.0","versionContrato":"0.12.2","commit":"23f8a53"}` (consultado el 14/11 a las 18:04). Desde A1.3 el servicio corre la API real de `api/` (clima, elevación, suelo, cultivos).
+URL pública: **https://agrohive.space** (y `www`; dominio propio comprado en Namecheap, DNS con dos registros A hacia `64.23.143.102`; certificado de Let's Encrypt `agrohive-space`, vence 2027-02-13, renovación automática, con un correo de contacto del dueño del servidor para los avisos). El hostname anterior **https://64-23-143-102.sslip.io** sigue activo (certificado de Let's Encrypt, vence 2027-02-12, renovación automática de certbot). Prueba: `GET /health` devuelve `{"status":"ok","servicio":"agrohive-api","version":"0.1.0","versionContrato":"0.12.2","commit":"23f8a53"}` (consultado el 14/11 a las 18:04). Desde A1.3 el servicio corre la API real de `api/` (clima, elevación, suelo, cultivos).
 
 No hay contraseñas ni llaves en este vault ni en el repo. El acceso SSH lo tiene Eduardo; si necesitas desplegar, pídeselo.
 
@@ -32,7 +32,7 @@ Convivencia con `mediworks` (V-16): comparte nginx, certbot y el droplet. Usa `m
 1. Lo que entra a `main` en GitHub no llega solo al servidor: Eduardo lo despliega.
 2. En el droplet: `sudo -u agrohive git -C /opt/agrohive/repo pull`, luego `sudo -u agrohive /opt/agrohive/venv/bin/pip install -r /opt/agrohive/repo/api/requirements.txt` y `systemctl restart agrohive-api`.
 3. El atajo en el droplet, como root, es `bash /opt/agrohive/repo/api/despliegue/actualizar-servidor.sh`: deja API y front en `origin/main`. El 14/11 noche dejo `23f8a53` y publico el front. Tambien se puede subir solo el front con `SERVIDOR=root@64.23.143.102 sh api/despliegue/desplegar-front.sh`. Una sola sesión despliega, y lo anuncia antes por el buzón. Ese script no toca `agrohive.env`. No hace falta `EARTHDATA_TOKEN` para el resto de la API; sin él, `/api/smap` responde 503. Desde el 14/11 noche la variable esta puesta en el droplet y `GET /api/smap` (Isla, 2024-06-01 a 2024-06-03) respondio 200 con humedad real el dia 3.
-4. Comprobar `https://64-23-143-102.sslip.io/health` (trae `commit` y `versionContrato`: ahi se ve que version corre), `/api/cultivos` y `https://mediworks.mx/` (debe seguir en 200).
+4. Comprobar `https://agrohive.space/health` (trae `commit` y `versionContrato`: ahi se ve que version corre), `/api/cultivos` y `https://mediworks.mx/` (debe seguir en 200).
 
 Logs: `journalctl -u agrohive-api`.
 

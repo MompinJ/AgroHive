@@ -199,6 +199,15 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — Dominio propio agrohive.space (Eduardo)
+
+- **Archivos:** `api/despliegue/agrohive.nginx.conf` (copia de la configuración real), `README.md`, `AgroVault/Compartido/Servidor.md`. En el droplet: `/etc/nginx/sites-available/agrohive`, `/opt/agrohive/agrohive.env`, certificado `agrohive-space`.
+- **Cambio:** el dominio `agrohive.space` (Namecheap) apunta al droplet con dos registros A (`@` y `www`; se borraron la redirección URL y el CNAME de estacionamiento). nginx sirve `agrohive.space` y `www.agrohive.space` con un certificado de Let's Encrypt nuevo (`agrohive-space`, vence 2027-02-13, renovación automática, con un correo de contacto del dueño del servidor para los avisos); HTTP redirige a HTTPS. Se agregó el dominio a `AGROHIVE_CORS_ORIGINS` y se reinició la API. El hostname `sslip.io` sigue funcionando.
+- **Por qué:** una red con FortiGuard bloqueaba `sslip.io` como "Dynamic DNS" y la demo quedaba inaccesible; un dominio propio no cae en esa categoría.
+- **Evidencia:** desde fuera, `agrohive.space` y `www` responden 200 en `/`, `/health`, `/api/cultivos` y `/medir.html` con el certificado de Let's Encrypt (CN=agrohive.space); `http` redirige 301 a `https`; `mediworks.mx` y `sslip.io` siguen en 200. Copias de seguridad de la configuración de nginx y del `.env` en `/root/respaldo-nginx/`.
+- **Límites:** no se probó el dominio desde la red con FortiGuard (un dominio nuevo puede clasificarse como "Newly Registered Domain" por un tiempo); el dominio vence según Namecheap y hay que renovarlo; la contraseña de root del droplet sigue sin cambiarse.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Plaga siempre presente en cultivos atacados y plegado animado del panel (Eduardo)
 
 - **Archivos:** `web/src/ui/lab/plagas.ts` y su prueba, `PanelIzq.tsx`, `panelColapsable.ts`, `lab.css`, `PanelIzq.test.tsx`; `docs/06`.
