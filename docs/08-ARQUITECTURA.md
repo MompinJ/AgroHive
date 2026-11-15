@@ -47,7 +47,7 @@ Reglas que no cambian:
 ## Módulos
 
 1. Mapa y parcela (demo fija; polígono si entra).
-2. Generador de cuadrícula (metros locales, tope y tamaño adaptativo).
+2. Generador de cuadrícula (metros locales, tope y tamaño adaptativo o elegido por el usuario; forma de dibujo de las celdas de borde). Vive en `web/src/geo/` (`cuadricula.ts`, `forma-celda.ts`, `tamano-celda.ts`); `web/src/ui/cuadricula.ts` lo reexporta.
 3. Cliente de terreno: elevación y pendiente por celda.
 4. Cliente de clima: POWER diario, respaldo Open-Meteo, caché.
 5. Catálogo de cultivos y suelos (archivos estáticos con fuente).
@@ -144,14 +144,14 @@ Los `null` son huecos que se llenan con valores calculados; nunca con números i
 | `POST /api/rotaciones` | Comparación y ranking |
 
 ## Rendimiento
-- Tope de celdas (~1 600) y tamaño de celda adaptativo.
+- Tope de celdas (~1 600) y tamaño de celda adaptativo. Desde el 14/11 noche `[DECIDIDO]` (Mompin) el usuario puede pedir el lado (automático, 10, 20, 30, 50 o 100 m): si con ese lado pasan de 1 600 celdas, el generador lo sube lo justo (redondeado a 0.1 m) y avisa con `TAMANO_CELDA_AJUSTADO`. «Automático» conserva la regla de siempre (lado ≥ 10 m y a lo más 40 × 40 en la caja envolvente); con un lado pedido el tope cuenta las celdas que tocan el contorno, no la caja, así que una parcela larga o diagonal gana resolución (franja diagonal de unos 30 km de largo: de 92 celdas de 556 m a 1 598 de 69.4 m, en menos de 1 s). La API (`POST /api/elevacion`) ya aceptaba cualquier lado > 0 y no cambia.
 - `InstancedMesh` por cultivo + etapa; geometrías unidas por modelo.
 - Recalcular solo lo que cambia (cambiar de escenario no recarga el terreno).
 - Medir FPS en la computadora más modesta del equipo.
 - **Requisitos mínimos:** medirlos y documentarlos para los jueces; modo 2D para equipos de 4 GB de RAM. No prometer cifras sin medir.
 
 ## Errores y resiliencia
-- POWER falla ⇒ Open-Meteo ⇒ caché, con aviso visible.
+- POWER falla ⇒ Open-Meteo ⇒ caché, con aviso visible. `[DECIDIDO]` H-B6 (Mompin, 14/11 noche): 20 s por intento y 2 intentos por fuente, con un plazo total de 70 s por petición, para que la cadena quepa en los 90 s que espera el front (`api/app/http.py`).
 - Sin internet ⇒ parcela de demo precargada.
 - Cuotas ⇒ cola y reintentos con espera.
 - Datos faltantes ⇒ se muestran, no se ocultan.

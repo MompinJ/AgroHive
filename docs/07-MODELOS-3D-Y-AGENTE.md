@@ -64,6 +64,32 @@ Del ejemplo de la zanahoria, que conviene repetir para cada cultivo:
 
 Todas las etapas comparten el mismo punto de anclaje para poder interpolar escala. El motor (05) decide la etapa y el estado; el modelo solo los representa.
 
+## Sandía, camote y cacahuate (MF2, 14/11 noche)
+
+Hechos por la IA de Mompin con OK de Mompin (Mafer no estaba), con cuatro agentes `modelador-voxel` en paralelo: uno por cultivo para el detallado (`modelos/cultivos/<cultivo>.py`) y uno solo para bloques e iconos, que son los únicos que editan `bloques.py` e `iconos2d.py`. Para que no chocaran, los colores se agregaron antes y juntos (índices 86 a 109 de `paleta.md`) y todos los modelos se regeneraron una vez.
+
+| Cultivo | Rasgos que se respetan | Cubos (siembra, brote, crecimiento, madurez, podrida) |
+| --- | --- | --- |
+| Sandía | Rastrera; guías con hoja partida en lóbulos angostos, zarcillos, flor amarilla; fruto ovalado con rayas oscuras sobre verde claro | 10, 11, 30, 55, 56 |
+| Camote | Rastrero; guías moradas, hoja acorazonada, flor lila en campanita; se siembra por esqueje; camotes rosa morado que asoman del lomo, uno con pulpa naranja | 11, 13, 30, 60, 55 |
+| Cacahuate | Mata baja más ancha que alta; hoja de 4 foliolos, flor amarilla, clavos (ginóforos) que bajan al suelo; vainas beige con cintura | 12, 13, 28, 57, 52 |
+
+- Nada va bajo y = 0 (lo pide la prueba): camotes y vainas se asoman sobre el lomo en vez de enterrarse. Tamaños cualitativos, no medidos; las referencias de forma están en el docstring de cada generador.
+- Bloques: de 15 a 24 cubos (el camote en siembra llega justo al tope). `bloques.py` ahora también regenera `visor_bloques.html`.
+- **Límite conocido:** el `preview` de `voxelkit.py` ordena mal la profundidad con cajas largas o giradas (las rayas de la sandía o el lomo tapan piezas); los agentes revisaron con renders propios con z-buffer, fuera del repo. La revisión final fue en la escena real (`docs/capturas/cultivos-nuevos/`). Falta mirarlos en Blockbench.
+
+## Ampliación del catálogo (15/11)
+
+La sesión "catalogo" agregó cultivos a `datos/catalogos/` sin modelo; la sesión "cultivos" (IA de Mompin, `Mompin-escena`) les hace modelo por tandas de 5, con el mismo método que sandía, camote y cacahuate: colores nuevos agregados juntos antes de modelar, un agente por detallado y uno solo por archivo compartido (`bloques.py`, `iconos2d.py`). Los bloques conservan el trazado común (3 lomos de x −8 a 8, 3 × 3 plantas) para que el recorte en triángulo de las celdas de borde les sirva. Tamaños y formas cualitativos; las fuentes de forma están en el docstring de cada generador.
+
+| Cultivo | Rasgos que se respetan | Cubos detallado (siembra, brote, crecimiento, madurez, podrida) | Cubos bloque |
+| --- | --- | --- | --- |
+| Soya | Erguida y arbustiva, trifoliada, flor lila chica; se cosecha seca: madurez tostada, casi sin hojas, con racimos de vainas | 11, 12, 29, 48, 46 | 15 a 21 |
+| Frijol caupí | Semirrastrero, foliolos lanceolados, pedúnculos largos; vainas muy largas en V, color paja; semilla crema con ojo negro | 10, 12, 29, 56, 48 | 15 a 21 |
+| Haba | Erguida, la más alta de las leguminosas, tallo cuadrado, hoja glauca; flor blanca con mancha negra; vainas gruesas que se ennegrecen | 8, 12, 28, 57, 41 | 15 a 21 |
+| Chícharo | Trepa por un tutor de madera con zarcillos; flor blanca; vaina abierta con los chícharos en fila | 12, 12, 30, 54, 52 | 15 a 21 |
+| Lenteja | Chica, plumosa, muchos tallitos finos; madurez color paja con vainas cortas | 11, 12, 30, 55, 40 | 15 a 21 |
+
 ## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
 
 En la escena, el suelo es una columna procedural que se estira hasta la altura del relieve y se pinta según la humedad del motor (`escena/suelo.ts`); un bloque voxel completo se deformaría al estirarlo. Por eso las variantes son **losas delgadas que se ponen encima de la columna**, no bloques.
@@ -92,13 +118,26 @@ La mascota es un **elote con cara feliz** (la "verdura con cara feliz" del doc 0
 
 **Pendiente (fuera de `modelos/`):** la escena todavía no la muestra. Mompin dejó dicho que va a reservar un lugar opcional para ella. Una prueba (`web/src/escena/pruebas/props.test.ts`) verifica paleta, huella y que se apoye en el suelo.
 
+## Medio cuadrado para las celdas de borde (bordes diagonales, 14/11 noche) `[DECIDIDO]`
+
+Las celdas de borde donde el polígono corta en diagonal se dibujan como medio cuadrado (triángulo con el ángulo recto en la esquina `SO`, `SE`, `NE` o `NO`; campo `forma` de la celda, contrato `parcela` 0.14.0). **No se modela cada cultivo dos veces:** se decidió recortar en el render (pedido de Mompin: elegir lo que se vea mejor y escale a 30 a 50 cultivos).
+
+| Pieza | Cómo se hace |
+| --- | --- |
+| Bloque de cultivo (`<cultivo>_<etapa>_bloque`), losa de suelo y cualquier otro `.bbmodel` | `web/src/escena/voxel/media.ts` corta **cada cubo** exactamente con el plano vertical de la diagonal de la celda (también los cubos girados) y tapa el corte con el color de una cara lateral del mismo cubo. Lo que cae en la otra mitad se descarta. Sirve para cualquier modelo con las convenciones de arriba, sin configurarlo por cultivo: los cultivos nuevos entran solos |
+| Columna de suelo y hueco sin elevación | Prisma triangular en código (`web/src/escena/render/media-celda.ts`), el mismo para las 4 orientaciones, girado en pasos de 90° |
+| Placa de estado | La misma textura, a 0.42 de la celda en vez de 0.6, corrida hacia la esquina del ángulo recto para que quede dentro del triángulo `[PROPUESTA]` |
+| Banderín de "no recomendado" | En la esquina del ángulo recto, con la bandera hacia adentro (en celda completa sigue en la noroeste) |
+
+Por qué así: el corte exacto coincide con el prisma de suelo (el borde se ve como una sola diagonal), no agrega archivos, y el presupuesto se mantiene (la mitad pesa a lo más el modelo entero más una tapa por cubo cortado; en la práctica, menos). Una prueba (`web/src/escena/pruebas/media.test.ts`) recorta todos los bloques y losas que haya en `modelos/` en las 4 orientaciones y comprueba que nada salga de la mitad, que ninguna cara quede al revés y ese presupuesto. Las mitades no usan el giro de 0° o 180° de los surcos (giraría la mitad equivocada): los surcos de una celda de borde quedan en la orientación base. El agente `modelador-voxel` no hizo falta para esto; si algún modelo se viera mal cortado, se ajusta su `.bbmodel` con el agente.
+
 ## Carga en la web
 
 - El proyecto **carga el `.bbmodel` directo en Three.js**, sin pasar a glTF. El visor de ejemplo lo hace en pocas líneas: lee cada elemento (`from`, `to`, `origin`, `rotation`) y su color de la paleta, y crea una caja.
 - glTF/GLB es **opcional**: se exporta desde Blockbench (File > Export) si algún día hiciera falta.
 - **Rendimiento en escena grande:** el visor de ejemplo crea una malla por cubo, lo que está bien para unos pocos modelos. Para una parcela con cientos de celdas, unir los cubos de cada modelo en una geometría y usar **`InstancedMesh` por combinación cultivo + etapa**, con variación por celda (rotación en pasos de 90°, ligera escala). Fijar un tope de celdas (propuesta: ~1 600).
 - **Respaldo:** si un modelo se atrasa, plantas procedurales con cajas en código para no bloquear el MVP.
-- **Implementado (A3.2, 14/11):** `web/src/escena/voxel/` lee cualquier `<cultivo>_<etapa>.bbmodel` que esté en `modelos/cultivos/` (sin tocar código), toma los colores de la paleta incrustada (coinciden con `modelos/paleta.md`, verificado en pruebas) y rechaza con error visible los que no siguen estas convenciones. Faltan los modelos de frijol y calabaza (A2.11): mientras tanto se ve la planta provisional.
+- **Implementado (A3.2, 14/11):** `web/src/escena/voxel/` lee cualquier `<cultivo>_<etapa>.bbmodel` que esté en `modelos/cultivos/` (sin tocar código), toma los colores de la paleta incrustada (coinciden con `modelos/paleta.md`, verificado en pruebas) y rechaza con error visible los que no siguen estas convenciones. Desde el 14/11 noche están los 8 cultivos del catálogo original (maíz, frijol, calabaza, chile, sorgo, sandía, camote y cacahuate) y desde el 15/11 se suman los de la ampliación (sección siguiente a la de sandía), cada uno con 5 detallados, 5 bloques y 5 iconos 2D; un cultivo del catálogo sin `.bbmodel` usa la planta provisional, declarada.
 
 ## Flujo de trabajo de arte
 

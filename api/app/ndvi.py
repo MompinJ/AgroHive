@@ -2,7 +2,7 @@
 import asyncio
 from datetime import date, datetime, timezone
 
-from . import cache, http, servicios
+from . import cache, config, http, servicios
 from .clientes import planetary
 
 LIMITES = ["PIXEL_MAYOR_QUE_PARCELA", "NO_MUESTRA_CULTIVO_DEL_USUARIO", "NO_ENTRA_AL_RANKING"]
@@ -12,26 +12,26 @@ CONCURRENCIA = 2  # ventanas a la vez; dentro de cada una se leen hasta 6 pixele
 
 
 async def _una(sem: asyncio.Semaphore, lat: float, lon: float, ini: date, fin: date):
-    """Una ventana con cache. Devuelve (datos, escala, calidad_ok) o el mensaje de error."""
+    """Una ventana con cache. Devuelve (datos, escala, calidad_ok, consultado, vencida) o el mensaje de error."""
     clave = f"ndvi_v1_{lat:.5f}_{lon:.5f}_{ini:%Y%m%d}_{fin:%Y%m%d}"  # por punto exacto: dos puntos cercanos pueden caer en pixeles distintos
     guardado = cache.leer(clave)
     if guardado and servicios._vigente(guardado[1], fin):
         r = guardado[0]
-        return r["datos"], r["escala"], r["calidadOk"], r["consultado"]
+        return r["datos"], r["escala"], r["calidadOk"], r["consultado"], False
     async with sem:
         try:
             async with http.crear_cliente(planetary.TIEMPO_LIMITE_S) as c:
                 datos, escala, calidad_ok = await planetary.ventana(c, lat, lon, ini, fin)
         except http.ErrorFuente as e:
-            if guardado:  # vencida pero es lo ultimo que hubo: se usa y se dice
+            if guardado:  # vencida pero es lo ultimo que hubo: se usa y se dice (NDVI_EN_CACHE, H-B11)
                 r = guardado[0]
-                return r["datos"], r["escala"], r["calidadOk"], r["consultado"]
+                return r["datos"], r["escala"], r["calidadOk"], r["consultado"], True
             return str(e)[:160]
-    consultado = date.today().isoformat()
+    consultado = config.hoy().isoformat()
     if calidad_ok:  # una ventana sin calidad no se fija en cache: se vuelve a pedir
         # Solo el NDVI ya convertido. El token SAS y la URL firmada del COG no se escriben.
         cache.escribir(clave, {"consultado": consultado, "datos": datos, "escala": escala, "calidadOk": True})
-    return datos, escala, calidad_ok, consultado
+    return datos, escala, calidad_ok, consultado, False
 
 
 async def serie(lon: float, lat: float, desde: date, hasta: date) -> dict:
@@ -39,12 +39,14 @@ async def serie(lon: float, lat: float, desde: date, hasta: date) -> dict:
     sem = asyncio.Semaphore(CONCURRENCIA)
     tramos = planetary.ventanas(desde, hasta)
     resultados = await asyncio.gather(*[_una(sem, lat, lon, a, b) for a, b in tramos])
-    datos, escalas, sin_leer, sin_calidad, consultas = [], set(), [], [], []
+    datos, escalas, sin_leer, sin_calidad, consultas, vencidas = [], set(), [], [], [], []
     for (a, b), r in zip(tramos, resultados):
         if isinstance(r, str):
             sin_leer.append((a, b, r))
             continue
-        d, escala, calidad_ok, consultado = r
+        d, escala, calidad_ok, consultado, vencida = r
+        if vencida:
+            vencidas.append((a, b, consultado))
         escalas.add(escala)
         consultas.append(consultado)
         if not calidad_ok:
@@ -67,6 +69,9 @@ async def serie(lon: float, lat: float, desde: date, hasta: date) -> dict:
     con_error = [d["fecha"] for d in serie_ if d["estado"] == "ERROR_DATOS"]
     if con_error:
         adv.append({"codigo": "NDVI_COMPUESTOS_CON_ERROR", "mensaje": f"No se pudo leer el pixel de {len(con_error)} compuesto(s) ({', '.join(con_error[:3])}{'...' if len(con_error) > 3 else ''}); salen con estado ERROR_DATOS y sin NDVI.", "severidad": "aviso"})
+    if vencidas:
+        rangos = "; ".join(f"{a} a {b} (guardado el {c})" for a, b, c in vencidas[:6]) + (f"; y {len(vencidas) - 6} mas" if len(vencidas) > 6 else "")
+        adv.append({"codigo": "NDVI_EN_CACHE", "mensaje": f"Planetary Computer no respondio para {len(vencidas)} tramo(s); se usa lo guardado antes: {rangos}.", "severidad": "aviso"})
     if sin_calidad:
         adv.append({"codigo": "NDVI_CALIDAD_NO_DISPONIBLE", "mensaje": "En algunos tramos no se pudo leer la bandera de calidad del pixel o algun compuesto fallo; esos dias salen sin ella o con error.", "severidad": "info"})
     con_dato = [d for d in serie_ if d["ndvi"] is not None]

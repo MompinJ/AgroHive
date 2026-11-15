@@ -194,6 +194,7 @@ export function construirEscena(
       relieve,
       pendientePct: celda.pendientePct,
       fraccionDentro: celda.fraccionDentro ?? null,
+      forma: celda.forma ?? 'completa',
       estadoVisual: estado,
       estadoEvaluacion: registro?.estado ?? null,
       motivo,

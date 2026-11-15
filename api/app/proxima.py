@@ -11,7 +11,7 @@ import math
 import statistics
 from datetime import date
 
-from . import cache, http, servicios
+from . import cache, config, http, servicios
 from .clientes import openmeteo
 
 P_INF, P_SUP = 10.0, 90.0
@@ -75,7 +75,7 @@ def _siguientes_meses(hoy: date, n: int) -> list[str]:
 
 
 async def proxima_temporada(lat: float, lon: float) -> dict:
-    hoy = date.today()
+    hoy = config.hoy()
     serie = await servicios.serie_clima(lat, lon, *VENTANA)  # puede lanzar SinDatos
     clim = climatologia_mensual(serie["diario"])
     advertencias = [{"codigo": "SIN_TENDENCIA", "mensaje": "El rango no incluye la tendencia del clima: usa los 20 anios historicos como si fueran estables.", "severidad": "info"}]

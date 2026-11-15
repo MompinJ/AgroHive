@@ -24,7 +24,7 @@ def _candado(clave: str) -> asyncio.Lock:
 
 
 def _vigente(edad_s: float, hasta: date) -> bool:
-    return hasta <= date.today() - timedelta(days=DIAS_SERIE_ESTABLE) or edad_s < TTL_RECIENTE_S
+    return hasta <= config.hoy() - timedelta(days=DIAS_SERIE_ESTABLE) or edad_s < TTL_RECIENTE_S
 
 
 def _meta() -> dict:
@@ -48,7 +48,7 @@ async def serie_clima(lat: float, lon: float, desde: date, hasta: date) -> dict:
         try:
             async with http.crear_cliente() as c:
                 dias = await power.serie_diaria(c, clat, clon, desde, hasta)
-            registro = {"consultado": date.today().isoformat(), "celda": [clon, clat], "diario": dias}
+            registro = {"consultado": config.hoy().isoformat(), "celda": [clon, clat], "diario": dias}
             cache.escribir(clave, registro)
             return await _con_lluvia_satelital(_respuesta_power(registro, coord, desde, hasta, []), lat, lon, desde, hasta)
         except http.ErrorFuente as e:
@@ -59,6 +59,10 @@ async def serie_clima(lat: float, lon: float, desde: date, hasta: date) -> dict:
 async def _con_lluvia_satelital(respuesta: dict, lat: float, lon: float, desde: date, hasta: date) -> dict:
     """Agrega `lluviaSatelital` (IMERG via POWER, A4.10) a una respuesta de POWER. Es evidencia opcional: si falla, la respuesta del
     clima sale igual, sin el bloque y con una advertencia (nunca se inventa ni se rellena con ceros). No la usa el balance ni los escenarios."""
+    if hasta < power.INICIO_IMERG:  # sin un solo dia de IMERG: no se arma un bloque vacio con un periodo invertido (desde 1998 > hasta)
+        aviso = {"codigo": "IMERG_FUERA_DE_COBERTURA", "mensaje": f"La lluvia satelital (IMERG) empieza el {power.INICIO_IMERG.isoformat()}; el periodo pedido es anterior.", "severidad": "info"}
+        respuesta["advertencias"] = [*respuesta["advertencias"], aviso]
+        return respuesta
     clat, clon = power.centro_celda_imerg(lat, lon)
     clave = f"imerg_v1_{clat:.2f}_{clon:.2f}_{desde:%Y%m%d}_{hasta:%Y%m%d}"
     async with _candado(clave):
@@ -70,7 +74,7 @@ async def _con_lluvia_satelital(respuesta: dict, lat: float, lon: float, desde: 
             try:
                 async with http.crear_cliente() as c:
                     dias = await power.serie_imerg(c, clat, clon, desde, hasta)
-                registro = {"consultado": date.today().isoformat(), "dias": dias}
+                registro = {"consultado": config.hoy().isoformat(), "dias": dias}
                 cache.escribir(clave, registro)
             except http.ErrorFuente as e:
                 if en_cache:
@@ -115,21 +119,25 @@ async def _respaldo_clima(lat, lon, desde, hasta, clave_power, cache_power, moti
     coord = (lon, lat)
     clave = f"openmeteo_{lat:.2f}_{lon:.2f}_{desde:%Y%m%d}_{hasta:%Y%m%d}"
     aviso_power = {"codigo": "POWER_NO_DISPONIBLE", "mensaje": f"NASA POWER no respondio ({motivo_power}).", "severidad": "aviso"}
+    aviso_cache = None
     try:
         async with http.crear_cliente() as c:
             dias = await openmeteo.serie_diaria(c, lat, lon, desde, hasta)
-        registro = {"consultado": date.today().isoformat(), "diario": dias}
+        registro = {"consultado": config.hoy().isoformat(), "diario": dias}
         cache.escribir(clave, registro)
     except http.ErrorFuente as e:
         en_cache = cache.leer(clave)
         if en_cache:
             registro = en_cache[0]
+            aviso_cache = {"codigo": "CLIMA_RESPALDO_EN_CACHE", "mensaje": f"Open-Meteo tampoco respondio ({e}); se usa su serie guardada el {registro['consultado']}.", "severidad": "aviso"}
         elif cache_power:
             adv = [aviso_power, {"codigo": "CACHE_VENCIDA", "mensaje": "Se usan datos de NASA POWER guardados antes; pueden estar desactualizados.", "severidad": "aviso"}]
             return _respuesta_power(cache_power[0], coord, desde, hasta, adv, estado="RESPALDO_HISTORICO")
         else:
             raise SinDatos(f"POWER y Open-Meteo no respondieron ({motivo_power}; {e})") from e
     adv = [aviso_power, {"codigo": "CLIMA_RESPALDO_OPEN_METEO", "mensaje": "Serie de respaldo (ERA5 via Open-Meteo). No es identica a NASA POWER: no mezclar con series de POWER.", "severidad": "aviso"}]
+    if aviso_cache:
+        adv.append(aviso_cache)
     return {
         "meta": _meta(), "estado": "RESPALDO_HISTORICO", "respaldo": True, "coordenada": coord,
         "fuente": _fuente_clima(openmeteo.NOMBRE_CLIMA, openmeteo.URL_ARCHIVO, openmeteo.RESOLUCION_CLIMA, "mm, C, MJ/m2",
@@ -194,7 +202,7 @@ async def terreno(celdas: list[CeldaEntrada], lado_m: float) -> dict:
     return {
         "meta": _meta(),
         "terreno": {"estado": estado, "fuente": {"nombre": nombre, "resolucion": resolucion, "unidades": "m (elevacion), % (pendiente)",
-                                                  "consultado": date.today().isoformat(), "nota": nota}},
+                                                  "consultado": config.hoy().isoformat(), "nota": nota}},
         "celdas": [{"id": c.id, "elevacionM": elev[(c.i, c.j)], "pendientePct": None if pend[c.id] is None else round(pend[c.id], 2)} for c in celdas],
         "advertencias": advertencias,
     }
@@ -235,7 +243,7 @@ async def _suelo_isric(lat: float, lon: float) -> dict:
                     props = dict(zip(nombres, await asyncio.gather(*[_propiedad(c, sem, p, lon, lat) for p in nombres])))
             except http.ErrorFuente as e:
                 raise SinDatos(f"SoilGrids no respondio ({e}); use el selector manual de suelo") from e
-            registro = {"consultado": date.today().isoformat(), "props": props}
+            registro = {"consultado": config.hoy().isoformat(), "props": props}
             if all(props[k] for k in ("clay", "sand", "silt")):
                 cache.escribir(clave, registro)  # solo se guarda lo completo: un hueco no debe quedar fijo
     props = registro["props"]
@@ -328,7 +336,7 @@ async def _estimacion_openlandmap(lat: float, lon: float) -> tuple[dict | None, 
                 props = await openlandmap.estimar(c, lon, lat)
         except http.ErrorFuente as e:
             return None, {"codigo": "OPENLANDMAP_NO_DISPONIBLE", "mensaje": f"OpenLandMap no respondio ({e}); solo hay estimacion de ISRIC.", "severidad": "info"}
-        registro = {"consultado": date.today().isoformat(), "props": props}
+        registro = {"consultado": config.hoy().isoformat(), "props": props}
         if all(props.get(k) for k in ("clay", "sand", "silt")):
             cache.escribir(clave, registro)
     props = registro["props"]
@@ -378,7 +386,11 @@ async def suelo(lat: float, lon: float) -> dict:
         resp = await _suelo_isric(lat, lon)
     except SinDatos as e:
         resp, error = None, e
-    olm, aviso = await tarea_olm
+    try:
+        queda = http.restante()
+        olm, aviso = await (tarea_olm if queda is None else asyncio.wait_for(tarea_olm, timeout=max(0.0, queda)))
+    except asyncio.TimeoutError:  # GDAL lee en hilos que no se pueden cancelar: no se le espera mas alla del plazo (H-B6)
+        olm, aviso = None, {"codigo": "OPENLANDMAP_NO_DISPONIBLE", "mensaje": "OpenLandMap no respondio dentro del plazo de la peticion; solo hay estimacion de ISRIC.", "severidad": "info"}
     if resp is None:
         if olm is None:
             raise error

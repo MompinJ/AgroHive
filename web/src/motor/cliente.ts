@@ -27,19 +27,48 @@ export interface ClienteMotor {
   terminar(): void;
 }
 
-export function crearClienteMotor(): ClienteMotor {
-  const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
+/** Lo que el cliente usa de un Worker (para poder probarlo sin navegador). */
+export interface WorkerMotor {
+  onmessage: ((ev: MessageEvent<Respuesta>) => void) | null;
+  onerror: ((ev: ErrorEvent | Event) => void) | null;
+  onmessageerror: ((ev: MessageEvent) => void) | null;
+  postMessage(mensaje: unknown): void;
+  terminate(): void;
+}
+
+const crearWorker = (): WorkerMotor => new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' }) as unknown as WorkerMotor;
+
+export function crearClienteMotor(crear: () => WorkerMotor = crearWorker): ClienteMotor {
+  const worker = crear();
   const pendientes = new Map<number, { resolver: (v: unknown) => void; rechazar: (e: Error) => void }>();
   let siguiente = 1;
-  worker.onmessage = (ev: MessageEvent<Respuesta>) => {
-    const p = pendientes.get(ev.data.id);
-    if (!p) return;
-    pendientes.delete(ev.data.id);
-    if (ev.data.ok) p.resolver(ev.data.resultado);
-    else p.rechazar(new Error(ev.data.error));
+  // H-M5: si el worker no carga, falla o se termina, ninguna promesa queda pendiente para siempre.
+  let caido: string | null = null;
+  const rechazarTodo = (motivo: string) => {
+    caido = motivo;
+    for (const p of pendientes.values()) p.rechazar(new Error(motivo));
+    pendientes.clear();
   };
+  worker.onmessage = (ev: MessageEvent<Respuesta>) => {
+    const d = ev.data as Respuesta | undefined;
+    if (!d || typeof d.id !== 'number') return; // respuesta sin id: no es de este protocolo
+    const p = pendientes.get(d.id);
+    if (!p) return;
+    pendientes.delete(d.id);
+    if (d.ok) p.resolver(d.resultado);
+    else p.rechazar(new Error(d.error));
+  };
+  worker.onerror = (ev) => {
+    const detalle = 'message' in ev && typeof ev.message === 'string' && ev.message ? `: ${ev.message}` : '';
+    rechazarTodo(`El motor (Web Worker) fallo${detalle}.`);
+  };
+  worker.onmessageerror = () => rechazarTodo('El motor (Web Worker) envio un mensaje que no se pudo leer.');
   const pedir = <T>(peticion: SinId<Peticion>): Promise<T> =>
     new Promise<T>((resolver, rechazar) => {
+      if (caido) {
+        rechazar(new Error(caido));
+        return;
+      }
       const id = siguiente++;
       pendientes.set(id, { resolver: resolver as (v: unknown) => void, rechazar });
       worker.postMessage({ ...peticion, id });
@@ -55,6 +84,9 @@ export function crearClienteMotor(): ClienteMotor {
     olvidar: async (rotacionId) => {
       await pedir(rotacionId ? { tipo: 'olvidar', rotacionId } : { tipo: 'olvidar' });
     },
-    terminar: () => worker.terminate(),
+    terminar: () => {
+      worker.terminate();
+      rechazarTodo('El motor se termino antes de responder.');
+    },
   };
 }

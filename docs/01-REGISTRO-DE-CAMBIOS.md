@@ -11,6 +11,111 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Pendiente:** confirmar con Mompin el retiro del 2D (era respaldo decidido en la reunión) y los cortes de validación y agua (`[PROPUESTA]`).
 - **Decisiones afectadas:** "3D en el MVP ... con modo 2D de respaldo" (11).
 
+### 2026-11-15 (madrugada) — Modelos de la ampliación del catálogo, tanda A: soya, frijol caupí, haba, chícharo y lenteja (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{soya,caupi,haba,chicharo,lenteja}.py` con sus 25 `.bbmodel` y visores; `modelos/cultivos/bloques/bloques.py` (25 bloques); `modelos/iconos2d/iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (42 colores, índices 110 a 151: los de esta tanda y los de la siguiente, para regenerar una sola vez); todos los `.bbmodel` regenerados (solo cambia la paleta incrustada); `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; `web/src/escena/ficha.ts` (nombres de los 10 cultivos de la tanda 1 del catálogo); pruebas `voxel.test.ts` (acepta cultivos con guion bajo, como `maiz_dulce`), `bloques.test.ts` e `iconos2d.test.ts` (13 cultivos); `modelos/iconos2d/iconos2d.py` separa la etapa por el último `_`; `docs/06`, `docs/07` (tabla de la ampliación), `docs/16` (M7).
+- **Cambio:** cada uno con 5 detallados (de 8 a 57 cubos), 5 bloques (de 15 a 21, con el trazado común para el recorte de bordes) y 5 iconos 2D (peor par nuevo de daltonismo 14.1 %), y su prefijo. La escena y la vista 2D los toman solos.
+- **Por qué:** encargo de Mompin por la sesión maestra: modelos para los cultivos que agrega la sesión "catalogo".
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` son de Mafer (con OK de Mompin); en `generar.py` solo el campo `modelo3d`. No se tocó `web/src/ui/`: `ui/planes.ts` (nombres y colores de la brocha) todavía no tiene los cultivos de la ampliación; queda para su dueño.
+- **Pendiente:** tanda B y los cultivos de las tandas 2 y 3 del catálogo; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 (madrugada) — Bordes diagonales, parte 2: piezas de medio cuadrado por recorte en el render `[DECIDIDO]` (Mompin; IA de Mompin, sesión "bordes", rama `Mompin-motor`)
+
+- **Archivos nuevos:** `web/src/escena/voxel/media.ts` (recorte de cualquier `.bbmodel` por la diagonal, con tapa), `web/src/escena/render/media-celda.ts` (prisma de suelo, giro por forma, placa y banderín en medio cuadrado), `web/src/escena/pruebas/media.test.ts` y `media-celda.test.ts`.
+- **Archivos cambiados:** `web/src/escena/voxel/geometria.ts` (exporta `esquinasCara`, `aplicar` y `Mat3`), `web/src/escena/modelo.ts` y `adaptador.ts` (`BloqueEscena.forma`, copiada del contrato, `completa` si falta), `docs/07` (sección "Medio cuadrado para las celdas de borde").
+- **Cambio:** se decidió recortar en el render en vez de modelar dos veces cada cultivo: cada cubo se corta exacto con el plano de la diagonal y el corte se tapa con el color de su cara lateral; la columna de suelo es un prisma triangular. Sirve para cualquier bloque sin configurarlo por cultivo (la prueba recorta los 42 bloques y 9 losas del repo en las 4 orientaciones). Todavía no se dibuja: la conexión con `escena-three.ts` y la vista 2D va en la parte 3.
+- **Evidencia:** `contratos/` 102/102, `api/` 162, catálogos en verde, `tsc --noEmit` limpio, `vitest` 976 (1 `todo`).
+
+### 2026-11-14 (noche) — Bordes diagonales y escala de celda, parte 1: geometría y contrato 0.14.0 `[DECIDIDO]` (Mompin; IA de Mompin, sesión "bordes", rama `Mompin-motor`)
+
+- **Archivos nuevos:** `web/src/geo/forma-celda.ts` (forma de dibujo de una celda frente al polígono, pura y con pruebas), `web/src/geo/tamano-celda.ts` (tamaño pedido y tope), `web/src/geo/cuadricula.ts` (el generador, movido desde `web/src/ui/cuadricula.ts`), `web/src/geo/forma-celda.test.ts`, `web/src/geo/cuadricula.test.ts`, `contratos/pruebas/invalidos/parcela.forma-desconocida.json`.
+- **Archivos cambiados:** `contratos/parcela.schema.json` (campo opcional `forma` en la celda; descripción de `tamanoCeldaM`), `contratos/package.json` y `package-lock.json` (0.14.0), `contratos/README.md` (historial), `contratos/ejemplos/parcela.ejemplo.json` (`forma: completa`), `contratos/tipos/contratos.d.ts` (regenerado), `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.14.0), `api/tests/test_contratos_api.py` (prueba nueva), `docs/08`, `AgroVault/Compartido/Contratos.md` y `Pendientes.md`.
+- **Cambio:** cada celda de borde lleva `forma`: `completa` o medio cuadrado cortado por la diagonal (`SO`, `SE`, `NE`, `NO`, por la esquina del ángulo recto). Regla de cubierta hacia afuera: con 2 o más esquinas dentro, completa (así las orillas norte-sur y este-oeste quedan rectas, sin dientes); con 1, el triángulo de esa esquina salvo que la celda completa se parezca más; con 0 (una punta), el triángulo que la contiene o completa. Una esquina sobre la orilla cuenta como fuera, así una orilla a 45° que pasa por dos esquinas da el triángulo exacto. `fraccionDentro` no cambia y sigue siendo lo que pesa en el motor; las celdas que existen tampoco cambian. El generador acepta `tamanoCeldaM` (`auto` o metros): automático conserva la regla de siempre; un lado pedido que pasa de 1 600 celdas se sube lo justo y avisa (`TAMANO_CELDA_AJUSTADO` en `parcela.advertencias`). Para no recorrer cajas enormes, el generador prueba solo el tramo de columnas que el contorno ocupa en cada fila. La API no cambia: ya aceptaba cualquier lado > 0 e ignora `forma`.
+- **Toca archivos de otros (con OK de Mompin por la maestra; buzón caído):** `web/src/ui/cuadricula.ts` (de balam, área de front de Eduardo por D1) queda en dos líneas: `export * from '../geo/cuadricula'`. Al fusionar: si Eduardo cambió el generador en ese archivo, sus cambios se pasan a `web/src/geo/cuadricula.ts` y `ui/cuadricula.ts` queda como la reexportación. El resultado del generador agrega `contornos` (lo que se dibuja: cuadrado o triángulo) y `escala`; `bordes` sigue siendo el cuadrado de cada celda, como antes.
+- **Evidencia:** `contratos/` 102/102, `api/` 155, catálogos en verde, `tsc --noEmit` limpio, `vitest` 683 (1 `todo`). Medido en `vitest`: rombo de 150 m de diagonal, error de área dibujada 1 528 m² con triángulos contra 2 978 m² con cuadrados; franja diagonal de unos 30 km pidiendo 10 m: 1 598 celdas de 69.4 m (antes 92 de 556 m), en 0.8 s.
+- **Sigue:** parte 2 (modelos de medio cuadrado) y parte 3 (escena 3D, vista 2D y selector de escala).
+
+### 2026-11-15 (madrugada) — Ampliación del catálogo de cultivos `[DECIDIDO]` (Mompin; sesión "catalogo", rama `Mompin-features`)
+
+- **Archivos:** `datos/catalogos/generar.py` (lista `AMPLIACION` al final de `CULTIVOS`), `cultivos.json` y `calendario-isla.json` regenerados, `datos/catalogos/README.md` (ampliación, criterio de fila, elecciones y cultivos que quedaron fuera), `docs/04` (nota del catálogo), `docs/16` (E7 para Eduardo), `docs/13` (fila "Ampliación del catálogo"), `AgroVault/Compartido/Pendientes.md`, `web/src/motor/pruebas/catalogo-ampliado.test.ts` (nueva).
+- **Cambio:** tanda 1, de 8 a 18 cultivos: soya, frijol caupí, haba, chícharo, lenteja, ejote, cebada, trigo, avena y maíz dulce. Tanda 2, a 28: yuca, caña de azúcar, ajonjolí, girasol, algodón, cártamo, higuerilla, jitomate, papa y calabacita; la caña toma su presencia del ciclo `Perennes` de SIAP (registrada en Isla) y, con 480 días, solo cabe en la serie si se siembra de octubre a diciembre (en PV sale `NO_EVALUABLE` con motivo, con prueba). Tanda 3, a 40: cebolla, pepino, melón, lechuga, zanahoria, berenjena, brócoli, col, coliflor, espinaca, rábano y betabel. El catálogo pasa de 5.5 KB a 18 KB con gzip (555 KB sin comprimir) y el front lo importa. Cada cifra sale de FAO-56 (Tablas 11, 12 y 22) o de EcoCrop (Recocrop, mismo archivo y sha256) y se cotejó con un script contra las tablas descargadas. Sin `modelo3d` y con entrada PV y OI en el calendario de Isla (ventana `NO_EVALUABLE`; presencia según SIAP).
+- **Por qué:** pedido de Mompin: 30 a 50 cultivos con prioridad para México, el trópico húmedo y las rotaciones.
+- **Quedan fuera:** arroz (FAO-56 es de arroz inundado y el balance no modela la lámina), garbanzo y ajo (sin días por etapa en Tabla 11), alfalfa (perenne de cortes), sorgo forrajero, piña (790 d, no cabe en la serie), plátano (solo filas mediterráneas), papaya, ñame, tomatillo, chayote, jícama, amaranto y chía (sin fila en FAO-56).
+- **Comprobado:** el motor simula cada cultivo del catálogo en PV y OI sin tronar; la compatibilidad sale `NO_EVALUABLE` con motivo y la rotación `EXPLORATORIO` si SIAP no registra el cultivo en Isla. La escena usa la planta provisional (ya declarada) cuando falta el modelo. La API devuelve el catálogo tal cual (prueba de contratos genérica). La regresión A5.5 no cambia.
+- **Toca archivos de otros:** `datos/catalogos/` es de Mafer; lo hace la IA de Mompin por su decisión. No toca las entradas de sorgo, sandía, camote y cacahuate ni `versionContrato` (los lleva la sesión "cultivos").
+
+### 2026-11-14 (noche) — Cultivos nuevos con modelo, prefijos, catálogos 0.13.0 y prueba de movimiento en verde (MF1, MF2, MF4, M4 y M5; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `datos/catalogos/generar.py` (prefijos y `VERSION_CONTRATO`) y los tres JSON regenerados; `modelos/paleta.py` y `paleta.md` (24 colores, índices 86 a 109); `modelos/cultivos/sandia.py`, `camote.py`, `cacahuate.py` con sus 15 `.bbmodel` y visores; `modelos/cultivos/bloques/bloques.py` (15 bloques, y ahora regenera `visor_bloques.html`); `modelos/iconos2d/iconos2d.py` (15 SVG) y su README; todos los `.bbmodel` existentes regenerados (solo cambia la paleta incrustada); `web/src/escena/voxel/bloque.ts`; `web/src/escena/pruebas/bloques.test.ts` e `iconos2d.test.ts` (8 cultivos); `herramientas/prueba-movimiento/movimiento.mjs` y su README; `docs/06`, `docs/07`, `docs/16`, `docs/hallazgos-back.md`; capturas en `docs/capturas/cultivos-nuevos/`.
+- **Cambio:** MF1, el sorgo declara `modelo3d.prefijo`. MF2, sandía, camote y cacahuate con 5 detallados, 5 bloques (de 15 a 24 cubos) y 5 iconos 2D cada uno, y su prefijo. M5, la escena y la vista 2D los toman solos (glob de `modelos/`): no hizo falta tocar `catalogo.ts` ni `web/src/ui/`; revisados en la vista previa, las 15 combinaciones cargan su `.bbmodel` sin respaldo. MF4 (H-B9), los catálogos declaran `versionContrato` 0.13.0 y validan sin cambiar datos (todo por `generar.py`, sin editar el JSON a mano). M4, `prueba-movimiento` 33 de 33: A2 y G1b fallaban porque el día por defecto de la vista previa (2016-07-16, 19.9 mm) tiene lluvia y la lluvia anima a propósito; la prueba ahora la apaga antes de medir el reposo, como `medir.html`, y agrega L1 a L3 (la lluvia anima, el reposo sin ella es 0, con reducir no hay gotas). Arreglo de paso: el bloque provisional de respaldo medía la altura del detallado sin sus rotaciones y con las hojas tendidas de la sandía salía más alto que la planta.
+- **Por qué:** reparto de Mompin para esta noche (`docs/16`, D4 `[DECIDIDO]`: los cultivos nuevos se terminan).
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` son de Mafer; los hizo la IA de Mompin con OK de Mompin porque Mafer no estaba trabajando. No se tocó la escena de Eduardo (`EscenaParcela.tsx`, `escena-three.ts`, `camara.ts`) ni `web/src/ui/`.
+- **Pendiente:** mirar los modelos en Blockbench; B1 (aviso en el selector de cultivos no registrados en Isla) sigue con su dueño. Los colores nuevos son a ojo, no medidos.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Hallazgos del back, segunda ronda (cazafallos, `Mompin-fallos`)
+
+- **Archivos:**
+  - `api/`: `app/http.py`, `rutas/{clima,suelo,terreno,proxima,cultivos}.py`, `servicios.py`, `ndvi.py`, `calendario.py`, `modelos.py`, `openapi.json` y `cliente/api.d.ts` regenerados; pruebas en `tests/test_hallazgos_back.py`, `test_basico.py` y `test_contratos_api.py`.
+  - Motor: `web/src/motor/{ranking,motor,fechas,protocolo,cliente,analogos,tarjetas}.ts`; pruebas en `pruebas/hallazgos-back.test.ts` y `pruebas/ranking.test.ts`.
+  - `datos/demo/respuestas/*.json` y `manifiesto.json`.
+  - Documentación: `docs/05`, `docs/08`, `docs/16` (M6 y E4), `docs/hallazgos-back.md`, `api/README.md`, `datos/calendario/LEEME.md`, `datos/demo/LEEME.md` y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:**
+  - Decisiones de Mompin (ya en `docs/13` y `docs/16`):
+    - H-B6: 20 s por intento, 2 intentos por fuente y un plazo total de 70 s por petición.
+    - H-M1: los pilares del puntaje se cuentan solo sobre las rotaciones que se ordenan; una EXPLORATORIO a la que le falta uno lleva puntaje `null`.
+    - H-M9: un escenario NO_EVALUABLE lleva todos sus indicadores en `null`.
+  - Además, cada uno con su prueba:
+    - H-M2: fin y etapa del ciclo por los parámetros del catálogo.
+    - H-B8: `/api/cultivos` sin catálogo responde 503 `ERROR_DATOS`.
+    - H-B11: aviso `NDVI_EN_CACHE`.
+    - H-M4: fechas inválidas dan NO_EVALUABLE con motivo.
+    - H-M5: errores y cierre del Worker sin promesas colgadas.
+    - H-M8: sin área dentro de la parcela, NO_EVALUABLE.
+    - H-M10: huecos según la simulación.
+    - H-M6: sin año de corte fijo en los análogos.
+    - H-B10: país más cercano a 25 km o menos en la costa.
+    - H-B9: el paquete de demo se revalidó contra 0.13.0 y solo cambió `versionContrato`.
+    - H-M11: la tarjeta nombra la institución de la ventana.
+- **Regresión A5.5:** no cambia. Con H-M11, en Isla la institución sigue siendo INIFAP y el texto queda igual, así que no hizo falta regenerarla.
+- **Toca archivos de otros:** `api/` y `datos/demo/` son de Eduardo; esta noche los lleva cazafallos **con OK de Mompin, porque Eduardo trabaja en el front**. No se tocaron `web/src/ui/`, `web/src/escena/`, `web/src/api/cliente.ts` ni `datos/catalogos/`.
+- **Pendiente:**
+  - H-M7, propuesto: un horizonte de los análogos que cruce septiembre necesita definir su año agrícola.
+  - Integrar a `main` y desplegar la API (E1).
+- **Decisiones afectadas:** H-B6, H-M1 y H-M9 quedan aplicadas.
+
+### 2026-11-14 (noche) — Decisiones y reparto del día final: D1, D4, H-B6, H-M1, H-M9 `[DECIDIDO]` (Mompin; sesión "estado")
+
+- **Archivos:** `docs/13` (seis filas nuevas), `docs/16` (sección 2 con decididas y abiertas; sección 3 con el reparto sobre `main` `582e482`), `docs/11` (resumen de decisiones).
+- **Cambio:** D1, Eduardo lleva el rediseño del front (`web/src/ui/`, `web/src/paginas/` y la parte de la escena que el front necesite) y los demás no tocan el front; D2 (placa) pasa a decidirla Eduardo. D4, se terminan sandía, camote y cacahuate. H-B6, unos 20 s y 2 intentos por fuente más un plazo total, para caber en los 90 s del front. H-M1, `entran` solo sobre las rotaciones que se ordenan; una `EXPLORATORIO` sin un pilar lleva puntaje `null`. H-M9, se sigue doc 05 (escenario `NO_EVALUABLE` con indicadores en `null`). La IA de Mompin toma motor, API y cultivos: cazafallos (`Mompin-fallos`) y cultivos (`Mompin-escena`).
+- **Cola:** M2 hecha (`582e482`, con `Mompin-fallos`); E1 despliega `582e482` mañana a primera hora; B2 pasa a Eduardo (E2); MF1, MF2, M4, M5 y la versión de los catálogos `EN CURSO` con la IA de Mompin; los hallazgos propuestos de `docs/hallazgos-back.md` quedan en la cola de su dueño, `EN CURSO` con cazafallos.
+- **Toca archivos de otros:** MF1, MF2 y la versión de los catálogos son archivos de Mafer, y los hallazgos del back son de la API de Eduardo; los hace la IA de Mompin por decisión de Mompin.
+- **Siguen abiertas:** D3 (llave SSH), D5 (cámara ligada al zoom), D6 (A4.4 y A0.3) y D7 (ramas muertas).
+
+### 2026-11-14 (noche) — Auditoría de fallos del back (Mompin, sesión cazafallos)
+
+- **Archivos:** `docs/hallazgos-back.md` (nuevo); `api/app/config.py` (`hoy()` en hora de la sede), `api/app/servicios.py`, `proxima.py`, `ndvi.py`, `regional.py`, `pedotransferencia.py`, `rutas/clima.py`, `rutas/ndvi.py`, `rutas/smap.py`, `clientes/terrarium.py`; `api/openapi.json` y `api/cliente/api.d.ts` regenerados; `api/tests/conftest.py` (`FormatChecker`) y `api/tests/test_hallazgos_back.py` (nuevo); `web/src/motor/protocolo.ts`, `motor.ts` y `pruebas/hallazgos-back.test.ts` (nuevo); `api/README.md`, `docs/05`.
+- **Cambio:** 22 hallazgos (4 medios, 18 menores, ninguno crítico para la demo). Se arreglan 9 con su prueba: fechas de la API en hora de la sede y no en la del servidor (UTC); IMERG antes de 1998 sin periodo invertido; aviso cuando el respaldo de Open-Meteo sale de la caché; un 503 de un tile de Terrarium ya no se toma como 404; OpenAPI desfasado más una prueba que lo vigila; la prueba de contratos de la API revisa el formato de las fechas; `rankear` vacío, `simular` fallido que dejaba el resultado anterior y el estado de `resultado-celda` en un escenario no simulado. El resto queda propuesto o a decidir en el informe.
+- **Por qué:** pedido de Mompin en la fase de revisión: cazar fallos del back sin tocar el front.
+- **Toca archivos de otros:** `api/` (Eduardo) y el motor; son arreglos acotados con prueba. Los números de la demo no cambian (la regresión A5.5 sigue en verde).
+- **Pendiente:** decidir H-B6 (tiempos de espera frente a los 90 s del front), H-M1 (pilares del ranking con rotaciones EXPLORATORIO) y H-M9 (pilares con número en un escenario NO_EVALUABLE).
+- **Decisiones afectadas:** ninguna todavía.
+
+### 2026-11-14 (noche) — La entrega sale del plan del día final `[DECIDIDO]` (Mompin; sesión "estado")
+
+- **Archivos:** `docs/16` (secciones 2 a 6), `docs/00`, `docs/11`, `docs/12`, `docs/13` (fila "Reglas de organización del día final"), `docs/14` (enlace en "Fase de revisión"), `AgroVault/Compartido/Reglas.md` (número de sección).
+- **Cambio:** el plan del día final ya no trae tareas, responsables ni horas de la entrega, ni la cuenta regresiva hacia las 23:59. La entrega es una fase posterior y, antes de mandar nada, pasa por una fase de aprobación de todo el equipo. En 16 queda solo la lista de lo que va a requerir (envío, Team Owner, página del portal, video, presentación) y las decisiones de la entrega, sin fecha ni asignación. El horario del juicio local (V-01) deja de condicionar el plan de trabajo. Las decisiones del plan se renumeran D1 a D7; se quitan de la cola las tareas de entrega (borrador A5.9, formulario, README de A5.7) y de la lista de relleno las de entrega, que se reemplazan por pruebas y revisiones de la app.
+- **Decisiones afectadas:** corrige la entrada anterior de esta noche (las horas del cierre `[PROPUESTA]` se retiran).
+
+### 2026-11-14 (noche, 23:10) — Auditoría global y plan del día final; reglas de organización `[DECIDIDO]` (Mompin; sesión "estado")
+
+- **Archivos:** `docs/16-PLAN-DIA-FINAL.md` (nuevo); `docs/00` (índice, orden de lectura y "Cómo editar" apuntan a 16), `docs/11` (sección "Decisiones abiertas del día final", apunta a 16), `docs/12` (quita rclone, Drive como lugar de edición y "no código antes del inicio"; ruta correcta del agente; reglas de 16), `docs/13` (fila "Reglas de organización del día final"), `docs/14` (nota de redespliegue en A4.7 y enlace a 16 en "Fase de revisión"; vistas regeneradas), `docs/15` (el prompt ya no dice "abre un pull request"), `AGENTS.md` (integración por aviso en el buzón y ventanas, no por PR; enlace a 16), `AgroVault/Compartido/Reglas.md` (lo mismo), `AgroVault/Compartido/Pendientes.md` (A4.13: el front ya pide `GET /api/calendario`), `README.md` de Mafer (solo la línea del despliegue: `f56450c`, contratos 0.13.0).
+- **Cambio:** Mompin decidió siete reglas de organización para el día final (apartar por el buzón, dueños por carpeta, ramas cortas, integración cada hora en punto, nadie espera más de 15 minutos, nadie sin tarea con lista de relleno, un solo editor de los archivos calientes por ventana). Se escriben en 16 con el estado real, la comparación de todas las ramas, las decisiones abiertas D1 a D15, la cola por persona, las horas límite del cierre `[PROPUESTA]` y 13 tareas de relleno. El frontend queda como área abierta a rediseño, sin propuesta de diseño.
+- **Evidencia:** sobre `origin/main` `f56450c`: `contratos/` 101/101, `api/` 148 pruebas, catálogos en verde, `tsc --noEmit` limpio, `vitest` 663 (1 `todo`). `origin/Eduardo` fusionado con `main` en un árbol temporal: `tsc` limpio y `vitest` 664. `origin/balam` choca solo en `docs/01`. `/health` público en `f56450c`, contratos 0.13.0; `/medir.html` servido. Los `ndvi-seco/habitual/lluvioso.json` no existen en ninguna rama; `datos/demo/respuestas/ndvi.json` cubre los tres años de escenario.
+- **Toca archivos de otros:** una línea del README de Mafer (dato de despliegue) y las notas del vault de reglas y pendientes; Mafer revisa su línea al integrarse esta rama.
+- **Decisiones afectadas:** ninguna de alcance. Las reglas pasan a `[DECIDIDO]` en 13; las horas del cierre quedan `[PROPUESTA]` hasta que Mompin las confirme con el horario de juicio local (V-01).
+
 ### 2026-11-14 (noche) — Cámara de juego de granja en la escena 3D (Eduardo)
 
 - **Archivos:** `web/src/escena/render/camara.ts` y `camara.test.ts` (nuevos), `escena/render/escena-three.ts`, `escena/EscenaParcela.tsx`, `escena/escena.css`, `ui/lab/PanelCultivos.tsx`; `docs/06`.
@@ -27,6 +132,13 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Toca archivos de otros:** la interfaz era de balam y la escena de Mompin; se avisó por el buzón y el equipo aprobó todos los cambios. El modo panel de `EscenaParcela` no cambia (`escena.html` y la vista previa siguen igual).
 - **Pendiente:** revisión con lector de pantalla y táctil real.
 - **Decisiones afectadas:** "Asignación de cultivos" y "Disposición exacta de paneles" en 11 pasan a decididas.
+
+### 2026-11-14 — Preparación revisable de A5.9 y prerrequisitos del portal (balam)
+
+- **Archivos:** `docs/entrega-a5-9.md` (nuevo), enlace desde `docs/02` y esta entrada. No se edita el README de Mafer ni se regeneran las vistas del tablero.
+- **Cambio:** borradores de los campos oficiales en inglés, inventario de enlaces, datos del equipo sin confirmar, checklist de dependencias y registro de envío todavía vacío. Balam confirmó que aún no tenemos URL de la página oficial; pidió que Mompin modifique A5.9 para incluir ese paso previo, Team Owner y responsable (buzón #256). A5.9 no pasa a HECHO por preparar el paquete.
+- **Evidencia:** lectura pública sin sesión: repo accesible; aplicación 200; `/health` aún declara commit `23f8a53` y contratos `0.12.2`; `/medir.html?auto=0` devuelve Inicio, sin control de medición, aunque el código local incluye esa página. Eduardo fue avisado (#260). La página de Boca del Río confirma sede y Local Lead; no se obtuvo horario local verificable. Capturas del portal de equipo, demo, membresía, OK del equipo y confirmación de envío siguen pendientes.
+- **Límites:** textos sujetos a revisión científica y de A5.7, idioma y atribuciones pendientes. No se crea cuenta/equipo, no se publica, no se aceptan declaraciones y no se envía formulario.
 
 ### 2026-11-14 (noche) — Fase de revisión `[DECIDIDO]` (Mompin; registrado por la cronista)
 

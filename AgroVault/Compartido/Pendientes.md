@@ -10,7 +10,7 @@ No cierres una fila "para ir avanzando". Si un default es inevitable para compil
 
 ## Hecho y que el vault no debe volver a abrir
 
-Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo, años análogos, tarjetas en el motor, regresión, contratos 0.12.2, catálogo y calendario de Isla, TAW de Saxton y Rawls conectado a `/api/suelo`, ISRIC y OpenLandMap, IMERG como evidencia, escena 3D con modelos de la milpa y el chile, losas de suelo en la escena, estados con daltonismo, selector R1–R4, banda en la interfaz, paquete de demo, API y front en el droplet. Detalle en [[Resumen]] y `docs/13`.
+Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo, años análogos, tarjetas en el motor, regresión, contratos 0.12.2, catálogo y calendario de Isla, TAW de Saxton y Rawls conectado a `/api/suelo`, ISRIC y OpenLandMap, IMERG como evidencia, escena 3D con modelos de los 8 cultivos del catálogo (milpa, chile, sorgo, sandía, camote y cacahuate; los cuatro últimos en `Mompin-escena` el 14/11 noche), catálogo ampliado a 40 cultivos (los 32 nuevos sin modelo 3D, con planta provisional; `Mompin-features`, 15/11), losas de suelo en la escena, estados con daltonismo, selector R1–R4, banda en la interfaz, paquete de demo, API y front en el droplet. Detalle en [[Resumen]] y `docs/13`.
 
 ## Marcas de `docs/14` que ya no describen el código
 
@@ -21,7 +21,7 @@ Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo,
 | A4.8 | Falta el schema `smap` | `[HECHO]` el 14/11 noche: el schema existe desde 0.10.0 y `GET /api/smap` publico devolvio humedad real. La interfaz no llama a SMAP (contraste, fuera del ranking) |
 | A2.12 / A3.1 | La escena no carga losas o no está en el Laboratorio | La escena carga las 9 losas y el Laboratorio la monta en diferido |
 | C2 en `docs/14` | El TAW de Isla es `NO_EVALUABLE` | El suelo del paquete trae TAW 122.3 mm/m y la rotación sale `EVALUABLE` |
-| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.13.0 en `contratos/`: 16 schemas (más `comun`), ejemplos, `npm test` (101/101) y tipos TS. Ver [[Contratos]] |
+| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.14.0 en `contratos/`: 16 schemas (más `comun`), ejemplos, `npm test` (102/102) y tipos TS. Ver [[Contratos]] |
 | A2.5, A2.6, A2.7 | Hechas (Mompin, integradas a `main`) | Motor en `web/src/motor/` (funciones puras + Web Worker; la interfaz usa `crearClienteMotor()`): escenarios por lluvia de temporadas PV+OI de SIAP, ET0 Penman-Monteith FAO-56, cubeta FAO-56 cap. 8, pilar de déficit hídrico y estados. Pruebas 1 a 5 de doc 05 en verde (`cd web && npm test`; la parte de erosión de la prueba 2 pasa a A3.7). Ver `docs/05` |
 | A4.1 | Parte del motor hecha (Mompin), contrato `serie-balance` 0.11.0; balam lo grafica en el dashboard (`[HECHO]`) | `cliente.serieBalance(rotacionId, escenario)`: lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo. La interfaz no recalcula |
 | A4.3 | `[HECHO]`: lógica de Mompin; `TarjetasRotacion` la muestra en el laboratorio y la comparación (balam) | `web/src/motor/tarjetas.ts` llena `explicacion` (por qué, evidencia con fuente, beneficios, huecos, riesgos) y el Worker la devuelve en `rankear`. Plantilla sin LLM; nada sin número o fuente |
@@ -44,16 +44,17 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 
 **Fase de revisión** `[DECIDIDO]` (Mompin, 14/11 noche): se revisa y valida lo que está en `main`, sobre todo el frontend. A0.3, A4.4, A5.7 y A5.9 quedan pospuestas hasta el final y el envío se hace solo cuando todos digan que están satisfechos (`docs/13`, `docs/14`). Los hallazgos de la revisión van por el buzón (pantalla, qué pasa, dueño, estado).
 
-Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas.
+Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas. Plan, decisiones abiertas y cola por persona del día final: `docs/16-PLAN-DIA-FINAL.md` (corte 14/11, 23:10).
 
 | ID | Qué falta |
 | --- | --- |
 | A0.3 | Pospuesta (fase de revisión). Acta de roles, cultivos y criterio de ranking (equipo). Lo decidido ya está en `docs/13` |
 | A3.9 | Chile y mascota hechos; la escena muestra la mascota por defecto (`EscenaParcela`, `mascota = true`). Falta la revisión humana del visor y de la equivalencia con el pimiento dulce |
 | A4.4 | Pospuesta (fase de revisión). Redacción con LLM, opcional, solo sobre números ya calculados |
-| A4.13 | Hecha en la API: `GET /api/calendario`. El front sigue leyendo solo `calendario-isla.json` (balam) |
+| A4.13 | Hecha en la API (`GET /api/calendario`) y conectada: `web/src/api/datosParcela.ts` la pide para parcelas propias; si falla, avisa y las fechas quedan `NO_EVALUABLE` |
 | A5.7 | `[EN CURSO]`, pospuesta (fase de revisión) (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |
 | A5.9 | Pospuesta: envío final según las reglas oficiales (`docs/02`), solo cuando todos estén satisfechos |
+| Back | Auditoría del 14/11 noche (`docs/hallazgos-back.md`, rama `Mompin-fallos`): 21 de 22 arreglados en dos rondas; H-B6, H-M1 y H-M9 los decidió Mompin. Falta H-M7 (horizonte de los análogos que cruza septiembre), propuesto al motor. Falta integrar la segunda ronda a `main` y desplegar la API |
 
 ## Huecos científicos que el motor deja en `NO_EVALUABLE` a propósito
 
@@ -63,7 +64,7 @@ Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas.
 - Sin escurrimiento por pendiente.
 - Frijol PV, chile y calabaza en Isla: sin ventana de siembra.
 - Calabaza en Isla: se muestra y no se recomienda.
-- Fuera de México: la API ya devuelve el maíz de GGCMI (`GET /api/calendario`). El front todavía no la llama.
+- Fuera de México: la API devuelve solo el maíz de temporal de GGCMI (`GET /api/calendario`, ya la llama el front); frijol, calabaza y chile quedan `NO_EVALUABLE` en fechas.
 - Kc sin ajuste por altura del cultivo.
 - Normalización del exceso (1 − fracción percolada) es `SUPUESTO`.
 

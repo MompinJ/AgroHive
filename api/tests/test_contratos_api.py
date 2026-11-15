@@ -2,6 +2,7 @@
 import json
 
 import httpx
+import pytest
 from fastapi.testclient import TestClient
 
 from app import config
@@ -56,8 +57,11 @@ def test_cultivos_del_catalogo_real_cumplen_el_contrato(validar):
     validar(cuerpo, "cultivo#")  # el schema describe el catalogo completo (meta, versionCatalogo y cultivos)
 
 
-def test_cultivos_sin_catalogo_sigue_siendo_no_evaluable():
-    assert cliente.get("/api/cultivos").json() == {"estado": "NO_EVALUABLE", "motivo": "El catalogo de cultivos aun no existe (A1.5).", "cultivos": []}
+def test_cultivos_sin_catalogo_es_503_error_datos():
+    """H-B8: antes respondia 200 con {estado, motivo, cultivos: []}, que no cumple cultivo.schema.json (sin meta ni versionCatalogo)."""
+    r = cliente.get("/api/cultivos")
+    assert r.status_code == 503
+    assert r.json()["estado"] == "ERROR_DATOS" and "catalogo de cultivos" in r.json()["motivo"]
 
 
 def test_errores_503_tienen_la_forma_que_declara_openapi():
@@ -117,3 +121,18 @@ def test_el_terreno_del_paquete_corresponde_a_la_orientacion_de_las_celdas(monke
     esperadas = {c["id"]: round(v, 1) for c, v in zip(celdas, asyncio.run(recalcular()))}
     guardado = {c["id"]: c["elevacionM"] for c in json.loads((RAIZ / "datos" / "demo" / "respuestas" / "terreno.json").read_text(encoding="utf-8"))["celdas"]}
     assert guardado == esperadas
+
+
+def test_elevacion_acepta_celdas_con_forma_y_tamano_pedido(simular, validar):
+    """Contratos 0.14.0: la celda puede traer `forma` (solo dibujo) y el tamano de celda lo puede elegir el usuario.
+    La API no usa la forma (la ignora) y acepta cualquier lado > 0; el relieve se calcula igual."""
+    simular(lambda r: httpx.Response(200, content=real("terrarium.png")) if "elevation-tiles" in r.url.host else httpx.Response(404))
+    formas = ["completa", "SO", "SE", "NE", "NO", "completa", "SO", "NE", "completa"]
+    celdas = [{**c, "forma": f} for c, f in zip(malla(3), formas)]
+    for lado in (10, 20, 30, 50, 100, 12.7):
+        r = cliente.post("/api/elevacion", json={"tamanoCeldaM": lado, "celdas": celdas})
+        assert r.status_code == 200
+        for dada, calculada in zip(celdas, r.json()["celdas"]):
+            validar({**dada, "fraccionDentro": 0.5, "elevacionM": calculada["elevacionM"], "pendientePct": calculada["pendientePct"]}, "parcela#/$defs/celda")
+    with pytest.raises(Exception):
+        validar({**celdas[0], "forma": "N", "elevacionM": None, "pendientePct": None}, "parcela#/$defs/celda")

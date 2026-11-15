@@ -192,3 +192,40 @@ describe('A4.2 criterio B con los pilares 2 y 3 (sin exceso, para revisar a mano
     expect(r.orden.map((f) => [f.rotacionId, f.arrepentimiento])).toEqual([['R9', 0], ['R8', 0.05], ['R7', 0.05]]);
   });
 });
+
+describe('H-M1: una rotacion EXPLORATORIO no cambia los pilares del puntaje de las demas (Mompin, 14/11)', () => {
+  const conCompat = (x: RotacionParaRanking, fuera: number | null, estado: ResultadoRotacion['estado'] = x.rotacion.estado): RotacionParaRanking => {
+    const r = structuredClone(x.rotacion);
+    r.estado = estado;
+    for (const e of ESC) {
+      r.porEscenario[e].pilares.compatibilidadCiclo =
+        fuera === null ? { estado: 'NO_EVALUABLE', motivo: 'Prueba: sin ventana.', siembrasFueraDeVentana: null } : { estado: 'EVALUABLE', siembrasFueraDeVentana: fuera };
+    }
+    return { rotacion: r, numeroSiembras: x.numeroSiembras };
+  };
+  const a = conCompat(R1, 1);
+  const b = conCompat(R2, 0);
+  const x = conCompat({ rotacion: { ...R3.rotacion, rotacionId: 'R9' }, numeroSiembras: 2 }, null, 'EXPLORATORIO');
+
+  it('los pesos y puntajes de las que se ordenan son los mismos con o sin la exploratoria', () => {
+    const solo = rankear([a, b]);
+    const conX = rankear([a, b, x]);
+    expect(solo.ponderacion?.pesos).toHaveProperty('compatibilidadCiclo');
+    expect(conX.ponderacion?.pesos).toEqual(solo.ponderacion?.pesos);
+    expect(conX.orden).toEqual(solo.orden);
+    for (const id of ['R1', 'R2']) {
+      const p = (r: ReturnType<typeof rankear>) => r.rotaciones.find((y) => y.rotacionId === id)?.porEscenario;
+      expect(ESC.map((e) => p(conX)?.[e].puntaje)).toEqual(ESC.map((e) => p(solo)?.[e].puntaje));
+    }
+  });
+
+  it('a la exploratoria le falta un pilar que entra: puntaje, peor caso y arrepentimiento en null, sin posicion', () => {
+    const rx = rankear([a, b, x]).rotaciones.find((y) => y.rotacionId === 'R9') as ResultadoRotacion;
+    expect(ESC.map((e) => rx.porEscenario[e].puntaje)).toEqual([null, null, null]);
+    expect(rx.peorCaso).toBeNull();
+    expect(rx.arrepentimiento).toBeNull();
+    expect(rx.ranking).toBeNull();
+    expect(rx.advertencias.map((w) => w.codigo)).toContain('SIN_PUNTAJE');
+    expect(validar(rx)).toEqual([]);
+  });
+});

@@ -17,7 +17,7 @@ URL publica: https://64-23-143-102.sslip.io (ver `AgroVault/Compartido/Servidor.
 | `GET /api/ndvi?lat&lon&desde&hasta` | **Evidencia** (A4.11): NDVI de MODIS MOD13Q1 V061 (pixel de 250 m, compuesto de 16 dias) por punto. La demo lee el paquete o la cache. Si falta, se lee de Microsoft Planetary Computer (producto NASA LP DAAC). Cita: Didan, K. (2021). MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061. NASA EOSDIS Land Processes DAAC. doi:10.5067/MODIS/MOD13Q1.061. Datos servidos por Microsoft Planetary Computer. Maximo 400 dias. **No entra al ranking ni al balance.** Trae los tres limites que la interfaz debe mostrar | `EXPLORATORIO` o `NO_EVALUABLE`; 503 |
 | `GET /api/ee-uu/cdl?lat&lon&desde&hasta` | **Contraste regional** (A4.12): cultivo de cada anio (2008 a 2025) en el pixel de 30 m del punto, de USDA NASS Cropland Data Layer por el servicio CropScape: la rotacion real que hubo ahi. Solo EE. UU. contiguos; fuera, `NO_EVALUABLE` sin llamar a la fuente. La categoria va tal cual; `cultivoCatalogo` solo si coincide exacto (Corn, Dry Beans, Squash, Peppers). **No entra al ranking** | `EVALUABLE` o `NO_EVALUABLE`; 503 |
 | `GET /api/ee-uu/ssurgo?lat&lon` | **Contraste regional** (A4.12): suelo de campo de USDA NRCS SSURGO (Soil Data Access), componente dominante de la unidad del punto, con horizontes (arena, limo, arcilla, materia organica, awc) y agua disponible hasta 100 cm (suma de awc_r x espesor; si falta dato no se extrapola). No sustituye a `/api/suelo`. **No entra al ranking** | `EVALUABLE` o `NO_EVALUABLE`; 503 |
-| `GET /api/cultivos` | Catalogo de `datos/catalogos/cultivos.json`; sin catalogo responde `NO_EVALUABLE` | |
+| `GET /api/cultivos` | Catalogo de `datos/catalogos/cultivos.json`; sin catalogo, 503 `ERROR_DATOS` (H-B8: un catalogo vacio no cumple el contrato) | 503 |
 | `GET /api/calendario?lat&lon` | Calendario de siembra del punto (A4.13). En el recuadro de Isla: SIAP/INIFAP. En el resto de Mexico: `NO_EVALUABLE` (no se usa GGCMI). Fuera de Mexico: dia de siembra del maiz de temporal de GGCMI fase 3, con la madurez en la nota. Frijol, calabaza y chile: `NO_EVALUABLE`. Sin pais en el mapa de 110 m: 422 | `calendario-local` |
 
 Documentacion interactiva en `/docs` y esquema en `/openapi.json`.
@@ -44,6 +44,12 @@ Como funciona y que se verifico:
 
 Si ni la fuente principal, ni el respaldo, ni la cache responden: **503 con el cuerpo `{estado: "ERROR_DATOS", motivo}`** (el modelo `ErrorDatos` que declara el OpenAPI, sin envolver en `detail`). Un periodo o coordenada invalidos dan 422.
 
+**Tiempos (H-B6, `[DECIDIDO]` por Mompin el 14/11):** 20 s por intento (`http.TIEMPO_INTENTO_S`) y 2 intentos por fuente (`http.INTENTOS`). Ademas, `http.plazo()` fija 70 s en total por peticion (`http.PLAZO_TOTAL_S`) en `/api/clima`, `/api/suelo`, `/api/elevacion` y `/api/proxima-temporada`. Ningun intento ni espera pasa de ese plazo: si una fuente se cuelga, se pasa al respaldo y despues a la cache, todo dentro de los 90 s que espera el front. OpenLandMap lee en hilos de GDAL que no se pueden cancelar; `/api/suelo` deja de esperarlo al agotarse el plazo y responde con ISRIC. NDVI, SMAP y EE. UU. conservan sus tiempos propios.
+
+**Avisos de cache:** `CLIMA_RESPALDO_EN_CACHE` (Open-Meteo guardado), `CACHE_VENCIDA` (POWER guardado), `IMERG_EN_CACHE` y `NDVI_EN_CACHE` (H-B11: una ventana de MODIS vencida que se reutiliza porque Planetary Computer no respondio).
+
+**Calendario en la costa (H-B10):** si el punto no cae en ningun pais de Natural Earth 1:110m, se toma el mas cercano a 25 km o menos, solo si no hay otro a esa distancia, con la advertencia `PAIS_POR_CERCANIA`. Boca del Rio queda a 1.4 km del poligono de Mexico. Ver `datos/calendario/LEEME.md`.
+
 ### Reglas que cumple
 
 - Un dato faltante es `null`, nunca cero (POWER usa -999 como relleno: se convierte a `null`).
@@ -55,6 +61,7 @@ Si ni la fuente principal, ni el respaldo, ni la cache responden: **503 con el c
 - Suelo: se pide el GeoTIFF en el CRS nativo de SoilGrids (Homolosine, via `pyproj`) porque la reproyeccion a 4326 del servidor deja ceros. En la zona de prueba hay una franja de ~500 m sin dato (el servicio la rellena con 0), asi que se usa la mediana de los pixeles con dato a menos de 1 km (3 km si no hay). El grupo (arenoso, franco, arcilloso) y el TAW salen de `datos/catalogos/suelos.json` (A1.6, de Mafer) si el archivo existe; si no, el grupo usa una copia de esa tabla y el TAW queda `NO_EVALUABLE`. Tres clases USDA no tienen fila en FAO-56 Tabla 19 (franco arcillo arenoso, franco arcilloso, arcillo arenoso): su TAW sale `NO_EVALUABLE` con el motivo de la tabla, nunca el de un grupo vecino.
 - Agua del suelo (A2.16 de Mafer conectada aqui): `app/pedotransferencia.py` carga `datos/catalogos/saxton_rawls.py` (una sola fuente de verdad) y le pasa arena, arcilla y materia organica de la estimacion usada, cada una con su fuente. La materia organica sale del carbono organico (`C g/kg / 10 x 1.724`, la materia organica contiene 58 % de C; cita verificada en ISRIC Report 2023/01, p. 25). Saxton-Rawls va primero porque entrega **la retencion** que el motor necesita para convertir GWETROOT (fraccion de saturacion) a fraccion de TAW; la tabla FAO-56 queda de respaldo (solo TAW). Con una estimacion EXPLORATORIA o sin carbono, el TAW es `NO_EVALUABLE` con su motivo; nunca se toma el valor de otra clase.
 - OpenLandMap-soildb (A2.15): capas COG de 30 m (arcilla, arena, limo, pH y carbono, 0 a 30 cm, 2020-2022) leidas por rangos HTTP con `rasterio`, sin descargar los archivos (cientos de GB); las URLs salen del catalogo STAC. Tarda unos 12 s en frio y queda en cache. Es una segunda opinion: si falla, `/api/suelo` responde solo con ISRIC y una advertencia.
+- Fechas en hora de la sede: `config.hoy()` (UTC-6 fijo, America/Mexico_City sin horario de verano desde 2022) da el `consultado` de las fuentes, el "hoy" de los limites de periodo y el mes de la proxima temporada, aunque el servidor corra en UTC. Solo SMAP usa la fecha UTC para decidir si un granulo ya deberia estar publicado, porque sus granulos son dias UTC.
 - Terreno: Terrarium z14 con interpolacion bilineal; respaldo Open-Meteo Elevation (90 m). La pendiente se calcula con diferencias finitas sobre la cuadricula. Si las celdas miden menos que el DEM, avisa con `RESOLUCION_DEM_GRUESA`.
 
 ## Desarrollo
@@ -75,4 +82,4 @@ Variables de entorno (ver `.env.example`; `EARTHDATA_TOKEN` solo para `/api/smap
 cd cliente && npm install && npm run todo   # genera api.d.ts y comprueba que compila
 ```
 
-`cliente/api.d.ts` es generado: no se edita a mano. Si cambias un modelo en `app/modelos.py`, regenera y sube ambos archivos.
+`cliente/api.d.ts` es generado: no se edita a mano. Si cambias un modelo en `app/modelos.py` o una ruta, regenera y sube ambos archivos; `tests/test_hallazgos_back.py` falla si `openapi.json` no coincide con la app.

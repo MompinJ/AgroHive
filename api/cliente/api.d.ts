@@ -53,9 +53,30 @@ export interface paths {
         };
         /**
          * Cultivos
-         * @description Catalogo propio (A1.5, de Mafer) leido de datos/catalogos/cultivos.json. Sin catalogo no se inventa nada.
+         * @description Catalogo propio (A1.5, de Mafer) leido de datos/catalogos/cultivos.json. Sin catalogo, 503 ERROR_DATOS: no se inventa nada
+         *     y no se responde un documento que no cumpla contratos/cultivo.schema.json (H-B8). El front trata los cultivos como obligatorios.
          */
         get: operations["cultivos_api_cultivos_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/calendario": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener Calendario
+         * @description Calendario de siembra del punto. En Mexico, SIAP/INIFAP (hoy solo Isla). Fuera, maiz de temporal de GGCMI fase 3.
+         */
+        get: operations["obtener_calendario_api_calendario_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -113,7 +134,7 @@ export interface paths {
         };
         /**
          * Obtener Ndvi
-         * @description NDVI de MODIS MOD13Q1 (250 m, 16 dias) en el punto, de ORNL DAAC. **Evidencia**: no entra al ranking. Maximo 400 dias por consulta.
+         * @description NDVI de MODIS MOD13Q1 V061 (250 m, 16 dias) en el punto, leido de Planetary Computer. **Evidencia**: no entra al ranking. Maximo 400 dias por consulta.
          */
         get: operations["obtener_ndvi_api_ndvi_get"];
         put?: never;
@@ -136,6 +157,46 @@ export interface paths {
          * @description Humedad del suelo SMAP L3 (36 km) por dia. Maximo 10 dias, hasta 3 dias antes de hoy. Sin token de Earthdata responde 503 con motivo.
          */
         get: operations["smap_api_smap_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ee-uu/cdl": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener Cdl
+         * @description Rotacion real por anio (USDA NASS CDL, 30 m) en el punto. Solo EE. UU. contiguos; fuera de ahi, NO_EVALUABLE. **Contraste**: no entra al ranking.
+         */
+        get: operations["obtener_cdl_api_ee_uu_cdl_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ee-uu/ssurgo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Obtener Ssurgo
+         * @description Suelo de campo de USDA (SSURGO, componente dominante) en el punto. Solo EE. UU. contiguos; fuera de ahi, NO_EVALUABLE. **Contraste**.
+         */
+        get: operations["obtener_ssurgo_api_ee_uu_ssurgo_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -177,6 +238,22 @@ export interface components {
              */
             severidad: "info" | "aviso" | "critico";
         };
+        /** AguaSsurgo */
+        AguaSsurgo: {
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+            /** Tawmm */
+            tawMm: number | null;
+            /** Profundidadcubiertacm */
+            profundidadCubiertaCm: number;
+            /** Hastacm */
+            hastaCm: number;
+            /** Metodo */
+            metodo: string;
+        };
         /** AguaSuelo */
         AguaSuelo: {
             /** Tawmmporm */
@@ -184,21 +261,67 @@ export interface components {
             metodoTaw?: components["schemas"]["MetodoTaw"] | null;
             retencion?: components["schemas"]["RetencionAgua"] | null;
         };
-        /**
-         * CatalogoCultivos
-         * @description Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, NO_EVALUABLE.
-         */
-        CatalogoCultivos: {
-            /** Estado */
-            estado?: "NO_EVALUABLE" | null;
+        /** AnioCdl */
+        AnioCdl: {
+            /** Anio */
+            anio: number;
+            /** Codigo */
+            codigo: number | null;
+            /** Categoria */
+            categoria: string | null;
+            /** Cultivocatalogo */
+            cultivoCatalogo: ("maiz" | "frijol" | "calabaza" | "chile") | null;
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
             /** Motivo */
             motivo?: string | null;
+        };
+        /**
+         * CatalogoCultivos
+         * @description Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, 503 (H-B8).
+         */
+        CatalogoCultivos: {
             /** Cultivos */
             cultivos: {
                 [key: string]: unknown;
             }[];
         } & {
             [key: string]: unknown;
+        };
+        /** Cdl */
+        Cdl: {
+            meta: components["schemas"]["Meta"];
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+            /** Motivo */
+            motivo?: string | null;
+            /** Aviso */
+            aviso: string;
+            /** Coordenada */
+            coordenada: [
+                number,
+                number
+            ];
+            /** Aniodesde */
+            anioDesde: number;
+            /** Aniohasta */
+            anioHasta: number;
+            fuente: components["schemas"]["Fuente"];
+            /** Limites */
+            limites: string[];
+            /** Anios */
+            anios: components["schemas"]["AnioCdl"][];
+            /**
+             * Advertencias
+             * @default []
+             */
+            advertencias: components["schemas"]["Advertencia"][];
         };
         /** CeldaEntrada */
         CeldaEntrada: {
@@ -234,6 +357,15 @@ export interface components {
             elevacionM: number | null;
             /** Pendientepct */
             pendientePct: number | null;
+        };
+        /** ComponenteSsurgo */
+        ComponenteSsurgo: {
+            /** Nombre */
+            nombre: string;
+            /** Porcentaje */
+            porcentaje?: number | null;
+            /** Grupohidrologico */
+            grupoHidrologico?: string | null;
         };
         /**
          * DatoNdvi
@@ -416,6 +548,22 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** HorizonteSsurgo */
+        HorizonteSsurgo: {
+            /** Nombre */
+            nombre: string | null;
+            profundidadCm: components["schemas"]["RangoCm"];
+            /** Arenapct */
+            arenaPct: number | null;
+            /** Limopct */
+            limoPct: number | null;
+            /** Arcillapct */
+            arcillaPct: number | null;
+            /** Materiaorganicapct */
+            materiaOrganicaPct: number | null;
+            /** Awccmcm */
+            awcCmCm: number | null;
+        };
         /**
          * HumedadSuelo
          * @description De donde sale humedadRaizFraccionSat y para que se usa (V-06).
@@ -529,6 +677,8 @@ export interface components {
             humedadM3M3?: number | null;
             /** Banderacalidad */
             banderaCalidad?: number | null;
+            /** Calidad */
+            calidad?: ("alta" | "baja" | "desconocida") | null;
         };
         /** Periodo */
         Periodo: {
@@ -567,6 +717,8 @@ export interface components {
              * @constant
              */
             nombre: "MOD13Q1";
+            /** Version */
+            version?: string | null;
             /** Banda */
             banda: string;
             /**
@@ -584,12 +736,32 @@ export interface components {
             /** Escala */
             escala: number;
         };
+        /** ProductoSmap */
+        ProductoSmap: {
+            /** Nombre */
+            nombre: string;
+            /**
+             * Resolucionkm
+             * @enum {integer}
+             */
+            resolucionKm: 36 | 9;
+            profundidadCm?: components["schemas"]["ProfundidadSmap"] | null;
+            /** Unidad */
+            unidad?: "m3/m3" | null;
+        };
         /** ProfundidadCm */
         ProfundidadCm: {
             /** Desdecm */
             desdeCm: number;
             /** Hastacm */
             hastaCm: number;
+        };
+        /** ProfundidadSmap */
+        ProfundidadSmap: {
+            /** Desde */
+            desde: number;
+            /** Hasta */
+            hasta: number;
         };
         /**
          * ProximaTemporada
@@ -645,6 +817,13 @@ export interface components {
             inferior: number | null;
             /** Superior */
             superior: number | null;
+        };
+        /** RangoCm */
+        RangoCm: {
+            /** Desde */
+            desde: number;
+            /** Hasta */
+            hasta: number;
         };
         /**
          * RetencionAgua
@@ -710,10 +889,42 @@ export interface components {
                 number,
                 number
             ];
+            producto?: components["schemas"]["ProductoSmap"] | null;
             celda?: components["schemas"]["CeldaSmap"] | null;
             fuente: components["schemas"]["Fuente"];
             /** Dias */
             dias: components["schemas"]["DiaSmap"][];
+            /**
+             * Advertencias
+             * @default []
+             */
+            advertencias: components["schemas"]["Advertencia"][];
+        };
+        /** Ssurgo */
+        Ssurgo: {
+            meta: components["schemas"]["Meta"];
+            /**
+             * Estado
+             * @enum {string}
+             */
+            estado: "EVALUABLE" | "NO_EVALUABLE" | "EXPLORATORIO" | "ERROR_DATOS" | "RESPALDO_HISTORICO";
+            /** Motivo */
+            motivo?: string | null;
+            /** Aviso */
+            aviso: string;
+            /** Coordenada */
+            coordenada: [
+                number,
+                number
+            ];
+            fuente: components["schemas"]["Fuente"];
+            /** Limites */
+            limites: string[];
+            unidad?: components["schemas"]["UnidadSsurgo"] | null;
+            componente?: components["schemas"]["ComponenteSsurgo"] | null;
+            /** Horizontes */
+            horizontes: components["schemas"]["HorizonteSsurgo"][];
+            agua?: components["schemas"]["AguaSsurgo"] | null;
             /**
              * Advertencias
              * @default []
@@ -815,6 +1026,13 @@ export interface components {
             /** Clase */
             clase: ("arena" | "arena_franca" | "franco_arenoso" | "franco" | "franco_limoso" | "limo" | "franco_arcillo_arenoso" | "franco_arcilloso" | "franco_arcillo_limoso" | "arcillo_arenoso" | "arcillo_limoso" | "arcilla") | null;
             fraccionesPct: components["schemas"]["FraccionesTextura"];
+        };
+        /** UnidadSsurgo */
+        UnidadSsurgo: {
+            /** Mukey */
+            mukey: string;
+            /** Nombre */
+            nombre: string;
         };
         /** ValidationError */
         ValidationError: {
@@ -968,6 +1186,47 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CatalogoCultivos"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDatos"];
+                };
+            };
+        };
+    };
+    obtener_calendario_api_calendario_get: {
+        parameters: {
+            query: {
+                lat: number;
+                lon: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -1124,6 +1383,88 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDatos"];
+                };
+            };
+        };
+    };
+    obtener_cdl_api_ee_uu_cdl_get: {
+        parameters: {
+            query: {
+                lat: number;
+                lon: number;
+                desde?: number;
+                hasta?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Cdl"];
+                };
+            };
+            /** @description Anios invalidos */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDatos"];
+                };
+            };
+        };
+    };
+    obtener_ssurgo_api_ee_uu_ssurgo_get: {
+        parameters: {
+            query: {
+                lat: number;
+                lon: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ssurgo"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
             /** @description Service Unavailable */
             503: {

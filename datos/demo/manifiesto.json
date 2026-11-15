@@ -10,7 +10,9 @@
     "2005-10-01",
     "2025-12-31"
   ],
-  "versionContrato": "0.10.0",
+  "versionContrato": "0.13.0",
+  "versionContratoAlGenerar": "0.10.0",
+  "notaVersion": "H-B9 (14/11 noche): los archivos de respuestas/ se revalidaron contra contratos 0.13.0 sin cambiar ningun dato; solo se subio meta.versionContrato. Los datos son los de la generacion original.",
   "validadoContra": [
     "serie-clima",
     "suelo",

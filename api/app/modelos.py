@@ -275,8 +275,6 @@ class ProximaTemporada(BaseModel):
 
 
 class CatalogoCultivos(BaseModel):
-    """Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, NO_EVALUABLE."""
+    """Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, 503 (H-B8)."""
     model_config = ConfigDict(extra="allow")  # meta y versionCatalogo del archivo pasan tal cual
-    estado: Literal["NO_EVALUABLE"] | None = None
-    motivo: str | None = None
     cultivos: list[dict[str, Any]]

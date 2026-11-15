@@ -10,7 +10,7 @@ import { balanceCiclo, type BalanceCiclo } from './balance';
 import { etapaVisual, parametrosCultivo, type ParametrosCultivo } from './cultivo';
 import { serieEt0, type MetodoEt0 } from './et0';
 import { peorEstado, juntarAdvertencias, sinNumeros } from './estados';
-import { aDia, sumarDias } from './fechas';
+import { aDia, esFechaValida, sumarDias } from './fechas';
 import { SIAP_CICLOS } from './fuentes';
 import { pilarCompatibilidad, pilarProteccion, type CicloParaPilar } from './pilares';
 import { siembraEnEscenario } from './temporadas';
@@ -127,6 +127,9 @@ export interface ResultadoMotor {
   plan: PlanSiembra;
   noRecomendados: CultivoNoRecomendado[];
   esEjemplo: boolean;
+  /** Parametros de cada cultivo del plan (null sin parametros con fuente). Dan el fin del ciclo y la etapa en resultado-celda
+   * aunque el escenario no se haya simulado (H-M2). */
+  parametros: Map<string, ParametrosCultivo | null>;
 }
 
 const clave = (ciclo: number, cultivo: string) => `${ciclo}|${cultivo}`;
@@ -153,6 +156,13 @@ function ciclosDeCeldas(plan: PlanSiembra, parcela: Parcela): Map<string, CicloP
 /** Lo que el schema no comprueba (contratos/README): ciclos cronologicos, celdas y cultivos existentes. */
 function validarPlan(plan: PlanSiembra, parcela: Parcela, porCelda: Map<string, CicloPlan[]>, parametros: Map<string, ParametrosCultivo | null>): string[] {
   const errores: string[] = [];
+  // H-M4: una fecha que no existe ('2026-02-30', '') deja el plan NO_EVALUABLE con motivo; no se corre en silencio ni se lanza error.
+  const malas = plan.ciclos.filter((c) => !esFechaValida(c.siembra));
+  if (malas.length > 0) return malas.map((c) => `La siembra del ciclo ${c.ciclo} (${c.cultivo}) no es una fecha valida: '${c.siembra}'.`);
+  // H-M8: sin area dentro de la parcela no hay con que ponderar los pilares (saldrian NaN).
+  if (!(parcela.celdas.reduce((s, c) => s + (c.fraccionDentro ?? 1), 0) > 0)) {
+    errores.push('Ninguna celda tiene area dentro de la parcela (la suma de fraccionDentro es 0): no hay donde promediar los pilares.');
+  }
   const numeros = plan.ciclos.map((c) => c.ciclo);
   if (new Set(numeros).size !== numeros.length) errores.push('Hay numeros de ciclo repetidos en el plan.');
   const ids = new Set(parcela.celdas.map((c) => c.id));
@@ -431,6 +441,16 @@ function metricas(
         : riesgoCalor(sim, e.parcela.celdas, ciclosPorCelda, catalogo),
       aporteIndirecto: aporte,
   };
+  if (sinNumeros(hidrico.estado)) {
+    // H-M9 (doc 05): un escenario NO_EVALUABLE o ERROR_DATOS lleva todos sus indicadores en null, con su motivo, aunque
+    // algun pilar (dias de suelo desnudo, leguminosa, ventanas) se pudiera contar sin el balance.
+    const motivo = hidrico.motivo ?? `Escenario ${hidrico.estado}.`;
+    const estado = hidrico.estado;
+    pilares.compatibilidadCiclo = { estado, motivo, siembrasFueraDeVentana: null };
+    pilares.proteccionSuelo = { estado, motivo, indiceErosionRelativo: null, diasSueloDesnudo: null };
+    pilares.riesgoCalor = { estado, motivo, diasEstresCalor: null };
+    pilares.aporteIndirecto = { estado, motivo, incluyeLeguminosa: null, especiesDistintas: null };
+  }
   return { anioReal: sim.anioReal, estado: hidrico.estado, pilares, puntaje: null };
 }
 
@@ -546,7 +566,8 @@ export function simularRotacion(e: EntradasMotor): ResultadoMotor {
     rotacionId: e.plan.rotacionId,
     estado,
     // Paso 7.1: una siembra fuera de la ventana local cae fuera en todos los escenarios (la ventana no depende del clima).
-    filtroClima: comp.pilar.siembrasFueraDeVentana === null ? null : comp.pilar.siembrasFueraDeVentana > 0,
+    // Con la rotacion NO_EVALUABLE o ERROR_DATOS, null como todos sus indicadores (H-M9).
+    filtroClima: sinNumeros(estado) || comp.pilar.siembrasFueraDeVentana === null ? null : comp.pilar.siembrasFueraDeVentana > 0,
     porEscenario,
     peorCaso: null,
     arrepentimiento: null,
@@ -556,7 +577,7 @@ export function simularRotacion(e: EntradasMotor): ResultadoMotor {
     explicacion: explicacion(e, simulaciones, porEscenario, taw, exceso),
   };
   if (noRecomendados.length > 0) rotacion.cultivosNoRecomendados = noRecomendados;
-  return { rotacion, exceso, simulaciones, ciclosPorCelda, parcela: e.parcela, plan: e.plan, noRecomendados, esEjemplo };
+  return { rotacion, exceso, simulaciones, ciclosPorCelda, parcela: e.parcela, plan: e.plan, noRecomendados, esEjemplo, parametros };
 }
 
 function construirAdvertencias(
@@ -581,7 +602,8 @@ function construirAdvertencias(
       severidad: 'aviso',
     });
   }
-  const conGwet = ESCENARIOS.some((x) => [...sims[x].ciclos.values()].some((c) => c.condicionInicial === 'gwetroot'));
+  const ci = condicionesIniciales(sims);
+  const conGwet = ci.gwetroot > 0;
   a.push(
     conGwet
       ? {
@@ -595,6 +617,14 @@ function construirAdvertencias(
           severidad: 'aviso',
         },
   );
+  if (conGwet && ci.capacidadDeCampo > 0) {
+    // H-M10: con GWETROOT en unos ciclos no se ocultan los que arrancaron a capacidad de campo (sin dato de GWETROOT ese dia).
+    a.push({
+      codigo: 'CONDICION_INICIAL_SUPUESTA',
+      mensaje: `${ci.capacidadDeCampo} ciclo(s) de los escenarios arrancan con el suelo a capacidad de campo (Dr,i = 0; ${FUENTE_DR_INICIAL_CERO.cita}) porque ese dia no hay GWETROOT. En un escenario seco este supuesto subestima el deficit.`,
+      severidad: 'aviso',
+    });
+  }
   a.push({
     codigo: 'KC_SIN_AJUSTE_CLIMATICO',
     mensaje: 'Kc medio y final de FAO-56 Tabla 12 sin el ajuste climatico de la ec. 62 (requiere la altura del cultivo, que no esta en el catalogo).',
@@ -634,6 +664,20 @@ function construirAdvertencias(
   return juntarAdvertencias(a, ...clima);
 }
 
+/** Ciclos simulados (con balance) segun como arrancaron: desde GWETROOT o a capacidad de campo. */
+function condicionesIniciales(sims: Record<Escenario, SimulacionEscenario>): { gwetroot: number; capacidadDeCampo: number } {
+  let gwetroot = 0;
+  let capacidadDeCampo = 0;
+  for (const x of ESCENARIOS) {
+    for (const c of sims[x].ciclos.values()) {
+      if (!c.balance) continue;
+      if (c.condicionInicial === 'gwetroot') gwetroot++;
+      else if (c.condicionInicial === 'capacidad_de_campo') capacidadDeCampo++;
+    }
+  }
+  return { gwetroot, capacidadDeCampo };
+}
+
 function explicacion(
   e: EntradasMotor,
   sims: Record<Escenario, SimulacionEscenario>,
@@ -662,14 +706,24 @@ function explicacion(
       });
     }
   }
-  const huecos = [
-    'Suelo estimado por textura (SUPUESTO), no medido en la parcela.',
-    'Agua del suelo al sembrar supuesta a capacidad de campo hasta convertir la humedad de POWER (A2.16).',
-    'Clima regional de NASA POWER: el mismo para toda la parcela.',
-    'Sin datos de mercado ni de rendimiento: no se estiman toneladas ni ingresos.',
-    'Sin indice de erosion con fuente (falta intensidad de lluvia sub-diaria y factores C y LS): la proteccion del suelo se mide con los dias de suelo desnudo.',
-    'Sin umbral de calor con fuente en el catalogo: el riesgo por calor no se evalua.',
-  ];
+  // H-M10: cada hueco sale de lo que paso en esta simulacion (los mismos indicadores que las advertencias), no de un texto fijo.
+  const ci = condicionesIniciales(sims);
+  const pil = ESCENARIOS.map((x) => porEscenario[x].pilares);
+  const huecos = ['Suelo estimado por textura (SUPUESTO), no medido en la parcela.'];
+  if (ci.capacidadDeCampo > 0) huecos.push(`Agua del suelo al sembrar supuesta a capacidad de campo en ${ci.capacidadDeCampo} ciclo(s) (sin retencion del suelo o sin GWETROOT ese dia).`);
+  if (ci.gwetroot > 0) huecos.push('Agua del suelo al sembrar desde la humedad regional de POWER (GWETROOT), no medida en la parcela.');
+  huecos.push('Clima regional de NASA POWER: el mismo para toda la parcela.');
+  huecos.push('Sin datos de mercado ni de rendimiento: no se estiman toneladas ni ingresos.');
+  if (pil.some((x) => (x.proteccionSuelo?.indiceErosionRelativo ?? null) === null)) {
+    huecos.push('Sin indice de erosion con fuente (falta intensidad de lluvia sub-diaria y factores C y LS): la proteccion del suelo se mide con los dias de suelo desnudo.');
+  }
+  if (pil.some((x) => (x.riesgoCalor?.diasEstresCalor ?? null) === null)) {
+    huecos.push(
+      pil.some((x) => x.riesgoCalor?.motivo?.includes('umbral'))
+        ? 'Sin umbral de calor con fuente en el catalogo: el riesgo por calor no se evalua.'
+        : 'El riesgo por calor no se pudo evaluar en algun escenario (ver su motivo).',
+    );
+  }
   if (!taw.ok) huecos.unshift(taw.motivo);
   return {
     porQue: `Pilar de deficit hidrico de la rotacion ${e.plan.rotacionId} en los tres escenarios historicos. El ranking entre rotaciones se calcula en A4.2.`,
@@ -687,7 +741,9 @@ export function resultadoCeldas(res: ResultadoMotor, escenario: Escenario, fecha
   const sim = res.simulaciones[escenario];
   if (sim.anioReal === null) return null;
   const registros: RegistroCelda[] = res.parcela.celdas.map((celda) => registroCelda(res, sim, celda.id, fecha));
-  const estado = peorEstado(...registros.map((x) => x.estado));
+  // El documento hereda tambien el estado del escenario: un registro de suelo desnudo es EVALUABLE, pero si el escenario no se
+  // pudo simular (sin TAW, plan invalido, clima faltante) el resultado de la fecha no lo es.
+  const estado = peorEstado(...registros.map((x) => x.estado), sim.estado);
   const salida: ResultadoCeldas = {
     meta: res.esEjemplo
       ? { versionContrato: VERSION_CONTRATO, esEjemplo: true, aviso: 'Calculado con entradas de ejemplo o sinteticas: no son datos reales.' }
@@ -712,27 +768,34 @@ export function resultadoCeldas(res: ResultadoMotor, escenario: Escenario, fecha
 function registroCelda(res: ResultadoMotor, sim: SimulacionEscenario, celdaId: string, fecha: string): RegistroCelda {
   const ciclos = res.ciclosPorCelda.get(celdaId) ?? [];
   const dia = aDia(fecha);
+  const nulos = { avanceEtapa: null, estadoPlanta: null, humedad: null, deficitMm: null, excesoMm: null, etcMm: null, estresCalor: null, riesgoErosion: null };
+  if (ciclos.some((c) => !esFechaValida(c.siembra))) {
+    // H-M4: con una siembra que no es fecha no se sabe que hay en la celda: NO_EVALUABLE con el motivo del plan.
+    return { celdaId, fecha, estado: 'NO_EVALUABLE', motivo: sim.motivo ?? 'El plan tiene una siembra que no es una fecha valida.', ciclo: null, cultivo: null, etapa: null, ...nulos };
+  }
   let actual: CicloPlan | undefined;
   let iDia = 0;
   for (let k = 0; k < ciclos.length; k++) {
     const c = ciclos[k] as CicloPlan;
     const inicio = aDia(c.siembra);
     const sc = sim.ciclos.get(clave(c.ciclo, c.cultivo));
-    const fin = sc?.parametros ? inicio + sc.parametros.totalDias : ciclos[k + 1] ? aDia((ciclos[k + 1] as CicloPlan).siembra) : Infinity;
+    // H-M2: el fin sale de la duracion del catalogo aunque el escenario no se haya simulado; sin duracion conocida, la siguiente
+    // siembra (o el ciclo no termina).
+    const total = (sc?.parametros ?? res.parametros.get(c.cultivo))?.totalDias ?? null;
+    const fin = total !== null ? inicio + total : ciclos[k + 1] ? aDia((ciclos[k + 1] as CicloPlan).siembra) : Infinity;
     if (dia >= inicio && dia < fin) {
       actual = c;
       iDia = dia - inicio + 1;
       break;
     }
   }
-  const nulos = { avanceEtapa: null, estadoPlanta: null, humedad: null, deficitMm: null, excesoMm: null, etcMm: null, estresCalor: null, riesgoErosion: null };
   if (!actual) {
     return { celdaId, fecha, estado: 'EVALUABLE', ciclo: null, cultivo: null, etapa: 'suelo_desnudo', ...nulos };
   }
   const sc = sim.ciclos.get(clave(actual.ciclo, actual.cultivo));
   const noRec = res.noRecomendados.find((n) => n.cultivo === actual.cultivo && n.ciclos.includes(actual.ciclo));
   const extra: Partial<RegistroCelda> = noRec ? { noRecomendadoEnLugar: true, fuenteMotivo: noRec.fuente } : {};
-  const p = sc?.parametros ?? null;
+  const p = sc?.parametros ?? res.parametros.get(actual.cultivo) ?? null;
   const ev = p ? etapaVisual(p, iDia) : null;
   if (!sc || !sc.balance) {
     return {

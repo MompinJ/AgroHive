@@ -130,6 +130,17 @@ interface SiembraVentana {
   fuente: Fuente | null;
 }
 
+/** H-M11: quien da la ventana, desde su fuente (antes decia siempre INIFAP, aunque fuera SIAP o GGCMI fuera de Mexico).
+ * Se nombra la institucion (lo que va antes de la primera coma de fuente.nombre); la cita completa esta en la evidencia. */
+export function ventanasDe(fuentes: (Fuente | null)[], una = false): string {
+  const quienes = [...new Set(fuentes.map((f) => f?.nombre.split(',')[0]?.trim()).filter((q): q is string => !!q))];
+  if (quienes.length === 0) return una ? 'la ventana del calendario local' : 'las ventanas del calendario local';
+  const lista = quienes.join(' y ');
+  const recomendada = quienes.every((q) => q === 'INIFAP');
+  if (una) return recomendada ? `la ventana recomendada por ${lista}` : `la ventana de siembra de ${lista}`;
+  return recomendada ? `las ventanas recomendadas por ${lista}` : `las ventanas de siembra de ${lista}`;
+}
+
 function siembrasYVentanas(ctx: ContextoTarjetas, motor: ResultadoMotor): SiembraVentana[] {
   return motor.plan.ciclos.map((c) => {
     const e = ctx.calendario?.entradas.find((x) => x.cultivo === c.cultivo && x.temporada === c.temporada);
@@ -204,7 +215,7 @@ export function tarjetaRotacion(ctx: ContextoTarjetas, r: ResultadoRotacion): Re
     if (fx !== null && fo.length > 0 && fx < Math.min(...fo)) {
       beneficios.push(`Agua de lluvia: en el año lluvioso es la que menos lluvia pierde por debajo de la raíz (${pct(fx)}).`);
     }
-    if (siembras.length > 0 && siembras.every((s) => s.dentro === true)) beneficios.push('Fechas: todas las siembras caen en las ventanas recomendadas por INIFAP para la zona.');
+    if (siembras.length > 0 && siembras.every((s) => s.dentro === true)) beneficios.push(`Fechas: todas las siembras caen en ${ventanasDe(siembras.map((s) => s.fuente))} para la zona.`);
   }
   const aporte = r.porEscenario.habitual.pilares.aporteIndirecto;
   if (aporte?.incluyeLeguminosa === true) {
@@ -288,7 +299,7 @@ export function tarjetaRotacion(ctx: ContextoTarjetas, r: ResultadoRotacion): Re
     riesgos.push(`Falta de agua: en el año seco el mes más difícil fue ${mesTexto(masDeficit.mes)} (${mm(masDeficit.mm)} que el cultivo pidió y no tuvo).`);
   }
   for (const s of siembras.filter((x) => x.dentro === false)) {
-    riesgos.push(`El ${nombreCultivo(ctx, s.cultivo)} del ciclo ${s.ciclo} se siembra el ${fecha(s.siembra)}, fuera de la ventana recomendada por INIFAP (${s.texto}).`);
+    riesgos.push(`El ${nombreCultivo(ctx, s.cultivo)} del ciclo ${s.ciclo} se siembra el ${fecha(s.siembra)}, fuera de ${ventanasDe([s.fuente], true)} (${s.texto}).`);
   }
 
   return { ...base, porQue, evidencia, beneficios, huecos, riesgos };

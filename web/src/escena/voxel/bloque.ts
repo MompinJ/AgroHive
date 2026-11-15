@@ -5,11 +5,13 @@
 // como mucho 24 cubos, sin caras de abajo, y un lomo bajo de 1 cubo por surco). Si falta uno, se
 // usa un bloque PROVISIONAL generado aqui a partir del modelo detallado: 3 surcos con su
 // lomo y 3 plantas de dos cubos (tallo y copa) cada uno, con la altura y los colores del
-// detallado (21 cubos). Desde el 14/11 estan los 20 bloques de Mafer (tope de 24 cubos sin
+// detallado (21 cubos). Desde el 14/11 estan los bloques de los 8 cultivos (tope de 24 cubos sin
 // caras de abajo): el provisional queda solo de respaldo si falta un .bbmodel.
 // La densidad es visual, no a escala.
 
 import type { CuboVoxel, ModeloVoxel, NombreCara, Vec3 } from './bbmodel';
+import { unirCubos } from './geometria';
+import { UNIDADES_BBMODEL_POR_CELDA } from '../modelo';
 
 export const claveBloque = (clave: string) => `${clave}_bloque`;
 
@@ -41,7 +43,9 @@ function colorFrecuente(cubos: readonly CuboVoxel[], filtro: (c: CuboVoxel) => b
 /** Bloque provisional: 3 surcos x 3 plantas (tallo y copa), con la altura y los colores del detallado. */
 export function bloqueProvisional(detallado: ModeloVoxel): ModeloVoxel {
   const cubos = detallado.cubos;
-  const altoDetallado = cubos.length ? Math.max(...cubos.map((c) => Math.max(c.desde[1], c.hasta[1]))) : 4;
+  // Alto real del detallado, con sus rotaciones: una hoja larga tendida se guarda como caja alta girada, y medir
+  // desde/hasta sin girar la haria crecer (pasaba con las hojas de la sandia).
+  const altoDetallado = cubos.length ? unirCubos(detallado, () => [1, 1, 1]).caja.max[1] * UNIDADES_BBMODEL_POR_CELDA : 4;
   // Hojas: lo que esta por encima del lomo (y >= 2); tallo: el cubo mas esbelto.
   const hoja = colorFrecuente(cubos, (c) => Math.min(c.desde[1], c.hasta[1]) >= 2, 3);
   const esbeltez = (c: CuboVoxel) => Math.abs(c.hasta[1] - c.desde[1]) / Math.max(0.5, Math.abs(c.hasta[0] - c.desde[0]), Math.abs(c.hasta[2] - c.desde[2]));

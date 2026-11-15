@@ -11,7 +11,9 @@
 //                       SUPUESTO: no hay umbral publicado de encharcamiento por cultivo en FAO-56 ni en el catalogo.
 //   riesgoCalor y aporteIndirecto son complementarios en doc 05 (tabla del paso 6): se muestran, no entran al puntaje.
 // Pesos: los de la fuente o del usuario (F8) si se pasan; si no, iguales entre los pilares que entran, declarados
-// SUPUESTO. Un pilar entra solo si tiene numero en todos los escenarios de todas las rotaciones comparadas.
+// SUPUESTO. Un pilar entra solo si tiene numero en todos los escenarios de todas las rotaciones que se ordenan (EVALUABLE
+// o RESPALDO_HISTORICO; H-M1, decidido por Mompin el 14/11): una EXPLORATORIO no cambia los pilares de las demas, y si le
+// falta un pilar que entra, su puntaje queda en null.
 //
 // B: puntaje por escenario = suma de pesos x subpuntajes; robustez = peor puntaje (peorCaso); arrepentimiento del
 //    escenario = mejor puntaje del escenario entre las rotaciones comparadas - puntaje de la rotacion; se ordena por
@@ -155,7 +157,7 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
   for (const p of PILARES) {
     const ok =
       !COMPLEMENTARIOS.includes(p) &&
-      candidatas.every((r) => ESCENARIOS.every((e) => subpuntaje(p, r.porEscenario[e], siembras.get(r.rotacionId) ?? 0) !== null));
+      ordenar.every((r) => ESCENARIOS.every((e) => subpuntaje(p, r.porEscenario[e], siembras.get(r.rotacionId) ?? 0) !== null));
     (ok ? entran : excluidos).push(p);
   }
   const criterio: CriterioRanking = opciones.criterio ?? (entran.length >= 2 ? 'B_minimax_arrepentimiento' : 'A_exposicion_hidrica_peor_caso');
@@ -193,9 +195,12 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
     };
     if (etiqueta === 'FUENTE' && opciones.fuentePesos) ponderacion.fuente = opciones.fuentePesos;
     for (const r of candidatas) {
+      const n = siembras.get(r.rotacionId) ?? 0;
+      // Una EXPLORATORIO sin numero en un pilar que entra no tiene puntaje (H-M1): no se rellena ni se saca el pilar.
+      if (!ESCENARIOS.every((e) => entran.every((p) => subpuntaje(p, r.porEscenario[e], n) !== null))) continue;
       const v = {} as Record<Escenario, number>;
       for (const e of ESCENARIOS) {
-        v[e] = entran.reduce((s, p) => s + (exactos[p] as number) * (subpuntaje(p, r.porEscenario[e], siembras.get(r.rotacionId) ?? 0) as number), 0);
+        v[e] = entran.reduce((s, p) => s + (exactos[p] as number) * (subpuntaje(p, r.porEscenario[e], n) as number), 0);
       }
       valorEscenario.set(r.rotacionId, v);
     }
@@ -214,7 +219,7 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
     const vals = ordenar.map((r) => (valorEscenario.get(r.rotacionId) as Record<Escenario, number>)[e]);
     mejor[e] = esB ? Math.max(...vals) : Math.min(...vals);
   }
-  const filas: (Omit<FilaRanking, 'posicion'> & { ordenable: boolean })[] = candidatas.map((r) => {
+  const filas: (Omit<FilaRanking, 'posicion'> & { ordenable: boolean })[] = candidatas.filter((r) => valorEscenario.has(r.rotacionId)).map((r) => {
     const v = valorEscenario.get(r.rotacionId) as Record<Escenario, number>;
     let peor: Escenario = 'seco';
     for (const e of ESCENARIOS) if (esB ? v[e] < v[peor] - TOL : v[e] > v[peor] + TOL) peor = e;
@@ -262,6 +267,20 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
 
   for (const r of rotaciones) {
     const f = filas.find((x) => x.rotacionId === r.rotacionId);
+    if (!f && candidatas.some((c) => c.rotacionId === r.rotacionId)) {
+      // EXPLORATORIO sin numero en algun pilar que entra: puntaje, peor caso y arrepentimiento quedan en null (H-M1).
+      const faltan = entran.filter((p) => ESCENARIOS.some((e) => subpuntaje(p, r.porEscenario[e], siembras.get(r.rotacionId) ?? 0) === null));
+      const aviso: Advertencia = {
+        codigo: 'SIN_PUNTAJE',
+        mensaje: `Rotacion EXPLORATORIO sin numero en ${faltan.join(', ')}, que entra al puntaje de las demas: no tiene puntaje ni posicion.`,
+        severidad: 'aviso',
+      };
+      r.ponderacion = esB ? ponderacion : null;
+      r.ranking = null;
+      r.advertencias = juntarAdvertencias(r.advertencias, [avisoCriterio, aviso]);
+      r.explicacion = { ...r.explicacion, porQue: `Sin posicion en el ranking (se muestra como exploratoria): no tiene numero en ${faltan.join(', ')}, asi que no tiene puntaje comparable.` };
+      continue;
+    }
     if (!f) continue;
     const v = valorEscenario.get(r.rotacionId) as Record<Escenario, number>;
     if (esB) for (const e of ESCENARIOS) r.porEscenario[e].puntaje = r4(v[e]);

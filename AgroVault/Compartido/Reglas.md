@@ -38,7 +38,7 @@ Aplican a Cursor, Codex y Claude. El detalle de producto está en [[Resumen]].
 - `[EN EVENTO]` y `[DEPENDE-DATOS]` no se fijan sin acuerdo. Si hace falta un default para compilar, déjalo marcado y anótalo.
 - Un archivo, un responsable. No edites archivos de otra persona sin avisarle.
 - Avisos entre sesiones: buzón de `herramientas/buzon/` (escuchar en segundo plano, mostrar el mensaje al usuario, no actuar sin su OK). El código va por git.
-- Rama propia (`balam`, `Mompin`, `Mafer`, `Eduardo`). Integración a `main` por pull request.
+- Rama propia (`balam`, `Mompin`, `Mafer`, `Eduardo`). Solo Mompin integra a `main`, por ventanas cada hora en punto, tras el aviso "listo para integrar" en el buzón; no se mergean PR a `main`. Reglas del día final `[DECIDIDO]`: `docs/16-PLAN-DIA-FINAL.md`, sección 4.
 - Modelos `.bbmodel`: agente `modelador-voxel` y `docs/07`. No mezcles escalas ni reordenes la paleta.
 - No afirmes que algo "ya funciona" o "está validado" si no hay prueba, commit o video.
 

@@ -6,7 +6,7 @@ responden 200 con NO_EVALUABLE y el motivo: no es un error, es que la fuente no 
 import asyncio
 from datetime import date
 
-from . import cache, http, servicios
+from . import cache, config, http, servicios
 from .clientes import cropscape, sda
 
 CONCURRENCIA_CDL = 4
@@ -41,7 +41,7 @@ async def _anio(sem, x, y, anio):
 
 
 async def cdl(lon: float, lat: float, desde: int, hasta: int) -> dict:
-    hoy = date.today().isoformat()
+    hoy = config.hoy().isoformat()
     base = {"meta": servicios._meta(), "aviso": AVISO_CDL, "coordenada": (lon, lat), "anioDesde": desde, "anioHasta": hasta, "limites": LIMITES_CDL,
             "fuente": {"nombre": cropscape.NOMBRE, "url": cropscape.URL_PORTAL, "cita": CITA_CDL.format(anios=f"{desde}-{hasta}", hoy=hoy),
                        "coordenada": (lon, lat), "periodo": {"desde": date(desde, 1, 1), "hasta": date(hasta, 12, 31)}, "consultado": hoy,
@@ -92,7 +92,7 @@ def agua_disponible(horizontes: list[dict], hasta_cm: int = PROFUNDIDAD_TAW_CM) 
 
 
 async def ssurgo(lon: float, lat: float) -> dict:
-    hoy = date.today().isoformat()
+    hoy = config.hoy().isoformat()
     base = {"meta": servicios._meta(), "aviso": AVISO_SSURGO, "coordenada": (lon, lat), "limites": LIMITES_SSURGO,
             "fuente": {"nombre": sda.NOMBRE, "url": sda.URL_PORTAL, "cita": sda.CITA, "coordenada": (lon, lat), "consultado": hoy,
                        "resolucion": "poligono de la unidad cartografica (escala del levantamiento, por lo comun 1:12 000 a 1:24 000)",

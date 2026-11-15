@@ -1,6 +1,7 @@
 """Configuracion por variables de entorno. Nunca poner llaves ni tokens en el repo."""
 import json
 import os
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[2]
@@ -44,3 +45,14 @@ def commit() -> str | None:
 
 COMMIT = commit()  # se lee una vez al arrancar
 USER_AGENT = f"agrohive-api/{VERSION_API}"
+
+
+# Hora de la sede (Boca del Rio, Veracruz): America/Mexico_City es UTC-6 fijo desde 2022 (Mexico dejo el horario de verano).
+# Se usa un desfase fijo y no zoneinfo para no depender de tzdata en el servidor. Las fechas que la API declara (consultado,
+# "hoy" de los limites de periodo, mes de la proxima temporada) van en hora de la sede, no en la del servidor (UTC en el droplet).
+ZONA_SEDE = timezone(timedelta(hours=-6), "America/Mexico_City")
+
+
+def hoy() -> date:
+    """Fecha de hoy en hora de la sede, sin importar la zona horaria del servidor."""
+    return datetime.now(ZONA_SEDE).date()
