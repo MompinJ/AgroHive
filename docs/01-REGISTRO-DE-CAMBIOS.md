@@ -2,6 +2,37 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — Hallazgos del back, segunda ronda (cazafallos, `Mompin-fallos`)
+
+- **Archivos:**
+  - `api/`: `app/http.py`, `rutas/{clima,suelo,terreno,proxima,cultivos}.py`, `servicios.py`, `ndvi.py`, `calendario.py`, `modelos.py`, `openapi.json` y `cliente/api.d.ts` regenerados; pruebas en `tests/test_hallazgos_back.py`, `test_basico.py` y `test_contratos_api.py`.
+  - Motor: `web/src/motor/{ranking,motor,fechas,protocolo,cliente,analogos,tarjetas}.ts`; pruebas en `pruebas/hallazgos-back.test.ts` y `pruebas/ranking.test.ts`.
+  - `datos/demo/respuestas/*.json` y `manifiesto.json`.
+  - Documentación: `docs/05`, `docs/08`, `docs/16` (M6 y E4), `docs/hallazgos-back.md`, `api/README.md`, `datos/calendario/LEEME.md`, `datos/demo/LEEME.md` y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:**
+  - Decisiones de Mompin (ya en `docs/13` y `docs/16`):
+    - H-B6: 20 s por intento, 2 intentos por fuente y un plazo total de 70 s por petición.
+    - H-M1: los pilares del puntaje se cuentan solo sobre las rotaciones que se ordenan; una EXPLORATORIO a la que le falta uno lleva puntaje `null`.
+    - H-M9: un escenario NO_EVALUABLE lleva todos sus indicadores en `null`.
+  - Además, cada uno con su prueba:
+    - H-M2: fin y etapa del ciclo por los parámetros del catálogo.
+    - H-B8: `/api/cultivos` sin catálogo responde 503 `ERROR_DATOS`.
+    - H-B11: aviso `NDVI_EN_CACHE`.
+    - H-M4: fechas inválidas dan NO_EVALUABLE con motivo.
+    - H-M5: errores y cierre del Worker sin promesas colgadas.
+    - H-M8: sin área dentro de la parcela, NO_EVALUABLE.
+    - H-M10: huecos según la simulación.
+    - H-M6: sin año de corte fijo en los análogos.
+    - H-B10: país más cercano a 25 km o menos en la costa.
+    - H-B9: el paquete de demo se revalidó contra 0.13.0 y solo cambió `versionContrato`.
+    - H-M11: la tarjeta nombra la institución de la ventana.
+- **Regresión A5.5:** no cambia. Con H-M11, en Isla la institución sigue siendo INIFAP y el texto queda igual, así que no hizo falta regenerarla.
+- **Toca archivos de otros:** `api/` y `datos/demo/` son de Eduardo; esta noche los lleva cazafallos **con OK de Mompin, porque Eduardo trabaja en el front**. No se tocaron `web/src/ui/`, `web/src/escena/`, `web/src/api/cliente.ts` ni `datos/catalogos/`.
+- **Pendiente:**
+  - H-M7, propuesto: un horizonte de los análogos que cruce septiembre necesita definir su año agrícola.
+  - Integrar a `main` y desplegar la API (E1).
+- **Decisiones afectadas:** H-B6, H-M1 y H-M9 quedan aplicadas.
+
 ### 2026-11-14 (noche) — Decisiones y reparto del día final: D1, D4, H-B6, H-M1, H-M9 `[DECIDIDO]` (Mompin; sesión "estado")
 
 - **Archivos:** `docs/13` (seis filas nuevas), `docs/16` (sección 2 con decididas y abiertas; sección 3 con el reparto sobre `main` `582e482`), `docs/11` (resumen de decisiones).

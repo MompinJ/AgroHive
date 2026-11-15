@@ -154,7 +154,7 @@
           "cultivos"
         ],
         "summary": "Cultivos",
-        "description": "Catalogo propio (A1.5, de Mafer) leido de datos/catalogos/cultivos.json. Sin catalogo no se inventa nada.",
+        "description": "Catalogo propio (A1.5, de Mafer) leido de datos/catalogos/cultivos.json. Sin catalogo, 503 ERROR_DATOS: no se inventa nada\ny no se responde un documento que no cumpla contratos/cultivo.schema.json (H-B8). El front trata los cultivos como obligatorios.",
         "operationId": "cultivos_api_cultivos_get",
         "responses": {
           "200": {
@@ -163,6 +163,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CatalogoCultivos"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDatos"
                 }
               }
             }
@@ -881,29 +891,6 @@
       },
       "CatalogoCultivos": {
         "properties": {
-          "estado": {
-            "anyOf": [
-              {
-                "type": "string",
-                "const": "NO_EVALUABLE"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Estado"
-          },
-          "motivo": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Motivo"
-          },
           "cultivos": {
             "items": {
               "additionalProperties": true,
@@ -919,7 +906,7 @@
           "cultivos"
         ],
         "title": "CatalogoCultivos",
-        "description": "Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, NO_EVALUABLE."
+        "description": "Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, 503 (H-B8)."
       },
       "Cdl": {
         "properties": {

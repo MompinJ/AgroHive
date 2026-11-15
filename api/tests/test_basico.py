@@ -46,8 +46,8 @@ def test_version_contrato_falla_si_no_es_json(tmp_path):
 
 
 def test_cultivos_sin_catalogo_no_inventa():
-    cuerpo = cliente.get("/api/cultivos").json()
-    assert cuerpo["estado"] == "NO_EVALUABLE" and cuerpo["cultivos"] == []
+    r = cliente.get("/api/cultivos")  # H-B8: 503 ERROR_DATOS, no un catalogo vacio que no cumple el contrato
+    assert r.status_code == 503 and r.json()["estado"] == "ERROR_DATOS"
 
 
 def test_cultivos_lee_el_catalogo(tmp_path):

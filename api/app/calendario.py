@@ -1,5 +1,6 @@
 """GET /api/calendario (A4.13). En Mexico manda el calendario cargado (hoy solo Isla). Fuera, GGCMI fase 3."""
 import json
+import math
 from datetime import date, datetime, timedelta, timezone
 from functools import lru_cache
 
@@ -21,6 +22,11 @@ FUENTES_GGCMI = {
 MOTIVO_FRIJOL = ("GGCMI fase 3 publica bea_rf, pero ni el NetCDF ni la ficha de Zenodo "
                  "(doi:10.5281/zenodo.5062513) dicen que bea sea frijol. Queda NO_EVALUABLE.")
 MOTIVO_SIN_PRODUCTO = "GGCMI fase 3 no trae calabaza ni chile. Queda NO_EVALUABLE."
+# H-B10: en la costa, Natural Earth 1:110m generaliza el litoral y deja fuera puntos en tierra (Boca del Rio, a 1.4 km del
+# poligono de Mexico; Veracruz puerto, 4.2 km). Medido el 14/11 sobre este archivo: Ensenada queda a 20 km y Lima a 15 km.
+# Si el punto no cae en ningun pais, se toma el mas cercano a 25 km o menos, solo si ningun otro pais esta a 25 km o menos
+# (en una frontera no se adivina). Es una tolerancia SUPUESTO sobre la precision del mapa, y la respuesta lo dice.
+TOLERANCIA_COSTA_KM = 25.0
 MOTIVO_MEXICO = ("En Mexico el calendario es SIAP e INIFAP. Solo esta cargado el de Isla (INEGI 30/077) "
                  "y este punto no cae en su recuadro. No se usa GGCMI.")
 
@@ -72,17 +78,48 @@ def _maiz() -> dict:
         }
 
 
+def _poligonos(f: dict) -> list:
+    geom = f["geometry"]
+    return geom["coordinates"] if geom["type"] == "MultiPolygon" else [geom["coordinates"]]
+
+
+def _distancia_km(lon: float, lat: float, poligonos: list) -> float:
+    """Distancia del punto al borde mas cercano, en km, en un plano local (basta para decenas de km)."""
+    kx, ky = 111.32 * math.cos(math.radians(lat)), 110.57
+    px, py = lon * kx, lat * ky
+    mejor = math.inf
+    for p in poligonos:
+        for anillo in p:
+            for a, b in zip(anillo, anillo[1:]):
+                ax, ay, bx, by = a[0] * kx, a[1] * ky, b[0] * kx, b[1] * ky
+                dx, dy = bx - ax, by - ay
+                t = 0.0 if dx == dy == 0 else max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)))
+                mejor = min(mejor, math.hypot(px - ax - t * dx, py - ay - t * dy))
+    return mejor
+
+
 def pais(lon: float, lat: float) -> dict:
-    """Pais de Natural Earth 110m. Lanza SinPais si no hay uno solo."""
-    hallados = []
-    for f in _paises():
-        geom = f["geometry"]
-        poligonos = geom["coordinates"] if geom["type"] == "MultiPolygon" else [geom["coordinates"]]
-        if any(_en_poligono(lon, lat, p) for p in poligonos):
-            hallados.append(f)
-    if len(hallados) != 1:
-        raise SinPais("sin un solo pais en Natural Earth 110m" if not hallados else "el punto cae en mas de un pais de Natural Earth 110m")
-    return {"iso": hallados[0]["iso"], "nombre": hallados[0]["nombre"]}
+    """Pais de Natural Earth 110m. Fuera de todo poligono, el mas cercano dentro de TOLERANCIA_COSTA_KM si no hay otro igual de
+    cerca (trae `distanciaKm`). Lanza SinPais si no hay uno solo."""
+    hallados = [f for f in _paises() if any(_en_poligono(lon, lat, p) for p in _poligonos(f))]
+    if len(hallados) > 1:
+        raise SinPais("el punto cae en mas de un pais de Natural Earth 110m")
+    if hallados:
+        return {"iso": hallados[0]["iso"], "nombre": hallados[0]["nombre"]}
+    cerca = sorted((_distancia_km(lon, lat, _poligonos(f)), i) for i, f in enumerate(_paises()))
+    cerca = [(d, _paises()[i]) for d, i in cerca if d <= TOLERANCIA_COSTA_KM]
+    if len(cerca) != 1:
+        raise SinPais("sin un solo pais en Natural Earth 110m" + (f" (hay {len(cerca)} a menos de {TOLERANCIA_COSTA_KM:.0f} km)" if cerca else ""))
+    d, f = cerca[0]
+    return {"iso": f["iso"], "nombre": f["nombre"], "distanciaKm": round(d, 1)}
+
+
+def _aviso_cercania(lugar: dict) -> list[dict]:
+    if "distanciaKm" not in lugar:
+        return []
+    return [{"codigo": "PAIS_POR_CERCANIA", "severidad": "aviso",
+             "mensaje": (f"El punto cae fuera de los poligonos de Natural Earth 1:110m (costa generalizada); se toma {lugar['nombre']}, "
+                         f"el unico pais a menos de {TOLERANCIA_COSTA_KM:.0f} km (a {lugar['distanciaKm']} km de su borde en ese mapa).")}]
 
 
 def _en_isla(lon: float, lat: float) -> bool:
@@ -181,7 +218,7 @@ def _sin_fuente_local(lugar: dict, motivo: str) -> dict:
         "ubicacion": {"pais": lugar["nombre"], "paisIso": lugar["iso"],
                       "unidadAdministrativa": {"sistema": "Natural Earth 110m", "clave": lugar["iso"], "nombre": lugar["nombre"], "nivel": 0}},
         "entradas": entradas,
-        "advertencias": [{"codigo": "CALENDARIO_SIN_FUENTE_LOCAL", "severidad": "aviso", "mensaje": motivo}],
+        "advertencias": [{"codigo": "CALENDARIO_SIN_FUENTE_LOCAL", "severidad": "aviso", "mensaje": motivo}, *_aviso_cercania(lugar)],
     }
 
 
@@ -213,6 +250,7 @@ def armar(lon: float, lat: float) -> dict:
     ident = f"calendario-ggcmi-{lugar['iso'].lower()}-{i}-{j}"
     adv.append({"codigo": "PAIS_NATURAL_EARTH_110M", "severidad": "info",
                  "mensaje": "El pais sale de Natural Earth 1:110m. En la costa el limite es grueso."})
+    adv.extend(_aviso_cercania(lugar))
     return {
         "meta": _meta(), "id": ident,
         "ubicacion": {"pais": lugar["nombre"], "paisIso": lugar["iso"], "region": f"celda GGCMI {lat_c:.2f},{lon_c:.2f}",

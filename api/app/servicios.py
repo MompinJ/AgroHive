@@ -386,7 +386,11 @@ async def suelo(lat: float, lon: float) -> dict:
         resp = await _suelo_isric(lat, lon)
     except SinDatos as e:
         resp, error = None, e
-    olm, aviso = await tarea_olm
+    try:
+        queda = http.restante()
+        olm, aviso = await (tarea_olm if queda is None else asyncio.wait_for(tarea_olm, timeout=max(0.0, queda)))
+    except asyncio.TimeoutError:  # GDAL lee en hilos que no se pueden cancelar: no se le espera mas alla del plazo (H-B6)
+        olm, aviso = None, {"codigo": "OPENLANDMAP_NO_DISPONIBLE", "mensaje": "OpenLandMap no respondio dentro del plazo de la peticion; solo hay estimacion de ISRIC.", "severidad": "info"}
     if resp is None:
         if olm is None:
             raise error

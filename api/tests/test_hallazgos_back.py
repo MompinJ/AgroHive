@@ -77,3 +77,87 @@ def test_openapi_json_committeado_esta_al_dia():
     from pathlib import Path
     guardado = json.loads((Path(__file__).parents[1] / "openapi.json").read_text(encoding="utf-8"))
     assert guardado == json.loads(json.dumps(app.openapi(), ensure_ascii=False))
+
+
+# ---------------------------------------------------------------- segunda ronda (decisiones de Mompin del 14/11)
+
+def colgada(lento):
+    """Handler de MockTransport: los hosts de `lento` no responden nunca (la conexion queda abierta); el resto, como `responder()`."""
+    import asyncio
+    normal = responder()
+
+    async def handler(request):
+        if any(h in request.url.host for h in lento):
+            await asyncio.sleep(3600)
+        return normal(request)
+    return handler
+
+
+def test_h_b6_presupuesto_cabe_en_los_90_s_del_front():
+    from app import http
+    peor_fuente = http.TIEMPO_INTENTO_S * http.INTENTOS + http.ESPERA_BASE_S * (2 ** (http.INTENTOS - 1) - 1)
+    assert http.PLAZO_TOTAL_S <= 75 and peor_fuente < http.PLAZO_TOTAL_S
+
+
+def test_h_b6_power_y_open_meteo_colgados_llegan_a_la_cache_dentro_del_plazo(simular, monkeypatch):
+    """Antes: 3 x 60 s por fuente (unos 183 s) y el front cortaba a los 90 s sin ver el respaldo. Ahora el plazo total corta la cadena."""
+    import time
+
+    from app import http, servicios
+    simular(responder())
+    cliente.get(f"/api/clima?{PARAMS}")  # deja la serie de POWER en cache
+    monkeypatch.setattr(servicios, "_vigente", lambda edad, hasta: False)
+    monkeypatch.setattr(http, "PLAZO_TOTAL_S", 1.0)
+    simular(colgada(("power.larc", "archive-api")))
+    t = time.monotonic()
+    c = cliente.get(f"/api/clima?{PARAMS}").json()
+    assert time.monotonic() - t < 3
+    assert c["estado"] == "RESPALDO_HISTORICO" and "CACHE_VENCIDA" in {a["codigo"] for a in c["advertencias"]}
+
+
+def test_h_b6_sin_cache_el_plazo_da_503_y_no_cuelga(simular, monkeypatch):
+    import time
+
+    from app import http
+    monkeypatch.setattr(http, "PLAZO_TOTAL_S", 1.0)
+    simular(colgada(("power.larc", "archive-api")))
+    t = time.monotonic()
+    r = cliente.get(f"/api/clima?{PARAMS}")
+    assert time.monotonic() - t < 3 and r.status_code == 503 and r.json()["estado"] == "ERROR_DATOS"
+
+
+def test_h_b11_ndvi_vencido_reutilizado_lo_dice(simular, validar, monkeypatch):
+    """Antes se reutilizaba la ventana vencida en silencio, aunque el comentario decia "se usa y se dice"."""
+    from app import servicios
+    from tests.test_ndvi import URL, leer_real, pc_simulado
+    simular(pc_simulado())
+    leer_real(monkeypatch)
+    primera = cliente.get(URL).json()
+    assert "NDVI_EN_CACHE" not in {a["codigo"] for a in primera["advertencias"]}
+    monkeypatch.setattr(servicios, "_vigente", lambda edad, hasta: False)
+    simular(pc_simulado(busqueda_ok=False))
+    c = cliente.get(URL).json()
+    validar(c, "ndvi#")
+    assert [d["fecha"] for d in c["serie"]] == [d["fecha"] for d in primera["serie"]]
+    assert "NDVI_EN_CACHE" in {a["codigo"] for a in c["advertencias"]}
+
+
+def test_h_b8_cultivos_declara_su_503_en_openapi():
+    assert "503" in app.openapi()["paths"]["/api/cultivos"]["get"]["responses"]
+
+
+def test_h_b10_la_costa_de_veracruz_es_mexico_y_lo_dice(validar):
+    """Boca del Rio (la sede) caia fuera del poligono 1:110m de Mexico: 422 "sin un solo pais"."""
+    r = cliente.get("/api/calendario?lat=19.10&lon=-96.10")
+    assert r.status_code == 200
+    c = r.json()
+    validar(c, "calendario-local#")
+    assert c["ubicacion"]["paisIso"] == "MX"
+    codigos = {a["codigo"] for a in c["advertencias"]}
+    assert {"PAIS_POR_CERCANIA", "CALENDARIO_SIN_FUENTE_LOCAL"} <= codigos
+
+
+def test_h_b10_mar_abierto_y_estrechos_no_adivinan_pais():
+    assert cliente.get("/api/calendario?lat=23.0&lon=-94.0").status_code == 422  # golfo de Mexico, a 386 km de la costa
+    r = cliente.get("/api/calendario?lat=35.95&lon=-5.6")  # estrecho de Gibraltar: Espana y Marruecos a menos de 25 km
+    assert r.status_code == 422 and "hay 2" in r.json()["detail"]

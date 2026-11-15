@@ -53,7 +53,8 @@ export interface paths {
         };
         /**
          * Cultivos
-         * @description Catalogo propio (A1.5, de Mafer) leido de datos/catalogos/cultivos.json. Sin catalogo no se inventa nada.
+         * @description Catalogo propio (A1.5, de Mafer) leido de datos/catalogos/cultivos.json. Sin catalogo, 503 ERROR_DATOS: no se inventa nada
+         *     y no se responde un documento que no cumpla contratos/cultivo.schema.json (H-B8). El front trata los cultivos como obligatorios.
          */
         get: operations["cultivos_api_cultivos_get"];
         put?: never;
@@ -280,13 +281,9 @@ export interface components {
         };
         /**
          * CatalogoCultivos
-         * @description Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, NO_EVALUABLE.
+         * @description Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, 503 (H-B8).
          */
         CatalogoCultivos: {
-            /** Estado */
-            estado?: "NO_EVALUABLE" | null;
-            /** Motivo */
-            motivo?: string | null;
             /** Cultivos */
             cultivos: {
                 [key: string]: unknown;
@@ -1189,6 +1186,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CatalogoCultivos"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDatos"];
                 };
             };
         };
