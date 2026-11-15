@@ -1,0 +1,366 @@
+{
+  "versionContrato": "0.15.0",
+  "grabado": "2026-11-15T16:27:45+00:00",
+  "clima": {
+    "clase": "Cwa",
+    "bioma": "templado",
+    "MAT": 18.8,
+    "MAP": 697.5,
+    "Thot": 23.6,
+    "Tcold": 14.7,
+    "verano": "AMJJAS"
+  },
+  "escenarios": {
+    "seco": {
+      "anioReal": 2009,
+      "percentil": 553,
+      "temporadas": {
+        "pv": 538.3,
+        "oi": 23.4,
+        "total": 561.7,
+        "fuente": {
+          "nombre": "SIAP (Servicio de Informacion Agroalimentaria y Pesquera), Normatividad Tecnica para la Generacion de Estadistica Basica Agropecuaria 2022",
+          "url": "https://www.gob.mx/cms/uploads/attachment/file/789519/NTGEBAP_2022.pdf",
+          "cita": "p. 10 (anio agricola de 18 meses: OI inicia con las siembras de octubre, PV con las de abril), p. 20 (Cuadro No. 1, Estructura del anio agricola) y p. 46 (siembras OI concluidas en marzo, PV en septiembre)",
+          "consultado": "2026-11-14"
+        }
+      }
+    },
+    "habitual": {
+      "anioReal": 2016,
+      "percentil": 724.8,
+      "temporadas": {
+        "pv": 619.4,
+        "oi": 106,
+        "total": 725.4,
+        "fuente": {
+          "nombre": "SIAP (Servicio de Informacion Agroalimentaria y Pesquera), Normatividad Tecnica para la Generacion de Estadistica Basica Agropecuaria 2022",
+          "url": "https://www.gob.mx/cms/uploads/attachment/file/789519/NTGEBAP_2022.pdf",
+          "cita": "p. 10 (anio agricola de 18 meses: OI inicia con las siembras de octubre, PV con las de abril), p. 20 (Cuadro No. 1, Estructura del anio agricola) y p. 46 (siembras OI concluidas en marzo, PV en septiembre)",
+          "consultado": "2026-11-14"
+        }
+      }
+    },
+    "lluvioso": {
+      "anioReal": 2018,
+      "percentil": 839.2,
+      "temporadas": {
+        "pv": 798.3,
+        "oi": 36.4,
+        "total": 834.8,
+        "fuente": {
+          "nombre": "SIAP (Servicio de Informacion Agroalimentaria y Pesquera), Normatividad Tecnica para la Generacion de Estadistica Basica Agropecuaria 2022",
+          "url": "https://www.gob.mx/cms/uploads/attachment/file/789519/NTGEBAP_2022.pdf",
+          "cita": "p. 10 (anio agricola de 18 meses: OI inicia con las siembras de octubre, PV con las de abril), p. 20 (Cuadro No. 1, Estructura del anio agricola) y p. 46 (siembras OI concluidas en marzo, PV en septiembre)",
+          "consultado": "2026-11-14"
+        }
+      }
+    }
+  },
+  "rotaciones": {
+    "R1": {
+      "estado": "EVALUABLE",
+      "filtroClima": null,
+      "pilares": {
+        "seco": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.5255,
+            "diasDeficit": 264,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 786.3,
+            "excesoTotalMm": 0
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 0,
+            "diasExceso": 0,
+            "fraccionLluviaPercolada": 0
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-sin-fuente-local-mx para: maiz PV (En Mexico el calendario es SIAP e INIFAP. Solo esta cargado el de Isla (INEGI 30/077) y este punto no cae en su recuadro. No se usa GGCMI.); trigo OI (sin entrada en el calendario).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 112
+          }
+        },
+        "habitual": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.3954,
+            "diasDeficit": 190,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 553.2,
+            "excesoTotalMm": 34.1
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 34.1,
+            "diasExceso": 14,
+            "fraccionLluviaPercolada": 0.0313
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-sin-fuente-local-mx para: maiz PV (En Mexico el calendario es SIAP e INIFAP. Solo esta cargado el de Isla (INEGI 30/077) y este punto no cae en su recuadro. No se usa GGCMI.); trigo OI (sin entrada en el calendario).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 113
+          }
+        },
+        "lluvioso": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.3922,
+            "diasDeficit": 166,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 542.7,
+            "excesoTotalMm": 0.8
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 0.8,
+            "diasExceso": 2,
+            "fraccionLluviaPercolada": 0.0006
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-sin-fuente-local-mx para: maiz PV (En Mexico el calendario es SIAP e INIFAP. Solo esta cargado el de Isla (INEGI 30/077) y este punto no cae en su recuadro. No se usa GGCMI.); trigo OI (sin entrada en el calendario).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 112
+          }
+        }
+      }
+    },
+    "R2": {
+      "estado": "EVALUABLE",
+      "filtroClima": null,
+      "pilares": {
+        "seco": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.5307,
+            "diasDeficit": 286,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 756.2,
+            "excesoTotalMm": 0
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 0,
+            "diasExceso": 0,
+            "fraccionLluviaPercolada": 0
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-sin-fuente-local-mx para: sorgo PV (sin entrada en el calendario); cebada OI (sin entrada en el calendario).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 112
+          }
+        },
+        "habitual": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.4172,
+            "diasDeficit": 194,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 557.3,
+            "excesoTotalMm": 2.1
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 2.1,
+            "diasExceso": 4,
+            "fraccionLluviaPercolada": 0.0019
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-sin-fuente-local-mx para: sorgo PV (sin entrada en el calendario); cebada OI (sin entrada en el calendario).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 113
+          }
+        },
+        "lluvioso": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.4127,
+            "diasDeficit": 168,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 543.8,
+            "excesoTotalMm": 0
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 0,
+            "diasExceso": 0,
+            "fraccionLluviaPercolada": 0
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-sin-fuente-local-mx para: sorgo PV (sin entrada en el calendario); cebada OI (sin entrada en el calendario).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 112
+          }
+        }
+      }
+    },
+    "R3": {
+      "estado": "EVALUABLE",
+      "filtroClima": null,
+      "pilares": {
+        "seco": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.2191,
+            "diasDeficit": 114,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 196.3,
+            "excesoTotalMm": 0
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 0,
+            "diasExceso": 0,
+            "fraccionLluviaPercolada": 0
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-sin-fuente-local-mx para: maiz PV (En Mexico el calendario es SIAP e INIFAP. Solo esta cargado el de Isla (INEGI 30/077) y este punto no cae en su recuadro. No se usa GGCMI.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 262
+          }
+        },
+        "habitual": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.0386,
+            "diasDeficit": 40,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 32.5,
+            "excesoTotalMm": 34.1
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 34.1,
+            "diasExceso": 14,
+            "fraccionLluviaPercolada": 0.0326
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-sin-fuente-local-mx para: maiz PV (En Mexico el calendario es SIAP e INIFAP. Solo esta cargado el de Isla (INEGI 30/077) y este punto no cae en su recuadro. No se usa GGCMI.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 263
+          }
+        },
+        "lluvioso": {
+          "deficitHidrico": {
+            "estado": "EVALUABLE",
+            "proporcionDemandaNoCubierta": 0.0099,
+            "diasDeficit": 16,
+            "diasDeficitEtapasSensibles": null,
+            "deficitTotalMm": 8.1,
+            "excesoTotalMm": 0.8
+          },
+          "excesoHidrico": {
+            "estado": "EVALUABLE",
+            "excesoTotalMm": 0.8,
+            "diasExceso": 2,
+            "fraccionLluviaPercolada": 0.0006
+          },
+          "compatibilidadCiclo": {
+            "estado": "NO_EVALUABLE",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-sin-fuente-local-mx para: maiz PV (En Mexico el calendario es SIAP e INIFAP. Solo esta cargado el de Isla (INEGI 30/077) y este punto no cae en su recuadro. No se usa GGCMI.).",
+            "siembrasFueraDeVentana": null
+          },
+          "proteccionSuelo": {
+            "estado": "EVALUABLE",
+            "motivo": "Indice de erosion relativo NO_EVALUABLE: RUSLE necesita intensidad de lluvia sub-diaria (I30) y factores C y LS con fuente para la parcela; con lluvia diaria se inventarian. El pilar usa los dias de suelo desnudo.",
+            "indiceErosionRelativo": null,
+            "diasSueloDesnudo": 262
+          }
+        }
+      }
+    }
+  },
+  "ranking": {
+    "criterio": "B_minimax_arrepentimiento",
+    "orden": [
+      {
+        "rotacionId": "R1",
+        "arrepentimiento": 0.0025,
+        "peorEscenario": "seco"
+      },
+      {
+        "rotacionId": "R2",
+        "arrepentimiento": 0.0066,
+        "peorEscenario": "seco"
+      },
+      {
+        "rotacionId": "R3",
+        "arrepentimiento": 0.0349,
+        "peorEscenario": "seco"
+      }
+    ]
+  },
+  "proximaTemporada": {
+    "analogos": [
+      2025
+    ],
+    "ciclosEvaluados": [
+      2
+    ],
+    "rango": {
+      "proporcionDemandaNoCubierta": {
+        "inferior": 0.978,
+        "superior": 0.978
+      },
+      "fraccionLluviaPercolada": {
+        "inferior": 0,
+        "superior": 0
+      },
+      "excesoTotalMm": {
+        "inferior": 0,
+        "superior": 0
+      }
+    }
+  },
+  "rankingCumpleContrato": true
+}

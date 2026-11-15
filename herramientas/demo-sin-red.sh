@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
-# A5.8: arranca la demo de Isla como si no hubiera internet: API local sin salida a la red + front compilado contra esa API.
+# A5.8: arranca la demo (las parcelas de ejemplo mundiales, datos/demo/ejemplos/) como si no hubiera internet: API local sin
+# salida a la red + front compilado contra esa API.
 # No apaga el wifi ni toca la red del sistema: bloquea la salida SOLO del proceso de la API (herramientas/sin-red/sitecustomize.py
-# bloquea los sockets de Python y los proxies invalidos bloquean a GDAL/libcurl). La cache de datos arranca vacia: todo sale del
-# paquete de demo (datos/demo). No usa tokens ni llaves.
+# bloquea los sockets de Python y los proxies invalidos bloquean a GDAL/libcurl). La cache de datos arranca vacia: todo sale de
+# los paquetes grabados. La API lee un solo paquete (AGROHIVE_DEMO_DIR), asi que el script junta en una carpeta temporal la cache
+# de cada ejemplo (datos/demo/ejemplos/*/cache) y la de Isla (datos/demo/cache, prueba interna). No usa tokens ni llaves.
+#
+# En el navegador, los ejemplos no llaman a la API: su paquete viaja dentro del front (web/src/demo/ejemplos.ts). La API sin red
+# sirve para la coordenada de cada ejemplo y para parcelas dibujadas encima de ellos.
 #
 # Nota: los proxies invalidos tambien afectan a curl; para consultar la API local usa  curl --noproxy "*" http://127.0.0.1:8021/...
 #
@@ -27,18 +32,27 @@ done
 
 PY="$RAIZ/api/.venv/bin/python"
 [ -x "$PY" ] || { echo "Falta api/.venv. Crealo: python3 -m venv api/.venv && api/.venv/bin/pip install -r api/requirements-dev.txt" >&2; exit 1; }
-[ -d "$RAIZ/datos/demo/cache" ] || { echo "Falta datos/demo/cache (el paquete de demo, A2.4)." >&2; exit 1; }
+ls -d "$RAIZ"/datos/demo/ejemplos/*/cache >/dev/null 2>&1 || { echo "Faltan los ejemplos grabados (datos/demo/ejemplos/*/cache): herramientas/ejemplos/grabar.py." >&2; exit 1; }
 
 CACHE_VACIA="$(mktemp -d)"
+PAQUETES="$(mktemp -d)"
 PIDS=()
-limpiar() { for p in "${PIDS[@]:-}"; do pkill -P "$p" 2>/dev/null || true; kill "$p" 2>/dev/null || true; done; rm -rf "$CACHE_VACIA"; }
+limpiar() { for p in "${PIDS[@]:-}"; do pkill -P "$p" 2>/dev/null || true; kill "$p" 2>/dev/null || true; done; rm -rf "$CACHE_VACIA" "$PAQUETES"; }
 trap limpiar EXIT INT TERM
+
+# Un solo paquete con la cache de todos los ejemplos (y la de Isla si esta). Los nombres de cache llevan la coordenada, asi que no chocan;
+# los tiles de Terrarium compartidos son el mismo archivo.
+for c in "$RAIZ"/datos/demo/ejemplos/*/cache "$RAIZ/datos/demo/cache"; do
+  if [ -d "$c" ]; then cp -r "$c"/. "$PAQUETES"/; fi
+done
+echo "Paquete sin red: $(ls -d "$RAIZ"/datos/demo/ejemplos/*/cache | wc -l) ejemplos, $(find "$PAQUETES" -type f | wc -l) archivos."
 
 # Entorno SIN red para la API: sockets de Python bloqueados (salvo loopback) y proxies invalidos para libcurl/GDAL.
 export PYTHONPATH="$RAIZ/herramientas/sin-red${PYTHONPATH:+:$PYTHONPATH}"
 export HTTP_PROXY="http://127.0.0.1:9" HTTPS_PROXY="http://127.0.0.1:9" ALL_PROXY="http://127.0.0.1:9" NO_PROXY=""
 export http_proxy="$HTTP_PROXY" https_proxy="$HTTPS_PROXY" all_proxy="$ALL_PROXY"
 export AGROHIVE_CACHE_DIR="$CACHE_VACIA"
+export AGROHIVE_DEMO_DIR="$PAQUETES"
 unset EARTHDATA_TOKEN  # SMAP necesita red y token: sin el responde 503 visible, que es lo esperado en esta prueba
 
 # Comprobacion: desde un proceso con este mismo entorno una URL externa DEBE fallar. Si sale, se aborta (la prueba no valdria).
@@ -55,7 +69,7 @@ for _ in $(seq 1 30); do
 done
 curl --noproxy "*" -fsS -m 2 "http://127.0.0.1:$PUERTO_API/health" || { echo "La API no arranco." >&2; exit 1; }
 echo
-echo "API sin red en http://127.0.0.1:$PUERTO_API (cache vacia en $CACHE_VACIA)"
+echo "API sin red en http://127.0.0.1:$PUERTO_API (cache vacia en $CACHE_VACIA, paquetes en $PAQUETES)"
 
 if [ "$SOLO_API" -eq 0 ]; then
   # El front se compila apuntando a la API local (en produccion comparten origen y VITE_API_URL queda vacia).
