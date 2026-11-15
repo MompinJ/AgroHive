@@ -3,13 +3,15 @@
 // ILUSTRATIVO: no cambia el modelo de la escena ni los datos del motor; solo dibuja lo que la
 // interfaz le pasa. Los insectos no entran al raycast (no roban el clic de la celda).
 
+import { tt } from '../../ui/i18n/actual';
 import * as THREE from 'three';
 
 export type TipoPlaga = 'chapulin' | 'gusano' | 'mosca' | 'escarabajo' | 'pulgon';
 export interface PlagaCelda { tipo: TipoPlaga; comiendo: boolean }
 
 export const NOMBRES_PLAGA: Record<TipoPlaga, string> = {
-  chapulin: 'Chapulín', gusano: 'Gusano', mosca: 'Mosca blanca', escarabajo: 'Escarabajo', pulgon: 'Pulgón',
+  get chapulin() { return tt('plagaTipo.chapulin'); }, get gusano() { return tt('plagaTipo.gusano'); }, get mosca() { return tt('plagaTipo.mosca'); },
+  get escarabajo() { return tt('plagaTipo.escarabajo'); }, get pulgon() { return tt('plagaTipo.pulgon'); },
 };
 
 /** Punto de apoyo de una celda: centro y cara superior del bloque (con losa). */

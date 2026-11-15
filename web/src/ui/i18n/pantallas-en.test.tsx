@@ -112,3 +112,30 @@ describe('B7, Laboratorio en ingles (T3b, T4a, T4b y T4c)', () => {
     expect(nombreEscenario.habitual).toBe('Año normal');
   });
 });
+
+import { NOMBRE_NIVEL_GRAFICOS, AJUSTES_GRAFICOS } from '../../escena/graficos';
+import { NIVELES_VALIDACION, validarBloque, detalleVista } from '../../escena/vistas';
+import { NIVELES_TEMPERATURA } from '../../escena/clima-vista';
+import { textoProblema, NOMBRE_GRAVEDAD } from '../../escena/problemas';
+import { resumirAvisos, NOMBRE_SEVERIDAD } from '../../escena/avisos-datos';
+
+describe('B7, HUD de la escena en ingles', () => {
+  it('graficos, vistas, validacion, temperatura, problemas y avisos de datos', () => {
+    const textos = enIngles(() => {
+      const bloque = { celdaId: 'c1', cultivo: 'maiz', etapa: 'crecimiento', registro: { estado: 'EVALUABLE', estadoPlanta: 'estresada', ciclo: 1, etcMm: 4.2, humedad: 0.5, deficitMm: 3, excesoMm: 0 } } as never;
+      return [
+        ...Object.values(NOMBRE_NIVEL_GRAFICOS), ...Object.values(AJUSTES_GRAFICOS).map((a) => a.detalle),
+        ...NIVELES_VALIDACION.map((n) => n.etiqueta), ...NIVELES_TEMPERATURA.map((n) => n.etiqueta),
+        ...validarBloque(bloque, () => false).motivos,
+        ...(['cultivo', 'validacion', 'agua'] as const).flatMap((v) => { const d = detalleVista(bloque, v, () => true); return [d.titulo, ...d.lineas]; }),
+        textoProblema({ cultivo: 'maiz', celdas: 4, conProblema: 3, calor: 1, estados: { estresada: 2, marchita: 1 }, gravedad: 'alto' } as never, nombreCultivo('maiz')),
+        ...Object.values(NOMBRE_GRAVEDAD), ...Object.values(NOMBRE_SEVERIDAD),
+        ...resumirAvisos([{ origen: 'suelo', codigo: 'SUELO_SUPUESTO', mensaje: 'x', severidad: 'aviso' }] as never, []).etiquetas.map((e) => e.texto),
+      ];
+    });
+    // "Soil SUPUESTO (assumed)" lleva la etiqueta del contrato, que no se traduce.
+    expect(sinEspanol(textos)).toEqual([]);
+    expect(textos).toContain('Maize: 3 of 4 cells with problems (1 wilted, 2 stressed, heat above the threshold in 1)');
+    expect(textos).toContain('High');
+  });
+});

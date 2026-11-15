@@ -1,3 +1,4 @@
+import { tt } from '../ui/i18n/actual';
 // Nivel de graficos de la escena 3D. Puro. Cuesta menos dibujar con menos pixeles (a 2x son cuatro
 // veces mas que a 1x), sin aves ni viento ambiental y con menos insectos. No cambia datos, colores
 // de los indicadores ni el motor. El suavizado de bordes (antialias) solo se fija al crear el
@@ -5,7 +6,7 @@
 
 export type NivelGraficos = 'bajo' | 'medio' | 'alto';
 export const NIVELES_GRAFICOS: readonly NivelGraficos[] = ['bajo', 'medio', 'alto'];
-export const NOMBRE_NIVEL_GRAFICOS: Record<NivelGraficos, string> = { bajo: 'Bajo', medio: 'Medio', alto: 'Alto' };
+export const NOMBRE_NIVEL_GRAFICOS: Record<NivelGraficos, string> = { get bajo() { return tt('graf.bajo'); }, get medio() { return tt('graf.medio'); }, get alto() { return tt('graf.alto'); } };
 
 export interface AjustesGraficos {
   /** Tope del ratio de pixeles del lienzo (1 = un pixel por pixel CSS). */
@@ -19,9 +20,9 @@ export interface AjustesGraficos {
 }
 
 export const AJUSTES_GRAFICOS: Record<NivelGraficos, AjustesGraficos> = {
-  bajo: { pixelRatioMax: 1, ambiente: false, insectosMax: 120, detalle: 'Menos píxeles, sin aves ni viento y pocos insectos. Para equipos modestos.' },
-  medio: { pixelRatioMax: 1.5, ambiente: true, insectosMax: 240, detalle: 'Resolución intermedia, con aves y viento y la mitad de insectos.' },
-  alto: { pixelRatioMax: 2, ambiente: true, insectosMax: 480, detalle: 'Resolución completa, con aves, viento y todos los insectos.' },
+  bajo: { pixelRatioMax: 1, ambiente: false, insectosMax: 120, get detalle() { return tt('graf.bajoDetalle'); } },
+  medio: { pixelRatioMax: 1.5, ambiente: true, insectosMax: 240, get detalle() { return tt('graf.medioDetalle'); } },
+  alto: { pixelRatioMax: 2, ambiente: true, insectosMax: 480, get detalle() { return tt('graf.altoDetalle'); } },
 };
 
 const LLAVE = 'agrohive:graficos:v1';
