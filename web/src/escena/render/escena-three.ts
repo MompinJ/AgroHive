@@ -26,6 +26,9 @@ import { banderinEnCelda, esMedia, geometriaPrisma, giroForma, placaEnCelda, por
 import type { FormaCelda } from '../../geo/forma-celda';
 import { decodificarPaletaPng, type ColorPaleta } from '../voxel/paleta-png';
 
+/** Escala de una planta que se estan comiendo las plagas (frente a la normal). */
+const FACTOR_COMIDA = 0.4;
+
 export class ErrorWebGL extends Error {
   constructor() {
     super('WebGL no esta disponible en este navegador o equipo.');
@@ -665,7 +668,33 @@ export class EscenaThree {
   setPlagas(plagas: ReadonlyMap<string, PlagaCelda> | null) {
     this.plagasActuales = plagas;
     if (this.modeloActual) this.plagas.construir(this.apoyos(this.modeloActual), plagas);
+    this.actualizarComidas();
     this.pedirCuadro('plagas');
+  }
+
+  /** Celdas cuyas plantas se estan comiendo las plagas (sin insecticida): se dibujan mucho mas chicas. */
+  private comidas = new Set<string>();
+
+  private escalaFinal(b: Pick<BloqueEscena, 'celdaId' | 'avanceEtapa'>): number {
+    return escalaPorAvance(b.avanceEtapa) * (this.comidas.has(b.celdaId) ? FACTOR_COMIDA : 1);
+  }
+
+  /** La planta de una celda con plaga sin tratar se encoge (se la comen) y vuelve a crecer al tratarla o quitar la plaga. Ilustrativo. */
+  private actualizarComidas() {
+    const nuevas = new Set<string>();
+    for (const [id, p] of this.plagasActuales ?? []) if (p.comiendo) nuevas.add(id);
+    const igual = nuevas.size === this.comidas.size && [...nuevas].every((id) => this.comidas.has(id));
+    this.comidas = nuevas;
+    if (igual || !this.modeloActual) return;
+    const bloques = new Map(this.modeloActual.bloques.map((b) => [b.celdaId, b]));
+    for (const [mesh, meta] of this.metaPlantas) {
+      const desde = meta.celdas.map((id) => this.plantasActuales.get(id)?.escala ?? 0);
+      const hasta = meta.celdas.map((id, k) => { const b = bloques.get(id); return b ? this.escalaFinal(b) : desde[k]!; });
+      if (desde.every((d, k) => d === hasta[k])) continue;
+      this.transiciones = this.transiciones.filter((t) => t.sale || t.mesh !== mesh);
+      const t = { mesh, meta, desde, hasta, inicio: performance.now(), sale: false };
+      if (this.opciones.reducirMovimiento) this.avanzarTransicion(t, 1); else this.transiciones.push(t);
+    }
   }
 
   /** Nube breve de insecticida sobre esas celdas (con reducir movimiento, quieta y breve). */
@@ -1097,7 +1126,7 @@ export class EscenaThree {
       const desde: number[] = [];
       const hasta: number[] = [];
       grupo.bloques.forEach((b, k) => {
-        const final = escalaPorAvance(b.avanceEtapa);
+        const final = this.escalaFinal(b);
         const inicio = escalaInicial(previas.get(b.celdaId), grupo.clave, final, animar);
         const pos = new THREE.Vector3(b.x, this.topeDe(b), b.z);
         // El medio cuadrado ya viene recortado en su orientacion: sin el giro de los surcos.

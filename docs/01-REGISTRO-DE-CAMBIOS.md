@@ -162,6 +162,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — La plaga se come las plantas y la paleta solo ofrece cultivos completos (Eduardo)
+
+- **Archivos:** `web/src/escena/render/escena-three.ts`, `ui/lab/cultivosListos.ts`, `PanelCultivos.tsx`, `cultivosListos.test.ts`; `docs/06`.
+- **Cambio:** (1) en las celdas con plaga sin tratar la planta se encoge al 40 % y vuelve a crecer al tratarla o si la plaga se va; antes solo aparecían insectos. (2) La paleta de pintar solo muestra cultivos con parámetros del motor y todos sus modelos; un cultivo incompleto no se ofrece.
+- **Evidencia:** `tsc` y suite del front en verde; la prueba con los modelos reales confirma que hoy los 40 cultivos están completos, así que ninguno se oculta todavía.
+- **Límites:** el encogimiento de las plantas es dibujo y no se vio en el navegador (no hay prueba de la escena 3D, que pide WebGL); la regla de cultivos completos no cambia nada hoy.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Selector de idioma con banderas (Eduardo)
 
 - **Archivos:** `web/src/ui/i18n/SelectorIdioma.tsx`, `idioma.css`, `idioma.test.tsx`.
