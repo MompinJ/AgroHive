@@ -34,7 +34,7 @@ Arquitectura **mundial**, demo validada en **Isla**. Las fuentes globales (POWER
 
 ### Qué todavía no está
 
-Ya están, además: modo 2D (A3.6), gráficas del dashboard (A4.1), tarjetas en pantalla (A4.3), tooltips por bloque (A3.8), slider de meses (A5.2), móvil y teclado (A5.3), pantalla de método (A4.5) y la mascota en la escena (A5.1). SMAP ya sale de la API con humedad real (A4.8), aunque la interfaz no lo llama. También están la medición en hardware real (A5.4) y CDL y SSURGO para EE. UU. (A4.12). **Fase de revisión** `[DECIDIDO]` (Mompin, 15/11): ahora se revisa y valida, sobre todo el frontend; quedan pospuestas hasta el final A0.3, A4.4, A5.7 (README en revisión humana) y A5.9, y el envío se hace solo cuando todos digan que están satisfechos (`docs/13`, `docs/14`). NDVI (A4.11) ya sale de la API como evidencia y no entra al ranking. Video y presentación se definen al final, fuera del tablero (no están canceladas). Pintar por bloques sigue `[EN EVENTO]`.
+Ya están, además: modo 2D (A3.6), gráficas del dashboard (A4.1), tarjetas en pantalla (A4.3), tooltips por bloque (A3.8), slider de meses (A5.2), móvil y teclado (A5.3), pantalla de método (A4.5) y la mascota en la escena (A5.1). SMAP ya sale de la API con humedad real (A4.8), aunque la interfaz no lo llama. También están la medición en hardware real (A5.4) y CDL y SSURGO para EE. UU. (A4.12). **Fase de revisión** `[DECIDIDO]` (Mompin, 14/11 noche): ahora se revisa y valida, sobre todo el frontend; quedan pospuestas hasta el final A0.3, A4.4, A5.7 (README en revisión humana) y A5.9, y el envío se hace solo cuando todos digan que están satisfechos (`docs/13`, `docs/14`). NDVI (A4.11) ya sale de la API como evidencia y no entra al ranking. Video y presentación se definen al final, fuera del tablero (no están canceladas). Pintar por bloques sigue `[EN EVENTO]`.
 
 ### Qué no hace
 
@@ -130,7 +130,7 @@ Modelos en `modelos/cultivos/` (maíz, frijol, calabaza, chile: siembra, brote, 
 
 ## Equipo y ritmo
 
-El avance por persona lo genera `herramientas/cronograma.py` en [[Cronograma]] (56 de 60 hechas el 15/11; las 4 restantes, pospuestas por la fase de revisión). Del camino crítico solo falta `A5.9` (envío, cuando todos estén satisfechos). Video y presentación se definen al final, fuera del tablero (`docs/13`). C2 y C3 ya se cruzaron en código. A4.6, la actividad que dispara C4, está `[HECHO]`; C5 no está cruzada.
+El avance por persona lo genera `herramientas/cronograma.py` en [[Cronograma]] (56 de 60 hechas el 14/11 a las 18:45; las 4 restantes, pospuestas por la fase de revisión). Del camino crítico solo falta `A5.9` (envío, cuando todos estén satisfechos). Video y presentación se definen al final, fuera del tablero (`docs/13`). C2 y C3 ya se cruzaron en código. A4.6, la actividad que dispara C4, está `[HECHO]`; C5 no está cruzada.
 
 Si hay que cortar: el extra A4.12 (A4.11, A4.8, A3.9 y el slider ya están hechos y no se recortan salvo que fallen). Después se puede quedar solo el pilar hídrico, luego el 2D con cajas, luego la parcela fija. No se sacrifican la trazabilidad de POWER, los límites en voz alta, tres rotaciones, el peor caso ni la entrega.
 

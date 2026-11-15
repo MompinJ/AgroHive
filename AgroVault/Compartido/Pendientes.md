@@ -42,9 +42,9 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 
 ## Abierto de verdad
 
-**Fase de revisión** `[DECIDIDO]` (Mompin, 15/11): se revisa y valida lo que está en `main`, sobre todo el frontend. A0.3, A4.4, A5.7 y A5.9 quedan pospuestas hasta el final y el envío se hace solo cuando todos digan que están satisfechos (`docs/13`, `docs/14`). Los hallazgos de la revisión van por el buzón (pantalla, qué pasa, dueño, estado).
+**Fase de revisión** `[DECIDIDO]` (Mompin, 14/11 noche): se revisa y valida lo que está en `main`, sobre todo el frontend. A0.3, A4.4, A5.7 y A5.9 quedan pospuestas hasta el final y el envío se hace solo cuando todos digan que están satisfechos (`docs/13`, `docs/14`). Los hallazgos de la revisión van por el buzón (pantalla, qué pasa, dueño, estado).
 
-Corte 15/11 desde las marcas de `docs/14`: 56 de 60 hechas.
+Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas.
 
 | ID | Qué falta |
 | --- | --- |
