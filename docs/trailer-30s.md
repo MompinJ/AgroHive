@@ -86,7 +86,7 @@ Sin derechos dudosos: **no usar pistas "No copyright" de canales de YouTube** (s
 
 ## Lista de tomas
 
-Se graba **más largo de lo que se usa** (5 a 8 s por toma) para elegir el mejor tramo en el corte. Columna EN: depende de la versión en inglés de la app (B7 de balam). Columna E10: depende de que los ejemplos mundiales estén conectados en el front (E10 de Eduardo); hoy `main` todavía muestra la demo de Isla.
+Se graba **más largo de lo que se usa** (5 a 8 s por toma) para elegir el mejor tramo en el corte. Columna EN: depende de la versión en inglés de la app (B7 de balam). Columna E10: depende de los ejemplos mundiales en el front (E10 de Eduardo), que **ya entró a `main`** el 15/11 (`2b78037`): Terreno lista los seis ejemplos y abre el elegido.
 
 | Toma | Bloque | Pantalla | Ejemplo | Acción | Usa | Graba | EN | E10 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -103,7 +103,7 @@ Se graba **más largo de lo que se usa** (5 a 8 s por toma) para elegir el mejor
 | T7 | 7 | Cartón (se hace en el editor) | — | Logo, frase, enlace, equipo, límite y declaración de IA | 4 s | — | — | — |
 | R1 | Respaldo | Método y fuentes | Bajío | Desplazar por fuentes y límites (por si se cambia el bloque 5) | — | 8 s | **Sí** | Sí |
 
-**Pueden grabarse ya** (sin esperar a B7): T1, T2 y T6a-f, si el front ya carga los ejemplos (E10). Todo lo demás espera a la versión en inglés.
+**Pueden grabarse ya** (sin esperar a B7): T1, T2 y T6a-f, con la escena a pantalla completa y sin textos en cuadro. Todo lo demás espera a la versión en inglés.
 
 ### Cómo grabar
 
@@ -120,15 +120,15 @@ Se graba **más largo de lo que se usa** (5 a 8 s por toma) para elegir el mejor
 
 | Toma | Estado | Archivo bueno | Notas |
 | --- | --- | --- | --- |
-| T1 | Espera E10 | | |
-| T2 | Espera E10 | | |
-| T3a | Espera E10 y B7 | | |
-| T3b | Espera E10 y B7 | | |
-| T4a | Espera E10 y B7 | | |
-| T4b | Espera E10 y B7 | | |
-| T4c | Espera E10 y B7 | | |
-| T5 | Espera E10 y B7 | | |
-| T6a-f | Espera E10 | | |
+| T1 | Lista para grabar | | |
+| T2 | Lista para grabar | | |
+| T3a | Espera B7 | | |
+| T3b | Espera B7 | | |
+| T4a | Espera B7 | | |
+| T4b | Espera B7 | | |
+| T4c | Espera B7 | | |
+| T5 | Espera B7 | | |
+| T6a-f | Lista para grabar | | |
 | T6g | Espera B7 | | |
 | T7 | Por hacer en el editor | | |
 | Voz | Espera OK de la ficha de Krea | | |
