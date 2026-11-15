@@ -12,7 +12,7 @@ AgroHive es un **simulador visual "what if"** que compara **rotaciones de cultiv
 - **Catálogo de 40 cultivos**, cada uno con modelo 3D de cinco etapas, bloque ligero e icono 2D (`datos/catalogos/`, `modelos/`). Los parámetros salen de FAO-56 y FAO EcoCrop, con fuente por valor (`datos/catalogos/README.md`). El calendario de siembra tiene una base mundial (GGCMI fase 3, MIRCA2000 y FAO Crop Calendar) y, en México, SIAP e INIFAP encima (`docs/04`, `docs/13`).
 - **El orden que se ve es el que calcula el motor** (ranking B, `docs/05`).
 - **La decisión final es del agricultor.** AgroHive no reemplaza a un agrónomo (`docs/00`, `docs/10`).
-- **Demo publicada:** <https://64-23-143-102.sslip.io>. El último despliegue anotado en `docs/01` (15/11/2026) es `main` `5f985da`, con `/health` en `versionContrato` 0.15.0; lo que entró después puede no estar publicado todavía. Está en el servidor de un integrante del equipo (`docs/13`): la dirección puede cambiar.
+- **Demo publicada:** <https://64-23-143-102.sslip.io>. El último despliegue anotado en `docs/01` (15/11/2026) es `main` `9fd83a9` (comprobado en `/health` el 15/11), con `/health` en `versionContrato` 0.15.0; lo que entró después puede no estar publicado todavía. Está en el servidor de un integrante del equipo (`docs/13`): la dirección puede cambiar.
 
 ## Estructura
 
