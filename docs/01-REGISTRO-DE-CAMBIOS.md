@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — A4.12: se borra la propuesta `ee-uu` (Eduardo)
+
+- **Archivos:** se elimina `api/propuestas-contrato/ee-uu.schema.json` (el directorio queda vacío y también se quita); `api/app/modelos_regional.py` (docstring).
+- **Cambio:** el schema ya está en `contratos/ee-uu.schema.json` (0.13.0, `efafb57`). La copia en `api/propuestas-contrato/` era la propuesta a Mompin; se borra para no duplicar. Las 13 pruebas de `test_regional.py` siguen activas (Mompin ya quitó el `skip` en main).
+- **Pendiente:** desplegar la API cuando Mompin dé el OK. `VERIFICAR` términos de uso de CDL antes de redistribuir datos.
+- **Decisiones afectadas:** ninguna. Cierra el pendiente de borrar la propuesta.
+
 ### 2026-11-15 — A4.12 hecha: CDL y SSURGO para coordenadas de EE. UU. (Eduardo)
 
 - **Archivos:** `api/app/clientes/cropscape.py`, `api/app/clientes/sda.py`, `api/app/regional.py`, `api/app/modelos_regional.py`, `api/app/rutas/regional.py`, `api/app/main.py`; `api/tests/test_regional.py` y `conftest.py` (carga las propuestas de contrato); `api/propuestas-contrato/ee-uu.schema.json` (nuevo); `datos/pruebas-apis/respuestas/cropscape_iowa_2008_2025.json` y `sda_ssurgo_iowa.json`; `api/README.md`, `docs/11`, `docs/14`, `AgroVault/Compartido/{APIs,Contratos,Codigo,Pendientes}.md`.
