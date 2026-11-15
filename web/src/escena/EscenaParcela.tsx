@@ -69,6 +69,8 @@ export interface EscenaParcelaProps {
   nombresPlaga?: Partial<Record<TipoPlaga, string>> | undefined;
   /** Bioma del entorno decorativo (modo fondo). Por defecto, tropical humedo (demo de Isla). */
   bioma?: Bioma | undefined;
+  /** Avisa cual es la celda elegida (null si se cierra la ficha): centra la zona de plagas. */
+  onCeldaElegida?: ((celdaId: string | null) => void) | undefined;
 }
 
 const NOMBRE_VISTA: Record<VistaBase, string> = { cultivo: 'Cultivos', validacion: 'Validación', agua: 'Agua' };
@@ -99,7 +101,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO, onCeldaElegida }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -121,6 +123,9 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     return () => consulta.removeEventListener('change', cambio);
   }, []);
   const [seleccion, setSeleccion] = useState<BloqueEscena | null>(null);
+  const alElegirRef = useRef(onCeldaElegida);
+  alElegirRef.current = onCeldaElegida;
+  useEffect(() => { alElegirRef.current?.(seleccion?.celdaId ?? null); }, [seleccion?.celdaId]);
   const [hover, setHover] = useState<{ bloque: BloqueEscena; x: number; y: number } | null>(null);
   const [avisosRender, setAvisosRender] = useState<Advertencia[]>([]);
   const [sinWebGL, setSinWebGL] = useState(false);

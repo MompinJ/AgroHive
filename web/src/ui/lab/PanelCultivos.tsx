@@ -4,7 +4,10 @@ import { useMemo, useState } from 'react';
 import type { LaboratorioEstado } from '../useLaboratorio';
 import { agregarCiclo, aplicarAcomodando, cambiarSiembra, conteoPintado, diasCultivo, inicioDeVentana, nombreRotacion, nuevaRotacion, quitarCiclo, referenciaSiembra } from '../planes';
 import { climatologia, conveniencia } from './conveniencia';
-import type { PlagaZona, riesgosDelPlan } from './plagas';
+import { RADIOS_PLAGA, type PlagaZona, type riesgosDelPlan } from './plagas';
+
+/** Zona de plagas: celdas dentro del radio de la celda elegida (null = toda la parcela). */
+export interface ZonaPlagas { radio: number | null; setRadio: (r: number | null) => void; centro: string | null; celdas: number; total: number }
 import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, fechaCorta, nombreCultivo, rangoVentana, textoMovidos } from './piezas';
 import { IconoBasura, IconoBicho, IconoCalendario, IconoEscudo, IconoInfo, IconoInsecticida, IconoMas, IconoQuitar } from './iconos';
 import type { Herramienta } from './BarraHerramientas';
@@ -13,12 +16,12 @@ import { AvisosDatos } from '../../escena/AvisosDatos';
 
 export type { Herramienta } from './BarraHerramientas';
 
-export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, cultivoActivo, setCultivoPincel, calculando, riesgos, hayPlagas, onProteger, presentes }: {
+export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, cultivoActivo, setCultivoPincel, calculando, riesgos, hayPlagas, onProteger, presentes, zona }: {
   estado: LaboratorioEstado; onAvanzar: (d: PasoLab) => void;
   herramienta: Herramienta; setHerramienta: (h: Herramienta) => void;
   cultivoActivo: string | null; setCultivoPincel: (c: string | null) => void;
   calculando: boolean;
-  riesgos: ReturnType<typeof riesgosDelPlan>; hayPlagas: boolean; onProteger: (() => void) | null; presentes: readonly PlagaZona[];
+  riesgos: ReturnType<typeof riesgosDelPlan>; hayPlagas: boolean; onProteger: (() => void) | null; zona: ZonaPlagas; presentes: readonly PlagaZona[];
 }) {
   const { rotacion, setRotacion, ciclo, setCiclo } = estado.seleccion;
   const [errorFecha, setErrorFecha] = useState('');
@@ -126,6 +129,14 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
     </div>
 
     {pintado.size > 0 && <p className="panel-ayuda">Pintadas: {[...pintado].map(([c, n]) => `${nombreCultivo(c)} ${n}`).join(' · ')}. El resto lleva {nombreCultivo(visible.cultivo)}.</p>}
+    {presentes.length > 0 && <div className="lab-zona-plaga" role="group" aria-label="Zona de plagas">
+      <p className="lab-plagas-titulo"><IconoBicho /> Zona de plagas</p>
+      <div className="lab-radios" role="radiogroup" aria-label="Radio de la zona de plagas, en celdas">
+        {RADIOS_PLAGA.map((r) => <button key={r} type="button" role="radio" aria-checked={zona.radio === r} className="lab-radio" onClick={() => zona.setRadio(r)}>{r}</button>)}
+        <button type="button" role="radio" aria-checked={zona.radio === null} className="lab-radio" onClick={() => zona.setRadio(null)}>Toda</button>
+      </div>
+      <p className="panel-ayuda">{zona.radio === null ? `Las plagas se dibujan en las ${zona.total} celdas.` : `Las plagas se dibujan solo en ${zona.celdas} de ${zona.total} celdas, a ${zona.radio} ${zona.radio === 1 ? 'celda' : 'celdas'} o menos de la celda ${zona.centro ?? ''}.`} Toca otra celda en la escena para mover la zona.</p>
+    </div>}
     {riesgos.length > 0 && <div className="lab-plagas" role="status">
       <p className="lab-plagas-titulo"><IconoBicho /> Plagas en tu zona</p>
       <ul>{riesgos.map((r) => <li key={`${r.plaga.id}:${r.cultivo}`}><strong>{r.plaga.nombreComun}</strong> ataca tu {nombreCultivo(r.cultivo).toLowerCase()}: {r.sinProteger.length} {r.sinProteger.length === 1 ? 'bloque' : 'bloques'} sin insecticida.</li>)}</ul>
