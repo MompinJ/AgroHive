@@ -32,6 +32,12 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Cambio:** el README decia que SMAP "no esta en la demo pública" por falta del token y que MODIS NDVI estaba "pendiente"; ahora dice lo que hay (SMAP en la API publica; NDVI en la API y en el paquete de demo; la interfaz no muestra ninguno de los dos). A5.4 pasa de `[BLOQUEADO]` a `[EN CURSO]`: sus dependencias (A3.6 y la herramienta de medicion, con `medir.html` en el build) estan en `main`; la nota usa las cifras mas recientes de Mompin (191 416 triangulos y 6.7 cuadros/s con los 20 bloques) en lugar de las anteriores. Falta solo medir en hardware real y publicar `medir.html` en el droplet (despliegue con la senal de Mompin).
 - **Decisiones afectadas:** ninguna. Proyecto en 54 de 60 hechas (90 %), 2 en curso (A5.4 y A5.7), 0 bloqueadas, segun `herramientas/cronograma.py`.
 
+### 2026-11-14 — Reposo con GPU real: desglose por motivo; sorgo en la escena (Mompin)
+
+- **Archivos:** `web/src/escena/render/escena-three.ts` (`pedirCuadro(motivo)` y `cuadrosPorMotivo` en las estadísticas), `medir/medir.tsx` y `herramientas/medir-escena/medir.mjs` (motivos del reposo), `ficha.ts` (nombres de sorgo, sandía, camote y cacahuate), `voxel/catalogo.ts` y `fuente-modelos.ts` (cómo entra un cultivo nuevo), `demo-motor.ts` y `vista-previa.tsx` (rotación de prueba R3 con sorgo); `docs/06`.
+- **Investigación:** no se reproduce sin GPU real. Probado con SwiftShader a densidad 1, 1.5 y 2 y anchos impares (siempre 0). Descartado `KHR_parallel_shader_compile`, que three.js solo usa en `compileAsync`. Queda el desglose para que Eduardo vuelva a medir.
+- **Sorgo:** se ve en sus etapas en manchón y en la celda elegida; sin cambios de código.
+
 ### 2026-11-14 (noche) — Nota de A5.4 y plan de recorte al día (cronista, pedido de Mompin)
 
 - **Archivos:** `docs/14` (fila A5.4 y paso 2 del plan de recorte; vistas regeneradas), `AgroVault/Compartido/Resumen.md`.

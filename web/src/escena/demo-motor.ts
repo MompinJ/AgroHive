@@ -65,7 +65,7 @@ export const SUELO_MANUAL_FRANCO: Suelo = {
   ph: { estado: 'NO_EVALUABLE', motivo: 'Selector manual: sin pH.' },
 };
 
-export type RotacionPrueba = 'R1' | 'R2';
+export type RotacionPrueba = 'R1' | 'R2' | 'R3';
 
 /** R1: milpa (maiz, frijol, maiz). R2: calabaza, frijol, maiz, para ver los tres cultivos. */
 export const ROTACIONES_PRUEBA: Record<RotacionPrueba, [string, string, 'PV' | 'OI'][]> = {
@@ -76,6 +76,11 @@ export const ROTACIONES_PRUEBA: Record<RotacionPrueba, [string, string, 'PV' | '
   ],
   R2: [
     ['calabaza', '2016-06-15', 'PV'],
+    ['frijol', '2016-11-01', 'OI'],
+    ['maiz', '2017-06-15', 'PV'],
+  ],
+  R3: [
+    ['sorgo', '2016-06-15', 'PV'],
     ['frijol', '2016-11-01', 'OI'],
     ['maiz', '2017-06-15', 'PV'],
   ],

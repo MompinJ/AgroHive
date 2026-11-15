@@ -21,7 +21,16 @@ export interface Ficha {
   filas: FilaFicha[];
 }
 
-const NOMBRES_CULTIVO: Record<string, string> = { maiz: 'Maíz', frijol: 'Frijol', calabaza: 'Calabaza', chile: 'Chile' };
+const NOMBRES_CULTIVO: Record<string, string> = {
+  maiz: 'Maíz',
+  frijol: 'Frijol',
+  calabaza: 'Calabaza',
+  chile: 'Chile',
+  sorgo: 'Sorgo',
+  sandia: 'Sandía',
+  camote: 'Camote',
+  cacahuate: 'Cacahuate',
+};
 const NOMBRES_ETAPA: Record<string, string> = {
   suelo_desnudo: 'Suelo desnudo',
   siembra: 'Siembra',

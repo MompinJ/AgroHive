@@ -2,7 +2,11 @@
 // lo que entrega el motor (cultivo, etapa, estadoPlanta) y agrupa las celdas por
 // clave para crear un InstancedMesh por combinacion cultivo + etapa.
 // Nombres de archivo: <cultivo>_<etapa>.bbmodel (doc 07); el desenlace de
-// estres "podrida" es su propio modelo (<cultivo>_podrida).
+// estres "podrida" es su propio modelo (<cultivo>_podrida). <cultivo> es el
+// modelo3d.prefijo del catalogo (datos/catalogos/cultivos.json), igual al id del cultivo:
+// un cultivo nuevo (sorgo, sandia, camote, cacahuate) entra al dejar sus .bbmodel en
+// modelos/cultivos/ y modelos/cultivos/bloques/, sin tocar este codigo. Si algun dia el
+// prefijo difiere del id, este es el lugar para traducirlo.
 
 import type { BloqueEscena } from '../modelo';
 import type { ModeloVoxel } from './bbmodel';
