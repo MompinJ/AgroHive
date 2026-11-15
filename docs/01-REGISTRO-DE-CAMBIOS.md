@@ -2,6 +2,11 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — R9, parte 1: Francia, Noruega y Kosovo en el mapa de países del calendario (IA de Mompin, sesión "calendario")
+
+- **Archivos:** `datos/calendario/extraer_paises.py` (nuevo), `datos/calendario/paises-110m.json` (regenerado, 172 a 175 países), `datos/calendario/LEEME.md`, `api/tests/test_calendario.py`.
+- **Cambio:** la revisión R9 de Mafer encontró que `GET /api/calendario` respondía 422 en toda Francia: el mapa de países se armó filtrando por `ISO_A2` de Natural Earth 110m, que vale -99 en Francia, Noruega, Kosovo, Chipre del Norte y Somalilandia. Ahora el código sale de `ISO_A2`, luego de `ISO_A2_EH` (FR, NO, XK) y, para los dos que no tienen ninguno, del país ISO que los contiene (CY, SO; las piezas se unen en un solo polígono). Taiwán pasa de `CN-TW`, que no cumplía el patrón `paisIso` del contrato, a TW. Ningún país queda en -99 (el extractor falla si aparece uno). Prueba con puntos en Francia, Noruega, Kosovo, Taiwán, Somalilandia y Chipre del Norte. El mensaje del 422 en la interfaz sigue siendo de Eduardo.
+
 ### 2026-11-15 — B7, pantalla 3: Laboratorio en inglés, parte de la interfaz (IA de Mompin, sesión "ingles")
 
 - **Archivos:** `web/src/ui/tutorial/Tutorial.tsx` (usa el tutorial en inglés `TUTORIALES_EN`, mismos pasos, resaltes e iconos), `web/src/ui/lab/` (`Laboratorio.tsx`, `BarraHerramientas.tsx`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `PanelIzq.tsx`, `EventoPantalla.tsx`, `eventos.ts`, `Mascota.tsx`, `consejos.ts`, `historial.ts`, `PanelHistorial.tsx`, `piezas.tsx`, `conveniencia.ts`), `web/src/ui/ControlTiempo.tsx`, `web/src/ui/planes.ts` (nombre de la rotación y mensajes de ciclos encimados), `web/src/ui/i18n/textos/tutorial.ts` y `laboratorio.ts` (nuevos), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
