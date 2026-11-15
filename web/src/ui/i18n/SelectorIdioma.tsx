@@ -8,9 +8,9 @@ export function SelectorIdioma() {
   const id = useId();
   return <div className="selector-idioma">
     <label htmlFor={id}>{t('idioma.etiqueta')}</label>
-    <select id={id} value={idioma} onChange={(e) => { if (esIdioma(e.currentTarget.value)) cambiarIdioma(e.currentTarget.value); }}>
+    <span className="selector-idioma-campo"><select id={id} value={idioma} onChange={(e) => { if (esIdioma(e.currentTarget.value)) cambiarIdioma(e.currentTarget.value); }}>
       <option value="es" lang="es">Español</option>
       <option value="en" lang="en">English</option>
-    </select>
+    </select><svg className="selector-idioma-flecha" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></span>
   </div>;
 }
