@@ -14,6 +14,7 @@ CON_GGCMI = {"maiz", "sorgo", "soya", "cacahuate", "trigo", "cebada", "papa", "y
              "chicharo", "maiz_dulce", "frijol", "ejote"}
 PULSES = {"caupi", "haba", "lenteja"}  # MIRCA2000, clase agregada Pulses
 EQUIVALENCIAS = {"chicharo", "maiz_dulce", "frijol", "ejote"} | PULSES
+FAO = {"KE"}  # paises de prueba que estan en FAO Crop Calendar
 MIRCA_PRESENCIA = {"maiz", "trigo", "cebada", "sorgo", "soya", "girasol", "papa", "yuca", "cana", "cacahuate", "algodon"}
 
 
@@ -54,6 +55,9 @@ def test_base_mundial_en_varios_continentes(nombre, validar):
     claves = [(e["cultivo"], e["temporada"]) for e in cuerpo["entradas"]]
     assert len(claves) == len(set(claves)) == 2 * len(_ids_catalogo())
     con = _con_ventana(cuerpo)
+    if iso in FAO:  # FAO Crop Calendar suma cultivos encima de la base
+        assert set(con) > CON_GGCMI | PULSES
+        return
     assert set(con) == CON_GGCMI | PULSES  # todos los puntos de prueba tienen Pulses de temporal en MIRCA2000
     for cultivo, e in con.items():
         assert e["estado"] == "EXPLORATORIO"
@@ -80,6 +84,51 @@ def test_base_mundial_en_varios_continentes(nombre, validar):
             assert e["estado"] == "NO_EVALUABLE" and e["motivo"]
     assert all("bea_rf" in e["motivo"] and "Beans" in e["motivo"] for e in cuerpo["entradas"] if e["cultivo"] in ("frijol", "ejote") and e["estado"] != "NO_EVALUABLE")
     assert any(a["codigo"] == "CALENDARIO_BASE_MUNDIAL" for a in cuerpo["advertencias"])
+
+
+def test_kenia_fao_crop_calendar_encima_de_la_base(validar):
+    cuerpo = cliente.get("/api/calendario", params={"lat": -0.5, "lon": 36.8}).json()
+    validar(cuerpo, "calendario-local#")
+    con = _con_ventana(cuerpo)
+    # Hortalizas y otros que ninguna fuente CC BY trae: vienen de FAO, con su licencia en la cita.
+    for cultivo in ("tomate", "cebolla", "zanahoria", "col", "camote"):
+        assert cultivo in con, cultivo
+        f = con[cultivo]["ventana"]["fuente"]
+        assert f["nombre"].startswith("FAO, Crop Calendar") and "CC BY-NC-SA 4.0" in f["cita"]
+        assert "union" in f["nota"] and "riego" in f["nota"]
+    tomate = _entrada(cuerpo, "tomate", "PV")["ventana"]
+    assert (tomate["desdeMes"], tomate["desdeDia"], tomate["hastaMes"], tomate["hastaDia"]) == (7, 31, 10, 15)
+    # Donde coinciden, FAO va encima de GGCMI y lo dice.
+    sorgo = _entrada(cuerpo, "sorgo", "PV")["ventana"]
+    assert sorgo["fuente"]["nombre"].startswith("FAO") and "GGCMI" in sorgo["fuente"]["nota"]
+    # Sin FAO para el cultivo, se queda la base: FAO no trae maiz de grano en Kenia, el maiz OI es de GGCMI.
+    assert DOI in _entrada(cuerpo, "maiz", "OI")["ventana"]["fuente"]["cita"]
+    codigos = {a["codigo"] for a in cuerpo["advertencias"]}
+    assert {"FAO_CROP_CALENDAR_NC_SA", "CALENDARIO_RESUMEN"} <= codigos
+    assert len(con) == 23
+
+
+def test_sin_la_carpeta_de_fao_la_api_sigue(monkeypatch, tmp_path, validar):
+    import shutil
+    for nombre in ("paises-110m.json", "ggcmi-rf.npz", "mirca-rf.npz", "siap-mexico.npz", "siap-mexico.json"):
+        shutil.copy(calendario.config.CALENDARIO_DIR / nombre, tmp_path / nombre)
+    monkeypatch.setattr(calendario.config, "CALENDARIO_DIR", tmp_path)
+    for f in (calendario._fao, calendario._ggcmi, calendario._mirca, calendario._siap, calendario._paises):
+        f.cache_clear()
+    try:
+        cuerpo = calendario.armar(36.8, -0.5)
+        validar(cuerpo, "calendario-local#")
+        assert "FAO, Crop Calendar" not in json.dumps(cuerpo)
+        assert len(_con_ventana(cuerpo)) == len(CON_GGCMI | PULSES)
+    finally:
+        monkeypatch.undo()
+        for f in (calendario._fao, calendario._ggcmi, calendario._mirca, calendario._siap, calendario._paises):
+            f.cache_clear()
+
+
+def test_fuera_de_fao_no_hay_ventanas_de_fao(validar):
+    cuerpo = cliente.get("/api/calendario", params={"lat": 42.0, "lon": -93.5}).json()
+    assert "FAO, Crop Calendar" not in json.dumps(cuerpo)
 
 
 def test_india_lenteja_de_rabi_y_maiz_registrado_en_mirca(validar):
