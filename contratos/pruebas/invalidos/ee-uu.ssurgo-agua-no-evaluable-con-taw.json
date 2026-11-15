@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "versionContrato": "0.13.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar el contrato (un punto ilustrativo en EE. UU.)."
+  },
+  "estado": "EXPLORATORIO",
+  "motivo": "Valores ficticios de ejemplo.",
+  "aviso": "Suelo cartografiado de SSURGO (componente dominante de la unidad): no es una medicion de la parcela ni entra al ranking. (Ejemplo ficticio.)",
+  "coordenada": [
+    -93.4,
+    42.05
+  ],
+  "fuente": {
+    "nombre": "EJEMPLO - estructura de USDA NRCS SSURGO (Soil Data Access), valores ficticios",
+    "nota": "No proviene de ninguna consulta real."
+  },
+  "limites": [
+    "COMPONENTE_DOMINANTE",
+    "SOLO_EE_UU",
+    "NO_ENTRA_AL_RANKING"
+  ],
+  "unidad": {
+    "mukey": "000000",
+    "nombre": "EJEMPLO"
+  },
+  "componente": {
+    "nombre": "EJEMPLO",
+    "porcentaje": 80,
+    "grupoHidrologico": "B"
+  },
+  "horizontes": [
+    {
+      "nombre": "Ap",
+      "profundidadCm": {
+        "desde": 0,
+        "hasta": 20
+      },
+      "arenaPct": 30,
+      "limoPct": 45,
+      "arcillaPct": 25,
+      "materiaOrganicaPct": 3.0,
+      "awcCmCm": 0.2
+    },
+    {
+      "nombre": "Bt",
+      "profundidadCm": {
+        "desde": 20,
+        "hasta": 100
+      },
+      "arenaPct": 28,
+      "limoPct": 40,
+      "arcillaPct": 32,
+      "materiaOrganicaPct": null,
+      "awcCmCm": 0.17
+    }
+  ],
+  "agua": {
+    "estado": "NO_EVALUABLE",
+    "tawMm": 176.0,
+    "profundidadCubiertaCm": 100,
+    "hastaCm": 100,
+    "metodo": "EJEMPLO: suma de awc_r x espesor de cada horizonte hasta hastaCm."
+  },
+  "advertencias": [
+    {
+      "codigo": "DATOS_DE_EJEMPLO",
+      "mensaje": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar el contrato (un punto ilustrativo en EE. UU.).",
+      "severidad": "critico"
+    }
+  ]
+}

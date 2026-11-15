@@ -11,11 +11,7 @@ from app.clientes import cropscape, sda
 from app.main import app
 from tests.conftest import real_json
 
-import pytest
-
-# Pendiente: las pruebas validan contra contratos/ee-uu.schema.json, que aun es propuesta
-# (api/propuestas-contrato/ee-uu.schema.json). Se reactivan cuando el contrato entre a contratos/.
-pytestmark = pytest.mark.skip(reason="espera contratos/ee-uu.schema.json (A4.12, propuesta de Eduardo)")
+# Las pruebas validan contra contratos/ee-uu.schema.json (contratos 0.13.0).
 
 cliente = TestClient(app)
 LON, LAT = -93.4, 42.05

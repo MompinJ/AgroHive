@@ -63,6 +63,10 @@ export type ValorCitado = ValorEvaluable | ValorNoEvaluable;
  */
 export type EtiquetaProcedencia = "FUENTE" | "SUPUESTO" | "USUARIO";
 /**
+ * Respuestas de GET /api/ee-uu/cdl (rotacion real por anio, USDA NASS Cropland Data Layer por CropScape, 2008 en adelante) y GET /api/ee-uu/ssurgo (suelo de campo, USDA NRCS SSURGO por Soil Data Access) (A4.12, forma propuesta por Eduardo; contratos 0.13.0). Contraste regional: no sustituyen a las fuentes globales del motor ni entran al ranking; la interfaz no los usa todavia. Fuera de EE. UU. contiguos: estado NO_EVALUABLE con motivo, sin llamar a la fuente. Un documento es de una de las dos formas.
+ */
+export type FuentesRegionalesEEUU = Cdl | Ssurgo;
+/**
  * Identificador de celda 'c-<i>-<j>'.
  */
 export type IdCelda = string;
@@ -127,6 +131,7 @@ export interface ContratosAgroHive {
   "calendario-local"?: CalendarioLocal;
   "clima-escenario"?: ClimaEscenario;
   cultivo?: CatalogoCultivos;
+  "ee-uu"?: FuentesRegionalesEEUU;
   ndvi?: Ndvi;
   parcela?: Parcela;
   "plan-siembra"?: PlanSiembra;
@@ -451,6 +456,99 @@ export interface UmbralesCultivo {
  */
 export interface Modelo3D {
   prefijo: string;
+}
+export interface Cdl {
+  meta: Meta;
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  aviso: string;
+  coordenada: LonLat;
+  anioDesde: number;
+  anioHasta: number;
+  fuente: Fuente;
+  /**
+   * Limites que la interfaz debe mostrar.
+   *
+   * @minItems 1
+   */
+  limites: [
+    "PIXEL_NO_ES_LA_PARCELA" | "CLASIFICACION_CON_ERROR" | "SOLO_EE_UU" | "NO_ENTRA_AL_RANKING",
+    ...("PIXEL_NO_ES_LA_PARCELA" | "CLASIFICACION_CON_ERROR" | "SOLO_EE_UU" | "NO_ENTRA_AL_RANKING")[]
+  ];
+  anios: AnioCdl[];
+  advertencias?: Advertencia[];
+}
+export interface AnioCdl {
+  anio: number;
+  /**
+   * Codigo de la leyenda de CDL; null si no hay clasificacion.
+   */
+  codigo: number | null;
+  /**
+   * Nombre de la categoria tal cual lo da USDA NASS (en ingles).
+   */
+  categoria: string | null;
+  /**
+   * Solo si la categoria coincide exacto con un cultivo del catalogo; nunca se asimila.
+   */
+  cultivoCatalogo: IdCultivo | null;
+  estado: EstadoEvaluacion;
+  motivo?: string | null;
+}
+export interface Ssurgo {
+  meta: Meta;
+  estado: EstadoEvaluacion;
+  motivo?: string;
+  aviso: string;
+  coordenada: LonLat;
+  fuente: Fuente;
+  /**
+   * @minItems 1
+   */
+  limites: [
+    "COMPONENTE_DOMINANTE" | "SOLO_EE_UU" | "NO_ENTRA_AL_RANKING",
+    ...("COMPONENTE_DOMINANTE" | "SOLO_EE_UU" | "NO_ENTRA_AL_RANKING")[]
+  ];
+  unidad?: UnidadSsurgo;
+  componente?: ComponenteSsurgo;
+  horizontes: HorizonteSsurgo[];
+  agua?: AguaSsurgo;
+  advertencias?: Advertencia[];
+}
+export interface UnidadSsurgo {
+  mukey: string;
+  nombre: string;
+}
+export interface ComponenteSsurgo {
+  nombre: string;
+  porcentaje?: number;
+  grupoHidrologico?: string;
+}
+export interface HorizonteSsurgo {
+  nombre: string | null;
+  profundidadCm: ProfundidadHorizonte;
+  arenaPct: number | null;
+  limoPct: number | null;
+  arcillaPct: number | null;
+  materiaOrganicaPct: number | null;
+  /**
+   * Agua disponible (awc_r de SSURGO), cm de agua por cm de suelo.
+   */
+  awcCmCm: number | null;
+}
+export interface ProfundidadHorizonte {
+  desde: number;
+  hasta: number;
+}
+/**
+ * TAW de la columna de suelo hasta hastaCm a partir de awc_r de SSURGO (metodo descrito en texto). Si no es evaluable, tawMm va en null.
+ */
+export interface AguaSsurgo {
+  estado: EstadoEvaluacion;
+  tawMm: number | null;
+  profundidadCubiertaCm: number;
+  hastaCm: number;
+  metodo: string;
 }
 /**
  * Respuesta de GET /api/ndvi (A4.11): NDVI de MODIS MOD13Q1 V061 (pixel de 250 m, compuesto de 16 dias) en un punto. Fuente principal: Microsoft Planetary Computer, coleccion modis-13Q1-061 (dato de NASA LP DAAC servido por Microsoft). Respaldo: servicio REST de ORNL DAAC, que no se llama en vivo; la demo usa cache y el paquete de demo. [VERIFICAR] una persona lee los terminos de uso de Planetary Computer (https://planetarycomputer.microsoft.com/terms) antes de la entrega. Es EVIDENCIA de los anios de escenario: el pixel es mayor que la parcela, no muestra el cultivo del usuario y no entra al ranking (no hay relacion publicada entre NDVI y los pilares).
