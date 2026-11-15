@@ -1,5 +1,7 @@
 # AgroHive (Code Hive)
 
+Versión en español · [English version](README.en.md)
+
 > **Estado de este documento (15/11/2026).** Las licencias y las reglas del reto se contrastaron con sus páginas oficiales, y quien las leyó fue una sesión de IA, no una persona. **Falta la revisión humana de las licencias y de la declaración de IA.** Lo que no se pudo verificar va marcado `[VERIFICAR]` y está resumido al final, en "Lo que falta verificar".
 
 ## Qué es
