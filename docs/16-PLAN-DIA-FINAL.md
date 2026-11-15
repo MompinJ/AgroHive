@@ -89,6 +89,7 @@ Estado: `LISTA`, `ESPERA` (depende de algo), `EN CURSO`, `HECHA`. Cada persona t
 | --- | --- | --- | --- | --- |
 | MF3 | Cotejar con el PDF de FAO-56 las filas cuyo total impreso no coincide con la suma de etapas: sorgo (130 contra 125), frijol caupí (110 contra 100) y ajonjolí (100 contra 110). Anotar el resultado en `datos/catalogos/README.md`; si un número cambia, se regenera con `generar.py` | `datos/catalogos/README.md` | — | HECHA (Mafer, 15/11: coinciden con lo impreso; el desajuste viene de la fuente, no cambia ningún valor) |
 | MF5 | Cotejar con el PDF las filas que la página parte o deja ambiguas: cacahuate (África Occidental, "Dry season"), yuca ("Rainy season" partida) y berenjena (total 130 o 140) | `datos/catalogos/README.md` | — | HECHA (Mafer, 15/11: no cambia ningún valor; 'Dry season' y 'Rainy season' quedan pendientes de confirmar con el PDF) |
+| MF10 | Punto D10: recorrer el laboratorio y la comparación y listar cada cifra visible (pilares, puntajes, días, mm, ventanas, NDVI, SMAP, plagas) con dónde se ve y si tiene fuente en "Método y fuentes". Sin cambiar código; la lista va a Eduardo y a la reunión | — | — | EN CURSO (Mafer) |
 | MF6 | Revisión humana de las elecciones del catálogo marcadas "revisar": chícharo en fresco, Kc end del trigo (cosecha mecánica), chile con los parámetros del pimiento dulce | `datos/catalogos/README.md` | — | HECHA (Mafer, 15/11: se mantienen los tres valores) |
 | MF7 | Revisar en Blockbench o en los visores de `modelos/` los modelos de los 32 cultivos de la ampliación (los colores son a ojo) y anotar lo que haya que corregir | `modelos/` (solo lectura; correcciones por tanda) | — | HECHA (Mafer, 15/11: sin correcciones obligatorias) |
 | MF8 | Bajar el poste de chícharo y jitomate para que no domine la celda | `modelos/` | — | HECHA (Mafer, 15/11) |
@@ -99,9 +100,10 @@ Estado: `LISTA`, `ESPERA` (depende de algo), `EN CURSO`, `HECHA`. Cada persona t
 
 | # | Tarea | Archivos | Depende de | Estado |
 | --- | --- | --- | --- | --- |
-| B5 | Recorrer los 40 cultivos en el laboratorio publicado (o en la vista previa de la escena): que cada uno cargue su modelo en cada etapa, que no salga la planta provisional y que el nombre se vea con acentos | — (hallazgos por el buzón al dueño) | — | LISTA |
+| B5 | Recorrer los 40 cultivos en el laboratorio publicado (o en la vista previa de la escena): que cada uno cargue su modelo en cada etapa, que no salga la planta provisional y que el nombre se vea con acentos | — (hallazgos por el buzón al dueño) | — | HECHA (cubierta por la auditoría de los 40 cultivos de Eduardo, `6429b70`) |
 | B3 | Pruebas de la interfaz contra cada despliegue: teclado, móvil, demo sin red, dibujo de parcela y selector "Tamaño de celda" | — | P2 | ESPERA |
-| B6 | Revisar los textos de la app contra los docs (rotaciones, escenarios "seco / normal / lluvioso", estados) y pasarle la lista a Eduardo | — | — | LISTA |
+| B6 | Revisar los textos de la app contra los docs (rotaciones, escenarios "seco / normal / lluvioso", estados) y pasarle la lista a Eduardo | — | — | HECHA (balam, 15/11: 5 grupos de diferencias en `web/evidencia/revision-sistema.md`, lista entregada a Eduardo) |
+| R9 | Dibujar parcelas en varios países (México fuera de Veracruz, Brasil, Kenia, India, España) en la app publicada y revisar que lo que falte salga `NO_EVALUABLE` con su motivo, nunca un número | — (hallazgos por el buzón) | Deploy con el calendario mundial (`5f985da`, ya publicado) | EN CURSO (balam) |
 | B4 | Apoyo al rediseño si Eduardo lo pide | según Eduardo | E2 | ESPERA |
 | B1 | Cultivos nuevos en el selector con aviso si no están registrados en el lugar | — | — | HECHA (Eduardo: sugeridos y aviso "casi no se siembra en esta zona"; la vista 2D se retiró) |
 
