@@ -1,6 +1,6 @@
 # Iconos 2D de cultivos
 
-140 sprites SVG de 28 cultivos (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo, lenteja, ejote, cebada, trigo, avena, maiz dulce, yuca, cana de azucar, ajonjoli, girasol, algodon, cartamo, higuerilla, jitomate, papa y calabacita x siembra, brote, crecimiento, madurez, podrida) para el modo 2D (A3.6).
+200 sprites SVG de 40 cultivos (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo, lenteja, ejote, cebada, trigo, avena, maiz dulce, yuca, cana de azucar, ajonjoli, girasol, algodon, cartamo, higuerilla, jitomate, papa, calabacita, cebolla, pepino, melon, lechuga, zanahoria, berenjena, brocoli, col, coliflor, espinaca, rabano y betabel x siembra, brote, crecimiento, madurez, podrida) para el modo 2D (A3.6).
 Nombre del archivo: `<cultivo>_<etapa>.svg`, igual que los modelos 3D de `modelos/cultivos/`. El id del cultivo puede llevar guion bajo (`maiz_dulce_madurez.svg`).
 
 - Pixel art de 16 x 16, fondo transparente, `shape-rendering="crispEdges"`: nitidos a 32 px (x2) y 64 px (x4).

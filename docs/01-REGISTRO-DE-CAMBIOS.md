@@ -11,6 +11,21 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Pendiente:** revisar la ficha de CABI del chapulín y fuentes de hospederos para diabrótica y pulgón; los cortes de conveniencia y bioma son `[PROPUESTA]`.
 - **Decisiones afectadas:** ninguna de alcance; las plagas son una capa ilustrativa que no entra al motor ni al ranking.
 
+### 2026-11-15 (madrugada) — Pasada final de la noche: docs/16 al día y resumen para Mompin (sesión "estado")
+
+- **Archivos:** `docs/16` (secciones 1 a 3 y 6 reescritas sobre `e355bb3`), `docs/RESUMEN-NOCHE-14-11.md` (nuevo, 25 líneas), `docs/11` (resumen de decisiones abiertas), `herramientas/buzon/README.md`, `enviar.sh` y `escuchar.sh` y `AGENTS.md` (IP del buzón por defecto: `192.168.0.102`, la nueva de la laptop de Mompin; `BUZON_URL` sigue mandando).
+- **Cambio:** HECHAS de la noche (M2, M4 a M7, MF1, MF2, MF4, E4, E7 y B1); primeras acciones de la mañana (buzón, desplegar `e355bb3`, avisar a Eduardo de los archivos que tocó bordes, reunión, integrar `cfded82`); cola con la carga que pidió Mompin (Eduardo lo grande; Mafer y balam con tareas cortas: cotejo de FAO-56, elecciones del catálogo por revisar, revisión de los 32 modelos nuevos, pruebas de interfaz). Decisiones nuevas para Mompin, encontradas al revisar el front de Eduardo contra los docs: D8 (se retiró el modo 2D y no hay respaldo sin WebGL; docs/00, docs/11, A3.6, A5.4 y el plan de recorte dicen otra cosa), D9 (R4 pasa a R3 en la interfaz; docs/13, docs/05 y README siguen con R4) y D10 (el laboratorio ya no muestra fuentes). Punto para la reunión: 7 commits de front empujados directo a `main` (regla 4).
+- **Evidencia:** sobre `e355bb3`: `contratos/` 102/102, `api/` 162, catálogos en verde, `tsc --noEmit` limpio, `vitest` 3254 (1 `todo`). `/health` público en `bdc792f`, contratos 0.14.0. `origin/Eduardo` lleva 1 commit (`cfded82`) sin integrar.
+- **No se corrigieron** docs/00, 05, 11, 13, 14 ni el README por D8 y D9: esperan la decisión de Mompin.
+
+### 2026-11-15 — Modelos de la ampliación del catálogo, tandas F y G: berenjena, brócoli, col, coliflor, espinaca, rábano y betabel; los 40 cultivos con modelo (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{berenjena,brocoli,col,coliflor,espinaca,rabano,betabel}.py` con sus 35 `.bbmodel` y visores; `bloques.py` (35 bloques; ayuda `con_cara`); `iconos2d.py` (35 SVG) y su README; `modelos/paleta.py` y `paleta.md` (17 colores más, índices 206 a 222, con una hoja de brásica compartida por brócoli, col y coliflor; quedan 33 libres); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los siete) y `cultivos.json`; pruebas con 40 cultivos; `docs/07` (tabla), `docs/16` (M7 hecha) y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** cada uno con 5 detallados (de 9 a 60 cubos), 5 bloques (de 15 a 21, trazado común) y 5 iconos 2D, y su prefijo. Las tres brásicas se distinguen por la cabeza (verde oscura granulada, lisa verde claro, pella crema). Con esto los 40 cultivos del catálogo tienen modelo, bloque e icono. Las dos últimas tandas van en un solo commit porque comparten `bloques.py` e `iconos2d.py`.
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` de Mafer, con OK de Mompin; en `generar.py` solo `modelo3d`.
+- **Pendiente:** revisión humana en Blockbench y en la escena de los 32 cultivos de la ampliación; los colores son a ojo.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Mascota en pantalla con consejos, NDVI y SMAP en el front, entorno 3D y más color (Eduardo)
 
 - **Archivos:** `web/src/ui/lab/` (`Mascota.tsx`, `consejos.ts` y su prueba, `useEvidencia.ts`, `Laboratorio.tsx`, `lab.css`), `web/src/api/cliente.ts` (`obtenerNdvi`, `obtenerSmap`), `web/src/ui/useLaboratorio.ts` (`esDemo`), `web/src/ui/tokens.css`; `web/src/escena/render/retrato.ts` y `entorno.ts` (nuevos), `escena-three.ts`, `EscenaParcela.tsx`, `escena.css`; `docs/06`.
@@ -37,6 +52,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Catálogo de 40 cultivos (tras integrar `main`):** paleta con sugeridos, buscador y grupos por tipo; color estable para cada cultivo; `NOMBRES_CULTIVO_ESCENA` con los 40 nombres con acentos (única fuente, la interfaz ya no tiene su propia tabla).
 - **Pendiente:** confirmar con Mompin el retiro del 2D (era respaldo decidido en la reunión; B1 y B3 de `docs/16` mencionan la vista 2D) y los cortes de validación y agua (`[PROPUESTA]`).
 - **Decisiones afectadas:** "3D en el MVP ... con modo 2D de respaldo" (11).
+
+### 2026-11-15 — Modelos de la ampliación del catálogo, tanda E: cebolla, pepino, melón, lechuga y zanahoria (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{cebolla,pepino,melon,lechuga,zanahoria}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; ayudas `espaldera`, `poste`, `colgado`, `al_pie`, `roseta`, `abanico`, `hombro`, `fronda`); `iconos2d.py` (25 SVG; ayudas `espaldera` y `pluma`) y su README; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; pruebas con 33 cultivos; `docs/07` (tabla) y `docs/16` (M7). La paleta no cambia (sus colores, 191 a 205, entraron con la tanda D).
+- **Cambio:** cada uno con 5 detallados (de 10 a 60 cubos), 5 bloques (de 15 a 24, sin piezas fuera de las plantas) y 5 iconos 2D (sobre los 165, peor par nuevo de daltonismo 14.8 %), y su prefijo. La zanahoria del proyecto es nueva (no la de práctica de `docs/agente-modelador-voxel/`).
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` de Mafer, con OK de Mompin; en `generar.py` solo `modelo3d`.
+- **Pendiente:** tandas F y G; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-15 — Modelos de la ampliación del catálogo, tanda D: cártamo, higuerilla, jitomate, papa y calabacita (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
 

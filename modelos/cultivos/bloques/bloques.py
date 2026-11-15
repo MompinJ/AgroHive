@@ -3,9 +3,10 @@
 Correr desde la raiz del repo:
     python modelos/cultivos/bloques/bloques.py
 
-Genera los 140 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo,
+Genera los 200 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo,
 lenteja, ejote, cebada, trigo, avena, maiz_dulce, yuca, cana, ajonjoli, girasol, algodon, cartamo, higuerilla, tomate
-(jitomate), papa y calabacita x siembra, brote, crecimiento, madurez, podrida) y visor_bloques.html.
+(jitomate), papa, calabacita, cebolla, pepino, melon, lechuga, zanahoria, berenjena, brocoli, col, coliflor, espinaca,
+rabano y betabel x siembra, brote, crecimiento, madurez, podrida) y visor_bloques.html.
 El nombre es <cultivo>_<etapa>_bloque y el cultivo puede llevar guion bajo (maiz_dulce): la etapa es el penultimo
 tramo, nunca el segundo.
 
@@ -28,7 +29,9 @@ Para agregar un cultivo/etapa: agregar su planta (1 o 2 cubos) a PLANTAS con las
 (o, para rastreras y matas bajas, guia/mata/esqueje/al_lado/encima; para leguminosas, en_v/costado/vaina_costado/con_tutor;
 para cereales de grano chico, cereal; para el maiz dulce, elote; para tallo con algo en la punta, tallo_punta con
 copa o cabeza; para capsulas pegadas al tallo, manguito; para arbusto piramidal, escalonada; para siembra de estaca o
-trozo, estaca/trozo; para pintar la cara de arriba, mata(arriba=...), con_arriba o punta_color) y la pareja a
+trozo, estaca/trozo; para pintar la cara de arriba, mata(arriba=...), con_arriba o punta_color; para trepadora en
+espaldera, espaldera con poste/colgado/al_pie; para roseta, roseta; para frondas en V, abanico; para raiz que asoma
+del lomo, hombro con fronda; para pintar otra cara de la pieza, con_cara) y la pareja a
 CULTIVOS_ETAPAS. Lo que va por surco ademas de las 9 plantas (la raiz de la yuca
 madura) va en EXTRAS, como la franja humeda de siembra.
 """
@@ -532,6 +535,116 @@ def punta_color(cols, resto):
     return r
 
 
+# ---------------- cebolla, pepino, melon, lechuga y zanahoria (ampliacion, tanda 5, 15/11) ----------------
+def espaldera(cols, ancho, alto, fondo, resto=nada, arriba=None):
+    """Pepino: la mata guiada en la espaldera, un panel de follaje a lo largo del surco (x), angosto en z y centrado en
+    la planta (casi sin giro, para que nunca se cruce al surco), y lo que dibuje resto(): el poste de madera que asoma
+    por encima o un pepino colgando de su cara. arriba: colores de la cara 'up' (brotes y flores)."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = r3(rng.uniform(-6, 6))
+        h = alto * escala
+        e = caja_ajustada(m, nombre + '_mata', base, (ancho * escala, h, fondo), rng.choice(cols), yaw=yaw)
+        if arriba:
+            pinta_cara(m, e, 'up', rng.choice(arriba))
+        resto(m, nombre, base, rng, escala, h, yaw)
+    return planta
+
+
+def poste(alto, col='wood', grueso=0.35):
+    """Poste de la espaldera en el centro de la planta (1 cubo)."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        m.box(nombre + '_poste', base, (grueso, r3(alto * escala), grueso), col)
+    return resto
+
+
+def colgado(cols, grueso, largo, f, dist):
+    """Fruto que cuelga pegado a una cara del panel (delante o detras, a dist del centro en z) desde la fraccion f de
+    su altura, casi vertical y apenas inclinado a lo largo del surco: el pepino maduro (1 cubo)."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        lado = rng.choice((-1, 1))
+        l = largo * escala
+        sitio = (r3(base[0] + rng.uniform(-0.8, 0.8)), r3(base[1] + max(0.15, f * h - l)), r3(base[2] + lado * (dist + grueso / 2)))
+        caja_ajustada(m, nombre + '_fruto', sitio, (grueso, l, grueso), rng.choice(cols), tilt=r3(rng.uniform(-8, 8)),
+                      yaw=r3(90 + rng.uniform(-10, 10)))
+    return resto
+
+
+def al_pie(cols, size, dist):
+    """Pieza tirada sobre el lomo al pie del panel (delante o detras), a lo largo del surco: el pepino caido (1 cubo)."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        lado = rng.choice((-1, 1))
+        sitio = (r3(base[0] + rng.uniform(-0.8, 0.8)), base[1], r3(base[2] + lado * dist))
+        caja_ajustada(m, nombre + '_pie', sitio, tuple(t * escala for t in size), rng.choice(cols), yaw=r3(rng.uniform(-20, 20)))
+    return resto
+
+
+def roseta(cols, ancho, alto, cols_cor, ancho_cor, alto_cor, arriba=None):
+    """Lechuga: roseta de hojas (1 cubo ancho y bajo) y, girado 45 grados sobre el mismo centro, el cogollo o la
+    segunda vuelta de hojas (1 cubo mas angosto y alto): desde arriba se lee como estrella de 8 puntas. arriba:
+    colores de la cara 'up' del cogollo (el corazon mas claro)."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = r3(rng.uniform(-30, 30))
+        caja_ajustada(m, nombre + '_hojas', base, (ancho * escala, alto * escala, ancho * escala), rng.choice(cols), yaw=yaw)
+        e = caja_ajustada(m, nombre + '_cogollo', base, (ancho_cor * escala, alto_cor * escala, ancho_cor * escala),
+                          rng.choice(cols_cor), yaw=r3(yaw + 45 + rng.uniform(-8, 8)))
+        if arriba:
+            pinta_cara(m, e, 'up', rng.choice(arriba))
+    return planta
+
+
+def abanico(cols, size, abre):
+    """Zanahoria: dos frondas finas que salen del mismo punto abiertas en V a lo largo del surco (x), abre grados
+    cada una (2 cubos). size = (ancho en z, largo, grueso en x)."""
+    def planta(m, nombre, base, rng, escala):
+        w, h, d = size
+        for k, lado in enumerate((90, -90)):
+            caja_ajustada(m, f'{nombre}_fronda{k}', base, (w, h * escala, d), rng.choice(cols), tilt=r3(rng.uniform(*abre)),
+                          yaw=r3(lado + rng.uniform(-15, 15)))
+    return planta
+
+
+def hombro(cols, size, hundido, cima, arriba=None):
+    """Zanahoria madura: el hombro de la raiz (1 cubo) asomando del lomo, hundido `hundido` unidades en el, y lo que
+    dibuje cima(m, nombre, tope, rng, escala) en su tope (el penacho). arriba: color de su cara 'up' (moho)."""
+    def planta(m, nombre, base, rng, escala):
+        w, h, d = (v * escala for v in size)
+        sitio = (base[0], r3(base[1] - hundido), base[2])
+        e = caja_ajustada(m, nombre + '_hombro', sitio, (w, h, d), rng.choice(cols), yaw=r3(rng.uniform(-30, 30)))
+        if arriba:
+            pinta_cara(m, e, 'up', rng.choice(arriba))
+        cima(m, nombre, (base[0], r3(base[1] - hundido + h), base[2]), rng, escala)
+    return planta
+
+
+def fronda(cols, size, tilt):
+    """Penacho (1 cubo como abanico plano en el plano x-y) inclinado tilt grados a lo largo del surco, hacia un lado al
+    azar. size = (ancho en z, largo, ancho en x)."""
+    def cima(m, nombre, tope, rng, escala):
+        w, h, d = size
+        caja_ajustada(m, nombre + '_penacho', tope, (w, h * escala, d), rng.choice(cols), tilt=r3(rng.uniform(*tilt)),
+                      yaw=r3(rng.choice((90, -90)) + rng.uniform(-15, 15)))
+    return cima
+
+
+# ---------------- berenjena, brocoli, col, coliflor, espinaca, rabano y betabel (ampliacion, tanda 6, 15/11) ----------------
+def con_cara(cara, cols, resto):
+    """Como con_arriba, pero en cualquier cara: pinta la cara `cara` del cubo que dibujo resto() con uno de cols
+    (el brillo de la berenjena en su costado, la punta blanca del rabano arrancado)."""
+    def r(m, nombre, base, rng, escala, h, yaw):
+        n = len(m.els)
+        resto(m, nombre, base, rng, escala, h, yaw)
+        if len(m.els) > n:
+            pinta_cara(m, m.els[-1], cara, rng.choice(cols))
+    return r
+
+
+# Melon maduro: fruto redondo beige con la red clara arriba y, al lado, una hoja o medio melon con la pulpa al aire.
+# Va dos veces en melon_madurez para que haya mas melones que guias.
+MELON_MADURO = mata(('melon_cascara',), 2.0, 1.7, 2.0, alterna(
+    al_lado(('calabaza_hoja', 'calabaza_hoja_dark'), (2.0, 0.3, 1.7), 2.1),
+    con_arriba(('melon_pulpa',), al_lado(('melon_cascara',), (1.3, 0.6, 1.3), 1.8))), arriba=('melon_red',))
+
+
 PLANTAS = {
     # maiz
     'maiz_siembra': semilla(('grano', 'grano_dark', 'grano_light'), (1.0, 0.7, 1.2)),
@@ -826,13 +939,150 @@ PLANTAS = {
         encima('yellow', 0.9))),
     'calabacita_podrida': mata(('hoja_seca_dark', 'hoja_marchita', 'podrido'), 2.6, 0.9, 2.4,
                                al_lado(('podrido', 'podrido_dark', 'moho'), (2.1, 0.6, 0.7), 2.3)),
+    # cebolla (mata de hojas tubulares erguidas verde azulado sobre un bulbo blanco; madurez: hojas dobladas a lo largo
+    # del surco y bulbo blanco grande con la tunica dorada arriba; siembra = bulbillo con su punta verde)
+    'cebolla_siembra': con_tallo('cebolla_hoja', 1.0, 0.25, pieza(('cebolla_tunica',), 0.0, 0.8, 0.6, 0, 0)),
+    'cebolla_brote': con_tallo('cebolla_hoja', 2.0, 0.3, hoja('cebolla_hoja', 0.3, 0.3, 1.7, 18, 30), giro=90),
+    'cebolla_crecimiento': con_tallo('cebolla_hoja', 3.6, 0.6, alterna(
+        pieza(('cebolla_bulbo',), 0.0, 1.0, 0.7, 0, 0), pieza(('cebolla_bulbo',), 0.0, 1.0, 0.7, 0, 0),
+        hoja('cebolla_hoja', 0.45, 0.35, 2.4, 14, 24)), giro=90),
+    'cebolla_madurez': mata(('cebolla_bulbo', 'cebolla_bulbo', 'cebolla_tunica'), 1.5, 1.2, 1.5, alterna(
+        hoja('cebolla_hoja', 0.85, 0.5, 2.6, 62, 78, 90), hoja('cebolla_hoja', 0.85, 0.5, 2.6, 62, 78, -90),
+        hoja('hoja_marchita', 0.85, 0.5, 2.4, 70, 88, 90)), arriba=('cebolla_tunica', 'cebolla_tunica', 'cebolla_bulbo')),
+    'cebolla_podrida': mata(('podrido', 'cebolla_tunica', 'podrido_dark'), 1.3, 0.8, 1.3, alterna(
+        hoja('hoja_seca', 0.8, 0.65, 2.2, 82, 95, 90), hoja('hoja_seca_dark', 0.8, 0.65, 2.0, 82, 95, -90), nada),
+        arriba=('moho', 'moho_light', 'podrido_dark')),
+    # pepino (trepa por una espaldera: panel de follaje a lo largo del surco con postes de madera que asoman; madurez:
+    # pepinos alargados verde oscuro colgando; podrida: follaje seco caido, postes oscuros y pepinos tirados)
+    'pepino_siembra': semilla(('white', 'calabaza_crema'), (0.55, 0.3, 1.0)),
+    'pepino_brote': con_tallo('pepino_fruto_light', 1.2, 0.4, hoja_plana('pepino_hoja', 2.0, 1.0)),
+    'pepino_crecimiento': espaldera(('pepino_hoja',), 3.0, 2.4, 0.8, poste(4.4), arriba=('pepino_hoja', 'pepino_hoja', 'leaf_light')),
+    'pepino_madurez': espaldera(('pepino_hoja', 'leaf'), 3.4, 3.8, 0.9, alterna(
+        poste(4.8), colgado(('pepino_fruto',), 0.7, 2.0, 0.75, 0.38), colgado(('pepino_fruto',), 0.7, 1.8, 0.6, 0.38)),
+        arriba=('pepino_hoja', 'pepino_hoja', 'pepino_hoja', 'yellow')),
+    'pepino_podrida': espaldera(('hoja_seca_dark', 'hoja_marchita', 'hoja_seca'), 3.0, 1.8, 0.8, alterna(
+        poste(4.4, 'wood_dark'), al_pie(('podrido', 'pepino_fruto', 'moho'), (1.7, 0.5, 0.5), 0.75)),
+        arriba=('moho', 'hoja_seca_dark', 'podrido')),
+    # melon (rastrero de hojas redondeadas; madurez: melon redondo beige con la red clara arriba y, en alguno, medio
+    # melon con la pulpa naranja al aire)
+    'melon_siembra': semilla(('melon_red', 'calabaza_crema'), (0.75, 0.35, 1.2)),
+    'melon_brote': con_tallo('calabaza_hoja_dark', 1.0, 0.5, hoja_plana('calabaza_hoja_light', 1.8, 1.4)),
+    'melon_crecimiento': guia('calabaza_hoja_dark', 3.2, alterna(
+        hoja_sobre_peciolo('calabaza_hoja', 2.0, 1.0),
+        hoja_sobre_peciolo('calabaza_hoja_light', 1.8, 1.0),
+        al_lado(('yellow',), (0.7, 0.7, 0.7), 1.3))),
+    'melon_madurez': alterna_plantas(MELON_MADURO, MELON_MADURO,
+                                     guia('calabaza_hoja_dark', 3.2, hoja_sobre_peciolo('calabaza_hoja', 2.2, 1.0))),
+    'melon_podrida': alterna_plantas(
+        mata(('melon_cascara', 'podrido', 'podrido'), 1.9, 1.1, 1.9,
+             al_lado(('hoja_seca', 'hoja_marchita'), (1.8, 0.3, 1.5), 2.0), arriba=('moho', 'moho_light', 'podrido_dark')),
+        guia('hoja_seca_dark', 3.0, hoja_sobre_peciolo('hoja_seca', 1.9, 1.0))),
+    # lechuga (roseta baja de hojas onduladas verde claro; madurez: cabeza redonda apretada con el corazon mas claro;
+    # siembra = plantula trasplantada)
+    'lechuga_siembra': semilla(('lechuga_hoja_light', 'lechuga_hoja'), (0.7, 0.35, 0.7)),
+    'lechuga_brote': roseta(('lechuga_hoja',), 1.4, 0.45, ('lechuga_hoja_light',), 1.0, 0.7),
+    'lechuga_crecimiento': roseta(('lechuga_hoja', 'lechuga_hoja_dark'), 2.5, 0.7, ('lechuga_hoja',), 2.0, 1.1,
+                                  arriba=('lechuga_hoja_light', 'lechuga_hoja')),
+    'lechuga_madurez': roseta(('lechuga_hoja_dark', 'lechuga_hoja'), 2.6, 0.7, ('lechuga_hoja',), 1.9, 1.9,
+                              arriba=('lechuga_hoja_light',)),
+    'lechuga_podrida': roseta(('hoja_marchita', 'hoja_seca'), 2.5, 0.4, ('podrido', 'lechuga_hoja_dark', 'podrido_dark'), 1.6, 0.9,
+                              arriba=('moho', 'moho_light', 'podrido_dark')),
+    # zanahoria (penacho plumoso verde fino abierto en V a lo largo del surco; madurez: hombro naranja asomando del lomo
+    # con su penacho; podrida: hombro oscuro con moho y penacho seco tumbado)
+    'zanahoria_siembra': semilla(('hoja_seca', 'hoja_seca_dark'), (0.45, 0.3, 0.75)),
+    'zanahoria_brote': abanico(('zanahoria_hoja',), (0.5, 1.4, 0.3), (14, 24)),
+    'zanahoria_crecimiento': abanico(('zanahoria_hoja', 'leaf'), (0.9, 2.6, 0.45), (14, 26)),
+    'zanahoria_madurez': hombro(('zanahoria_raiz',), (1.3, 0.9, 1.3), 0.3,
+                                fronda(('zanahoria_hoja', 'zanahoria_hoja', 'leaf'), (0.5, 2.9, 1.5), (10, 22))),
+    'zanahoria_podrida': hombro(('podrido', 'zanahoria_raiz_dark', 'podrido_dark'), (1.1, 0.6, 1.1), 0.35,
+                                fronda(('hoja_seca', 'hoja_seca_dark', 'hoja_marchita'), (0.6, 2.4, 0.9), (65, 85)),
+                                arriba=('moho', 'moho_light', 'zanahoria_raiz_dark')),
+    # berenjena (arbusto de hoja verde grisaceo, flor lila; madurez: frutos morado oscuro brillante colgando con su caliz
+    # verde; podrida: arbusto seco y frutos tirados con moho)
+    'berenjena_siembra': semilla(('hoja_seca_light', 'hoja_seca'), (0.5, 0.3, 0.7)),
+    'berenjena_brote': con_tallo('berenjena_hoja', 1.3, 0.4, hoja_plana('berenjena_hoja', 2.0, 1.3)),
+    'berenjena_crecimiento': mata(('berenjena_hoja',), 2.4, 2.4, 2.3, alterna(
+        encima('flor_lila', 0.6), nada, nada)),
+    'berenjena_madurez': mata(('berenjena_hoja',), 2.4, 2.8, 2.3, alterna(
+        con_cara('up', ('berenjena_hoja',), con_cara('east', ('berenjena_brillo',), vaina_costado(
+            ('berenjena_fruto',), 0.12, 0.95, 1.8, 1.3, -6, 6))),
+        con_cara('up', ('berenjena_hoja',), con_cara('east', ('berenjena_brillo',), vaina_costado(
+            ('berenjena_fruto',), 0.2, 0.9, 1.6, 1.3, -6, 6))),
+        encima('flor_lila', 0.6))),
+    'berenjena_podrida': mata(('hoja_seca_dark', 'hoja_marchita', 'podrido'), 2.2, 1.3, 2.0,
+                              con_arriba(('moho', 'moho_light'), al_lado(('berenjena_fruto', 'podrido_dark', 'podrido'),
+                                                                         (1.6, 0.75, 0.8), 1.9))),
+    # brocoli (hojas glaucas grandes y erguidas; madurez: cabeza verde oscura granulada arriba al centro; podrida: hojas
+    # marchitas y la cabeza pasada, florecida en amarillo o podrida con moho)
+    'brocoli_siembra': semilla(('brasica_hoja_light', 'brasica_hoja'), (0.7, 0.4, 0.7)),
+    'brocoli_brote': roseta(('brasica_hoja',), 1.4, 0.6, ('brasica_hoja_light',), 0.9, 1.0),
+    'brocoli_crecimiento': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.4, 1.4, ('brasica_hoja',), 1.7, 1.9,
+                                  arriba=('brasica_hoja_light', 'brasica_hoja')),
+    'brocoli_madurez': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.6, 1.7, ('brocoli_cabeza',), 1.5, 2.4,
+                              arriba=('brocoli_cabeza_dark', 'brocoli_cabeza_dark', 'brocoli_cabeza')),
+    'brocoli_podrida': roseta(('hoja_marchita', 'hoja_seca', 'brasica_hoja_dark'), 2.4, 0.9, ('podrido', 'brocoli_cabeza_dark'),
+                              1.3, 1.6, arriba=('yellow', 'moho', 'podrido_dark')),
+    # col (hojas glaucas anchas y abiertas casi al ras; madurez: bola lisa verde claro; podrida: bola hundida con moho)
+    'col_siembra': semilla(('brasica_hoja', 'brasica_hoja_light'), (0.75, 0.35, 0.75)),
+    'col_brote': roseta(('brasica_hoja',), 1.6, 0.45, ('brasica_hoja_light',), 1.0, 0.7),
+    'col_crecimiento': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.6, 0.7, ('brasica_hoja_light',), 1.6, 1.2,
+                              arriba=('brasica_hoja_light', 'col_cabeza')),
+    'col_madurez': roseta(('brasica_hoja_dark', 'brasica_hoja'), 2.7, 0.7, ('col_cabeza',), 1.9, 1.6,
+                          arriba=('col_cabeza',)),
+    'col_podrida': roseta(('hoja_marchita', 'hoja_seca', 'hoja_seca_dark'), 2.6, 0.4, ('podrido', 'col_cabeza', 'podrido_dark'),
+                          1.8, 1.1, arriba=('moho', 'moho_light', 'podrido_dark')),
+    # coliflor (hojas glaucas erguidas que abrazan la pella; madurez: pella crema que asoma arriba; podrida: pella
+    # manchada de cafe y moho)
+    'coliflor_siembra': semilla(('brasica_hoja_light', 'brasica_hoja'), (0.65, 0.45, 0.65)),
+    'coliflor_brote': roseta(('brasica_hoja_light',), 1.3, 0.7, ('brasica_hoja',), 0.8, 1.1),
+    'coliflor_crecimiento': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.2, 1.8, ('brasica_hoja',), 1.5, 2.2,
+                                   arriba=('brasica_hoja_light',)),
+    'coliflor_madurez': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.4, 2.0, ('coliflor_cabeza_dark',), 1.6, 2.4,
+                               arriba=('coliflor_cabeza',)),
+    'coliflor_podrida': roseta(('hoja_marchita', 'hoja_seca_dark', 'hoja_seca'), 2.2, 1.0, ('coliflor_cabeza_dark', 'podrido'),
+                               1.4, 1.4, arriba=('podrido', 'moho', 'moho_dark')),
+    # espinaca (roseta baja de hojas lisas verde oscuro brillante; podrida: espigada, roseta seca y tallo floral)
+    'espinaca_siembra': semilla(('hoja_seca', 'hoja_seca_light'), (0.5, 0.35, 0.5)),
+    'espinaca_brote': abanico(('espinaca_hoja',), (0.6, 1.3, 0.3), (28, 42)),
+    'espinaca_crecimiento': roseta(('espinaca_hoja', 'espinaca_hoja_dark'), 2.0, 0.5, ('espinaca_hoja',), 1.5, 0.8),
+    'espinaca_madurez': roseta(('espinaca_hoja_dark',), 2.5, 0.6, ('espinaca_hoja_dark', 'espinaca_hoja'), 1.9, 1.0,
+                               arriba=('espinaca_hoja',)),
+    'espinaca_podrida': mata(('hoja_marchita', 'hoja_seca_dark', 'podrido'), 2.1, 0.4, 2.0,
+                             con_arriba(('hoja_seca_light', 'hoja_marchita'), pieza(('hoja_marchita', 'hoja_seca'), 0.5, 0.4, 3.0,
+                                                                                    6, 16, 90)),
+                             arriba=('moho', 'hoja_seca_dark', 'moho_light')),
+    # rabano (roseta chica verde; madurez: bolita roja asomando del lomo con sus hojas y, en alguna, el rabano ya
+    # arrancado tendido con la punta blanca; podrida: bola oscura con moho y hojas secas tumbadas)
+    'rabano_siembra': semilla(('wood', 'hoja_seca'), (0.45, 0.35, 0.45)),
+    'rabano_brote': con_tallo('leaf_light', 0.7, 0.3, hoja_plana('leaf_light', 1.6, 0.9)),
+    'rabano_crecimiento': roseta(('leaf', 'leaf_dark'), 1.7, 0.6, ('leaf_light', 'leaf'), 1.1, 1.2),
+    'rabano_madurez': alterna_plantas(
+        hombro(('rabano_raiz',), (1.3, 1.1, 1.3), 0.3, fronda(('leaf', 'leaf', 'leaf_dark'), (0.5, 1.7, 1.5), (16, 30))),
+        hombro(('rabano_raiz',), (1.3, 1.1, 1.3), 0.3, fronda(('leaf', 'leaf', 'leaf_dark'), (0.5, 1.7, 1.5), (16, 30))),
+        mata(('leaf', 'leaf_dark'), 1.4, 0.8, 1.3, con_cara('east', ('white',), al_lado(('rabano_raiz',), (1.5, 0.95, 0.95), 1.5)))),
+    'rabano_podrida': hombro(('rabano_raiz', 'podrido', 'podrido_dark'), (1.1, 0.7, 1.1), 0.35,
+                             fronda(('hoja_seca', 'hoja_seca_dark', 'hoja_marchita'), (0.6, 1.9, 0.9), (65, 85)),
+                             arriba=('moho', 'moho_light', 'podrido_dark')),
+    # betabel (hojas verde oscuro con peciolo rojo; madurez: raiz morada grande asomando, con la corona roja de los
+    # peciolos arriba; podrida: raiz oscura con moho y hojas secas tumbadas)
+    'betabel_siembra': semilla(('hoja_seca', 'hoja_seca_dark'), (0.6, 0.4, 0.6)),
+    'betabel_brote': con_tallo('betabel_nervio', 0.9, 0.3, hoja_plana('leaf', 1.6, 0.8)),
+    'betabel_crecimiento': tallo_punta(('betabel_nervio',), 1.2, 0.8, copa(('leaf_dark', 'leaf_dark', 'leaf'), (2.2, 0.8, 2.0),
+                                                                          arriba=('leaf_dark', 'leaf'))),
+    'betabel_madurez': hombro(('betabel_raiz',), (1.7, 1.3, 1.7), 0.35,
+                              fronda(('leaf_dark', 'leaf_dark', 'leaf'), (0.6, 2.1, 2.0), (10, 22)), arriba=('betabel_nervio',)),
+    'betabel_podrida': hombro(('betabel_raiz_dark', 'podrido', 'podrido_dark'), (1.4, 0.8, 1.4), 0.4,
+                              fronda(('hoja_seca_dark', 'hoja_marchita', 'hoja_seca'), (0.6, 2.2, 1.1), (65, 85)),
+                              arriba=('moho', 'moho_light', 'podrido_dark')),
 }
 
 CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate',
                                     'soya', 'caupi', 'haba', 'chicharo', 'lenteja',
                                     'ejote', 'cebada', 'trigo', 'avena', 'maiz_dulce',
                                     'yuca', 'cana', 'ajonjoli', 'girasol', 'algodon',
-                                    'cartamo', 'higuerilla', 'tomate', 'papa', 'calabacita')
+                                    'cartamo', 'higuerilla', 'tomate', 'papa', 'calabacita',
+                                    'cebolla', 'pepino', 'melon', 'lechuga', 'zanahoria',
+                                    'berenjena', 'brocoli', 'col', 'coliflor', 'espinaca', 'rabano', 'betabel')
                    for e in ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')]
 
 

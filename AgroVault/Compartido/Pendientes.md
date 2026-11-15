@@ -10,7 +10,7 @@ No cierres una fila "para ir avanzando". Si un default es inevitable para compil
 
 ## Hecho y que el vault no debe volver a abrir
 
-Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo, años análogos, tarjetas en el motor, regresión, contratos 0.12.2, catálogo y calendario de Isla, TAW de Saxton y Rawls conectado a `/api/suelo`, ISRIC y OpenLandMap, IMERG como evidencia, escena 3D con modelos de los 8 cultivos del catálogo (milpa, chile, sorgo, sandía, camote y cacahuate; los cuatro últimos en `Mompin-escena` el 14/11 noche), catálogo ampliado a 40 cultivos (los 32 nuevos sin modelo 3D, con planta provisional; `Mompin-features`, 15/11), losas de suelo en la escena, estados con daltonismo, selector R1–R4, banda en la interfaz, paquete de demo, API y front en el droplet. Detalle en [[Resumen]] y `docs/13`.
+Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo, años análogos, tarjetas en el motor, regresión, contratos 0.12.2, catálogo y calendario de Isla, TAW de Saxton y Rawls conectado a `/api/suelo`, ISRIC y OpenLandMap, IMERG como evidencia, escena 3D con modelos de los 40 cultivos del catálogo (los 32 de la ampliación, del 15/11, en `docs/07`), catálogo ampliado a 40 cultivos (los 32 nuevos sin modelo 3D, con planta provisional; `Mompin-features`, 15/11), losas de suelo en la escena, estados con daltonismo, selector R1–R4, banda en la interfaz, paquete de demo, API y front en el droplet. Detalle en [[Resumen]] y `docs/13`.
 
 ## Marcas de `docs/14` que ya no describen el código
 

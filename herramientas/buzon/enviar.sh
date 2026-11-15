@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Manda un mensaje al buzon del equipo.
 # Uso: bash herramientas/buzon/enviar.sh <TuNombre> <Para|todos> "texto"
-# Servidor: variable BUZON_URL (por defecto http://172.20.10.6:3000).
+# Servidor: variable BUZON_URL (por defecto http://192.168.0.102:3000).
 set -u
 if [ $# -lt 3 ]; then
   echo "Uso: bash herramientas/buzon/enviar.sh <TuNombre> <Para|todos> \"texto\"" >&2
   exit 2
 fi
-URL="${BUZON_URL:-http://172.20.10.6:3000}"
+URL="${BUZON_URL:-http://192.168.0.102:3000}"
 TOKEN_HDR=()
 if [ -n "${BUZON_TOKEN:-}" ]; then TOKEN_HDR=(-H "X-Token: $BUZON_TOKEN"); fi
 R="$(curl -s -m 10 ${TOKEN_HDR[@]+"${TOKEN_HDR[@]}"} "$URL/enviar" \
