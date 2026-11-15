@@ -4,7 +4,7 @@
 >
 > **Deck:** <https://claude.ai/artifact/Mz67DDoAK9bLQY7YVrtdNq> (privado hasta que Mompin lo comparta). Mismo diseño, cifras y fuentes que la versión en inglés; la tabla "De dónde sale cada cifra" de [`presentacion.md`](presentacion.md) vale igual aquí.
 >
-> **Capturas:** portada con la escena sin interfaz (`capturas/presentacion/portada-scenarios-bajio-recorte.png`) y pantalla Cultivos con la app en español (`capturas/presentacion/cultivos-bajio-es.png`, 15/11, `main` c4b6543). Falta la de Comparación (hueco punteado en la diapositiva 4).
+> **Capturas:** portada con la escena sin interfaz (`capturas/presentacion/portada-scenarios-bajio-recorte.png`) y pantalla Cultivos con la app en español (`capturas/presentacion/cultivos-bajio-es.png`, 15/11, `main` c4b6543). Comparación con la app en español (`capturas/presentacion/comparacion-bajio-es-recorte.png`, desde `Mompin-motor` f2990b9).
 
 ### 1. Portada
 
@@ -68,9 +68,8 @@
 - 5
 - Orden por el peor año
 - Minimax de arrepentimiento; pesos iguales, SUPUESTO
-- Captura
-- Comparación · ejemplo Bajío
-- Ranking por robustez con la primera fila y la columna del peor escenario a la vista
+- Imagen: pantalla Comparación del Bajío; la Rotación 1 aparece como la más robusta y cada tarjeta nombra su peor año, el seco de 2009
+- Pantalla Comparación, ejemplo Bajío: orden por el peor año.
 
 **Notas del orador:** Por dentro: tomamos veinte años de clima diario de NASA POWER para la parcela. De ahí elegimos tres años reales, los más cercanos a los percentiles 10, 50 y 90 de la lluvia de las temporadas de siembra: un año seco, uno normal y uno lluvioso. Son historia, no una predicción. Un balance de agua FAO-56 corre en cada celda, directamente en el navegador. Cada rotación recibe cuatro pilares por año: déficit de agua, exceso de agua, ajuste a la ventana de siembra y cobertura del suelo. Luego ordenamos por el peor año, con minimax de arrepentimiento, no por el mejor. El orden que se ve en pantalla es el que calcula el motor.
 

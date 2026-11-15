@@ -4,7 +4,7 @@
 >
 > **Deck:** <https://claude.ai/artifact/9at5wxSRsVZGkQNNBeDDnv> (tipo Slides de Claude, privado hasta que Mompin lo comparta desde su menú Share; se descarga como PDF o PPTX). Este archivo guarda el mismo texto (diapositivas y notas del orador) para revisarlo en el repo. **Versión en español:** [`presentacion-es.md`](presentacion-es.md) (deck aparte, no se entrega).
 >
-> **Estado (15/11):** borrador para revisión del equipo. Falta la captura de Comparison (hueco marcado abajo) y la aprobación de todo el equipo antes de enviarla (`docs/13`, "Reglas de organización del día final").
+> **Estado (15/11):** borrador para revisión del equipo, con las tres capturas puestas y la aprobación de todo el equipo antes de enviarla (`docs/13`, "Reglas de organización del día final").
 
 ## Reglas que cumple
 
@@ -22,13 +22,13 @@
 
 ## Capturas
 
-Sacadas sin pantalla el 15/11 desde `main` c4b6543 (app en inglés): Chrome `--headless=new` con SwiftShader conducido por CDP, ventana de 1920 x 1080, gráficos en Alto, tutoriales cerrados, ejemplo Bajío elegido en Land (método de la memoria del proyecto, "capturas de la escena sin pantalla"; los ejemplos vienen grabados en el front y no piden la API). Archivos en [`capturas/presentacion/`](capturas/presentacion/).
+Sacadas sin pantalla el 15/11 desde `main` c4b6543 (app en inglés; Comparison desde `Mompin-motor`, ver la tabla): Chrome `--headless=new` con SwiftShader conducido por CDP, ventana de 1920 x 1080, gráficos en Alto, tutoriales cerrados, ejemplo Bajío elegido en Land (método de la memoria del proyecto, "capturas de la escena sin pantalla"; los ejemplos vienen grabados en el front y no piden la API). Archivos en [`capturas/presentacion/`](capturas/presentacion/).
 
 | Diapositiva | Pantalla (nombre en la app en inglés) | Ejemplo | Archivo | Estado |
 | --- | --- | --- | --- | --- |
 | 1 Cover | Scenarios, Normal year 2016, semana 11 de 19, interfaz oculta | Bajío | `scenarios-bajio-normal-2016.png` (completa) y `portada-scenarios-bajio-recorte.png` (recorte de 1040 x 1080 que va en el deck) | Puesta |
 | 3 What it is | Crops, rotación 1 (maíz, sorgo, maíz), Esquilote con su primer consejo | Bajío | `crops-bajio.png` | Puesta |
-| 4 How it works | Comparison, ranking por robustez con la primera fila y la columna del peor escenario | Bajío | Pendiente: espera a que entre la pantalla 4 en inglés | Hueco punteado en el deck |
+| 4 How it works | Comparison: tres tarjetas de rotación con el agua que faltó en seco, normal y lluvioso; Rotation 1 marcada "The most robust" y en las tres el peor año es el seco (2009) | Bajío | `comparison-bajio.png` (completa) y `comparison-bajio-recorte.png` (recorte del panel, va en el deck); en español, `comparacion-bajio-es.png` y `comparacion-bajio-es-recorte.png` | Puesta. Sacada de `origin/Mompin-motor` f2990b9, que ya trae B7 pantalla 4 (24a49f3), porque aún no estaba en `main` |
 
 **El orden del ranking se lee de la captura**, no de este archivo: las rotaciones iniciales las arma el front (E10).
 
@@ -77,7 +77,7 @@ Duración de las notas: entre 25 y 40 s cada una a ritmo normal; unos 3.5 min en
 - 3 · FAO-56 water balance per cell: runs in the browser, inside a Web Worker.
 - 4 · Four pillars per year: water deficit, excess water, planting window, soil cover.
 - 5 · Ranked by the worst year: minimax regret; equal weights, declared SUPUESTO.
-- Hueco: *Screenshot: Comparison · Bajío example* (robustness ranking with the first row and the worst-scenario column in view).
+- Imagen: pantalla Comparison del Bajío (`capturas/presentacion/comparison-bajio-recorte.png`), con el pie "Comparison screen, Bajío example: ranked by the worst year."
 
 **Notes:** Under the hood: we take twenty years of daily NASA POWER climate for the field. From them we pick three real years, the ones closest to the 10th, 50th and 90th percentile of rain in the sowing seasons: a dry, a normal and a wet year. They are history, not a prediction. A FAO-56 water balance runs for every cell, right in the browser. Each rotation gets four pillars per year: water deficit, excess water, planting-window fit and soil cover. Then we rank by the worst year, with minimax regret, not by the best. The order you see on screen is the one the engine computes.
 
@@ -150,7 +150,7 @@ Duración de las notas: entre 25 y 40 s cada una a ritmo normal; unos 3.5 min en
 ## Pendientes antes de enviarla
 
 - [x] Capturas de Scenarios y Crops puestas.
-- [ ] Captura de Comparison cuando entre la pantalla 4 en inglés.
+- [x] Captura de Comparison puesta (en inglés y en español).
 - [x] Revisión a ojo de las 7 diapositivas con las fuentes cargadas (vista previa local en Chrome sin pantalla, 15/11): nada se sale de su caja.
 - [ ] Que el equipo confirme la declaración de IA (la idea humana, la marca de las ilustraciones de la interfaz) como pide el README.
 - [ ] Compartir el deck con enlace público (menú Share del deck) o exportarlo a PDF y subirlo donde no pida registro ni permisos (`docs/02`).
