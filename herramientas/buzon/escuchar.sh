@@ -3,14 +3,14 @@
 # algo e imprime los mensajes; la sesion de IA se lo dice a su usuario y lo
 # vuelve a lanzar. Recuerda el ultimo mensaje visto en ~/.agrohive-buzon-<nombre>.
 # Uso: bash herramientas/buzon/escuchar.sh <TuNombre>
-# Servidor: variable BUZON_URL (por defecto http://192.168.0.102:3000).
+# Servidor: variable BUZON_URL (por defecto http://172.20.10.3:3000).
 set -u
 YO="${1:-}"
 if [ -z "$YO" ]; then
   echo "Uso: bash herramientas/buzon/escuchar.sh <TuNombre>" >&2
   exit 2
 fi
-URL="${BUZON_URL:-http://192.168.0.102:3000}"
+URL="${BUZON_URL:-http://172.20.10.3:3000}"
 CURSOR="$HOME/.agrohive-buzon-$(printf '%s' "$YO" | tr '[:upper:]' '[:lower:]')"
 TOKEN_HDR=()
 if [ -n "${BUZON_TOKEN:-}" ]; then TOKEN_HDR=(-H "X-Token: $BUZON_TOKEN"); fi

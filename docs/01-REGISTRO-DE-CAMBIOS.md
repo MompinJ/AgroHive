@@ -2,6 +2,10 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Buzón: IP por defecto del hotspot de la sede (sesión "buzon")
+
+- `herramientas/buzon/enviar.sh`, `escuchar.sh`, `README.md`, `AGENTS.md` y `docs/16` (P1): la IP por defecto pasa de `192.168.0.102` (casa) a `172.20.10.3` (hotspot, `wlo1`); `BUZON_URL` sigue mandando.
+
 ### 2026-11-15 — Insecticida: protege solo el riesgo y ligado a la malla (Eduardo)
 
 - **Archivos:** `web/src/ui/lab/plagas.ts` (`firmaMalla`, `celdasEnRiesgo`), `web/src/ui/lab/Laboratorio.tsx`, `web/src/ui/lab/PanelCultivos.tsx`, `web/src/ui/lab/plagas.test.ts`; `docs/06`.
