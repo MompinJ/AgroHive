@@ -169,7 +169,7 @@ Estado al 14/11 (`cd web && npm test`, archivos en `web/src/motor/pruebas/`):
 
 Además: ejemplos de FAO-56 para ET0, conservación de masa de la cubeta, salidas validadas contra los JSON Schema de `contratos/`, protocolo del Web Worker, la rotación con los tres escenarios en menos de 300 ms, el ranking (A4.2: criterios A y B calculados a mano, minimax, desempate y pesos del usuario) y la evidencia de C2 con el paquete de demo (`c2.test.ts`: suelo del mapa ⇒ `NO_EVALUABLE`; selector manual ⇒ resultados por celda y por rotación conformes al contrato).
 
-**Regresión (A5.5, `web/src/motor/pruebas/regresion.test.ts`):** fija contra `regresion/demo-isla.json` los números clave de la demo (paquete A2.4, suelo real de Isla):
+**Regresión (A5.5, `web/src/motor/pruebas/regresion.test.ts`):** fija contra `regresion/demo-isla.json` los números clave de la parcela de Isla (paquete A2.4, suelo real de Isla; era la demo hasta el 15/11, ahora prueba interna):
 - escenarios 2023 / 2016 / 2024 con su lluvia de temporadas y sus percentiles;
 - pilares de la milpa en cada escenario;
 - estados y `filtroClima` de las cuatro rotaciones;
@@ -178,3 +178,5 @@ Además: ejemplos de FAO-56 para ET0, conservación de masa de la cubeta, salida
 - los años análogos y el rango de la próxima temporada.
 
 Además comprueba que `VERSION_CONTRATO` del motor sea la versión de `contratos/` y que el plan de ejemplo de `contratos/` pase por el motor con salidas conformes a los schemas. Si un número cambia a propósito: `ACTUALIZAR_REGRESION=1 npx vitest run src/motor/pruebas/regresion.test.ts`, revisar el diff de `demo-isla.json` y explicarlo en docs/01 en el mismo commit.
+
+**Regresión de los ejemplos mundiales** (15/11, `web/src/motor/pruebas/regresion-ejemplos.test.ts`): como A5.5, para cada parcela de ejemplo de `datos/demo/ejemplos/` fija contra `regresion/ejemplos/<id>.json` el clima de Köppen-Geiger, los escenarios, el estado y los pilares de 2 a 4 rotaciones de prueba con los cultivos del lugar (no son recomendaciones), el ranking y la próxima temporada, y que el resultado cumpla `resultado-rotacion`. Desde ese día la de Isla es una prueba interna (Isla ya no es la demo, `docs/13`). Se regenera con `ACTUALIZAR_REGRESION=1 npx vitest run src/motor/pruebas/regresion-ejemplos.test.ts` y el diff se explica en `docs/01`.

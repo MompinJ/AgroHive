@@ -33,10 +33,12 @@ Filosofía: **minimizar el arrepentimiento** cuando el clima no coopera. Un plan
 
 ## Caso de demostración
 
+**Desde el 15/11 la demo son parcelas de ejemplo mundiales** `[DECIDIDO]` (Mompin; `docs/13`, "Demo mundial"): Bajío (Guanajuato, México), Sorriso (Mato Grosso, Brasil), Uasin Gishu (Rift Valley, Kenia), Ludhiana (Punjab, India), Tierra de Campos (Palencia, España) y Story County (Iowa, EE. UU., con CDL y SSURGO). El usuario elige una o dibuja la suya. Datos y detalle en `datos/demo/ejemplos/LEEME.md`. Isla, Veracruz queda como prueba interna del motor, no como demo. La tabla de abajo es el caso original y vale para cada ejemplo salvo la ubicación y la superficie.
+
 | Campo | Valor | Nota |
 | --- | --- | --- |
-| Ubicación | Municipio de **Isla, Veracruz** | Caso de demo y de respaldo; no es validación local. `[PROPUESTA]` |
-| Superficie | **2 ha ficticias** | Parcela de ejemplo, no catastral. |
+| Ubicación | ~~Municipio de **Isla, Veracruz**~~ Seis lugares agrícolas reales en cinco continentes (ver arriba) | Ejemplos y respaldo sin red; no son validación local. `[DECIDIDO]` 15/11 |
+| Superficie | ~~**2 ha ficticias**~~ Unas **2.8 ha ficticias** por ejemplo, sobre tierra de cultivo real (ESA WorldCover 2021) | Parcela de ejemplo, no catastral ni levantamiento. |
 | Manejo | Temporal, sin riego | Riego fuera del análisis base. |
 | Suelo | Elegido por el usuario o hipotético, siempre etiquetado `SUPUESTO` | Ver 04. |
 | Clima | NASA POWER diario histórico | Regional, misma serie para toda la parcela. |
@@ -102,7 +104,7 @@ Con el selector, el usuario puede armar sus propias secuencias además de estas.
 - Panel de inventario y costos (agua, nutrientes, mano de obra).
 - Mini tutoriales con la mascota.
 - Datos de suelo automáticos por coordenada.
-- Fuentes regionales de EE. UU. cuando la parcela cae ahí: CDL (rotación real) y SSURGO (A4.12). La arquitectura es mundial y la demo se valida en Isla (13, "Alcance geográfico").
+- Fuentes regionales de EE. UU. cuando la parcela cae ahí: CDL (rotación real) y SSURGO (A4.12). La arquitectura es mundial y la demo son las parcelas de ejemplo mundiales (13, "Demo mundial"); el ejemplo de Iowa ya graba CDL y SSURGO.
 - Más cultivos, props decorativos (pájaro, casa, pozo) y variantes visuales.
 - Escalabilidad y optimización avanzada.
 

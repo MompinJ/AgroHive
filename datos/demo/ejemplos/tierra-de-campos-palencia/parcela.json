@@ -1,0 +1,991 @@
+{
+  "meta": {
+    "versionContrato": "0.15.0",
+    "esEjemplo": true,
+    "aviso": "Parcela de ejemplo, no es un levantamiento: poligono ficticio de unas 2.8 ha sobre tierra de cultivo real (ESA WorldCover 2021). Clima, suelo, terreno y evidencia son datos reales de la API para esa coordenada."
+  },
+  "id": "ejemplo-tierra-de-campos-palencia",
+  "nombre": "Parcela de ejemplo · Tierra de Campos, Castilla y León",
+  "origen": "demo",
+  "poligono": [
+    [
+      -5.0010083,
+      41.9491105
+    ],
+    [
+      -4.9988329,
+      41.9491105
+    ],
+    [
+      -4.9988329,
+      41.9501897
+    ],
+    [
+      -4.9993154,
+      41.9505486
+    ],
+    [
+      -5.0010083,
+      41.9505486
+    ],
+    [
+      -5.0010083,
+      41.9491105
+    ]
+  ],
+  "areaHa": 2.7972144942825348,
+  "centroide": [
+    -4.99979956,
+    41.94990158
+  ],
+  "tamanoCeldaM": 20,
+  "sueloId": "suelo-41950n-5000w",
+  "terreno": {
+    "estado": "EVALUABLE",
+    "fuente": {
+      "nombre": "AWS Terrain Tiles (Terrarium)",
+      "unidades": "m (elevacion), % (pendiente)",
+      "consultado": "2026-11-15",
+      "resolucion": "tile z14, unos 9 m por pixel interpolado",
+      "nota": "La resolucion nativa del DEM de origen no esta verificada (VERIFICAR; Mapzen lo compone de SRTM y otras fuentes, unos 30 m)."
+    }
+  },
+  "celdas": [
+    {
+      "id": "c-0-0",
+      "i": 0,
+      "j": 0,
+      "centro": [
+        -5.000887379799086,
+        41.94920043203638
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 752.2,
+      "pendientePct": 6.95
+    },
+    {
+      "id": "c-0-1",
+      "i": 0,
+      "j": 1,
+      "centro": [
+        -5.00064553939726,
+        41.94920043203638
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 752.9,
+      "pendientePct": 5.55
+    },
+    {
+      "id": "c-0-2",
+      "i": 0,
+      "j": 2,
+      "centro": [
+        -5.0004036989954335,
+        41.94920043203638
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 751.9,
+      "pendientePct": 7.81
+    },
+    {
+      "id": "c-0-3",
+      "i": 0,
+      "j": 3,
+      "centro": [
+        -5.000161858593607,
+        41.94920043203638
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.9,
+      "pendientePct": 5.03
+    },
+    {
+      "id": "c-0-4",
+      "i": 0,
+      "j": 4,
+      "centro": [
+        -4.999920018191781,
+        41.94920043203638
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 751.0,
+      "pendientePct": 2.24
+    },
+    {
+      "id": "c-0-5",
+      "i": 0,
+      "j": 5,
+      "centro": [
+        -4.999678177789955,
+        41.94920043203638
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 751.3,
+      "pendientePct": 2.92
+    },
+    {
+      "id": "c-0-6",
+      "i": 0,
+      "j": 6,
+      "centro": [
+        -4.999436337388128,
+        41.94920043203638
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 752.0,
+      "pendientePct": 2.8
+    },
+    {
+      "id": "c-0-7",
+      "i": 0,
+      "j": 7,
+      "centro": [
+        -4.999194496986302,
+        41.94920043203638
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 751.8,
+      "pendientePct": 4.16
+    },
+    {
+      "id": "c-0-8",
+      "i": 0,
+      "j": 8,
+      "centro": [
+        -4.998952656584475,
+        41.94920043203638
+      ],
+      "fraccionDentro": 0.9951884944245734,
+      "forma": "completa",
+      "elevacionM": 751.1,
+      "pendientePct": 3.54
+    },
+    {
+      "id": "c-1-0",
+      "i": 1,
+      "j": 0,
+      "centro": [
+        -5.000887379799086,
+        41.94938029610912
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 751.0,
+      "pendientePct": 6.6
+    },
+    {
+      "id": "c-1-1",
+      "i": 1,
+      "j": 1,
+      "centro": [
+        -5.00064553939726,
+        41.94938029610912
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 751.8,
+      "pendientePct": 6.29
+    },
+    {
+      "id": "c-1-2",
+      "i": 1,
+      "j": 2,
+      "centro": [
+        -5.0004036989954335,
+        41.94938029610912
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.7,
+      "pendientePct": 6.54
+    },
+    {
+      "id": "c-1-3",
+      "i": 1,
+      "j": 3,
+      "centro": [
+        -5.000161858593607,
+        41.94938029610912
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 3.01
+    },
+    {
+      "id": "c-1-4",
+      "i": 1,
+      "j": 4,
+      "centro": [
+        -4.999920018191781,
+        41.94938029610912
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.6,
+      "pendientePct": 3.72
+    },
+    {
+      "id": "c-1-5",
+      "i": 1,
+      "j": 5,
+      "centro": [
+        -4.999678177789955,
+        41.94938029610912
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 751.0,
+      "pendientePct": 3.18
+    },
+    {
+      "id": "c-1-6",
+      "i": 1,
+      "j": 6,
+      "centro": [
+        -4.999436337388128,
+        41.94938029610912
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 751.5,
+      "pendientePct": 4.01
+    },
+    {
+      "id": "c-1-7",
+      "i": 1,
+      "j": 7,
+      "centro": [
+        -4.999194496986302,
+        41.94938029610912
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 751.1,
+      "pendientePct": 3.48
+    },
+    {
+      "id": "c-1-8",
+      "i": 1,
+      "j": 8,
+      "centro": [
+        -4.998952656584475,
+        41.94938029610912
+      ],
+      "fraccionDentro": 0.9951884944288968,
+      "forma": "completa",
+      "elevacionM": 751.0,
+      "pendientePct": 0.56
+    },
+    {
+      "id": "c-2-0",
+      "i": 2,
+      "j": 0,
+      "centro": [
+        -5.000887379799086,
+        41.94956016018187
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.1,
+      "pendientePct": 4.98
+    },
+    {
+      "id": "c-2-1",
+      "i": 2,
+      "j": 1,
+      "centro": [
+        -5.00064553939726,
+        41.94956016018187
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.4,
+      "pendientePct": 5.26
+    },
+    {
+      "id": "c-2-2",
+      "i": 2,
+      "j": 2,
+      "centro": [
+        -5.0004036989954335,
+        41.94956016018187
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 2.47
+    },
+    {
+      "id": "c-2-3",
+      "i": 2,
+      "j": 3,
+      "centro": [
+        -5.000161858593607,
+        41.94956016018187
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.7,
+      "pendientePct": 1.27
+    },
+    {
+      "id": "c-2-4",
+      "i": 2,
+      "j": 4,
+      "centro": [
+        -4.999920018191781,
+        41.94956016018187
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.9,
+      "pendientePct": 4.14
+    },
+    {
+      "id": "c-2-5",
+      "i": 2,
+      "j": 5,
+      "centro": [
+        -4.999678177789955,
+        41.94956016018187
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.4,
+      "pendientePct": 5.4
+    },
+    {
+      "id": "c-2-6",
+      "i": 2,
+      "j": 6,
+      "centro": [
+        -4.999436337388128,
+        41.94956016018187
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.4,
+      "pendientePct": 6.5
+    },
+    {
+      "id": "c-2-7",
+      "i": 2,
+      "j": 7,
+      "centro": [
+        -4.999194496986302,
+        41.94956016018187
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.5,
+      "pendientePct": 3.58
+    },
+    {
+      "id": "c-2-8",
+      "i": 2,
+      "j": 8,
+      "centro": [
+        -4.998952656584475,
+        41.94956016018187
+      ],
+      "fraccionDentro": 0.9951884944334269,
+      "forma": "completa",
+      "elevacionM": 751.0,
+      "pendientePct": 2.8
+    },
+    {
+      "id": "c-3-0",
+      "i": 3,
+      "j": 0,
+      "centro": [
+        -5.000887379799086,
+        41.94974002425461
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.1,
+      "pendientePct": 4.07
+    },
+    {
+      "id": "c-3-1",
+      "i": 3,
+      "j": 1,
+      "centro": [
+        -5.00064553939726,
+        41.94974002425461
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.7,
+      "pendientePct": 3.01
+    },
+    {
+      "id": "c-3-2",
+      "i": 3,
+      "j": 2,
+      "centro": [
+        -5.0004036989954335,
+        41.94974002425461
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 0.5
+    },
+    {
+      "id": "c-3-3",
+      "i": 3,
+      "j": 3,
+      "centro": [
+        -5.000161858593607,
+        41.94974002425461
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.5,
+      "pendientePct": 2.26
+    },
+    {
+      "id": "c-3-4",
+      "i": 3,
+      "j": 4,
+      "centro": [
+        -4.999920018191781,
+        41.94974002425461
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.1,
+      "pendientePct": 2.7
+    },
+    {
+      "id": "c-3-5",
+      "i": 3,
+      "j": 5,
+      "centro": [
+        -4.999678177789955,
+        41.94974002425461
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 748.9,
+      "pendientePct": 6.27
+    },
+    {
+      "id": "c-3-6",
+      "i": 3,
+      "j": 6,
+      "centro": [
+        -4.999436337388128,
+        41.94974002425461
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 748.9,
+      "pendientePct": 7.59
+    },
+    {
+      "id": "c-3-7",
+      "i": 3,
+      "j": 7,
+      "centro": [
+        -4.999194496986302,
+        41.94974002425461
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.8,
+      "pendientePct": 5.48
+    },
+    {
+      "id": "c-3-8",
+      "i": 3,
+      "j": 8,
+      "centro": [
+        -4.998952656584475,
+        41.94974002425461
+      ],
+      "fraccionDentro": 0.9951884944377506,
+      "forma": "completa",
+      "elevacionM": 750.5,
+      "pendientePct": 3.72
+    },
+    {
+      "id": "c-4-0",
+      "i": 4,
+      "j": 0,
+      "centro": [
+        -5.000887379799086,
+        41.94991988832736
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.0,
+      "pendientePct": 3.01
+    },
+    {
+      "id": "c-4-1",
+      "i": 4,
+      "j": 1,
+      "centro": [
+        -5.00064553939726,
+        41.94991988832736
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.6,
+      "pendientePct": 2.51
+    },
+    {
+      "id": "c-4-2",
+      "i": 4,
+      "j": 2,
+      "centro": [
+        -5.0004036989954335,
+        41.94991988832736
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 0.5
+    },
+    {
+      "id": "c-4-3",
+      "i": 4,
+      "j": 3,
+      "centro": [
+        -5.000161858593607,
+        41.94991988832736
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.8,
+      "pendientePct": 2.8
+    },
+    {
+      "id": "c-4-4",
+      "i": 4,
+      "j": 4,
+      "centro": [
+        -4.999920018191781,
+        41.94991988832736
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.0,
+      "pendientePct": 4.98
+    },
+    {
+      "id": "c-4-5",
+      "i": 4,
+      "j": 5,
+      "centro": [
+        -4.999678177789955,
+        41.94991988832736
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 747.9,
+      "pendientePct": 4.65
+    },
+    {
+      "id": "c-4-6",
+      "i": 4,
+      "j": 6,
+      "centro": [
+        -4.999436337388128,
+        41.94991988832736
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 747.5,
+      "pendientePct": 4.26
+    },
+    {
+      "id": "c-4-7",
+      "i": 4,
+      "j": 7,
+      "centro": [
+        -4.999194496986302,
+        41.94991988832736
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.0,
+      "pendientePct": 7.7
+    },
+    {
+      "id": "c-4-8",
+      "i": 4,
+      "j": 8,
+      "centro": [
+        -4.998952656584475,
+        41.94991988832736
+      ],
+      "fraccionDentro": 0.995188494442074,
+      "forma": "completa",
+      "elevacionM": 750.5,
+      "pendientePct": 7.5
+    },
+    {
+      "id": "c-5-0",
+      "i": 5,
+      "j": 0,
+      "centro": [
+        -5.000887379799086,
+        41.9500997524001
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.0,
+      "pendientePct": 3.0
+    },
+    {
+      "id": "c-5-1",
+      "i": 5,
+      "j": 1,
+      "centro": [
+        -5.00064553939726,
+        41.9500997524001
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.6,
+      "pendientePct": 2.5
+    },
+    {
+      "id": "c-5-2",
+      "i": 5,
+      "j": 2,
+      "centro": [
+        -5.0004036989954335,
+        41.9500997524001
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 1.0
+    },
+    {
+      "id": "c-5-3",
+      "i": 5,
+      "j": 3,
+      "centro": [
+        -5.000161858593607,
+        41.9500997524001
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 0.9
+    },
+    {
+      "id": "c-5-4",
+      "i": 5,
+      "j": 4,
+      "centro": [
+        -4.999920018191781,
+        41.9500997524001
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.7,
+      "pendientePct": 6.04
+    },
+    {
+      "id": "c-5-5",
+      "i": 5,
+      "j": 5,
+      "centro": [
+        -4.999678177789955,
+        41.9500997524001
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 747.8,
+      "pendientePct": 6.05
+    },
+    {
+      "id": "c-5-6",
+      "i": 5,
+      "j": 6,
+      "centro": [
+        -4.999436337388128,
+        41.9500997524001
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 747.6,
+      "pendientePct": 4.96
+    },
+    {
+      "id": "c-5-7",
+      "i": 5,
+      "j": 7,
+      "centro": [
+        -4.999194496986302,
+        41.9500997524001
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.1,
+      "pendientePct": 7.67
+    },
+    {
+      "id": "c-5-8",
+      "i": 5,
+      "j": 8,
+      "centro": [
+        -4.998952656584475,
+        41.9500997524001
+      ],
+      "fraccionDentro": 0.9951884944463975,
+      "forma": "completa",
+      "elevacionM": 750.5,
+      "pendientePct": 7.0
+    },
+    {
+      "id": "c-6-0",
+      "i": 6,
+      "j": 0,
+      "centro": [
+        -5.000887379799086,
+        41.95027961647285
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.0,
+      "pendientePct": 3.47
+    },
+    {
+      "id": "c-6-1",
+      "i": 6,
+      "j": 1,
+      "centro": [
+        -5.00064553939726,
+        41.95027961647285
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.6,
+      "pendientePct": 2.61
+    },
+    {
+      "id": "c-6-2",
+      "i": 6,
+      "j": 2,
+      "centro": [
+        -5.0004036989954335,
+        41.95027961647285
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 1.0
+    },
+    {
+      "id": "c-6-3",
+      "i": 6,
+      "j": 3,
+      "centro": [
+        -5.000161858593607,
+        41.95027961647285
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 0.0
+    },
+    {
+      "id": "c-6-4",
+      "i": 6,
+      "j": 4,
+      "centro": [
+        -4.999920018191781,
+        41.95027961647285
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 2.37
+    },
+    {
+      "id": "c-6-5",
+      "i": 6,
+      "j": 5,
+      "centro": [
+        -4.999678177789955,
+        41.95027961647285
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.1,
+      "pendientePct": 7.67
+    },
+    {
+      "id": "c-6-6",
+      "i": 6,
+      "j": 6,
+      "centro": [
+        -4.999436337388128,
+        41.95027961647285
+      ],
+      "fraccionDentro": 1,
+      "forma": "completa",
+      "elevacionM": 749.0,
+      "pendientePct": 8.07
+    },
+    {
+      "id": "c-6-7",
+      "i": 6,
+      "j": 7,
+      "centro": [
+        -4.999194496986302,
+        41.95027961647285
+      ],
+      "fraccionDentro": 0.9999894850559854,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 5.66
+    },
+    {
+      "id": "c-6-8",
+      "i": 6,
+      "j": 8,
+      "centro": [
+        -4.998952656584475,
+        41.95027961647285
+      ],
+      "fraccionDentro": 0.49535525901358496,
+      "forma": "SO",
+      "elevacionM": 750.6,
+      "pendientePct": 3.04
+    },
+    {
+      "id": "c-7-0",
+      "i": 7,
+      "j": 0,
+      "centro": [
+        -5.000887379799086,
+        41.95045948054559
+      ],
+      "fraccionDentro": 0.9954822505904211,
+      "forma": "completa",
+      "elevacionM": 749.7,
+      "pendientePct": 3.64
+    },
+    {
+      "id": "c-7-1",
+      "i": 7,
+      "j": 1,
+      "centro": [
+        -5.00064553939726,
+        41.95045948054559
+      ],
+      "fraccionDentro": 0.9954822505904211,
+      "forma": "completa",
+      "elevacionM": 749.9,
+      "pendientePct": 1.68
+    },
+    {
+      "id": "c-7-2",
+      "i": 7,
+      "j": 2,
+      "centro": [
+        -5.0004036989954335,
+        41.95045948054559
+      ],
+      "fraccionDentro": 0.9954822505904211,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 0.25
+    },
+    {
+      "id": "c-7-3",
+      "i": 7,
+      "j": 3,
+      "centro": [
+        -5.000161858593607,
+        41.95045948054559
+      ],
+      "fraccionDentro": 0.9954822505904211,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 0.0
+    },
+    {
+      "id": "c-7-4",
+      "i": 7,
+      "j": 4,
+      "centro": [
+        -4.999920018191781,
+        41.95045948054559
+      ],
+      "fraccionDentro": 0.9954822505904211,
+      "forma": "completa",
+      "elevacionM": 750.0,
+      "pendientePct": 1.75
+    },
+    {
+      "id": "c-7-5",
+      "i": 7,
+      "j": 5,
+      "centro": [
+        -4.999678177789955,
+        41.95045948054559
+      ],
+      "fraccionDentro": 0.9954822505904211,
+      "forma": "completa",
+      "elevacionM": 750.7,
+      "pendientePct": 8.19
+    },
+    {
+      "id": "c-7-6",
+      "i": 7,
+      "j": 6,
+      "centro": [
+        -4.999436337388128,
+        41.95045948054559
+      ],
+      "fraccionDentro": 0.9954822505904211,
+      "forma": "completa",
+      "elevacionM": 750.7,
+      "pendientePct": 8.5
+    },
+    {
+      "id": "c-7-7",
+      "i": 7,
+      "j": 7,
+      "centro": [
+        -4.999194496986302,
+        41.95045948054559
+      ],
+      "fraccionDentro": 0.4954940956652134,
+      "forma": "SO",
+      "elevacionM": 750.7,
+      "pendientePct": 3.5
+    }
+  ],
+  "ubicacion": {
+    "municipio": "Belmonte de Campos",
+    "estado": "Palencia, Castilla y León",
+    "pais": "España"
+  },
+  "coordenadasIlustrativas": true,
+  "advertencias": [
+    {
+      "codigo": "RESOLUCION_DEM_GRUESA",
+      "mensaje": "El modelo de elevacion tiene unos 30 m y las celdas miden 20 m: el relieve entre celdas es interpolado, no medido.",
+      "severidad": "info"
+    }
+  ]
+}
