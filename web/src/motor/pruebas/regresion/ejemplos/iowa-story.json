@@ -60,7 +60,7 @@
   "rotaciones": {
     "R1": {
       "estado": "EVALUABLE",
-      "filtroClima": null,
+      "filtroClima": true,
       "pilares": {
         "seco": {
           "deficitHidrico": {
@@ -78,9 +78,8 @@
             "fraccionLluviaPercolada": 0
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-us-95-172 para: soya PV (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 3
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -105,9 +104,8 @@
             "fraccionLluviaPercolada": 0.0297
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-us-95-172 para: soya PV (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 3
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -132,9 +130,8 @@
             "fraccionLluviaPercolada": 0.0615
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-us-95-172 para: soya PV (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 3
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -235,12 +232,12 @@
     "orden": [
       {
         "rotacionId": "R2",
-        "arrepentimiento": 0.0033,
+        "arrepentimiento": 0.0025,
         "peorEscenario": "seco"
       },
       {
         "rotacionId": "R1",
-        "arrepentimiento": 0.008,
+        "arrepentimiento": 0.006,
         "peorEscenario": "seco"
       }
     ]

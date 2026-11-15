@@ -60,7 +60,7 @@
   "rotaciones": {
     "R1": {
       "estado": "EVALUABLE",
-      "filtroClima": null,
+      "filtroClima": true,
       "pilares": {
         "seco": {
           "deficitHidrico": {
@@ -78,9 +78,8 @@
             "fraccionLluviaPercolada": 0
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-in-118-511 para: trigo OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 3
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -105,9 +104,8 @@
             "fraccionLluviaPercolada": 0.0271
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-in-118-511 para: trigo OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 3
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -132,9 +130,8 @@
             "fraccionLluviaPercolada": 0.1828
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-in-118-511 para: trigo OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 3
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -146,8 +143,8 @@
       }
     },
     "R2": {
-      "estado": "EVALUABLE",
-      "filtroClima": null,
+      "estado": "EXPLORATORIO",
+      "filtroClima": true,
       "pilares": {
         "seco": {
           "deficitHidrico": {
@@ -165,9 +162,8 @@
             "fraccionLluviaPercolada": 0
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-in-118-511 para: algodon PV (sin entrada en el calendario); trigo OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -192,9 +188,8 @@
             "fraccionLluviaPercolada": 0
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-in-118-511 para: algodon PV (sin entrada en el calendario); trigo OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -219,9 +214,8 @@
             "fraccionLluviaPercolada": 0.0938
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-in-118-511 para: algodon PV (sin entrada en el calendario); trigo OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -234,7 +228,7 @@
     },
     "R3": {
       "estado": "EVALUABLE",
-      "filtroClima": null,
+      "filtroClima": true,
       "pilares": {
         "seco": {
           "deficitHidrico": {
@@ -252,9 +246,8 @@
             "fraccionLluviaPercolada": 0.0135
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-in-118-511 para: papa OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -279,9 +272,8 @@
             "fraccionLluviaPercolada": 0.0263
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-in-118-511 para: papa OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -306,9 +298,8 @@
             "fraccionLluviaPercolada": 0.1958
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-in-118-511 para: papa OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -324,18 +315,13 @@
     "criterio": "B_minimax_arrepentimiento",
     "orden": [
       {
-        "rotacionId": "R2",
+        "rotacionId": "R1",
         "arrepentimiento": 0,
         "peorEscenario": "seco"
       },
       {
-        "rotacionId": "R1",
-        "arrepentimiento": 0.0268,
-        "peorEscenario": "seco"
-      },
-      {
         "rotacionId": "R3",
-        "arrepentimiento": 0.0729,
+        "arrepentimiento": 0.0346,
         "peorEscenario": "seco"
       }
     ]

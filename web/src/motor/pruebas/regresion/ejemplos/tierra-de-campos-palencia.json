@@ -79,7 +79,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (sin entrada en el calendario); girasol PV (sin entrada en el calendario); cebada OI (sin entrada en el calendario).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -106,7 +106,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (sin entrada en el calendario); girasol PV (sin entrada en el calendario); cebada OI (sin entrada en el calendario).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -133,7 +133,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (sin entrada en el calendario); girasol PV (sin entrada en el calendario); cebada OI (sin entrada en el calendario).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -166,7 +166,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: cebada OI (sin entrada en el calendario); lenteja OI (sin entrada en el calendario).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); lenteja OI (Celda 41.75 N, -4.75 E. SUPUESTO: MIRCA2000 no separa lenteja (Lens culinaris); se toma el calendario de la clase agregada Pulses (todas las leguminosas de grano de la celda), que puede corresponder a otra leguminosa. MIRCA2000 no registra un periodo de Pulses de temporal que empiece en OI en esta celda.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -193,7 +193,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: cebada OI (sin entrada en el calendario); lenteja OI (sin entrada en el calendario).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); lenteja OI (Celda 41.75 N, -4.75 E. SUPUESTO: MIRCA2000 no separa lenteja (Lens culinaris); se toma el calendario de la clase agregada Pulses (todas las leguminosas de grano de la celda), que puede corresponder a otra leguminosa. MIRCA2000 no registra un periodo de Pulses de temporal que empiece en OI en esta celda.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -220,7 +220,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: cebada OI (sin entrada en el calendario); lenteja OI (sin entrada en el calendario).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: cebada OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.); lenteja OI (Celda 41.75 N, -4.75 E. SUPUESTO: MIRCA2000 no separa lenteja (Lens culinaris); se toma el calendario de la clase agregada Pulses (todas las leguminosas de grano de la celda), que puede corresponder a otra leguminosa. MIRCA2000 no registra un periodo de Pulses de temporal que empiece en OI en esta celda.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -253,7 +253,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (sin entrada en el calendario).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -280,7 +280,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (sin entrada en el calendario).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -307,7 +307,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (sin entrada en el calendario).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-es-96-350 para: trigo OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {

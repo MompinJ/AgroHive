@@ -21,9 +21,11 @@ type Ciclo = [string, string, 'PV' | 'OI'];
 /** Rotaciones de prueba por ejemplo (fechas fijas en 2016-2018; PV/OI es solo el semestre del anio agricola). */
 const ROTACIONES: Record<string, Record<string, Ciclo[]>> = {
   'bajio-guanajuato': {
-    R1: [['maiz', '2016-06-20', 'PV'], ['trigo', '2016-12-01', 'OI'], ['maiz', '2017-06-20', 'PV']],
-    R2: [['sorgo', '2016-06-20', 'PV'], ['cebada', '2016-12-01', 'OI'], ['sorgo', '2017-06-20', 'PV']],
+    R1: [['maiz', '2016-06-20', 'PV'], ['sorgo', '2017-06-20', 'PV']],
+    R2: [['sorgo', '2016-06-20', 'PV'], ['frijol', '2017-06-20', 'PV']],
     R3: [['maiz', '2016-06-20', 'PV'], ['maiz', '2017-06-20', 'PV']],
+    // Trigo de temporal en OI: SIAP no lo registra en el municipio, debe quedar EXPLORATORIO y fuera del orden.
+    R4: [['maiz', '2016-06-20', 'PV'], ['trigo', '2016-12-01', 'OI'], ['maiz', '2017-06-20', 'PV']],
   },
   'mato-grosso-sorriso': {
     R1: [['soya', '2016-10-15', 'OI'], ['maiz', '2017-02-15', 'OI'], ['soya', '2017-10-15', 'OI']],

@@ -1,7 +1,9 @@
 {
   "id": "iowa-story",
   "grabado": "2026-11-15T16:18:35+00:00",
-  "regrabado": {},
+  "regrabado": {
+    "calendario": "2026-11-15T16:47:55+00:00"
+  },
   "parcela": "ejemplo-iowa-story",
   "centroide": [
     -93.54995936,
@@ -13,7 +15,6 @@
     "2025-12-31"
   ],
   "versionContrato": "0.15.0",
-  "clima": null,
   "datos": {
     "clima": {
       "estado": "EVALUABLE",
@@ -39,7 +40,7 @@
       "estado": "EVALUABLE",
       "archivo": "respuestas/calendario.json",
       "contrato": "calendario-local#",
-      "entradasEvaluables": 1
+      "entradasEvaluables": 18
     },
     "plagas": {
       "estado": "EVALUABLE",

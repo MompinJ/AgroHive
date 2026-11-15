@@ -2,7 +2,8 @@
   "id": "bajio-guanajuato",
   "grabado": "2026-11-15T16:27:45+00:00",
   "regrabado": {
-    "smap": "2026-11-15T16:28:55+00:00"
+    "smap": "2026-11-15T16:28:55+00:00",
+    "calendario": "2026-11-15T16:47:55+00:00"
   },
   "parcela": "ejemplo-bajio-guanajuato",
   "centroide": [
@@ -37,10 +38,10 @@
       "contrato": "proxima-temporada#"
     },
     "calendario": {
-      "estado": "NO_EVALUABLE",
+      "estado": "EVALUABLE",
       "archivo": "respuestas/calendario.json",
       "contrato": "calendario-local#",
-      "entradasEvaluables": 0
+      "entradasEvaluables": 18
     },
     "plagas": {
       "estado": "EVALUABLE",

@@ -1,65 +1,144 @@
 {
   "nota": "Definicion de las parcelas de ejemplo mundiales (decision de Mompin, 15/11). Cada parcela es un poligono FICTICIO de unas 2.8 ha colocado sobre pixeles de cultivo de ESA WorldCover 10 m 2021 v200 (clase 40, Cropland). No es un levantamiento ni la parcela de nadie. 'cultivosSugeridos' son cultivos de ejemplo del catalogo de 40 que se siembran en la region; no son una estadistica ni una recomendacion. Las cifras salen de la API al grabar (herramientas/ejemplos/grabar.py).",
-  "geometria": { "anchoM": 180, "altoM": 160, "chaflanNoresteM": 40, "tamanoCeldaM": 20 },
+  "geometria": {
+    "anchoM": 180,
+    "altoM": 160,
+    "chaflanNoresteM": 40,
+    "tamanoCeldaM": 20
+  },
   "lugares": [
     {
       "id": "bajio-guanajuato",
       "nombre": "Bajío, Guanajuato",
-      "pais": "México", "paisIso": "MX",
-      "ubicacion": { "municipio": "Jaral del Progreso", "estado": "Guanajuato", "pais": "México" },
+      "pais": "México",
+      "paisIso": "MX",
+      "ubicacion": {
+        "municipio": "Jaral del Progreso",
+        "estado": "Guanajuato",
+        "pais": "México"
+      },
       "continente": "América del Norte",
-      "centro": [-101.04908, 20.449],
-      "cultivosSugeridos": ["maiz", "sorgo", "trigo", "cebada", "frijol"],
-      "porQue": "Valle agrícola del Bajío: granos de temporal en primavera-verano (maíz, sorgo) y trigo y cebada en otoño-invierno."
+      "centro": [
+        -101.04908,
+        20.449
+      ],
+      "cultivosSugeridos": [
+        "maiz",
+        "sorgo",
+        "frijol",
+        "girasol"
+      ],
+      "porQue": "Valle agrícola del Bajío: maíz, sorgo y frijol de temporal en primavera-verano. El trigo y la cebada del Bajío son de riego: SIAP no los registra de temporal en Jaral del Progreso (2021-2025)."
     },
     {
       "id": "mato-grosso-sorriso",
       "nombre": "Sorriso, Mato Grosso",
-      "pais": "Brasil", "paisIso": "BR",
-      "ubicacion": { "municipio": "Sorriso", "estado": "Mato Grosso", "pais": "Brasil" },
+      "pais": "Brasil",
+      "paisIso": "BR",
+      "ubicacion": {
+        "municipio": "Sorriso",
+        "estado": "Mato Grosso",
+        "pais": "Brasil"
+      },
       "continente": "América del Sur",
-      "centro": [-55.79763, -12.6],
-      "cultivosSugeridos": ["soya", "maiz", "algodon"],
+      "centro": [
+        -55.79763,
+        -12.6
+      ],
+      "cultivosSugeridos": [
+        "soya",
+        "maiz",
+        "algodon"
+      ],
       "porQue": "Cerrado de Mato Grosso: soya en la temporada de lluvias y maíz o algodón de segunda siembra."
     },
     {
       "id": "uasin-gishu-kenia",
       "nombre": "Uasin Gishu, Rift Valley",
-      "pais": "Kenia", "paisIso": "KE",
-      "ubicacion": { "municipio": "Kesses", "estado": "Condado de Uasin Gishu", "pais": "Kenia" },
+      "pais": "Kenia",
+      "paisIso": "KE",
+      "ubicacion": {
+        "municipio": "Kesses",
+        "estado": "Condado de Uasin Gishu",
+        "pais": "Kenia"
+      },
       "continente": "África",
-      "centro": [35.35404, 0.44908],
-      "cultivosSugeridos": ["maiz", "trigo", "frijol", "papa"],
+      "centro": [
+        35.35404,
+        0.44908
+      ],
+      "cultivosSugeridos": [
+        "maiz",
+        "trigo",
+        "frijol",
+        "papa"
+      ],
       "porQue": "Meseta alta del Rift Valley (antigua provincia), zona maicera y triguera de Kenia."
     },
     {
       "id": "punjab-ludhiana",
       "nombre": "Ludhiana, Punjab",
-      "pais": "India", "paisIso": "IN",
-      "ubicacion": { "municipio": "Ludhiana (West) Tahsil", "estado": "Punjab", "pais": "India" },
+      "pais": "India",
+      "paisIso": "IN",
+      "ubicacion": {
+        "municipio": "Ludhiana (West) Tahsil",
+        "estado": "Punjab",
+        "pais": "India"
+      },
       "continente": "Asia",
-      "centro": [75.69992, 30.79983],
-      "cultivosSugeridos": ["trigo", "maiz", "papa", "algodon"],
-      "porQue": "Llanura del Indo-Ganges: trigo en rabi (invierno) y cultivos de kharif (monzón). El arroz, principal cultivo de kharif aquí, no está en el catálogo de 40."
+      "centro": [
+        75.69992,
+        30.79983
+      ],
+      "cultivosSugeridos": [
+        "trigo",
+        "maiz",
+        "papa"
+      ],
+      "porQue": "Llanura del Indo-Ganges: trigo en rabi (invierno) y maíz en kharif (monzón), con papa. El arroz, principal cultivo de kharif aquí, no está en el catálogo de 40; el algodón no aparece registrado en esta celda."
     },
     {
       "id": "tierra-de-campos-palencia",
       "nombre": "Tierra de Campos, Castilla y León",
-      "pais": "España", "paisIso": "ES",
-      "ubicacion": { "municipio": "Belmonte de Campos", "estado": "Palencia, Castilla y León", "pais": "España" },
+      "pais": "España",
+      "paisIso": "ES",
+      "ubicacion": {
+        "municipio": "Belmonte de Campos",
+        "estado": "Palencia, Castilla y León",
+        "pais": "España"
+      },
       "continente": "Europa",
-      "centro": [-4.99992, 41.94983],
-      "cultivosSugeridos": ["trigo", "cebada", "girasol", "lenteja"],
+      "centro": [
+        -4.99992,
+        41.94983
+      ],
+      "cultivosSugeridos": [
+        "trigo",
+        "cebada",
+        "girasol",
+        "lenteja"
+      ],
       "porQue": "Meseta cerealista de secano: trigo y cebada de invierno, girasol de verano y leguminosas como la lenteja."
     },
     {
       "id": "iowa-story",
       "nombre": "Story County, Iowa",
-      "pais": "Estados Unidos", "paisIso": "US",
-      "ubicacion": { "municipio": "Milford Township, Story County", "estado": "Iowa", "pais": "Estados Unidos" },
+      "pais": "Estados Unidos",
+      "paisIso": "US",
+      "ubicacion": {
+        "municipio": "Milford Township, Story County",
+        "estado": "Iowa",
+        "pais": "Estados Unidos"
+      },
       "continente": "América del Norte",
-      "centro": [-93.55008, 42.05008],
-      "cultivosSugeridos": ["maiz", "soya"],
+      "centro": [
+        -93.55008,
+        42.05008
+      ],
+      "cultivosSugeridos": [
+        "maiz",
+        "soya"
+      ],
       "porQue": "Corn Belt: rotación maíz-soya. Aquí además entran CDL (rotación real del píxel) y SSURGO (suelo de campo)."
     }
   ]

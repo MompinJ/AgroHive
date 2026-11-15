@@ -4,10 +4,10 @@
 
 | Id | Lugar | País | Cultivos de ejemplo |
 | --- | --- | --- | --- |
-| `bajio-guanajuato` | Jaral del Progreso, Guanajuato (Bajío) | México | maíz, sorgo, trigo, cebada, frijol |
+| `bajio-guanajuato` | Jaral del Progreso, Guanajuato (Bajío) | México | maíz, sorgo, frijol, girasol |
 | `mato-grosso-sorriso` | Sorriso, Mato Grosso | Brasil | soya, maíz, algodón |
 | `uasin-gishu-kenia` | Kesses, Uasin Gishu (Rift Valley) | Kenia | maíz, trigo, frijol, papa |
-| `punjab-ludhiana` | Ludhiana, Punjab | India | trigo, maíz, papa, algodón |
+| `punjab-ludhiana` | Ludhiana, Punjab | India | trigo, maíz, papa |
 | `tierra-de-campos-palencia` | Belmonte de Campos, Palencia (Castilla y León) | España | trigo, cebada, girasol, lenteja |
 | `iowa-story` | Story County, Iowa | Estados Unidos | maíz, soya (además CDL y SSURGO) |
 
@@ -17,7 +17,7 @@ El clima de Köppen-Geiger de cada uno, la fecha de grabación y el estado de ca
 
 - **Cada parcela es un polígono ficticio** de unas 2.8 ha (180 x 160 m con la esquina noreste cortada a 45°, celdas de 20 m), con `coordenadasIlustrativas: true` y el aviso "Parcela de ejemplo, no es un levantamiento". No es la parcela de nadie.
 - **Está sobre tierra de cultivo real:** el centro se eligió en un bloque de unos 200 x 200 m donde todos los píxeles de ESA WorldCover 10 m 2021 v200 son clase 40 (Cropland); `manifiesto.json` guarda la fracción medida sobre el polígono (100 % en los seis). Cita: Zanaga, D. et al. (2022). ESA WorldCover 10 m 2021 v200. doi:10.5281/zenodo.7254221, CC BY 4.0, servido por Microsoft Planetary Computer. La ubicación administrativa sale de los límites de OpenStreetMap (Overpass, `is_in`).
-- **Los cultivos sugeridos son ejemplos de la región**, del catálogo de 40, elegidos por el equipo; no son una estadística ni una recomendación. En Punjab falta el arroz (no está en el catálogo).
+- **Los cultivos sugeridos son ejemplos de la región**, del catálogo de 40, elegidos por el equipo; no son una estadística ni una recomendación. Se revisaron contra la presencia del calendario grabado: ninguno está `no_registrado` de temporal en el lugar (lo vigila `web/src/demo/ejemplos.test.ts`). Por eso el Bajío no sugiere trigo ni cebada (son de riego; SIAP no los registra de temporal en Jaral del Progreso) y Ludhiana no sugiere algodón. En Punjab falta el arroz (no está en el catálogo).
 - **Los datos son reales** para esa coordenada: clima de NASA POWER (ventana estándar 2005-10-01 a 2025-12-31, con IMERG), elevación de Terrarium, suelo de ISRIC y OpenLandMap, próxima temporada de ECMWF SEAS5 vía Open-Meteo, calendario de `/api/calendario`, plagas de GBIF, NDVI de MODIS (toda la ventana), SMAP de los 10 días anteriores a la grabación, y CDL y SSURGO (solo Iowa; fuera de EE. UU. van `NO_EVALUABLE` sin llamar a la fuente).
 - **Nada se inventa:** si una fuente no respondió al grabar, su archivo no existe y `manifiesto.json` dice `NO_EVALUABLE` con el motivo; el módulo de carga lo pasa a `avisos` y `faltan`.
 

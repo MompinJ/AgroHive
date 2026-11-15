@@ -22,11 +22,10 @@
       "cultivosSugeridos": [
         "maiz",
         "sorgo",
-        "trigo",
-        "cebada",
-        "frijol"
+        "frijol",
+        "girasol"
       ],
-      "porQue": "Valle agrícola del Bajío: granos de temporal en primavera-verano (maíz, sorgo) y trigo y cebada en otoño-invierno.",
+      "porQue": "Valle agrícola del Bajío: maíz, sorgo y frijol de temporal en primavera-verano. El trigo y la cebada del Bajío son de riego: SIAP no los registra de temporal en Jaral del Progreso (2021-2025).",
       "clima": {
         "clase": "Cwa",
         "descripcion": "templado, invierno seco y verano cálido",
@@ -39,7 +38,7 @@
         "suelo": "EVALUABLE",
         "terreno": "EVALUABLE",
         "proxima-temporada": "EXPLORATORIO",
-        "calendario": "NO_EVALUABLE",
+        "calendario": "EVALUABLE",
         "plagas": "EVALUABLE",
         "ndvi": "EXPLORATORIO",
         "smap": "EVALUABLE",
@@ -157,10 +156,9 @@
       "cultivosSugeridos": [
         "trigo",
         "maiz",
-        "papa",
-        "algodon"
+        "papa"
       ],
-      "porQue": "Llanura del Indo-Ganges: trigo en rabi (invierno) y cultivos de kharif (monzón). El arroz, principal cultivo de kharif aquí, no está en el catálogo de 40.",
+      "porQue": "Llanura del Indo-Ganges: trigo en rabi (invierno) y maíz en kharif (monzón), con papa. El arroz, principal cultivo de kharif aquí, no está en el catálogo de 40; el algodón no aparece registrado en esta celda.",
       "clima": {
         "clase": "Cwa",
         "descripcion": "templado, invierno seco y verano cálido",

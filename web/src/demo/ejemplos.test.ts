@@ -28,6 +28,17 @@ describe('indice de ejemplos mundiales', () => {
       expect(e.clima?.clase, e.id).toMatch(/^[ABCDE]/);
     }
   });
+  it('ningun cultivo sugerido esta "no registrado" de temporal en el calendario grabado del lugar', async () => {
+    for (const e of lista) {
+      const d = await cargarEjemplo(e.id);
+      for (const c of e.cultivosSugeridos) {
+        const filas = (d.calendario?.entradas ?? []).filter((x) => x.cultivo === c);
+        expect(filas.length, `${e.id}: ${c} sin entradas en el calendario`).toBeGreaterThan(0);
+        expect(filas.some((x) => (x as { presencia?: { estado?: string } }).presencia?.estado !== 'no_registrado'), `${e.id}: ${c} no registrado`).toBe(true);
+        expect(filas.some((x) => x.ventana.estado === 'EVALUABLE'), `${e.id}: ${c} sin ventana evaluable`).toBe(true);
+      }
+    }
+  });
   it('el poligono cae en tierra de cultivo de ESA WorldCover (casi todos los pixeles de clase 40)', () => {
     for (const e of lista) expect(manifiesto(e.id).datos.worldcover?.fraccionCultivo ?? 0, e.id).toBeGreaterThanOrEqual(0.95);
   });

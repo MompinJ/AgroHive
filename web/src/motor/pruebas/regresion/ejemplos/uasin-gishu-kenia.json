@@ -79,7 +79,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-ke-179-430 para: frijol OI (GGCMI fase 3 publica bea_rf, pero ni el NetCDF ni la ficha de Zenodo (doi:10.5281/zenodo.5062513) dicen que bea sea frijol. Queda NO_EVALUABLE.).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-ke-179-430 para: frijol OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -106,7 +106,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-ke-179-430 para: frijol OI (GGCMI fase 3 publica bea_rf, pero ni el NetCDF ni la ficha de Zenodo (doi:10.5281/zenodo.5062513) dicen que bea sea frijol. Queda NO_EVALUABLE.).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-ke-179-430 para: frijol OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -133,7 +133,7 @@
           },
           "compatibilidadCiclo": {
             "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-ke-179-430 para: frijol OI (GGCMI fase 3 publica bea_rf, pero ni el NetCDF ni la ficha de Zenodo (doi:10.5281/zenodo.5062513) dicen que bea sea frijol. Queda NO_EVALUABLE.).",
+            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-ke-179-430 para: frijol OI (GGCMI fase 3 publica un solo ciclo de temporal por celda. La otra temporada no tiene dato.).",
             "siembrasFueraDeVentana": null
           },
           "proteccionSuelo": {
@@ -147,7 +147,7 @@
     },
     "R2": {
       "estado": "EVALUABLE",
-      "filtroClima": null,
+      "filtroClima": true,
       "pilares": {
         "seco": {
           "deficitHidrico": {
@@ -165,9 +165,8 @@
             "fraccionLluviaPercolada": 0
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-ke-179-430 para: trigo PV (sin entrada en el calendario); papa OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -192,9 +191,8 @@
             "fraccionLluviaPercolada": 0.1958
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-ke-179-430 para: trigo PV (sin entrada en el calendario); papa OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -219,9 +217,8 @@
             "fraccionLluviaPercolada": 0.3711
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-ke-179-430 para: trigo PV (sin entrada en el calendario); papa OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",

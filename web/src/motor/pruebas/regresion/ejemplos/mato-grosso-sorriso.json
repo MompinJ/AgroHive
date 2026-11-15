@@ -60,7 +60,7 @@
   "rotaciones": {
     "R1": {
       "estado": "EVALUABLE",
-      "filtroClima": null,
+      "filtroClima": true,
       "pilares": {
         "seco": {
           "deficitHidrico": {
@@ -78,9 +78,8 @@
             "fraccionLluviaPercolada": 0.3843
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-br-205-248 para: soya OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 3
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -105,9 +104,8 @@
             "fraccionLluviaPercolada": 0.5461
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-br-205-248 para: soya OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 3
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -132,9 +130,8 @@
             "fraccionLluviaPercolada": 0.6459
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-br-205-248 para: soya OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 3
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -147,7 +144,7 @@
     },
     "R2": {
       "estado": "EVALUABLE",
-      "filtroClima": null,
+      "filtroClima": true,
       "pilares": {
         "seco": {
           "deficitHidrico": {
@@ -165,9 +162,8 @@
             "fraccionLluviaPercolada": 0.383
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-br-205-248 para: soya OI (sin entrada en el calendario); algodon OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -192,9 +188,8 @@
             "fraccionLluviaPercolada": 0.5802
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-br-205-248 para: soya OI (sin entrada en el calendario); algodon OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -219,9 +214,8 @@
             "fraccionLluviaPercolada": 0.6591
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-br-205-248 para: soya OI (sin entrada en el calendario); algodon OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -234,7 +228,7 @@
     },
     "R3": {
       "estado": "EVALUABLE",
-      "filtroClima": null,
+      "filtroClima": true,
       "pilares": {
         "seco": {
           "deficitHidrico": {
@@ -252,9 +246,8 @@
             "fraccionLluviaPercolada": 0.3724
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-br-205-248 para: soya OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -279,9 +272,8 @@
             "fraccionLluviaPercolada": 0.5118
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-br-205-248 para: soya OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -306,9 +298,8 @@
             "fraccionLluviaPercolada": 0.6491
           },
           "compatibilidadCiclo": {
-            "estado": "NO_EVALUABLE",
-            "motivo": "Sin ventana de siembra con fuente en el calendario calendario-ggcmi-br-205-248 para: soya OI (sin entrada en el calendario).",
-            "siembrasFueraDeVentana": null
+            "estado": "EVALUABLE",
+            "siembrasFueraDeVentana": 2
           },
           "proteccionSuelo": {
             "estado": "EVALUABLE",
@@ -330,12 +321,12 @@
       },
       {
         "rotacionId": "R1",
-        "arrepentimiento": 0.0233,
+        "arrepentimiento": 0.0174,
         "peorEscenario": "lluvioso"
       },
       {
         "rotacionId": "R3",
-        "arrepentimiento": 0.1231,
+        "arrepentimiento": 0.0923,
         "peorEscenario": "lluvioso"
       }
     ]

@@ -3,7 +3,8 @@
   "grabado": "2026-11-15T16:27:34+00:00",
   "regrabado": {
     "ndvi": "2026-11-15T16:28:52+00:00",
-    "smap": "2026-11-15T16:28:57+00:00"
+    "smap": "2026-11-15T16:28:57+00:00",
+    "calendario": "2026-11-15T16:47:55+00:00"
   },
   "parcela": "ejemplo-uasin-gishu-kenia",
   "centroide": [
@@ -41,7 +42,7 @@
       "estado": "EVALUABLE",
       "archivo": "respuestas/calendario.json",
       "contrato": "calendario-local#",
-      "entradasEvaluables": 1
+      "entradasEvaluables": 36
     },
     "plagas": {
       "estado": "EVALUABLE",
