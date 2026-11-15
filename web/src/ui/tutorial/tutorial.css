@@ -1,0 +1,36 @@
+/* Tutorial de Esquilote: tarjeta abajo al centro, o boton con la mascota cuando esta cerrado. */
+.esquilote { position: fixed; z-index: 60; font-family: var(--font-ui, system-ui, sans-serif); }
+.esquilote-tarjeta {
+  left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; align-items: flex-end; gap: 12px;
+  width: min(560px, calc(100% - 24px)); padding: 14px 18px 14px 12px; border-radius: 22px;
+  background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); border: 1px solid var(--color-border, #cfd8cf);
+  box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 18px 48px -12px rgb(17 34 26 / 35%);
+}
+.esquilote-dibujo { flex-shrink: 0; overflow: visible; }
+.esquilote-cuerpo { display: grid; gap: 6px; min-width: 0; }
+.esquilote-nombre { margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-muted, #5a6b5e); }
+.esquilote-cuerpo h2 { margin: 0; font-size: 1.1rem; line-height: 1.25; }
+.esquilote-cuerpo p:not(.esquilote-nombre) { margin: 0; font-size: .92rem; line-height: 1.45; }
+.esquilote-acciones { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.esquilote-acciones button, .esquilote-boton { font: inherit; cursor: pointer; }
+.esquilote-acciones button { min-height: 40px; padding: 6px 16px; border-radius: 999px; font-size: .88rem; font-weight: 600; }
+.esquilote-saltar { margin-right: auto; border: 0; background: transparent; color: var(--color-text-muted, #5a6b5e); text-decoration: underline; text-underline-offset: 3px; padding-inline: 4px !important; }
+.esquilote-atras { border: 1px solid var(--color-control-border, #b8c4b8); background: transparent; color: inherit; }
+.esquilote-siguiente { border: 1px solid var(--color-action, #1f4d38); background: var(--color-action, #1f4d38); color: var(--color-on-action, #fff); }
+.esquilote-boton {
+  left: 16px; bottom: 16px; display: flex; align-items: center; gap: 6px; padding: 6px 14px 6px 8px; border-radius: 999px;
+  background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); border: 1px solid var(--color-border, #cfd8cf);
+  box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 10px 28px -10px rgb(17 34 26 / 35%); font-size: .85rem; font-weight: 700;
+}
+.esquilote-boton .esquilote-dibujo { height: 66px; }
+.esquilote-resalte { outline: 3px solid #f4c631; outline-offset: 3px; border-radius: 12px; }
+@media (prefers-reduced-motion: no-preference) {
+  .esquilote-saluda { animation: esquilote-rebote 1.6s ease-in-out 2; transform-origin: 50% 100%; }
+  .esquilote-resalte { animation: esquilote-latido 1.4s ease-in-out infinite; }
+}
+@keyframes esquilote-rebote { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px) rotate(-3deg); } 70% { transform: translateY(0) rotate(2deg); } }
+@keyframes esquilote-latido { 0%, 100% { outline-color: #f4c631; } 50% { outline-color: rgb(244 198 49 / 35%); } }
+@media (max-width: 520px) {
+  .esquilote-tarjeta { gap: 6px; padding: 10px 12px 10px 6px; }
+  .esquilote-tarjeta .esquilote-dibujo { width: 54px; height: 81px; }
+}
