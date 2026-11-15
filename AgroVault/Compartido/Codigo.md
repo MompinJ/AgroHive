@@ -31,17 +31,17 @@ Complementa [[Resumen]]. Si esta nota y el archivo discrepan, manda el archivo.
 | `src/escena/` | Three.js: relieve, `.bbmodel`, placas, losas. `EscenaParcela.tsx` es el componente que monta el laboratorio |
 | `src/ui/useLaboratorio.ts` | Carga demo o API, arma R1–R4 y llama al Worker |
 | `src/ui/planes.ts` | Definición de R1–R4 y calendario de Isla |
-| `src/ui/LaboratorioConectado.tsx` | Selector, escena y métricas. No pinta `explicacion` |
+| `src/ui/LaboratorioConectado.tsx` | Selector, escena, métricas y tarjetas (`TarjetasRotacion`, A4.3) |
 | `src/ui/cuadricula.ts` | Polígono → celdas. `i` crece al norte desde el sur |
 | `src/api/` | Cliente de la API: `cliente.ts`, `datosParcela.ts`, `usarDatosParcela.ts` |
 | `src/paginas/` | Inicio, Terreno, Laboratorio, Comparación |
 | `escena.html` | Vista previa de la escena, aparte de la app |
 
-Comandos: `cd web && npm test`, `npm run dev`, `npx tsc --noEmit`. La última corrida anotada en `docs/01` fue de 303 pruebas, en el cambio de las tarjetas. Vuelve a contarlas si las necesitas.
+Comandos: `cd web && npm test`, `npm run dev`, `npx tsc --noEmit`. Corrida del 14/11 a las 18:00 sobre `main` (`f2bc172`): 581 pruebas pasan y 1 queda como pendiente (todo). Vuelve a contarlas si las necesitas.
 
 ## `api/`
 
-FastAPI. Rutas en `app/rutas/`: `clima`, `suelo`, `cultivos`, `proxima`, `terreno` (`POST /api/elevacion`), `smap`, `ndvi` (`GET /api/ndvi`, A4.11, Planetary Computer), `calendario` (`GET /api/calendario`, A4.13). `versionContrato` de `/health` sigue a `contratos/package.json` (0.12.1).
+FastAPI. Rutas en `app/rutas/`: `clima`, `suelo`, `cultivos`, `proxima`, `terreno` (`POST /api/elevacion`), `smap`, `ndvi` (`GET /api/ndvi`, A4.11, Planetary Computer), `calendario` (`GET /api/calendario`, A4.13). `versionContrato` de `/health` sigue a `contratos/package.json` (0.12.2).
 
 | Pieza | Archivo |
 | --- | --- |
@@ -73,7 +73,7 @@ FastAPI. Rutas en `app/rutas/`: `clima`, `suelo`, `cultivos`, `proxima`, `terren
 
 ## `contratos/`
 
-Versión `0.12.1` (`contratos/package.json`). Schemas, ejemplos, inválidos y `tipos/contratos.d.ts`. Resumen en [[Contratos]]. `cd contratos && npm test`.
+Versión `0.12.2` (`contratos/package.json`). Schemas, ejemplos, inválidos y `tipos/contratos.d.ts`. Resumen en [[Contratos]]. `cd contratos && npm test`.
 
 ## `modelos/` y `features/`
 
@@ -91,7 +91,7 @@ Generadores: `modelos/cultivos/{maiz,frijol,calabaza,chile}.py`, `modelos/suelos
 ## Borradores que no sustituyen al archivo oficial
 
 - `docs/guion-video-borrador.md` — borrador del guion para el final; no es tarea activa.
-- `docs/README-borrador.md` — texto para A5.7. `README.md` de la raíz sigue siendo la ficha corta.
+- `docs/README-borrador.md` — antecedente de A5.7. `README.md` de la raíz ya es el de A5.7, en revisión humana.
 - `docs/08` — arquitectura de antes del 14/11. El motor no está en el servidor y varios nombres de campos cambiaron.
 
 ## Verificación antes de `main`

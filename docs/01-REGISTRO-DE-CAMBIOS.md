@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — Documentación al día con `main` (cronista)
+
+- **Archivos:** `docs/00`, `docs/11`, `docs/13`, `docs/14` (nota de C2, fuera de las tablas); `AgroVault/Compartido/{Resumen,Pendientes,Codigo,Contratos,Servidor,APIs}.md`; `README.md`, `docs/README-borrador.md`, `web/README.md`, `api/README.md`.
+- **Cambio:** solo se reflejan decisiones y estados que ya están en `docs/13` y en las marcas de `docs/14`; no se cambia ninguna decisión. La demo compara por defecto R1, R2 y R4 (quedaba "R1 a R4" en la fila A4.3 de 13 y en README); contratos 0.12.2 (la vault decía 0.10.0 y 0.12.1); A4.13, A2.16, A5.2 y A0.7 hechas (13 y 11 las daban por venir); en 11 se tachan los temas `[EN EVENTO]` y `[DEPENDE-DATOS]` ya decididos en 13; NDVI de MODIS en uso por Planetary Computer (README lo daba pendiente y con ORNL); video y presentación no están canceladas para el equipo (web/README); "Abierto de verdad" de Pendientes rehecho con lo que sigue abierto en 14; `README-borrador` marcado como antecedente superado por `README.md`.
+- **Evidencia:** `origin/main` 091eb7f; `python3 herramientas/cronograma.py` (54 de 60 hechas tras A0.5 y A4.8); pruebas sobre f2bc172: contratos 92/92, api 124, web 581 y 1 todo, catálogos en verde. A4.8 la cerró Eduardo en la entrada de abajo; Pendientes ya no la lista como abierta.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — A4.8 hecha: SMAP publico con humedad real (Eduardo)
 
 - **Archivos:** `docs/14` (A4.8 `[HECHO]`; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`, `AgroVault/Compartido/Servidor.md`.
