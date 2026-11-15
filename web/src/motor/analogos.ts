@@ -41,7 +41,9 @@ export function candidatosAnalogos(capa: ProximaTemporadaAproximada, diario: rea
       }
       if (ll >= (m.lluviaMm.inferior as number) && ll <= (m.lluviaMm.superior as number)) dentro++;
     }
-    if (completo && t <= 2025) salida.push({ anio: t, mesesDentro: dentro, deMeses: meses.length });
+    // H-M6: sin anio de corte escrito a mano (antes `t <= 2025`): entra todo anio con los meses del horizonte completos, y
+    // el anio del propio horizonte (el que se esta por vivir) nunca esta completo en la serie historica.
+    if (completo) salida.push({ anio: t, mesesDentro: dentro, deMeses: meses.length });
   }
   return salida;
 }

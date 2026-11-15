@@ -7,7 +7,7 @@ Paquete de demo sin internet (A2.4, base de A5.8). Tiene dos formas del mismo co
 | `cache/` | La **cache de la API**. Cuando a la API le falta su cache local, la lee (`AGROHIVE_DEMO_DIR`): con eso `GET /api/clima`, `POST /api/elevacion`, `GET /api/suelo` y `GET /api/proxima-temporada` responden sin red para la parcela demo. No hay que cambiar nada en el front |
 | `respuestas/` | El **cuerpo de cada respuesta tal cual** (`serie-clima.json`, `suelo.json`, `terreno.json`, `proxima-temporada.json`), validado contra `contratos/`. El motor puede leerlos directo, sin la API |
 
-`manifiesto.json` dice cuando se genero, para que punto, con que version del contrato y que archivos trae.
+`manifiesto.json` dice cuando se genero, para que punto, con que version del contrato y que archivos trae. El 14/11 (noche, H-B9) los cinco archivos de `respuestas/` se revalidaron contra contratos 0.13.0 sin cambiar ningun dato y solo se subio su `meta.versionContrato`. `versionContratoAlGenerar` (0.10.0) conserva la version original; si se regenera con internet, `generar.py` vuelve a escribir todo.
 
 ## Regenerar (necesita internet)
 

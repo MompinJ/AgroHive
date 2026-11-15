@@ -56,8 +56,11 @@ def test_cultivos_del_catalogo_real_cumplen_el_contrato(validar):
     validar(cuerpo, "cultivo#")  # el schema describe el catalogo completo (meta, versionCatalogo y cultivos)
 
 
-def test_cultivos_sin_catalogo_sigue_siendo_no_evaluable():
-    assert cliente.get("/api/cultivos").json() == {"estado": "NO_EVALUABLE", "motivo": "El catalogo de cultivos aun no existe (A1.5).", "cultivos": []}
+def test_cultivos_sin_catalogo_es_503_error_datos():
+    """H-B8: antes respondia 200 con {estado, motivo, cultivos: []}, que no cumple cultivo.schema.json (sin meta ni versionCatalogo)."""
+    r = cliente.get("/api/cultivos")
+    assert r.status_code == 503
+    assert r.json()["estado"] == "ERROR_DATOS" and "catalogo de cultivos" in r.json()["motivo"]
 
 
 def test_errores_503_tienen_la_forma_que_declara_openapi():

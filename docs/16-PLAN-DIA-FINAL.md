@@ -70,7 +70,7 @@ Estado: `LISTA` (se puede empezar), `ESPERA` (depende de algo), `EN CURSO`, `HEC
 | M3 | Ventanas de integración cada hora en punto (regla 4) | `main` | Avisos "listo para integrar" | EN CURSO |
 | M4 | Arreglar A2 y G1b de `prueba-movimiento`: la lluvia animada de la vista previa no deja la escena en reposo | `web/src/escena/` | — | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
 | M5 | Registrar en la escena sorgo, sandía, camote y cacahuate | `web/src/escena/voxel/catalogo.ts` | MF1, MF2 | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
-| M6 | Hallazgos del motor: H-M1 y H-M9 (decididos), H-M2 (fin del ciclo por duración del catálogo), H-M4 (fecha inválida), H-M5 (errores del Worker), H-M6, H-M7, H-M8, H-M10 y H-M11 (fuente de la ventana en la tarjeta; cambia la regresión A5.5) | `web/src/motor/` | — | EN CURSO (cazafallos, `Mompin-fallos`) |
+| M6 | Hallazgos del motor: H-M1 y H-M9 (decididos), H-M2 (fin del ciclo por duración del catálogo), H-M4 (fecha inválida), H-M5 (errores del Worker), H-M6, H-M7, H-M8, H-M10 y H-M11 (fuente de la ventana en la tarjeta) | `web/src/motor/` | — | HECHA en `Mompin-fallos` salvo H-M7, que queda propuesto (`docs/hallazgos-back.md`). H-M11 no cambió la regresión A5.5 |
 
 ### Eduardo (rediseño del front, `api/`, `datos/` salvo catálogos, servidor; único con SSH)
 
@@ -79,7 +79,7 @@ Estado: `LISTA` (se puede empezar), `ESPERA` (depende de algo), `EN CURSO`, `HEC
 | E1 | Desplegar `582e482` como primera acción de mañana, una sola vez, avisando antes y después (`/health` con el commit, `/medir.html` y `mediworks.mx` en 200); después, cada `main` que Mompin pida | droplet | — | LISTA |
 | E2 | Rediseño del front (antes B2, D1) y decisión de la placa de estado (D2) | `web/src/ui/`, `web/src/paginas/`, la parte de `web/src/escena/` que el front necesite | — | LISTA |
 | E3 | Correr `/medir.html` en la Mac con GPU real y mandar la línea de reposo con motivos (buzón #257); medir un celular o una laptop sin GPU dedicada | `docs/06` (con aviso), capturas | Deploy | LISTA |
-| E4 | Hallazgos del back: H-B6 (decidido), H-B8 (503 sin catálogo), H-B9 (regenerar el paquete de demo), H-B10 (país en la costa de Veracruz), H-B11 (aviso `NDVI_EN_CACHE`) | `api/`, `datos/demo/` | — | EN CURSO (cazafallos, `Mompin-fallos`) |
+| E4 | Hallazgos del back: H-B6 (decidido), H-B8 (503 sin catálogo), H-B9 (regenerar el paquete de demo), H-B10 (país en la costa de Veracruz), H-B11 (aviso `NDVI_EN_CACHE`) | `api/`, `datos/demo/` | — | HECHA en `Mompin-fallos` (cazafallos, con OK de Mompin; falta integrar a `main` y desplegar) |
 | E5 | Decidir qué hace con `Comunicacion.md` de `Eduardo-B` (sección 1) | `AgroVault/Compartido/` | — | LISTA |
 | E6 | Si D3 dice que sí: agregar la llave pública de Mompin al droplet | droplet | D3 | ESPERA |
 | E7 | El selector de cultivos necesita búsqueda o agrupación (por ejemplo leguminosas, cereales, hortalizas, raíces) para 30 a 50 cultivos (ampliación del catálogo del 15/11, rama `Mompin-features`). Los mapas `nombresCultivos` y `coloresCultivo` de `web/src/ui/planes.ts` y `NOMBRES_CULTIVO` de `web/src/escena/ficha.ts` solo traen los 8 primeros: los nuevos se muestran con su id (por ejemplo `maiz_dulce`) y en gris; conviene tomar el nombre de `nombreComun` del catálogo | `web/src/ui/` (D1) | Integrar `Mompin-features` | ESPERA |

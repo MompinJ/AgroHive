@@ -17,7 +17,7 @@ URL publica: https://64-23-143-102.sslip.io (ver `AgroVault/Compartido/Servidor.
 | `GET /api/ndvi?lat&lon&desde&hasta` | **Evidencia** (A4.11): NDVI de MODIS MOD13Q1 V061 (pixel de 250 m, compuesto de 16 dias) por punto. La demo lee el paquete o la cache. Si falta, se lee de Microsoft Planetary Computer (producto NASA LP DAAC). Cita: Didan, K. (2021). MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061. NASA EOSDIS Land Processes DAAC. doi:10.5067/MODIS/MOD13Q1.061. Datos servidos por Microsoft Planetary Computer. Maximo 400 dias. **No entra al ranking ni al balance.** Trae los tres limites que la interfaz debe mostrar | `EXPLORATORIO` o `NO_EVALUABLE`; 503 |
 | `GET /api/ee-uu/cdl?lat&lon&desde&hasta` | **Contraste regional** (A4.12): cultivo de cada anio (2008 a 2025) en el pixel de 30 m del punto, de USDA NASS Cropland Data Layer por el servicio CropScape: la rotacion real que hubo ahi. Solo EE. UU. contiguos; fuera, `NO_EVALUABLE` sin llamar a la fuente. La categoria va tal cual; `cultivoCatalogo` solo si coincide exacto (Corn, Dry Beans, Squash, Peppers). **No entra al ranking** | `EVALUABLE` o `NO_EVALUABLE`; 503 |
 | `GET /api/ee-uu/ssurgo?lat&lon` | **Contraste regional** (A4.12): suelo de campo de USDA NRCS SSURGO (Soil Data Access), componente dominante de la unidad del punto, con horizontes (arena, limo, arcilla, materia organica, awc) y agua disponible hasta 100 cm (suma de awc_r x espesor; si falta dato no se extrapola). No sustituye a `/api/suelo`. **No entra al ranking** | `EVALUABLE` o `NO_EVALUABLE`; 503 |
-| `GET /api/cultivos` | Catalogo de `datos/catalogos/cultivos.json`; sin catalogo responde `NO_EVALUABLE` | |
+| `GET /api/cultivos` | Catalogo de `datos/catalogos/cultivos.json`; sin catalogo, 503 `ERROR_DATOS` (H-B8: un catalogo vacio no cumple el contrato) | 503 |
 | `GET /api/calendario?lat&lon` | Calendario de siembra del punto (A4.13). En el recuadro de Isla: SIAP/INIFAP. En el resto de Mexico: `NO_EVALUABLE` (no se usa GGCMI). Fuera de Mexico: dia de siembra del maiz de temporal de GGCMI fase 3, con la madurez en la nota. Frijol, calabaza y chile: `NO_EVALUABLE`. Sin pais en el mapa de 110 m: 422 | `calendario-local` |
 
 Documentacion interactiva en `/docs` y esquema en `/openapi.json`.
@@ -43,6 +43,12 @@ Como funciona y que se verifico:
 ### Errores
 
 Si ni la fuente principal, ni el respaldo, ni la cache responden: **503 con el cuerpo `{estado: "ERROR_DATOS", motivo}`** (el modelo `ErrorDatos` que declara el OpenAPI, sin envolver en `detail`). Un periodo o coordenada invalidos dan 422.
+
+**Tiempos (H-B6, `[DECIDIDO]` por Mompin el 14/11):** 20 s por intento (`http.TIEMPO_INTENTO_S`) y 2 intentos por fuente (`http.INTENTOS`). Ademas, `http.plazo()` fija 70 s en total por peticion (`http.PLAZO_TOTAL_S`) en `/api/clima`, `/api/suelo`, `/api/elevacion` y `/api/proxima-temporada`. Ningun intento ni espera pasa de ese plazo: si una fuente se cuelga, se pasa al respaldo y despues a la cache, todo dentro de los 90 s que espera el front. OpenLandMap lee en hilos de GDAL que no se pueden cancelar; `/api/suelo` deja de esperarlo al agotarse el plazo y responde con ISRIC. NDVI, SMAP y EE. UU. conservan sus tiempos propios.
+
+**Avisos de cache:** `CLIMA_RESPALDO_EN_CACHE` (Open-Meteo guardado), `CACHE_VENCIDA` (POWER guardado), `IMERG_EN_CACHE` y `NDVI_EN_CACHE` (H-B11: una ventana de MODIS vencida que se reutiliza porque Planetary Computer no respondio).
+
+**Calendario en la costa (H-B10):** si el punto no cae en ningun pais de Natural Earth 1:110m, se toma el mas cercano a 25 km o menos, solo si no hay otro a esa distancia, con la advertencia `PAIS_POR_CERCANIA`. Boca del Rio queda a 1.4 km del poligono de Mexico. Ver `datos/calendario/LEEME.md`.
 
 ### Reglas que cumple
 
