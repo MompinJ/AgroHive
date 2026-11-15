@@ -159,6 +159,59 @@ PALETA_AGROHIVE = {
     # 108-109: semilla de cacahuate (tegumento rojizo) y clavo (ginoforo) que baja al suelo
     'cacahuate_semilla': '#b5634a',
     'cacahuate_clavo': '#d8cfa2',
+    # 110-115: soya (hoja trifoliada verde oscuro, vaina pubescente que se tuesta al madurar, grano crema)
+    'soya_hoja_dark': '#2e5e26',
+    'soya_hoja': '#4a8a35',
+    'soya_hoja_light': '#7fb352',
+    'soya_vaina': '#8fa35a',
+    'soya_vaina_seca': '#9a7440',
+    'soya_semilla': '#e6cf8a',
+    # 116-121: frijol caupi (hoja lanceolada brillante, vaina larga delgada, semilla crema con ojo negro)
+    'caupi_hoja_dark': '#2a5a2c',
+    'caupi_hoja': '#3f8a3c',
+    'caupi_hoja_light': '#73b55a',
+    'caupi_vaina': '#a9c46a',
+    'caupi_vaina_seca': '#c9ab6a',
+    'caupi_semilla': '#efe2c0',
+    # 122-127: haba (hoja glauca gris verde, vaina gruesa que se ennegrece, semilla grande)
+    'haba_hoja_dark': '#3d5e45',
+    'haba_hoja': '#6a8f73',
+    'haba_hoja_light': '#9bb8a0',
+    'haba_vaina': '#5f9a45',
+    'haba_vaina_negra': '#2c2a24',
+    'haba_semilla': '#c8c98e',
+    # 128-132: chicharo (hoja y estipula verde claro glauco, vaina brillante, semilla verde redonda)
+    'chicharo_hoja_dark': '#3e7038',
+    'chicharo_hoja': '#69a35a',
+    'chicharo_hoja_light': '#a3cf86',
+    'chicharo_vaina': '#6fbb3f',
+    'chicharo_semilla': '#9ccf5a',
+    # 133-136: lenteja (planta fina, foliolos chicos, vaina corta plana, semilla lenticular)
+    'lenteja_hoja': '#5b8c40',
+    'lenteja_hoja_light': '#93bd6a',
+    'lenteja_vaina': '#c4bb72',
+    'lenteja_semilla': '#a8743c',
+    # 137-139: ejote (vaina tierna, larga y cilindrica; la hoja usa frijol_hoja*)
+    'ejote_vaina_dark': '#3f7d2a',
+    'ejote_vaina': '#62a83a',
+    'ejote_vaina_light': '#9fd067',
+    # 140-142: hoja de cereal de grano chico (cebada, trigo, avena; verde azulado, mas angosta que el maiz)
+    'cereal_hoja_dark': '#2f6640',
+    'cereal_hoja': '#4f8f5a',
+    'cereal_hoja_light': '#86b98a',
+    # 143-144: cebada (espiga con aristas largas que cabecea)
+    'cebada_espiga': '#d9c983',
+    'cebada_arista': '#efe2b4',
+    # 145-147: trigo (espiga compacta y erguida, dorada)
+    'trigo_espiga_dark': '#b8892f',
+    'trigo_espiga': '#d9aa45',
+    'trigo_espiga_light': '#f0cf74',
+    # 148-149: avena (panicula abierta y colgante)
+    'avena_espiga': '#e3d7a3',
+    'avena_espiga_dark': '#b5a46a',
+    # 150-151: grano tierno de maiz dulce (elote; lo demas usa los colores del maiz)
+    'maiz_dulce_grano': '#f2dc7a',
+    'maiz_dulce_grano_light': '#faf0b8',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'

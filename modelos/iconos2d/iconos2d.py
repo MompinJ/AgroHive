@@ -3,8 +3,8 @@
 Correr desde la raiz del repo:
     python modelos/iconos2d/iconos2d.py
 
-Genera 40 SVG (maiz, frijol, calabaza, chile, sorgo, sandia, camote y cacahuate x siembra, brote, crecimiento, madurez,
-podrida) y visor_iconos.html.
+Genera 65 SVG (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo y lenteja
+x siembra, brote, crecimiento, madurez, podrida) y visor_iconos.html.
 Cada icono es pixel art de 16 x 16 con fondo transparente: `shape-rendering="crispEdges"` y rectangulos por tramo
 de color, asi que a 32 px (x2) y 64 px (x4) conserva los pixeles. Usa SOLO colores de modelos/paleta.py (los mismos
 de los modelos 3D): ningun color nuevo. El color nunca va solo: cada icono tiene silueta propia y un <title> en
@@ -25,7 +25,8 @@ from paleta import PALETA_AGROHIVE as PAL  # noqa: E402
 N = 16
 ETAPAS = ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')
 NOMBRES = {'maiz': 'Maíz', 'frijol': 'Frijol', 'calabaza': 'Calabaza', 'chile': 'Chile', 'sorgo': 'Sorgo',
-           'sandia': 'Sandía', 'camote': 'Camote', 'cacahuate': 'Cacahuate'}
+           'sandia': 'Sandía', 'camote': 'Camote', 'cacahuate': 'Cacahuate', 'soya': 'Soya', 'caupi': 'Frijol caupí',
+           'haba': 'Haba', 'chicharo': 'Chícharo', 'lenteja': 'Lenteja'}
 ETIQUETAS = {'siembra': 'en siembra', 'brote': 'en brote', 'crecimiento': 'en crecimiento', 'madurez': 'en madurez',
              'podrida': 'podrida'}
 
@@ -462,6 +463,340 @@ def cacahuate_podrida(c):
     vaina_cintura(c, 8, 11, 'cacahuate_vaina_dark', 'moho', 'podrido')
 
 
+# ---------------- ayudas de las leguminosas (soya, caupi, haba, chicharo, lenteja) ----------------
+def grano_redondo(c, x, y, col, luz, ojo=None):
+    """Grano redondo de 3 x 3 sin esquinas (soya): cruz con brillo arriba y el hilo abajo."""
+    c.p(x + 1, y, luz); c.r(x, y + 1, x + 2, y + 1, col); c.p(x + 1, y + 2, ojo or col)
+
+
+def trifolio(c, x, y, col, luz, sombra):
+    """Hoja trifoliada de 5 x 4 (soya): foliolo central arriba y dos laterales, con el peciolo al centro."""
+    c.r(x + 1, y, x + 3, y, luz); c.r(x + 1, y + 1, x + 3, y + 1, col)
+    c.r(x, y + 2, x + 1, y + 3, col); c.r(x + 3, y + 2, x + 4, y + 3, col)
+    c.p(x, y + 2, luz); c.p(x + 4, y + 2, luz); c.p(x + 2, y + 2, sombra); c.p(x + 2, y + 3, sombra)
+
+
+def diagonal(c, x, y, dx, dy, largo, col):
+    """Linea de `largo` pixeles desde (x, y) en el paso (dx, dy): foliolos lanceolados, vainas largas, zarcillos."""
+    for i in range(largo):
+        c.p(x + dx * i, y + dy * i, col)
+
+
+def flor_haba(c, x, y):
+    """Flor de haba de 2 x 2: petalos blancos con la mancha negra."""
+    c.r(x, y, x + 1, y, 'white'); c.p(x, y + 1, 'white'); c.p(x + 1, y + 1, 'black')
+
+
+def mapa(c, x0, y0, filas, colores):
+    """Dibuja un mapa de letras desde (x0, y0): cada letra es un color de `colores` y '.' queda vacio."""
+    for dy, fila in enumerate(filas):
+        for dx, letra in enumerate(fila):
+            if letra != '.':
+                c.p(x0 + dx, y0 + dy, colores[letra])
+
+
+# ---------------- soya ----------------
+def soya_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((3, 10), (7, 10), (11, 10), (5, 8), (9, 8), (7, 6)):
+        grano_redondo(c, x, y, 'soya_semilla', 'grano_light', 'soya_vaina_seca')
+    grano_redondo(c, 0, 10, 'soya_semilla', 'grano_light', 'soya_vaina_seca')
+
+
+def soya_brote(c):
+    c.suelo()
+    c.r(7, 4, 7, 12, 'soya_hoja_dark')
+    c.r(4, 9, 6, 10, 'soya_vaina'); c.p(4, 10, 'soya_hoja'); c.r(8, 9, 10, 10, 'soya_vaina'); c.p(10, 10, 'soya_hoja')
+    c.r(3, 4, 6, 6, 'soya_hoja'); c.r(4, 3, 5, 3, 'soya_hoja_light'); c.p(3, 4, 'soya_hoja_light')
+    c.r(8, 4, 11, 6, 'soya_hoja'); c.r(9, 3, 10, 3, 'soya_hoja_light'); c.p(11, 4, 'soya_hoja_light')
+    c.p(6, 6, 'soya_hoja_dark'); c.p(8, 6, 'soya_hoja_dark'); c.p(7, 2, 'soya_hoja_light'); c.p(7, 3, 'soya_hoja_light')
+
+
+def soya_crecimiento(c):
+    c.suelo()
+    c.r(7, 4, 8, 12, 'soya_hoja_dark')
+    trifolio(c, 5, 1, 'soya_hoja', 'soya_hoja_light', 'soya_hoja_dark')
+    trifolio(c, 1, 4, 'soya_hoja', 'soya_hoja_light', 'soya_hoja_dark'); c.p(6, 6, 'soya_hoja_dark')
+    trifolio(c, 10, 5, 'soya_hoja', 'soya_hoja_light', 'soya_hoja_dark'); c.p(9, 7, 'soya_hoja_dark')
+    trifolio(c, 2, 9, 'soya_hoja', 'soya_hoja_light', 'soya_hoja_dark')
+    trifolio(c, 9, 9, 'soya_hoja', 'soya_hoja_light', 'soya_hoja_dark')
+    c.p(6, 8, 'flor_lila'); c.p(9, 4, 'flor_lila')
+
+
+def soya_madurez(c):
+    c.suelo()
+    mapa(c, 0, 1, (
+        '.......h........',
+        '......hsh.......',
+        '.....lvsl.......',
+        '.....vvsvv......',
+        '....h.vsv.......',
+        '....lvvsvvl.....',
+        '.....vvsvv......',
+        '...h..vsv.lh....',
+        '....lvvsvvv.....',
+        '....vv.svv......',
+        '.......s........',
+        '......sss.......',
+    ), {'s': 'hoja_seca_dark', 'v': 'soya_vaina_seca', 'l': 'hoja_seca_light', 'h': 'hoja_seca'})
+
+
+def soya_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 5, (
+        '....sss.........',
+        '...s...s........',
+        '..s.....s.......',
+        '.ppm....sv......',
+        '.mpp....sv......',
+        '..pp...vs.......',
+        '..m....vs..hh...',
+        '.ooo...ss..hlh..',
+    ), {'s': 'hoja_seca_dark', 'v': 'soya_vaina_seca', 'l': 'hoja_seca_light', 'h': 'hoja_seca', 'p': 'podrido',
+        'm': 'moho', 'o': 'moho_dark'})
+
+
+# ---------------- frijol caupi ----------------
+def caupi_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((0, 11), (5, 9), (10, 11)):
+        c.r(x + 1, y, x + 3, y, 'caupi_semilla'); c.r(x, y + 1, x + 4, y + 1, 'caupi_semilla')
+        c.r(x + 1, y + 2, x + 3, y + 2, 'hoja_seca_light'); c.p(x + 2, y, 'black'); c.p(x + 2, y + 1, 'black')
+    c.r(5, 12, 9, 12, 'caupi_semilla'); c.r(6, 11, 8, 11, 'caupi_semilla'); c.p(7, 11, 'black')
+
+
+def caupi_brote(c):
+    c.suelo()
+    c.r(7, 8, 7, 12, 'caupi_hoja_dark')
+    c.r(5, 10, 6, 11, 'caupi_semilla'); c.r(8, 10, 9, 11, 'caupi_semilla'); c.p(5, 11, 'hoja_seca_light'); c.p(9, 11, 'hoja_seca_light')
+    c.p(6, 7, 'caupi_hoja_dark')
+    for i, (x, y) in enumerate(((5, 7), (4, 6), (3, 6), (2, 5), (1, 5), (0, 4))):
+        c.p(x, y, 'caupi_hoja'); c.p(x, y + 1, 'caupi_hoja_dark' if i else 'caupi_hoja')
+    for i, (x, y) in enumerate(((8, 7), (9, 6), (10, 6), (11, 5), (12, 5), (13, 4), (14, 3))):
+        c.p(x, y, 'caupi_hoja_light'); c.p(x, y + 1, 'caupi_hoja')
+    c.p(7, 7, 'caupi_hoja_light'); c.p(7, 6, 'caupi_hoja_light')
+
+
+def caupi_crecimiento(c):
+    c.suelo()
+    c.r(7, 7, 8, 12, 'caupi_hoja_dark')
+    diagonal(c, 6, 9, -1, 1, 3, 'caupi_hoja_dark'); c.r(0, 12, 3, 12, 'caupi_hoja_dark')
+    diagonal(c, 9, 9, 1, 1, 3, 'caupi_hoja_dark'); c.r(12, 12, 15, 12, 'caupi_hoja_dark')
+    for x, y, d in ((2, 9, -1), (5, 6, -1), (2, 11, -1), (10, 6, 1), (13, 9, 1), (13, 11, 1)):
+        diagonal(c, x, y, d, -1, 3, 'caupi_hoja'); c.p(x, y, 'caupi_hoja_light')
+    for x, y, d in ((7, 6, -1), (8, 6, 1), (4, 9, -1), (11, 9, 1)):
+        diagonal(c, x, y, d, -1, 3, 'caupi_hoja_light')
+    c.r(7, 2, 8, 2, 'flor_lila'); c.p(7, 3, 'caupi_hoja_dark'); c.p(8, 3, 'caupi_hoja_dark'); c.r(7, 4, 8, 5, 'caupi_hoja')
+
+
+def caupi_madurez(c):
+    c.suelo()
+    c.r(2, 9, 13, 10, 'caupi_hoja'); c.r(4, 8, 11, 8, 'caupi_hoja_light'); c.r(3, 11, 12, 11, 'caupi_hoja_dark')
+    for x in (2, 6, 10, 13):
+        c.p(x, 9, 'caupi_hoja_light'); c.p(x - 1, 10, 'caupi_hoja_dark')
+    c.r(7, 1, 8, 7, 'caupi_hoja_dark')
+    for i in range(7):
+        c.r(6 - i, 2 + i, 6 - i, 3 + i, 'caupi_vaina_seca'); c.r(9 + i, 2 + i, 9 + i, 3 + i, 'caupi_vaina_seca')
+    c.p(0, 9, 'hoja_seca'); c.p(15, 9, 'hoja_seca'); c.p(6, 2, 'hoja_seca'); c.p(9, 2, 'hoja_seca')
+    c.p(4, 4, 'caupi_vaina'); c.p(11, 4, 'caupi_vaina')
+
+
+def caupi_podrida(c):
+    c.suelo(seco=True)
+    c.r(0, 11, 6, 11, 'podrido'); c.r(1, 12, 7, 12, 'podrido_dark'); c.p(2, 10, 'moho_light'); c.p(5, 10, 'moho')
+    c.r(8, 10, 15, 10, 'caupi_vaina_seca'); c.r(8, 11, 14, 11, 'podrido'); c.p(11, 9, 'moho_light'); c.p(14, 9, 'moho')
+    c.r(9, 12, 12, 12, 'moho_dark')
+    c.r(7, 7, 7, 10, 'hoja_seca_dark'); c.p(6, 6, 'hoja_seca_dark'); c.r(3, 6, 5, 6, 'hoja_seca'); c.p(2, 7, 'hoja_seca')
+    c.r(8, 6, 10, 6, 'hoja_marchita'); c.p(11, 7, 'hoja_marchita'); c.p(4, 7, 'hoja_seca_light')
+
+
+# ---------------- haba ----------------
+def haba_siembra(c):
+    c.suelo('suelo_humedo')
+    mapa(c, 0, 6, (
+        '......hsh.......',
+        '.....hsssd......',
+        '.....nsssd......',
+        '.....nsssd......',
+        '......sdd.......',
+        'hssssn....hssssn',
+        'ddddn......ddddn',
+    ), {'s': 'haba_semilla', 'h': 'haba_hoja_light', 'd': 'hoja_seca', 'n': 'black'})
+
+
+def haba_brote(c):
+    c.suelo()
+    c.r(7, 3, 8, 12, 'haba_hoja_dark')
+    c.r(4, 8, 6, 9, 'haba_hoja'); c.p(4, 8, 'haba_hoja_light'); c.r(9, 8, 11, 9, 'haba_hoja'); c.p(11, 8, 'haba_hoja_light')
+    c.r(5, 4, 6, 5, 'haba_hoja_light'); c.r(9, 4, 10, 5, 'haba_hoja_light')
+    c.r(7, 1, 8, 2, 'haba_hoja_light'); c.r(5, 11, 6, 11, 'haba_hoja'); c.r(9, 11, 10, 11, 'haba_hoja')
+
+
+def haba_crecimiento(c):
+    c.suelo()
+    c.r(7, 1, 8, 12, 'haba_hoja_dark')
+    for y, izq in ((1, True), (4, False), (7, True), (10, False)):
+        x = 3 if izq else 9
+        c.r(x, y, x + 3, y + 1, 'haba_hoja'); c.r(x, y, x + 1, y, 'haba_hoja_light'); c.p(x + 3 if izq else x, y + 2, 'haba_hoja')
+    for y, izq in ((3, False), (6, True), (9, True)):
+        flor_haba(c, 9 if not izq else 5, y)
+
+
+def haba_madurez(c):
+    c.suelo()
+    mapa(c, 0, 1, (
+        '...lhhhss.......',
+        '...hhhhss.hhhl..',
+        '.......sshhhh...',
+        '.....l.ss.......',
+        '....gg.ss..l....',
+        '....gg.ss.gg....',
+        '....gg.ss.gg....',
+        '...hh..ss.gg.h..',
+        '..d.d..ss..g.hh.',
+        '.nn.nn.ss...d...',
+        '.nn.nn.ss..nn...',
+        '.n..n..ss.nnn...',
+    ), {'s': 'haba_hoja_dark', 'h': 'haba_hoja', 'l': 'haba_hoja_light', 'g': 'haba_vaina', 'n': 'haba_vaina_negra',
+        'd': 'podrido_dark'})
+
+
+def haba_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 5, (
+        '...l............',
+        '..sl............',
+        '..ss............',
+        '..sssss.........',
+        '..ss..sss...h...',
+        '..ss.m..sss.hh..',
+        '..ssnnn...sss...',
+        '.ossnnnm...nnnm.',
+    ), {'s': 'hoja_seca_dark', 'l': 'hoja_seca_light', 'h': 'hoja_seca', 'n': 'haba_vaina_negra', 'm': 'moho_light',
+        'o': 'moho_dark'})
+
+
+# ---------------- chicharo ----------------
+def chicharo_siembra(c):
+    c.suelo('suelo_humedo')
+    for x in (1, 4, 7, 10, 13):
+        c.r(x, 12, x + 1, 13, 'chicharo_semilla'); c.p(x, 12, 'chicharo_hoja_light')
+    for x in (2, 8):
+        c.r(x, 10, x + 1, 11, 'chicharo_semilla'); c.p(x + 1, 11, 'chicharo_hoja')
+    c.r(11, 4, 11, 12, 'wood')
+
+
+def chicharo_brote(c):
+    c.suelo()
+    c.r(11, 2, 11, 12, 'wood'); c.p(11, 1, 'wood_dark')
+    c.r(6, 6, 6, 12, 'chicharo_hoja_dark')
+    c.r(4, 10, 5, 11, 'chicharo_hoja'); c.r(7, 10, 8, 11, 'chicharo_hoja')
+    c.r(3, 7, 5, 8, 'chicharo_hoja_light'); c.r(7, 7, 9, 7, 'chicharo_hoja_light')
+    diagonal(c, 7, 5, 1, -1, 3, 'chicharo_hoja_light'); c.p(10, 3, 'chicharo_hoja_light'); c.p(12, 4, 'chicharo_hoja_light')
+
+
+def chicharo_crecimiento(c):
+    c.suelo()
+    c.r(12, 1, 12, 12, 'wood'); c.p(12, 0, 'wood_dark')
+    c.r(5, 9, 5, 12, 'chicharo_hoja_dark'); diagonal(c, 6, 8, 1, -1, 5, 'chicharo_hoja_dark')
+    for y in (3, 6, 9):
+        c.p(11, y, 'chicharo_hoja_light'); c.p(13, y + 1, 'chicharo_hoja_light')
+    c.r(2, 9, 4, 11, 'chicharo_hoja'); c.p(2, 9, 'chicharo_hoja_light'); c.r(6, 10, 7, 11, 'chicharo_hoja')
+    c.r(4, 5, 6, 7, 'chicharo_hoja_light'); c.r(8, 3, 9, 6, 'chicharo_hoja'); c.p(7, 4, 'chicharo_hoja')
+    c.r(9, 1, 10, 1, 'white'); c.p(10, 2, 'white')
+
+
+def chicharo_madurez(c):
+    c.suelo()
+    c.r(12, 1, 12, 12, 'wood'); c.p(12, 0, 'wood_dark')
+    c.r(10, 1, 10, 12, 'chicharo_hoja_dark')
+    for y in (2, 5):
+        c.p(11, y, 'chicharo_hoja_light'); c.p(13, y + 1, 'chicharo_hoja_light')
+    c.r(8, 1, 9, 2, 'chicharo_hoja'); c.r(13, 8, 14, 9, 'chicharo_hoja'); c.r(11, 10, 11, 11, 'chicharo_hoja')
+    c.p(9, 0, 'white'); c.p(11, 8, 'white')
+    c.r(8, 4, 8, 7, 'chicharo_vaina'); c.p(9, 4, 'chicharo_hoja_dark'); c.p(8, 4, 'chicharo_hoja_light')
+    mapa(c, 0, 9, (
+        '.lllllllll',
+        'v12d12d12v',
+        'v22d22d22v',
+        '.vvvvvvvv.',
+    ), {'v': 'chicharo_vaina', 'l': 'chicharo_hoja_light', '1': 'chicharo_hoja_light', '2': 'chicharo_semilla',
+        'd': 'chicharo_hoja_dark'})
+
+
+def chicharo_podrida(c):
+    c.suelo(seco=True)
+    c.r(12, 2, 12, 12, 'wood'); c.p(12, 1, 'wood_dark')
+    diagonal(c, 11, 3, -1, 1, 3, 'hoja_seca_dark'); c.r(13, 3, 13, 5, 'hoja_seca_dark')
+    c.r(2, 10, 10, 10, 'hoja_seca'); c.r(1, 11, 11, 12, 'hoja_seca_dark'); c.p(4, 9, 'hoja_seca_light'); c.p(8, 9, 'hoja_seca_light')
+    c.r(4, 11, 8, 11, 'podrido'); c.r(5, 12, 7, 12, 'podrido_dark'); c.r(5, 10, 6, 10, 'moho_light'); c.p(8, 10, 'moho')
+
+
+# ---------------- lenteja ----------------
+def lenteja_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((0, 11), (4, 11), (8, 11), (12, 11), (2, 9), (10, 9), (6, 9), (13, 9)):
+        c.p(x + 1, y, 'hoja_seca_light'); c.r(x, y + 1, x + 2, y + 1, 'lenteja_semilla')
+    for x, y in ((2, 13), (6, 14), (10, 13), (13, 14)):
+        c.r(x, y, x + 1, y, 'lenteja_semilla')
+
+
+def lenteja_brote(c):
+    c.suelo()
+    mapa(c, 0, 3, (
+        '.......l........',
+        '......lsl.......',
+        '..l....s....l...',
+        '.lsl..lsl..lsl..',
+        '..s....s....s...',
+        '.lsl..lsl..lsl..',
+        '...s...s...s....',
+        '....s..s..s.....',
+        '.....s.s.s......',
+        '......sss.......',
+    ), {'s': 'lenteja_hoja', 'l': 'lenteja_hoja_light'})
+
+
+def lenteja_crecimiento(c):
+    c.suelo()
+    for xt, yt, flor in ((1, 6, 'white'), (4, 3, 'flor_lila'), (7, 1, 'flor_lila'), (11, 3, 'white'), (14, 6, 'flor_lila')):
+        x0 = 7 if xt <= 7 else 8
+        n = max(abs(xt - x0), 12 - yt)
+        for i in range(n + 1):
+            x, y = round(x0 + (xt - x0) * i / n), round(12 + (yt - 12) * i / n)
+            c.p(x, y, 'lenteja_hoja')
+            if y % 2 == 0 and y < 11:
+                for lado in (x - 1, x + 1):
+                    if 0 <= lado < 16 and (lado, y) not in c.px:
+                        c.p(lado, y, 'lenteja_hoja_light')
+        c.p(xt, yt - 1, flor)
+
+
+def lenteja_madurez(c):
+    c.suelo()
+    mapa(c, 0, 4, (
+        '.....vn.vn......',
+        '...vn.llll.vn...',
+        '..llhhhlhhhll...',
+        '.vnhhdhhhdhhvn..',
+        '..lhhdvnhdhhh...',
+        '.vnhhdhhhdvnvn..',
+        '...hhdhvndhh....',
+        '.....d.dd.d.....',
+        '......ddd.......',
+    ), {'d': 'hoja_seca_dark', 'h': 'hoja_seca', 'l': 'hoja_seca_light', 'v': 'lenteja_vaina', 'n': 'lenteja_semilla'})
+
+
+def lenteja_podrida(c):
+    c.suelo(seco=True)
+    c.r(1, 11, 14, 12, 'hoja_seca'); c.r(2, 10, 12, 10, 'hoja_marchita')
+    for x in (2, 6, 10, 13):
+        c.p(x, 11, 'hoja_seca_dark'); c.p(x + 1, 12, 'hoja_seca_light')
+    c.r(4, 9, 6, 10, 'moho'); c.p(5, 8, 'moho_light'); c.r(9, 11, 11, 12, 'podrido'); c.p(10, 10, 'moho_light')
+    diagonal(c, 7, 9, 1, -1, 3, 'hoja_seca_dark'); diagonal(c, 12, 9, 1, -1, 2, 'hoja_seca_dark')
+    c.r(1, 12, 3, 12, 'moho_dark')
+
+
 DIBUJOS = {f'{cultivo}_{etapa}': globals()[f'{cultivo}_{etapa}'] for cultivo in NOMBRES for etapa in ETAPAS}
 
 VISOR = """<!doctype html>
@@ -500,7 +835,7 @@ if __name__ == '__main__':
     for clave, dibujo in DIBUJOS.items():
         c = Lienzo()
         dibujo(c)
-        cultivo, etapa = clave.split('_', 1)
+        cultivo, etapa = clave.rsplit('_', 1)  # el cultivo puede llevar '_' (maiz_dulce)
         ruta = os.path.join(AQUI, clave + '.svg')
         with open(ruta, 'w', encoding='utf-8', newline='\n') as f:
             f.write(svg(c, f'{NOMBRES[cultivo]} {ETIQUETAS[etapa]}'))

@@ -2233,6 +2233,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "soya"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 85 dias). EcoCrop da un ciclo de 75 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra soya en Isla entre 2021 y 2025; en Veracruz solo en Panuco, al norte del estado. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."
     },
     {
@@ -2477,6 +2480,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "caupi"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 100 dias; la tabla imprime 110). EcoCrop da un ciclo de 60 a 240 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
@@ -2723,6 +2729,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "haba"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 100 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la subfila de grano seco (Dry/Seed) porque SIAP registra 'haba grano'; la de cosecha en fresco tiene Kc end 1.10. SIAP no registra haba en Isla entre 2021 y 2025."
     },
     {
@@ -2968,6 +2977,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "chicharo"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 60 a 140 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la subfila de cosecha en fresco (chicharo verde); la de grano seco (Dry/Seed) da Kc end 0.30 y p 0.40. Eleccion del equipo: una persona debe revisarla."
     },
     {
@@ -3212,6 +3224,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "lenteja"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 70 a 240 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },

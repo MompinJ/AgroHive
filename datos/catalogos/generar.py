@@ -375,6 +375,7 @@ AMPLIACION = [
     # -- tanda 1: leguminosas y cereales para rotaciones
     {
         "id": "soya",
+        "modelo3d": "soya",
         "nombreComun": "Soya",
         "nombreCientifico": "Glycine max (L.) Merr.",
         "esLeguminosa": True,
@@ -395,6 +396,7 @@ AMPLIACION = [
     },
     {
         "id": "caupi",
+        "modelo3d": "caupi",
         "nombreComun": "Frijol caupi",
         "nombreCientifico": "Vigna unguiculata (L.) Walp.",
         "esLeguminosa": True,
@@ -414,6 +416,7 @@ AMPLIACION = [
     },
     {
         "id": "haba",
+        "modelo3d": "haba",
         "nombreComun": "Haba",
         "nombreCientifico": "Vicia faba L.",
         "esLeguminosa": True,
@@ -435,6 +438,7 @@ AMPLIACION = [
     },
     {
         "id": "chicharo",
+        "modelo3d": "chicharo",
         "nombreComun": "Chicharo",
         "nombreCientifico": "Pisum sativum L.",
         "esLeguminosa": True,
@@ -455,6 +459,7 @@ AMPLIACION = [
     },
     {
         "id": "lenteja",
+        "modelo3d": "lenteja",
         "nombreComun": "Lenteja",
         "nombreCientifico": "Lens culinaris Medik.",
         "esLeguminosa": True,

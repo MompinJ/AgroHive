@@ -30,6 +30,17 @@ const NOMBRES_CULTIVO: Record<string, string> = {
   sandia: 'Sandía',
   camote: 'Camote',
   cacahuate: 'Cacahuate',
+  // Ampliacion del catalogo (15/11, tanda 1)
+  soya: 'Soya',
+  caupi: 'Frijol caupí',
+  haba: 'Haba',
+  chicharo: 'Chícharo',
+  lenteja: 'Lenteja',
+  ejote: 'Ejote',
+  cebada: 'Cebada',
+  trigo: 'Trigo',
+  avena: 'Avena',
+  maiz_dulce: 'Maíz dulce',
 };
 const NOMBRES_ETAPA: Record<string, string> = {
   suelo_desnudo: 'Suelo desnudo',

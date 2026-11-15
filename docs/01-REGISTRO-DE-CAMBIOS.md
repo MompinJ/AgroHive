@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 (madrugada) — Modelos de la ampliación del catálogo, tanda A: soya, frijol caupí, haba, chícharo y lenteja (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{soya,caupi,haba,chicharo,lenteja}.py` con sus 25 `.bbmodel` y visores; `modelos/cultivos/bloques/bloques.py` (25 bloques); `modelos/iconos2d/iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (42 colores, índices 110 a 151: los de esta tanda y los de la siguiente, para regenerar una sola vez); todos los `.bbmodel` regenerados (solo cambia la paleta incrustada); `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; `web/src/escena/ficha.ts` (nombres de los 10 cultivos de la tanda 1 del catálogo); pruebas `voxel.test.ts` (acepta cultivos con guion bajo, como `maiz_dulce`), `bloques.test.ts` e `iconos2d.test.ts` (13 cultivos); `modelos/iconos2d/iconos2d.py` separa la etapa por el último `_`; `docs/06`, `docs/07` (tabla de la ampliación), `docs/16` (M7).
+- **Cambio:** cada uno con 5 detallados (de 8 a 57 cubos), 5 bloques (de 15 a 21, con el trazado común para el recorte de bordes) y 5 iconos 2D (peor par nuevo de daltonismo 14.1 %), y su prefijo. La escena y la vista 2D los toman solos.
+- **Por qué:** encargo de Mompin por la sesión maestra: modelos para los cultivos que agrega la sesión "catalogo".
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` son de Mafer (con OK de Mompin); en `generar.py` solo el campo `modelo3d`. No se tocó `web/src/ui/`: `ui/planes.ts` (nombres y colores de la brocha) todavía no tiene los cultivos de la ampliación; queda para su dueño.
+- **Pendiente:** tanda B y los cultivos de las tandas 2 y 3 del catálogo; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 (madrugada) — Ampliación del catálogo de cultivos `[DECIDIDO]` (Mompin; sesión "catalogo", rama `Mompin-features`)
 
 - **Archivos:** `datos/catalogos/generar.py` (lista `AMPLIACION` al final de `CULTIVOS`), `cultivos.json` y `calendario-isla.json` regenerados, `datos/catalogos/README.md` (ampliación, criterio de fila, elecciones y cultivos que quedaron fuera), `docs/04` (nota del catálogo), `docs/16` (E7 para Eduardo), `web/src/motor/pruebas/catalogo-ampliado.test.ts` (nueva).

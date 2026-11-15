@@ -3,8 +3,8 @@
 Correr desde la raiz del repo:
     python modelos/cultivos/bloques/bloques.py
 
-Genera los 40 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote y cacahuate x siembra, brote, crecimiento,
-madurez, podrida) y visor_bloques.html.
+Genera los 65 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo y
+lenteja x siembra, brote, crecimiento, madurez, podrida) y visor_bloques.html.
 
 En la escena cada bloque (celda de 10 x 10 m) usa uno de estos modelos en lugar de la planta detallada, que se
 queda para la celda seleccionada. Es una representacion visual, NO a escala: el numero de plantas, su tamano y la
@@ -22,7 +22,8 @@ Trazado comun (para que una parcela de bloques pegados se lea continua): 3 surco
 por surco con esa misma separacion (x = -16/3, 0, 16/3), tambien continuas entre bloques. Los lomos ocupan x[-8, 8].
 
 Para agregar un cultivo/etapa: agregar su planta (1 o 2 cubos) a PLANTAS con las ayudas con_tallo/hoja/pieza/semilla
-(o, para rastreras y matas bajas, guia/mata/esqueje/al_lado/encima) y la pareja a CULTIVOS_ETAPAS.
+(o, para rastreras y matas bajas, guia/mata/esqueje/al_lado/encima; para leguminosas, en_v/costado/vaina_costado/con_tutor) y la pareja
+a CULTIVOS_ETAPAS.
 """
 import math
 import os
@@ -302,6 +303,56 @@ def fruto_largo_podrido(largo, alto, fondo):
     return planta
 
 
+# ---------------- soya, caupi, haba, chicharo y lenteja (leguminosas de la ampliacion, 15/11) ----------------
+def en_v(col_hoja, ancho, alto, fondo, cols_vaina, largo, abre):
+    """Caupi en madurez: mata baja y una vaina larga que sale de lo alto abierta hacia un lado; como el lado se
+    alterna (yaw 0 o 180) las vainas de plantas vecinas se leen en V. 2 cubos."""
+    def planta(m, nombre, base, rng, escala):
+        h = alto * escala
+        caja_ajustada(m, nombre + '_mata', base, (ancho * escala, h, fondo * escala), rng.choice(col_hoja),
+                      yaw=r3(rng.uniform(-30, 30)))
+        caja_ajustada(m, nombre + '_vaina', a_lo_alto(base, 0.8 * h), (0.4, largo * escala, 0.4), rng.choice(cols_vaina),
+                      tilt=r3(rng.uniform(*abre)), yaw=r3(rng.choice((0, 180)) + rng.uniform(-30, 30)))
+    return planta
+
+
+def costado(col, tam, f, mancha=None):
+    """Flor (cubito) pegada al costado de la mata, a la fraccion f de su altura. mancha: color de la cara frontal
+    (+z), p. ej. la mancha negra de la flor de haba (misma paleta, otra cara)."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        lado = hacia_centro(base, rng)
+        sitio = (r3(base[0] + lado * 0.8 * escala), r3(base[1] + f * h), r3(base[2] + rng.uniform(-0.4, 0.4)))
+        e = m.box(nombre + '_flor', sitio, (tam, tam, tam), col, yaw=r3(rng.uniform(-20, 20)))
+        if mancha:
+            i = m.names.index(mancha)
+            e['faces']['south']['uv'] = [i % 16, i // 16, i % 16 + 1, i // 16 + 1]
+    return resto
+
+
+def vaina_costado(cols, f, grueso, largo, dist, t0=-12, t1=12):
+    """Vaina pegada al costado de la mata (fuera del follaje, hacia el centro del bloque), casi vertical, con su base
+    a la fraccion f de la altura (haba, soya y lenteja en madurez)."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        lado = hacia_centro(base, rng)
+        sitio = (r3(base[0] + lado * (dist + grueso / 2) * escala), r3(base[1] + f * h), r3(base[2] + rng.uniform(-0.3, 0.3)))
+        caja_ajustada(m, nombre + '_vaina', sitio, (grueso, largo * escala, grueso), rng.choice(cols),
+                      tilt=r3(rng.uniform(t0, t1)), yaw=r3(rng.uniform(-20, 20)))
+    return resto
+
+
+def con_tutor(alto_tutor, cols, ancho, alto, tilt=None):
+    """Chicharo: un tutor fino de madera y la planta pegada a el (columna angosta de follaje), centrados juntos en
+    la posicion del trazado. tilt=(min, max) recarga la planta (podrida). 2 cubos."""
+    def planta(m, nombre, base, rng, escala):
+        lado = hacia_centro(base, rng)
+        sep = 0.25 + ancho * escala / 2
+        m.box(nombre + '_tutor', (r3(base[0] - lado * sep / 2), base[1], base[2]), (0.3, r3(alto_tutor * escala), 0.3), 'wood')
+        sitio = (r3(base[0] + lado * sep / 2), base[1], r3(base[2] + rng.uniform(-0.2, 0.2)))
+        caja_ajustada(m, nombre + '_mata', sitio, (ancho * escala, alto * escala, ancho * escala), rng.choice(cols),
+                      tilt=r3(rng.uniform(*tilt)) if tilt else 0, yaw=r3(rng.uniform(-20, 20)))
+    return planta
+
+
 PLANTAS = {
     # maiz
     'maiz_siembra': semilla(('grano', 'grano_dark', 'grano_light'), (1.0, 0.7, 1.2)),
@@ -387,9 +438,61 @@ PLANTAS = {
         encima('yellow', 0.6))),
     'cacahuate_podrida': mata(('hoja_seca', 'hoja_seca_dark'), 2.8, 0.9, 2.6,
                               al_lado(('cacahuate_vaina_dark', 'podrido', 'moho'), (1.5, 0.6, 0.8), 2.4)),
+    # soya (erguida y arbustiva, trifoliada verde oscuro, flor lila; madurez seca: planta tostada con vainas)
+    'soya_siembra': semilla(('soya_semilla',), (0.8, 0.6, 0.9)),
+    'soya_brote': con_tallo('soya_hoja_dark', 1.8, 0.5, hoja_plana('soya_hoja_light', 1.9, 1.2)),
+    'soya_crecimiento': mata(('soya_hoja', 'soya_hoja_dark'), 2.0, 3.4, 1.9, alterna(
+        encima('flor_lila', 0.6), encima('flor_lila', 0.6), nada)),
+    'soya_madurez': mata(('soya_vaina_seca', 'soya_vaina_seca', 'hoja_seca_dark'), 1.7, 4.0, 1.6, alterna(
+        vaina_costado(('hoja_seca', 'soya_vaina_seca'), 0.3, 0.5, 1.6, 0.85),
+        vaina_costado(('hoja_seca', 'soya_vaina_seca'), 0.45, 0.5, 1.6, 0.85),
+        encima('hoja_marchita', 0.7))),
+    'soya_podrida': mata(('hoja_seca_dark', 'podrido'), 1.8, 2.2, 1.6, alterna(
+        al_lado(('moho', 'moho_dark'), (1.4, 0.5, 0.7), 1.5),
+        pieza(('podrido_dark',), 0.7, 0.5, 1.6, 110, 140))),
+    # caupi (semirrastrero abierto: guia baja con foliolos lanceolados brillantes; vainas largas color paja en V)
+    'caupi_siembra': semilla(('caupi_semilla',), (0.7, 0.5, 1.1)),
+    'caupi_brote': con_tallo('caupi_hoja_dark', 1.5, 0.5, hoja_plana('caupi_hoja_light', 2.3, 0.8)),
+    'caupi_crecimiento': guia('caupi_hoja_dark', 3.2, alterna(
+        hoja('caupi_hoja_light', 1.0, 1.3, 2.8, 22, 38, 90), hoja('caupi_hoja', 1.0, 1.2, 2.6, 22, 38, 90))),
+    'caupi_madurez': en_v(('caupi_hoja', 'caupi_hoja_light'), 2.6, 1.2, 2.2, ('caupi_vaina_seca', 'caupi_vaina_seca', 'caupi_vaina'),
+                          3.0, (45, 60)),
+    'caupi_podrida': guia('hoja_seca_dark', 3.0, alterna(
+        al_lado(('moho', 'podrido'), (2.4, 0.4, 0.5), 1.0),
+        hoja('hoja_seca', 1.0, 1.0, 2.0, 70, 85))),
+    # haba (erguida y alta, gris verde; flor blanca con mancha negra; vainas gruesas, las bajas negras)
+    'haba_siembra': semilla(('haba_semilla',), (1.2, 0.6, 1.5)),
+    'haba_brote': con_tallo('haba_hoja_dark', 2.4, 0.6, hoja('haba_hoja_light', 0.8, 1.4, 1.6, 40, 55)),
+    'haba_crecimiento': mata(('haba_hoja', 'haba_hoja_light'), 1.5, 5.0, 1.5, alterna(
+        costado('white', 0.7, 0.55, mancha='black'), costado('white', 0.7, 0.7, mancha='black'), nada)),
+    'haba_madurez': mata(('haba_hoja', 'haba_hoja_dark'), 1.6, 5.4, 1.6, alterna(
+        vaina_costado(('haba_vaina',), 0.5, 0.9, 2.2, 0.8),
+        vaina_costado(('haba_vaina_negra',), 0.08, 0.9, 2.0, 0.8),
+        vaina_costado(('haba_vaina_negra',), 0.15, 0.9, 2.0, 0.8))),
+    'haba_podrida': con_tallo('hoja_seca_dark', 4.4, 0.8, alterna(
+        pieza(('haba_vaina_negra', 'moho'), 0.5, 0.8, 2.0, 130, 150, 60),
+        hoja('podrido', 0.4, 1.4, 2.2, 95, 115, 160)), tilt=(20, 32)),
+    # chicharo (trepa por un tutor de madera; follaje verde claro glauco; vainas verde brillante)
+    'chicharo_siembra': semilla(('chicharo_semilla',), (0.8, 0.7, 0.8)),
+    'chicharo_brote': con_tutor(4.0, ('chicharo_hoja_light',), 0.8, 1.6),
+    'chicharo_crecimiento': con_tutor(5.6, ('chicharo_hoja', 'chicharo_hoja_light'), 1.0, 4.0),
+    'chicharo_madurez': con_tutor(6.0, ('chicharo_vaina', 'chicharo_hoja', 'chicharo_vaina'), 1.3, 4.8),
+    'chicharo_podrida': con_tutor(5.6, ('hoja_seca_dark', 'podrido', 'moho'), 1.2, 2.2, tilt=(18, 30)),
+    # lenteja (la mas chica y fina, plumosa; madurez color paja con vainas cortas)
+    'lenteja_siembra': semilla(('lenteja_semilla',), (0.7, 0.3, 0.7)),
+    'lenteja_brote': con_tallo('lenteja_hoja', 1.3, 0.3, hoja('lenteja_hoja_light', 0.9, 0.6, 0.9, 25, 45)),
+    'lenteja_crecimiento': mata(('lenteja_hoja', 'lenteja_hoja_light'), 1.3, 2.0, 1.3, alterna(
+        encima('lenteja_hoja_light', 0.8, 0.7), encima('white', 0.4), nada)),
+    'lenteja_madurez': mata(('hoja_seca_light', 'hoja_marchita'), 1.3, 2.1, 1.3, alterna(
+        vaina_costado(('lenteja_vaina',), 0.4, 0.5, 0.9, 0.65),
+        vaina_costado(('lenteja_vaina',), 0.55, 0.5, 0.9, 0.65),
+        nada)),
+    'lenteja_podrida': mata(('podrido', 'hoja_seca_dark'), 1.4, 0.9, 1.4,
+                            al_lado(('moho', 'podrido_dark'), (0.9, 0.4, 0.6), 1.1)),
 }
 
-CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate')
+CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate',
+                                    'soya', 'caupi', 'haba', 'chicharo', 'lenteja')
                    for e in ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')]
 
 

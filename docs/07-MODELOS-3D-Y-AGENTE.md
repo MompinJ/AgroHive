@@ -78,6 +78,18 @@ Hechos por la IA de Mompin con OK de Mompin (Mafer no estaba), con cuatro agente
 - Bloques: de 15 a 24 cubos (el camote en siembra llega justo al tope). `bloques.py` ahora también regenera `visor_bloques.html`.
 - **Límite conocido:** el `preview` de `voxelkit.py` ordena mal la profundidad con cajas largas o giradas (las rayas de la sandía o el lomo tapan piezas); los agentes revisaron con renders propios con z-buffer, fuera del repo. La revisión final fue en la escena real (`docs/capturas/cultivos-nuevos/`). Falta mirarlos en Blockbench.
 
+## Ampliación del catálogo (15/11)
+
+La sesión "catalogo" agregó cultivos a `datos/catalogos/` sin modelo; la sesión "cultivos" (IA de Mompin, `Mompin-escena`) les hace modelo por tandas de 5, con el mismo método que sandía, camote y cacahuate: colores nuevos agregados juntos antes de modelar, un agente por detallado y uno solo por archivo compartido (`bloques.py`, `iconos2d.py`). Los bloques conservan el trazado común (3 lomos de x −8 a 8, 3 × 3 plantas) para que el recorte en triángulo de las celdas de borde les sirva. Tamaños y formas cualitativos; las fuentes de forma están en el docstring de cada generador.
+
+| Cultivo | Rasgos que se respetan | Cubos detallado (siembra, brote, crecimiento, madurez, podrida) | Cubos bloque |
+| --- | --- | --- | --- |
+| Soya | Erguida y arbustiva, trifoliada, flor lila chica; se cosecha seca: madurez tostada, casi sin hojas, con racimos de vainas | 11, 12, 29, 48, 46 | 15 a 21 |
+| Frijol caupí | Semirrastrero, foliolos lanceolados, pedúnculos largos; vainas muy largas en V, color paja; semilla crema con ojo negro | 10, 12, 29, 56, 48 | 15 a 21 |
+| Haba | Erguida, la más alta de las leguminosas, tallo cuadrado, hoja glauca; flor blanca con mancha negra; vainas gruesas que se ennegrecen | 8, 12, 28, 57, 41 | 15 a 21 |
+| Chícharo | Trepa por un tutor de madera con zarcillos; flor blanca; vaina abierta con los chícharos en fila | 12, 12, 30, 54, 52 | 15 a 21 |
+| Lenteja | Chica, plumosa, muchos tallitos finos; madurez color paja con vainas cortas | 11, 12, 30, 55, 40 | 15 a 21 |
+
 ## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
 
 En la escena, el suelo es una columna procedural que se estira hasta la altura del relieve y se pinta según la humedad del motor (`escena/suelo.ts`); un bloque voxel completo se deformaría al estirarlo. Por eso las variantes son **losas delgadas que se ponen encima de la columna**, no bloques.
@@ -112,7 +124,7 @@ La mascota es un **elote con cara feliz** (la "verdura con cara feliz" del doc 0
 - glTF/GLB es **opcional**: se exporta desde Blockbench (File > Export) si algún día hiciera falta.
 - **Rendimiento en escena grande:** el visor de ejemplo crea una malla por cubo, lo que está bien para unos pocos modelos. Para una parcela con cientos de celdas, unir los cubos de cada modelo en una geometría y usar **`InstancedMesh` por combinación cultivo + etapa**, con variación por celda (rotación en pasos de 90°, ligera escala). Fijar un tope de celdas (propuesta: ~1 600).
 - **Respaldo:** si un modelo se atrasa, plantas procedurales con cajas en código para no bloquear el MVP.
-- **Implementado (A3.2, 14/11):** `web/src/escena/voxel/` lee cualquier `<cultivo>_<etapa>.bbmodel` que esté en `modelos/cultivos/` (sin tocar código), toma los colores de la paleta incrustada (coinciden con `modelos/paleta.md`, verificado en pruebas) y rechaza con error visible los que no siguen estas convenciones. Desde el 14/11 noche están los 8 cultivos del catálogo (maíz, frijol, calabaza, chile, sorgo, sandía, camote y cacahuate), cada uno con 5 detallados, 5 bloques y 5 iconos 2D; la planta provisional queda solo de respaldo.
+- **Implementado (A3.2, 14/11):** `web/src/escena/voxel/` lee cualquier `<cultivo>_<etapa>.bbmodel` que esté en `modelos/cultivos/` (sin tocar código), toma los colores de la paleta incrustada (coinciden con `modelos/paleta.md`, verificado en pruebas) y rechaza con error visible los que no siguen estas convenciones. Desde el 14/11 noche están los 8 cultivos del catálogo original (maíz, frijol, calabaza, chile, sorgo, sandía, camote y cacahuate) y desde el 15/11 se suman los de la ampliación (sección siguiente a la de sandía), cada uno con 5 detallados, 5 bloques y 5 iconos 2D; un cultivo del catálogo sin `.bbmodel` usa la planta provisional, declarada.
 
 ## Flujo de trabajo de arte
 
