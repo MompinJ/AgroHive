@@ -2,6 +2,12 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — MF3: sorgo, caupí y ajonjolí cotejados con la edición web de FAO-56 (Mafer)
+
+- **Archivos:** `datos/catalogos/README.md` (tres filas).
+- **Cambio:** se cotejaron con la Tabla 11 de la edición web de FAO-56 (https://www.fao.org/4/x0490e/x0490e0b.htm, leída el 15/11) las filas `Sorghum` (USA, Pakis., Med., mayo/junio: 20/35/40/30, total impreso 130, suma 125), `Green gram, cowpeas` (Mediterráneo, marzo: 20/30/30/20, total 110, suma 100) y `Sesame` (China, junio: 20/30/40/20, total 100, suma 110). Las etapas del catálogo coinciden con lo impreso y el desajuste de los totales es de la fuente (la segunda fila del sorgo, región árida, también lo tiene: suma 130, total 140). Ningún valor cambia: el ciclo sigue siendo la suma de las etapas.
+- **Límites:** se leyó la edición web, no el PDF; no resuelve si lo mal impreso es el total o una etapa. Lo leyó un subagente que lee páginas (la página devolvió el texto literal solo hasta la mitad, pero la tabla cae dentro de ese tramo).
+
 ### 2026-11-15 — Hero de Inicio con entrada animada y accesible (balam; registrado por Mompin)
 
 - **Archivos:** `web/src/ui/inicio.css`, `DESIGN.md` (rama `balam`, `23cebe4`, PR #11).
