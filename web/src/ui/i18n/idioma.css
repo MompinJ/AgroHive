@@ -1,4 +1,6 @@
 .selector-idioma { display: inline-grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--space-2); min-inline-size: 0; color: var(--color-text); font-family: var(--font-ui); }
 .selector-idioma label { font-size: .875rem; margin: 0; }
-.selector-idioma select { inline-size: auto; width: auto; min-inline-size: 7rem; min-height: 44px; max-width: 100%; border: 1px solid var(--color-control-border); border-radius: var(--radius-input); padding-block: 8px; padding-inline: 12px 28px; background: var(--color-surface); color: var(--color-text); font: inherit; font-size: 16px; cursor: pointer; }
+.selector-idioma-campo { position: relative; display: grid; align-items: center; min-inline-size: 0; }
+.selector-idioma select { appearance: none; -webkit-appearance: none; inline-size: auto; width: auto; min-inline-size: 7rem; min-height: 44px; max-width: 100%; border: 1px solid var(--color-control-border); border-radius: var(--radius-input); padding-block: 8px; padding-inline: 12px 40px; background: var(--color-surface); color: var(--color-text); font: inherit; font-size: 16px; cursor: pointer; }
+.selector-idioma-flecha { position: absolute; inset-inline-end: 12px; inset-block-start: 50%; transform: translateY(-50%); pointer-events: none; }
 .selector-idioma select:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
