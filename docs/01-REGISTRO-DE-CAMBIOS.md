@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — MF5: cacahuate, yuca y berenjena cotejados con la edición web de FAO-56 (Mafer)
+
+- **Archivos:** `datos/catalogos/README.md` (tres filas).
+- **Cambio:** se cotejaron con la Tabla 11 de la edición web de FAO-56 (https://www.fao.org/4/x0490e/x0490e0b.htm, leída el 15/11): `Groundnut`, África Occidental (25/35/45/25, total 130, suma bien), `Cassava` year 1 (20/40/90/60, total 210, suma bien; year 2: 150/40/110/60 = 360) y `Egg plant` (región árida, octubre: 30/40/40/20, total `130\1`, suma bien; mayo/junio: 30/45/40/25 con total impreso `40` por error de la fuente, suma 140, fila que se salta). Todas las cifras del catálogo coinciden con lo impreso. Ningún valor cambia.
+- **Límites:** las etiquetas de fecha de cacahuate («Dry season») y yuca («Rainy season») salen partidas entre filas en la edición web; la lectura del catálogo es la natural pero solo el PDF la confirma. Lo leyó un subagente que lee páginas (el texto literal llegó hasta la mitad de la página; la tabla cae dentro).
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Cultivos completos: auditoría, Vite vigila modelos, cultivos largos recorren ciclos (Eduardo)
 
 - **Archivos:** `web/vite.config.ts`; `web/src/ui/planes.ts` (`acomodarCiclos`, `aplicarAcomodando`, `DIAS_MAX_CLIMA`) y su prueba; `web/src/ui/lab/` (`cultivos-completos.test.ts` nuevo, `conveniencia.ts` y su prueba, `PanelCultivos.tsx`, `Laboratorio.tsx`, `piezas.tsx`, `lab.css`); `web/src/escena/render/escena-three.ts` (banderín); `docs/06`.
