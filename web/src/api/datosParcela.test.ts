@@ -32,11 +32,23 @@ describe('cargarDatosParcela (A4.6)', () => {
     expect(fallaObligatoria(d)).toBeNull();
   });
 
-  it('si falla un dato obligatorio lo nombra, con el motivo del servidor', async () => {
+  it('si falla un dato obligatorio (clima o catalogo) lo nombra, con el motivo del servidor', async () => {
     const d = await cargarDatosParcela([-95.53, 18.03], {
-      fetchFn: api({ clima: climaOk, suelo: () => json({ estado: 'ERROR_DATOS', motivo: 'SoilGrids no respondio' }, 503), cultivos: cultivosOk, proxima: proximaOk }),
+      fetchFn: api({ clima: () => json({ estado: 'ERROR_DATOS', motivo: 'POWER y Open-Meteo no respondieron' }, 503), suelo: sueloOk, cultivos: cultivosOk, proxima: proximaOk }),
     });
-    expect(fallaObligatoria(d)).toEqual({ falla: 'suelo', error: { estado: 'ERROR_DATOS', motivo: 'SoilGrids no respondio', codigo: 503 } });
+    expect(fallaObligatoria(d)).toEqual({ falla: 'clima', error: { estado: 'ERROR_DATOS', motivo: 'POWER y Open-Meteo no respondieron', codigo: 503 } });
+  });
+
+  it('cualquier lugar se puede dibujar: sin datos de suelo la parcela carga, se avisa y no se inventa un suelo', async () => {
+    const d = await cargarDatosParcela([-30, 0], { // mar abierto: SoilGrids no tiene dato
+      fetchFn: api({ clima: climaOk, suelo: () => json({ estado: 'ERROR_DATOS', motivo: 'SoilGrids no tiene dato de textura en esta zona' }, 503), cultivos: cultivosOk, proxima: proximaOk }),
+    });
+    expect(fallaObligatoria(d)).toBeNull();
+    expect(d.suelo.ok).toBe(false);
+    const aviso = avisosDe(d).find((a) => a.codigo === 'SUELO_NO_DISPONIBLE')!;
+    expect(aviso.origen).toBe('suelo');
+    expect(aviso.mensaje).toContain('NO_EVALUABLE');
+    expect(aviso.mensaje).toContain('SoilGrids no tiene dato de textura');
   });
 
   it('el calendario es opcional: sin el la parcela carga y se avisa (el motor marca las fechas NO_EVALUABLE, no inventa uno)', async () => {
