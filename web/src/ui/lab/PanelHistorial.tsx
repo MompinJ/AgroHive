@@ -4,7 +4,7 @@ import { IconoBicho, IconoBrocha, IconoCalendario, IconoEscudo, IconoInsecticida
 import { masRecientesPrimero, NOMBRE_TIPO_HECHO, textoHecho, type Hecho, type TipoHecho } from './historial';
 import { fechaLarga } from './eventos';
 
-const ICONOS: Record<TipoHecho, () => ReactNode> = { siembra: IconoBrocha, insecticida: IconoInsecticida, cosecha: IconoCalendario, plaga: IconoBicho, problema: IconoEscudo };
+const ICONOS: Record<TipoHecho, () => ReactNode> = { siembra: IconoBrocha, insecticida: IconoInsecticida, cosecha: IconoCalendario, plaga: IconoBicho, problema: IconoEscudo, muerte: IconoBicho };
 const hora = (ms: number) => new Date(ms).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
 
 export function PanelHistorial({ hechos, onBorrar, abiertoInicial = false }: { hechos: readonly Hecho[]; onBorrar: () => void; abiertoInicial?: boolean }) {

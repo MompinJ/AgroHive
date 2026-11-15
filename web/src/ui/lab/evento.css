@@ -42,3 +42,9 @@
   .evento::before { animation: none; opacity: 0; }
 }
 @media (max-width: 520px) { .evento-aviso { top: 14%; padding: 12px 14px 14px; } .evento-titulo { font-size: 1.15rem; } }
+
+/* Plantas muertas: velo apagado y hojas marrones que caen. */
+.evento-muerte::before { background: radial-gradient(120% 90% at 50% 40%, rgb(70 60 40 / 0%) 30%, rgb(60 50 35 / 34%) 100%); }
+.evento-muerte .evento-aviso { border-color: #7a6a4a; }
+.evento-muerte .evento-tipo { color: #6b5a38; }
+.evento-brizna-marron { background: #8a6a3a; height: 7px; border-radius: 4px 1px; top: 8%; }

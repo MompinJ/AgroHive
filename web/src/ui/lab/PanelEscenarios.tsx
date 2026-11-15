@@ -5,6 +5,7 @@ import type { LaboratorioEstado } from '../useLaboratorio';
 import type { EstadoSerieBalance } from '../useSerieBalance';
 import type { RangoTiempo } from '../tiempo';
 import { ControlTiempo } from '../ControlTiempo';
+import { PanelIzq } from './PanelIzq';
 import { MarcaProblema } from '../../escena/MarcaProblema';
 import type { ProblemaCultivo } from '../../escena/problemas';
 import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, nombreCultivo, nombreEscenario, numero, porcentaje } from './piezas';
@@ -28,11 +29,11 @@ export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdas
   const metricas = resultado?.porEscenario[escenario];
   const encabezado = <EncabezadoPanel indice={2} titulo="¿Cómo le iría a tu plan?">Lo probamos con tres años reales del pasado en tu zona: uno seco, uno normal y uno lluvioso.</EncabezadoPanel>;
 
-  if (!plan || !visible) return <aside className="panel panel-izq" aria-label="Escenarios">{encabezado}<Cargando>Preparando…</Cargando></aside>;
+  if (!plan || !visible) return <PanelIzq etiqueta="Escenarios">{encabezado}<Cargando>Preparando…</Cargando></PanelIzq>;
   const pilar = metricas?.pilares;
 
   return <>
-    <aside className="panel panel-izq" aria-label="Escenarios">
+    <PanelIzq etiqueta="Escenarios">
       {encabezado}
 
       <div className="lab-escenarios" role="radiogroup" aria-label="Año de prueba">
@@ -71,7 +72,7 @@ export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdas
         <a className="lab-boton lab-boton-suave" href="#/laboratorio"><span aria-hidden="true">←</span> Cultivos</a>
         <button type="button" className="lab-boton lab-boton-primario" disabled={!estado.calculo} onClick={() => onAvanzar('comparacion')}>Comparar <span aria-hidden="true">→</span></button>
       </footer>
-    </aside>
+    </PanelIzq>
 
     <section className="lab-dock" aria-label="Recorrido en el tiempo">
       <ControlTiempo key={claveTiempo} fecha={fecha} rango={rango} listo={!!estado.calculo && celdasListas} fallo={!!errorCeldas} retener={retener} onFecha={onFecha} />

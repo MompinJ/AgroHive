@@ -4,7 +4,7 @@
 // cultivo). Un solo trazo de la brocha suele tocar varias celdas y se suelta muchas veces seguidas: los trazos consecutivos del mismo cultivo
 // y ciclo se agrupan en un hecho, para que la lista cuente lo que paso y no cada movimiento del raton.
 
-export type TipoHecho = 'siembra' | 'insecticida' | 'cosecha' | 'plaga' | 'problema';
+export type TipoHecho = 'siembra' | 'insecticida' | 'cosecha' | 'plaga' | 'problema' | 'muerte';
 
 export interface Hecho {
   id: number;
@@ -27,7 +27,7 @@ export interface Hecho {
 export const TOPE_HECHOS = 200;
 export const VENTANA_AGRUPAR_MS = 4000;
 
-export const NOMBRE_TIPO_HECHO: Record<TipoHecho, string> = { siembra: 'Siembra', insecticida: 'Insecticida', cosecha: 'Cosecha', plaga: 'Plaga', problema: 'Problema' };
+export const NOMBRE_TIPO_HECHO: Record<TipoHecho, string> = { siembra: 'Siembra', insecticida: 'Insecticida', cosecha: 'Cosecha', plaga: 'Plaga', problema: 'Problema', muerte: 'Plantas muertas' };
 
 const celdas = (n: number) => `${n} ${n === 1 ? 'celda' : 'celdas'}`;
 
@@ -60,7 +60,7 @@ export function registrar(lista: readonly Hecho[], nuevo: Omit<Hecho, 'id'>): He
 /** Del mas reciente al mas viejo, para mostrar. */
 export const masRecientesPrimero = (lista: readonly Hecho[]): Hecho[] => [...lista].reverse();
 
-const TIPOS: readonly string[] = ['siembra', 'insecticida', 'cosecha', 'plaga', 'problema'];
+const TIPOS: readonly string[] = ['siembra', 'insecticida', 'cosecha', 'plaga', 'problema', 'muerte'];
 
 /** Lee lo guardado sin confiar en el: descarta lo que no tenga la forma de un hecho. */
 export function leerHechos(crudo: string | null | undefined): Hecho[] {

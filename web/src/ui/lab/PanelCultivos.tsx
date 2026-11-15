@@ -5,6 +5,7 @@ import type { LaboratorioEstado } from '../useLaboratorio';
 import { agregarCiclo, aplicarAcomodando, cambiarSiembra, conteoPintado, diasCultivo, inicioDeVentana, nombreRotacion, nuevaRotacion, quitarCiclo, referenciaSiembra } from '../planes';
 import { climatologia, conveniencia } from './conveniencia';
 import type { PlagaZona, riesgosDelPlan } from './plagas';
+import { PanelIzq } from './PanelIzq';
 import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, fechaCorta, nombreCultivo, rangoVentana, textoMovidos } from './piezas';
 import { IconoBasura, IconoBicho, IconoCalendario, IconoEscudo, IconoInfo, IconoInsecticida, IconoMas, IconoQuitar } from './iconos';
 import type { Herramienta } from './BarraHerramientas';
@@ -32,10 +33,10 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
   const encabezado = <EncabezadoPanel indice={1} titulo="Pinta tus cultivos">Elige un cultivo y pinta los bloques de tu parcela.</EncabezadoPanel>;
 
   if (!datos || !plan || !visible) {
-    return <aside className="panel panel-izq" aria-label="Cultivos">
+    return <PanelIzq etiqueta="Cultivos">
       {encabezado}
       {estado.error ? <Aviso tipo="error" accion={{ texto: 'Reintentar', onClick: estado.reintentar }}>{estado.error}</Aviso> : <Cargando>Preparando clima, suelo y cultivos…</Cargando>}
-    </aside>;
+    </PanelIzq>;
   }
 
   const indice = plan.ciclos.indexOf(visible);
@@ -65,7 +66,7 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
     return true;
   }
 
-  return <aside className="panel panel-izq" aria-label="Cultivos">
+  return <PanelIzq etiqueta="Cultivos">
     {encabezado}
 
     <div className="panel-bloque">
@@ -161,5 +162,5 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
         : <p className="lab-listo" role="status"><span aria-hidden="true">●</span> Listo</p>}
       <button type="button" className="lab-boton lab-boton-primario" disabled={!estado.calculo} onClick={() => onAvanzar('escenarios')}>Ver escenarios <span aria-hidden="true">→</span></button>
     </footer>
-  </aside>;
+  </PanelIzq>;
 }

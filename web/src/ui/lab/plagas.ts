@@ -1,6 +1,6 @@
 // Plagas en el simulador (capa ilustrativa): con los registros de presencia de GBIF cerca de la
 // parcela (/api/plagas) y la tabla de cultivos hospederos con fuente, marca en que celdas hay plaga: en cada
-// grupo de celdas del mismo cultivo que una plaga registrada ataca, solo cerca del 20 % (un foco). Si el usuario
+// cultivo que una plaga registrada ataca, solo cerca del 20 % de las celdas (un foco fijo). Si el usuario
 // no aplica insecticida en esa celda y ciclo, la escena la dibuja comiendose la planta. No cambia el motor ni el ranking: un
 // registro de presencia no es un pronostico de dano.
 import type { PlanSiembra } from '../../../../contratos/tipos/contratos';
@@ -76,21 +76,21 @@ export function focoDelGrupo(grupo: readonly CeldaIJ[], semilla: string, fraccio
 }
 
 /**
- * Celdas con plaga en un ciclo: por cada cultivo que una plaga registrada ataca, solo el 20 % de sus celdas (un foco). Menos modelos
- * cargados y una infestacion creible en vez de toda la parcela a la vez. Es ilustrativo: ni el motor ni el ranking lo usan.
+ * Celdas con plaga en un ciclo. La zona de cada cultivo atacado (el 20 % de las celdas de la PARCELA, un foco) se fija con el plan, el ciclo, el
+ * cultivo y la plaga, y no depende de que se haya plantado: una celda lleva la plaga si su cultivo es atacado y cae en la zona de ese cultivo.
+ * Asi, plantar o borrar algo solo hace aparecer o desaparecer la plaga en las celdas afectadas; las demas no se mueven. Es ilustrativo.
  */
 export function celdasConPlaga(plan: PlanSiembra, celdas: readonly CeldaIJ[], presentes: readonly PlagaZona[], ciclo: number): Set<string> {
-  const grupos = new Map<string, { plaga: PlagaZona; celdas: CeldaIJ[] }>();
+  const zonas = new Map<string, Set<string>>();
+  const salida = new Set<string>();
   for (const c of celdas) {
     const cultivo = cultivoDeCelda(plan, c.id, ciclo);
     const plaga = plagaDeCultivo(presentes, cultivo);
     if (!plaga || !cultivo) continue;
-    const g = grupos.get(cultivo) ?? { plaga, celdas: [] };
-    g.celdas.push(c);
-    grupos.set(cultivo, g);
+    let zona = zonas.get(cultivo);
+    if (!zona) { zona = new Set(focoDelGrupo(celdas, `${plan.rotacionId}:${ciclo}:${cultivo}:${plaga.id}`)); zonas.set(cultivo, zona); }
+    if (zona.has(c.id)) salida.add(c.id);
   }
-  const salida = new Set<string>();
-  for (const [cultivo, g] of grupos) for (const id of focoDelGrupo(g.celdas, `${plan.rotacionId}:${ciclo}:${cultivo}:${g.plaga.id}`)) salida.add(id);
   return salida;
 }
 
