@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Insecticida: protege solo el riesgo y ligado a la malla (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/plagas.ts` (`firmaMalla`, `celdasEnRiesgo`), `web/src/ui/lab/Laboratorio.tsx`, `web/src/ui/lab/PanelCultivos.tsx`, `web/src/ui/lab/plagas.test.ts`; `docs/06`.
+- **Cambio:** (1) la protección con insecticida se guarda con una firma de la malla (tamaño de celda e ids); si cambia la malla empieza vacía, en vez de proteger celdas ajenas. (2) El botón del panel de cultivos protege solo los bloques atacados en el ciclo ("Proteger los N bloques en riesgo"), no toda la parcela; la barra de herramientas conserva "Insecticida en toda la parcela". (3) El panel aclara que el insecticida no tiene costo ni efecto en el rendimiento.
+- **Por qué:** la protección guardaba ids de celda que cambian con el tamaño de celda (mismo problema que el plan `porCelda`), y el botón anterior protegía celdas sin plaga, lo que no reflejaba una decisión.
+- **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
+- **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
+
 ### 2026-11-15 — Arreglo: rotaciones guardadas de otra parcela en parcelas dibujadas (Eduardo)
 
 - **Archivos:** `web/src/ui/planes.ts` (`reconstruirPlan`, `claveDeParcela`) y su prueba, `web/src/ui/useLaboratorio.ts`, `web/src/ui/lab/Laboratorio.tsx`.

@@ -10,7 +10,7 @@ import { colorCultivo, conflictosPlan, fechaParaVer, nombresCultivos, pintarCeld
 import type { PincelEscena } from '../../escena/pincel';
 import { PanelCultivos } from './PanelCultivos';
 import { BarraHerramientas, type Herramienta } from './BarraHerramientas';
-import { mapaPlagas, plagasPresentes, proteger, riesgosDelPlan } from './plagas';
+import { celdasEnRiesgo, firmaMalla, mapaPlagas, plagasPresentes, proteger, riesgosDelPlan } from './plagas';
 import { usePlagasZona, useProteccion } from './usePlagas';
 import { biomaDe, climatologia, NOMBRE_BIOMA } from './conveniencia';
 import { PanelEscenarios } from './PanelEscenarios';
@@ -121,13 +121,15 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   // Plagas registradas en la zona y proteccion con insecticida (por rotacion y ciclo).
   const plagasZona = usePlagasZona(datos?.parcela.centroide ?? null, datos?.esDemo ?? false);
   const presentes = useMemo(() => plagasPresentes(plagasZona), [plagasZona]);
-  const [proteccion, setProteccion] = useProteccion(datos ? estado.claveGuardado : null);
+  const celdasParcela = useMemo(() => datos?.parcela.celdas.map((c) => c.id) ?? [], [datos]);
+  // La proteccion va ligada a la malla: si cambia el tamano de celda, empieza vacia en vez de apuntar a celdas ajenas.
+  const claveProteccion = datos ? `${estado.claveGuardado}:${firmaMalla(celdasParcela, datos.parcela.tamanoCeldaM)}` : null;
+  const [proteccion, setProteccion] = useProteccion(claveProteccion);
   const rociar = useCallback((ids: string[]) => {
     if (!plan || !visible || !ids.length) return;
     setProteccion(proteger(proteccion, plan.rotacionId, visible.ciclo, ids));
     setRociado({ celdas: ids, clave: Date.now() });
   }, [plan, visible, proteccion, setProteccion]);
-  const celdasParcela = useMemo(() => datos?.parcela.celdas.map((c) => c.id) ?? [], [datos]);
   const riesgos = useMemo(() => (plan && visible ? riesgosDelPlan(plan, celdasParcela, presentes, proteccion).filter((r) => r.ciclo === visible.ciclo) : []), [plan, visible, celdasParcela, presentes, proteccion]);
   const plagasEscena = useMemo(() => (resultado && plan ? mapaPlagas(resultado.registros, presentes, proteccion, plan.rotacionId) : undefined), [resultado, plan, presentes, proteccion]);
 
@@ -158,6 +160,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     setCultivoPincel(null);
   } : null;
   const rociarTodo = () => rociar(celdasParcela);
+  const protegerRiesgo = () => rociar(celdasEnRiesgo(riesgos));
 
   const clima = useMemo(() => climatologia(datos?.serie), [datos?.serie]);
   const bioma = useMemo(() => biomaDe(clima), [clima]);
@@ -183,7 +186,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     {datos && paso !== 'comparacion' && <Mascota consejos={listaConsejos} paso={paso} />}
     <div className="lab-fondo">{fondo}</div>
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
-    {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} calculando={!estado.calculo || !celdasListas} riesgos={riesgos} hayPlagas={presentes.some((p) => plan?.ciclos.some((c) => p.cultivos.includes(c.cultivo)))} onRociarTodo={rociarTodo} presentes={presentes} />}
+    {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} calculando={!estado.calculo || !celdasListas} riesgos={riesgos} hayPlagas={presentes.some((p) => plan?.ciclos.some((c) => p.cultivos.includes(c.cultivo)))} onProteger={riesgos.length ? protegerRiesgo : null} presentes={presentes} />}
     {paso === 'cultivos' && datos && <BarraHerramientas herramienta={herramienta} setHerramienta={setHerramienta} tamano={tamano} setTamano={setTamano}
       onSembrarTodo={sembrarTodo} sembrarTexto={`Sembrar ${nombresCultivos[cultivoActivo ?? ''] ?? cultivoActivo ?? ''} en toda la parcela`}
       onRociarTodo={presentes.length ? rociarTodo : null} deshacer={estado.deshacer} rehacer={estado.rehacer} puedeDeshacer={estado.puedeDeshacer} puedeRehacer={estado.puedeRehacer} />}

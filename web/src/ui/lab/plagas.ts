@@ -30,6 +30,18 @@ export function plagaDeCultivo(presentes: readonly PlagaZona[], cultivo: string 
   return cultivo ? presentes.find((p) => p.cultivos.includes(cultivo)) : undefined;
 }
 
+/** Huella de la malla de la parcela (tamano de celda y ids). Si cambia, las celdas ya no son las mismas: la proteccion guardada no aplica. */
+export function firmaMalla(celdas: readonly string[], tamanoCeldaM: number): string {
+  let h = 0x811c9dc5; // FNV-1a de 32 bits: basta para distinguir mallas, no es seguridad
+  for (const s of [String(tamanoCeldaM), ...celdas]) for (let k = 0; k < s.length; k++) { h ^= s.charCodeAt(k); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(16);
+}
+
+/** Celdas que una plaga ataca en el ciclo y que no tienen insecticida: lo que "proteger" debe cubrir, sin el resto de la parcela. */
+export function celdasEnRiesgo(riesgos: readonly { sinProteger: readonly string[] }[]): string[] {
+  return [...new Set(riesgos.flatMap((r) => r.sinProteger))];
+}
+
 export function protegidas(proteccion: Proteccion, rotacion: string, ciclo: number): ReadonlySet<string> {
   return new Set(proteccion[rotacion]?.[String(ciclo)] ?? []);
 }

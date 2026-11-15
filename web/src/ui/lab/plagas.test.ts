@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { calendarioIsla, pintarCeldas, planesIniciales } from '../planes';
 import { parcelaConTerrenoDemo } from '../../escena/demo-motor';
-import { mapaPlagas, plagaDeCultivo, plagasPresentes, proteger, protegidas, riesgosDelPlan, type PlagaZona } from './plagas';
+import { celdasEnRiesgo, firmaMalla, mapaPlagas, plagaDeCultivo, plagasPresentes, proteger, protegidas, riesgosDelPlan, type PlagaZona } from './plagas';
 
 const zona: PlagaZona[] = [
   { id: 'cogollero', nombreComun: 'Gusano cogollero', tipoVisual: 'gusano', estado: 'presente', registros: 40, cultivos: ['maiz', 'sorgo'] },
@@ -47,5 +47,21 @@ describe('plagas en el simulador', () => {
     expect(c1.find((x) => x.cultivo === 'frijol')!.plaga.id).toBe('chapulin');
     // Ciclo 2 es frijol en todo: chapulin en todas las celdas.
     expect(r.find((x) => x.ciclo === 2)!.sinProteger).toHaveLength(celdas.length);
+  });
+
+  it('la firma de la malla cambia con el tamano de celda o con los ids, y no con el orden de llamada', () => {
+    const a = firmaMalla(['c-0-0', 'c-0-1'], 70.71);
+    expect(firmaMalla(['c-0-0', 'c-0-1'], 70.71)).toBe(a);
+    expect(firmaMalla(['c-0-0', 'c-0-1'], 35)).not.toBe(a);
+    expect(firmaMalla(['c-0-0', 'c-0-2'], 70.71)).not.toBe(a);
+  });
+
+  it('proteger el riesgo cubre solo los bloques atacados, sin repetir ni tocar el resto', () => {
+    const pintado = pintarCeldas(plan, parcela, 1, [celdas[0]!], 'frijol', calendarioIsla);
+    const r = riesgosDelPlan(pintado, celdas, plagasPresentes(zona), {}).filter((x) => x.ciclo === 1);
+    const enRiesgo = celdasEnRiesgo(r);
+    expect(enRiesgo).toHaveLength(celdas.length); // maiz y frijol: el chapulin ataca ambos
+    expect(celdasEnRiesgo([{ sinProteger: [celdas[1]!, celdas[1]!] }])).toEqual([celdas[1]]);
+    expect(celdasEnRiesgo([])).toEqual([]);
   });
 });

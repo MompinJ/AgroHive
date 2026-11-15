@@ -13,12 +13,12 @@ import { AvisosDatos } from '../../escena/AvisosDatos';
 
 export type { Herramienta } from './BarraHerramientas';
 
-export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, cultivoActivo, setCultivoPincel, calculando, riesgos, hayPlagas, onRociarTodo, presentes }: {
+export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, cultivoActivo, setCultivoPincel, calculando, riesgos, hayPlagas, onProteger, presentes }: {
   estado: LaboratorioEstado; onAvanzar: (d: PasoLab) => void;
   herramienta: Herramienta; setHerramienta: (h: Herramienta) => void;
   cultivoActivo: string | null; setCultivoPincel: (c: string | null) => void;
   calculando: boolean;
-  riesgos: ReturnType<typeof riesgosDelPlan>; hayPlagas: boolean; onRociarTodo: () => void; presentes: readonly PlagaZona[];
+  riesgos: ReturnType<typeof riesgosDelPlan>; hayPlagas: boolean; onProteger: (() => void) | null; presentes: readonly PlagaZona[];
 }) {
   const { rotacion, setRotacion, ciclo, setCiclo } = estado.seleccion;
   const [errorFecha, setErrorFecha] = useState('');
@@ -127,7 +127,8 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
     {riesgos.length > 0 && <div className="lab-plagas" role="status">
       <p className="lab-plagas-titulo"><IconoBicho /> Plagas en tu zona</p>
       <ul>{riesgos.map((r) => <li key={`${r.plaga.id}:${r.cultivo}`}><strong>{r.plaga.nombreComun}</strong> ataca tu {nombreCultivo(r.cultivo).toLowerCase()}: {r.sinProteger.length} {r.sinProteger.length === 1 ? 'bloque' : 'bloques'} sin insecticida.</li>)}</ul>
-      <button type="button" className="lab-boton lab-boton-suave lab-boton-ancho" onClick={onRociarTodo}><IconoInsecticida /> Echar insecticida en todo el ciclo</button>
+      {onProteger && <button type="button" className="lab-boton lab-boton-suave lab-boton-ancho" onClick={onProteger}><IconoInsecticida /> Proteger los {riesgos.reduce((n, r) => n + r.sinProteger.length, 0)} {riesgos.reduce((n, r) => n + r.sinProteger.length, 0) === 1 ? 'bloque' : 'bloques'} en riesgo</button>}
+      <p className="panel-ayuda">El insecticida no tiene costo ni efecto en el rendimiento aquí: el simulador no lo modela, porque no hay datos con fuente para cuantificarlo.</p>
     </div>}
     {riesgos.length === 0 && hayPlagas && <p className="lab-protegido"><IconoEscudo /> Este ciclo está protegido de las plagas registradas en tu zona.</p>}
 
