@@ -35,6 +35,7 @@
 | [Buzón del equipo](../herramientas/buzon/README.md) | Mensajes entre las sesiones de IA por la red local del evento (servidor en la laptop de Mompin). No reemplaza a git. |
 | [`AgroVault/`](../AgroVault/Bienvenido.md) | Vault de Obsidian: resumen para Claude, Codex y Cursor, APIs investigadas y pendientes. Resume `docs/` y `contratos/`, no decide. |
 | [Trailer de 30 s](trailer-30s.md) | Guion del video de la entrega (voz en inglés, subtítulos EN y ES), lista de tomas, plan de armado y esquema de 7 diapositivas. Reemplaza al guion largo para la entrega. |
+| [Presentación de 7 diapositivas](presentacion.md) | Deck en inglés de la entrega (enlace al deck), texto de cada diapositiva, notas del orador, capturas que faltan y fuente de cada cifra. |
 | [Hallazgos del back](hallazgos-back.md) | Auditoría de fallos de `api/`, motor y contratos (14/11 noche): qué se arregló, qué se propone y qué falta decidir. |
 | [`contratos/`](../contratos/README.md) | Contratos de datos (JSON Schema), ejemplos y tipos TS. Fuente de verdad de los formatos. |
 

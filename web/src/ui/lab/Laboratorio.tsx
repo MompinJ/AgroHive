@@ -30,6 +30,9 @@ const BIOMA_NEUTRO: Bioma = 'templado';
 import { PanelEscenarios } from './PanelEscenarios';
 import { PanelComparacion } from './PanelComparacion';
 import { Aviso, nombreCultivo, textoMovidos } from './piezas';
+import { useIdioma } from '../i18n/Idioma';
+import { nombrePlaga } from '../i18n/textos/laboratorio';
+import { koppenEn } from '../i18n/textos/terreno';
 import { Globo } from './Globo';
 import { Mascota } from './Mascota';
 import { consejos } from './consejos';
@@ -65,6 +68,7 @@ function useVentana() {
 
 export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEstado; paso: PasoLab; onAvanzar: (destino: PasoLab) => void }) {
   const { rotacion, ciclo, escenario, fechaElegida, setFecha } = estado.seleccion;
+  const { idioma, t } = useIdioma();
   const [webglDisponible] = useState(puedeUsarWebGL);
   const [celdas, setCeldas] = useState<{ clave: string; valor: ResultadoCeldas } | null>(null);
   const [falloCeldas, setFalloCeldas] = useState<{ clave: string; motivo: string } | null>(null);
@@ -110,7 +114,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
       setFalloCeldas(null);
       void conLimite(calculo.cliente.celdas(plan.rotacionId, escenario, fecha)).then((valor) => {
         if (activo) { setCeldas({ clave: claveCeldas, valor }); setFalloCeldas(null); }
-      }).catch((e: unknown) => { if (activo) setFalloCeldas({ clave: claveCeldas, motivo: e instanceof Error ? e.message : 'No se pudieron consultar las celdas.' }); });
+      }).catch((e: unknown) => { if (activo) setFalloCeldas({ clave: claveCeldas, motivo: e instanceof Error ? e.message : t('lab.errorCeldas') }); });
     }, 120);
     return () => { activo = false; clearTimeout(reloj); };
   }, [estado.calculo, plan, escenario, fecha, claveCeldas]);
@@ -171,11 +175,11 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
       const fecha = propia && rango ? (propia > rango.hasta ? rango.hasta : propia) : propia ?? rango?.hasta ?? visible.siembra;
       return { nombre: nombreCultivo(c), celdas, fecha };
     });
-  }, [plan, visible, celdasParcela, datos, rango]);
+  }, [plan, visible, celdasParcela, datos, rango, idioma]);
   const plagaActiva = useMemo<PlagaActiva | null>(() => {
     const r = [...riesgos].sort((a, b) => b.sinProteger.length - a.sinProteger.length)[0];
-    return r ? { plaga: r.plaga.nombreComun, cultivo: nombreCultivo(r.cultivo), bloques: r.sinProteger.length } : null;
-  }, [riesgos]);
+    return r ? { plaga: nombrePlaga(r.plaga.nombreComun), cultivo: nombreCultivo(r.cultivo), bloques: r.sinProteger.length } : null;
+  }, [riesgos, idioma]);
   // Con un aviso o una animacion en pantalla, la reproduccion espera; y unos segundos mas despues, para que se alcance a leer.
   const [retener, setRetener] = useState(false);
   useEffect(() => {
@@ -276,7 +280,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const koppen = useMemo(() => datos?.clima ?? climaDeSerie(datos?.serie), [datos?.clima, datos?.serie]);
   const bioma = koppen.bioma;
   const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
-  const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
+  const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>{t('lab.sinWebgl')}</strong><p>{t('lab.sinWebglAyuda')}</p></div>
     : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
       <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} tMediaDia={clima.tMediaDia} serieClima={datos.serie} serieVistas={serie.datos} rangosTemperatura={rangosCultivos} rociado={rociado} bioma={bioma ?? BIOMA_NEUTRO} />
     </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
@@ -289,9 +293,9 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     resultado: estado.calculo?.ranking.rotaciones.find((r) => r.rotacionId === plan?.rotacionId) ?? null,
     ordenadas: ordenarRotaciones(estado.calculo?.ranking.rotaciones ?? []),
     nombreRotacion: (id) => nombreRotacion(id, estado.planes), leguminosas, ndvi: evidencia.ndvi, smap: evidencia.smap,
-    bioma: koppen.estado === 'EVALUABLE' ? { nombre: `clima ${koppen.descripcion}`, tMedia: clima.tMediaAnual, lluvia: clima.lluviaAnualMm } : null,
-    riesgos: riesgos.map((r) => ({ plaga: r.plaga.nombreComun, cultivo: nombreCultivo(r.cultivo), bloques: r.sinProteger.length })),
-  }), [paso, plan, ciclo, datos, escenario, estado.calculo, estado.planes, leguminosas, evidencia, riesgos, koppen, clima]);
+    bioma: koppen.estado === 'EVALUABLE' ? { nombre: t('terreno.clima', { descripcion: idioma === 'en' ? koppenEn(koppen.clase) : koppen.descripcion }), tMedia: clima.tMediaAnual, lluvia: clima.lluviaAnualMm } : null,
+    riesgos: riesgos.map((r) => ({ plaga: nombrePlaga(r.plaga.nombreComun), cultivo: nombreCultivo(r.cultivo), bloques: r.sinProteger.length })),
+  }), [paso, plan, ciclo, datos, escenario, estado.calculo, estado.planes, leguminosas, evidencia, riesgos, koppen, clima, idioma]);
   return <div className={`lab lab-paso-${paso}`}>
     <Globo />
     {datos && paso !== 'comparacion' && <Mascota consejos={listaConsejos} paso={paso} />}
@@ -301,15 +305,15 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
     {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} calculando={!estado.calculo || !celdasListas} riesgos={riesgos} hayPlagas={presentes.some((p) => plan?.ciclos.some((c) => p.cultivos.includes(c.cultivo)))} onProteger={riesgos.length ? protegerRiesgo : null} presentes={presentes} />}
     {paso === 'cultivos' && datos && <BarraHerramientas herramienta={herramienta} setHerramienta={setHerramienta} tamano={tamano} setTamano={setTamano}
-      onSembrarTodo={sembrarTodo} sembrarTexto={`Sembrar ${cultivoActivo ? nombreCultivo(cultivoActivo) : ''} en toda la parcela`}
+      onSembrarTodo={sembrarTodo} sembrarTexto={t('lab.sembrarTodo', { cultivo: cultivoActivo ? nombreCultivo(cultivoActivo) : '' })}
       onRociarTodo={presentes.length ? rociarTodo : null} deshacer={estado.deshacer} rehacer={estado.rehacer} puedeDeshacer={estado.puedeDeshacer} puedeRehacer={estado.puedeRehacer} />}
     {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} retener={retener} problemas={problemasCultivos} />}
     {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} hechos={historial.hechos} plagasDe={(id) => {
       const p = estado.planes.find((x) => x.rotacionId === id);
-      return p ? riesgosDelPlan(p, celdasParcela, presentes, proteccion, focosDelPlan(p, celdasIJ, presentes)).map((r) => ({ ciclo: r.ciclo, plaga: r.plaga.nombreComun, cultivo: nombreCultivo(r.cultivo), bloques: r.sinProteger.length })) : [];
+      return p ? riesgosDelPlan(p, celdasParcela, presentes, proteccion, focosDelPlan(p, celdasIJ, presentes)).map((r) => ({ ciclo: r.ciclo, plaga: nombrePlaga(r.plaga.nombreComun), cultivo: nombreCultivo(r.cultivo), bloques: r.sinProteger.length })) : [];
     }} />}
     {aviso && <Aviso tipo="error" className="lab-toast" onCerrar={() => setAviso('')}>{aviso}</Aviso>}
     {!aviso && nota && <Aviso tipo="info" className="lab-toast" onCerrar={() => setNota('')}>{nota}</Aviso>}
-    {paso !== 'cultivos' && errorCeldas && <Aviso tipo="error" className="lab-toast" accion={{ texto: 'Reintentar', onClick: () => setIntentoCeldas((n) => n + 1) }}>{errorCeldas}</Aviso>}
+    {paso !== 'cultivos' && errorCeldas && <Aviso tipo="error" className="lab-toast" accion={{ texto: t('cultivos.reintentar'), onClick: () => setIntentoCeldas((n) => n + 1) }}>{errorCeldas}</Aviso>}
   </div>;
 }
