@@ -11,20 +11,21 @@ describe('panel izquierdo plegable', () => {
     expect(html).toContain('contenido');
     expect(html).toContain('aria-label="Ocultar el panel"');
     expect(html).toContain('aria-expanded="true"');
-    expect(html).not.toContain('panel-plegado');
+    expect(html).not.toContain('panel-izq-oculto');
   });
-  it('plegado deja solo una pestana con el titulo y sin el contenido', () => {
+  it('plegado se desliza fuera (sigue en el DOM para poder animarse), oculto para lectores y sin foco, y muestra una pestana', () => {
     fijarPanelPlegado(true);
     const html = renderToStaticMarkup(<PanelIzq etiqueta="Escenarios"><p>contenido</p></PanelIzq>);
-    expect(html).toContain('panel-plegado');
+    expect(html).toContain('panel-izq-oculto');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain('inert');
+    expect(html).toContain('panel-pestana-visible');
     expect(html).toContain('Escenarios');
-    expect(html).toContain('aria-expanded="false"');
-    expect(html).not.toContain('contenido');
   });
   it('el estado es uno solo para los dos paneles', () => {
     expect(panelPlegado()).toBe(false);
     fijarPanelPlegado(true);
     expect(panelPlegado()).toBe(true);
-    expect(renderToStaticMarkup(<PanelIzq etiqueta="Cultivos"><i /></PanelIzq>)).toContain('panel-plegado');
+    expect(renderToStaticMarkup(<PanelIzq etiqueta="Cultivos"><i /></PanelIzq>)).toContain('panel-izq-oculto');
   });
 });

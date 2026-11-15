@@ -455,11 +455,24 @@
 .historial-pie { padding: 8px 12px 12px; display: flex; justify-content: flex-end; border-top: 1px solid var(--color-border, #e0e6e0); }
 @media (max-width: 520px) { .boton-historial-texto { display: none; } }
 
-/* Panel izquierdo plegable: boton en la esquina y, plegado, una pestana con el titulo. */
-.panel-izq { position: absolute; }
+/* Panel izquierdo plegable: se desliza a la izquierda; la barra de herramientas y el control de tiempo se mueven con el. */
+.panel-izq { position: absolute; transition: transform .38s cubic-bezier(.4, 0, .2, 1), opacity .3s ease, visibility 0s linear 0s; }
+.panel-izq-oculto { transform: translateX(calc(-100% - 2 * var(--lab-borde))); opacity: 0; visibility: hidden; pointer-events: none; transition: transform .38s cubic-bezier(.4, 0, .2, 1), opacity .3s ease, visibility 0s linear .38s; }
 .panel-plegar { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; color: var(--color-text, #1d2b21); font: inherit; font-size: .82rem; font-weight: 700; cursor: pointer; }
 .panel-plegar-esquina { position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; justify-content: center; border-radius: 50%; background: var(--color-panel, #eef3ee); }
 .panel-plegar-esquina:hover { background: var(--color-sage-50, #e3efe6); }
-.panel-plegado { width: auto !important; max-height: none !important; height: auto !important; padding: 6px 12px 6px 8px !important; border-radius: 999px; overflow: visible; }
-.panel-plegado .panel-plegar { min-height: 40px; }
-@media (max-width: 760px) { .panel-plegado { top: auto; bottom: var(--lab-borde); right: auto; } }
+.panel-pestana { position: absolute; z-index: 10; top: var(--lab-top); left: var(--lab-borde); display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 14px 6px 10px; border: 1px solid rgb(255 255 255 / 70%); border-radius: 999px; background: var(--lab-vidrio); backdrop-filter: saturate(1.5) blur(18px); -webkit-backdrop-filter: saturate(1.5) blur(18px); box-shadow: var(--shadow-float); color: var(--color-text, #1d2b21); font: inherit; font-size: .85rem; font-weight: 700; cursor: pointer; opacity: 0; visibility: hidden; transform: translateX(-24px); pointer-events: none; transition: opacity .3s ease .12s, transform .38s cubic-bezier(.4, 0, .2, 1) .08s, visibility 0s linear .45s; }
+.panel-pestana-visible { opacity: 1; visibility: visible; transform: none; pointer-events: auto; transition: opacity .3s ease .2s, transform .38s cubic-bezier(.4, 0, .2, 1) .15s, visibility 0s linear 0s; }
+/* La barra de herramientas y el control de tiempo siguen al panel. */
+.barra-herr, .lab-dock { transition: left .38s cubic-bezier(.4, 0, .2, 1); }
+body.panel-izq-plegado .barra-herr { left: calc(var(--lab-borde) + 150px); }
+body.panel-izq-plegado .lab-dock { left: calc(var(--lab-borde) + 150px); }
+@media (max-width: 760px) {
+  .panel-izq-oculto { transform: translateY(calc(100% + 2 * var(--lab-borde))); }
+  .panel-pestana { top: auto; bottom: var(--lab-borde); transform: translateY(24px); }
+  .panel-pestana-visible { transform: none; }
+  body.panel-izq-plegado .barra-herr, body.panel-izq-plegado .lab-dock { left: var(--lab-borde); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel-izq, .panel-izq-oculto, .panel-pestana, .panel-pestana-visible, .barra-herr, .lab-dock { transition: none; }
+}
