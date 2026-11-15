@@ -5,6 +5,7 @@
   --landing-cream: var(--color-canvas);
   --landing-blur: 3.5px;
   --landing-radius: var(--radius-pill);
+  --landing-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   color: var(--landing-ink);
   font-family: var(--font-ui);
@@ -26,8 +27,32 @@
   .landing-button:hover { background: var(--color-action-hover); color: var(--color-on-action); }
 }
 @media (prefers-reduced-motion: no-preference) {
+  .landing-background { animation: landing-acercamiento 1200ms var(--landing-ease-out) both; }
+  .landing-content > * { animation: landing-entrada 600ms var(--landing-ease-out) backwards; }
+  .landing-content > :nth-child(2) { animation-delay: 60ms; }
+  .landing-content > :nth-child(3) { animation-delay: 120ms; }
+  .landing-content > :nth-child(4) { animation-delay: 180ms; }
+  .landing-content > :nth-child(5) { animation-delay: 240ms; }
+  .landing-content > :nth-child(6) { animation-delay: 300ms; }
+  .landing-content > :focus-within { animation: none; }
   .landing-button { transition: background-color 150ms ease-out, transform 150ms ease-out; }
   .landing-button:active { transform: scale(.96); }
+}
+@keyframes landing-entrada {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes landing-acercamiento {
+  from { transform: scale(1); }
+  to { transform: scale(1.025); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-content > * { animation: landing-fundido 200ms ease-out; }
+  .landing-content > :focus-within { animation: none; }
+}
+@keyframes landing-fundido {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 @media (max-width: 760px) {
   .landing-hero { min-height: max(850px, 100svh); padding: 48px 20px 28px; }

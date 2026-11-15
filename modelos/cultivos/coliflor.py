@@ -10,7 +10,7 @@ CUALITATIVOS, no medidas reales: la planta madura llega a ~10 unidades y la pell
 (de ~3 a ~7), mas baja que el brocoli.
 
 Rasgos que se respetan:
-- Hojas GRANDES, largas y erguidas, gruesas y cerosas, verde azulado (glaucas, brasica_hoja_*), con
+- Hojas GRANDES, largas y erguidas, gruesas y cerosas, verde azulado (glaucas, chicharo_hoja_*), con
   la nervadura central clara y marcada. Cada hoja es una tira oblonga en tres tramos: base angosta y
   oscura casi vertical, lamina ancha y punta clara que se abre un poco hacia afuera.
 - PELLA (cabeza) en el centro: domo crema hecho de grumos apretados (botones florales sin abrir,
@@ -37,7 +37,7 @@ Fuentes de forma (consultadas el 15/11):
 Las hojas erguidas y largas son el diseno acordado con el equipo (las fuentes hablan de hojas
 grandes, cerosas y verde azulado que rodean el centro, no de su angulo).
 
-Colores solo de la paleta fija: brasica_hoja_dark/_hoja/_hoja_light (compartidos con brocoli y col),
+Colores solo de la paleta fija: chicharo_hoja_dark/_hoja/_hoja_light (compartidos con brocoli y col),
 coliflor_cabeza y coliflor_cabeza_dark (pella), wood_dark y podrido_dark (semilla), y los marchitos
 compartidos (hoja_seca*, hoja_marchita, podrido*, moho*). Las hojas giran en los tres ejes con `marco`
 y `caja` de calabacita.py (rotacion Euler ZYX alrededor del centro de cada cubo, sin mover la caja).
@@ -61,9 +61,9 @@ from calabacita import marco, caja, en  # noqa: E402  (giros libres en Euler ZYX
 BASE = (0, 2, 0)      # anclaje: encima del monticulo (igual que el maiz)
 
 # tramos de hoja: (base, lamina, punta)
-VIEJA = ('brasica_hoja_dark', 'brasica_hoja_dark', 'brasica_hoja')
-MEDIA = ('brasica_hoja_dark', 'brasica_hoja', 'brasica_hoja_light')
-NUEVA = ('brasica_hoja', 'brasica_hoja_light', 'brasica_hoja_light')
+VIEJA = ('chicharo_hoja_dark', 'chicharo_hoja_dark', 'chicharo_hoja')
+MEDIA = ('chicharo_hoja_dark', 'chicharo_hoja', 'chicharo_hoja_light')
+NUEVA = ('chicharo_hoja', 'chicharo_hoja_light', 'chicharo_hoja_light')
 SECA = ('hoja_seca_dark', 'hoja_seca', 'hoja_seca_light')
 MARCHITA = ('hoja_seca', 'hoja_marchita', 'hoja_seca_light')
 PODRIDA = ('podrido', 'hoja_seca_dark', 'hoja_seca')
@@ -158,18 +158,18 @@ def brote():
     m = Model('coliflor_brote', PAL)
     monticulo(m)
     m.box('hoyo', (0, 2, 0), (3.4, 0.16, 2.8), 'suelo_humedo', yaw=-10)
-    m.box('tallito', BASE, (0.5, 1.3, 0.5), 'brasica_hoja_light')
+    m.box('tallito', BASE, (0.5, 1.3, 0.5), 'chicharo_hoja_light')
     top = (0, 3.2, 0)
     for k, yaw in enumerate((100, 280)):
         r = marco(yaw, -14)
-        caja(m, f'cotiledon{k}_pec', en(top, r, (0, 0, 0.4)), (0.35, 0.3, 0.8), 'brasica_hoja', r)
+        caja(m, f'cotiledon{k}_pec', en(top, r, (0, 0, 0.4)), (0.35, 0.3, 0.8), 'chicharo_hoja', r)
         centro = en(top, r, (0, 0, 0.8))
         for s in (-1, 1):   # dos lobulos abiertos en V: la punta queda con muesca (acorazonado)
             rl = marco(yaw + 22 * s, -12)
             caja(m, f'cotiledon{k}_lobulo{s + 1}', en(centro, rl, (0, 0, 0.75)), (1.0, 0.28, 1.5),
-                 'brasica_hoja' if s < 0 else 'brasica_hoja_light', rl)
+                 'chicharo_hoja' if s < 0 else 'chicharo_hoja_light', rl)
     hoja(m, 'hoja1', mover(top, 200, 0.1, 0.05), 200, [(-66, 1.3, 0.7), (-48, 1.7, 1.4)],
-         cols=('brasica_hoja', 'brasica_hoja_light'), grueso=0.25)
+         cols=('chicharo_hoja', 'chicharo_hoja_light'), grueso=0.25)
     return m
 
 
@@ -179,7 +179,7 @@ def crecimiento():
     hojitas, todavia sin pella. 26 cubos con el lomo."""
     m = Model('coliflor_crecimiento', PAL)
     monticulo(m)
-    m.box('tallo', BASE, (1.3, 0.7, 1.3), 'brasica_hoja_light', yaw=15)
+    m.box('tallo', BASE, (1.3, 0.7, 1.3), 'chicharo_hoja_light', yaw=15)
     # (yaw, p1, L1, W1, p2, L2, W2, cols)
     specs = [(20, -58, 2.8, 1.8, -42, 3.2, 2.9, VIEJA), (157, -60, 2.8, 1.8, -44, 3.2, 2.9, VIEJA),
              (295, -64, 2.8, 1.7, -48, 3.1, 2.8, MEDIA), (72, -68, 2.7, 1.6, -54, 3.0, 2.6, MEDIA),
@@ -187,9 +187,9 @@ def crecimiento():
              (125, -80, 2.2, 1.3, -70, 2.2, 1.9, NUEVA)]
     for k, (yaw, p1, L1, W1, p2, L2, W2, cols) in enumerate(specs):
         hoja(m, f'hoja{k}', mover(BASE, yaw, 0.5, 0.5), yaw, [(p1, L1, W1), (p2, L2, W2)],
-             cols=cols, nervio='brasica_hoja_light' if cols != NUEVA else 'brasica_hoja')
-    m.box('cogollo', (0, 2.6, 0), (1.2, 1.4, 1.2), 'brasica_hoja_light', yaw=40)
-    m.box('cogollo2', (0.1, 2.6, -0.1), (0.8, 2.0, 0.8), 'brasica_hoja', yaw=-10)
+             cols=cols, nervio='chicharo_hoja_light' if cols != NUEVA else 'chicharo_hoja')
+    m.box('cogollo', (0, 2.6, 0), (1.2, 1.4, 1.2), 'chicharo_hoja_light', yaw=40)
+    m.box('cogollo2', (0.1, 2.6, -0.1), (0.8, 2.0, 0.8), 'chicharo_hoja', yaw=-10)
     return m
 
 
@@ -200,19 +200,19 @@ def madurez():
     lados. 51 cubos con el lomo."""
     m = Model('coliflor_madurez', PAL)
     monticulo(m)
-    m.box('tallo', BASE, (1.8, 1.0, 1.8), 'brasica_hoja_light', yaw=20)
+    m.box('tallo', BASE, (1.8, 1.0, 1.8), 'chicharo_hoja_light', yaw=20)
     # exteriores: (yaw, p1, p2, p3, cols); las del frente de la camara (yaw ~35) mas abiertas
     ext = [(35, -64, -46, -26, MEDIA), (86, -70, -54, -32, VIEJA), (138, -78, -64, -42, MEDIA),
            (190, -80, -68, -46, VIEJA), (242, -78, -66, -44, MEDIA), (294, -72, -58, -36, VIEJA),
            (346, -66, -50, -28, MEDIA)]
     for k, (yaw, p1, p2, p3, cols) in enumerate(ext):
         hoja(m, f'ext{k}', mover(BASE, yaw, 2.6, 0.3), yaw, [(p1, 3.0, 2.4), (p2, 3.6, 3.6), (p3, 2.2, 2.7)],
-             cols=cols, nervio='brasica_hoja_light')
+             cols=cols, nervio='chicharo_hoja_light')
     pella(m, 'pella', 3.0, 3.0)
     # interiores de blanqueo: suben pegadas a la pella y se doblan sobre ella, sin taparla toda
     for k, yaw in enumerate((165, 235, 300)):
         hoja(m, f'int{k}', mover(BASE, yaw, 3.3, 0.6), yaw, [(-86, 4.6, 2.6), (-160, 2.6, 2.8)],
-             cols=('brasica_hoja', 'brasica_hoja_light'))
+             cols=('chicharo_hoja', 'chicharo_hoja_light'))
     return m
 
 

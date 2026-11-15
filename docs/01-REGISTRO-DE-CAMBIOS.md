@@ -9,6 +9,60 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** Eduardo vio "plantas incompletas o que no funcionan": en desarrollo eran los modelos nuevos que Vite no veía; en todas partes, 12 cultivos largos bloqueados en la paleta y la caña que el motor no puede evaluar.
 - **Pendiente:** que el motor evalúe ciclos de más de un año de clima (caña); es del motor (Mompin).
 
+### 2026-11-15 — Hero de Inicio con entrada animada y accesible (balam; registrado por Mompin)
+
+- **Archivos:** `web/src/ui/inicio.css`, `DESIGN.md` (rama `balam`, `23cebe4`, PR #11).
+- **Cambio:** entrada escalonada del hero (600 ms, desfases de 60 ms) y acercamiento suave del fondo (1200 ms, una vez). Solo anima `transform` y `opacity`; con movimiento reducido queda un fundido de 200 ms y el foco con teclado cancela la entrada.
+- **Por qué:** mejora visual, sin cambio de alcance, textos, datos ni contratos.
+- **Toca archivos de otros:** el front es de Eduardo (D1); el cambio es aditivo y aislado en `inicio.css`.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — MF6: revisión de tres elecciones del catálogo (Mafer)
+
+- **Archivos:** `datos/catalogos/README.md` (tres filas de «Elecciones que una persona debe revisar»).
+- **Cambio:** `[DECIDIDO]` Mafer, 15/11 (tarea MF6 de Mompin, `docs/16`): se mantienen (1) el chícharo en fresco (Kc final 1.10, p 0.35, subfila `Fresh`), (2) el Kc final del trigo en 0.25 (cosecha mecanizada) y (3) el chile con los parámetros del pimiento dulce, rotulado como equivalencia de especie. Las tres filas pasan de «revisar» a «revisado». Ningún valor cambia: `cultivos.json` y los JSON generados quedan igual.
+- **Límites:** revisado con lo que dice el propio README y el catálogo; no se cotejó con el PDF de FAO-56 (eso es MF3 y MF5). Las demás filas marcadas «revisar» (cebada, trigo y avena por altitud; maíz dulce; yuca) siguen abiertas.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — Calendario MUNDIAL, parte 4: FAO Crop Calendar encima (CC BY-NC-SA, 57 países) (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
+
+- **Decisión aplicada:** `[DECIDIDO]` Mompin, 15/11 (docs/13): FAO Crop Calendar entra con la licencia más restrictiva (CC BY-NC-SA 4.0), en carpeta aparte con su aviso; GGCMI es la base y FAO va encima; donde no hay GGCMI, FAO cubre. Anotado en docs/11 que condiciona la licencia del repo (D, para la entrega).
+- **Archivos:** `datos/calendario/fao-crop-calendar/` (nuevo: `LICENCIA.md`, `extraer_fao.py`, `fao-crop-calendar.json` de 288 KB), `api/app/calendario.py`, `api/tests/test_calendario.py`, `datos/calendario/LEEME.md`, `docs/04`, `docs/11`, `docs/13`, `datos/catalogos/README.md`, `api/README.md`, `AgroVault/Compartido/APIs.md` y `Resumen.md`.
+- **Cambio:** en los 57 países de FAO Crop Calendar (África, Asia, Andes; no trae México ni EE. UU.) la ventana de cada cultivo y temporada sale de FAO cuando la hay: unión de los periodos de siembra de las zonas agroecológicas del país, porque FAO no publica sus límites; tramos separados en una temporada no se eligen (`FAO_ZONAS_DISTINTAS`). Cada ventana cita a FAO y la licencia; la respuesta lleva `FAO_CROP_CALENDAR_NC_SA`. Advertencia nueva `CALENDARIO_RESUMEN` con el conteo del punto.
+- **Conteo:** 18/40 en cualquier punto (GGCMI y MIRCA); con FAO, Kenia 23, Perú 23, Etiopía 23, Bangladesh 24, Pakistán 28, Colombia 29 y Marruecos 33. Memoria: 144 MB de RSS con todos los extractos.
+- **Para el front:** contrato sin cambios. En países de FAO aparecen ventanas que cruzan el año (por ejemplo, octubre a marzo); el motor ya las acepta (`dentroDeVentana`).
+
+### 2026-11-15 — Calendario MUNDIAL, parte 3: MIRCA2000 y frijol desde GGCMI `bea`; 18 de 40 cultivos con ventana (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
+
+- **Decisiones:** `[DECIDIDO]` Mompin, 15/11, registradas en `docs/13`: (1) frijol y ejote se toman de GGCMI `bea` ("Beans" en el protocolo ISIMIP3, sin especie) como equivalencia `SUPUESTO`, con la advertencia `FRIJOL_SIN_ESPECIE`; (2) FAO Crop Calendar entra con la licencia más restrictiva (CC BY-NC-SA), en carpeta separada (parte 4).
+- **Archivos:** `api/app/calendario.py`, `api/tests/test_calendario.py`, `datos/calendario/extraer_mirca.py` (nuevo), `mirca-rf.npz` (1.3 MB) y `mirca-rf.json` (nuevos), `datos/calendario/LEEME.md`, `docs/04`, `docs/13`, `datos/catalogos/README.md`, `api/README.md`, `AgroVault/Compartido/APIs.md` y `Resumen.md`.
+- **Cambio:** ventana para frijol y ejote (GGCMI `bea_rf`) y para caupí, haba y lenteja (mes de inicio de la clase Pulses de temporal de MIRCA2000; hasta 3 subcultivos por celda, uno por temporada; `SUPUESTO`). Fuera de México la presencia de 11 cultivos sale del área cosechada de temporal de MIRCA2000 en la celda (`registrado` / `no_registrado`); en México sigue mandando SIAP. Advertencias nuevas: `PRESENCIA_MIRCA2000`, `FRIJOL_SIN_ESPECIE`, `CALENDARIO_EQUIVALENCIA_SUPUESTO` (reemplaza a `GGCMI_EQUIVALENCIA_SUPUESTO`); se quita `GGCMI_NO_ES_CENSO`.
+- **Fuente / evidencia:** MIRCA2000 v1.1, doi:10.5281/zenodo.7422506, CC BY 4.0 (Portmann, Siebert y Döll 2010, GBC 24, GB1011). SAGE (Sacks et al. 2010) descartada: no publica licencia. Prueba nueva: centro de la India, lenteja OI (octubre, rabi) y maíz registrado en MIRCA. Conteo: 18/40 con ventana en los 8 puntos de prueba (México, EE. UU., Brasil, Kenia, India, España, Australia).
+
+### 2026-11-15 — Calendario MUNDIAL, parte 2: presencia de SIAP en todos los municipios de México (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
+
+- **Archivos:** `api/app/calendario.py`, `api/tests/test_calendario.py`, `datos/calendario/extraer_siap_mexico.py` (nuevo), `siap-mexico.npz` y `siap-mexico.json` (nuevos, 165 KB y 790 KB), `datos/calendario/LEEME.md`; se quita `datos/calendario/isla-recuadro.json` (Isla se reconoce por su clave INEGI); `docs/04`, `docs/13`, `datos/catalogos/README.md`, `api/README.md`, `AgroVault/Compartido/APIs.md`.
+- **Cambio:** en cualquier municipio de México, `GET /api/calendario` suma encima de GGCMI la presencia de SIAP (cierre agrícola municipal 2021-2025, modalidad temporal) para 38 de los 40 cultivos (caupí y maíz dulce no tienen nombre equivalente en SIAP): `registrado` con la superficie por año, o `no_registrado`. La ubicación trae `claveEstadoInegi`, `estado`, `claveMunicipioInegi` y `municipio`, y el `id` pasa a `calendario-mx-<ent><mun>-ggcmi-<i>-<j>` (Isla: `calendario-mx-30077-ggcmi-143-168`). En Isla las ventanas de INIFAP siguen mandando. Un municipio sin pareja (urbano o ambiguo) deja la presencia `sin_dato` con la advertencia `SIAP_SIN_MUNICIPIO`.
+- **Para el front:** en México vuelve a venir `ubicacion.municipio`; fuera de México no. Contrato sin cambios.
+- **Fuente / evidencia:** SIAP, datos abiertos (`https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php`, descargado el 15/11); límites de geoBoundaries gbOpen MEX ADM2 (CC BY 4.0) y ADM1 (CC BY 3.0 IGO). 2428 de 2457 municipios emparejados por nombre dentro del estado; los 29 sin pareja están en `sinPareja`. Memoria medida: la API pasa de 92 a 126 MB de RSS con los dos extractos. Pruebas: Texcoco (15/099, maíz, frijol, cebada, trigo, avena y haba registrados), Culiacán, Isla y un punto urbano de CDMX.
+
+### 2026-11-15 — Calendario de siembra MUNDIAL, parte 1: GGCMI fase 3 para 13 cultivos, también en México (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
+
+- **Decisión:** `[DECIDIDO]` Mompin, 15/11: AgroHive es mundial; Isla deja de ser zona demo. Registrada en `docs/13` ("AgroHive MUNDIAL y calendario base"); ajusta "Alcance geográfico", "Zona y cultivo" y "Calendario y aptitud fuera de México".
+- **Archivos:** `api/app/calendario.py`, `api/tests/test_calendario.py`, `api/tests/test_hallazgos_back.py` (código de advertencia), `api/requirements.txt` (`numpy` explícito), `datos/calendario/extraer_ggcmi.py` (nuevo), `ggcmi-rf.npz` y `ggcmi-rf.json` (nuevos, 480 KB), `datos/calendario/LEEME.md`; se quita del repo `datos/calendario/ggcmi/mai_rf_*.nc4` (lo reemplaza el extracto); `docs/04`, `docs/11`, `docs/13`, `datos/catalogos/README.md`, `api/README.md`, `AgroVault/Compartido/APIs.md` y `Resumen.md`.
+- **Cambio:** `GET /api/calendario` arma una **base mundial** en cualquier coordenada, también en México (se quita "No se usa GGCMI"): día de siembra de temporal de GGCMI fase 3 para maíz, sorgo, soya, cacahuate, trigo (`swh`), cebada, papa, yuca, caña, girasol y algodón, más chícharo (`pea`) y maíz dulce (`mai`) como equivalencias de la misma especie `SUPUESTO`. Las entradas cubren los 40 cultivos del catálogo (PV y OI); los que no tienen fuente mundial van `NO_EVALUABLE` con motivo. En el recuadro de Isla, SIAP/INIFAP se suman encima: su ventana manda y su presencia reemplaza el `sin_dato` de GGCMI. **Para el front:** el contrato no cambia, pero cambian los `id` (`calendario-ggcmi-<iso>-<i>-<j>`, y en Isla `calendario-isla-ggcmi-<i>-<j>` en vez de `calendario-isla`) y la respuesta genérica no trae `ubicacion.municipio` (usar `region` o `unidadAdministrativa.nombre`).
+- **Por qué:** fuera de Isla 39 de 40 cultivos salían `NO_EVALUABLE` y el pilar de compatibilidad no entraba al ranking.
+- **Fuente / evidencia:** Jägermeyr et al. 2021, Nature Food 2: 873-885; GGCMI Phase 3 crop calendar v1.01, doi:10.5281/zenodo.5062513, CC BY 4.0 (md5 de cada NetCDF en `ggcmi-rf.json`). Pruebas con puntos en México (CDMX, Sinaloa), EE. UU. (Iowa), Brasil (Mato Grosso), Kenia, India (Madhya Pradesh), España y Australia (NSW). Suites: `contratos/`, `api/` (pytest), catálogos, `tsc` y `vitest` en verde.
+- **Pendiente:** más fuentes (SAGE, MIRCA2000) y la presencia de SIAP en todo México.
+
+### 2026-11-15 — MF8 y MF9: postes de chícharo y jitomate, y tono de hoja de las brásicas (Mafer)
+
+- **Archivos:** `modelos/cultivos/chicharo.py`, `tomate.py`, `brocoli.py`, `coliflor.py` y sus `.bbmodel` regenerados; `modelos/cultivos/bloques/bloques.py` y los bloques de brócoli y coliflor; `visor_<cultivo>.html` de los cuatro y `bloques/visor_bloques.html`.
+- **MF8:** el poste (tutor) ya no mide lo mismo en todas las etapas: chícharo 6, 8, 13, 14,5 y 12 (siembra a podrida; antes 18) y jitomate 6,5, 8,5, 13,5, 15 y 13 (antes 19). En madurez la planta se comprimió (nudos y zarcillo a 0,8 de su altura) para seguir trepando el poste. Altura máxima de la celda: chícharo de 20,5 a 17 y jitomate de 21,5 a 17,5. Mismos cubos (54 y 59 en madurez).
+- **MF9:** brócoli, col y coliflor compartían el verde azulado `brasica_hoja*`. Sin colores nuevos: el brócoli pasa a `chile_hoja*` (verde oscuro), la coliflor a `chicharo_hoja*` (verde claro) y la col conserva `brasica_hoja*`. Aplica al modelo detallado y a los bloques ligeros; las formas no cambian.
+- **Límites:** los 5 iconos 2D de brócoli, col y coliflor siguen con el verde azulado compartido (`BRASICA` en `iconos2d.py`), así que el tono del ícono no coincide con el del modelo; no los toqué para no mover la prueba de daltonismo. Revisado a la vista en el visor, no en Blockbench ni en la escena de la app.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Buzón: IP por defecto del hotspot de la sede (sesión "buzon")
 
 - `herramientas/buzon/enviar.sh`, `escuchar.sh`, `README.md`, `AGENTS.md` y `docs/16` (P1): la IP por defecto pasa de `192.168.0.102` (casa) a `172.20.10.3` (hotspot, `wlo1`); `BUZON_URL` sigue mandando.
@@ -390,7 +444,6 @@ Decisiones afectadas:
 - **Archivos:** `modelos/cultivos/sorgo.py`, `sorgo_<etapa>.bbmodel` (5), `visor_sorgo.html`; `modelos/cultivos/bloques/bloques.py`, `sorgo_<etapa>_bloque.bbmodel` (5), `visor_bloques.html`; `web/src/escena/pruebas/bloques.test.ts` (ahora 25 bloques, 5 cultivos).
 - **Cambio:** el sorgo detallado en 5 etapas (10, 9, 24, 45 y 40 cubos; el tope es el maíz maduro, 55) con la paleta compartida y sin colores nuevos: planta alta de un tallo, hojas angostas y panoja rojiza compacta que se inclina al madurar, sin mazorca. Lo generó el agente `modelador-voxel`; lo revisé (regeneración idéntica, 446 pruebas de la escena, captura de las 5 etapas) y la usuaria lo aprobó a la vista. Bloques con las reglas de Mompin: siembra 15 cubos y el resto 21, sin cara inferior.
 - **Límites:** brote y crecimiento se parecen al maíz (solo cambian hojas más angostas y tallo más delgado). Proporciones cualitativas; forma de la panoja de una búsqueda del agente en fichas de universidades. No probado en Blockbench ni en la escena de la app.
-- **Pendiente:** ícono 2D del sorgo; que la escena (catálogo de modelos de Mompin) reconozca `sorgo` y el campo `modelo3d` del catálogo, que no declaré todavía; sandía, camote y cacahuate.
 - **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — Catálogo: camote y cacahuate (encargo #198 punto 2, Mafer)
