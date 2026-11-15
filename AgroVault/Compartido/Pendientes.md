@@ -44,14 +44,14 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 
 **Fase de revisión** `[DECIDIDO]` (Mompin, 14/11 noche): se revisa y valida lo que está en `main`, sobre todo el frontend. A0.3, A4.4, A5.7 y A5.9 quedan pospuestas hasta el final y el envío se hace solo cuando todos digan que están satisfechos (`docs/13`, `docs/14`). Los hallazgos de la revisión van por el buzón (pantalla, qué pasa, dueño, estado).
 
-Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas.
+Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas. Plan, decisiones abiertas y cola por persona del día final: `docs/16-PLAN-DIA-FINAL.md` (corte 14/11, 23:10).
 
 | ID | Qué falta |
 | --- | --- |
 | A0.3 | Pospuesta (fase de revisión). Acta de roles, cultivos y criterio de ranking (equipo). Lo decidido ya está en `docs/13` |
 | A3.9 | Chile y mascota hechos; la escena muestra la mascota por defecto (`EscenaParcela`, `mascota = true`). Falta la revisión humana del visor y de la equivalencia con el pimiento dulce |
 | A4.4 | Pospuesta (fase de revisión). Redacción con LLM, opcional, solo sobre números ya calculados |
-| A4.13 | Hecha en la API: `GET /api/calendario`. El front sigue leyendo solo `calendario-isla.json` (balam) |
+| A4.13 | Hecha en la API (`GET /api/calendario`) y conectada: `web/src/api/datosParcela.ts` la pide para parcelas propias; si falla, avisa y las fechas quedan `NO_EVALUABLE` |
 | A5.7 | `[EN CURSO]`, pospuesta (fase de revisión) (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |
 | A5.9 | Pospuesta: envío final según las reglas oficiales (`docs/02`), solo cuando todos estén satisfechos |
 
@@ -63,7 +63,7 @@ Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas.
 - Sin escurrimiento por pendiente.
 - Frijol PV, chile y calabaza en Isla: sin ventana de siembra.
 - Calabaza en Isla: se muestra y no se recomienda.
-- Fuera de México: la API ya devuelve el maíz de GGCMI (`GET /api/calendario`). El front todavía no la llama.
+- Fuera de México: la API devuelve solo el maíz de temporal de GGCMI (`GET /api/calendario`, ya la llama el front); frijol, calabaza y chile quedan `NO_EVALUABLE` en fechas.
 - Kc sin ajuste por altura del cultivo.
 - Normalización del exceso (1 − fracción percolada) es `SUPUESTO`.
 

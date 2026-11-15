@@ -17,8 +17,8 @@ Antes de hacer nada:
 Yo soy <NOMBRE>, mi rama es <MI_RAMA>. Mis actividades estan en el tablero de reparto del doc 14.
 Empieza por: <PRIMERA_TAREA>.
 
-Reglas: trabaja solo en mi rama y en mis carpetas; commits pequenos; nunca push a main (abre un pull request
-al cerrar una actividad con su entregable verificable); no inventes datos: si falta un parametro, usa
+Reglas: trabaja solo en mi rama y en mis carpetas; commits pequenos; nunca push a main (sube a mi rama y
+avisa por el buzon "listo para integrar"; solo Mompin integra; reglas del dia final en docs/16); no inventes datos: si falta un parametro, usa
 NO_EVALUABLE; toda cifra cientifica lleva fuente; usa los ejemplos de contratos/ejemplos/ hasta que la
 pieza real exista; sin emojis en el codigo.
 ```
