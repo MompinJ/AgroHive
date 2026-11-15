@@ -2,6 +2,12 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — Nota de A5.4 y plan de recorte al día (cronista, pedido de Mompin)
+
+- **Archivos:** `docs/14` (fila A5.4 y paso 2 del plan de recorte; vistas regeneradas), `AgroVault/Compartido/Resumen.md`.
+- **Cambio:** la nota de A5.4 lleva la medición nueva de `docs/06` y de la entrada "Los 20 bloques de Mafer en la escena, medidos": 191 416 triángulos y 6.7 cuadros/s con los bloques de 24 cubos (antes 449 380 y 3.2). En el plan de recorte, A4.11, A4.8, A3.9 y A5.2 quedan como hechas; el único extra por quitar es A4.12.
+- **Decisiones afectadas:** ninguna. A5.4 sigue `[BLOQUEADO]` (falta hardware real).
+
 ### 2026-11-14 — Iconos de Mafer conectados a la vista 2D (balam)
 
 - **Archivos:** `web/src/ui/iconosCultivo2D.ts` (nuevo), `Parcela2D.tsx`, `parcela2d.css` y pruebas; `modelos/iconos2d/README.md`, `docs/06`, `web/README.md` y captura en `web/evidencia/`.
