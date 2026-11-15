@@ -7,7 +7,7 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Archivos:** `README.md` (tabla de fuentes NASA), `docs/14` (A5.4; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`.
 - **Verificado:** `GET /api/smap` en `https://64-23-143-102.sslip.io` (Isla, 2024-06-01 a 2024-06-03) responde 200 `EVALUABLE`, asi que `EARTHDATA_TOKEN` esta en el entorno del servicio. No se leyo ni se copio su valor y no hay llaves en el repo. A4.8 ya estaba `[HECHO]` en `docs/14`; las entradas anteriores de este registro que dicen "falta el OK del token" eran de antes y se conservan como historia.
 - **Cambio:** el README decia que SMAP "no esta en la demo pública" por falta del token y que MODIS NDVI estaba "pendiente"; ahora dice lo que hay (SMAP en la API publica; NDVI en la API y en el paquete de demo; la interfaz no muestra ninguno de los dos). A5.4 pasa de `[BLOQUEADO]` a `[EN CURSO]`: sus dependencias (A3.6 y la herramienta de medicion, con `medir.html` en el build) estan en `main`; la nota usa las cifras mas recientes de Mompin (191 416 triangulos y 6.7 cuadros/s con los 20 bloques) en lugar de las anteriores. Falta solo medir en hardware real y publicar `medir.html` en el droplet (despliegue con la senal de Mompin).
-- **Decisiones afectadas:** ninguna. Proyecto en 55 de 60 hechas segun `docs/14`; 0 bloqueadas.
+- **Decisiones afectadas:** ninguna. Proyecto en 54 de 60 hechas (90 %), 2 en curso (A5.4 y A5.7), 0 bloqueadas, segun `herramientas/cronograma.py`.
 
 ### 2026-11-14 (noche) — A4.8 hecha: SMAP publico con humedad real (Eduardo)
 
