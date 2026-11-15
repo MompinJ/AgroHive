@@ -41,7 +41,7 @@
 | ~~Pilares de la prueba de estrés~~ | Resuelto: déficit, exceso, compatibilidad y protección del suelo entran al ranking B (A3.7, A4.2; 13) | 05 |
 | ~~Cómo se asigna el clima a cada ciclo~~ | Decidido: opción (c) `temporada_tipica` (A2.8; 13) | 05 |
 | Robustez sobre todo el histórico o solo 3 años | Según datos y tiempo | 04 |
-| Fuentes NASA adicionales (GPM, SMAP, MODIS) | IMERG (A4.10) y NDVI de MODIS (A4.11) hechos como evidencia; queda SMAP (A4.8, en curso) | 04 |
+| Fuentes NASA adicionales (GPM, SMAP, MODIS) | IMERG (A4.10), NDVI de MODIS (A4.11) y SMAP en la API (A4.8) hechos como evidencia | 04 |
 
 ## Mejoras a considerar `[MEJORA]`
 - Incluir la **rotación actual del agricultor** como referencia.
@@ -57,7 +57,7 @@ Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Al
 | GPM IMERG | **Sí**, A4.10 | Viene dentro de NASA POWER (`IMERG_PRECTOT`, `time-standard=UTC`, sin cuenta; probado). 0.1°, desde 1998-01-01 (POWER y CMR; la metodología dice 1998-06-01 y UCAR 2000-06-01). Ve tormentas que MERRA-2 aplana; es evidencia y no cambia los escenarios (ver riesgos) |
 | MODIS NDVI | **Sí**, A4.11 | MOD13Q1 V061 por Planetary Computer (`modis-13Q1-061`), con caché y paquete de demo. ORNL no respondió (502/503) y no se llama en vivo. Evidencia; píxel de 250 m, no entra al ranking. `[VERIFICAR]` términos en planetarycomputer.microsoft.com/terms (V-25) |
 | SRTM, ERA5 | Ya integrados | Terrarium (elevación compuesta de SRTM y otras fuentes) y respaldo Open-Meteo (ERA5) |
-| SMAP | En curso (A4.8) | 9 a 36 km, cuenta Earthdata, capa superficial; cubre los tres años de escenario (desde 2015), útil para contrastar la humedad |
+| SMAP | **Sí**, A4.8 (en la API; la interfaz no lo llama) | 9 a 36 km, cuenta Earthdata, capa superficial; cubre los tres años de escenario (desde 2015), útil para contrastar la humedad |
 | FAO GAEZ v4 | **Solo evidencia** `[DECIDIDO]` (13), no fuente base, por la licencia no comercial | ArcGIS REST público sin llave (`gaez-services.fao.org/server/rest/services/res05` aptitud, `res02` inicio y duración del ciclo; probado 14/11, unos 5 s por punto) y GeoTIFF directo; 5' (~9 km); clima CRUTS32 1981-2010. Trae maíz y frijol (Phaseolus), **no calabaza ni chile**. En (18.03, -95.53), temporal, insumo bajo: aptitud del maíz 5556/10000 e inicio de ciclo día 106 (~16 de abril, dentro de PV). Licencia **CC BY-NC-SA 4.0** (catálogo de FAO): no comercial. Cita: Fischer et al. 2021, doi:10.4060/cb4744en. Buscar la capa por `name`, porque los `objectid` cambian |
 | Calendario de siembra mundial | **GGCMI fase 3** `[DECIDIDO]` (13): respaldo fuera de México, A4.13 `[HECHO]` (Eduardo, `GET /api/calendario`) | GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food; doi:10.5281/zenodo.5062513, CC BY 4.0): siembra y madurez de temporal a 0.5°, maíz `mai_rf` (servido) y frijol `bea_rf` (`[VERIFICAR]`: la ficha de Zenodo y el NetCDF, leídos el 14/11, no dicen que "bea" sea frijol; la API lo deja `NO_EVALUABLE`). GEOGLAM Crop Monitor (doi:10.5281/zenodo.15850408, CC BY 4.0): por estado, con temporadas de maíz equivalentes a PV y OI; que México venga en la descarga está `[VERIFICAR]`. SAGE (Sacks et al. 2010) es de los años 90 y débil en leguminosas. La API de FAO Crop Calendar (sin documentar) no respondió el 14/11. Ninguna trae calabaza ni chile: para esos cultivos, `NO_EVALUABLE` fuera de México |
 | Landsat / HLS / Sentinel-2 | No antes de C4 | Resolución útil (10 a 30 m), pero nubes en temporal y procesamiento pesado |

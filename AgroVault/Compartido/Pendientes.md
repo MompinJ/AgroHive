@@ -18,7 +18,7 @@ Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo,
 | --- | --- | --- |
 | A4.6 | Falta conectar las páginas | `[HECHO]` el 14/11 noche: P0 a P3 de la demo de Isla y la API local sin red. La URL pública quedó en A4.7 (`23f8a53`) |
 | A4.9 | A2.13 aún dice "falta la interfaz" | A4.9 está `[HECHO]`: la banda se muestra y se apaga |
-| A4.8 | Falta el schema `smap` | `contratos/smap.schema.json` existe desde 0.10.0. Sigue abierto el token en el droplet y el uso en la interfaz |
+| A4.8 | Falta el schema `smap` | `[HECHO]` el 14/11 noche: el schema existe desde 0.10.0 y `GET /api/smap` publico devolvio humedad real. La interfaz no llama a SMAP (contraste, fuera del ranking) |
 | A2.12 / A3.1 | La escena no carga losas o no está en el Laboratorio | La escena carga las 9 losas y el Laboratorio la monta en diferido |
 | C2 en `docs/14` | El TAW de Isla es `NO_EVALUABLE` | El suelo del paquete trae TAW 122.3 mm/m y la rotación sale `EVALUABLE` |
 | A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.12.2 en `contratos/`: 15 schemas (más `comun`), ejemplos, `npm test` (92/92) y tipos TS. Ver [[Contratos]] |
@@ -42,14 +42,13 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 
 ## Abierto de verdad
 
-Corte 14/11, 18:10, desde las marcas de `docs/14` (53 de 60 hechas tras el merge de A0.5).
+Corte 14/11, 18:15, desde las marcas de `docs/14` (54 de 60 hechas tras A0.5 y A4.8).
 
 | ID | Qué falta |
 | --- | --- |
 | A0.3 | Acta de roles, cultivos y criterio de ranking (equipo). Lo decidido ya está en `docs/13` |
 | A3.9 | Chile y mascota hechos; la escena muestra la mascota por defecto (`EscenaParcela`, `mascota = true`). Falta la revisión humana del visor y de la equivalencia con el pimiento dulce |
 | A4.4 | Redacción con LLM, opcional, solo sobre números ya calculados |
-| A4.8 | `[EN CURSO]`. A las 18:04 `GET /api/smap` en el droplet (Isla, 2024-06-01 a 2024-06-03) responde 200 y lee gránulos SPL3SMP, así que el token ya funciona; los tres días salen `NO_EVALUABLE` (ningún pase válido en la celda). `web/src` no llama a SMAP. No entra al ranking |
 | A4.12 | CDL y SSURGO, después de C5. C5 no está cruzada |
 | A4.13 | Hecha en la API: `GET /api/calendario`. El front sigue leyendo solo `calendario-isla.json` (balam) |
 | A5.4 | `[BLOQUEADO]`: medir en hardware real (laptop sin GPU dedicada y celular) con `web/medir.html`, que ya entra al build |

@@ -6,8 +6,15 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
 - **Archivos:** `docs/00`, `docs/11`, `docs/13`, `docs/14` (nota de C2, fuera de las tablas); `AgroVault/Compartido/{Resumen,Pendientes,Codigo,Contratos,Servidor,APIs}.md`; `README.md`, `docs/README-borrador.md`, `web/README.md`, `api/README.md`.
 - **Cambio:** solo se reflejan decisiones y estados que ya están en `docs/13` y en las marcas de `docs/14`; no se cambia ninguna decisión. La demo compara por defecto R1, R2 y R4 (quedaba "R1 a R4" en la fila A4.3 de 13 y en README); contratos 0.12.2 (la vault decía 0.10.0 y 0.12.1); A4.13, A2.16, A5.2 y A0.7 hechas (13 y 11 las daban por venir); en 11 se tachan los temas `[EN EVENTO]` y `[DEPENDE-DATOS]` ya decididos en 13; NDVI de MODIS en uso por Planetary Computer (README lo daba pendiente y con ORNL); video y presentación no están canceladas para el equipo (web/README); "Abierto de verdad" de Pendientes rehecho con lo que sigue abierto en 14; `README-borrador` marcado como antecedente superado por `README.md`.
-- **Evidencia:** `origin/main` 091eb7f; `python3 herramientas/cronograma.py` (53 de 60 hechas); pruebas sobre f2bc172: contratos 92/92, api 124, web 581 y 1 todo, catálogos en verde. `GET /api/smap` en el droplet a las 18:04 (Isla, 2024-06-01 a 2024-06-03): 200, lee gránulos SPL3SMP; los tres días salen `NO_EVALUABLE` (anotado en Pendientes; A4.8 sigue `[EN CURSO]` en 14).
+- **Evidencia:** `origin/main` 091eb7f; `python3 herramientas/cronograma.py` (54 de 60 hechas tras A0.5 y A4.8); pruebas sobre f2bc172: contratos 92/92, api 124, web 581 y 1 todo, catálogos en verde. A4.8 la cerró Eduardo en la entrada de abajo; Pendientes ya no la lista como abierta.
 - **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — A4.8 hecha: SMAP publico con humedad real (Eduardo)
+
+- **Archivos:** `docs/14` (A4.8 `[HECHO]`; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`, `AgroVault/Compartido/Servidor.md`.
+- **Cambio:** `GET /api/smap` en `https://64-23-143-102.sslip.io` (Isla, -95.53, 18.03, 2024-06-01 a 2024-06-03) responde 200 `EVALUABLE` en unos 20 s. El 2024-06-03 trae humedad real 0.1432 m3/m3 (AM 0.1402, PM 0.1463, granulo `SMAP_L3_SM_P_20240603_R19240_001.h5`). El 1 y el 2 tienen granulo pero sin recuperacion valida (`NO_EVALUABLE`; no se inventa). Contraste, fuera del ranking. `web/src` no llama a SMAP. `EARTHDATA_TOKEN` queda solo en el entorno del servicio (`/opt/agrohive/agrohive.env`, modo 640) y en un `.env` local no versionado. No esta en el repo.
+- **Fuente / evidencia:** respuesta publica del 14/11 noche, API en `23f8a53`, contrato 0.12.2. `/health` seguia en 200.
+- **Decisiones afectadas:** ninguna. Eduardo pasa de 16 de 19 hechas (84 %) a 17 de 19 (89 %). Con A0.5 de balam ya en `main`, el proyecto queda en 54 de 60 (90 %).
 
 ### 2026-11-14 — Entrada de medición en producción y verificación A0.5 (balam)
 
