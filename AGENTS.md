@@ -42,4 +42,6 @@ En el evento, las sesiones de IA se avisan por la red local con `herramientas/bu
 | Mafer | `Mafer` | `modelos/`, `datos/catalogos/`, `docs/` (entrega) |
 | balam | `balam` | `web/src/ui/`, `web/src/paginas/` |
 
+Dia final `[DECIDIDO]` (Mompin, 14/11 noche, D1): el rediseno del front (`web/src/ui/`, `web/src/paginas/` y la parte de la escena que el front necesite) lo lleva Eduardo; los demas no tocan el front. Reparto vigente en `docs/16-PLAN-DIA-FINAL.md`.
+
 Cada actividad tiene un ID (A1.1, A2.6...) en `docs/14-CRONOGRAMA.md`, con su esfuerzo, dependencias y entregable verificable.

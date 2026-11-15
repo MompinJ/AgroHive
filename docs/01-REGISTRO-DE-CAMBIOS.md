@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — Decisiones y reparto del día final: D1, D4, H-B6, H-M1, H-M9 `[DECIDIDO]` (Mompin; sesión "estado")
+
+- **Archivos:** `docs/13` (seis filas nuevas), `docs/16` (sección 2 con decididas y abiertas; sección 3 con el reparto sobre `main` `582e482`), `docs/11` (resumen de decisiones).
+- **Cambio:** D1, Eduardo lleva el rediseño del front (`web/src/ui/`, `web/src/paginas/` y la parte de la escena que el front necesite) y los demás no tocan el front; D2 (placa) pasa a decidirla Eduardo. D4, se terminan sandía, camote y cacahuate. H-B6, unos 20 s y 2 intentos por fuente más un plazo total, para caber en los 90 s del front. H-M1, `entran` solo sobre las rotaciones que se ordenan; una `EXPLORATORIO` sin un pilar lleva puntaje `null`. H-M9, se sigue doc 05 (escenario `NO_EVALUABLE` con indicadores en `null`). La IA de Mompin toma motor, API y cultivos: cazafallos (`Mompin-fallos`) y cultivos (`Mompin-escena`).
+- **Cola:** M2 hecha (`582e482`, con `Mompin-fallos`); E1 despliega `582e482` mañana a primera hora; B2 pasa a Eduardo (E2); MF1, MF2, M4, M5 y la versión de los catálogos `EN CURSO` con la IA de Mompin; los hallazgos propuestos de `docs/hallazgos-back.md` quedan en la cola de su dueño, `EN CURSO` con cazafallos.
+- **Toca archivos de otros:** MF1, MF2 y la versión de los catálogos son archivos de Mafer, y los hallazgos del back son de la API de Eduardo; los hace la IA de Mompin por decisión de Mompin.
+- **Siguen abiertas:** D3 (llave SSH), D5 (cámara ligada al zoom), D6 (A4.4 y A0.3) y D7 (ramas muertas).
+
 ### 2026-11-14 (noche) — Auditoría de fallos del back (Mompin, sesión cazafallos)
 
 - **Archivos:** `docs/hallazgos-back.md` (nuevo); `api/app/config.py` (`hoy()` en hora de la sede), `api/app/servicios.py`, `proxima.py`, `ndvi.py`, `regional.py`, `pedotransferencia.py`, `rutas/clima.py`, `rutas/ndvi.py`, `rutas/smap.py`, `clientes/terrarium.py`; `api/openapi.json` y `api/cliente/api.d.ts` regenerados; `api/tests/conftest.py` (`FormatChecker`) y `api/tests/test_hallazgos_back.py` (nuevo); `web/src/motor/protocolo.ts`, `motor.ts` y `pruebas/hallazgos-back.test.ts` (nuevo); `api/README.md`, `docs/05`.

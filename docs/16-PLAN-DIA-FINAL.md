@@ -1,6 +1,6 @@
 # 16 · Plan del día final (15/11/2026)
 
-Corte de esta auditoría: sábado 14/11, 23:10 (hora de la sede), sobre `origin/main` `f56450c`. Este documento manda sobre la organización del trabajo del día final; la entrega es una fase posterior y queda fuera de este plan (sección 5); el detalle de cada actividad sigue en `docs/14` y las decisiones en `docs/13`. Lo que no se pudo verificar va marcado `[VERIFICAR]`.
+Corte de esta auditoría: sábado 14/11, 23:10 (hora de la sede), sobre `origin/main` `f56450c`; decisiones y reparto actualizados después, con `main` en `582e482`. Este documento manda sobre la organización del trabajo del día final; la entrega es una fase posterior y queda fuera de este plan (sección 5); el detalle de cada actividad sigue en `docs/14` y las decisiones en `docs/13`. Lo que no se pudo verificar va marcado `[VERIFICAR]`.
 
 ## 1. Estado real
 
@@ -8,7 +8,7 @@ Corte de esta auditoría: sábado 14/11, 23:10 (hora de la sede), sobre `origin/
 - **Despliegue al día:** `https://64-23-143-102.sslip.io/health` responde commit `f56450c` y contratos 0.13.0; `/medir.html` ya sirve la herramienta de medición y `/api/cultivos` responde 200.
 - **Funciona:** motor FAO-56 en Web Worker, escenarios seco / habitual / lluvioso, ranking B con cuatro pilares, tarjetas por plantilla, próxima temporada `EXPLORATORIO`, recorrido Terreno → Cultivos → Escenarios → Comparación (laboratorio por pasos con escena 3D de fondo y brocha), vista 2D, dashboard, método, demo sin red, API con POWER, IMERG, NDVI, SMAP, suelo, elevación, calendario (SIAP/INIFAP y GGCMI) y CDL/SSURGO.
 - **No funciona o está incompleto:** `herramientas/prueba-movimiento` falla A2 y G1b (la lluvia animada de la vista previa no deja la escena en reposo; ya fallaba antes de la cámara de Eduardo). Sandía, camote y cacahuate están en el catálogo pero sin modelo 3D, bloque ni icono 2D; el sorgo tiene modelos e icono, pero `cultivos.json` no declara su `modelo3d.prefijo`. No hay medición en un celular ni en una laptop modesta física.
-- **Frontend:** el flujo y el aspecto no convencen al equipo. Queda como **área abierta a rediseño** (sección 3); este documento no propone el diseño.
+- **Frontend:** el flujo y el aspecto no convencen al equipo. Queda como **área abierta a rediseño**, a cargo de Eduardo (D1, sección 3); este documento no propone el diseño.
 - **Pospuesto hasta el final** (fase de revisión, `docs/13`): A0.3 (acta), A4.4 (redacción con LLM, opcional), A5.7 (README, en curso con Mafer) y A5.9 (envío). Lo que toca a la entrega está en la sección 5, fuera de este plan.
 
 ### Ramas (comparadas con `origin/main` `f56450c`)
@@ -26,15 +26,26 @@ Corte de esta auditoría: sábado 14/11, 23:10 (hora de la sede), sobre `origin/
 | Local `Mompin-a29-descartada` (+1) | A2.9 propia descartada (balam la hizo) | Muerta |
 | Locales `Eduardo`, `Mafer`, `balam`, `main` | Apuntan a commits viejos (el commit inicial o 6 atrás) | Sin valor: usar las remotas |
 
-## 2. Decisiones abiertas de Mompin para el plan de trabajo
+## 2. Decisiones de Mompin para el plan de trabajo
+
+Decididas el 14/11 por la noche `[DECIDIDO]` (Mompin; también en `docs/13`):
+
+| # | Decisión |
+| --- | --- |
+| D1 | **Eduardo lleva el rediseño del front**: `web/src/ui/`, `web/src/paginas/` y la parte de la escena que el front necesite. Los demás no tocan el front |
+| D4 | **Sandía, camote y cacahuate se terminan**: modelo, bloque, icono 2D y registro en la escena |
+| H-B6 | Plazo de unos 20 s y 2 intentos por fuente, más un plazo total por petición, para que la cadena de respaldos del clima quepa en los 90 s del front (`docs/hallazgos-back.md`) |
+| H-M1 | En el ranking, `entran` se calcula solo sobre las rotaciones que se ordenan; una `EXPLORATORIO` a la que le falta un pilar lleva puntaje `null` |
+| H-M9 | Se sigue doc 05: con un escenario `NO_EVALUABLE`, todos sus indicadores (también `proteccionSuelo` y `aporteIndirecto`) van en `null` |
+| Reparto IA | La IA de Mompin (sesión maestra y sus especialistas) toma esta noche las tareas de motor, API y cultivos que nadie está haciendo: **cazafallos** (rama `Mompin-fallos`) arregla los hallazgos del back y del motor; **cultivos** (rama `Mompin-escena`) hace MF1, MF2, M4, M5 y la versión de los catálogos |
+
+Siguen abiertas:
 
 | # | Decisión | Por qué bloquea | Bloquea a |
 | --- | --- | --- | --- |
-| D1 | **Quién lidera el rediseño del front** y hasta qué hora se aceptan cambios grandes | `web/src/ui/` es de balam y el laboratorio actual lo hizo Eduardo | Rediseño |
-| D2 | **Placa de estado de la escena** (qué hace en el laboratorio por pasos; hoy mide 0.6 de la celda, `docs/06`) | El rediseño del front la necesita | Rediseño, escena |
+| D2 | **Placa de estado de la escena** (hoy mide 0.6 de la celda, `docs/06`): ahora la decide Eduardo con el front (D1) | El rediseño la necesita | Rediseño |
 | D3 | **Deploy:** solo Eduardo persona tiene SSH; las sesiones de IA no. Decidir si Eduardo agrega la llave pública de Mompin como respaldo | Si Eduardo no está, nada nuevo llega al público | Cada integración |
-| D4 | **Cultivos nuevos sin modelo** (sandía, camote, cacahuate): terminarlos o dejarlos solo en el catálogo con aviso | Funciones congeladas (#243) salvo lo que ya estaba en vuelo | Mafer, escena, selector |
-| D5 | **Inclinación de cámara ligada al zoom** (`[PROPUESTA]` de Eduardo) | Entra con su rama | Escena |
+| D5 | **Inclinación de cámara ligada al zoom** (`[PROPUESTA]` de Eduardo, ya en `main`) | Queda como propuesta | Escena |
 | D6 | **A4.4 (LLM) y A0.3 (acta):** cerrarlas como descartada y "lo decidido está en 13", o hacerlas | Están pospuestas sin fecha | Tablero |
 | D7 | **Borrar ramas muertas** (sección 1) | Ruido para las IAs que comparan ramas | Nadie (limpieza) |
 
@@ -44,50 +55,58 @@ Al terminar el hackathon: apagar `herramientas/buzon/buzon.py` y cerrar el puert
 
 ## 3. Cola de tareas por persona
 
-Estado: `LISTA` (se puede empezar), `ESPERA` (depende de algo), `EN CURSO`, `HECHA`. Cada persona trabaja de arriba hacia abajo; cuando una tarea se bloquea, pasa a la siguiente o a una de relleno (sección 6). Al tomar una tarea, se anuncia en el buzón (regla 1).
+Estado: `LISTA` (se puede empezar), `ESPERA` (depende de algo), `EN CURSO`, `HECHA`. Cada persona trabaja de arriba hacia abajo; cuando una tarea se bloquea, pasa a la siguiente o a una de relleno (sección 6). Al tomar una tarea, se anuncia en el buzón (regla 1). Corte del reparto: 14/11 noche, `main` en `582e482`.
 
-**Frontend: área abierta a rediseño.** El flujo y el aspecto actuales no agradan; se van a cambiar mucho. Lo que se decida sale de D1 y D2 y se agrega aquí. Mientras tanto, nadie pule estilos del front actual. Lo que no cambia: el front no recalcula indicadores, el 3D solo representa lo que entrega el motor y los estados siguen siendo legibles con daltonismo (`docs/06`).
+**Frontend: área abierta a rediseño, a cargo de Eduardo (D1).** El flujo y el aspecto actuales no agradan; se van a cambiar mucho. Eduardo decide el diseño y la placa de estado (D2); los demás no tocan el front y, si Eduardo lo pide, apoyan. Lo que no cambia: el front no recalcula indicadores, el 3D solo representa lo que entrega el motor y los estados siguen siendo legibles con daltonismo (`docs/06`).
+
+**Hallazgos del back y del motor** (`docs/hallazgos-back.md`): los arreglados ya están en `main`. Los propuestos o recién decididos van en la cola de su dueño, `EN CURSO` con cazafallos (rama `Mompin-fallos`); cuando cazafallos termine, lo que quede propuesto vuelve al dueño como `LISTA`.
 
 ### Mompin (integra `main`, motor, contratos, escena)
 
 | # | Tarea | Archivos | Depende de | Estado |
 | --- | --- | --- | --- | --- |
-| M1 | Tomar las decisiones D1 a D4 a primera hora y anunciarlas | `docs/13`, `docs/01` (las registra quien edita los calientes) | — | LISTA |
-| M2 | Integrar `origin/balam`, luego `origin/Eduardo`, luego `Mompin-docs` (orden y conflictos en sección 1); regenerar el cronograma; pedir deploy a Eduardo | `docs/01`, vistas del cronograma | 4 suites en verde | LISTA |
-| M3 | Ventanas de integración cada hora en punto (regla 4) | `main` | Avisos "listo para integrar" | LISTA |
-| M4 | Arreglar A2 y G1b de `prueba-movimiento`: la lluvia animada de la vista previa no deja la escena en reposo | `web/src/escena/` | — | LISTA |
-| M5 | Registrar en la escena los cultivos de Mafer conforme lleguen (sorgo primero) | `web/src/escena/voxel/catalogo.ts` | Mafer MF1, MF2 | ESPERA |
-| M6 | Escena del rediseño (placa de estado, modo fondo) según D1 y D2 | `web/src/escena/` | D1, D2 | ESPERA |
+| M1 | Decidir D1 a D7 y anunciarlas | `docs/13`, `docs/01` | — | EN CURSO (D1 y D4 tomadas; D3, D5, D6 y D7 abiertas; D2 pasa a Eduardo) |
+| M2 | Integrar `origin/balam`, `origin/Eduardo`, `Mompin-docs` y `Mompin-fallos`; regenerar el cronograma | `main` | 4 suites en verde | HECHA (`582e482`) |
+| M3 | Ventanas de integración cada hora en punto (regla 4) | `main` | Avisos "listo para integrar" | EN CURSO |
+| M4 | Arreglar A2 y G1b de `prueba-movimiento`: la lluvia animada de la vista previa no deja la escena en reposo | `web/src/escena/` | — | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
+| M5 | Registrar en la escena sorgo, sandía, camote y cacahuate | `web/src/escena/voxel/catalogo.ts` | MF1, MF2 | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
+| M6 | Hallazgos del motor: H-M1 y H-M9 (decididos), H-M2 (fin del ciclo por duración del catálogo), H-M4 (fecha inválida), H-M5 (errores del Worker), H-M6, H-M7, H-M8, H-M10 y H-M11 (fuente de la ventana en la tarjeta; cambia la regresión A5.5) | `web/src/motor/` | — | EN CURSO (cazafallos, `Mompin-fallos`) |
 
-### Eduardo (`api/`, `datos/` salvo catálogos, servidor; único con SSH)
+### Eduardo (rediseño del front, `api/`, `datos/` salvo catálogos, servidor; único con SSH)
 
 | # | Tarea | Archivos | Depende de | Estado |
 | --- | --- | --- | --- | --- |
-| E1 | Desplegar cada `main` que Mompin pida, una sola vez, avisando antes y después (`/health` con el commit, `/medir.html` y `mediworks.mx` en 200) | droplet | M2, M3 | ESPERA |
-| E2 | Correr `/medir.html` en la Mac con GPU real y mandar la línea de reposo con motivos (buzón #257); medir un celular o una laptop sin GPU dedicada | `docs/06` (con aviso), capturas | Deploy actual (ya está) | LISTA |
-| E3 | Decidir qué hace con `Comunicacion.md` de `Eduardo-B` (sección 1) | `AgroVault/Compartido/` | — | LISTA |
-| E4 | Si D3 dice que sí: agregar la llave pública de Mompin al droplet | droplet | D3 | ESPERA |
-| E5 | Apoyo al rediseño del front si D1 lo pide | según D1 | D1 | ESPERA |
+| E1 | Desplegar `582e482` como primera acción de mañana, una sola vez, avisando antes y después (`/health` con el commit, `/medir.html` y `mediworks.mx` en 200); después, cada `main` que Mompin pida | droplet | — | LISTA |
+| E2 | Rediseño del front (antes B2, D1) y decisión de la placa de estado (D2) | `web/src/ui/`, `web/src/paginas/`, la parte de `web/src/escena/` que el front necesite | — | LISTA |
+| E3 | Correr `/medir.html` en la Mac con GPU real y mandar la línea de reposo con motivos (buzón #257); medir un celular o una laptop sin GPU dedicada | `docs/06` (con aviso), capturas | Deploy | LISTA |
+| E4 | Hallazgos del back: H-B6 (decidido), H-B8 (503 sin catálogo), H-B9 (regenerar el paquete de demo), H-B10 (país en la costa de Veracruz), H-B11 (aviso `NDVI_EN_CACHE`) | `api/`, `datos/demo/` | — | EN CURSO (cazafallos, `Mompin-fallos`) |
+| E5 | Decidir qué hace con `Comunicacion.md` de `Eduardo-B` (sección 1) | `AgroVault/Compartido/` | — | LISTA |
+| E6 | Si D3 dice que sí: agregar la llave pública de Mompin al droplet | droplet | D3 | ESPERA |
 
 ### Mafer (`modelos/`, `datos/catalogos/`, README)
 
+MF1, MF2 y la versión de los catálogos tocan archivos de Mafer: las hace la IA de Mompin por el reparto de esta noche.
+
 | # | Tarea | Archivos | Depende de | Estado |
 | --- | --- | --- | --- | --- |
-| MF1 | Declarar `modelo3d.prefijo` del sorgo en el catálogo (sus modelos e icono ya existen) y avisar | `datos/catalogos/cultivos.json` | — | LISTA |
-| MF2 | Sandía, camote y cacahuate: modelo detallado, bloque de 24 cubos e icono 2D, por tandas, y su prefijo | `modelos/`, `datos/catalogos/cultivos.json` | D4 | ESPERA |
+| MF1 | Declarar `modelo3d.prefijo` del sorgo en el catálogo (sus modelos e icono ya existen) | `datos/catalogos/cultivos.json` | — | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
+| MF2 | Sandía, camote y cacahuate: modelo detallado, bloque de 24 cubos, icono 2D y prefijo (D4) | `modelos/`, `datos/catalogos/cultivos.json` | — | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
 | MF3 | Cotejar con el PDF de FAO-56 los datos marcados (sorgo 125 contra 130; fila de cacahuate de África Occidental) | `datos/catalogos/` | — | LISTA |
+| MF4 | `versionContrato` real en los catálogos (H-B9) | `datos/catalogos/*.json` | — | EN CURSO (IA de Mompin, cultivos, `Mompin-escena`) |
 
-### balam (`web/src/ui/`, `web/src/paginas/`)
+### balam
 
 | # | Tarea | Archivos | Depende de | Estado |
 | --- | --- | --- | --- | --- |
-| B1 | Mostrar en el selector y en la vista 2D los cultivos nuevos con su icono y aviso si no están registrados en Isla | `web/src/ui/` | Mafer MF1, MF2 | ESPERA |
-| B2 | Rediseño del front en `web/src/ui/` y `web/src/paginas/` según D1 | `web/src/ui/`, `web/src/paginas/` | D1 | ESPERA |
+| B1 | Mostrar en el selector y en la vista 2D los cultivos nuevos con su icono y aviso si no están registrados en Isla | `web/src/ui/` (coordinar con Eduardo, D1) | MF1, MF2 | ESPERA |
 | B3 | Pruebas finales de la interfaz contra cada despliegue (teclado, móvil, 2D/3D, demo sin red) y hallazgos por el buzón | — | E1 | ESPERA |
+| B4 | Apoyo al rediseño del front si Eduardo lo pide | según Eduardo | E2 | ESPERA |
+
+B2 (rediseño) pasó a Eduardo (E2) por D1.
 
 ### Las IAs (sesiones de cada quien)
 
-Las IAs solo toman tareas que su persona aprueba, en la rama de su persona. Tareas que valen para cualquiera: las de relleno de la sección 6, revisión de citas contra `README.md` y `docs/04`, y correr las 4 suites antes de cada aviso "listo para integrar". La sesión que lleve los archivos calientes de una ventana (regla 7) recibe por el buzón las entradas de `docs/01` y las marcas de `docs/14` de las demás.
+Las IAs solo toman tareas que su persona aprueba, en la rama de su persona. La IA de Mompin lleva esta noche cazafallos (`Mompin-fallos`: M6 y E4) y cultivos (`Mompin-escena`: M4, M5, MF1, MF2 y MF4). Tareas que valen para cualquiera: las de relleno de la sección 6, revisión de citas contra `README.md` y `docs/04`, y correr las 4 suites antes de cada aviso "listo para integrar". La sesión que lleve los archivos calientes de una ventana (regla 7) recibe por el buzón las entradas de `docs/01` y las marcas de `docs/14` de las demás.
 
 ## 4. Reglas de organización `[DECIDIDO]` (Mompin, 14/11 noche)
 
