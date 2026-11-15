@@ -12,7 +12,7 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 ### 2026-11-15 — Hero de Inicio con entrada animada y accesible (balam; registrado por Mompin)
 
 - **Archivos:** `web/src/ui/inicio.css`, `DESIGN.md` (rama `balam`, `23cebe4`, PR #11).
-- **Cambio:** entrada escalonada del hero (600 ms, desfases de 60 ms) y acercamiento suave del fondo (1200 ms, una vez). Solo anima `transform` y `opacity`; con movimiento reducido queda un fundido de 200 ms y el foco con teclado cancela la entrada.
+- **Cambio:** entrada escalonada del hero (texto 1 s, desfases de 80 ms; ajustado en `fca7039`) y acercamiento suave del fondo (2.4 s, una vez). Solo anima `transform` y `opacity`; con movimiento reducido queda un fundido de 200 ms y el foco con teclado cancela la entrada.
 - **Por qué:** mejora visual, sin cambio de alcance, textos, datos ni contratos.
 - **Toca archivos de otros:** el front es de Eduardo (D1); el cambio es aditivo y aislado en `inicio.css`.
 - **Decisiones afectadas:** ninguna.

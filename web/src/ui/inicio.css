@@ -27,13 +27,13 @@
   .landing-button:hover { background: var(--color-action-hover); color: var(--color-on-action); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .landing-background { animation: landing-acercamiento 1200ms var(--landing-ease-out) both; }
-  .landing-content > * { animation: landing-entrada 600ms var(--landing-ease-out) backwards; }
-  .landing-content > :nth-child(2) { animation-delay: 60ms; }
-  .landing-content > :nth-child(3) { animation-delay: 120ms; }
-  .landing-content > :nth-child(4) { animation-delay: 180ms; }
-  .landing-content > :nth-child(5) { animation-delay: 240ms; }
-  .landing-content > :nth-child(6) { animation-delay: 300ms; }
+  .landing-background { animation: landing-acercamiento 2400ms var(--landing-ease-out) both; }
+  .landing-content > * { animation: landing-entrada 1000ms var(--landing-ease-out) backwards; }
+  .landing-content > :nth-child(2) { animation-delay: 80ms; }
+  .landing-content > :nth-child(3) { animation-delay: 160ms; }
+  .landing-content > :nth-child(4) { animation-delay: 240ms; }
+  .landing-content > :nth-child(5) { animation-delay: 320ms; }
+  .landing-content > :nth-child(6) { animation-delay: 400ms; }
   .landing-content > :focus-within { animation: none; }
   .landing-button { transition: background-color 150ms ease-out, transform 150ms ease-out; }
   .landing-button:active { transform: scale(.96); }
