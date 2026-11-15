@@ -9,7 +9,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 
 | Archivo | Contrato | Contenido |
 | --- | --- | --- |
-| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa (maiz, frijol, calabaza), chile (cultivo extra de la demo), del encargo #198 sorgo, sandia, camote y cacahuate (aun sin modelo 3D: no declaran `modelo3d`) y la ampliacion del 15/11 (lista abajo), tambien sin `modelo3d` |
+| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa (maiz, frijol, calabaza), chile (cultivo extra de la demo), del encargo #198 sorgo, sandia, camote y cacahuate (con `modelo3d`) y la ampliacion del 15/11 (lista abajo), sin `modelo3d` |
 | `suelos.json` | `contratos/tabla-suelos.schema.json` | TAW por clase USDA, FAO-56 Tabla 19 |
 | `calendario-isla.json` | `contratos/calendario-local.schema.json` | Ventanas de siembra y presencia en SIAP de Isla, por cultivo y temporada |
 | `saxton_rawls.py` | `agua` de `contratos/suelo.schema.json` | TAW y retencion (θsat, θFC, θWP) por pedotransferencia de Saxton y Rawls (2006) para cualquier textura; pruebas contra la Tabla 3 del articulo con `python -m unittest discover -s datos/catalogos` |
