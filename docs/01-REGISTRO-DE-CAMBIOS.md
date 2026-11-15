@@ -20,6 +20,14 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Candidatos para ampliar el catálogo: SIAP de Veracruz y FAO-56 (Mafer)
+
+- **Archivos:** `datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv` (nuevo), `fuentes/LEEME.md`.
+- **Cambio:** para el encargo #198 punto 2 se sumó la superficie sembrada de temporal 2021-2025 de 8 candidatos en Veracruz, en el DDR 175 y en Isla, desde los cierres municipales del SIAP. Resultado: sorgo (Isla 48 a 50 ha por año) y sandía (Isla unas 425 ha por año hasta 2024) están en Isla; camote (San Andrés y Santiago Tuxtla, 54 a 58 ha) y cacahuate (Catemaco, 66 a 68 ha) están en el DDR 175 pero no en Isla; la soya de Veracruz está solo en Pánuco (norte, 10 150 a 15 233 ha), lejos de Isla; la yuca no aparece. Lista aprobada por la usuaria: sorgo, sandía, camote, soya y cacahuate; se propone retirar la soya.
+- **Fuente / evidencia:** SIAP cierre agrícola municipal 2021-2025 (descargado el 14/11/2026); FAO-56 Tablas 11, 12 y 22 leídas de la página oficial: Kc inicial de varios cultivos y raíz o p de otros no se pudieron leer y quedarían `NO_EVALUABLE`; la página es una versión con OCR corregido a mano, hay que cotejarla con el PDF.
+- **Pendiente:** EcoCrop de los cinco sin revisar; la decisión sobre la soya (la usuaria y Mompin); `[VERIFICAR]` por una persona la redistribución de los datos del SIAP.
+- **Decisiones afectadas:** ninguna todavía.
+
 ### 2026-11-14 (noche) — Iconos 2D de los cultivos, encargo #198 punto 1 (Mafer)
 
 - **Archivos:** `modelos/iconos2d/` (`iconos2d.py`, 20 `<cultivo>_<etapa>.svg`, `visor_iconos.html`, `README.md`); `web/src/escena/pruebas/iconos2d.test.ts`.
