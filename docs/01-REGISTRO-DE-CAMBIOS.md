@@ -81,6 +81,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — Despliegue de `5f985da` en el droplet (Eduardo)
+
+- **Archivos:** `AgroVault/Compartido/Servidor.md`.
+- **Cambio:** se corrió `api/despliegue/actualizar-servidor.sh`. La URL pública queda en `main` `5f985da`: `/health` con `versionContrato` 0.15.0, front publicado, `/medir.html`, `/api/cultivos`, `/api/calendario`, `/api/plagas`, `/api/ee-uu/cdl` y `/api/smap` en 200; `mediworks.mx` sigue en 200. Sube todo lo que había entrado a `main` desde `1d50118`, incluido lo de Mompin, Mafer y balam.
+- **Evidencia:** respuestas públicas del 15/11; los textos de la landing sin menú, de Esquilote y de la cosecha están en el bundle publicado, y "Gráficos" y "1 celda =" en el archivo de la escena 3D, que se carga aparte. El texto del menú anterior ("Explorar demo") ya no está.
+- **Límites:** el despliegue se hizo con la contraseña de root que se había pegado en el chat, porque la llave SSH sigue sin autorizarse. **Esa contraseña debe cambiarse** y pasar a llaves. No hubo aviso por el buzón antes ni después.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Animaciones a pantalla completa de cosecha y plaga (Eduardo)
 
 - **Archivos:** `web/src/ui/lab/eventos.ts`, `EventoPantalla.tsx`, `evento.css` (nuevos) y pruebas; `Laboratorio.tsx`; `ui/tutorial/pasos.ts`; `docs/06`.
