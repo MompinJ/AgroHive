@@ -34,3 +34,8 @@
   .esquilote-tarjeta { gap: 6px; padding: 10px 12px 10px 6px; }
   .esquilote-tarjeta .esquilote-dibujo { width: 54px; height: 81px; }
 }
+
+.esquilote-retrato { object-fit: contain; }
+.esquilote-tarjeta .esquilote-retrato { align-self: flex-end; margin-bottom: -4px; }
+.esquilote-boton .esquilote-retrato { height: 56px; width: 56px; }
+.esquilote-guia .mascota { display: none; }

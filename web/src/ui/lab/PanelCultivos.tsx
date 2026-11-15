@@ -135,7 +135,7 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
         {RADIOS_PLAGA.map((r) => <button key={r} type="button" role="radio" aria-checked={zona.radio === r} className="lab-radio" onClick={() => zona.setRadio(r)}>{r}</button>)}
         <button type="button" role="radio" aria-checked={zona.radio === null} className="lab-radio" onClick={() => zona.setRadio(null)}>Toda</button>
       </div>
-      <p className="panel-ayuda">{zona.radio === null ? `Las plagas se dibujan en las ${zona.total} celdas.` : `Las plagas se dibujan solo en ${zona.celdas} de ${zona.total} celdas, a ${zona.radio} ${zona.radio === 1 ? 'celda' : 'celdas'} o menos de la celda ${zona.centro ?? ''}.`} Toca otra celda en la escena para mover la zona.</p>
+      <p className="panel-ayuda">{zona.radio === null || zona.celdas >= zona.total ? `Las plagas se dibujan en las ${zona.total} ${zona.total === 1 ? 'celda' : 'celdas'}${zona.radio === null ? '' : ' (la zona cubre toda la parcela)'}.` : `Las plagas se dibujan solo en ${zona.celdas} de ${zona.total} celdas, a ${zona.radio} ${zona.radio === 1 ? 'celda' : 'celdas'} o menos de la celda ${zona.centro ?? ''}.`} Toca otra celda en la escena para mover la zona.</p>
     </div>}
     {riesgos.length > 0 && <div className="lab-plagas" role="status">
       <p className="lab-plagas-titulo"><IconoBicho /> Plagas en tu zona</p>

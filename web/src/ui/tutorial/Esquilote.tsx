@@ -1,7 +1,18 @@
-// Esquilote, el elote mascota de AgroHive. Dibujo propio en SVG (decorativo: el texto del tutorial lleva el sentido).
+// Esquilote, el elote mascota de AgroHive. Se dibuja con el retrato del mismo modelo voxel que la mascota de la
+// pantalla (escena/render/retrato.ts), asi es un solo personaje; si no hay WebGL, un dibujo SVG de respaldo.
+// Decorativo: el texto del tutorial lleva el sentido.
+import { useEffect, useState } from 'react';
+
 const GRANOS = Array.from({ length: 10 }, (_, fila) => Array.from({ length: 3 }, (_, col) => ({ fila, col }))).flat().filter(({ fila }) => fila < 3 || fila > 6);
 
 export function Esquilote({ ancho = 84, saluda = false }: { ancho?: number; saluda?: boolean }) {
+  const [retrato, setRetrato] = useState<string | null>(null);
+  useEffect(() => {
+    let activo = true;
+    void import('../../escena/render/retrato').then((m) => m.retratoMascota()).then((url) => { if (activo) setRetrato(url); }).catch(() => {});
+    return () => { activo = false; };
+  }, []);
+  if (retrato) return <img className={`esquilote-dibujo esquilote-retrato${saluda ? ' esquilote-saluda' : ''}`} src={retrato} alt="" width={ancho} height={ancho} />;
   return <svg className={`esquilote-dibujo${saluda ? ' esquilote-saluda' : ''}`} width={ancho} height={Math.round(ancho * 1.5)} viewBox="0 0 100 150" aria-hidden="true" focusable="false">
     <ellipse cx="50" cy="143" rx="26" ry="5" fill="#1d2b21" opacity=".16" />
     {/* hojas de atras */}

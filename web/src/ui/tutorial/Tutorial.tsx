@@ -46,6 +46,13 @@ export function TutorialEsquilote() {
     if (siguiente) setEstado(siguiente); else terminar(estado);
   };
 
+  // Con la tarjeta abierta, los consejos de la mascota de la pantalla se ocultan: Esquilote habla una sola vez.
+  const guiando = estado !== null;
+  useEffect(() => {
+    document.body.classList.toggle('esquilote-guia', guiando);
+    return () => document.body.classList.remove('esquilote-guia');
+  }, [guiando]);
+
   // Escape cierra la tarjeta.
   useEffect(() => {
     if (!estado) return;
