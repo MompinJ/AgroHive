@@ -10,8 +10,8 @@
 | Sede | USBI Veracruz, Calzada Juan Pablo II s/n, esq. Bv. Adolfo Ruíz Cortines, Costa Verde, Boca del Río | Confirmado |
 | Modalidad | Presencial | Confirmado |
 | Organizador local | Gonzalo Ortiz Chavez (contacto en la página del evento) | Confirmado |
-| Horario de apertura y cierre en sede | No publicado al 10/11. La v1.2 usó como referencia 14/11 09:00 a 15/11 23:59 (unas 39 h), **sin fuente** | `[VERIFICAR]` |
-| Formato de entrega, video y presentación ante jueces | No verificado | `[VERIFICAR]` |
+| Horario de actividades y juicio en sede | Pendiente de confirmar con el organizador; puede diferir de la ventana global de envío documentada abajo | `[VERIFICAR]` V-01 |
+| Entrega global y evaluación | Guías 2026 verificadas abajo (A0.5) | No equivale a envío realizado |
 | Equipo | 4 integrantes | `[DECIDIDO]` |
 
 ### Tiempo real de trabajo
@@ -21,7 +21,33 @@ De las horas disponibles, descontando descanso, comida y traslados, quedan alred
 - **No empezar el proyecto antes de que inicie el hackathon.** Todo el código del proyecto se hace durante el evento.
 - Antes sí se puede: leer el reto, revisar datasets, crear cuentas (Earthdata), formar equipo, elegir librerías, preparar documentación, practicar herramientas con ejercicios ajenos al proyecto (por ejemplo, la zanahoria del agente de modelos).
 - Preguntar al organizador si los prototipos técnicos previos cuentan como "empezar". `[VERIFICAR]`
-- Declarar el uso de IA y las licencias conforme a las reglas. `[VERIFICAR]`
+- Declarar IA y recursos según las reglas verificadas abajo; el cumplimiento y las licencias siguen pendientes de revisión humana.
+
+## Verificación A0.5 — 14/11/2026
+
+Fuentes primarias abiertas en Chrome: [guía de entrega, publicada el 13/11/2026](https://www.spaceappschallenge.org/resources/project-submission-guide/), [guía de evaluación, 13/11/2026](https://www.spaceappschallenge.org/resources/judging-awards-guide/) y [FAQ de participantes](https://www.spaceappschallenge.org/resources/participant-faqs/). La búsqueda devolvía 502; la lectura directa en navegador sí funcionó.
+
+### Entrega global confirmada
+
+- Ventana: 14/11, 09:00 a 15/11, 23:59, hora de la sede. Confirmar juicio local por separado (V-01).
+- Formulario: nombre, resumen, demo, proyecto final, descripción, uso de IA/SI, datos NASA y referencias.
+- Demo obligatoria: video de hasta 30 segundos o siete diapositivas, contando portada e introducción. Enlaces públicos separados para demo y proyecto, sin registro ni permisos.
+- Formulario y materiales enlazados en inglés; video hablado en otro idioma necesita subtítulos en inglés.
+- Guardar no entrega: aceptar declaraciones, pulsar **Submit for Judging**, comprobar confirmación y reenviar tras editar. Integrantes aceptados en la misma sede. Materiales sin personas menores de 18 años.
+
+### IA y originalidad confirmadas
+
+IA/SI como apoyo, no para originar la idea. Indicar dónde/cómo se usó: marca visible en imagen/video; reconocimiento textual y metadatos en audio/código/datos. Contenido generado sin identidad NASA. La [respuesta GO Team del 6/11](https://github.com/nasa/spaceapps/discussions/1849) confirma declaración y marcas.
+
+El proyecto no debe iniciarse antes del evento ([GO Team, 10/11](https://github.com/nasa/spaceapps/discussions/1916)). La guía de evaluación exige trabajo original y referencias de recursos externos, también código abierto, con sus permisos. Criterios: impacto, creatividad, validez, relevancia y presentación, escala 1 a 5.
+
+NASA distingue contenido propio y de terceros; atribuir no implica aval de NASA ([guía de imágenes y medios](https://www.nasa.gov/nasa-brand-center/images-and-media/)).
+
+### Aplicación a AgroHive y pendientes de A5.9
+
+La verificación de reglas (A0.5) está hecha; **el cumplimiento completo y la entrega no están certificados**. El equipo debe preparar los enlaces y materiales en inglés, resolver su demo obligatoria, completar declaración de IA y marcas/metadatos, confirmar originalidad y permisos, revisar membresía y obtener confirmación de envío.
+
+La interfaz y el README actuales están en español: registrar el desfase para la entrega y consultar con la sede el alcance sobre la aplicación enlazada, sin dar por concedida una excepción. Marcas de imágenes generadas, licencia propia y revisión de fuentes siguen pendientes según README/A5.7. La decisión de Balam de no realizar video/presentación en su carril no cambia la regla externa ni reasigna esa tarea. Esta revisión no publica ni envía nada al portal.
 
 ## El reto oficial
 

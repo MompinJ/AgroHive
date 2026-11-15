@@ -20,7 +20,7 @@ Abrir `medir.html` de la app: `http://<servidor>/medir.html`. Empieza sola y al 
 - `?viento=10&reposo=3`: segundos de cada prueba.
 - `?auto=0`: no empezar sola (sale un botón).
 
-En desarrollo, desde la red local (el celular en el mismo wifi): `cd web && npx vite --host 0.0.0.0` y abrir `http://<ip-de-la-laptop>:5173/medir.html?api=http://<ip>:8010` con la API levantada para esa red (`AGROHIVE_CORS_ORIGINS`). Para que `medir.html` exista también en el sitio publicado, falta que `vite build` la incluya (ver abajo).
+En desarrollo, desde la red local (el celular en el mismo wifi): `cd web && npx vite --host 0.0.0.0` y abrir `http://<ip-de-la-laptop>:5173/medir.html?api=http://<ip>:8010` con la API levantada para esa red (`AGROHIVE_CORS_ORIGINS`). El build ya incluye `medir.html` (ajuste de balam, 14/11); aparecerá en el sitio tras desplegar esa versión.
 
 ## Con Node (laptop)
 
@@ -31,9 +31,9 @@ node herramientas/medir-escena/medir.mjs --url "https://64-23-143-102.sslip.io/m
 
 Abre Chrome con un perfil temporal (no usa la sesión del usuario), espera a que termine y guarda `resultados/medicion-<fecha>.json`, `.txt` y `.png`. Sin `--ventana` corre headless con render por software: las cifras salen pesimistas (sirven para comparar, no para los jueces). Requiere Node 22 o más reciente.
 
-## Pendiente para publicarla en el droplet
+## Inclusión en el build de producción
 
-`web/vite.config.ts` (de balam) construye solo `index.html`. Para que `medir.html` también salga en `dist/`:
+`web/vite.config.ts` (de balam) incluye ambas entradas; `npm run build` genera `dist/index.html` y `dist/medir.html`:
 
 ```ts
 build: { rollupOptions: { input: { main: 'index.html', medir: 'medir.html' } } },

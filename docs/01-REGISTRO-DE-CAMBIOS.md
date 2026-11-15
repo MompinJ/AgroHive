@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 — Entrada de medición en producción y verificación A0.5 (balam)
+
+- **Archivos:** `web/vite.config.ts`, `web/README.md`, `herramientas/medir-escena/README.md`; `docs/02`, `docs/11`, `docs/14` y vistas generadas.
+- **Cambio:** build multipágina con `index.html` y `medir.html`, solicitado por Mompin en buzón #216 y autorizado por Balam. No despliega al droplet ni realiza la medición de hardware.
+- **A0.5:** guías oficiales de entrega/evaluación de 2026, publicadas el 13/11, leídas directamente en Chrome el 14/11; búsqueda daba 502. Reglas y fuentes centralizadas en docs/02; V-03/V-04 documentadas, A0.5 hecha como verificación de reglas. El cumplimiento, revisión humana de permisos, inglés, demo del equipo y envío siguen pendientes en A5.7/A5.9; horario de juicio local V-01 no confirmado. No se reactiva video/presentación en el carril de Balam.
+- **Evidencia:** build genera ambos HTML; `medir.html?auto=0` en preview de producción devuelve 200 y muestra el control de inicio. Fuentes enlazadas en docs/02: guías 2026, FAQ, respuestas GO Team #1849/#1916 y guía NASA de medios. No se marca el proyecto como conforme ni enviado.
+
 ### 2026-11-14 — Los 20 bloques de Mafer en la escena, medidos (Mompin)
 
 - **Archivos:** `web/src/escena/voxel/bloque.ts` (tope de 24; el provisional queda solo de respaldo), `medir/medir.tsx` (caso nuevo: mezcla de los 4 cultivos con `plan.porCelda`); `docs/06`.
