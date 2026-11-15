@@ -2,6 +2,9 @@
 // parcela y el resultado del motor tal cual (contratos) y solo los representa.
 // Punto de integracion propuesto: ver web/src/escena/INTEGRACION.md.
 
+import { tt } from '../ui/i18n/actual';
+import { useIdioma } from '../ui/i18n/Idioma';
+import { textoCelda } from '../ui/i18n/textos/terreno';
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import type { Advertencia, Parcela, ResultadoCeldas, SerieBalance, SerieClima, Suelo } from '../../../contratos/tipos/contratos';
 import { CORTES_LLUVIA, lluviaDelDia, textoLluvia } from './lluvia';
@@ -12,7 +15,7 @@ import { construirEscena } from './adaptador';
 import type { AvisoDatos } from '../api/datosParcela';
 import { CODIGOS_TERRENO } from './avisos-datos';
 import { AvisosDatos } from './AvisosDatos';
-import { bloqueCentral, fichaBloque, NOMBRES_CULTIVO_ESCENA, vecino } from './ficha';
+import { bloqueCentral, fichaBloque, nombreCultivo, vecino } from './ficha';
 import { describirBloque, entradasLeyenda, type EntradaLeyenda } from './leyenda';
 import { EXAGERACION_VERTICAL_DEFECTO, type BloqueEscena } from './modelo';
 import { huellaPincel, type PincelEscena } from './pincel';
@@ -83,13 +86,16 @@ export interface EscenaParcelaProps {
   tMediaDia?: readonly (number | null)[] | undefined;
 }
 
-const NOMBRE_VISTA: Record<VistaBase, string> = { cultivo: 'Cultivos', validacion: 'Validación', agua: 'Agua', luz: 'Luz', temperatura: 'Temperatura' };
+const NOMBRE_VISTA: Record<VistaBase, string> = {
+  get cultivo() { return tt('vista.cultivo'); }, get validacion() { return tt('vista.validacion'); }, get agua() { return tt('vista.agua'); },
+  get luz() { return tt('vista.luz'); }, get temperatura() { return tt('vista.temperatura'); },
+};
 const AYUDA_VISTA: Record<VistaBase, string> = {
-  cultivo: 'Colorea la base de cada bloque con el color de su cultivo',
-  validacion: 'De verde (muy buena) a rojo (muy mala idea) según el motor',
-  agua: 'De gris (casi nada) a azul marino (mucha agua) según la demanda del día',
-  luz: 'De azul pizarra (poca) a amarillo (mucha) según la radiación solar de la semana',
-  temperatura: 'Compara la temperatura media de la semana con el rango de cada cultivo (FAO EcoCrop)',
+  get cultivo() { return tt('vistaAyuda.cultivo'); },
+  get validacion() { return tt('vistaAyuda.validacion'); },
+  get agua() { return tt('vistaAyuda.agua'); },
+  get luz() { return tt('vistaAyuda.luz'); },
+  get temperatura() { return tt('vistaAyuda.temperatura'); },
 };
 
 const SIN_MARCAS: ReadonlyMap<string, string> = new Map();
@@ -114,6 +120,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
 }
 
 export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO, tMediaDia, serieClima = null, serieVistas = null, rangosTemperatura }: EscenaParcelaProps) {
+  useIdioma(); // se vuelve a dibujar el HUD al cambiar de idioma
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -319,7 +326,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
 
   const avisosCriticos = criticos.map((a) => (
     <p key={a.codigo + a.mensaje} className="escena-aviso escena-aviso-critico" role="note">
-      <strong>{a.codigo === 'DATOS_DE_EJEMPLO' ? 'Datos de ejemplo' : 'Aviso'}:</strong> {a.mensaje}
+      <strong>{a.codigo === 'DATOS_DE_EJEMPLO' ? tt('esc3d.datosEjemplo') : tt('esc3d.aviso')}:</strong> {a.mensaje}
     </p>
   ));
 
@@ -502,13 +509,13 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     const presentes = vista === 'cultivo' ? [...new Set(modelo.bloques.map((b) => b.cultivo).filter((c): c is string => !!c))] : [];
     const sinDato = vista ? modelo.bloques.length - (coloresVista?.size ?? 0) : 0;
     const globo = (b: BloqueEscena) => {
-      const d = vista ? detalleVista(b, vista, dentroDeVentana, contextoVista) : { titulo: fichaBloque(b).resumen, lineas: [`Celda ${b.celdaId}`] };
+      const d = vista ? detalleVista(b, vista, dentroDeVentana, contextoVista) : { titulo: fichaBloque(b).resumen, lineas: [tt('esc3d.celda', { id: b.celdaId })] };
       const plaga = plagas?.get(b.celdaId) as (PlagaCelda & { nombre?: string }) | undefined;
-      const lineaPlaga = plaga ? `Plaga: ${plaga.nombre ?? nombresPlaga?.[plaga.tipo] ?? NOMBRES_PLAGA[plaga.tipo]} (${plaga.comiendo ? 'sin tratar' : 'tratada'})` : null;
+      const lineaPlaga = plaga ? tt('esc3d.plaga', { nombre: plaga.nombre ?? nombresPlaga?.[plaga.tipo] ?? NOMBRES_PLAGA[plaga.tipo], estado: plaga.comiendo ? tt('esc3d.sinTratar') : tt('esc3d.tratada') }) : null;
       return <><strong>{d.titulo}</strong>{d.lineas.map((l) => <span key={l}>{l}</span>)}{lineaPlaga && <span className={plaga!.comiendo ? 'escena-globo-plaga' : undefined}>{lineaPlaga}</span>}</>;
     };
     return (
-      <section className={`escena escena-fondo escena-bioma-${bioma} escena-clima-${climaDelFondo} ${className}`} data-clima={NOMBRE_CLIMA_FONDO[climaDelFondo]} aria-label="Escena 3D de la parcela" style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
+      <section className={`escena escena-fondo escena-bioma-${bioma} escena-clima-${climaDelFondo} ${className}`} data-clima={NOMBRE_CLIMA_FONDO[climaDelFondo]} aria-label={tt('esc3d.escena')} style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
         {lienzoCaja}
         {hover && !sinWebGL && (
           <div className={`escena-globo escena-globo-vista${vista ? ` escena-globo-${vista}` : ''}`} style={{ left: hover.x, top: hover.y }} aria-hidden="true">
@@ -518,21 +525,21 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
         {hud && (
           <div className="escena-hud">
             {seleccion && !pincel && (
-              <div className="escena-hud-panel escena-hud-ficha" role="region" aria-label="Celda elegida" aria-live="polite">
+              <div className="escena-hud-panel escena-hud-ficha" role="region" aria-label={tt('esc3d.celdaElegida')} aria-live="polite">
                 <div className="escena-hud-cabeza">
-                  <p>Celda {seleccion.celdaId}</p>
-                  <button type="button" className="escena-hud-cerrar" onClick={() => elegir(null)} aria-label="Cerrar ficha">×</button>
+                  <p>{tt('esc3d.celda', { id: seleccion.celdaId })}</p>
+                  <button type="button" className="escena-hud-cerrar" onClick={() => elegir(null)} aria-label={tt('esc3d.cerrarFicha')}>×</button>
                 </div>
                 <div className="escena-hud-globo">{globo(seleccion)}</div>
               </div>
             )}
             {vista && (
-              <div className="escena-hud-panel escena-escala" role="region" aria-label={`Escala de la vista ${NOMBRE_VISTA[vista]}`}>
+              <div className="escena-hud-panel escena-escala" role="region" aria-label={tt('esc3d.escalaVista', { vista: NOMBRE_VISTA[vista] })}>
                 <p className="escena-escala-titulo">{NOMBRE_VISTA[vista]}</p>
                 {vista === 'cultivo' && (
                   <ul className="escena-escala-lista">
-                    {presentes.map((c) => { const pr = problemas.find((x) => x.cultivo === c); return <li key={c}><span className="escena-escala-muestra" style={{ background: colorCultivo(c) }} />{NOMBRES_CULTIVO_ESCENA[c] ?? c}{pr && <MarcaProblema problema={pr} nombre={NOMBRES_CULTIVO_ESCENA[c] ?? c} />}</li>; })}
-                    {presentes.length === 0 && <li>Sin cultivos en esta fecha.</li>}
+                    {presentes.map((c) => { const pr = problemas.find((x) => x.cultivo === c); return <li key={c}><span className="escena-escala-muestra" style={{ background: colorCultivo(c) }} />{nombreCultivo(c)}{pr && <MarcaProblema problema={pr} nombre={nombreCultivo(c)} />}</li>; })}
+                    {presentes.length === 0 && <li>{tt('esc3d.sinCultivos')}</li>}
                   </ul>
                 )}
                 {vista === 'validacion' && (
@@ -540,22 +547,22 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
                     <ul className="escena-escala-pasos">
                       {[...NIVELES_VALIDACION].reverse().map((n) => <li key={n.nivel} style={{ background: n.color }} title={n.etiqueta} />)}
                     </ul>
-                    <div className="escena-escala-extremos"><span>Muy mala idea</span><span>Muy buena</span></div>
-                    <p className="escena-detalle">Estado de la planta del motor; baja con siembra fuera de ventana, calor o cultivo no registrado en el lugar.</p>
+                    <div className="escena-escala-extremos"><span>{tt('esc3d.muyMalaIdea')}</span><span>{tt('esc3d.muyBuena')}</span></div>
+                    <p className="escena-detalle">{tt('esc3d.validacionAyuda')}</p>
                   </>
                 )}
                 {vista === 'agua' && (
                   <>
                     <div className="escena-escala-degradado" style={{ background: `linear-gradient(90deg, ${colorAgua(0)}, ${colorAgua(AGUA_MAX_MM)})` }} />
-                    <div className="escena-escala-extremos"><span>0 mm/día</span><span>{AGUA_MAX_MM}+ mm/día</span></div>
-                    <p className="escena-detalle">Demanda de agua del cultivo ese día (ETc del motor).</p>
+                    <div className="escena-escala-extremos"><span>{tt('esc3d.mmDia', { n: 0 })}</span><span>{tt('esc3d.mmDiaMas', { n: AGUA_MAX_MM })}</span></div>
+                    <p className="escena-detalle">{tt('esc3d.aguaAyuda')}</p>
                   </>
                 )}
                 {vista === 'luz' && (
                   <>
                     <div className="escena-escala-degradado" style={{ background: `linear-gradient(90deg, ${colorLuz(0)}, ${colorLuz(LUZ_MAX_MJ)})` }} />
-                    <div className="escena-escala-extremos"><span>0</span><span>{LUZ_MAX_MJ}+ MJ/m² al día</span></div>
-                    <p className="escena-detalle">{climaSemana?.radiacionMjM2Dia == null ? 'Sin radiación con dato en esta semana.' : `Esta semana: ${megajoules(climaSemana.radiacionMjM2Dia)}.`} Radiación solar de NASA POWER; es la misma en toda la parcela (celda de unos 56 × 66 km), así que todas las celdas llevan el mismo color.</p>
+                    <div className="escena-escala-extremos"><span>0</span><span>{tt('esc3d.mjDia', { n: LUZ_MAX_MJ })}</span></div>
+                    <p className="escena-detalle">{climaSemana?.radiacionMjM2Dia == null ? tt('esc3d.sinRadiacion') : tt('esc3d.estaSemana', { valor: megajoules(climaSemana.radiacionMjM2Dia) })}{tt('esc3d.luzAyuda')}</p>
                   </>
                 )}
                 {vista === 'temperatura' && (
@@ -563,30 +570,30 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
                     <ul className="escena-escala-pasos">
                       {NIVELES_TEMPERATURA.map((n) => <li key={n.nivel} style={{ background: n.color }} title={n.etiqueta} />)}
                     </ul>
-                    <div className="escena-escala-extremos"><span>Demasiado frío</span><span>Demasiado calor</span></div>
-                    <p className="escena-detalle">{climaSemana?.tMediaC == null ? 'Sin temperatura con dato en esta semana.' : `Media de la semana: ${grados(climaSemana.tMediaC)}.`} Se compara con el rango de temperatura media de cada cultivo (FAO EcoCrop); no es un umbral de estrés diario.</p>
+                    <div className="escena-escala-extremos"><span>{tt('esc3d.frio')}</span><span>{tt('esc3d.calor')}</span></div>
+                    <p className="escena-detalle">{climaSemana?.tMediaC == null ? tt('esc3d.sinTemperatura') : tt('esc3d.mediaSemana', { valor: grados(climaSemana.tMediaC) })}{tt('esc3d.temperaturaAyuda')}</p>
                   </>
                 )}
-                {sinDato > 0 && <p className="escena-detalle">Sin color: {sinDato} {sinDato === 1 ? 'celda' : 'celdas'} sin dato del motor.</p>}
+                {sinDato > 0 && <p className="escena-detalle">{tt('esc3d.sinColor', { n: sinDato, celdas: sinDato === 1 ? tt('esc3d.celdaS') : tt('esc3d.celdasP') })}</p>}
               </div>
             )}
-            <div className="escena-hud-graficos" role="radiogroup" aria-label="Nivel de gráficos">
-              <span>Gráficos</span>
+            <div className="escena-hud-graficos" role="radiogroup" aria-label={tt('esc3d.nivelGraficos')}>
+              <span>{tt('esc3d.graficos')}</span>
               {NIVELES_GRAFICOS.map((n) => (
                 <button key={n} type="button" role="radio" aria-checked={nivelGraficos === n} title={AJUSTES_GRAFICOS[n].detalle} onClick={() => elegirNivel(n)}>{NOMBRE_NIVEL_GRAFICOS[n]}</button>
               ))}
             </div>
-            {leyendaCelda && <p className="escena-hud-escala-celda" role="note" aria-label="Escala de la celda">
-              <span className="escena-escala-regla" aria-hidden="true" />{leyendaCelda.texto}
+            {leyendaCelda && <p className="escena-hud-escala-celda" role="note" aria-label={tt('esc3d.escalaCelda')}>
+              <span className="escena-escala-regla" aria-hidden="true" />{textoCelda(leyendaCelda)}
             </p>}
-            <div className="escena-hud-barra" role="toolbar" aria-label="Vistas de la parcela">
+            <div className="escena-hud-barra" role="toolbar" aria-label={tt('esc3d.vistas')}>
               {(tieneClima ? (['cultivo', 'validacion', 'agua', 'luz', 'temperatura'] as const) : (['cultivo', 'validacion', 'agua'] as const)).map((v) => (
                 <button key={v} type="button" aria-pressed={vista === v} onClick={() => setVista((a) => (a === v ? null : v))} title={AYUDA_VISTA[v]}>
                   <span className={`escena-vista-icono escena-vista-${v}`} aria-hidden="true" />{NOMBRE_VISTA[v]}
                 </button>
               ))}
               <span className="escena-hud-separador" aria-hidden="true" />
-              <button type="button" className="escena-brujula" onClick={() => escena.current?.restablecerVista(true)} disabled={sinWebGL} aria-label={`Restablecer vista (Inicio). Norte a ${azimut} grados. Q y E giran.`} title="Restablecer vista (Inicio). Q y E giran">
+              <button type="button" className="escena-brujula" onClick={() => escena.current?.restablecerVista(true)} disabled={sinWebGL} aria-label={tt('esc3d.brujula', { azimut })} title={tt('esc3d.brujulaTitulo')}>
                 <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style={{ transform: `rotate(${azimut}deg)` }}>
                   <path d="M12 3 15.5 12H8.5Z" fill="#b5452f" /><path d="M12 21 8.5 12h7Z" fill="currentColor" opacity=".45" /><circle cx="12" cy="12" r="1.6" fill="#fff" />
                 </svg>

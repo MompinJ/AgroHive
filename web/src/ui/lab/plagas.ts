@@ -3,6 +3,7 @@
 // cultivo que una plaga registrada ataca, solo cerca del 20 % de las celdas (un foco fijo). Si el usuario
 // no aplica insecticida en esa celda y ciclo, la escena la dibuja comiendose la planta. No cambia el motor ni el ranking: un
 // registro de presencia no es un pronostico de dano.
+import { nombrePlaga } from '../i18n/textos/laboratorio';
 import type { PlanSiembra } from '../../../../contratos/tipos/contratos';
 import { cultivoDeCelda } from '../planes';
 
@@ -120,7 +121,7 @@ export function mapaPlagas(
     if (r.ciclo == null || !r.cultivo) continue;
     const plaga = plagaDeCultivo(presentes, r.cultivo);
     if (!plaga || protegidas(proteccion, rotacion, r.ciclo).has(r.celdaId)) continue;
-    salida.set(r.celdaId, { tipo: plaga.tipoVisual, comiendo: true, nombre: plaga.nombreComun });
+    salida.set(r.celdaId, { tipo: plaga.tipoVisual, comiendo: true, nombre: nombrePlaga(plaga.nombreComun) });
   }
   return salida;
 }

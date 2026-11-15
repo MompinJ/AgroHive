@@ -10,6 +10,7 @@
 // El color nunca va solo: cada estado tiene un patron y un icono propios, distintos
 // de los demas, y una etiqueta de texto. Las pruebas verifican las tres cosas.
 
+import { tt } from '../ui/i18n/actual';
 import { tintaSobre } from './contraste';
 import type { EstadoVisual } from './modelo';
 
@@ -58,7 +59,7 @@ export const ORDEN_ESTADOS: readonly EstadoVisual[] = [
 
 export const ESTILOS_ESTADO: Record<EstadoVisual, EstiloEstado> = {
   normal: conTinta({
-    etiqueta: 'Normal',
+    get etiqueta() { return tt('estado.normal'); },
     color: '#009e73',
     patron: 'liso',
     icono: 'hoja',
@@ -66,7 +67,7 @@ export const ESTILOS_ESTADO: Record<EstadoVisual, EstiloEstado> = {
     descripcion: 'El motor no reporta estres en la planta.',
   }),
   estresada: conTinta({
-    etiqueta: 'Estresada',
+    get etiqueta() { return tt('estado.estresada'); },
     color: '#e69f00',
     patron: 'puntos',
     icono: 'gota_tachada',
@@ -74,7 +75,7 @@ export const ESTILOS_ESTADO: Record<EstadoVisual, EstiloEstado> = {
     descripcion: 'El motor reporta estres en la planta.',
   }),
   marchita: conTinta({
-    etiqueta: 'Marchita',
+    get etiqueta() { return tt('estado.marchita'); },
     color: '#d55e00',
     patron: 'rayas',
     icono: 'hoja_caida',
@@ -82,7 +83,7 @@ export const ESTILOS_ESTADO: Record<EstadoVisual, EstiloEstado> = {
     descripcion: 'El motor reporta marchitez.',
   }),
   podrida: conTinta({
-    etiqueta: 'Podrida',
+    get etiqueta() { return tt('estado.podrida'); },
     color: '#cc79a7',
     patron: 'rayas_densas',
     icono: 'equis',
@@ -90,7 +91,7 @@ export const ESTILOS_ESTADO: Record<EstadoVisual, EstiloEstado> = {
     descripcion: 'El motor reporta el desenlace de estres (podrida).',
   }),
   suelo_desnudo: conTinta({
-    etiqueta: 'Suelo desnudo',
+    get etiqueta() { return tt('estado.sueloDesnudo'); },
     color: '#8a6240',
     patron: 'verticales',
     icono: 'surco',
@@ -114,7 +115,7 @@ export const ESTILOS_ESTADO: Record<EstadoVisual, EstiloEstado> = {
     descripcion: 'Fallo una fuente de datos sin respaldo.',
   }),
   sin_resultado: conTinta({
-    etiqueta: 'Sin resultado',
+    get etiqueta() { return tt('estado.sinResultado'); },
     color: '#bdbdbd',
     patron: 'horizontales',
     icono: 'vacio',
@@ -125,7 +126,7 @@ export const ESTILOS_ESTADO: Record<EstadoVisual, EstiloEstado> = {
 
 /** Estilo del relieve faltante (celda sin elevacion): hueco, no nivel cero. */
 export const ESTILO_SIN_ELEVACION: EstiloEstado = conTinta({
-  etiqueta: 'Sin elevacion',
+  get etiqueta() { return tt('estado.sinElevacion'); },
   color: '#ececec',
   patron: 'cruces',
   icono: 'interrogacion',
