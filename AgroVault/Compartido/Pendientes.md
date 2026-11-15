@@ -46,20 +46,12 @@ Corte 14/11, 18:15, desde las marcas de `docs/14` (54 de 60 hechas tras A0.5 y A
 
 | ID | Qué falta |
 | --- | --- |
-<<<<<<< HEAD
-| A3.6 | Hecho en `origin/main` y en la rama `Eduardo`. A5.4 está `[EN CURSO]` (no la bloquea nadie): la pérdida de contexto WebGL ya se probó con SwiftShader y falta la medición en hardware real |
-| A3.8 | Tooltip o toque: humedad, déficit, pendiente |
-| A3.9 | Chile y mascota hechos. Falta revisión humana del visor y de la equivalencia pimiento dulce. La escena no muestra la mascota. Props descartados |
-| A4.1 | Gráficas de lluvia, demanda y balance (balam). El motor ya entrega las series: `cliente.serieBalance(rotacionId, escenario)` con lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo (contrato `serie-balance` 0.11.0). La interfaz no recalcula |
-| A4.3 | Pintar `explicacion` en la comparación. La plantilla ya sale de `rankear` |
-=======
 | A0.3 | Acta de roles, cultivos y criterio de ranking (equipo). Lo decidido ya está en `docs/13` |
 | A3.9 | Chile y mascota hechos; la escena muestra la mascota por defecto (`EscenaParcela`, `mascota = true`). Falta la revisión humana del visor y de la equivalencia con el pimiento dulce |
->>>>>>> origin/main
 | A4.4 | Redacción con LLM, opcional, solo sobre números ya calculados |
 | A4.12 | CDL y SSURGO, después de C5. C5 no está cruzada |
 | A4.13 | Hecha en la API: `GET /api/calendario`. El front sigue leyendo solo `calendario-isla.json` (balam) |
-| A5.4 | `[BLOQUEADO]`: medir en hardware real (laptop sin GPU dedicada y celular) con `web/medir.html`, que ya entra al build |
+| A5.4 | `[EN CURSO]` (no la bloquea nadie): medido con SwiftShader, 518 celdas, 191 416 triángulos y 6.7 cuadros/s. Falta la medición en hardware real (laptop sin GPU dedicada y celular) con `web/medir.html`, que ya entra al build, y publicarlo en el droplet con la señal de Mompin |
 | A5.7 | `[EN CURSO]` (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |
 | A5.9 | Envío final según las reglas oficiales (`docs/02`) |
 
