@@ -13,8 +13,11 @@ export type DatosParcela = {
 };
 
 type Opciones = { senal?: AbortSignal; tiempoMs?: number; fetchFn?: typeof fetch };
-export type Obligatorio = 'clima' | 'suelo' | 'cultivos';
-const OBLIGATORIOS: readonly Obligatorio[] = ['clima', 'suelo', 'cultivos'];
+// Cualquier lugar del mundo se puede dibujar y se toma solo la informacion que hay de el. Sin clima o sin catalogo no hay simulacion posible,
+// asi que esos dos son obligatorios; el suelo (SoilGrids no cubre oceano, hielo ni algunos desiertos), el calendario local y la proxima
+// temporada son opcionales: si faltan, lo que depende de ellos queda NO_EVALUABLE y se avisa, no se inventa.
+export type Obligatorio = 'clima' | 'cultivos';
+const OBLIGATORIOS: readonly Obligatorio[] = ['clima', 'cultivos'];
 
 /** Pide las cinco respuestas en paralelo para el centroide de la parcela. Nunca lanza. */
 export async function cargarDatosParcela(centroide: readonly [number, number], opciones: Opciones = {}): Promise<DatosParcela> {
@@ -55,6 +58,7 @@ export function avisosDe(d: DatosParcela): AvisoDatos[] {
     de('clima', d.clima.datos.advertencias);
   }
   if (d.suelo.ok) de('suelo', d.suelo.datos.advertencias);
+  else avisos.push({ origen: 'suelo', codigo: 'SUELO_NO_DISPONIBLE', mensaje: `Sin datos de suelo para este lugar (${d.suelo.error.motivo}): lo que depende del suelo, como el balance de agua, queda NO_EVALUABLE; el clima, las fechas y las plagas siguen disponibles.`, severidad: 'aviso' });
   if (d.proximaTemporada.ok) de('proxima temporada', d.proximaTemporada.datos.advertencias);
   else avisos.push({ origen: 'proxima temporada', codigo: 'PROXIMA_TEMPORADA_NO_DISPONIBLE', mensaje: d.proximaTemporada.error.motivo, severidad: 'info' });
   if (d.calendario?.ok) de('calendario', d.calendario.datos.advertencias);
