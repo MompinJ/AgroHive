@@ -39,6 +39,8 @@ Fuentes primarias abiertas en Chrome: [guía de entrega, publicada el 13/11/2026
 
 IA/SI como apoyo, no para originar la idea. Indicar dónde/cómo se usó: marca visible en imagen/video; reconocimiento textual y metadatos en audio/código/datos. Contenido generado sin identidad NASA. La [respuesta GO Team del 6/11](https://github.com/nasa/spaceapps/discussions/1849) confirma declaración y marcas.
 
+**En la demo de AgroHive** (15/11): la voz en inglés del trailer es generada con IA (ElevenLabs TTS vía Krea, guion del equipo). Se declara en texto (README, "Declaración de uso de IA"), en los metadatos del audio y con una línea visible en el cartón final del video. Detalle y lista de verificación en [`trailer-30s.md`](trailer-30s.md).
+
 El proyecto no debe iniciarse antes del evento ([GO Team, 10/11](https://github.com/nasa/spaceapps/discussions/1916)). La guía de evaluación exige trabajo original y referencias de recursos externos, también código abierto, con sus permisos. Criterios: impacto, creatividad, validez, relevancia y presentación, escala 1 a 5.
 
 NASA distingue contenido propio y de terceros; atribuir no implica aval de NASA ([guía de imágenes y medios](https://www.nasa.gov/nasa-brand-center/images-and-media/)).

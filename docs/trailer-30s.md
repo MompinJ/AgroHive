@@ -48,7 +48,7 @@ Nombres del montaje (bloque 6), en este orden: Bajío, Mexico · Sorriso, Brazil
 
 **Si sobra voz** al grabar, lo primero que se corta es "20 years of" (bloque 3) y luego "Watch your field react" se vuelve texto en pantalla.
 
-**Enlace del cierre** `[EN EVENTO]`: el equipo decide si va la app publicada (hoy `https://64-23-143-102.sslip.io/`) o el repositorio (`github.com/MompinJ/AgroHive`). En pantalla conviene uno solo, corto.
+**Enlace del cierre** `[DECIDIDO]` (Mompin, 15/11): se muestra la URL de la app publicada (hoy `https://64-23-143-102.sslip.io/`). Si cambia el despliegue, se cambia en el cartón.
 
 **Evento en el cierre:** "Field Shift challenge" en texto, sin logos del evento ni de NASA. Si se quiere poner "NASA Space Apps Challenge 2026" como texto, confirmar antes con las reglas de marca (`docs/02`, guía de imágenes y medios) `[VERIFICAR]`.
 
@@ -67,7 +67,8 @@ Archivos listos para importar en el editor (SRT, mismos tiempos que la tabla):
 **Voz con IA en Krea** `[DECIDIDO]` (Mompin, 15/11: "tengo KREA, para la voz"). Krea tiene texto a voz (ElevenLabs `elevenlabs/tts` y Seed Audio). Flujo obligatorio: se pule el texto, se pide el costo con preflight, se muestra la ficha (modelo, voz, texto, costo y saldo) y **no se genera nada sin el OK de Mompin**; primero una sola toma para validar el tono.
 
 - **Tono:** voz adulta, cálida y segura, ritmo de trailer pero sin exagerar; acento neutro.
-- **Se generan los 6 bloques por separado** (más fácil de ajustar al corte) o el texto completo con pausas marcadas; se decide en la ficha.
+- **Toma 1 generada** (15/11, OK de Mompin): ElevenLabs TTS `eleven_v4`, voz **Brian**, texto completo con pausas; 22.6 créditos. Archivo: [`trailer-30s/voz/voz-v1-brian.mp3`](trailer-30s/voz/voz-v1-brian.mp3) (20.7 s, con la declaración de IA en los metadatos). Job de Krea `acc8a6de-7199-4b2d-a49e-fa240b8750a3`.
+- **Dónde cae cada frase en el archivo** (medido con `silencedetect`, para cortar y alinear subtítulos): 1) 0.0-1.8 s · 2) 2.2-4.7 s · 3) 5.1-9.3 s · 4) 9.7-14.2 s · 5) 14.6-17.9 s (con pausa antes de "not their best") · 6) 18.3-20.7 s. Cada frase cabe en su bloque de la escaleta.
 - **Declaración (obligatoria por `docs/02`):** en el video, una línea visible en el cartón final ("Voice: AI-generated (Krea / ElevenLabs)" o el modelo real); en el audio exportado, el mismo texto en los metadatos (`comment`/`description`); y la mención en `docs/02` y en el README.
 
 ## Música y sonido
@@ -120,23 +121,106 @@ Se graba **más largo de lo que se usa** (5 a 8 s por toma) para elegir el mejor
 
 | Toma | Estado | Archivo bueno | Notas |
 | --- | --- | --- | --- |
-| T1 | Lista para grabar | | |
-| T2 | Lista para grabar | | |
+| T1 | Lista para grabar (laptop o sin pantalla) | | |
+| T2 | Lista para grabar (laptop o sin pantalla) | | |
 | T3a | Espera B7 | | |
 | T3b | Espera B7 | | |
 | T4a | Espera B7 | | |
 | T4b | Espera B7 | | |
 | T4c | Espera B7 | | |
 | T5 | Espera B7 | | |
-| T6a-f | Lista para grabar | | |
+| T6a-f | Lista para grabar (laptop o sin pantalla) | | |
 | T6g | Espera B7 | | |
 | T7 | Por hacer en el editor | | |
-| Voz | Espera OK de la ficha de Krea | | |
+| Voz | Toma 1 lista, falta validarla en el corte | `voz/voz-v1-brian.mp3` | Brian, eleven_v4 |
 | Música | Por elegir (A, B o C) | | |
+
+### Grabar en la laptop (Linux con Hyprland), paso a paso
+
+**1. Levantar la app en local** (desde la raíz del repo, con `main` actualizado):
+
+```bash
+cd web
+npm ci                                   # solo la primera vez
+npm run dev -- --host 127.0.0.1 --port 5173 --strictPort    # http://127.0.0.1:5173
+```
+
+Los seis ejemplos vienen grabados en el front: **no necesitan la API**. Solo T6g (dibujar una parcela) pide datos a la API pública, que acepta `127.0.0.1:5173`. Sin internet: `bash herramientas/demo-sin-red.sh` (API sin red y front en `http://127.0.0.1:4173/`, `docs/demo-sin-red.md`).
+
+**2. Abrir el navegador a 1920 x 1080:** `google-chrome-stable --new-window --app=http://127.0.0.1:5173/#/terreno` y pantalla completa con F11 en el monitor de la laptop (eDP-1, 1920 x 1080 a 60 Hz). Con la NVIDIA (si está `prime-run`): `prime-run google-chrome-stable ...` da más cuadros.
+
+**3. Llegar al Bajío:** Terreno → "Saltar tutorial" → tarjeta **Bajío, Guanajuato** → abre Cultivos con la rotación 1 sembrada (maíz) → "Ver escenarios". En la escena, abajo a la derecha, **Gráficos: Alto** (se queda guardado en el navegador).
+
+**4. Ocultar la interfaz** para las tomas solo 3D (T1, T2, T6): F12 → consola → pegar esto (no cambia el código de la app; se va al recargar):
+
+```js
+window.toma = {
+  ocultar() { document.head.insertAdjacentHTML('beforeend', '<style id="toma">body *{visibility:hidden!important}body *:has(canvas),canvas{visibility:visible!important}</style>'); },
+  mostrar() { document.getElementById('toma')?.remove(); },
+  semana(n) { const r = document.querySelector('input[type=range]'); Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(r, String(n)); for (const t of ['input', 'change', 'pointerup']) r.dispatchEvent(new Event(t, { bubbles: true })); },
+};
+```
+
+Luego F12 para cerrar las herramientas. `toma.ocultar()` deja solo la escena con su cielo; `toma.mostrar()` regresa todo; `toma.semana(4)` mueve la línea de tiempo (0 a 18 en el maíz del Bajío).
+
+**5. Mover la cámara con teclado** (clic una vez sobre la escena): **Q / E** giran 45° con animación, **+ / -** acercan, **W A S D** desplazan, **Inicio** restablece. Clic derecho y arrastrar gira suave. Con teclado el cursor puede quedarse estacionado en el otro monitor.
+
+**6. Grabar con wf-recorder** (Ctrl+C para parar):
+
+```bash
+mkdir -p ~/Videos/agrohive
+wf-recorder -o eDP-1 -r 60 -c libx264 -p preset=veryfast -p crf=18 -f ~/Videos/agrohive/T1_bajio_seco_v1.mp4
+```
+
+En la primera prueba comprobar si sale el cursor; si sale, dejarlo en el otro monitor. OBS sirve igual (fuente "Captura de pantalla (PipeWire)", 1920 x 1080, 60 fps, sin "Capturar cursor").
+
+**7. Cada toma:**
+
+| Toma | Cómo |
+| --- | --- |
+| T1 | Escenarios → **Año seco 2009**, `toma.semana(3)`, `toma.ocultar()`, acercar con + dos veces. Grabar, y a los 2 s `toma.semana(10)` (pasa de verde a estresado). |
+| T2 | Igual, sin acercar (Inicio), en `toma.semana(12)`; grabar 8 s girando suave con clic derecho o un toque de E. |
+| T6a-f | Terreno → cada ejemplo → Cultivos → "Ver escenarios" → `toma.semana(8)` → `toma.ocultar()` → misma distancia (Inicio) → grabar 4 s con un toque de E. Orden: Bajío, Sorriso, Uasin Gishu, Ludhiana, Tierra de Campos, Story County. |
+
+### Opción: las grabo yo sin pantalla
+
+Probado el 15/11: Chrome sin pantalla, conducido por Playwright, con **el reloj de la página controlado** (se avanza 1/60 s y se toma un cuadro). Sale a **60 fps exactos y 1920 x 1080**, sin interfaz, con el cielo, sin cursor y sin depender de la GPU; la cámara gira con el mismo arrastre de clic derecho. Tarda unos 0.4 s por cuadro (unos 3 minutos por cada 8 s de toma). Sirve para **T1, T2 y T6a-f**; las tomas con interfaz (T3 a T5, T6g) conviene grabarlas en la laptop cuando entre B7. Decide Mompin.
+
+## Cartón final (T7): variantes
+
+Todas llevan el enlace de la app publicada (`[DECIDIDO]`, arriba), "Team Code Hive · Field Shift challenge", la línea de límites y la declaración de IA. Sin logos de NASA ni del evento.
+
+| | Línea grande | Línea media | Línea chica (límites e IA) |
+| --- | --- | --- | --- |
+| **A. Lema** (recomendada: repite la voz) | **AgroHive** | Plan for the bad year. | Explores real climate history. Does not forecast yields, income or the weather. The farmer decides. · Voice: AI-generated (ElevenLabs via Krea). Climate data: NASA POWER. |
+| B. Contraste | **Not the best year. The worst one.** | AgroHive · Test your crop rotation before you plant. | Igual que A |
+| C. Alcance | **AgroHive** | What-if farming on 20 years of real climate · 6 sample farms · 5 continents · 40 crops | Igual que A |
+
+## Línea de tiempo del montaje
+
+Proyecto 1920 x 1080 a 60 fps (o 30 si la plataforma lo pide), 30 s. **La pista de voz ya está colocada:** [`trailer-30s/voz/voz-v1-linea-30s.wav`](trailer-30s/voz/voz-v1-linea-30s.wav) (30.0 s, 48 kHz, cada frase en su segundo; se suelta en 0:00). Los subtítulos (`.srt`) ya siguen esos tiempos.
+
+| Tiempo | V1 tomas | V2 texto en pantalla | Voz (en la pista) | Música |
+| --- | --- | --- | --- | --- |
+| 0:00-0:03 | T1 (lista para grabar) | WHAT IF? | frase 1, 0.3-2.1 s | golpe grave en 0:00, viento seco |
+| 0:03-0:07 | T2 (lista para grabar) | Dry year · 2009 | frase 2, 3.4-5.8 s | pad bajo |
+| 0:07-0:09 | **Hueco T3a (espera B7)** | NASA POWER climate data, 2005-2025 | frase 3, 7.2-11.4 s | entra el pulso |
+| 0:09-0:12 | **Hueco T3b (espera B7)** | | | |
+| 0:12-0:14.5 | **Hueco T4a (espera B7)** | Dry 2009 · Normal 2016 · Wet 2018 | frase 4, 12.2-16.8 s | crece |
+| 0:14.5-0:16 | **Hueco T4b (espera B7)** | | | barrido de guadaña |
+| 0:16-0:17 | **Hueco T4c (espera B7)** | | | zumbido del enjambre |
+| 0:17-0:21 | **Hueco T5 (espera B7)** | Ranked by the worst year | frase 5, 17.0-20.5 s | tensión, sube |
+| 0:21-0:24.6 | T6a-f, 0.6 s c/u (listas para grabar) | nombre de cada lugar | — | **pico**: golpe en 0:21, cortes al pulso |
+| 0:24.6-0:26 | **Hueco T6g (espera B7)** | Or draw your own field | — | pico |
+| 0:26-0:30 | T7 cartón | variante A, B o C | frase 6, 26.3-28.5 s | corte seco en 0:26 y acorde que se apaga |
+
+Mientras falten las tomas en inglés, los huecos pueden llevar el cartón del bloque en negro con su texto, para revisar ritmo y voz.
+
+**Música:** opción A (Krea, `elevenlabs/music-v2.5`, instrumental, 30 s) con un prompt que sigue esta tabla (golpe en 0, espacio para la voz hasta 0:21, pico de 0:21 a 0:26, corte y cola). **Krea no devuelve el costo previo de este modelo** (el preflight sale vacío): se generaría sabiendo eso, con OK de Mompin. Si no, opción B (Pixabay Music).
 
 ## Cómo se arma
 
-1. **Voz primero:** con la ficha aprobada se genera la voz en Krea por bloques; se mide cuánto dura cada uno y se ajusta la escaleta a la voz real.
+1. **Voz primero:** hecha (toma 1, 15/11) y colocada en `voz-v1-linea-30s.wav`.
 2. **Tomas:** se graban según la lista (cuando entren E10 y B7) y se elige el mejor tramo de cada una.
 3. **Edición** en el editor que use el equipo (Kdenlive, DaVinci o CapCut): línea de tiempo 1920 x 1080 a 60 fps (o 30 si la plataforma lo pide), pistas: video, texto en pantalla, subtítulos, voz, música, efectos. Cortes al ritmo de la música, sobre todo en el bloque 6.
 4. **Subtítulos:** importar el `.bilingue.srt` y ajustar los tiempos a la voz real.
