@@ -8,11 +8,13 @@ import { indicePaso, irA, pages, pasos, usePage } from './ui/navigation';
 import { BarraPasos } from './ui/BarraPasos';
 import { Laboratorio, type PasoLab } from './ui/lab/Laboratorio';
 import type { Parcela } from '../../contratos/tipos/contratos';
+import { useIdioma } from './ui/i18n/Idioma';
 
 const rutaDePaso: Record<PasoLab, string> = { cultivos: '/laboratorio', escenarios: '/escenarios', comparacion: '/comparacion' };
 const pasoDeRuta: Record<string, PasoLab> = { '/laboratorio': 'cultivos', '/escenarios': 'escenarios', '/comparacion': 'comparacion' };
 
 export default function App() {
+  const { t } = useIdioma();
   const { path, mode } = usePage();
   const isHome = path === '/';
   const isTerrain = path === '/terreno';
@@ -31,14 +33,14 @@ export default function App() {
   // Stepper obligatorio: una ruta de un paso aun cerrado lleva al paso abierto mas lejano.
   useEffect(() => {
     if (bloqueado) {
-      setAnnouncement(`Completa primero el paso ${progreso + 1}: ${pasos[progreso]!.label}.`);
+      setAnnouncement(t('app.completaPaso', { n: progreso + 1, nombre: pasos[progreso]!.label }));
       irA(pasos[progreso]!.path, true);
     }
   }, [bloqueado, progreso]);
 
   useEffect(() => {
     const page = pages.find((item) => item.path === path);
-    document.title = `AgroHive · ${page?.label ?? 'Página no encontrada'}`;
+    document.title = `AgroHive · ${page?.label ?? t('app.noEncontrada')}`;
     const locationKey = `${path}?${mode ?? ''}`;
     if (previousLocation.current !== locationKey) {
       document.querySelector<HTMLElement>('h1')?.focus({ preventScroll: true });
@@ -52,7 +54,7 @@ export default function App() {
     if (parcela || id !== ejemplo) setProgreso(1); else setProgreso((p) => Math.max(p, 1));
     setParcela(null);
     setEjemplo(id);
-    setAnnouncement('Parcela de ejemplo seleccionada.');
+    setAnnouncement(t('app.ejemploElegido'));
   };
   const guardarParcela = (p: Parcela) => { setParcela(p); setProgreso(1); };
   const avanzar = (destino: PasoLab) => {
@@ -62,12 +64,12 @@ export default function App() {
   };
 
   if (isHome) return <div className="app-shell app-shell-home">
-    <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
+    <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>{t('nav.saltar')}</a>
     <main id="contenido" className="landing-main" tabIndex={-1}><Inicio /></main>
   </div>;
 
   if (pasoLab) return <div className="app-shell app-shell-lab">
-    <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
+    <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>{t('nav.saltar')}</a>
     <BarraPasos path={path} progreso={progreso} sobreEscena />
     <main id="contenido" className="lab-main" tabIndex={-1}>{!bloqueado && <Laboratorio estado={laboratorio} paso={pasoLab} onAvanzar={avanzar} />}</main>
     <div className="sr-only" role="status">{announcement}</div>
@@ -77,14 +79,14 @@ export default function App() {
   switch (path) {
     case '/terreno': content = <Terreno polygonMode={mode === 'poligono'} parcela={parcela} ejemplo={parcela ? null : ejemplo} onGuardar={guardarParcela} onElegirEjemplo={elegirEjemplo} />; break;
     case '/metodo': content = <MetodoFuentes estado={laboratorio} />; break;
-    default: content = <><PageHeading step="—" title="Esta página no existe.">Puedes volver al inicio para continuar explorando.</PageHeading><ActionLink href="#/">Volver al inicio</ActionLink></>;
+    default: content = <><PageHeading step="—" title={t('app.noExiste')}>{t('app.noExisteAyuda')}</PageHeading><ActionLink href="#/">{t('app.volver')}</ActionLink></>;
   }
 
   return <div className={`app-shell${isTerrain ? ' app-shell-terrain' : ''}`}>
-    <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
+    <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>{t('nav.saltar')}</a>
     <BarraPasos path={path} progreso={progreso} />
     <main id="contenido" className={isTerrain ? 'terrain-main' : 'wrap main-content'} tabIndex={-1}>{content}{!isTerrain && <MethodNotes />}</main>
     <div className="sr-only" role="status">{announcement}</div>
-    {isTerrain ? <footer className="terrain-footer"><p>Apoya la decisión del agricultor. No reemplaza asesoría agronómica.</p></footer> : <footer className="site-footer wrap"><p>AgroHive <span aria-hidden="true">/</span> Code Hive · NASA Space Apps 2026</p><p>Apoya la decisión del agricultor. No reemplaza asesoría agronómica.</p></footer>}
+    {isTerrain ? <footer className="terrain-footer"><p>{t('app.pie')}</p></footer> : <footer className="site-footer wrap"><p>AgroHive <span aria-hidden="true">/</span> Code Hive · NASA Space Apps 2026</p><p>{t('app.pie')}</p></footer>}
   </div>;
 }

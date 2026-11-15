@@ -3,6 +3,8 @@
 // parcela y el motor, con sus unidades. Un valor que falta dice NO_EVALUABLE y por que;
 // nunca se muestra como cero.
 
+import { idiomaActual, tt } from '../ui/i18n/actual';
+import { NOMBRES_CULTIVO_EN } from '../ui/i18n/cultivos-en';
 import { ESTILOS_ESTADO } from './estilos-estado';
 import type { BloqueEscena } from './modelo';
 
@@ -66,14 +68,15 @@ export const NOMBRES_CULTIVO_ESCENA: Record<string, string> = {
   betabel: 'Betabel',
 };
 export const NOMBRES_ETAPA_ESCENA: Record<string, string> = {
-  suelo_desnudo: 'Suelo desnudo',
-  siembra: 'Siembra',
-  brote: 'Brote',
-  crecimiento: 'Crecimiento',
-  madurez: 'Madurez',
+  get suelo_desnudo() { return tt('etapa.suelo_desnudo'); },
+  get siembra() { return tt('etapa.siembra'); },
+  get brote() { return tt('etapa.brote'); },
+  get crecimiento() { return tt('etapa.crecimiento'); },
+  get madurez() { return tt('etapa.madurez'); },
 };
 
-export const nombreCultivo = (id: string) => NOMBRES_CULTIVO_ESCENA[id] ?? id;
+/** Nombre visible del cultivo en el idioma activo (en ingles, nombreComunEn del catalogo; si falta, el de espanol). */
+export const nombreCultivo = (id: string) => (idiomaActual() === 'en' ? NOMBRES_CULTIVO_EN[id] : undefined) ?? NOMBRES_CULTIVO_ESCENA[id] ?? id;
 
 const numero = (n: number, decimales: number) =>
   n.toLocaleString('es-MX', { minimumFractionDigits: decimales, maximumFractionDigits: decimales });
@@ -151,7 +154,7 @@ export function fichaBloque(b: BloqueEscena): Ficha {
 
   return {
     titulo: `Celda ${b.celdaId}`,
-    resumen: `${cultivo ?? 'Sin cultivo'} · ${estilo.etiqueta}${b.noRecomendadoEnLugar ? ' · no recomendado aquí' : ''}`,
+    resumen: tt('ficha.resumen', { cultivo: cultivo ?? tt('val.sinCultivo'), estado: estilo.etiqueta, noRec: b.noRecomendadoEnLugar ? tt('ficha.noRec') : '' }),
     filas,
   };
 }

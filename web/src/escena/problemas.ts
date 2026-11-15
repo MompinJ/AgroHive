@@ -1,3 +1,5 @@
+import { tt } from '../ui/i18n/actual';
+import type { ClaveTexto } from '../ui/i18n/diccionarios';
 // Problemas de un cultivo en la simulacion, para la mini marca de su seccion. Puro: lee lo que el motor ya entrego en cada
 // registro de celda (estado de la planta y calor sobre el umbral); no calcula nada nuevo.
 //
@@ -51,13 +53,13 @@ export function problemasPorCultivo(registros: readonly RegistroProblema[]): Pro
   return [...grupos.values()].filter((g) => g.conProblema > 0).sort((a, b) => PESO[b.gravedad] - PESO[a.gravedad] || b.conProblema - a.conProblema || a.cultivo.localeCompare(b.cultivo));
 }
 
-const NOMBRE_ESTADO: Record<EstadoProblema, [string, string]> = { estresada: ['estresada', 'estresadas'], marchita: ['marchita', 'marchitas'], podrida: ['podrida', 'podridas'] };
+const NOMBRE_ESTADO: Record<EstadoProblema, [ClaveTexto, ClaveTexto]> = { estresada: ['prob.estresada', 'prob.estresadas'], marchita: ['prob.marchita', 'prob.marchitas'], podrida: ['prob.podrida', 'prob.podridas'] };
 
 /** "Maíz: 3 de 4 celdas con problemas (2 estresadas, 1 marchita; calor en 1)". */
 export function textoProblema(p: ProblemaCultivo, nombre: string): string {
-  const partes = (['podrida', 'marchita', 'estresada'] as const).filter((e) => p.estados[e]).map((e) => `${p.estados[e]} ${NOMBRE_ESTADO[e][p.estados[e] === 1 ? 0 : 1]}`);
-  if (p.calor) partes.push(`calor sobre el umbral en ${p.calor}`);
-  return `${nombre}: ${p.conProblema} de ${p.celdas} ${p.celdas === 1 ? 'celda' : 'celdas'} con problemas (${partes.join(', ')})`;
+  const partes = (['podrida', 'marchita', 'estresada'] as const).filter((e) => p.estados[e]).map((e) => `${p.estados[e]} ${tt(NOMBRE_ESTADO[e][p.estados[e] === 1 ? 0 : 1])}`);
+  if (p.calor) partes.push(tt('prob.calor', { n: p.calor }));
+  return tt('prob.texto', { nombre, n: p.conProblema, total: p.celdas, celdas: p.celdas === 1 ? tt('esc3d.celdaS') : tt('esc3d.celdasP'), partes: partes.join(', ') });
 }
 
-export const NOMBRE_GRAVEDAD: Record<Gravedad, string> = { aviso: 'Atención', alto: 'Problema', critico: 'Problema grave' };
+export const NOMBRE_GRAVEDAD: Record<Gravedad, string> = { get aviso() { return tt('grav.aviso'); }, get alto() { return tt('grav.alto'); }, get critico() { return tt('grav.critico'); } };
