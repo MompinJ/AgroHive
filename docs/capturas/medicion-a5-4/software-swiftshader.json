@@ -1,0 +1,72 @@
+{
+  "fecha": "2026-11-15T00:16:09.795Z",
+  "url": "http://localhost:5173/medir.html?api=http://127.0.0.1:8010",
+  "api": "http://127.0.0.1:8010",
+  "navegador": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+  "gpu": {
+    "vendedor": "Google Inc. (Google)",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+    "webgl2": true,
+    "webgl1": true
+  },
+  "equipo": {
+    "nucleos": 18,
+    "memoriaGB": 32,
+    "pantalla": "800x600",
+    "dpr": 1,
+    "tactil": false
+  },
+  "modo": "3D",
+  "preparacionMs": 167,
+  "medidas": [
+    {
+      "caso": "demo (4 celdas)",
+      "celdas": 4,
+      "primeraEscenaMs": 297,
+      "triangulos": 2264,
+      "drawCalls": 5,
+      "cuadrosEnReposo": 0,
+      "segundosReposo": 3,
+      "cuadrosPorSegundoConViento": 60,
+      "segundosViento": 10,
+      "memoriaMB": 61.7,
+      "lluviaDelDia": 0.01
+    },
+    {
+      "caso": "poligono propio (518 celdas)",
+      "celdas": 518,
+      "primeraEscenaMs": 598,
+      "triangulos": 191416,
+      "drawCalls": 5,
+      "cuadrosEnReposo": 0,
+      "segundosReposo": 3,
+      "cuadrosPorSegundoConViento": 9.4,
+      "segundosViento": 10,
+      "memoriaMB": 62.8,
+      "lluviaDelDia": 0.01
+    },
+    {
+      "caso": "mezcla de 4 cultivos (518 celdas)",
+      "celdas": 518,
+      "primeraEscenaMs": 1188,
+      "triangulos": 191416,
+      "drawCalls": 8,
+      "cuadrosEnReposo": 0,
+      "segundosReposo": 3,
+      "cuadrosPorSegundoConViento": 9.4,
+      "segundosViento": 10,
+      "memoriaMB": 61.6,
+      "lluviaDelDia": 0.84
+    }
+  ],
+  "perdidaContexto": {
+    "extension": true,
+    "perdido": true,
+    "restaurado": true,
+    "cuadrosTras": 5,
+    "triangulosTras": 191416
+  },
+  "errores": [],
+  "terminado": true,
+  "erroresConsola": []
+}

@@ -23,7 +23,7 @@ La fuente de verdad son los JSON Schema de `contratos/` (versión `0.12.2`, acti
 | `parcela.schema.json` | Polígono, cuadrícula y celdas con `elevacionM` y `pendientePct`; enlaza el suelo con `sueloId` | Front (polígono) + API (elevación) |
 | `suelo.schema.json` | Textura (USDA y grupo del selector) y pH estimados, siempre `SUPUESTO`; `estimaciones` de ISRIC y OpenLandMap y `estimacionUsada`; TAW con `metodoTaw` (tabla FAO-56 o Saxton y Rawls 2006) y `retencion` | API `GET /api/suelo` (A2.14, A2.15, A2.16) |
 | `cultivo.schema.json` | Catálogo, solo lo que no depende del lugar: ciclo, etapas y Kc de FAO-56, umbrales de EcoCrop (lluvia del ciclo y lluvia anual por separado) | `datos/catalogos/` (A1.5) |
-| `calendario-local.schema.json` | Calendario por municipio (clave INEGI): cultivo, temporada PV/OI, ventana de siembra con fuente y presencia del cultivo en el lugar | `datos/` (A0.6) |
+| `calendario-local.schema.json` | Calendario por lugar (`paisIso` y `unidadAdministrativa`; clave INEGI en México): cultivo, temporada PV/OI, ventana de siembra con fuente y presencia del cultivo en el lugar | `datos/` (A0.6) y `GET /api/calendario` (A4.13) |
 | `tabla-suelos.schema.json` | TAW por metro y rangos de humedad por clase textural (FAO-56 Tabla 19), con fuente o `NO_EVALUABLE` | `datos/catalogos/` (A1.6) |
 | `serie-clima.schema.json` | Respuesta de `GET /api/clima`: serie diaria del periodo, sin escenario | API `GET /api/clima` |
 | `ndvi.schema.json` | NDVI MOD13Q1 (250 m) por punto, evidencia con límites declarados; no entra al ranking | API `GET /api/ndvi` (A4.11) |
@@ -67,7 +67,9 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 | `GET /api/proxima-temporada?lat=&lon=` | Banda p10 a p90 por mes, **6 meses**, sin cifra única; no es predicción. Implementado | `proxima-temporada` |
 | `GET /api/suelo?lat=&lon=` | Textura, pH y TAW (Saxton y Rawls si hay carbono) de 0 a 30 cm. ISRIC es `estimacionUsada`; OpenLandMap va en `estimaciones` y sustituye si ISRIC falla. Siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
 | `GET /api/smap?lon=&lat=&desde=&hasta=` | Humedad superficial SMAP L3, contraste, máximo 10 días. Sin `EARTHDATA_TOKEN`: 503. Implementado. No entra al balance | `smap` |
-| `GET /api/ndvi?lat=&lon=&desde=&hasta=` | NDVI MOD13Q1 V061 por Planetary Computer, evidencia, máximo 400 días. No entra al ranking. Implementado (A4.11). La descripción del schema todavía nombra a ORNL: pedido a Mompin | `ndvi` |
+| `GET /api/ndvi?lat=&lon=&desde=&hasta=` | NDVI MOD13Q1 V061 por Planetary Computer, evidencia, máximo 400 días. No entra al ranking. Implementado (A4.11). Desde 0.12.2 la descripción del schema cita Planetary Computer y Didan (2021) | `ndvi` |
+| `GET /api/ee-uu/cdl?lat=&lon=&desde=&hasta=` | Rotación real por año (USDA NASS CDL, 30 m), solo EE. UU. contiguos; contraste, no entra al ranking. Implementado (A4.12). Schema propuesto en `api/propuestas-contrato/ee-uu.schema.json`, pedido a Mompin | `ee-uu#/$defs/cdl` (propuesta) |
+| `GET /api/ee-uu/ssurgo?lat=&lon=` | Suelo de campo SSURGO (componente dominante, horizontes, agua disponible a 100 cm), solo EE. UU.; contraste. Implementado (A4.12) | `ee-uu#/$defs/ssurgo` (propuesta) |
 | `GET /api/calendario?lat=&lon=` | En Isla, el calendario SIAP/INIFAP. Fuera de México, maíz de temporal de GGCMI (un día, madurez en la nota). Frijol, calabaza y chile: `NO_EVALUABLE`. Implementado (A4.13) | `calendario-local` |
 
 Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 con `{estado: ERROR_DATOS, motivo}`. Detalle y cómo correr la API en `api/README.md`.

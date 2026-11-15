@@ -55,6 +55,11 @@ def validar():
     for f in CONTRATOS.glob("*.schema.json"):
         contenido = json.loads(f.read_text(encoding="utf-8"))
         recursos.append((contenido["$id"], Resource.from_contents(contenido)))
+    ids = {i for i, _ in recursos}
+    for f in (RAIZ / "api" / "propuestas-contrato").glob("*.schema.json"):  # propuestas a Mompin; si ya pasaron a contratos/, gana contratos/
+        contenido = json.loads(f.read_text(encoding="utf-8"))
+        if contenido["$id"] not in ids:
+            recursos.append((contenido["$id"], Resource.from_contents(contenido)))
     registro = Registry().with_resources(recursos)
 
     def _validar(instancia, ref):

@@ -2,6 +2,48 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — A4.12 hecha: CDL y SSURGO para coordenadas de EE. UU. (Eduardo)
+
+- **Archivos:** `api/app/clientes/cropscape.py`, `api/app/clientes/sda.py`, `api/app/regional.py`, `api/app/modelos_regional.py`, `api/app/rutas/regional.py`, `api/app/main.py`; `api/tests/test_regional.py` y `conftest.py` (carga las propuestas de contrato); `api/propuestas-contrato/ee-uu.schema.json` (nuevo); `datos/pruebas-apis/respuestas/cropscape_iowa_2008_2025.json` y `sda_ssurgo_iowa.json`; `api/README.md`, `docs/11`, `docs/14`, `AgroVault/Compartido/{APIs,Contratos,Codigo,Pendientes}.md`.
+- **Cambio:** `GET /api/ee-uu/cdl` da el cultivo de cada año (2008 a 2025) en el pixel de 30 m del punto (USDA NASS CDL por CropScape, en EPSG:5070). `GET /api/ee-uu/ssurgo` da el componente dominante de SSURGO (Soil Data Access), sus horizontes y el agua disponible a 100 cm (suma de awc_r x espesor, sin extrapolar). Fuera de EE. UU. contiguos responden `NO_EVALUABLE` sin llamar. La categoría de CDL va tal cual; solo se enlaza al catálogo si el nombre coincide exacto. La interfaz no las llama; no cambian motor, contratos ni paquete de demo.
+- **Por qué ahora:** la fila decía "después de C5". Eduardo decidió el 15/11 hacerla ya porque es aditiva y el resto de sus actividades estaba cerrado.
+- **Fuente / evidencia:** respuestas reales del 14/11 en Iowa (-93.4, 42.05; punto de prueba): CDL maíz y soya alternados de 2014 a 2025 (2011 a 2013 maíz); SSURGO Webster clay loam (90 %), grupo C/D, 180 mm a 100 cm. 13 pruebas nuevas; 137 en total en `api/`.
+- **Pendiente:** Mompin pasa `api/propuestas-contrato/ee-uu.schema.json` a `contratos/` si lo acepta (las pruebas usan la de `contratos/` en cuanto exista). `VERIFICAR` términos de uso de CDL antes de redistribuir datos.
+- **Decisiones afectadas:** ninguna de alcance del MVP. Eduardo 19 de 19.
+
+### 2026-11-15 — A5.4 hecha: requisitos medidos con GPU real y sin GPU (Eduardo)
+
+- **Archivos:** `docs/06` (tabla de requisitos), `docs/10` (respuesta a jueces), `docs/11` (V-11), `docs/14`; evidencia en `docs/capturas/medicion-a5-4/`.
+- **Cambio:** se corrió `herramientas/medir-escena/medir.mjs` con la escena de `main` (518 celdas, bloques de 24 cubos). Con GPU real (Apple M5 Max, WebGL2): 114.8 cuadros/s con maíz en madurez y 105.1 con la mezcla; sin GPU (SwiftShader, mismo equipo): 9.4 en ambos. 191 416 triángulos, 5 a 8 draw calls, primera escena en 0.3 a 1.2 s. Pérdida y recuperación del contexto WebGL sin errores.
+- **Límites:** la Mac es de gama alta; no se midió un celular ni una laptop modesta física. Con GPU real el reposo no llegó siempre a 0 cuadros (demo y mezcla); con software sí. Causa no identificada; se avisa a Mompin.
+- **Decisiones afectadas:** ninguna. V-11 queda con evidencia.
+
+### 2026-11-15 — Token de SMAP verificado, README y A5.4 corregidos (Eduardo)
+
+- **Archivos:** `README.md` (tabla de fuentes NASA), `docs/14` (A5.4; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`.
+- **Verificado:** `GET /api/smap` en `https://64-23-143-102.sslip.io` (Isla, 2024-06-01 a 2024-06-03) responde 200 `EVALUABLE`, asi que `EARTHDATA_TOKEN` esta en el entorno del servicio. No se leyo ni se copio su valor y no hay llaves en el repo. A4.8 ya estaba `[HECHO]` en `docs/14`; las entradas anteriores de este registro que dicen "falta el OK del token" eran de antes y se conservan como historia.
+- **Cambio:** el README decia que SMAP "no esta en la demo pública" por falta del token y que MODIS NDVI estaba "pendiente"; ahora dice lo que hay (SMAP en la API publica; NDVI en la API y en el paquete de demo; la interfaz no muestra ninguno de los dos). A5.4 pasa de `[BLOQUEADO]` a `[EN CURSO]`: sus dependencias (A3.6 y la herramienta de medicion, con `medir.html` en el build) estan en `main`; la nota usa las cifras mas recientes de Mompin (191 416 triangulos y 6.7 cuadros/s con los 20 bloques) en lugar de las anteriores. Falta solo medir en hardware real y publicar `medir.html` en el droplet (despliegue con la senal de Mompin).
+- **Decisiones afectadas:** ninguna. Proyecto en 54 de 60 hechas (90 %), 2 en curso (A5.4 y A5.7), 0 bloqueadas, segun `herramientas/cronograma.py`.
+
+### 2026-11-14 (noche) — Nota de A5.4 y plan de recorte al día (cronista, pedido de Mompin)
+
+- **Archivos:** `docs/14` (fila A5.4 y paso 2 del plan de recorte; vistas regeneradas), `AgroVault/Compartido/Resumen.md`.
+- **Cambio:** la nota de A5.4 lleva la medición nueva de `docs/06` y de la entrada "Los 20 bloques de Mafer en la escena, medidos": 191 416 triángulos y 6.7 cuadros/s con los bloques de 24 cubos (antes 449 380 y 3.2). En el plan de recorte, A4.11, A4.8, A3.9 y A5.2 quedan como hechas; el único extra por quitar es A4.12.
+- **Decisiones afectadas:** ninguna. A5.4 sigue `[BLOQUEADO]` (falta hardware real).
+
+### 2026-11-14 — Iconos de Mafer conectados a la vista 2D (balam)
+
+- **Archivos:** `web/src/ui/iconosCultivo2D.ts` (nuevo), `Parcela2D.tsx`, `parcela2d.css` y pruebas; `modelos/iconos2d/README.md`, `docs/06`, `web/README.md` y captura en `web/evidencia/`.
+- **Cambio:** los 20 SVG de Mafer se consumen desde su carpeta original como recursos compartidos. El cultivo/etapa sale del motor; `podrida` solo cuando lo declara su estado. No se dibuja planta con NO_EVALUABLE, ERROR_DATOS, sin resultado, suelo desnudo o recurso desconocido. Icono a 32 px sobre placa completa de 32 px, sin solaparse, en celda cuadrada de 80 px. Se conservan leyenda, ficha, huecos y navegación.
+- **Evidencia:** pruebas de los 20 recursos y los casos sin dato; navegador de producción sin WebGL: maíz en siembra, R1/ciclo 2/seco frijol, cambio de fecha a crecimiento; solo consulta de celdas, sin API ni Three.js. 320 px sin desborde, flechas de teclado y axe sin incidencias en criterios revisados; captura `web/evidencia/iconos-2d-frijol-320.png`. Los SVG y su generador no se modifican.
+
+### 2026-11-14 (noche) — Documentación al día con `main` (cronista)
+
+- **Archivos:** `docs/00`, `docs/11`, `docs/13`, `docs/14` (nota de C2, fuera de las tablas); `AgroVault/Compartido/{Resumen,Pendientes,Codigo,Contratos,Servidor,APIs}.md`; `README.md`, `docs/README-borrador.md`, `web/README.md`, `api/README.md`.
+- **Cambio:** solo se reflejan decisiones y estados que ya están en `docs/13` y en las marcas de `docs/14`; no se cambia ninguna decisión. La demo compara por defecto R1, R2 y R4 (quedaba "R1 a R4" en la fila A4.3 de 13 y en README); contratos 0.12.2 (la vault decía 0.10.0 y 0.12.1); A4.13, A2.16, A5.2 y A0.7 hechas (13 y 11 las daban por venir); en 11 se tachan los temas `[EN EVENTO]` y `[DEPENDE-DATOS]` ya decididos en 13; NDVI de MODIS en uso por Planetary Computer (README lo daba pendiente y con ORNL); video y presentación no están canceladas para el equipo (web/README); "Abierto de verdad" de Pendientes rehecho con lo que sigue abierto en 14; `README-borrador` marcado como antecedente superado por `README.md`.
+- **Evidencia:** `origin/main` 091eb7f; `python3 herramientas/cronograma.py` (54 de 60 hechas tras A0.5 y A4.8); pruebas sobre f2bc172: contratos 92/92, api 124, web 581 y 1 todo, catálogos en verde. A4.8 la cerró Eduardo en la entrada de abajo; Pendientes ya no la lista como abierta.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — A4.8 hecha: SMAP publico con humedad real (Eduardo)
 
 - **Archivos:** `docs/14` (A4.8 `[HECHO]`; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`, `AgroVault/Compartido/Servidor.md`.

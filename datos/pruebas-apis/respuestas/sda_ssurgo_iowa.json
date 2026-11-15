@@ -1,0 +1,88 @@
+{
+ "nota": "Soil Data Access (SSURGO, USDA NRCS) leido el 14/11/2026 en (-93.4, 42.05): consulta con SDA_Get_Mukey_from_intersection_with_WktWgs84 y componentes principales. 'punto_sin_dato' es la respuesta real (HTTP 200, cuerpo `{}`) de un punto sin suelo cartografiado (lago Michigan, -87.0 43.0).",
+ "respuesta": {
+  "Table": [
+   [
+    "cokey",
+    "mukey",
+    "muname",
+    "compname",
+    "comppct_r",
+    "hydgrp",
+    "hzname",
+    "hzdept_r",
+    "hzdepb_r",
+    "sandtotal_r",
+    "silttotal_r",
+    "claytotal_r",
+    "om_r",
+    "awc_r"
+   ],
+   [
+    "28635398",
+    "2835021",
+    "Webster clay loam, Bemis moraine, 0 to 2 percent slopes",
+    "Webster",
+    "90",
+    "C/D",
+    "Ap",
+    "0",
+    "20",
+    "21",
+    "47",
+    "32",
+    "7",
+    "0.18"
+   ],
+   [
+    "28635398",
+    "2835021",
+    "Webster clay loam, Bemis moraine, 0 to 2 percent slopes",
+    "Webster",
+    "90",
+    "C/D",
+    "A",
+    "20",
+    "58",
+    "25",
+    "42",
+    "33",
+    "5",
+    "0.18"
+   ],
+   [
+    "28635398",
+    "2835021",
+    "Webster clay loam, Bemis moraine, 0 to 2 percent slopes",
+    "Webster",
+    "90",
+    "C/D",
+    "Bg",
+    "58",
+    "97",
+    "33",
+    "41",
+    "26",
+    "1.5",
+    "0.18"
+   ],
+   [
+    "28635398",
+    "2835021",
+    "Webster clay loam, Bemis moraine, 0 to 2 percent slopes",
+    "Webster",
+    "90",
+    "C/D",
+    "Cg",
+    "97",
+    "200",
+    "49",
+    "36",
+    "15",
+    "0.25",
+    "0.18"
+   ]
+  ]
+ },
+ "punto_sin_dato": "{}"
+}

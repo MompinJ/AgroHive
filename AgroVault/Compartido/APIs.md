@@ -139,6 +139,13 @@ El 250 m (v02) está en Google Earth Engine como clase de textura USDA y pH en a
 
 Regla: cualquiera de las dos queda `SUPUESTO`; el selector manual FAO-56 sigue de respaldo.
 
+## Fuentes regionales de EE. UU. (A4.12)
+
+**Probado el 14/11.** Solo cuando la coordenada cae en EE. UU. contiguos; fuera, la API responde `NO_EVALUABLE` sin llamar. Ninguna entra al ranking.
+
+- **CDL (USDA NASS Cropland Data Layer)**, servicio CropScape `https://nassgeodata.gmu.edu/axis2/services/CDLService/GetCDLValue?year=&x=&y=`. Pide x,y en **EPSG:5070** (con lon/lat responde 500), acepta 1997 a 2025 (nacional desde 2008), responde XML con `value` y `category` y tarda ~1 s. Fuera del raster da `value: 0, "No Data"`. En un campo de Iowa (-93.4, 42.05) dio maíz y soya alternados de 2014 a 2025. Cita oficial de NASS: "USDA National Agricultural Statistics Service Cropland Data Layer. {año}. Published crop-specific data layer [Online]. Available at https://nassgeodata.nass.usda.gov/CropScape/". Planetary Computer también lo tiene (`usda-cdl`), pero solo hasta 2021. `VERIFICAR` términos de uso de NASS antes de redistribuir.
+- **SSURGO (USDA NRCS)** por Soil Data Access: `POST https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest` con SQL y `SDA_Get_Mukey_from_intersection_with_WktWgs84('point(lon lat)')`. Sin cuenta. Un punto sin suelo cartografiado responde 200 con `{}`. En el mismo punto: Webster clay loam (90 %), grupo hidrológico C/D, agua disponible 180 mm a 100 cm.
+
 ## Calendario por coordenada (A4.13)
 
 `GET /api/calendario` no llama a una API en vivo. En el recuadro OSM de Isla lee `datos/catalogos/calendario-isla.json`. Fuera de México lee el NetCDF `mai_rf` de GGCMI fase 3 (doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): un día de siembra y la madurez en la nota. El país sale de Natural Earth 110m. `bea_rf` no se sirve: la ficha de Zenodo no lo identifica como frijol.
@@ -158,7 +165,7 @@ Regla: cualquiera de las dos queda `SUPUESTO`; el selector manual FAO-56 sigue d
 - **AppEEARS** ([API](https://appeears.earthdatacloud.nasa.gov/api/)): inicio de sesión `POST /api/login` (Basic con Earthdata, devuelve token Bearer de unas 48 h); muestras puntuales con `POST /api/task` (`task_type: "point"`, `params.dates`, `params.layers`, `params.coordinates` en EPSG:4326). Respuesta 202 con `task_id`; consultar `GET /api/task/{id}`. Para NDVI MODIS, `MOD13Q1.061` con capa `_250m_16_days_NDVI` (`VERIFICAR`: el nombre de capa vino de un resumen, no del texto literal). Es asíncrono; no sirve para el flujo en vivo del polígono.
 - **GIBS / Worldview**: capas WMTS sin llave, ejemplo `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/{fecha}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`. Hubo un reporte de tiles negros en la capa de color verdadero. `VERIFICAR` el ID de la capa de precipitación en el documento de capacidades. Decoración de mapa solamente; no alimenta el motor.
 
-## Orden sugerido de pruebas (los pasos 1, 2, 3 y 5 ya se hicieron en A0.7, ver `datos/pruebas-apis/LEEME.md`; quedan el 4 y el 6)
+## Orden sugerido de pruebas (los pasos 1, 2, 3 y 5 ya se hicieron en A0.7, ver `datos/pruebas-apis/LEEME.md`; el 4 se hizo en A2.14 y el 6 con el paquete de demo de A2.4)
 
 1. POWER diario puntual con los 7 parámetros de arriba: unidades reales, `GWETROOT` en AG, un navegador con `fetch` para CORS.
 2. Open-Meteo archivo con ERA5: nombres diarios exactos de lluvia y humedad de suelo; contar llamadas gastadas.

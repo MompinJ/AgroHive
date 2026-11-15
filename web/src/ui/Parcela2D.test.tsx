@@ -4,6 +4,37 @@ import type { Parcela, ResultadoCeldas } from '../../../contratos/tipos/contrato
 import parcelaEjemplo from '../../../contratos/ejemplos/parcela.ejemplo.json';
 import resultadoEjemplo from '../../../contratos/ejemplos/resultado-celda.ejemplo.json';
 import { Parcela2D } from './Parcela2D';
+import { iconoCultivo2D } from './iconosCultivo2D';
+
+it('muestra cultivo y etapa recibidos junto a la placa del estado, sin cambiar su descripción', () => {
+  const html = renderToStaticMarkup(<Parcela2D parcela={parcelaEjemplo as Parcela} resultado={resultadoEjemplo as ResultadoCeldas} fecha="2015-12-01" />);
+  expect(html).toContain('class="parcela2d-cultivo"');
+  expect(html).toContain('data-icono="frijol_crecimiento"');
+  expect(html).toContain('class="parcela2d-placa"');
+  expect(html).toContain('estado Estresada');
+  expect(html).toContain('alt=""');
+});
+
+it('no representa un cultivo inexistente o un suelo desnudo como una planta', () => {
+  expect(iconoCultivo2D({ cultivo: null, etapa: null, estadoVisual: 'sin_resultado' })).toBeNull();
+  expect(iconoCultivo2D({ cultivo: 'maiz', etapa: 'suelo_desnudo', estadoVisual: 'suelo_desnudo' })).toBeNull();
+  expect(iconoCultivo2D({ cultivo: 'cultivo_desconocido', etapa: 'brote', estadoVisual: 'normal' })).toBeNull();
+  expect(iconoCultivo2D({ cultivo: 'maiz', etapa: 'brote', estadoVisual: 'NO_EVALUABLE' })).toBeNull();
+});
+
+it('usa el sprite podrido solo cuando el motor declara ese estado', () => {
+  expect(iconoCultivo2D({ cultivo: 'chile', etapa: 'madurez', estadoVisual: 'podrida' })?.clave).toBe('chile_podrida');
+  expect(iconoCultivo2D({ cultivo: 'chile', etapa: 'madurez', estadoVisual: 'estresada' })?.clave).toBe('chile_madurez');
+});
+
+it('encuentra los veinte sprites entregados sin duplicar sus archivos', () => {
+  for (const cultivo of ['maiz', 'frijol', 'calabaza', 'chile']) {
+    for (const etapa of ['siembra', 'brote', 'crecimiento', 'madurez'] as const) {
+      expect(iconoCultivo2D({ cultivo, etapa, estadoVisual: 'normal' })?.clave).toBe(`${cultivo}_${etapa}`);
+    }
+    expect(iconoCultivo2D({ cultivo, etapa: 'madurez', estadoVisual: 'podrida' })?.clave).toBe(`${cultivo}_podrida`);
+  }
+});
 
 it('representa las celdas del contrato, conserva huecos y explica el dato original sin WebGL', () => {
   const parcela = structuredClone(parcelaEjemplo) as Parcela;

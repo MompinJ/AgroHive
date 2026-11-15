@@ -1,6 +1,6 @@
 # AgroHive (Code Hive): borrador del README para A5.7
 
-> **Borrador para Mafer (dueña de A5.7).** No reemplaza a `README.md` todavía. Cada afirmación remite al documento o contrato de donde sale; lo que falta confirmar va marcado `[VERIFICAR]`. Antes de publicarlo, revisar las fechas, el estado de las actividades en `docs/14` y las reglas oficiales del reto (V-03, V-04).
+> **Antecedente de A5.7, superado por `README.md`** (Mafer), que es el que manda si difieren. Se conserva como historial; no se mantiene al día. Cada afirmación remite al documento o contrato de donde sale; lo que falta confirmar va marcado `[VERIFICAR]`. Antes de publicarlo, revisar las fechas, el estado de las actividades en `docs/14` y las reglas oficiales del reto (V-03, V-04).
 
 ## Qué es
 

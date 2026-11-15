@@ -47,9 +47,12 @@ def test_elevacion_cumple_parcela(simular, validar):
 
 def test_cultivos_del_catalogo_real_cumplen_el_contrato(validar):
     config.CATALOGOS_DIR.mkdir(parents=True)
-    (config.CATALOGOS_DIR / "cultivos.json").write_bytes((RAIZ / "datos" / "catalogos" / "cultivos.json").read_bytes())
+    crudo = (RAIZ / "datos" / "catalogos" / "cultivos.json").read_bytes()
+    (config.CATALOGOS_DIR / "cultivos.json").write_bytes(crudo)
     cuerpo = cliente.get("/api/cultivos").json()
-    assert [c["id"] for c in cuerpo["cultivos"]] == ["maiz", "frijol", "calabaza", "chile"]
+    esperados = [c["id"] for c in json.loads(crudo)["cultivos"]]  # la API devuelve el catalogo tal cual, en su orden
+    assert [c["id"] for c in cuerpo["cultivos"]] == esperados
+    assert esperados[:4] == ["maiz", "frijol", "calabaza", "chile"]
     validar(cuerpo, "cultivo#")  # el schema describe el catalogo completo (meta, versionCatalogo y cultivos)
 
 
