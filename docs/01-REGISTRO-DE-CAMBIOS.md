@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 (madrugada) — Ampliación del catálogo de cultivos `[DECIDIDO]` (Mompin; sesión "catalogo", rama `Mompin-features`)
+
+- **Archivos:** `datos/catalogos/generar.py` (lista `AMPLIACION` al final de `CULTIVOS`), `cultivos.json` y `calendario-isla.json` regenerados, `datos/catalogos/README.md` (ampliación, criterio de fila, elecciones y cultivos que quedaron fuera), `docs/04` (nota del catálogo), `docs/16` (E7 para Eduardo), `web/src/motor/pruebas/catalogo-ampliado.test.ts` (nueva).
+- **Cambio:** tanda 1, de 8 a 18 cultivos: soya, frijol caupí, haba, chícharo, lenteja, ejote, cebada, trigo, avena y maíz dulce. Cada cifra sale de FAO-56 (Tablas 11, 12 y 22) o de EcoCrop (Recocrop, mismo archivo y sha256) y se cotejó con un script contra las tablas descargadas. Sin `modelo3d` y con entrada PV y OI en el calendario de Isla (ventana `NO_EVALUABLE`; presencia según SIAP).
+- **Por qué:** pedido de Mompin: 30 a 50 cultivos con prioridad para México, el trópico húmedo y las rotaciones.
+- **Quedan fuera:** arroz (FAO-56 es de arroz inundado y el balance no modela la lámina), garbanzo y ajo (sin días por etapa en Tabla 11), alfalfa (perenne de cortes), sorgo forrajero, piña (790 d, no cabe en la serie), plátano (solo filas mediterráneas), papaya, ñame, tomatillo, chayote, jícama, amaranto y chía (sin fila en FAO-56).
+- **Comprobado:** el motor simula cada cultivo del catálogo en PV y OI sin tronar; la compatibilidad sale `NO_EVALUABLE` con motivo y la rotación `EXPLORATORIO` si SIAP no registra el cultivo en Isla. La escena usa la planta provisional (ya declarada) cuando falta el modelo. La API devuelve el catálogo tal cual (prueba de contratos genérica). La regresión A5.5 no cambia.
+- **Toca archivos de otros:** `datos/catalogos/` es de Mafer; lo hace la IA de Mompin por su decisión. No toca las entradas de sorgo, sandía, camote y cacahuate ni `versionContrato` (los lleva la sesión "cultivos").
+
 ### 2026-11-14 (noche) — Cultivos nuevos con modelo, prefijos, catálogos 0.13.0 y prueba de movimiento en verde (MF1, MF2, MF4, M4 y M5; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
 
 - **Archivos:** `datos/catalogos/generar.py` (prefijos y `VERSION_CONTRATO`) y los tres JSON regenerados; `modelos/paleta.py` y `paleta.md` (24 colores, índices 86 a 109); `modelos/cultivos/sandia.py`, `camote.py`, `cacahuate.py` con sus 15 `.bbmodel` y visores; `modelos/cultivos/bloques/bloques.py` (15 bloques, y ahora regenera `visor_bloques.html`); `modelos/iconos2d/iconos2d.py` (15 SVG) y su README; todos los `.bbmodel` existentes regenerados (solo cambia la paleta incrustada); `web/src/escena/voxel/bloque.ts`; `web/src/escena/pruebas/bloques.test.ts` e `iconos2d.test.ts` (8 cultivos); `herramientas/prueba-movimiento/movimiento.mjs` y su README; `docs/06`, `docs/07`, `docs/16`, `docs/hallazgos-back.md`; capturas en `docs/capturas/cultivos-nuevos/`.
@@ -10,6 +19,37 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Toca archivos de otros:** `modelos/` y `datos/catalogos/` son de Mafer; los hizo la IA de Mompin con OK de Mompin porque Mafer no estaba trabajando. No se tocó la escena de Eduardo (`EscenaParcela.tsx`, `escena-three.ts`, `camara.ts`) ni `web/src/ui/`.
 - **Pendiente:** mirar los modelos en Blockbench; B1 (aviso en el selector de cultivos no registrados en Isla) sigue con su dueño. Los colores nuevos son a ojo, no medidos.
 - **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Hallazgos del back, segunda ronda (cazafallos, `Mompin-fallos`)
+
+- **Archivos:**
+  - `api/`: `app/http.py`, `rutas/{clima,suelo,terreno,proxima,cultivos}.py`, `servicios.py`, `ndvi.py`, `calendario.py`, `modelos.py`, `openapi.json` y `cliente/api.d.ts` regenerados; pruebas en `tests/test_hallazgos_back.py`, `test_basico.py` y `test_contratos_api.py`.
+  - Motor: `web/src/motor/{ranking,motor,fechas,protocolo,cliente,analogos,tarjetas}.ts`; pruebas en `pruebas/hallazgos-back.test.ts` y `pruebas/ranking.test.ts`.
+  - `datos/demo/respuestas/*.json` y `manifiesto.json`.
+  - Documentación: `docs/05`, `docs/08`, `docs/16` (M6 y E4), `docs/hallazgos-back.md`, `api/README.md`, `datos/calendario/LEEME.md`, `datos/demo/LEEME.md` y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:**
+  - Decisiones de Mompin (ya en `docs/13` y `docs/16`):
+    - H-B6: 20 s por intento, 2 intentos por fuente y un plazo total de 70 s por petición.
+    - H-M1: los pilares del puntaje se cuentan solo sobre las rotaciones que se ordenan; una EXPLORATORIO a la que le falta uno lleva puntaje `null`.
+    - H-M9: un escenario NO_EVALUABLE lleva todos sus indicadores en `null`.
+  - Además, cada uno con su prueba:
+    - H-M2: fin y etapa del ciclo por los parámetros del catálogo.
+    - H-B8: `/api/cultivos` sin catálogo responde 503 `ERROR_DATOS`.
+    - H-B11: aviso `NDVI_EN_CACHE`.
+    - H-M4: fechas inválidas dan NO_EVALUABLE con motivo.
+    - H-M5: errores y cierre del Worker sin promesas colgadas.
+    - H-M8: sin área dentro de la parcela, NO_EVALUABLE.
+    - H-M10: huecos según la simulación.
+    - H-M6: sin año de corte fijo en los análogos.
+    - H-B10: país más cercano a 25 km o menos en la costa.
+    - H-B9: el paquete de demo se revalidó contra 0.13.0 y solo cambió `versionContrato`.
+    - H-M11: la tarjeta nombra la institución de la ventana.
+- **Regresión A5.5:** no cambia. Con H-M11, en Isla la institución sigue siendo INIFAP y el texto queda igual, así que no hizo falta regenerarla.
+- **Toca archivos de otros:** `api/` y `datos/demo/` son de Eduardo; esta noche los lleva cazafallos **con OK de Mompin, porque Eduardo trabaja en el front**. No se tocaron `web/src/ui/`, `web/src/escena/`, `web/src/api/cliente.ts` ni `datos/catalogos/`.
+- **Pendiente:**
+  - H-M7, propuesto: un horizonte de los análogos que cruce septiembre necesita definir su año agrícola.
+  - Integrar a `main` y desplegar la API (E1).
+- **Decisiones afectadas:** H-B6, H-M1 y H-M9 quedan aplicadas.
 
 ### 2026-11-14 (noche) — Decisiones y reparto del día final: D1, D4, H-B6, H-M1, H-M9 `[DECIDIDO]` (Mompin; sesión "estado")
 

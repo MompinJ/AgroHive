@@ -181,7 +181,7 @@ def calendario_isla():
             {"codigo": "CAMOTE_CACAHUATE_NO_REGISTRADOS", "severidad": "aviso",
              "mensaje": "SIAP no registra camote ni cacahuate en Isla entre 2021 y 2025 (si en municipios vecinos del mismo distrito): "
                         "no son recomendables alli sin validar con un tecnico local."},
-        ],
+        ] + ADVERTENCIAS_ISLA_AMPLIACION,
     }
 
 # Cada cultivo: fila de FAO-56 Tabla 11 (dias por etapa), Tabla 12 (Kc), Tabla 22 (Zr, p) y fila de EcoCrop.
@@ -357,6 +357,217 @@ NOTA_KC_INI = (
 NOTA_ZR = "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
 NOTA_P = "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
 NOTA_CLIMA_KC = "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+
+# ---------------------------------------------------------------- ampliacion del catalogo (15/11, decidido por Mompin)
+# Cultivos nuevos, al final de la lista y sin modelo3d. Mismas fuentes y criterios que los ocho de arriba; las elecciones
+# nuevas estan en la tabla "Elecciones que una persona debe revisar" de README.md. Criterio de fila de Tabla 11:
+# (a) fila tropical si existe; (b) si no, la de siembra mas cercana a junio (temporal PV de Isla); (c) empate: la region
+# mas calida; (d) se salta una fila con etapas impresas ambiguas o que no suman su total si otra fila cumple.
+MOTIVO_SIN_VENTANA_AMPLIACION = ("Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de "
+                                 "siembra (INIFAP) para {nombre}.")
+NOTA_ESTACAS = "Nota 2 de Tabla 12: si crece con tutores de 1.5 a 2 m el Kc medio debe aumentarse."
+FILA_CEREALES = {"fila": "Barley/Oats/Wheat", "region": "East Africa", "siembra": "July",
+                 "etapas": (15, 30, 65, 40), "total": 150,
+                 "porque": ("Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, "
+                            "noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal "
+                            "primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo.")}
+AMPLIACION = [
+    # -- tanda 1: leguminosas y cereales para rotaciones
+    {
+        "id": "soya",
+        "nombreComun": "Soya",
+        "nombreCientifico": "Glycine max (L.) Merr.",
+        "esLeguminosa": True,
+        "t11": {"fila": "Soybeans", "region": "Tropics", "siembra": "Dec",
+                "etapas": (15, 15, 40, 15), "total": 85,
+                "porque": ("Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno en Isla). Las otras filas son "
+                           "del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d).")},
+        "t12": {"fila": "Soybeans",
+                "ini": (0.4, "Kc ini general del grupo e. Legumes (la fila de la soya no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.50, None)},
+        "t22": {"fila": "Soybeans", "zr": 1.3, "zrRango": "0.6-1.3", "p": 0.50},
+        "eco": {"fila": "Soyabean", "sci": "Glycine max (L.) Merrill", "gmin": 75, "gmax": 180,
+                "tmin": 10, "topmn": 20, "topmx": 33, "tmax": 38,
+                "rmin": 450, "ropmn": 600, "ropmx": 1500, "rmax": 1800},
+        "nota_extra": ("SIAP no registra soya en Isla entre 2021 y 2025; en Veracruz solo en Panuco, al norte del estado. "
+                       "Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
+    },
+    {
+        "id": "caupi",
+        "nombreComun": "Frijol caupi",
+        "nombreCientifico": "Vigna unguiculata (L.) Walp.",
+        "esLeguminosa": True,
+        "t11": {"fila": "Green gram, cowpeas", "region": "Mediterranean", "siembra": "March",
+                "etapas": (20, 30, 30, 20), "total": 100, "total_impreso": 110,
+                "porque": ("Unica fila de Tabla 11 para caupi (compartida con el frijol mungo); no hay fila tropical. La fila imprime "
+                           "20/30/30/20 pero un total de 110 dias: las cuatro etapas suman 100. Como con el sorgo, se guardan las "
+                           "etapas impresas y el ciclo es su suma (100); la diferencia queda por cotejar contra el PDF de FAO-56.")},
+        "t12": {"fila": "Green Gram and Cowpeas",
+                "ini": (0.4, "Kc ini general del grupo e. Legumes (la fila del caupi no da Kc ini propio)."),
+                "mid": (1.05, None),
+                "end": (0.35, "Tabla 12 da 0.60-0.35 (nota 6): el primer valor es para cosecha en fresco y el segundo para grano seco; se usa 0.35, grano seco.")},
+        "t22": {"fila": "Green Gram and Cowpeas", "zr": 1.0, "zrRango": "0.6-1.0", "p": 0.45},
+        "eco": {"fila": "Cowpea", "sci": "Vigna unguiculata unguic. L", "gmin": 60, "gmax": 240,
+                "tmin": 10, "topmn": 20, "topmx": 35, "tmax": 40,
+                "rmin": 400, "ropmn": 600, "ropmx": 1500, "rmax": 4100},
+    },
+    {
+        "id": "haba",
+        "nombreComun": "Haba",
+        "nombreCientifico": "Vicia faba L.",
+        "esLeguminosa": True,
+        "t11": {"fila": "Faba bean, broad bean", "region": "Europe", "siembra": "May",
+                "etapas": (15, 25, 35, 15), "total": 90,
+                "porque": ("Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal "
+                           "primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa "
+                           "(haba de invierno, 235 d).")},
+        "t12": {"fila": "Fababean (broad bean) - Dry/Seed",
+                "ini": (0.5, None),
+                "mid": (1.15, NOTA_ESTACAS),
+                "end": (0.30, None)},
+        "t22": {"fila": "Fababean (broad bean) - Dry/Seed", "zr": 0.7, "zrRango": "0.5-0.7", "p": 0.45},
+        "eco": {"fila": "Broad bean", "sci": "Vicia faba L.", "gmin": 100, "gmax": 150,
+                "tmin": 5, "topmn": 18, "topmx": 28, "tmax": 32,
+                "rmin": 250, "ropmn": 650, "ropmx": 1000, "rmax": 2600},
+        "nota_extra": ("Se usa la subfila de grano seco (Dry/Seed) porque SIAP registra 'haba grano'; la de cosecha en fresco "
+                       "tiene Kc end 1.10. SIAP no registra haba en Isla entre 2021 y 2025."),
+    },
+    {
+        "id": "chicharo",
+        "nombreComun": "Chicharo",
+        "nombreCientifico": "Pisum sativum L.",
+        "esLeguminosa": True,
+        "t11": {"fila": "Peas", "region": "Europe", "siembra": "May",
+                "etapas": (15, 25, 35, 15), "total": 90,
+                "porque": ("Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal "
+                           "primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d).")},
+        "t12": {"fila": "Peas - Fresh",
+                "ini": (0.5, None),
+                "mid": (1.15, NOTA_ESTACAS + " Para chicharo con tutores la nota da 1.20."),
+                "end": (1.10, None)},
+        "t22": {"fila": "Peas - Fresh", "zr": 1.0, "zrRango": "0.6-1.0", "p": 0.35},
+        "eco": {"fila": "Pea", "sci": "Pisum sativum L.", "gmin": 60, "gmax": 140,
+                "tmin": 4, "topmn": 10, "topmx": 24, "tmax": 30,
+                "rmin": 350, "ropmn": 800, "ropmx": 1200, "rmax": 2500},
+        "nota_extra": ("Se usa la subfila de cosecha en fresco (chicharo verde); la de grano seco (Dry/Seed) da Kc end 0.30 y "
+                       "p 0.40. Eleccion del equipo: una persona debe revisarla."),
+    },
+    {
+        "id": "lenteja",
+        "nombreComun": "Lenteja",
+        "nombreCientifico": "Lens culinaris Medik.",
+        "esLeguminosa": True,
+        "t11": {"fila": "Lentil", "region": "Europe", "siembra": "April",
+                "etapas": (20, 30, 60, 40), "total": 150,
+                "porque": ("Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal "
+                           "primavera-verano de Isla. La otra es de octubre/noviembre en region arida (170 d).")},
+        "t12": {"fila": "Lentil",
+                "ini": (0.4, "Kc ini general del grupo e. Legumes (la fila de la lenteja no da Kc ini propio)."),
+                "mid": (1.10, None),
+                "end": (0.30, None)},
+        "t22": {"fila": "Lentil", "zr": 0.8, "zrRango": "0.6-0.8", "p": 0.50},
+        "eco": {"fila": "Lentil", "sci": "Lens culinaris Medikus", "gmin": 70, "gmax": 240,
+                "tmin": 5, "topmn": 15, "topmx": 29, "tmax": 32,
+                "rmin": 250, "ropmn": 600, "ropmx": 1000, "rmax": 2500},
+    },
+    {
+        "id": "ejote",
+        "nombreComun": "Ejote",
+        "nombreCientifico": "Phaseolus vulgaris L.",
+        "esLeguminosa": True,
+        "t11": {"fila": "Beans (green)", "region": "Calif., Egypt, Lebanon", "siembra": "Aug/Sep",
+                "etapas": (15, 25, 25, 10), "total": 75,
+                "porque": ("Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al "
+                           "temporal primavera-verano de Isla. La otra es de febrero/marzo en California y el Mediterraneo (90 d).")},
+        "t12": {"fila": "Beans, green",
+                "ini": (0.5, None),
+                "mid": (1.05, "Nota 2: si crece con tutores de 1.5 a 2 m puede tomarse 1.15."),
+                "end": (0.90, None)},
+        "t22": {"fila": "Beans, green", "zr": 0.7, "zrRango": "0.5-0.7", "p": 0.45},
+        "eco": {"fila": "Bean, Common", "sci": "Phaseolus vulgaris L.", "gmin": 50, "gmax": 270,
+                "tmin": 7, "topmn": 16, "topmx": 25, "tmax": 32,
+                "rmin": 300, "ropmn": 500, "ropmx": 2000, "rmax": 4300},
+        "nota_extra": "Misma especie que el frijol, cosechada en vaina verde: EcoCrop no separa el ejote y se usa la fila del frijol comun.",
+    },
+    {
+        "id": "cebada",
+        "nombreComun": "Cebada",
+        "nombreCientifico": "Hordeum vulgare L.",
+        "esLeguminosa": False,
+        "t11": FILA_CEREALES,
+        "t12": {"fila": "Barley",
+                "ini": (0.3, "Kc ini general del grupo i. Cereals (la fila de la cebada no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.25, None)},
+        "t22": {"fila": "Barley", "zr": 1.5, "zrRango": "1.0-1.5", "p": 0.55},
+        "eco": {"fila": "Barley", "sci": "Hordeum vulgare L.", "gmin": 90, "gmax": 240,
+                "tmin": 2, "topmn": 15, "topmx": 20, "tmax": 40,
+                "rmin": 200, "ropmn": 500, "ropmx": 1000, "rmax": 2000},
+    },
+    {
+        "id": "trigo",
+        "nombreComun": "Trigo",
+        "nombreCientifico": "Triticum aestivum L.",
+        "esLeguminosa": False,
+        "t11": FILA_CEREALES,
+        "t12": {"fila": "Spring Wheat",
+                "ini": (0.3, "Kc ini general del grupo i. Cereals (la fila del trigo no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.25, "Tabla 12 da 0.25-0.4 (nota 10): el valor mayor es para cosecha manual; se usa 0.25, cosecha mecanica. Eleccion del equipo: una persona debe revisarla.")},
+        "t22": {"fila": "Spring Wheat", "zr": 1.5, "zrRango": "1.0-1.5", "p": 0.55},
+        "eco": {"fila": "Wheat, common", "sci": "Triticum aestivum L.", "gmin": 90, "gmax": 250,
+                "tmin": 5, "topmn": 15, "topmx": 23, "tmax": 27,
+                "rmin": 300, "ropmn": 750, "ropmx": 900, "rmax": 1600},
+        "nota_extra": "Se usa trigo de primavera (Spring Wheat): las filas de trigo de invierno de Tabla 12 suponen suelos helados o latencia invernal.",
+    },
+    {
+        "id": "avena",
+        "nombreComun": "Avena",
+        "nombreCientifico": "Avena sativa L.",
+        "esLeguminosa": False,
+        "t11": FILA_CEREALES,
+        "t12": {"fila": "Oats",
+                "ini": (0.3, "Kc ini general del grupo i. Cereals (la fila de la avena no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.25, None)},
+        "t22": {"fila": "Oats", "zr": 1.5, "zrRango": "1.0-1.5", "p": 0.55},
+        "eco": {"fila": "Oats", "sci": "Avena sativa L.", "gmin": 110, "gmax": 270,
+                "tmin": 5, "topmn": 16, "topmx": 20, "tmax": 30,
+                "rmin": 250, "ropmn": 600, "ropmx": 1000, "rmax": 1500},
+        "nota_extra": "Avena para grano: la avena forrajera de corte no tiene fila propia en FAO-56.",
+    },
+    {
+        "id": "maiz_dulce",
+        "nombreComun": "Maiz dulce (elote)",
+        "nombreCientifico": "Zea mays L. var. saccharata",
+        "esLeguminosa": False,
+        "t11": {"fila": "Maize (sweet)", "region": "Philippines", "siembra": "March",
+                "etapas": (20, 20, 30, 10), "total": 80,
+                "porque": "Unica fila tropical de maiz dulce. Nota 3 de Tabla 11: la etapa final dura unos 35 dias si el grano se deja madurar y secar."},
+        "t12": {"fila": "Maize, Sweet (sweet corn)",
+                "ini": (0.3, "Kc ini general del grupo i. Cereals (la fila del maiz dulce no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (1.05, "Nota 12: 1.05 si se cosecha en fresco para consumo humano; si se deja secar en campo, usar el Kc end del maiz de grano.")},
+        "t22": {"fila": "Maize, Sweet (sweet corn)", "zr": 1.2, "zrRango": "0.8-1.2", "p": 0.50},
+        "eco": {"fila": "Sweet Corn", "sci": "Zea mays v.saccharata Sturt", "gmin": 65, "gmax": 100,
+                "tmin": 12, "topmn": 16, "topmx": 24, "tmax": 38,
+                "rmin": 600, "ropmn": 800, "ropmx": 1500, "rmax": 1800},
+        "nota_extra": ("Maiz dulce cosechado en fresco. El elote de maiz criollo que se cosecha tierno no es esta variedad: "
+                       "para el se usaria la fila del maiz de grano con otra fecha de cosecha, que FAO-56 no publica."),
+    },
+]
+CULTIVOS += AMPLIACION
+CULTIVO_SIAP.update({c["id"]: c.get("siap") for c in AMPLIACION})
+for _c in AMPLIACION:
+    for _t in ("PV", "OI"):
+        ORDEN_ISLA.append((_c["id"], _t))
+        MOTIVO_SIN_VENTANA[(_c["id"], _t)] = MOTIVO_SIN_VENTANA_AMPLIACION.format(nombre=_c["nombreComun"].lower())
+ADVERTENCIAS_ISLA_AMPLIACION = [
+    {"codigo": "AMPLIACION_SIN_VENTANA", "severidad": "aviso",
+     "mensaje": ("Los cultivos de la ampliacion del catalogo (15/11) aun no tienen ventana de siembra con fuente para Isla: su "
+                 "compatibilidad de ciclo sale NO_EVALUABLE. Los que SIAP no registra en Isla se muestran, pero no se recomiendan.")},
+]
 
 
 def cultivo(c):
