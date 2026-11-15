@@ -4,6 +4,8 @@ import type { PlanSiembra } from '../../../../contratos/tipos/contratos';
 import { colorCultivo, nombresCultivos } from '../planes';
 import { iconoDeCultivo } from '../iconosCultivo2D';
 import { pasos } from '../navigation';
+import { idiomaActual } from '../i18n/actual';
+import { NOMBRES_CULTIVO_EN } from '../i18n/cultivos-en';
 
 export const numero = (n: number | null | undefined, unidad = '') => n == null ? 'NO_EVALUABLE' : `${n.toLocaleString('es-MX', { maximumFractionDigits: 1 })}${unidad}`;
 export const porcentaje = (n: number | null | undefined) => n == null ? 'NO_EVALUABLE' : new Intl.NumberFormat('es-MX', { style: 'percent', maximumFractionDigits: 1 }).format(n);
@@ -13,7 +15,8 @@ export function fechaCorta(fecha: string): string {
   const [a, m, d] = fecha.split('-');
   return `${Number(d)} ${meses[Number(m) - 1] ?? m} ${a}`;
 }
-export const nombreCultivo = (id: string) => nombresCultivos[id] ?? id;
+/** Nombre visible del cultivo en el idioma activo (en ingles, nombreComunEn del catalogo; si falta, el de espanol). */
+export const nombreCultivo = (id: string) => (idiomaActual() === 'en' ? NOMBRES_CULTIVO_EN[id] : undefined) ?? nombresCultivos[id] ?? id;
 /** "Recorri el ciclo 2 al 3 feb 2027 para que no se encimen." o vacio si nada se movio. */
 export function textoMovidos(movidos: readonly { ciclo: number; despues: string }[]): string {
   if (!movidos.length) return '';

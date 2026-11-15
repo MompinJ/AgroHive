@@ -274,7 +274,15 @@ class ProximaTemporada(BaseModel):
     advertencias: list[Advertencia] = []
 
 
+class CultivoCatalogo(BaseModel):
+    """Un cultivo de contratos/cultivo.schema.json. Pasa tal cual (lo valida el contrato en las pruebas); se declara el campo
+    nuevo de 0.16.0 para que quede en OpenAPI y en el cliente generado."""
+    model_config = ConfigDict(extra="allow")
+    # 0.16.0: nombre comun en ingles, opcional (catalogos viejos sin el campo siguen siendo validos; sin el, se omite).
+    nombreComunEn: str | None = Field(default=None, min_length=1)
+
+
 class CatalogoCultivos(BaseModel):
     """Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, 503 (H-B8)."""
     model_config = ConfigDict(extra="allow")  # meta y versionCatalogo del archivo pasan tal cual
-    cultivos: list[dict[str, Any]]
+    cultivos: list[CultivoCatalogo]

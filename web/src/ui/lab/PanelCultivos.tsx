@@ -6,6 +6,8 @@ import { agregarCiclo, aplicarAcomodando, cambiarSiembra, conteoPintado, diasCul
 import { climatologia, conveniencia } from './conveniencia';
 import type { PlagaZona, riesgosDelPlan } from './plagas';
 import { PanelIzq } from './PanelIzq';
+import { cultivosParaPintar } from './cultivosListos';
+import { MODELOS_DISPONIBLES } from '../../escena/voxel/fuente-modelos';
 import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, fechaCorta, nombreCultivo, rangoVentana, textoMovidos } from './piezas';
 import { IconoBasura, IconoBicho, IconoCalendario, IconoEscudo, IconoInfo, IconoInsecticida, IconoMas, IconoQuitar } from './iconos';
 import type { Herramienta } from './BarraHerramientas';
@@ -50,7 +52,9 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
   // Paleta ordenada de mas a menos conveniente para la tierra y la fecha del ciclo (conveniencia.ts).
   // Se ven los 8 primeros; "Ver mas" despliega el resto en el mismo orden. La busqueda filtra.
   const normal = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  const evaluados = datos.catalogo.cultivos.map((c, orden) => ({ c, orden, v: conveniencia(c, {
+  // Solo se ofrecen cultivos con informacion suficiente (parametros del motor y todos sus modelos): un cultivo incompleto no sale.
+  const listos = cultivosParaPintar(datos.catalogo, MODELOS_DISPONIBLES).listos;
+  const evaluados = listos.map((c, orden) => ({ c, orden, v: conveniencia(c, {
     clima, siembra: visible.siembra, temporada: visible.temporada, dias: diasCultivo(c.id, datos.catalogo), disponibles, calendario: datos.calendario, plagas: presentes,
   }) })).sort((x, y) => y.v.puntos - x.v.puntos || x.orden - y.orden);
   const q = normal(busqueda.trim());
@@ -108,7 +112,7 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
 
     <div className="panel-bloque">
       <p className="panel-etiqueta" id="paleta-etiqueta">Cultivo de la brocha</p>
-      <input className="lab-buscar" type="search" placeholder={`Buscar entre ${datos.catalogo.cultivos.length} cultivos`} aria-label="Buscar cultivo" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+      <input className="lab-buscar" type="search" placeholder={`Buscar entre ${listos.length} cultivos`} aria-label="Buscar cultivo" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
       <div className="lab-paleta" role="radiogroup" aria-labelledby="paleta-etiqueta">
         {visibles.map(({ c, v }) => {
           const tip = `${nombreCultivo(c.id)}: ${v.nivel === 'buena' ? 'buena opción' : v.nivel === 'regular' ? 'opción regular' : 'mala opción'}. ${v.motivos.join(' ')}`;

@@ -146,7 +146,7 @@ Decisiones para la fase de entrega (sin fecha ni asignación):
 
 - Team Owner y quién envía; página del equipo y proyecto en el portal; integrantes aceptados en la sede.
 - Horario de juicio local (V-01). No condiciona el plan de trabajo.
-- Inglés del README, de la página del portal y de la app.
+- Inglés del README, de la página del portal y de la app. **README:** `README.en.md` hecho (Mafer, 15/11; traducción con IA, falta que una persona revise las licencias y la declaración de IA). **App:** B7 en curso (IA de Mompin, sesión "ingles"). **Portal:** pendiente.
 - Licencia del repo.
 - Revisión humana de los términos de Esri World Imagery, Microsoft Planetary Computer (V-25) y CDL de USDA.
 - Las 3 imágenes generadas con IA (`terreno-hero-v1`, `terreno-demo-v1`, `terreno-poligono-v1`): marca de agua visible, cambiarlas o quitarlas; origen de `inicio-campo.png`, que no está registrado.

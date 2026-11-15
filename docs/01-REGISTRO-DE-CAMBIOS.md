@@ -2,6 +2,30 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, pantalla 1: tarjetas del motor y nombres de cultivo en el idioma elegido (IA de Mompin, sesión "ingles")
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la IA de Mompin toma B7 (interfaz en inglés); balam lo deja. Mompin autorizó editar `web/src/ui/` y `web/src/paginas/`, solo textos con `t('clave')`, avisando a Eduardo antes de cada pantalla (buzón).
+- **Archivos:** `web/src/ui/useLaboratorio.ts` (`useIdioma`; `cliente.rankear(ids, undefined, idioma)`; `idioma` en la clave del cálculo), `web/src/ui/i18n/actual.ts` (nuevo: idioma activo para el código que no es React, lo fija `ProveedorIdioma`), `web/src/ui/i18n/cultivos-en.ts` y su prueba (nombres en inglés, iguales a `nombreComunEn` del catálogo), `web/src/ui/i18n/Idioma.tsx`, `web/src/ui/i18n/diccionarios.ts` ("Typical year" pasa a "Normal year", como las tarjetas y el trailer), `web/src/ui/lab/piezas.tsx` (`nombreCultivo` según el idioma), `web/src/ui/lab/Laboratorio.tsx` y `web/src/paginas/Terreno.tsx` (usan `nombreCultivo`).
+- **Cambio:** con el idioma en inglés, las tarjetas y los nombres de cultivo de la paleta, el plan, los escenarios, la comparación y los ejemplos de Terreno salen en inglés. Sin cambios visuales.
+- **Pendiente:** la ficha de la celda y la leyenda de la escena (`web/src/escena/ficha.ts`, `vistas.ts`, `EscenaParcela.tsx`) siguen con sus nombres en español: están fuera de lo autorizado (`web/src/escena/`).
+
+### 2026-11-15 — Contratos 0.16.0: `nombreComunEn` en el catálogo de cultivos (IA de Mompin, sesión "ingles", parte 2)
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; los cultivos necesitan nombre en inglés con fuente.
+- **Contrato:** `cultivo` gana el campo opcional `nombreComunEn` (versión menor, compatible: un catálogo sin el campo sigue siendo válido). `contratos/package.json` 0.16.0 (la API lo lee para `/health`), tipos regenerados (`contratos/tipos/contratos.d.ts`), ejemplo con el campo en el maíz y sin él en el cultivo ficticio, caso inválido nuevo `pruebas/invalidos/cultivo.nombre-en-vacio.json`, historial en `contratos/README.md`.
+- **API:** `api/app/modelos.py` declara `CultivoCatalogo` con `nombreComunEn` opcional (el resto del cultivo pasa tal cual) dentro de `CatalogoCultivos`; `api/openapi.json` y `api/cliente/api.d.ts` regenerados (`exportar_openapi.py`, `npm run todo`); prueba nueva en `api/tests/test_contratos_api.py` (catálogo real con el campo y catálogo viejo sin él, sin `null`); `api/README.md`. `api/tests/test_ejemplos.py` acepta ejemplos grabados en 0.15.0 (`COMPATIBLES`): 0.16.0 solo toca el catálogo de cultivos, que los ejemplos no graban, así que no hace falta regrabarlos; un cambio que toque lo grabado sí obliga a regrabar.
+- **Catálogo:** `datos/catalogos/generar.py` (`NOMBRES_EN`, `nombre_en`; `VERSION_CONTRATO` de los catálogos de 0.14.0 a 0.16.0) llena los 40 cultivos desde la fila de FAO-56 (Tabla 11 o 12) o EcoCrop que ya usa cada uno, con la fila citada en `notas`; el chile, sin fila propia, desde GRIN-Global (USDA ARS, *Capsicum annuum* var. *annuum*, id 311784, consultado el 15/11). Chile ("Chili pepper") y melón ("Melon") quedan marcados para revisión humana. `cultivos.json`, `suelos.json` y `calendario-isla.json` regenerados con `generar.py`: en `cultivos.json` solo cambian `versionContrato`, `nombreComunEn` y `notas`; en los otros dos, solo `versionContrato`. `validar.mjs` comprueba que cada cultivo tenga el nombre y su fuente en `notas`. Tabla completa en `datos/catalogos/README.md` ("Nombres en inglés").
+- **Motor:** `VERSION_CONTRATO` 0.16.0. Las tarjetas en inglés usan `nombreComunEn` (maize, sorghum, common bean). Regresiones regeneradas con `ACTUALIZAR_REGRESION=1`: en `demo-isla.json` y en las seis de `regresion/ejemplos/` solo cambia `versionContrato` (0.15.0 a 0.16.0); en `regresion/ingles/bajio-guanajuato.json`, además, los nombres de cultivo pasan del español al inglés. Ninguna cifra cambia.
+- **Docs:** `docs/04` (catálogo), `docs/05` (paso 8), `datos/catalogos/README.md`.
+- **Pendiente:** revisión humana de chile y melón (y, si el equipo quiere, `Maize` frente a `Corn` y `Peanut` frente a `Groundnut`); desplegar para que `/api/cultivos` sirva el campo.
+
+### 2026-11-15 — README en inglés (Mafer)
+
+- **Archivos:** `README.en.md` (nuevo) y una línea de enlace al inicio de `README.md`.
+- **Cambio:** traducción completa del README al inglés, con la misma estructura y las mismas tablas; las rutas, los campos de la API, los códigos de estado y las marcas del equipo (`[VERIFICAR]`, `[DECIDIR]`, `[DECIDIDO]`, `[PROPUESTA]`, `SUPUESTO`) se dejan en español para poder buscarlos en los dos archivos, con una nota al inicio que las explica. Cubre el punto «Inglés del README» de `docs/16`.
+- **Límites:** la versión en español es la de referencia; hay que mantener los dos archivos al día. Quedan fuera «la página del portal» y «la app», que también lista `docs/16`. La traducción la hizo una IA; conviene que una persona la lea.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — README al día con el alcance mundial y lo hecho el 15/11 (Mafer)
 
 - **Archivos:** `README.md`.
@@ -15,7 +39,7 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Archivos:** `web/src/motor/idioma.ts` (nuevo: `IdiomaMotor`, `IDIOMA_MOTOR_POR_DEFECTO`, `esIdiomaMotor`, `idiomaMotor`), `web/src/motor/tarjetas.ts` (las frases pasan a un diccionario `TEXTOS` por idioma; `ContextoTarjetas.idioma`; `AVISOS_EXPERTO`, `nombreEscenario`; `ventanasDe` con idioma), `web/src/motor/ranking.ts` (`rankear(entrada, opciones, idioma)`: `mensaje` y motivos de `noOrdenadas`), `web/src/motor/protocolo.ts` (`idioma?` en la petición `rankear`), `web/src/motor/cliente.ts` (`rankear(rotacionIds?, opciones?, idioma?)`; solo manda `idioma` si se lo pasan), `web/src/motor/index.ts`; pruebas nuevas `web/src/motor/pruebas/tarjetas-ingles.test.ts` y `regresion-ingles.test.ts` con `regresion/ingles/bajio-guanajuato.json`; `docs/05` (paso 8: cómo se usa, qué se traduce y qué no), `docs/16` (fila B7), `AgroVault/Compartido/Resumen.md`.
 - **Cambio:** con `idioma: 'en'` las tarjetas salen en inglés con las mismas cifras y fuentes; sin idioma, en español. Los motivos técnicos de `NO_EVALUABLE` se citan en español, marcados ("Engine reason (in Spanish)"); las fuentes y sus citas no se traducen. Detalle en `docs/05`.
 - **Evidencia:** la regresión A5.5 en español (`demo-isla.json`) no cambia; la de los ejemplos mundiales tampoco.
-- **Pendiente:** (1) la UI pasa `idioma` desde `useIdioma` (balam, B7; línea exacta en `docs/05`); (2) los nombres de cultivo en inglés llegan con `nombreComunEn` del catálogo (parte 2); mientras, la tarjeta en inglés usa el nombre en español.
+- **Pendiente:** (1) la UI pasa `idioma` desde `useIdioma` (balam, B7; línea exacta en `docs/05`); (2) los nombres de cultivo en inglés llegan con `nombreComunEn` del catálogo (parte 2, entrada de arriba).
 - **No se tocó:** `web/src/ui/`, `web/src/paginas/`.
 
 ### 2026-11-15 — B7, parte 1: base de idioma español/inglés (balam; registrado por Mompin)
@@ -161,6 +185,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** la protección guardaba ids de celda que cambian con el tamaño de celda (mismo problema que el plan `porCelda`), y el botón anterior protegía celdas sin plaga, lo que no reflejaba una decisión.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
+
+### 2026-11-15 — La plaga se come las plantas y la paleta solo ofrece cultivos completos (Eduardo)
+
+- **Archivos:** `web/src/escena/render/escena-three.ts`, `ui/lab/cultivosListos.ts`, `PanelCultivos.tsx`, `cultivosListos.test.ts`; `docs/06`.
+- **Cambio:** (1) en las celdas con plaga sin tratar la planta se encoge al 40 % y vuelve a crecer al tratarla o si la plaga se va; antes solo aparecían insectos. (2) La paleta de pintar solo muestra cultivos con parámetros del motor y todos sus modelos; un cultivo incompleto no se ofrece.
+- **Evidencia:** `tsc` y suite del front en verde; la prueba con los modelos reales confirma que hoy los 40 cultivos están completos, así que ninguno se oculta todavía.
+- **Límites:** el encogimiento de las plantas es dibujo y no se vio en el navegador (no hay prueba de la escena 3D, que pide WebGL); la regla de cultivos completos no cambia nada hoy.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-15 — Selector de idioma con banderas (Eduardo)
 

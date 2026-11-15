@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { AVISO_EJEMPLOS, listarEjemplos } from '../demo/ejemplos';
-import { nombresCultivos } from '../ui/planes';
 import { fotoPorEjemplo, fotosEjemplos } from '../ui/fotosEjemplos';
+import { nombreCultivo as nombreDelCultivo } from '../ui/lab/piezas';
 import type { Parcela } from '../../../contratos/tipos/contratos';
 import { DibujarParcela } from '../ui/DibujarParcela';
 import hero from '../ui/assets/terreno-hero-v1.png';
 import '../ui/terreno.css';
 
 const ejemplos = listarEjemplos();
-const nombreCultivo = (id: string) => (nombresCultivos[id] ?? id).toLowerCase();
+const nombreCultivo = (id: string) => nombreDelCultivo(id).toLowerCase();
 
 /** Baja a una seccion y le da el foco (sin animar si se pide menos movimiento). */
 function bajarA(seccion: HTMLElement | null) {

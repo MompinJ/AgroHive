@@ -306,9 +306,7 @@ export interface components {
          */
         CatalogoCultivos: {
             /** Cultivos */
-            cultivos: {
-                [key: string]: unknown;
-            }[];
+            cultivos: components["schemas"]["CultivoCatalogo"][];
         } & {
             [key: string]: unknown;
         };
@@ -387,6 +385,17 @@ export interface components {
             porcentaje?: number | null;
             /** Grupohidrologico */
             grupoHidrologico?: string | null;
+        };
+        /**
+         * CultivoCatalogo
+         * @description Un cultivo de contratos/cultivo.schema.json. Pasa tal cual (lo valida el contrato en las pruebas); se declara el campo
+         *     nuevo de 0.16.0 para que quede en OpenAPI y en el cliente generado.
+         */
+        CultivoCatalogo: {
+            /** Nombrecomunen */
+            nombreComunEn?: string | null;
+        } & {
+            [key: string]: unknown;
         };
         /**
          * DatoNdvi
