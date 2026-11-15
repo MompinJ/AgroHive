@@ -1,6 +1,8 @@
 // Fuente de los .bbmodel de Mafer (modelos/cultivos/ y modelos/suelos/). Vite los empaqueta como
 // texto y se cargan bajo demanda: solo se baja el modelo que la escena usa.
-// Para sumar un cultivo basta con dejar su <cultivo>_<etapa>.bbmodel en modelos/cultivos/.
+// Para sumar un cultivo basta con dejar su <cultivo>_<etapa>.bbmodel en modelos/cultivos/ (y su
+// bloque en modelos/cultivos/bloques/). Con `npm run dev` corriendo hay que reiniciarlo: Vite no
+// vigila modelos/ (esta fuera de web/) y no ve los archivos nuevos hasta arrancar otra vez.
 
 import { leerBbmodel, type ModeloVoxel } from './bbmodel';
 
