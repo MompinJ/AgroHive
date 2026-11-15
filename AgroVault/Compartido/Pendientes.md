@@ -42,18 +42,18 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 
 ## Abierto de verdad
 
-Corte 14/11, 18:15, desde las marcas de `docs/14` (54 de 60 hechas tras A0.5 y A4.8).
+**Fase de revisión** `[DECIDIDO]` (Mompin, 14/11 noche): se revisa y valida lo que está en `main`, sobre todo el frontend. A0.3, A4.4, A5.7 y A5.9 quedan pospuestas hasta el final y el envío se hace solo cuando todos digan que están satisfechos (`docs/13`, `docs/14`). Los hallazgos de la revisión van por el buzón (pantalla, qué pasa, dueño, estado).
+
+Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas.
 
 | ID | Qué falta |
 | --- | --- |
-| A0.3 | Acta de roles, cultivos y criterio de ranking (equipo). Lo decidido ya está en `docs/13` |
+| A0.3 | Pospuesta (fase de revisión). Acta de roles, cultivos y criterio de ranking (equipo). Lo decidido ya está en `docs/13` |
 | A3.9 | Chile y mascota hechos; la escena muestra la mascota por defecto (`EscenaParcela`, `mascota = true`). Falta la revisión humana del visor y de la equivalencia con el pimiento dulce |
-| A4.4 | Redacción con LLM, opcional, solo sobre números ya calculados |
-| A4.12 | `[HECHO]` 15/11 (Eduardo decidió no esperar a C5: es un extra aditivo que la interfaz no llama). `GET /api/ee-uu/cdl` y `/api/ee-uu/ssurgo`; schema en `contratos/ee-uu.schema.json` (0.13.0). Falta el OK de Mompin para desplegar |
+| A4.4 | Pospuesta (fase de revisión). Redacción con LLM, opcional, solo sobre números ya calculados |
 | A4.13 | Hecha en la API: `GET /api/calendario`. El front sigue leyendo solo `calendario-isla.json` (balam) |
-| A5.4 | `[HECHO]` 15/11: medida con GPU real (Apple M5 Max, 105 a 115 cuadros/s con 518 celdas) y sin GPU (SwiftShader, 9.4 cuadros/s); cifras y límites en `docs/06`. Falta, opcional, un celular o una laptop modesta física con `/medir.html` |
-| A5.7 | `[EN CURSO]` (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |
-| A5.9 | Envío final según las reglas oficiales (`docs/02`) |
+| A5.7 | `[EN CURSO]`, pospuesta (fase de revisión) (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |
+| A5.9 | Pospuesta: envío final según las reglas oficiales (`docs/02`), solo cuando todos estén satisfechos |
 
 ## Huecos científicos que el motor deja en `NO_EVALUABLE` a propósito
 
