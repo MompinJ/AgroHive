@@ -19,6 +19,13 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Docs:** `docs/04` (catálogo), `docs/05` (paso 8), `datos/catalogos/README.md`.
 - **Pendiente:** revisión humana de chile y melón (y, si el equipo quiere, `Maize` frente a `Corn` y `Peanut` frente a `Groundnut`); desplegar para que `/api/cultivos` sirva el campo.
 
+### 2026-11-15 — README en inglés (Mafer)
+
+- **Archivos:** `README.en.md` (nuevo) y una línea de enlace al inicio de `README.md`.
+- **Cambio:** traducción completa del README al inglés, con la misma estructura y las mismas tablas; las rutas, los campos de la API, los códigos de estado y las marcas del equipo (`[VERIFICAR]`, `[DECIDIR]`, `[DECIDIDO]`, `[PROPUESTA]`, `SUPUESTO`) se dejan en español para poder buscarlos en los dos archivos, con una nota al inicio que las explica. Cubre el punto «Inglés del README» de `docs/16`.
+- **Límites:** la versión en español es la de referencia; hay que mantener los dos archivos al día. Quedan fuera «la página del portal» y «la app», que también lista `docs/16`. La traducción la hizo una IA; conviene que una persona la lea.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — README al día con el alcance mundial y lo hecho el 15/11 (Mafer)
 
 - **Archivos:** `README.md`.
@@ -178,6 +185,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** la protección guardaba ids de celda que cambian con el tamaño de celda (mismo problema que el plan `porCelda`), y el botón anterior protegía celdas sin plaga, lo que no reflejaba una decisión.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
+
+### 2026-11-15 — La plaga se come las plantas y la paleta solo ofrece cultivos completos (Eduardo)
+
+- **Archivos:** `web/src/escena/render/escena-three.ts`, `ui/lab/cultivosListos.ts`, `PanelCultivos.tsx`, `cultivosListos.test.ts`; `docs/06`.
+- **Cambio:** (1) en las celdas con plaga sin tratar la planta se encoge al 40 % y vuelve a crecer al tratarla o si la plaga se va; antes solo aparecían insectos. (2) La paleta de pintar solo muestra cultivos con parámetros del motor y todos sus modelos; un cultivo incompleto no se ofrece.
+- **Evidencia:** `tsc` y suite del front en verde; la prueba con los modelos reales confirma que hoy los 40 cultivos están completos, así que ninguno se oculta todavía.
+- **Límites:** el encogimiento de las plantas es dibujo y no se vio en el navegador (no hay prueba de la escena 3D, que pide WebGL); la regla de cultivos completos no cambia nada hoy.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-15 — Selector de idioma con banderas (Eduardo)
 
