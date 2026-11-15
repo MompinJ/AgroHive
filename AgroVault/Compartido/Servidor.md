@@ -21,7 +21,7 @@ No hay contraseñas ni llaves en este vault ni en el repo. El acceso SSH lo tien
 | Servicio | `agrohive-api.service` (systemd), uvicorn en `127.0.0.1:8010`, solo local |
 | App | `ExecStart` apunta a `app.main:app` con `WorkingDirectory=/opt/agrohive/repo/api`. El `stub/app.py` provisional ya no se usa |
 | Caché de datos | `/opt/agrohive/cache` (clima, tiles y suelo; se puede borrar sin riesgo) |
-| Variables de entorno | `/opt/agrohive/agrohive.env` (`AGROHIVE_CACHE_DIR`, `AGROHIVE_CATALOGOS_DIR`, `AGROHIVE_CORS_ORIGINS`; sin secretos) |
+| Variables de entorno | `/opt/agrohive/agrohive.env` (`AGROHIVE_CACHE_DIR`, `AGROHIVE_CATALOGOS_DIR`, `AGROHIVE_CORS_ORIGINS`, `EARTHDATA_TOKEN`). El token no esta en el repo: el archivo vive solo en el droplet, modo 640, grupo `agrohive` |
 | nginx | `/etc/nginx/sites-available/agrohive`, enlazado en `sites-enabled`. 80 redirige a 443. En 443: `/api/`, `/health`, `/docs` y `/openapi.json` van a la API (`:8010`); el resto sirve el front desde `/var/www/agrohive-web`. Copia de la configuración en `api/despliegue/` |
 | Certificado | `/etc/letsencrypt/live/agrohive/`, emitido con `certbot certonly --webroot`; la renovación recarga nginx |
 
@@ -31,7 +31,7 @@ Convivencia con `mediworks` (V-16): comparte nginx, certbot y el droplet. Usa `m
 
 1. Lo que entra a `main` en GitHub no llega solo al servidor: Eduardo lo despliega.
 2. En el droplet: `sudo -u agrohive git -C /opt/agrohive/repo pull`, luego `sudo -u agrohive /opt/agrohive/venv/bin/pip install -r /opt/agrohive/repo/api/requirements.txt` y `systemctl restart agrohive-api`.
-3. El atajo en el droplet, como root, es `bash /opt/agrohive/repo/api/despliegue/actualizar-servidor.sh`: deja API y front en `origin/main`. El 14/11 noche dejo `23f8a53` y publico el front. Tambien se puede subir solo el front con `SERVIDOR=root@64.23.143.102 sh api/despliegue/desplegar-front.sh`. Una sola sesión despliega, y lo anuncia antes por el buzón. No hace falta `EARTHDATA_TOKEN` para el resto de la API; sin él, `/api/smap` responde 503.
+3. El atajo en el droplet, como root, es `bash /opt/agrohive/repo/api/despliegue/actualizar-servidor.sh`: deja API y front en `origin/main`. El 14/11 noche dejo `23f8a53` y publico el front. Tambien se puede subir solo el front con `SERVIDOR=root@64.23.143.102 sh api/despliegue/desplegar-front.sh`. Una sola sesión despliega, y lo anuncia antes por el buzón. Ese script no toca `agrohive.env`. No hace falta `EARTHDATA_TOKEN` para el resto de la API; sin él, `/api/smap` responde 503. Desde el 14/11 noche la variable esta puesta en el droplet y `GET /api/smap` (Isla, 2024-06-01 a 2024-06-03) respondio 200 con humedad real el dia 3.
 4. Comprobar `https://64-23-143-102.sslip.io/health` (trae `commit` y `versionContrato`: ahi se ve que version corre), `/api/cultivos` y `https://mediworks.mx/` (debe seguir en 200).
 
 Logs: `journalctl -u agrohive-api`.
