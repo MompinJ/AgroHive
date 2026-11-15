@@ -75,7 +75,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A0.2 `[HECHO]` | Documentación consolidada en `docs/` | Mompin | S | Haiku | — | `docs/` al día, registro en 01 |
 | A0.3 | Acordar roles, cultivos iniciales y criterio de ranking (V-18, V-19) | Todos | XS | Haiku | — | Acta breve en 11 |
 | A0.4 `[HECHO]` | Acceso SSH, firewall y hostname del servidor (V-15 a V-17) | R3 / Eduardo | S | Sonnet | — | `https://<host>/health` responde |
-| A0.5 | Verificar reglas de entrega e IA (V-03, V-04) | R4 | XS | Haiku | — | Notas en 11 |
+| A0.5 `[HECHO]` | Verificar reglas de entrega e IA (V-03, V-04) | R4 | XS | Haiku | — | Guías oficiales 2026 leídas en navegador; fuentes en docs/02 y 11. Cumplimiento pendiente en A5.7/A5.9; horario local V-01 |
 | A0.6 `[HECHO]` | Consultar SIAP: cultivos y calendario del municipio; confirmar zona demo y milpa (V-20) | R3 | S | Sonnet | — | Zona y cultivos confirmados en 13; calendario de Isla en `calendario-local` con fuente (SIAP o INIFAP) |
 | A0.7 `[HECHO]` | Verificar Open-Meteo estacional, CORS de POWER y acceso a elevación (V-21, V-22) | R3 | S | Sonnet | — | Parámetros probados con una llamada real, anotados en 04 |
 
@@ -224,7 +224,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
 | **Eduardo** | 17 | 0 | 1 | 1 | 89 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
-| **balam** | 12 | 0 | 0 | 3 | 80 % de 15 |
+| **balam** | 13 | 0 | 0 | 2 | 87 % de 15 |
 
 ### Mompin
 
@@ -291,7 +291,7 @@ Generado por `herramientas/cronograma.py` desde las marcas de las tablas de fase
 
 | ID | Actividad | Estado | Nota |
 | --- | --- | --- | --- |
-| A0.5 | Verificar reglas de entrega e IA (V-03, V-04) | PENDIENTE |  |
+| A0.5 | Verificar reglas de entrega e IA (V-03, V-04) | HECHO |  |
 | A1.2 | Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías | HECHO | rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados |
 | A2.9 | Cuadrícula desde polígono (Turf.js) con tope de celdas | HECHO |  |
 | A2.10 | Mapa y dibujo de polígono libre (Leaflet) | HECHO |  |

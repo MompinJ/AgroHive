@@ -76,8 +76,8 @@ Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Al
 | --- | --- | --- |
 | V-01 | Horario de inicio y cierre en sede Boca del Río | Preguntar al organizador; regirse por el límite más temprano |
 | V-02 | Pestaña Resources y fuentes NASA aceptadas | Revisar la página del reto |
-| V-03 | Formato de entrega, video y juicio | Adaptar al formulario oficial |
-| V-04 | Reglas de IA, código previo, marca e imágenes NASA | Atribuir y declarar según reglas |
+| V-03 | Reglas globales verificadas el 14/11 (A0.5); entrega y juicio local aún por ejecutar/confirmar | Guías 2026 y pendientes en [02](02-EVENTO-Y-RETO.md#verificación-a05--14112026); cumplir en A5.9, horario local en V-01 |
+| V-04 | Reglas de IA, originalidad y marca verificadas (A0.5); no se certifica cumplimiento ni licencias | Fuentes y pendientes de marcas/metadatos, inglés y permisos en [02](02-EVENTO-Y-RETO.md#verificación-a05--14112026); README/A5.7 requiere revisión humana |
 | V-05 | Qué cuenta como "empezar" antes del evento | Preguntar al organizador |
 | V-06 | ~~Parámetros de POWER~~ Decidido 14/11 (13): `GWETROOT` entra como condición inicial y comparación, convertida de fracción de saturación a fracción de TAW; radiación ya en MJ/m²/día | — |
 | V-07 | Parámetros de Open-Meteo | Revisar su documentación |

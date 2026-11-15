@@ -7,7 +7,20 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Archivos:** `docs/14` (A4.8 `[HECHO]`; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`, `AgroVault/Compartido/Servidor.md`.
 - **Cambio:** `GET /api/smap` en `https://64-23-143-102.sslip.io` (Isla, -95.53, 18.03, 2024-06-01 a 2024-06-03) responde 200 `EVALUABLE` en unos 20 s. El 2024-06-03 trae humedad real 0.1432 m3/m3 (AM 0.1402, PM 0.1463, granulo `SMAP_L3_SM_P_20240603_R19240_001.h5`). El 1 y el 2 tienen granulo pero sin recuperacion valida (`NO_EVALUABLE`; no se inventa). Contraste, fuera del ranking. `web/src` no llama a SMAP. `EARTHDATA_TOKEN` queda solo en el entorno del servicio (`/opt/agrohive/agrohive.env`, modo 640) y en un `.env` local no versionado. No esta en el repo.
 - **Fuente / evidencia:** respuesta publica del 14/11 noche, API en `23f8a53`, contrato 0.12.2. `/health` seguia en 200.
-- **Decisiones afectadas:** ninguna. Eduardo pasa de 16 de 19 hechas (84 %) a 17 de 19 (89 %). El proyecto pasa de 52 de 60 (87 %) a 53 de 60 (88 %).
+- **Decisiones afectadas:** ninguna. Eduardo pasa de 16 de 19 hechas (84 %) a 17 de 19 (89 %). Con A0.5 de balam ya en `main`, el proyecto queda en 54 de 60 (90 %).
+
+### 2026-11-14 — Entrada de medición en producción y verificación A0.5 (balam)
+
+- **Archivos:** `web/vite.config.ts`, `web/README.md`, `herramientas/medir-escena/README.md`; `docs/02`, `docs/11`, `docs/14` y vistas generadas.
+- **Cambio:** build multipágina con `index.html` y `medir.html`, solicitado por Mompin en buzón #216 y autorizado por Balam. No despliega al droplet ni realiza la medición de hardware.
+- **A0.5:** guías oficiales de entrega/evaluación de 2026, publicadas el 13/11, leídas directamente en Chrome el 14/11; búsqueda daba 502. Reglas y fuentes centralizadas en docs/02; V-03/V-04 documentadas, A0.5 hecha como verificación de reglas. El cumplimiento, revisión humana de permisos, inglés, demo del equipo y envío siguen pendientes en A5.7/A5.9; horario de juicio local V-01 no confirmado. No se reactiva video/presentación en el carril de Balam.
+- **Evidencia:** build genera ambos HTML; `medir.html?auto=0` en preview de producción devuelve 200 y muestra el control de inicio. Fuentes enlazadas en docs/02: guías 2026, FAQ, respuestas GO Team #1849/#1916 y guía NASA de medios. No se marca el proyecto como conforme ni enviado.
+
+### 2026-11-14 — Los 20 bloques de Mafer en la escena, medidos (Mompin)
+
+- **Archivos:** `web/src/escena/voxel/bloque.ts` (tope de 24; el provisional queda solo de respaldo), `medir/medir.tsx` (caso nuevo: mezcla de los 4 cultivos con `plan.porCelda`); `docs/06`.
+- **Medido (518 celdas, SwiftShader):** maíz en madurez, 191 416 triángulos y 6.7 cuadros/s; antes 449 380 y 3.2 con el detallado. Mezcla de 4 cultivos: 8 draw calls y 6.5 cuadros/s; reposo 0. Los 20 bloques revisados uno por uno y en la escena; la celda elegida sigue resaltando.
+- **Observación para Mompin:** con bloques bajos, las placas de estado dominan la vista de lejos.
 
 ### 2026-11-14 — A5.2 y A5.3: tiempo compartido, móvil y accesibilidad (balam)
 
@@ -26,6 +39,14 @@ Cambio y motivo:
 Fuente / evidencia:
 Decisiones afectadas:
 ```
+
+### 2026-11-14 (noche) — Iconos 2D de los cultivos, encargo #198 punto 1 (Mafer)
+
+- **Archivos:** `modelos/iconos2d/` (`iconos2d.py`, 20 `<cultivo>_<etapa>.svg`, `visor_iconos.html`, `README.md`); `web/src/escena/pruebas/iconos2d.test.ts`.
+- **Cambio:** un sprite plano de 16 × 16 por cultivo y etapa (maíz, frijol, calabaza, chile × 5), con la paleta compartida y sin colores nuevos, legible a 32 y 64 px (escalas enteras). Cada SVG lleva `<title>` en español, sin scripts ni imágenes externas.
+- **Pruebas:** paleta, tamaño, suelo en la última fila, y que todo par de los 20 iconos se distinga en al menos 12 % de sus píxeles (dE ≥ 15) bajo visión normal, protanopia, deuteranopia y tritanopia, con `daltonismo.ts`. El 12 % y el dE de 15 son `[PROPUESTA]` (el 15 es el de `estilos-estado.ts`); ajustar si el equipo prefiere otro. 65 pruebas del archivo en verde.
+- **Pendiente:** ninguna pantalla los carga aún; dónde se muestran en `ui/Parcela2D.tsx` es de balam. Revisión visual humana. El punto 2 del encargo (ampliar el catálogo) no se ha empezado.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — A4.8 sigue en curso: SMAP en el droplet responde 503 (Eduardo)
 
