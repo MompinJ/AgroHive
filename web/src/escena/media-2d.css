@@ -1,0 +1,11 @@
+/* Medio cuadrado en la vista 2D: la mitad que queda con el fondo de la celda; la diagonal con
+   la tinta tenue, y la mitad de fuera transparente. La forma se lee por el dibujo, no solo por color. */
+.parcela2d-celda.parcela2d-media {
+  --fondo-media: var(--color-surface);
+  background: linear-gradient(var(--dir-media), var(--fondo-media) calc(50% - 1px), var(--color-text-muted) calc(50% - 1px), var(--color-text-muted) calc(50% + 1px), transparent calc(50% + 1px));
+}
+.parcela2d-media-so { --dir-media: to top right; }
+.parcela2d-media-ne { --dir-media: to bottom left; }
+.parcela2d-media-se { --dir-media: to top left; }
+.parcela2d-media-no { --dir-media: to bottom right; }
+.parcela2d-celda.parcela2d-media.parcela2d-marcada { --fondo-media: color-mix(in srgb, var(--marca) 45%, var(--color-surface)); }

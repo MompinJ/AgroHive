@@ -10,6 +10,7 @@ import { rgbaPlaca } from '../escena/placa';
 import type { BloqueEscena } from '../escena/modelo';
 import { huellaPincel, type PincelEscena } from '../escena/pincel';
 import { iconoCultivo2D } from './iconosCultivo2D';
+import { claseMedia2D } from '../escena/media-2d';
 import './parcela2d.css';
 
 // Los mismos píxeles de las placas 3D, en símbolos SVG compartidos por todas las
@@ -123,7 +124,7 @@ export function Parcela2D({ parcela, resultado, fecha, suelo = null, avisosDatos
         {bloques.map((b) => {
           const icono = iconoCultivo2D(b);
           const marca = trazo.has(b.celdaId) ? pincel?.color : marcas.get(b.celdaId);
-          return <button key={b.celdaId} type="button" data-celda={b.celdaId} className={`parcela2d-celda${marca ? ' parcela2d-marcada' : ''}`} ref={(n) => { if (n) botones.current.set(b.celdaId, n); else botones.current.delete(b.celdaId); }}
+          return <button key={b.celdaId} type="button" data-celda={b.celdaId} className={`parcela2d-celda${marca ? ' parcela2d-marcada' : ''}${claseMedia2D(b.forma)}`} ref={(n) => { if (n) botones.current.set(b.celdaId, n); else botones.current.delete(b.celdaId); }}
           style={{ gridColumn: Math.round(b.x + (modelo.columnas - 1) / 2) + 1, gridRow: Math.round(b.z + (modelo.filas - 1) / 2) + 1, ...(marca ? { '--marca': marca } as CSSProperties : {}) }}
           tabIndex={actual?.celdaId === b.celdaId ? 0 : -1} aria-pressed={actual?.celdaId === b.celdaId}
           aria-label={describirBloque(b)} title={describirBloque(b)} onFocus={() => elegir(b)} onClick={() => { if (!pincel) elegir(b); }} onKeyDown={(e) => tecla(e, b)}>
