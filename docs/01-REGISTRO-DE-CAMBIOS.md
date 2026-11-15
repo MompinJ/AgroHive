@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 (madrugada) — Ampliación del catálogo de cultivos `[DECIDIDO]` (Mompin; sesión "catalogo", rama `Mompin-features`)
+
+- **Archivos:** `datos/catalogos/generar.py` (lista `AMPLIACION` al final de `CULTIVOS`), `cultivos.json` y `calendario-isla.json` regenerados, `datos/catalogos/README.md` (ampliación, criterio de fila, elecciones y cultivos que quedaron fuera), `docs/04` (nota del catálogo), `docs/16` (E7 para Eduardo), `web/src/motor/pruebas/catalogo-ampliado.test.ts` (nueva).
+- **Cambio:** tanda 1, de 8 a 18 cultivos: soya, frijol caupí, haba, chícharo, lenteja, ejote, cebada, trigo, avena y maíz dulce. Cada cifra sale de FAO-56 (Tablas 11, 12 y 22) o de EcoCrop (Recocrop, mismo archivo y sha256) y se cotejó con un script contra las tablas descargadas. Sin `modelo3d` y con entrada PV y OI en el calendario de Isla (ventana `NO_EVALUABLE`; presencia según SIAP).
+- **Por qué:** pedido de Mompin: 30 a 50 cultivos con prioridad para México, el trópico húmedo y las rotaciones.
+- **Quedan fuera:** arroz (FAO-56 es de arroz inundado y el balance no modela la lámina), garbanzo y ajo (sin días por etapa en Tabla 11), alfalfa (perenne de cortes), sorgo forrajero, piña (790 d, no cabe en la serie), plátano (solo filas mediterráneas), papaya, ñame, tomatillo, chayote, jícama, amaranto y chía (sin fila en FAO-56).
+- **Comprobado:** el motor simula cada cultivo del catálogo en PV y OI sin tronar; la compatibilidad sale `NO_EVALUABLE` con motivo y la rotación `EXPLORATORIO` si SIAP no registra el cultivo en Isla. La escena usa la planta provisional (ya declarada) cuando falta el modelo. La API devuelve el catálogo tal cual (prueba de contratos genérica). La regresión A5.5 no cambia.
+- **Toca archivos de otros:** `datos/catalogos/` es de Mafer; lo hace la IA de Mompin por su decisión. No toca las entradas de sorgo, sandía, camote y cacahuate ni `versionContrato` (los lleva la sesión "cultivos").
+
 ### 2026-11-14 (noche) — Decisiones y reparto del día final: D1, D4, H-B6, H-M1, H-M9 `[DECIDIDO]` (Mompin; sesión "estado")
 
 - **Archivos:** `docs/13` (seis filas nuevas), `docs/16` (sección 2 con decididas y abiertas; sección 3 con el reparto sobre `main` `582e482`), `docs/11` (resumen de decisiones).

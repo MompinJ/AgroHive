@@ -51,6 +51,8 @@
 | **INEGI edafología** | Contexto de suelo | Escala gruesa | `[VERIFICAR]` |
 | **SoilGrids (ISRIC)** | Textura y materia orgánica | **API REST pausada**; no depender de ella | Verificado (pausada) |
 
+> **Catálogo de cultivos (ampliación del 15/11, `[DECIDIDO]` Mompin):** `datos/catalogos/cultivos.json` pasa de 8 a 18 cultivos (tanda 1: soya, frijol caupí, haba, chícharo, lenteja, ejote, cebada, trigo, avena y maíz dulce), con la misma regla: cada parámetro sale de FAO-56 (Tablas 11, 12 y 22) o de EcoCrop (copia de Recocrop) con su fuente, y lo que no tiene fuente queda fuera o `NO_EVALUABLE`. Los nuevos no tienen modelo 3D ni ventana de siembra con fuente en Isla: su compatibilidad de ciclo sale `NO_EVALUABLE` con motivo, y los que SIAP no registra en Isla dejan la rotación en `EXPLORATORIO`. Criterios, elecciones y cultivos que quedaron fuera (arroz, garbanzo, ajo, alfalfa, piña, papaya y otros): `datos/catalogos/README.md`.
+
 > **Investigación del 14/11** (detalle, endpoints y límites en `AgroVault/Compartido/APIs.md`; todo lo marcado `VERIFICAR` allí se prueba con una llamada real): Open-Meteo Elevation (Copernicus GLO-90, hasta 100 coordenadas por llamada) es candidato para la elevación junto a Terrarium y SRTM (V-08); la página original de FAO EcoCrop ya no responde y hay copias públicas de su base cuya licencia falta verificar; SoilGrids se consulta por WCS mientras la API REST siga pausada; el pronóstico estacional de Open-Meteo documenta 7 meses de horizonte (V-21).
 
 ### Suelo: la fuente más débil
