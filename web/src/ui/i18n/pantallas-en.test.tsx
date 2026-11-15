@@ -179,3 +179,19 @@ describe('B7, Comparacion en ingles (T5): resumen en PDF', () => {
     expect(sinEspanol(texto.filter((x) => !/Bajío|Guanajuato/.test(x)))).toEqual([]);
   });
 });
+
+import { MetodoFuentes } from '../../paginas/MetodoFuentes';
+import { DataState, MethodNotes } from '../components';
+import { BotonSonido } from '../BotonSonido';
+import { condicionesFuentes } from '../licencias';
+
+describe('B7, Metodo y fuentes en ingles (R1) y piezas comunes', () => {
+  it('no deja espanol fuera de los nombres de las fuentes', () => {
+    const estado = { datos: null, error: '', reintentar: nada } as never;
+    const html = en(<><MetodoFuentes estado={estado} /><MethodNotes /><DataState state="loading" /><BotonSonido /></>);
+    expect(html).toContain('Methods, sources and limits');
+    expect(enEspanol(html)).toEqual([]);
+    expect(enIngles(() => sinEspanol(condicionesFuentes.map((c) => c.texto)))).toEqual([]);
+    expect(condicionesFuentes[0]!.texto).toMatch(/^Citar el proyecto POWER/);
+  });
+});

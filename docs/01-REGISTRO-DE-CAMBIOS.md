@@ -2,6 +2,11 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, pantalla 5: Método y fuentes, tablero del balance y piezas comunes en inglés (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/paginas/MetodoFuentes.tsx`, `web/src/ui/components.tsx` (`DataState`, `PageHeading`, `MethodNotes`, `Brand`), `web/src/ui/licencias.ts` (resumen de cada licencia, en los dos idiomas), `web/src/ui/DashboardBalance.tsx`, `web/src/ui/BotonSonido.tsx`, `web/src/ui/i18n/textos/metodo.ts` (nuevo), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
+- **Cambio:** "Método y fuentes" (respaldo R1), el tablero de agua mes a mes, las notas de método y el botón de sonido salen en inglés. Los nombres de las fuentes, sus citas y los mensajes que llegan de la API (advertencias y avisos de la parcela) no se traducen: son datos. El resumen en inglés de las licencias es una traducción del resumen del equipo, no del texto legal.
+
 ### 2026-11-15 — Notas del catálogo sin «Isla» como lugar de referencia (R9, Mafer)
 
 - **Archivos:** `datos/catalogos/generar.py` y `datos/catalogos/cultivos.json` regenerado (`suelos.json` y `calendario-isla.json` quedan iguales).
