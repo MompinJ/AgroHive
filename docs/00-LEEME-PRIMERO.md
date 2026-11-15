@@ -23,7 +23,7 @@
 | [06 · Experiencia 2D/3D](06-EXPERIENCIA-2D-3D.md) | Tres paneles, flujo de pantallas, reglas de interacción. |
 | [07 · Modelos 3D y agente](07-MODELOS-3D-Y-AGENTE.md) | Pipeline de modelos con el agente `modelador-voxel`. |
 | [08 · Arquitectura](08-ARQUITECTURA.md) | Stack propuesto, contratos de datos, rendimiento. |
-| [09 · Equipo y plan](09-EQUIPO-Y-PLAN.md) | 4 integrantes, roles, cronograma, puntos de corte. |
+| [09 · Equipo y plan](09-EQUIPO-Y-PLAN.md) | 4 integrantes, roles, cronograma, puntos de corte. Roles y cronograma por horas quedan sustituidos por 13 y 14. |
 | [10 · Pitch y límites](10-PITCH-Y-LIMITES.md) | Narrativa, límites científicos, preguntas de jueces. |
 | [11 · Decisiones, pendientes y riesgos](11-DECISIONES-PENDIENTES-Y-RIESGOS.md) | Qué está decidido, qué se decide en el evento, riesgos. |
 | [12 · Guía para agentes y colaboradores](12-GUIA-PARA-AGENTES.md) | Cómo leer y editar esta carpeta (Claude, ChatGPT, Cursor). |

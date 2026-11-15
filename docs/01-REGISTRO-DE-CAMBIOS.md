@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — Documentación al día con `main` (cronista)
+
+- **Archivos:** `docs/00`, `docs/11`, `docs/13`, `docs/14` (nota de C2, fuera de las tablas); `AgroVault/Compartido/{Resumen,Pendientes,Codigo,Contratos,Servidor,APIs}.md`; `README.md`, `docs/README-borrador.md`, `web/README.md`, `api/README.md`.
+- **Cambio:** solo se reflejan decisiones y estados que ya están en `docs/13` y en las marcas de `docs/14`; no se cambia ninguna decisión. La demo compara por defecto R1, R2 y R4 (quedaba "R1 a R4" en la fila A4.3 de 13 y en README); contratos 0.12.2 (la vault decía 0.10.0 y 0.12.1); A4.13, A2.16, A5.2 y A0.7 hechas (13 y 11 las daban por venir); en 11 se tachan los temas `[EN EVENTO]` y `[DEPENDE-DATOS]` ya decididos en 13; NDVI de MODIS en uso por Planetary Computer (README lo daba pendiente y con ORNL); video y presentación no están canceladas para el equipo (web/README); "Abierto de verdad" de Pendientes rehecho con lo que sigue abierto en 14; `README-borrador` marcado como antecedente superado por `README.md`.
+- **Evidencia:** `origin/main` 091eb7f; `python3 herramientas/cronograma.py` (53 de 60 hechas); pruebas sobre f2bc172: contratos 92/92, api 124, web 581 y 1 todo, catálogos en verde. `GET /api/smap` en el droplet a las 18:04 (Isla, 2024-06-01 a 2024-06-03): 200, lee gránulos SPL3SMP; los tres días salen `NO_EVALUABLE` (anotado en Pendientes; A4.8 sigue `[EN CURSO]` en 14).
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 — Entrada de medición en producción y verificación A0.5 (balam)
 
 - **Archivos:** `web/vite.config.ts`, `web/README.md`, `herramientas/medir-escena/README.md`; `docs/02`, `docs/11`, `docs/14` y vistas generadas.
