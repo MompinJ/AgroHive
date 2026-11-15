@@ -48,7 +48,7 @@ Nombres del montaje (bloque 6), en este orden: Bajío, Mexico · Sorriso, Brazil
 
 **Si sobra voz** al grabar, lo primero que se corta es "20 years of" (bloque 3) y luego "Watch your field react" se vuelve texto en pantalla.
 
-**Enlace del cierre** `[DECIDIDO]` (Mompin, 15/11): se muestra la URL de la app publicada (hoy `https://64-23-143-102.sslip.io/`). Si cambia el despliegue, se cambia en el cartón.
+**Enlace del cierre** `[DECIDIDO]` (Mompin, 15/11): se muestra la URL de la app publicada, desde el 15/11 el dominio propio **`agrohive.space`** (antes `64-23-143-102.sslip.io`).
 
 **Evento en el cierre:** "Field Shift challenge" en texto, sin logos del evento ni de NASA. Si se quiere poner "NASA Space Apps Challenge 2026" como texto, confirmar antes con las reglas de marca (`docs/02`, guía de imágenes y medios) `[VERIFICAR]`.
 
@@ -121,19 +121,19 @@ Se graba **más largo de lo que se usa** (5 a 8 s por toma) para elegir el mejor
 
 | Toma | Estado | Archivo bueno | Notas |
 | --- | --- | --- | --- |
-| T1 | Lista para grabar (laptop o sin pantalla) | | |
-| T2 | Lista para grabar (laptop o sin pantalla) | | |
-| T3a | Espera B7 | | |
-| T3b | Espera B7 | | |
-| T4a | Espera B7 | | |
-| T4b | Espera B7 | | |
-| T4c | Espera B7 | | |
-| T5 | Espera B7 | | |
-| T6a-f | Lista para grabar (laptop o sin pantalla) | | |
-| T6g | Espera B7 | | |
-| T7 | Por hacer en el editor | | |
+| T1 | Grabada | clip T1 | sin pantalla, 60 fps |
+| T2 | Grabada | clip T2 | |
+| T3a | Grabada en inglés (c0833b5) | clip T3a | |
+| T3b | Grabada en inglés (c0833b5) | clip T3b | |
+| T4a | Grabada en inglés (c0833b5) | clip T4a | |
+| T4b | Grabada en inglés (c0833b5) | clip T4b | |
+| T4c | Grabada en inglés (c0833b5) | clip T4c | |
+| T5 | Grabada en inglés (c0833b5) | clip T5 | |
+| T6a-f | Grabadas | clips T6a a T6f | |
+| T6g | Grabada en inglés (c0833b5) | clip T6g | |
+| T7 | Hecho (variante A) | `fuentes/carton-final-A.png` | integrantes, reto y agrohive.space |
 | Voz | Toma 1 lista, falta validarla en el corte | `voz/voz-v1-brian.mp3` | Brian, eleven_v4 |
-| Música | Por elegir (A, B o C) | | |
+| Música | v1 generada (Krea), falta que el equipo la apruebe | `musica/musica-v1-krea.mp3` | Si no gusta, el equipo pone una sin copyright (opción B o C) |
 
 ### Grabar en la laptop (Linux con Hyprland), paso a paso
 
@@ -217,6 +217,15 @@ Proyecto 1920 x 1080 a 60 fps (o 30 si la plataforma lo pide), 30 s. **La pista 
 Mientras falten las tomas en inglés, los huecos pueden llevar el cartón del bloque en negro con su texto, para revisar ritmo y voz.
 
 **Música:** opción A (Krea, `elevenlabs/music-v2.5`, instrumental, 30 s) con un prompt que sigue esta tabla (golpe en 0, espacio para la voz hasta 0:21, pico de 0:21 a 0:26, corte y cola). **Krea no devuelve el costo previo de este modelo** (el preflight sale vacío): se generaría sabiendo eso, con OK de Mompin. Si no, opción B (Pixabay Music).
+
+## Render (15/11)
+
+**v2:** [`trailer-30s/render/agrohive-trailer-v2.mp4`](trailer-30s/render/agrohive-trailer-v2.mp4): 30.0 s, 1920 x 1080 a 60 fps, H.264 + AAC, 42 MB. Lleva todas las tomas (la interfaz en inglés de `main` c0833b5), la voz de Brian, la música v1, los subtítulos EN y ES quemados en caja oscura y el cartón final con los cuatro integrantes, el reto y `agrohive.space`. La declaración de IA va en el cartón y en los metadatos del archivo. Falta que el equipo lo apruebe.
+
+- **Cómo se grabó:** Chrome sin pantalla conducido por Playwright, con el reloj de la página y las animaciones CSS avanzadas a mano 1/60 s por cuadro: 60 fps exactos, sin cursor y sin saltos. Las tomas 3D se grabaron con la interfaz oculta por CSS inyectado, sin cambiar el código de la app, y las de interfaz con la GPU Intel (`--use-angle=gl-egl`).
+- **Cortes:** caen en los golpes de la música (cada 4 s). Los 6 ejemplos van encadenados con fundidos de 0.1 s y el mismo giro de cámara; el cartón final entra con un fundido de 0.35 s.
+- **Fuentes** en [`trailer-30s/fuentes/`](trailer-30s/fuentes/): `grabar-tomas.mjs` (3D), `grabar-ui.mjs` (interfaz), `graficos.mjs` (textos y cartones), `codificar.sh` (cuadros a MP4), `montar2.py` (el corte) y `subs-bilingue.ass`. Para regrabar hace falta `npm i playwright` aparte y la app en `127.0.0.1:5173`.
+- **Fuera del repo por peso** (`~/Videos/agrohive/` en la laptop de Mompin): los clips de cada toma, los gráficos, el v1 y una copia ligera de 12 MB del v2.
 
 ## Cómo se arma
 

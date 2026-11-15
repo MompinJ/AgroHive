@@ -1,0 +1,18 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sub,Inter,44,&H00FFFFFF,&H00FFFFFF,&H5A101A14,&H5A101A14,-1,0,0,0,100,100,0,0,3,14,0,2,120,120,110,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.30,0:00:02.90,Sub,,0,0,0,,What if next season is a dry one?\N{\fs36\b0\i1\c&HDCE6E0&}¿Y si la próxima temporada viene seca?
+Dialogue: 0,0:00:03.20,0:00:06.90,Sub,,0,0,0,,One bad year can wipe out a whole season.\N{\fs36\b0\i1\c&HDCE6E0&}Un mal año puede acabar con toda una temporada.
+Dialogue: 0,0:00:07.10,0:00:11.80,Sub,,0,0,0,,AgroHive tests your crop rotation against 20 years of real NASA climate.\N{\fs36\b0\i1\c&HDCE6E0&}AgroHive pone a prueba tu rotación con 20 años de clima real de la NASA.
+Dialogue: 0,0:00:12.10,0:00:16.85,Sub,,0,0,0,,Dry year, normal year, wet year. Watch your field react.\N{\fs36\b0\i1\c&HDCE6E0&}Año seco, normal y lluvioso. Mira cómo reacciona tu campo.
+Dialogue: 0,0:00:16.95,0:00:20.70,Sub,,0,0,0,,It ranks rotations by their worst year, not their best.\N{\fs36\b0\i1\c&HDCE6E0&}Ordena las rotaciones por su peor año, no por el mejor.
+Dialogue: 0,0:00:26.20,0:00:28.90,Sub,,0,0,0,,AgroHive. Plan for the bad year.\N{\fs36\b0\i1\c&HDCE6E0&}AgroHive. Planea para el año malo.
