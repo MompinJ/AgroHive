@@ -1,0 +1,10 @@
+Medicion de la escena 3D · 2026-11-15T00:13:54.553Z
+Navegador: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36
+GPU: ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Max, Unspecified Version) (Google Inc. (Apple)) · WebGL2 si · WebGL1 si · modo 3D
+Preparacion de datos (motor y API): 225 ms
+Equipo: 18 nucleos · memoria 32 GB · pantalla 1728x1117 · dpr 2
+- demo (4 celdas): primera escena 405 ms · 2264 triangulos · 5 draw calls · 91 cuadros en 3 s de reposo · 119.8 cuadros/s con viento · memoria 71.9 MB · lluvia del dia 0.01
+- poligono propio (518 celdas): primera escena 309 ms · 191416 triangulos · 5 draw calls · 26 cuadros en 3 s de reposo · 114.8 cuadros/s con viento · memoria 69.8 MB · lluvia del dia 0.01
+- mezcla de 4 cultivos (518 celdas): primera escena 312 ms · 191416 triangulos · 8 draw calls · 157 cuadros en 3 s de reposo · 105.1 cuadros/s con viento · memoria 68.1 MB · lluvia del dia 0.84
+Perdida de contexto: perdido si, recuperado si
+Errores: ninguno

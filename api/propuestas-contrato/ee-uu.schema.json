@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agrohive.example/contratos/ee-uu.schema.json",
+  "title": "FuentesRegionalesEEUU",
+  "description": "PROPUESTA de Eduardo (A4.12) para que Mompin la pase a contratos/. Respuestas de GET /api/ee-uu/cdl (rotacion real por anio, USDA NASS Cropland Data Layer) y GET /api/ee-uu/ssurgo (suelo de campo, USDA NRCS SSURGO). Contraste regional: no sustituyen a las fuentes globales del motor ni entran al ranking. Fuera de EE. UU. contiguos: estado NO_EVALUABLE con motivo.",
+  "$defs": {
+    "cdl": {
+      "title": "Cdl",
+      "type": "object",
+      "required": ["meta", "estado", "aviso", "coordenada", "anioDesde", "anioHasta", "fuente", "limites", "anios"],
+      "properties": {
+        "meta": {"$ref": "comun.schema.json#/$defs/meta"},
+        "estado": {"$ref": "comun.schema.json#/$defs/estado"},
+        "motivo": {"type": "string", "minLength": 1},
+        "aviso": {"type": "string", "minLength": 1},
+        "coordenada": {"$ref": "comun.schema.json#/$defs/lonLat"},
+        "anioDesde": {"type": "integer", "minimum": 2008},
+        "anioHasta": {"type": "integer", "minimum": 2008},
+        "fuente": {"$ref": "comun.schema.json#/$defs/fuente"},
+        "limites": {"type": "array", "minItems": 1, "items": {"enum": ["PIXEL_NO_ES_LA_PARCELA", "CLASIFICACION_CON_ERROR", "SOLO_EE_UU", "NO_ENTRA_AL_RANKING"]}},
+        "anios": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["anio", "codigo", "categoria", "cultivoCatalogo", "estado"],
+            "properties": {
+              "anio": {"type": "integer"},
+              "codigo": {"description": "Codigo de la leyenda de CDL; null si no hay clasificacion.", "type": ["integer", "null"], "minimum": 1},
+              "categoria": {"description": "Nombre de la categoria tal cual lo da USDA NASS (en ingles).", "type": ["string", "null"], "minLength": 1},
+              "cultivoCatalogo": {"description": "Solo si la categoria coincide exacto con un cultivo del catalogo; nunca se asimila.", "anyOf": [{"$ref": "comun.schema.json#/$defs/idCultivo"}, {"type": "null"}]},
+              "estado": {"$ref": "comun.schema.json#/$defs/estado"},
+              "motivo": {"type": ["string", "null"]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "advertencias": {"type": "array", "items": {"$ref": "comun.schema.json#/$defs/advertencia"}}
+      },
+      "additionalProperties": false
+    },
+    "ssurgo": {
+      "title": "Ssurgo",
+      "type": "object",
+      "required": ["meta", "estado", "aviso", "coordenada", "fuente", "limites", "horizontes"],
+      "properties": {
+        "meta": {"$ref": "comun.schema.json#/$defs/meta"},
+        "estado": {"$ref": "comun.schema.json#/$defs/estado"},
+        "motivo": {"type": "string", "minLength": 1},
+        "aviso": {"type": "string", "minLength": 1},
+        "coordenada": {"$ref": "comun.schema.json#/$defs/lonLat"},
+        "fuente": {"$ref": "comun.schema.json#/$defs/fuente"},
+        "limites": {"type": "array", "minItems": 1, "items": {"enum": ["COMPONENTE_DOMINANTE", "SOLO_EE_UU", "NO_ENTRA_AL_RANKING"]}},
+        "unidad": {"type": "object", "required": ["mukey", "nombre"], "properties": {"mukey": {"type": "string"}, "nombre": {"type": "string"}}, "additionalProperties": false},
+        "componente": {"type": "object", "required": ["nombre"], "properties": {"nombre": {"type": "string"}, "porcentaje": {"type": "number"}, "grupoHidrologico": {"type": "string"}}, "additionalProperties": false},
+        "horizontes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["nombre", "profundidadCm", "arenaPct", "limoPct", "arcillaPct", "materiaOrganicaPct", "awcCmCm"],
+            "properties": {
+              "nombre": {"type": ["string", "null"]},
+              "profundidadCm": {"type": "object", "required": ["desde", "hasta"], "properties": {"desde": {"type": "integer", "minimum": 0}, "hasta": {"type": "integer", "minimum": 0}}, "additionalProperties": false},
+              "arenaPct": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+              "limoPct": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+              "arcillaPct": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+              "materiaOrganicaPct": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+              "awcCmCm": {"description": "Agua disponible (awc_r de SSURGO), cm de agua por cm de suelo.", "type": ["number", "null"], "minimum": 0, "maximum": 1}
+            },
+            "additionalProperties": false
+          }
+        },
+        "agua": {
+          "type": "object",
+          "required": ["estado", "tawMm", "profundidadCubiertaCm", "hastaCm", "metodo"],
+          "properties": {
+            "estado": {"$ref": "comun.schema.json#/$defs/estado"},
+            "tawMm": {"type": ["number", "null"], "minimum": 0},
+            "profundidadCubiertaCm": {"type": "integer", "minimum": 0},
+            "hastaCm": {"type": "integer", "minimum": 1},
+            "metodo": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        },
+        "advertencias": {"type": "array", "items": {"$ref": "comun.schema.json#/$defs/advertencia"}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

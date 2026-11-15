@@ -1,0 +1,72 @@
+{
+  "fecha": "2026-11-15T00:13:54.553Z",
+  "url": "http://localhost:5173/medir.html?api=http://127.0.0.1:8010",
+  "api": "http://127.0.0.1:8010",
+  "navegador": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+  "gpu": {
+    "vendedor": "Google Inc. (Apple)",
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Max, Unspecified Version)",
+    "webgl2": true,
+    "webgl1": true
+  },
+  "equipo": {
+    "nucleos": 18,
+    "memoriaGB": 32,
+    "pantalla": "1728x1117",
+    "dpr": 2,
+    "tactil": false
+  },
+  "modo": "3D",
+  "preparacionMs": 225,
+  "medidas": [
+    {
+      "caso": "demo (4 celdas)",
+      "celdas": 4,
+      "primeraEscenaMs": 405,
+      "triangulos": 2264,
+      "drawCalls": 5,
+      "cuadrosEnReposo": 91,
+      "segundosReposo": 3,
+      "cuadrosPorSegundoConViento": 119.8,
+      "segundosViento": 10,
+      "memoriaMB": 71.9,
+      "lluviaDelDia": 0.01
+    },
+    {
+      "caso": "poligono propio (518 celdas)",
+      "celdas": 518,
+      "primeraEscenaMs": 309,
+      "triangulos": 191416,
+      "drawCalls": 5,
+      "cuadrosEnReposo": 26,
+      "segundosReposo": 3,
+      "cuadrosPorSegundoConViento": 114.8,
+      "segundosViento": 10,
+      "memoriaMB": 69.8,
+      "lluviaDelDia": 0.01
+    },
+    {
+      "caso": "mezcla de 4 cultivos (518 celdas)",
+      "celdas": 518,
+      "primeraEscenaMs": 312,
+      "triangulos": 191416,
+      "drawCalls": 8,
+      "cuadrosEnReposo": 157,
+      "segundosReposo": 3,
+      "cuadrosPorSegundoConViento": 105.1,
+      "segundosViento": 10,
+      "memoriaMB": 68.1,
+      "lluviaDelDia": 0.84
+    }
+  ],
+  "perdidaContexto": {
+    "extension": true,
+    "perdido": true,
+    "restaurado": true,
+    "cuadrosTras": 60,
+    "triangulosTras": 190624
+  },
+  "errores": [],
+  "terminado": true,
+  "erroresConsola": []
+}
