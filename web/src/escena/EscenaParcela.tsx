@@ -128,6 +128,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   const modeloRef = useRef<typeof modelo | null>(null);
   pincelRef.current = pincel;
   const [abierto, setAbierto] = useState<'celdas' | 'leyenda' | 'vista' | null>(null);
+  const [azimut, setAzimut] = useState(45);
   const onPintar = useMemo(
     () => (bloque: BloqueEscena | null, fase: 'inicio' | 'trazo' | 'fin') => {
       const p = pincelRef.current;
@@ -154,6 +155,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       mascota,
       pincel: !!pincel,
       onPintar,
+      onAzimut: setAzimut,
       ...(desplazamiento ? { desplazamiento } : {}),
       onSeleccion: (b: BloqueEscena | null) => {
         setSeleccion(b);
@@ -259,8 +261,8 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
           tabIndex={0}
           aria-label={
             pincel
-              ? 'Parcela en 3D, modo brocha. Arrastra para pintar celdas; clic derecho o dos dedos para girar, rueda o pellizca para acercar. Enter pinta alrededor de la celda elegida.'
-              : 'Parcela en 3D. Arrastra para girar, rueda o pellizca para acercar, flechas para desplazar. Toca un bloque o pulsa Enter para ver su estado; Escape quita la seleccion. La lista de celdas permite elegir cualquier celda.'
+              ? 'Parcela en 3D, modo brocha. Arrastra para pintar celdas; clic derecho o dos dedos para girar, rueda o pellizca para acercar. Teclado: W A S D o flechas desplazan, Q y E giran, mas y menos acercan, Inicio restablece; Enter pinta alrededor de la celda elegida.'
+              : 'Parcela en 3D. Arrastra para desplazar, clic derecho o dos dedos para girar, rueda o pellizca para acercar, doble clic para ir a una celda. Teclado: W A S D o flechas desplazan, Q y E giran, mas y menos acercan, Inicio restablece. Toca un bloque o pulsa Enter para ver su estado; Escape quita la seleccion. La lista de celdas permite elegir cualquier celda.'
           }
           onKeyDown={(e) => {
             if ((e.key === 'Enter' || e.key === ' ') && pincel) {
@@ -304,9 +306,14 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
         <input type="checkbox" checked={viento && !reducirMovimiento} disabled={reducirMovimiento} onChange={(e) => setViento(e.target.checked)} />
         <span>Viento leve{reducirMovimiento ? ' (apagado: reducir movimiento)' : ''}</span>
       </label>
-      <button type="button" className="escena-boton" onClick={() => escena.current?.restablecerVista()} disabled={sinWebGL}>
+      <div className="escena-flechas" role="group" aria-label="Girar la vista">
+        <button type="button" className="escena-boton" onClick={() => escena.current?.girar(-45)} disabled={sinWebGL} aria-label="Girar a la izquierda (Q)">↺</button>
+        <button type="button" className="escena-boton" onClick={() => escena.current?.girar(45)} disabled={sinWebGL} aria-label="Girar a la derecha (E)">↻</button>
+      </div>
+      <button type="button" className="escena-boton" onClick={() => escena.current?.restablecerVista(true)} disabled={sinWebGL}>
         Restablecer vista
       </button>
+      <p className="escena-detalle">Arrastra para desplazar; clic derecho o dos dedos para girar; rueda o pellizco para acercar (la vista se inclina al acercar); doble clic para ir a una celda. Teclado: W A S D, Q y E, + y −, Inicio.</p>
     </div>
   );
 
@@ -439,7 +446,14 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
                 Leyenda{criticos.length + otros.length > 0 ? <span className="escena-hud-punto" aria-label=" (hay avisos)" /> : null}
               </button>
               <button type="button" aria-pressed={abierto === 'vista'} onClick={() => alternar('vista')}>Vista</button>
-              <button type="button" onClick={() => escena.current?.restablecerVista()} disabled={sinWebGL} aria-label="Restablecer vista" title="Restablecer vista">⟲</button>
+              <span className="escena-hud-separador" aria-hidden="true" />
+              <button type="button" onClick={() => escena.current?.girar(-45)} disabled={sinWebGL} aria-label="Girar a la izquierda (Q)" title="Girar a la izquierda (Q)">↺</button>
+              <button type="button" className="escena-brujula" onClick={() => escena.current?.restablecerVista(true)} disabled={sinWebGL} aria-label={`Restablecer vista (Inicio). Norte a ${azimut} grados`} title="Restablecer vista (Inicio)">
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style={{ transform: `rotate(${azimut}deg)` }}>
+                  <path d="M12 3 15.5 12H8.5Z" fill="#b5452f" /><path d="M12 21 8.5 12h7Z" fill="currentColor" opacity=".45" /><circle cx="12" cy="12" r="1.6" fill="#fff" />
+                </svg>
+              </button>
+              <button type="button" onClick={() => escena.current?.girar(45)} disabled={sinWebGL} aria-label="Girar a la derecha (E)" title="Girar a la derecha (E)">↻</button>
             </div>
           </div>
         )}

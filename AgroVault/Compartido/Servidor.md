@@ -16,7 +16,7 @@ No hay contraseñas ni llaves en este vault ni en el repo. El acceso SSH lo tien
 | Cosa | Dónde |
 | --- | --- |
 | Usuario del sistema | `agrohive` (sin shell, sin sudo), carpeta `/opt/agrohive` |
-| Clon del repo | `/opt/agrohive/repo`, rama `main`. El último despliegue anotado en `docs/01` es el commit `23f8a53` (`/health` con `versionContrato` 0.12.2). Lo que entre a `main` después no está en el droplet hasta que Eduardo despliegue |
+| Clon del repo | `/opt/agrohive/repo`, rama `main`. El último despliegue es el commit `f56450c` (14/11 noche, laboratorio por pasos; `/health` con `versionContrato` 0.13.0). Lo que entre a `main` después no está en el droplet hasta que Eduardo despliegue |
 | Entorno de Python | `/opt/agrohive/venv` (fastapi, uvicorn) |
 | Servicio | `agrohive-api.service` (systemd), uvicorn en `127.0.0.1:8010`, solo local |
 | App | `ExecStart` apunta a `app.main:app` con `WorkingDirectory=/opt/agrohive/repo/api`. El `stub/app.py` provisional ya no se usa |

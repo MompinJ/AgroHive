@@ -192,3 +192,17 @@ Pedido de Eduardo en la fase de revisión del front; el equipo aprobó todos los
 - **Marcas mientras calcula**: lo pintado se cubre con un azulejo translúcido del color del cultivo (entrada del usuario, no un resultado) hasta que llega el resultado del motor. Solo en Cultivos la escena conserva el último resultado mientras recalcula, para que pintar no vacíe la parcela; Escenarios y Comparación muestran únicamente el resultado vigente. La fecha que se ve en Cultivos es el 60 % del ciclo (plantas crecidas); en Escenarios se recorre con el dock del tiempo.
 - **Paleta**: `ui/tokens.css` pasa de la referencia Duna (casi acromática) a verdes de campo con neutros salvia y acento trigo; los nombres de variables se conservan. Los colores de estado del motor en la escena no cambian. Los colores de la brocha por cultivo (`coloresCultivo`) solo identifican lo pintado.
 - **Comprobado** en Chrome sin GPU (SwiftShader) a 1440 × 900, 1280 × 800 y 390 × 844: guardia del stepper, pintar en 3D y 2D, recálculo del motor, escenarios con lluvia y comparación; sin desborde horizontal. Pruebas nuevas en `ui/planes.test.ts` y `escena/pincel.test.ts`. Falta lector de pantalla real y hardware táctil.
+
+### Cámara de juego de granja (Eduardo, 14/11 noche)
+
+`escena/render/camara.ts` (`CamaraGranja`, sobre `OrbitControls`) reemplaza la órbita libre por los controles de los juegos de granja y colonias en 3D (Timberborn, Anno, Townscaper; Hay Day en móvil). Vale en el laboratorio y en la vista previa.
+
+- **Ratón:** arrastrar con el botón principal desplaza sobre el suelo; derecho o central giran; la rueda acerca hacia el cursor. Con la brocha, el principal pinta, el central desplaza y el derecho gira.
+- **Táctil:** un dedo desplaza (o pinta con brocha); dos dedos pellizcan y giran.
+- **Teclado** (con el lienzo enfocado): W A S D o flechas desplazan de forma continua según hacia dónde mira la cámara; Q y E giran 45° con transición; + y − acercan; Inicio restablece.
+- **Inclinación ligada al zoom** `[PROPUESTA]`: de 42° desde la vertical con el zoom mínimo (0,6) a 66° con el máximo (5), en escala logarítmica. No se arrastra por separado.
+- **Doble clic** en una celda: vuela hacia ella y acerca a 2,4 si estaba más lejos (no con la brocha).
+- **Límites:** el punto que se mira no sale de la parcela más una celda de margen.
+- **Brújula** en el panel de la escena: la aguja roja marca el norte (−z) y gira con la vista; tocarla restablece. Botones ↺ y ↻ giran 45°. En modo panel, botones de giro y una línea de ayuda.
+- **Movimiento reducido:** sin inercia y sin vuelos (los giros y el restablecer saltan al destino). El desplazamiento con teclado sigue, porque lo maneja el usuario.
+- **Comprobado** en Chrome sin GPU: arrastrar desplaza sin cambiar el azimut, Q/E y los botones giran ±45°, Inicio vuelve a 45°, la rueda acerca e inclina, el doble clic enfoca y abre la ficha, y la brocha sigue pintando. `herramientas/prueba-movimiento`: 28 de 30. Las dos que fallan (A2 y G1b, reposo sin reducir) también fallan sin este cambio: la vista previa muestra un día con lluvia y `lluvia-animada` sigue pidiendo cuadros. Sus F1 a F5 (inercia de cámara) pasan; F1 y F3 dicen "girar" pero miden movimiento de cámara, y arrastrar ahora desplaza.

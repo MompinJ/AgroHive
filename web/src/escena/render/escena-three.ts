@@ -5,7 +5,7 @@
 // continuo) y opcion de reducir movimiento.
 
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CamaraGranja } from './camara';
 import { ESTILO_SIN_ELEVACION, ESTILOS_ESTADO } from '../estilos-estado';
 import { GROSOR_BASE, type BloqueEscena, type EscenaModelo, type EstadoVisual } from '../modelo';
 import { rgbaPlaca } from '../placa';
@@ -49,6 +49,8 @@ export interface OpcionesRender {
    * x positivo mueve la parcela a la derecha, y positivo la sube. Por defecto, centrada.
    */
   desplazamiento?: { x: number; y: number };
+  /** Azimut de la camara en grados (para la brujula); se avisa solo cuando cambia. */
+  onAzimut?: (grados: number) => void;
   onPintar?: (bloque: BloqueEscena | null, fase: 'inicio' | 'trazo' | 'fin') => void;
 }
 
@@ -94,7 +96,8 @@ export type MotivoCuadro =
   | 'transicion'
   | 'viento'
   | 'lluvia-animada'
-  | 'pintura';
+  | 'pintura'
+  | 'camara';
 
 /** Hueco de una celda sin elevacion: por debajo del punto mas bajo, nunca "a nivel cero". */
 const TOPE_HUECO = -GROSOR_BASE * 0.6;
@@ -295,7 +298,7 @@ export class EscenaThree {
   private readonly renderer: THREE.WebGLRenderer;
   private readonly scene = new THREE.Scene();
   private readonly camara: THREE.OrthographicCamera;
-  private readonly controles: OrbitControls;
+  private readonly camaraGranja: CamaraGranja;
   private readonly raiz = new THREE.Group();
   private readonly raycaster = new THREE.Raycaster();
   private readonly observador: ResizeObserver;
@@ -375,18 +378,10 @@ export class EscenaThree {
     sol.position.set(4, 8, 3);
     this.scene.add(sol);
 
-    // Camara casi isometrica, rotacion limitada y zoom (doc 06).
-    this.controles = new OrbitControls(this.camara, lienzo);
-    this.controles.enablePan = true;
-    this.controles.screenSpacePanning = true;
-    this.controles.minPolarAngle = THREE.MathUtils.degToRad(20);
-    this.controles.maxPolarAngle = THREE.MathUtils.degToRad(70);
-    this.controles.minZoom = 0.6;
-    this.controles.maxZoom = 6;
-    this.controles.keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' };
-    this.controles.listenToKeyEvents(lienzo);
-    this.controles.addEventListener('change', () => this.pedirCuadro('controles'));
+    // Camara de juego de granja (camara.ts): desplazar, girar en pasos, zoom con inclinacion.
+    this.camaraGranja = new CamaraGranja(this.camara, lienzo, () => this.pedirCuadro('controles'), (g) => this.opciones.onAzimut?.(g));
     this.aplicarMovimiento();
+    lienzo.addEventListener('dblclick', this.alDobleClic);
 
     lienzo.addEventListener('webglcontextlost', this.alPerderContexto);
     lienzo.addEventListener('webglcontextrestored', this.alRestaurarContexto);
@@ -416,7 +411,7 @@ export class EscenaThree {
       instancias,
       cuadros: this.cuadros,
       ultimoCuadroMs: this.ultimoCuadroMs,
-      inercia: this.controles.enableDamping,
+      inercia: this.camaraGranja.controles.enableDamping,
       transiciones: this.transiciones.length,
       viento: this.vientoActivo(),
       lluvia: this.lluviaActiva(),
@@ -440,18 +435,10 @@ export class EscenaThree {
   }
 
   private aplicarMovimiento() {
-    // Reducir movimiento: sin inercia al girar ni animaciones.
-    this.controles.enableDamping = !this.opciones.reducirMovimiento;
-    this.controles.dampingFactor = 0.12;
-    // Con pincel, el boton principal y un dedo pintan; girar queda en el derecho y en dos dedos.
-    if (this.opciones.pincel) {
-      this.controles.mouseButtons = { LEFT: null, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
-      this.controles.touches = { ONE: null, TWO: THREE.TOUCH.DOLLY_ROTATE };
-    } else {
-      this.controles.mouseButtons = { LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.PAN };
-      this.controles.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
-      this.pintando = false;
-    }
+    // Reducir movimiento: sin inercia ni vuelos de camara. Con pincel, el boton principal y un
+    // dedo pintan; girar queda en el derecho y en dos dedos.
+    this.camaraGranja.configurar({ reducirMovimiento: this.opciones.reducirMovimiento, pincel: !!this.opciones.pincel });
+    if (!this.opciones.pincel) this.pintando = false;
   }
 
   /**
@@ -490,14 +477,20 @@ export class EscenaThree {
   }
 
   /** Vuelve a la vista inicial (casi isometrica, toda la parcela visible). */
-  restablecerVista() {
-    const d = 20;
-    this.camara.position.set(d, d * 0.9, d);
-    this.camara.zoom = 1;
-    this.controles.target.set(0, 0, 0);
-    this.camara.updateProjectionMatrix();
-    this.controles.update();
+  restablecerVista(animar = false) {
+    this.camaraGranja.restablecer(animar);
     this.pedirCuadro('vista');
+  }
+
+  /** Gira la vista en pasos (botones de la brujula, Q y E). Positivo = contra reloj desde arriba. */
+  girar(grados: number) {
+    this.camaraGranja.girar(grados);
+    this.pedirCuadro('camara');
+  }
+
+  acercar(factor: number) {
+    this.camaraGranja.acercar(factor);
+    this.pedirCuadro('camara');
   }
 
   actualizar(modelo: EscenaModelo) {
@@ -514,6 +507,7 @@ export class EscenaThree {
     this.extension = Math.max(modelo.filas, modelo.columnas, 2) * 0.6 + 0.6;
     this.lluvia.caja(modelo.columnas, Math.max(modelo.filas, modelo.columnas) * 0.8 + 2, modelo.filas);
     this.construirTerreno(modelo);
+    this.camaraGranja.fijarLimites(modelo.columnas, modelo.filas);
     this.ajustarTamano();
     // La camara solo vuelve a la vista inicial si cambia la parcela, no al cambiar fecha o escenario.
     const claveVista = `${modelo.parcelaId}:${modelo.filas}x${modelo.columnas}`;
@@ -620,7 +614,8 @@ export class EscenaThree {
     this.materialMascota.dispose();
     this.marco.traverse((o) => { if (o instanceof THREE.Mesh) o.geometry.dispose(); });
     this.materialesMarco.forEach((m) => m.dispose());
-    this.controles.dispose();
+    this.lienzo.removeEventListener('dblclick', this.alDobleClic);
+    this.camaraGranja.dispose();
     this.limpiar();
     for (const g of this.cacheGeometria.values()) void g.then((x) => x.dispose());
     this.cacheGeometria.clear();
@@ -1078,9 +1073,9 @@ export class EscenaThree {
       this.cuadroPendiente = 0;
       for (const m of this.motivosPendientes) this.cuadrosPorMotivo[m] = (this.cuadrosPorMotivo[m] ?? 0) + 1;
       this.motivosPendientes.clear();
-      // Con inercia, update() devuelve true mientras la camara se sigue moviendo.
-      const siguioMoviendo = this.controles.enableDamping && this.controles.update();
+      // La camara avanza teclado, vuelos e inercia; true mientras se sigue moviendo.
       const ahora = performance.now();
+      const siguioMoviendo = this.camaraGranja.paso(ahora);
       if (this.transiciones.length > 0) {
         this.transiciones = this.transiciones.filter((t) => !this.avanzarTransicion(t, (ahora - t.inicio) / DURACION_TRANSICION_MS));
       }
@@ -1126,6 +1121,15 @@ export class EscenaThree {
     const bloque = this.bloqueEn(ev.clientX, ev.clientY);
     this.seleccionar(bloque);
     this.opciones.onSeleccion?.(bloque);
+  };
+
+  // Doble clic: volar hacia la celda (con pincel el doble clic pinta, no mueve la camara).
+  private readonly alDobleClic = (ev: MouseEvent) => {
+    if (this.opciones.pincel) return;
+    const b = this.bloqueEn(ev.clientX, ev.clientY);
+    if (!b) return;
+    this.camaraGranja.enfocar(new THREE.Vector3(b.x, this.topeDe(b), b.z));
+    this.pedirCuadro('camara');
   };
 
   private bloqueEn(clientX: number, clientY: number): BloqueEscena | null {

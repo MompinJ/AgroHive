@@ -102,7 +102,7 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
       <div className="lab-segmentado lab-segmentado-chico" role="radiogroup" aria-label="Tamaño de la brocha">
         {tamanos.map((t) => <button type="button" role="radio" key={t.valor} aria-checked={tamano === t.valor} title={t.ayuda} disabled={herramienta === 'mover'} onClick={() => setTamano(t.valor)}>{t.texto}</button>)}
       </div>
-      <p className="panel-ayuda">{herramienta === 'mover' ? 'Arrastra para girar la parcela.' : 'Arrastra sobre la parcela para pintar. Clic derecho o dos dedos para girar.'}</p>
+      <p className="panel-ayuda">{herramienta === 'mover' ? 'Arrastra para desplazar; clic derecho o dos dedos para girar; doble clic para ir a una celda. Teclado: WASD, Q y E.' : 'Arrastra sobre la parcela para pintar. Clic derecho o dos dedos giran; rueda acerca.'}</p>
       {cultivoActivo && cultivoActivo !== visible.cultivo && herramienta !== 'goma' && (
         <button type="button" className="lab-boton lab-boton-suave lab-boton-ancho" onClick={() => {
           const nuevo = rellenarCiclo(plan, datos.parcela, visible.ciclo, cultivoActivo, datos.calendario, datos.catalogo);
