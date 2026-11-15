@@ -1,0 +1,26 @@
+{
+ "nota": "GetCDLValue de CropScape (USDA NASS) leido el 14/11/2026 en un campo de Iowa (-93.4, 42.05; coordenadas ilustrativas del punto de prueba). x,y en EPSG:5070 (Conus Albers). Cuerpo XML tal cual.",
+ "x": 213712.6,
+ "y": 2119429.0,
+ "anios": {
+  "2008": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 5, category: \"Soybeans\", color: \"#267300\"}</Result></ns1:GetCDLValueResponse>",
+  "2009": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>",
+  "2010": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 5, category: \"Soybeans\", color: \"#267300\"}</Result></ns1:GetCDLValueResponse>",
+  "2011": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>",
+  "2012": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>",
+  "2013": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>",
+  "2014": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 5, category: \"Soybeans\", color: \"#267300\"}</Result></ns1:GetCDLValueResponse>",
+  "2015": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>",
+  "2016": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 5, category: \"Soybeans\", color: \"#267300\"}</Result></ns1:GetCDLValueResponse>",
+  "2017": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>",
+  "2018": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 5, category: \"Soybeans\", color: \"#267300\"}</Result></ns1:GetCDLValueResponse>",
+  "2019": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>",
+  "2020": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 5, category: \"Soybeans\", color: \"#267300\"}</Result></ns1:GetCDLValueResponse>",
+  "2021": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>",
+  "2022": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 5, category: \"Soybeans\", color: \"#267300\"}</Result></ns1:GetCDLValueResponse>",
+  "2023": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>",
+  "2024": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 5, category: \"Soybeans\", color: \"#267300\"}</Result></ns1:GetCDLValueResponse>",
+  "2025": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: 213712.6, y: 2119429.0, value: 1, category: \"Corn\", color: \"#FFD400\"}</Result></ns1:GetCDLValueResponse>"
+ },
+ "sin_dato_2023": "<ns1:GetCDLValueResponse xmlns:ns1=\"http://cropscape.csiss.gmu.edu/CDLService/\"><Result>{x: -1500000.0, y: 1000000.0, value: 0, category: \"No Data\", color: \"#000000\"}</Result></ns1:GetCDLValueResponse>"
+}

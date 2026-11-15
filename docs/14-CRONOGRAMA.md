@@ -112,7 +112,7 @@ F0 Arranque -> F1 Contratos y esqueleto -> F2 Datos y motor -> F3 Escena y selec
 | A2.15 `[HECHO]` | Cliente OpenLandMap y comparación con ISRIC en `GET /api/suelo` (V-23: ambos servicios) | R3 | S | Sonnet | A2.14 | `GET /api/suelo` devuelve `estimaciones` de ISRIC y OpenLandMap con fuente y `estimacionUsada` |
 | A2.16 (Mafer) `[HECHO]` | TAW por pedotransferencia de Saxton y Rawls (2006) para cualquier textura, desde arena, arcilla y materia orgánica | R3 / Mafer | M | Opus | A2.14, A1.6 | `agua.tawMmPorM` con `metodoTaw` y `retencion` (θsat, θFC, θWP), citado y `SUPUESTO`; prueba contra valores publicados del artículo |
 
-Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 hechas; el motor devuelve resultados por celda con el paquete de demo real (A2.4: POWER, SoilGrids y Terrarium de Isla; suelo franco del selector manual mientras el TAW de Isla es `NO_EVALUABLE`) y pasa las pruebas 1 a 5 de doc 05 (`web/src/motor/pruebas/c2.test.ts`); C2 se cruza al integrarse a `main`.
+Compuerta **C2** al terminar A2.1, A2.6 y A2.7. Estado 14/11: A2.1, A2.6 y A2.7 hechas; el motor devuelve resultados por celda con el paquete de demo real (A2.4: POWER, SoilGrids y Terrarium de Isla) y pasa las pruebas 1 a 5 de doc 05 (`web/src/motor/pruebas/c2.test.ts`). C2 cruzada: está en `main` y, desde A2.16, el suelo de Isla da TAW 122.3 mm/m por Saxton y Rawls (antes se usaba el franco del selector manual).
 
 ## F3 · Escena y selector
 

@@ -36,7 +36,7 @@ Como funciona y que se verifico:
 - **Fallas que no se esconden:** un compuesto cuyo pixel no se pudo leer sale `ERROR_DATOS` (advertencia `NDVI_COMPUESTOS_CON_ERROR`); un tramo cuyo catalogo no respondio se dice (`NDVI_TRAMOS_SIN_LEER`); una ventana incompleta no se fija en cache; si nada responde, 503 `ERROR_DATOS`.
 - **Cache por punto exacto y ventana** de 144 dias alineada desde 2000-01-01: dos puntos cercanos pueden caer en pixeles distintos. Maximo 400 dias por consulta.
 - **Limites** (los tres, siempre): el pixel de 250 m es mayor que la parcela de 2 ha, no muestra el cultivo del usuario y no entra al ranking.
-- **Licencia:** el STAC de la coleccion marca `proprietary`; los datos son de NASA LP DAAC alojados por Microsoft. `[VERIFICAR]` una persona lee https://planetarycomputer.microsoft.com/terms antes de la entrega final. La descripcion de `contratos/ndvi.schema.json` sigue nombrando a ORNL y doi:10.3334/ORNLDAAC/1600; el schema no obliga ese texto y la calidad del pixel ya esta documentada (contratos 0.12.0 / paquete 0.12.1). Lo edita Mompin.
+- **Licencia:** el STAC de la coleccion marca `proprietary`; los datos son de NASA LP DAAC alojados por Microsoft. `[VERIFICAR]` una persona lee https://planetarycomputer.microsoft.com/terms antes de la entrega final. Desde contratos 0.12.2 la descripcion de `contratos/ndvi.schema.json` cita Planetary Computer y Didan (2021); ORNL queda como respaldo que no se llama en vivo.
 
 ### Errores
 
