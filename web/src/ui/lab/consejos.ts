@@ -65,7 +65,7 @@ export function consejos(e: EntradaConsejos): Consejo[] {
   const verdor = ultimoNdvi(e.ndvi);
 
   if (e.paso === 'cultivos') {
-    salida.push({ id: 'pintar', tono: 'idea', texto: '¡Hola! Elige un cultivo y arrastra sobre la parcela para sembrarlo. Clic derecho (o dos dedos) gira la vista.' });
+    salida.push({ id: 'pintar', tono: 'idea', texto: '¡Hola! Elige un cultivo y arrastra con la brocha {brocha} sobre la parcela para sembrarlo. Clic derecho (o dos dedos) gira la vista.' });
     if (visible) {
       const ref = referenciaSiembra(visible.cultivo, visible.temporada, e.calendario);
       const v = ref?.ventana.estado === 'EVALUABLE' ? ref.ventana : null;
@@ -77,14 +77,14 @@ export function consejos(e: EntradaConsejos): Consejo[] {
       salida.push({ id: 'leguminosa', tono: 'idea', texto: 'Muchas rotaciones alternan con una leguminosa (frijol, haba, soya). Arma otra rotación con una y compáralas; este simulador no mide su aporte al suelo.' });
     }
     const r = e.riesgos?.[0];
-    if (r) salida.splice(1, 0, { id: 'plaga', tono: 'ojo', texto: `¡Cuidado! Hay registros de ${r.plaga.toLowerCase()} cerca de aquí y ataca tu ${r.cultivo.toLowerCase()}. Usa el insecticida o se comerá tus plantas (${r.bloques} ${r.bloques === 1 ? 'bloque' : 'bloques'} sin proteger).` });
+    if (r) salida.splice(1, 0, { id: 'plaga', tono: 'ojo', texto: `¡Cuidado! Hay registros de ${r.plaga.toLowerCase()} cerca de aquí y ataca tu ${r.cultivo.toLowerCase()}. Usa el insecticida {insecticida} o se comerá tus plantas (${r.bloques} ${r.bloques === 1 ? 'bloque' : 'bloques'} sin proteger).` });
     if (e.bioma && e.bioma.tMedia != null && e.bioma.lluvia != null) salida.push({ id: 'bioma', tono: 'dato', texto: `Tu parcela está en ${e.bioma.nombre}: unos ${Math.round(e.bioma.tMedia)} °C en promedio y ${Math.round(e.bioma.lluvia).toLocaleString('es-MX')} mm de lluvia al año. Los cultivos de arriba en la lista son los que mejor van con eso.` });
     if (humedad) salida.push({ id: 'smap', tono: 'dato', texto: `Según el satélite SMAP, el suelo de tu zona estaba ${nivelSmap(humedad.valor)} el ${fechaLarga(humedad.fecha)} (${dos(humedad.valor)} m³/m³). Es un dato regional, no de tu parcela.` });
     if (verdor) salida.push({ id: 'ndvi', tono: 'dato', texto: `El verdor de la zona (NDVI) era de ${dos(verdor.valor)} el ${fechaLarga(verdor.fecha)} de ${verdor.fecha.slice(0, 4)}: ${nivelNdvi(verdor.valor)}. Mide la vegetación de alrededor, no tu cultivo.` });
   }
 
   if (e.paso === 'escenarios') {
-    salida.push({ id: 'tiempo', tono: 'idea', texto: 'Mueve la línea de tiempo de abajo y suéltala para ver cómo crece tu cultivo ese año.' });
+    salida.push({ id: 'tiempo', tono: 'idea', texto: 'Mueve la línea de tiempo {calendario} de abajo y suéltala para ver cómo crece tu cultivo, semana a semana.' });
     const m = e.resultado?.porEscenario[e.escenario];
     const falta = m?.pilares.deficitHidrico.deficitTotalMm;
     const sobra = m?.pilares.excesoHidrico?.excesoTotalMm;

@@ -9,6 +9,9 @@ import { rangoDelCiclo } from '../tiempo';
 import { aplicarAcomodando, colorCultivo, cultivoDeCelda, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
 import { EventoPantalla } from './EventoPantalla';
 import { tocar } from '../sonido';
+import { PanelHistorial } from './PanelHistorial';
+import { useHistorial } from './useHistorial';
+import { textoProblema } from '../../escena/problemas';
 import { rangosTemperatura } from '../../escena/clima-vista';
 import { problemasPorCultivo } from '../../escena/problemas';
 import { eventosAlAvanzar, PAUSA_EXTRA_EVENTO_MS, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
@@ -137,12 +140,15 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   // La proteccion va ligada a la malla: si cambia el tamano de celda, empieza vacia en vez de apuntar a celdas ajenas.
   const claveProteccion = datos ? `${estado.claveGuardado}:${firmaMalla(celdasParcela, datos.parcela.tamanoCeldaM)}` : null;
   const [proteccion, setProteccion] = useProteccion(claveProteccion);
+  // Historial de hechos (siembras, insecticida, cosecha, plaga y problemas por cultivo), guardado por parcela.
+  const historial = useHistorial(datos ? estado.claveGuardado : null);
   const rociar = useCallback((ids: string[]) => {
     if (!plan || !visible || !ids.length) return;
     setProteccion(proteger(proteccion, plan.rotacionId, visible.ciclo, ids));
     setRociado({ celdas: ids, clave: Date.now() });
     tocar('rociar');
-  }, [plan, visible, proteccion, setProteccion]);
+    historial.agregar({ tipo: 'insecticida', celdas: ids.length, ciclo: visible.ciclo, clave: `${plan.rotacionId}:${visible.ciclo}:insecticida` });
+  }, [plan, visible, proteccion, setProteccion, historial.agregar]);
   const riesgos = useMemo(() => (plan && visible ? riesgosDelPlan(plan, celdasZona, presentes, proteccion).filter((r) => r.ciclo === visible.ciclo) : []), [plan, visible, celdasZona, presentes, proteccion]);
   const plagasEscena = useMemo(() => (resultado && plan ? mapaPlagas(resultado.registros.filter((r) => zonaPlaga.has(r.celdaId)), presentes, proteccion, plan.rotacionId) : undefined), [resultado, plan, presentes, proteccion, zonaPlaga]);
 
@@ -181,12 +187,27 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     fechaPrevia.current = { clave, fecha };
     if (anterior !== null && anterior !== fecha) tocar('semana'); // un golpecito por cada paso del tiempo
     const nuevos = eventosAlAvanzar({ anterior, actual: fecha, rango, clave, cosecha: datosEvento.current.cosecha, plaga: datosEvento.current.plaga });
-    if (nuevos.length) setCola((c) => [...c, ...nuevos]);
+    if (nuevos.length) {
+      setCola((c) => [...c, ...nuevos]);
+      for (const e of nuevos) historial.agregar({ tipo: e.tipo, titulo: e.titulo, detalle: e.detalle, fechaSim: e.fecha, ciclo: visible.ciclo });
+    }
   }, [paso, fecha, rango, plan?.rotacionId, visible?.ciclo, escenario]);
 
   // Luz y temperatura (paso Escenarios): rangos de temperatura de cada cultivo (FAO EcoCrop, del catalogo) y problemas por cultivo en la fecha mostrada.
   const rangosCultivos = useMemo(() => rangosTemperatura(datos?.catalogo), [datos?.catalogo]);
   const problemasCultivos = useMemo(() => (celdasListas && celdas ? problemasPorCultivo(celdas.valor.registros) : []), [celdasListas, celdas]);
+
+  // Un problema nuevo en un grupo de cultivo (no una vez por celda ni cada vez que se mueve la fecha) queda en el historial.
+  const problemasVistos = useRef(new Set<string>());
+  useEffect(() => {
+    if (paso !== 'escenarios' || !plan || !visible || !celdasListas) return;
+    for (const p of problemasCultivos) {
+      const llave = `${estado.claveGuardado}:${plan.rotacionId}:${visible.ciclo}:${escenario}:${p.cultivo}:${p.gravedad}`;
+      if (problemasVistos.current.has(llave)) continue;
+      problemasVistos.current.add(llave);
+      historial.agregar({ tipo: 'problema', titulo: textoProblema(p, nombresCultivos[p.cultivo] ?? p.cultivo), fechaSim: fecha, ciclo: visible.ciclo });
+    }
+  }, [problemasCultivos, paso, celdasListas]);
 
   const pincel: PincelEscena | null = useMemo(() => {
     if (paso !== 'cultivos' || herramienta === 'mover' || !plan || !visible || !datos) return null;
@@ -205,9 +226,10 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
         setPendientes((p) => { const m = new Map(p); for (const id of ids) m.set(id, color); return m; });
         estado.actualizar(r.plan);
         tocar('pintar');
+        historial.agregar({ tipo: 'siembra', sujeto: cultivo ? nombresCultivos[cultivo] ?? cultivo : null, celdas: ids.length, ciclo: visible.ciclo, clave: `${plan.rotacionId}:${visible.ciclo}:${cultivo ?? 'general'}` });
       },
     };
-  }, [paso, herramienta, plan, visible, datos, cultivoActivo, tamano, estado, rociar]);
+  }, [paso, herramienta, plan, visible, datos, cultivoActivo, tamano, estado, rociar, historial.agregar]);
 
   const sembrarTodo = plan && visible && datos && cultivoActivo && cultivoActivo !== visible.cultivo && herramienta === 'brocha' ? () => {
     const r = aplicarAcomodando(rellenarCiclo(plan, datos.parcela, visible.ciclo, cultivoActivo, datos.calendario, datos.catalogo), datos.parcela, datos.calendario, datos.catalogo);
@@ -215,6 +237,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     setNota(textoMovidos(r.movidos));
     estado.actualizar(r.plan);
     setCultivoPincel(null);
+    historial.agregar({ tipo: 'siembra', sujeto: nombresCultivos[cultivoActivo] ?? cultivoActivo, celdas: celdasParcela.length, ciclo: visible.ciclo, clave: `${plan.rotacionId}:${visible.ciclo}:${cultivoActivo}` });
   } : null;
   const rociarTodo = () => rociar(celdasZona);
   const protegerRiesgo = () => rociar(celdasEnRiesgo(riesgos));
@@ -242,6 +265,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     <Globo />
     {datos && paso !== 'comparacion' && <Mascota consejos={listaConsejos} paso={paso} />}
     <EventoPantalla evento={cola[0] ?? null} onTerminar={() => setCola((c) => c.slice(1))} />
+    {datos && <PanelHistorial hechos={historial.hechos} onBorrar={historial.borrar} />}
     <div className="lab-fondo">{fondo}</div>
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
     {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} calculando={!estado.calculo || !celdasListas} riesgos={riesgos} hayPlagas={presentes.some((p) => plan?.ciclos.some((c) => p.cultivos.includes(c.cultivo)))} onProteger={riesgos.length ? protegerRiesgo : null} zona={{ radio: radioPlaga, setRadio: setRadioPlaga, centro: centroZona, celdas: celdasZona.length, total: celdasParcela.length }} presentes={presentes} />}
