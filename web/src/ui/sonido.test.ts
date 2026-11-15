@@ -97,4 +97,47 @@ describe('efectos de sonido', () => {
     crearMotor(fabrica, almacen()).tocar('clic');
     expect(log.resumido).toBe(1);
   });
+
+  it('con gesto exigido, nada suena ni se crea audio hasta el primer gesto del usuario', () => {
+    const { fabrica, log } = falso();
+    const m = crearMotor(fabrica, almacen(), true);
+    expect(m.estaDesbloqueado()).toBe(false);
+    expect(m.tocar('habla')).toBe(false); // p. ej. los blips de Esquilote antes de cualquier clic
+    expect(log.creado).toBe(0);
+    m.desbloquear();
+    expect(log.creado).toBe(1);
+    expect(m.estaDesbloqueado()).toBe(true);
+    expect(m.tocar('clic')).toBe(true);
+    expect(log.osciladores.length).toBeGreaterThan(0);
+  });
+  it('al desbloquear despierta un audio dormido y las notas esperan a que corra el reloj', async () => {
+    const { ctx, fabrica, log } = falso();
+    (ctx as unknown as { state: string }).state = 'suspended';
+    (ctx as unknown as { resume: () => Promise<void> }).resume = () => { log.resumido += 1; (ctx as unknown as { state: string }).state = 'running'; return Promise.resolve(); };
+    const m = crearMotor(fabrica, almacen(), true);
+    m.desbloquear();
+    expect(log.resumido).toBe(1);
+    (ctx as unknown as { state: string }).state = 'suspended';
+    m.tocar('pintar');
+    expect(log.osciladores).toHaveLength(0); // aun dormido: no programa nada
+    await Promise.resolve(); await Promise.resolve();
+    expect(log.osciladores.length).toBeGreaterThan(0); // ya corre: ahora si
+  });
+  it('si el navegador no lo deja despertar, no programa notas ni falla', async () => {
+    const { ctx, fabrica, log } = falso();
+    (ctx as unknown as { state: string }).state = 'suspended';
+    (ctx as unknown as { resume: () => Promise<void> }).resume = () => Promise.resolve(); // sigue suspended
+    const m = crearMotor(fabrica, almacen(), true);
+    m.desbloquear();
+    m.tocar('aviso');
+    await Promise.resolve(); await Promise.resolve();
+    expect(log.osciladores).toHaveLength(0);
+  });
+  it('silenciado, el desbloqueo no hace sonar nada', () => {
+    const { fabrica, log } = falso();
+    const m = crearMotor(fabrica, almacen('0'), true);
+    m.desbloquear();
+    expect(m.tocar('clic')).toBe(false);
+    expect(log.osciladores).toHaveLength(0);
+  });
 });
