@@ -8433,6 +8433,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "berenjena"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 70 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
     {
@@ -8677,6 +8680,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "brocoli"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 135 dias). EcoCrop da un ciclo de 80 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
@@ -8923,6 +8929,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "col"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 165 dias). EcoCrop da un ciclo de 60 a 200 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
     {
@@ -9167,6 +9176,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "coliflor"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 140 dias). EcoCrop da un ciclo de 60 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
@@ -9413,6 +9425,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "espinaca"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 100 dias). EcoCrop da un ciclo de 40 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
     {
@@ -9658,6 +9673,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "rabano"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 35 dias). EcoCrop da un ciclo de 21 a 135 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Rabano pequeno de mesa: EcoCrop 'Radish, Western' (S.R., small radish)."
     },
     {
@@ -9902,6 +9920,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "betabel"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 70 dias). EcoCrop da un ciclo de 55 a 90 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Betabel de mesa; la remolacha azucarera tiene otra fila."
     }

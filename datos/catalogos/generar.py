@@ -869,6 +869,7 @@ AMPLIACION = [
     },
     {
         "id": "berenjena",
+        "modelo3d": "berenjena",
         "nombreComun": "Berenjena",
         "nombreCientifico": "Solanum melongena L.",
         "esLeguminosa": False,
@@ -886,6 +887,7 @@ AMPLIACION = [
     },
     {
         "id": "brocoli",
+        "modelo3d": "brocoli",
         "nombreComun": "Brocoli",
         "nombreCientifico": "Brassica oleracea var. italica Plenck",
         "esLeguminosa": False,
@@ -903,6 +905,7 @@ AMPLIACION = [
     },
     {
         "id": "col",
+        "modelo3d": "col",
         "nombreComun": "Col (repollo)",
         "nombreCientifico": "Brassica oleracea var. capitata L.",
         "esLeguminosa": False,
@@ -920,6 +923,7 @@ AMPLIACION = [
     },
     {
         "id": "coliflor",
+        "modelo3d": "coliflor",
         "nombreComun": "Coliflor",
         "nombreCientifico": "Brassica oleracea var. botrytis L.",
         "esLeguminosa": False,
@@ -937,6 +941,7 @@ AMPLIACION = [
     },
     {
         "id": "espinaca",
+        "modelo3d": "espinaca",
         "nombreComun": "Espinaca",
         "nombreCientifico": "Spinacia oleracea L.",
         "esLeguminosa": False,
@@ -954,6 +959,7 @@ AMPLIACION = [
     },
     {
         "id": "rabano",
+        "modelo3d": "rabano",
         "nombreComun": "Rabano",
         "nombreCientifico": "Raphanus sativus L.",
         "esLeguminosa": False,
@@ -972,6 +978,7 @@ AMPLIACION = [
     },
     {
         "id": "betabel",
+        "modelo3d": "betabel",
         "nombreComun": "Betabel",
         "nombreCientifico": "Beta vulgaris L.",
         "esLeguminosa": False,

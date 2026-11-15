@@ -109,6 +109,15 @@ La sesión "catalogo" agregó cultivos a `datos/catalogos/` sin modelo; la sesi�
 | Melón | Rastrero de hoja redondeada y zarcillo simple; fruto beige con red clara y pulpa naranja | 10, 10, 28, 59, 50 | 15 a 21 |
 | Lechuga | Roseta baja de hojas onduladas verde claro; madurez con cabeza rizada y corazón claro | 11, 11, 28, 54, 46 | 15 a 21 |
 | Zanahoria | Penacho plumoso de hojas muy divididas; hombro naranja asomando y una raíz arrancada en madurez | 11, 11, 29, 60, 54 | 15 a 21 |
+| Berenjena | Arbusto de hoja grande verde grisáceo, flor lila colgante; frutos morado oscuro con cáliz verde colgando | 10, 9, 29, 58, 50 | 15 a 21 |
+| Brócoli | Tallo grueso, hoja glauca de peciolo largo; cabeza verde oscura granulada; podrida florece en amarillo | 11, 10, 30, 53, 52 | 15 a 21 |
+| Col | Planta baja de hoja glauca en copa; cabeza redonda, lisa y verde claro | 10, 10, 28, 55, 51 | 15 a 21 |
+| Coliflor | Hojas glaucas erguidas que envuelven una pella crema granulada | 11, 12, 26, 51, 44 | 15 a 21 |
+| Espinaca | Roseta baja de hoja lisa verde oscuro brillante; podrida espigada con tallo floral | 12, 12, 28, 56, 49 | 15 a 21 |
+| Rábano | Roseta chica; raíz roja redonda con punta blanca asomando y una arrancada | 9, 12, 29, 60, 53 | 15 a 21 |
+| Betabel | Hoja verde oscuro con peciolo y nervadura rojos; raíz morada grande, una partida con anillos | 11, 12, 30, 53, 45 | 15 a 21 |
+
+Con esta tabla los 40 cultivos del catálogo tienen modelo; la paleta queda en 223 colores (33 libres).
 
 ## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
 
@@ -157,7 +166,7 @@ Por qué así: el corte exacto coincide con el prisma de suelo (el borde se ve c
 - glTF/GLB es **opcional**: se exporta desde Blockbench (File > Export) si algún día hiciera falta.
 - **Rendimiento en escena grande:** el visor de ejemplo crea una malla por cubo, lo que está bien para unos pocos modelos. Para una parcela con cientos de celdas, unir los cubos de cada modelo en una geometría y usar **`InstancedMesh` por combinación cultivo + etapa**, con variación por celda (rotación en pasos de 90°, ligera escala). Fijar un tope de celdas (propuesta: ~1 600).
 - **Respaldo:** si un modelo se atrasa, plantas procedurales con cajas en código para no bloquear el MVP.
-- **Implementado (A3.2, 14/11):** `web/src/escena/voxel/` lee cualquier `<cultivo>_<etapa>.bbmodel` que esté en `modelos/cultivos/` (sin tocar código), toma los colores de la paleta incrustada (coinciden con `modelos/paleta.md`, verificado en pruebas) y rechaza con error visible los que no siguen estas convenciones. Desde el 14/11 noche están los 8 cultivos del catálogo original (maíz, frijol, calabaza, chile, sorgo, sandía, camote y cacahuate) y desde el 15/11 se suman los de la ampliación (sección siguiente a la de sandía), cada uno con 5 detallados, 5 bloques y 5 iconos 2D; un cultivo del catálogo sin `.bbmodel` usa la planta provisional, declarada.
+- **Implementado (A3.2, 14/11):** `web/src/escena/voxel/` lee cualquier `<cultivo>_<etapa>.bbmodel` que esté en `modelos/cultivos/` (sin tocar código), toma los colores de la paleta incrustada (coinciden con `modelos/paleta.md`, verificado en pruebas) y rechaza con error visible los que no siguen estas convenciones. Desde el 14/11 noche están los 8 cultivos del catálogo original (maíz, frijol, calabaza, chile, sorgo, sandía, camote y cacahuate) y desde el 15/11 los 32 de la ampliación (sección siguiente a la de sandía): los 40 del catálogo, cada uno con 5 detallados, 5 bloques y 5 iconos 2D. Un cultivo que se agregue al catálogo sin `.bbmodel` usa la planta provisional, declarada.
 
 ## Flujo de trabajo de arte
 

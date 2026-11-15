@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Modelos de la ampliación del catálogo, tandas F y G: berenjena, brócoli, col, coliflor, espinaca, rábano y betabel; los 40 cultivos con modelo (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{berenjena,brocoli,col,coliflor,espinaca,rabano,betabel}.py` con sus 35 `.bbmodel` y visores; `bloques.py` (35 bloques; ayuda `con_cara`); `iconos2d.py` (35 SVG) y su README; `modelos/paleta.py` y `paleta.md` (17 colores más, índices 206 a 222, con una hoja de brásica compartida por brócoli, col y coliflor; quedan 33 libres); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los siete) y `cultivos.json`; pruebas con 40 cultivos; `docs/07` (tabla), `docs/16` (M7 hecha) y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** cada uno con 5 detallados (de 9 a 60 cubos), 5 bloques (de 15 a 21, trazado común) y 5 iconos 2D, y su prefijo. Las tres brásicas se distinguen por la cabeza (verde oscura granulada, lisa verde claro, pella crema). Con esto los 40 cultivos del catálogo tienen modelo, bloque e icono. Las dos últimas tandas van en un solo commit porque comparten `bloques.py` e `iconos2d.py`.
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` de Mafer, con OK de Mompin; en `generar.py` solo `modelo3d`.
+- **Pendiente:** revisión humana en Blockbench y en la escena de los 32 cultivos de la ampliación; los colores son a ojo.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Mascota en pantalla con consejos, NDVI y SMAP en el front, entorno 3D y más color (Eduardo)
 
 - **Archivos:** `web/src/ui/lab/` (`Mascota.tsx`, `consejos.ts` y su prueba, `useEvidencia.ts`, `Laboratorio.tsx`, `lab.css`), `web/src/api/cliente.ts` (`obtenerNdvi`, `obtenerSmap`), `web/src/ui/useLaboratorio.ts` (`esDemo`), `web/src/ui/tokens.css`; `web/src/escena/render/retrato.ts` y `entorno.ts` (nuevos), `escena-three.ts`, `EscenaParcela.tsx`, `escena.css`; `docs/06`.

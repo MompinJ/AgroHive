@@ -12,7 +12,7 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 4. Por material, 3 tonos (oscuro, base, claro). Lo claro va en tapas y puntas; lo oscuro en bajos, nudos y arrugas.
 5. Los indices 0-15 son `PALETA_BASE` de `herramientas/voxelkit.py`, en el mismo orden.
 
-## Colores (206)
+## Colores (223)
 
 | Indice | Nombre | Hex | Uso |
 | --- | --- | --- | --- |
@@ -222,6 +222,23 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 | 203 | zanahoria_hoja | #3f8f3a | Follaje plumoso de zanahoria |
 | 204 | zanahoria_raiz | #e8741c | Raiz de zanahoria, naranja |
 | 205 | zanahoria_raiz_dark | #b8541a | Anillos y sombra de la zanahoria |
+| 206 | berenjena_fruto | #3b1f4a | Berenjena (fruto), morado oscuro |
+| 207 | berenjena_brillo | #7a5a8e | Brillo del fruto de la berenjena |
+| 208 | berenjena_hoja | #5f7f55 | Hoja grande de berenjena, verde grisaceo |
+| 209 | brasica_hoja_dark | #3a6a5a | Hoja de brasica en sombra, nervadura |
+| 210 | brasica_hoja | #5f9184 | Hoja glauca de brocoli, col o coliflor |
+| 211 | brasica_hoja_light | #9cc0b2 | Hoja de brasica con luz, cera |
+| 212 | brocoli_cabeza_dark | #2a5a32 | Floretes del brocoli en sombra |
+| 213 | brocoli_cabeza | #4a8a46 | Cabeza granulada del brocoli |
+| 214 | col_cabeza | #b8d49a | Cabeza de col (repollo), verde claro |
+| 215 | coliflor_cabeza | #f1e8c8 | Cabeza (pella) de la coliflor, crema |
+| 216 | coliflor_cabeza_dark | #d6c89a | Grumos y sombra de la pella de coliflor |
+| 217 | espinaca_hoja_dark | #1f5226 | Hoja de espinaca en sombra |
+| 218 | espinaca_hoja | #2f7a32 | Hoja lisa y brillante de espinaca |
+| 219 | rabano_raiz | #d0304e | Raiz redonda del rabano, rojo |
+| 220 | betabel_raiz | #6e1a35 | Raiz del betabel, morado rojizo |
+| 221 | betabel_raiz_dark | #45101f | Sombra y anillos del betabel |
+| 222 | betabel_nervio | #b02a4a | Peciolo y nervadura roja de la hoja de betabel |
 
 Los hex son elegidos a ojo para el estilo voxel (no medidos de fotos). Las manchas plateadas de la hoja de calabaza y el fruto verde de C. moschata se tomaron de descripciones varietales (no de una variedad concreta).
 
@@ -241,4 +258,6 @@ Los tonos de yuca (152-158), cana (159-162), ajonjoli (163-166), girasol (167-17
 
 Los tonos de cartamo (176-177), higuerilla (178-181), jitomate (182-185), papa (186-188) y calabacita (189-190) son cualitativos, elegidos a ojo (15/11, sesion de cultivos); la calabacita reutiliza la hoja de la calabaza (52-55). No estan medidos de fotos.
 
-Los tonos de cebolla (191-193), pepino (194-196), melon (197-199), lechuga (200-202) y zanahoria (203-205) son cualitativos, elegidos a ojo (15/11, sesion de cultivos); el melon reutiliza la hoja de la calabaza. No estan medidos de fotos. Quedan 50 indices libres.
+Los tonos de cebolla (191-193), pepino (194-196), melon (197-199), lechuga (200-202) y zanahoria (203-205) son cualitativos, elegidos a ojo (15/11, sesion de cultivos); el melon reutiliza la hoja de la calabaza. No estan medidos de fotos.
+
+Los tonos de berenjena (206-208), hoja de brasica (209-211, compartida por brocoli, col y coliflor), brocoli (212-213), col (214), coliflor (215-216), espinaca (217-218), rabano (219) y betabel (220-222) son cualitativos, elegidos a ojo (15/11, sesion de cultivos). No estan medidos de fotos. Quedan 33 indices libres.

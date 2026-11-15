@@ -19,7 +19,7 @@ const MIN_CUBOS = 12; // 9 plantas de un cubo y 3 lomos, como minimo
 const MIN_LOMOS = 3;
 
 /** Cultivos con modelo: los 4 de la milpa y el chile, el sorgo, sandia, camote y cacahuate, y la ampliacion del catalogo (15/11). */
-const CULTIVOS = ['maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate', 'soya', 'caupi', 'haba', 'chicharo', 'lenteja', 'ejote', 'cebada', 'trigo', 'avena', 'maiz_dulce', 'yuca', 'cana', 'ajonjoli', 'girasol', 'algodon', 'cartamo', 'higuerilla', 'tomate', 'papa', 'calabacita', 'cebolla', 'pepino', 'melon', 'lechuga', 'zanahoria'];
+const CULTIVOS = ['maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate', 'soya', 'caupi', 'haba', 'chicharo', 'lenteja', 'ejote', 'cebada', 'trigo', 'avena', 'maiz_dulce', 'yuca', 'cana', 'ajonjoli', 'girasol', 'algodon', 'cartamo', 'higuerilla', 'tomate', 'papa', 'calabacita', 'cebolla', 'pepino', 'melon', 'lechuga', 'zanahoria', 'berenjena', 'brocoli', 'col', 'coliflor', 'espinaca', 'rabano', 'betabel'];
 const ESPERADOS = CULTIVOS.flatMap((c) => ['siembra', 'brote', 'crecimiento', 'madurez', 'podrida'].map((e) => `${c}_${e}_bloque.bbmodel`));
 
 const paletaDocumentada = [...readFileSync(`${raiz}modelos/paleta.md`, 'utf8').matchAll(/^\| (\d+) \| \S+ \| (#[0-9a-f]{6}) \|/gm)]

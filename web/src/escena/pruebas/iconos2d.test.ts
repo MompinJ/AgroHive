@@ -9,7 +9,7 @@ import { diferenciaColor, VISTAS_COLOR, type VistaColor } from '../daltonismo';
 // de iconos se distinga bajo las tres dicromacias.
 const raiz = fileURLToPath(new URL('../../../../', import.meta.url));
 const carpeta = `${raiz}modelos/iconos2d/`;
-const CULTIVOS = ['maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate', 'soya', 'caupi', 'haba', 'chicharo', 'lenteja', 'ejote', 'cebada', 'trigo', 'avena', 'maiz_dulce', 'yuca', 'cana', 'ajonjoli', 'girasol', 'algodon', 'cartamo', 'higuerilla', 'tomate', 'papa', 'calabacita', 'cebolla', 'pepino', 'melon', 'lechuga', 'zanahoria'];
+const CULTIVOS = ['maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate', 'soya', 'caupi', 'haba', 'chicharo', 'lenteja', 'ejote', 'cebada', 'trigo', 'avena', 'maiz_dulce', 'yuca', 'cana', 'ajonjoli', 'girasol', 'algodon', 'cartamo', 'higuerilla', 'tomate', 'papa', 'calabacita', 'cebolla', 'pepino', 'melon', 'lechuga', 'zanahoria', 'berenjena', 'brocoli', 'col', 'coliflor', 'espinaca', 'rabano', 'betabel'];
 const ETAPAS = ['siembra', 'brote', 'crecimiento', 'madurez', 'podrida'];
 const NOMBRES = CULTIVOS.flatMap((c) => ETAPAS.map((e) => `${c}_${e}`));
 const LADO = 16;

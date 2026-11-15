@@ -3,10 +3,10 @@
 Correr desde la raiz del repo:
     python modelos/cultivos/bloques/bloques.py
 
-Genera los 165 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo,
+Genera los 200 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo,
 lenteja, ejote, cebada, trigo, avena, maiz_dulce, yuca, cana, ajonjoli, girasol, algodon, cartamo, higuerilla, tomate
-(jitomate), papa, calabacita, cebolla, pepino, melon, lechuga y zanahoria x siembra, brote, crecimiento, madurez,
-podrida) y visor_bloques.html.
+(jitomate), papa, calabacita, cebolla, pepino, melon, lechuga, zanahoria, berenjena, brocoli, col, coliflor, espinaca,
+rabano y betabel x siembra, brote, crecimiento, madurez, podrida) y visor_bloques.html.
 El nombre es <cultivo>_<etapa>_bloque y el cultivo puede llevar guion bajo (maiz_dulce): la etapa es el penultimo
 tramo, nunca el segundo.
 
@@ -31,7 +31,7 @@ para cereales de grano chico, cereal; para el maiz dulce, elote; para tallo con 
 copa o cabeza; para capsulas pegadas al tallo, manguito; para arbusto piramidal, escalonada; para siembra de estaca o
 trozo, estaca/trozo; para pintar la cara de arriba, mata(arriba=...), con_arriba o punta_color; para trepadora en
 espaldera, espaldera con poste/colgado/al_pie; para roseta, roseta; para frondas en V, abanico; para raiz que asoma
-del lomo, hombro con fronda) y la pareja a
+del lomo, hombro con fronda; para pintar otra cara de la pieza, con_cara) y la pareja a
 CULTIVOS_ETAPAS. Lo que va por surco ademas de las 9 plantas (la raiz de la yuca
 madura) va en EXTRAS, como la franja humeda de siembra.
 """
@@ -626,6 +626,18 @@ def fronda(cols, size, tilt):
     return cima
 
 
+# ---------------- berenjena, brocoli, col, coliflor, espinaca, rabano y betabel (ampliacion, tanda 6, 15/11) ----------------
+def con_cara(cara, cols, resto):
+    """Como con_arriba, pero en cualquier cara: pinta la cara `cara` del cubo que dibujo resto() con uno de cols
+    (el brillo de la berenjena en su costado, la punta blanca del rabano arrancado)."""
+    def r(m, nombre, base, rng, escala, h, yaw):
+        n = len(m.els)
+        resto(m, nombre, base, rng, escala, h, yaw)
+        if len(m.els) > n:
+            pinta_cara(m, m.els[-1], cara, rng.choice(cols))
+    return r
+
+
 # Melon maduro: fruto redondo beige con la red clara arriba y, al lado, una hoja o medio melon con la pulpa al aire.
 # Va dos veces en melon_madurez para que haya mas melones que guias.
 MELON_MADURO = mata(('melon_cascara',), 2.0, 1.7, 2.0, alterna(
@@ -985,6 +997,83 @@ PLANTAS = {
     'zanahoria_podrida': hombro(('podrido', 'zanahoria_raiz_dark', 'podrido_dark'), (1.1, 0.6, 1.1), 0.35,
                                 fronda(('hoja_seca', 'hoja_seca_dark', 'hoja_marchita'), (0.6, 2.4, 0.9), (65, 85)),
                                 arriba=('moho', 'moho_light', 'zanahoria_raiz_dark')),
+    # berenjena (arbusto de hoja verde grisaceo, flor lila; madurez: frutos morado oscuro brillante colgando con su caliz
+    # verde; podrida: arbusto seco y frutos tirados con moho)
+    'berenjena_siembra': semilla(('hoja_seca_light', 'hoja_seca'), (0.5, 0.3, 0.7)),
+    'berenjena_brote': con_tallo('berenjena_hoja', 1.3, 0.4, hoja_plana('berenjena_hoja', 2.0, 1.3)),
+    'berenjena_crecimiento': mata(('berenjena_hoja',), 2.4, 2.4, 2.3, alterna(
+        encima('flor_lila', 0.6), nada, nada)),
+    'berenjena_madurez': mata(('berenjena_hoja',), 2.4, 2.8, 2.3, alterna(
+        con_cara('up', ('berenjena_hoja',), con_cara('east', ('berenjena_brillo',), vaina_costado(
+            ('berenjena_fruto',), 0.12, 0.95, 1.8, 1.3, -6, 6))),
+        con_cara('up', ('berenjena_hoja',), con_cara('east', ('berenjena_brillo',), vaina_costado(
+            ('berenjena_fruto',), 0.2, 0.9, 1.6, 1.3, -6, 6))),
+        encima('flor_lila', 0.6))),
+    'berenjena_podrida': mata(('hoja_seca_dark', 'hoja_marchita', 'podrido'), 2.2, 1.3, 2.0,
+                              con_arriba(('moho', 'moho_light'), al_lado(('berenjena_fruto', 'podrido_dark', 'podrido'),
+                                                                         (1.6, 0.75, 0.8), 1.9))),
+    # brocoli (hojas glaucas grandes y erguidas; madurez: cabeza verde oscura granulada arriba al centro; podrida: hojas
+    # marchitas y la cabeza pasada, florecida en amarillo o podrida con moho)
+    'brocoli_siembra': semilla(('brasica_hoja_light', 'brasica_hoja'), (0.7, 0.4, 0.7)),
+    'brocoli_brote': roseta(('brasica_hoja',), 1.4, 0.6, ('brasica_hoja_light',), 0.9, 1.0),
+    'brocoli_crecimiento': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.4, 1.4, ('brasica_hoja',), 1.7, 1.9,
+                                  arriba=('brasica_hoja_light', 'brasica_hoja')),
+    'brocoli_madurez': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.6, 1.7, ('brocoli_cabeza',), 1.5, 2.4,
+                              arriba=('brocoli_cabeza_dark', 'brocoli_cabeza_dark', 'brocoli_cabeza')),
+    'brocoli_podrida': roseta(('hoja_marchita', 'hoja_seca', 'brasica_hoja_dark'), 2.4, 0.9, ('podrido', 'brocoli_cabeza_dark'),
+                              1.3, 1.6, arriba=('yellow', 'moho', 'podrido_dark')),
+    # col (hojas glaucas anchas y abiertas casi al ras; madurez: bola lisa verde claro; podrida: bola hundida con moho)
+    'col_siembra': semilla(('brasica_hoja', 'brasica_hoja_light'), (0.75, 0.35, 0.75)),
+    'col_brote': roseta(('brasica_hoja',), 1.6, 0.45, ('brasica_hoja_light',), 1.0, 0.7),
+    'col_crecimiento': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.6, 0.7, ('brasica_hoja_light',), 1.6, 1.2,
+                              arriba=('brasica_hoja_light', 'col_cabeza')),
+    'col_madurez': roseta(('brasica_hoja_dark', 'brasica_hoja'), 2.7, 0.7, ('col_cabeza',), 1.9, 1.6,
+                          arriba=('col_cabeza',)),
+    'col_podrida': roseta(('hoja_marchita', 'hoja_seca', 'hoja_seca_dark'), 2.6, 0.4, ('podrido', 'col_cabeza', 'podrido_dark'),
+                          1.8, 1.1, arriba=('moho', 'moho_light', 'podrido_dark')),
+    # coliflor (hojas glaucas erguidas que abrazan la pella; madurez: pella crema que asoma arriba; podrida: pella
+    # manchada de cafe y moho)
+    'coliflor_siembra': semilla(('brasica_hoja_light', 'brasica_hoja'), (0.65, 0.45, 0.65)),
+    'coliflor_brote': roseta(('brasica_hoja_light',), 1.3, 0.7, ('brasica_hoja',), 0.8, 1.1),
+    'coliflor_crecimiento': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.2, 1.8, ('brasica_hoja',), 1.5, 2.2,
+                                   arriba=('brasica_hoja_light',)),
+    'coliflor_madurez': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.4, 2.0, ('coliflor_cabeza_dark',), 1.6, 2.4,
+                               arriba=('coliflor_cabeza',)),
+    'coliflor_podrida': roseta(('hoja_marchita', 'hoja_seca_dark', 'hoja_seca'), 2.2, 1.0, ('coliflor_cabeza_dark', 'podrido'),
+                               1.4, 1.4, arriba=('podrido', 'moho', 'moho_dark')),
+    # espinaca (roseta baja de hojas lisas verde oscuro brillante; podrida: espigada, roseta seca y tallo floral)
+    'espinaca_siembra': semilla(('hoja_seca', 'hoja_seca_light'), (0.5, 0.35, 0.5)),
+    'espinaca_brote': abanico(('espinaca_hoja',), (0.6, 1.3, 0.3), (28, 42)),
+    'espinaca_crecimiento': roseta(('espinaca_hoja', 'espinaca_hoja_dark'), 2.0, 0.5, ('espinaca_hoja',), 1.5, 0.8),
+    'espinaca_madurez': roseta(('espinaca_hoja_dark',), 2.5, 0.6, ('espinaca_hoja_dark', 'espinaca_hoja'), 1.9, 1.0,
+                               arriba=('espinaca_hoja',)),
+    'espinaca_podrida': mata(('hoja_marchita', 'hoja_seca_dark', 'podrido'), 2.1, 0.4, 2.0,
+                             con_arriba(('hoja_seca_light', 'hoja_marchita'), pieza(('hoja_marchita', 'hoja_seca'), 0.5, 0.4, 3.0,
+                                                                                    6, 16, 90)),
+                             arriba=('moho', 'hoja_seca_dark', 'moho_light')),
+    # rabano (roseta chica verde; madurez: bolita roja asomando del lomo con sus hojas y, en alguna, el rabano ya
+    # arrancado tendido con la punta blanca; podrida: bola oscura con moho y hojas secas tumbadas)
+    'rabano_siembra': semilla(('wood', 'hoja_seca'), (0.45, 0.35, 0.45)),
+    'rabano_brote': con_tallo('leaf_light', 0.7, 0.3, hoja_plana('leaf_light', 1.6, 0.9)),
+    'rabano_crecimiento': roseta(('leaf', 'leaf_dark'), 1.7, 0.6, ('leaf_light', 'leaf'), 1.1, 1.2),
+    'rabano_madurez': alterna_plantas(
+        hombro(('rabano_raiz',), (1.3, 1.1, 1.3), 0.3, fronda(('leaf', 'leaf', 'leaf_dark'), (0.5, 1.7, 1.5), (16, 30))),
+        hombro(('rabano_raiz',), (1.3, 1.1, 1.3), 0.3, fronda(('leaf', 'leaf', 'leaf_dark'), (0.5, 1.7, 1.5), (16, 30))),
+        mata(('leaf', 'leaf_dark'), 1.4, 0.8, 1.3, con_cara('east', ('white',), al_lado(('rabano_raiz',), (1.5, 0.95, 0.95), 1.5)))),
+    'rabano_podrida': hombro(('rabano_raiz', 'podrido', 'podrido_dark'), (1.1, 0.7, 1.1), 0.35,
+                             fronda(('hoja_seca', 'hoja_seca_dark', 'hoja_marchita'), (0.6, 1.9, 0.9), (65, 85)),
+                             arriba=('moho', 'moho_light', 'podrido_dark')),
+    # betabel (hojas verde oscuro con peciolo rojo; madurez: raiz morada grande asomando, con la corona roja de los
+    # peciolos arriba; podrida: raiz oscura con moho y hojas secas tumbadas)
+    'betabel_siembra': semilla(('hoja_seca', 'hoja_seca_dark'), (0.6, 0.4, 0.6)),
+    'betabel_brote': con_tallo('betabel_nervio', 0.9, 0.3, hoja_plana('leaf', 1.6, 0.8)),
+    'betabel_crecimiento': tallo_punta(('betabel_nervio',), 1.2, 0.8, copa(('leaf_dark', 'leaf_dark', 'leaf'), (2.2, 0.8, 2.0),
+                                                                          arriba=('leaf_dark', 'leaf'))),
+    'betabel_madurez': hombro(('betabel_raiz',), (1.7, 1.3, 1.7), 0.35,
+                              fronda(('leaf_dark', 'leaf_dark', 'leaf'), (0.6, 2.1, 2.0), (10, 22)), arriba=('betabel_nervio',)),
+    'betabel_podrida': hombro(('betabel_raiz_dark', 'podrido', 'podrido_dark'), (1.4, 0.8, 1.4), 0.4,
+                              fronda(('hoja_seca_dark', 'hoja_marchita', 'hoja_seca'), (0.6, 2.2, 1.1), (65, 85)),
+                              arriba=('moho', 'moho_light', 'podrido_dark')),
 }
 
 CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate',
@@ -992,7 +1081,8 @@ CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorg
                                     'ejote', 'cebada', 'trigo', 'avena', 'maiz_dulce',
                                     'yuca', 'cana', 'ajonjoli', 'girasol', 'algodon',
                                     'cartamo', 'higuerilla', 'tomate', 'papa', 'calabacita',
-                                    'cebolla', 'pepino', 'melon', 'lechuga', 'zanahoria')
+                                    'cebolla', 'pepino', 'melon', 'lechuga', 'zanahoria',
+                                    'berenjena', 'brocoli', 'col', 'coliflor', 'espinaca', 'rabano', 'betabel')
                    for e in ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')]
 
 

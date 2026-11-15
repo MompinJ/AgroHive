@@ -281,6 +281,31 @@ PALETA_AGROHIVE = {
     'zanahoria_hoja': '#3f8f3a',
     'zanahoria_raiz': '#e8741c',
     'zanahoria_raiz_dark': '#b8541a',
+    # 206-208: berenjena (fruto morado oscuro brillante, hoja verde grisaceo; flor flor_lila, caliz verde)
+    'berenjena_fruto': '#3b1f4a',
+    'berenjena_brillo': '#7a5a8e',
+    'berenjena_hoja': '#5f7f55',
+    # 209-211: hoja de brasica (brocoli, col, coliflor; glauca, verde azulado)
+    'brasica_hoja_dark': '#3a6a5a',
+    'brasica_hoja': '#5f9184',
+    'brasica_hoja_light': '#9cc0b2',
+    # 212-213: cabeza de brocoli (granulada verde oscura)
+    'brocoli_cabeza_dark': '#2a5a32',
+    'brocoli_cabeza': '#4a8a46',
+    # 214: cabeza de col (verde claro, lisa y apretada)
+    'col_cabeza': '#b8d49a',
+    # 215-216: cabeza de coliflor (crema, granulada)
+    'coliflor_cabeza': '#f1e8c8',
+    'coliflor_cabeza_dark': '#d6c89a',
+    # 217-218: espinaca (hoja lisa verde oscuro brillante)
+    'espinaca_hoja_dark': '#1f5226',
+    'espinaca_hoja': '#2f7a32',
+    # 219: rabano (raiz roja redonda; la punta usa white, la hoja leaf*)
+    'rabano_raiz': '#d0304e',
+    # 220-222: betabel (raiz morado rojizo, nervadura roja de la hoja)
+    'betabel_raiz': '#6e1a35',
+    'betabel_raiz_dark': '#45101f',
+    'betabel_nervio': '#b02a4a',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'
