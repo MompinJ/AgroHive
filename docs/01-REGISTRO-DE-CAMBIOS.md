@@ -82,6 +82,13 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Íconos 2D del sorgo (encargo #198, Mafer)
+
+- **Archivos:** `modelos/iconos2d/iconos2d.py`, `sorgo_<etapa>.svg` (5), `visor_iconos.html`, `README.md`; `web/src/escena/pruebas/iconos2d.test.ts` (ahora 25 íconos).
+- **Cambio:** íconos 16 × 16 del sorgo en sus 5 etapas con la paleta compartida y sin colores nuevos: semillas redondas rojizas, plantita con hojas caídas, planta con hojas caídas, planta con panoja rojiza y desenlace podrido con la panoja colgando a la izquierda. Se rediseñaron brote, crecimiento y podrida hasta que todo par de los 25 pasó el criterio de daltonismo (12 % de píxeles con dE ≥ 15 en las 4 vistas, `[PROPUESTA]`). `web/src/ui/iconosCultivo2D.ts` (de balam) los toma solo del directorio, sin cambios.
+- **Pendiente:** revisión visual humana; los de sandía, camote y cacahuate.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Modelo 3D del sorgo y sus 5 bloques (encargo #198, Mafer)
 
 - **Archivos:** `modelos/cultivos/sorgo.py`, `sorgo_<etapa>.bbmodel` (5), `visor_sorgo.html`; `modelos/cultivos/bloques/bloques.py`, `sorgo_<etapa>_bloque.bbmodel` (5), `visor_bloques.html`; `web/src/escena/pruebas/bloques.test.ts` (ahora 25 bloques, 5 cultivos).
