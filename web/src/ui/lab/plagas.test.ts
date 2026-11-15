@@ -154,5 +154,15 @@ describe('plagas en el simulador', () => {
       const mapa = mapaPlagas(registros.filter((r) => foco.has(r.celdaId)), plagasPresentes(zona), {}, 'R1');
       expect(mapa.size).toBe(20);
     });
+    it('un cultivo atacado siempre tiene plaga, aunque se plante solo fuera de su zona', () => {
+      const celdas = malla(10);
+      const zonaMaiz = celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1);
+      const fuera = celdas.filter((c) => !zonaMaiz.has(c.id)).slice(0, 3).map((c) => c.id);
+      // Todo el ciclo es tomate (no atacado) salvo 3 celdas de frijol (atacado por el chapulin) que caen fuera de la zona del frijol.
+      const plan = { ...planGrande, ciclos: [{ ciclo: 1, cultivo: 'tomate', siembra: '2026-06-15' }], porCelda: Object.fromEntries(fuera.map((id) => [id, [{ ciclo: 1, cultivo: 'frijol' }]])) } as unknown as typeof planGrande;
+      const f = celdasConPlaga(plan, celdas, plagasPresentes(zona), 1);
+      expect(f.size).toBe(1); // el 20 % de 3 celdas, al menos una
+      for (const id of f) expect(fuera).toContain(id);
+    });
   });
 });
