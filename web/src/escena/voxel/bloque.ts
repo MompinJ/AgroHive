@@ -2,17 +2,19 @@
 // con un modelo ligero de varias plantas en surcos, y la celda elegida con el modelo
 // detallado. Los modelos de bloque los hace Mafer en modelos/cultivos/bloques/
 // (<cultivo>_<etapa>_bloque.bbmodel, convenciones de doc 07; [DECIDIDO] Mompin con Mafer:
-// como mucho 55 cubos y un lomo bajo de 1 cubo de alto por surco). Mientras falte uno, se
+// como mucho 24 cubos, sin caras de abajo, y un lomo bajo de 1 cubo por surco). Si falta uno, se
 // usa un bloque PROVISIONAL generado aqui a partir del modelo detallado: 3 surcos con su
 // lomo y 3 plantas de dos cubos (tallo y copa) cada uno, con la altura y los colores del
-// detallado (21 cubos). La densidad es visual, no a escala.
+// detallado (21 cubos). Desde el 14/11 estan los 20 bloques de Mafer (tope de 24 cubos sin
+// caras de abajo): el provisional queda solo de respaldo si falta un .bbmodel.
+// La densidad es visual, no a escala.
 
 import type { CuboVoxel, ModeloVoxel, NombreCara, Vec3 } from './bbmodel';
 
 export const claveBloque = (clave: string) => `${clave}_bloque`;
 
-/** Tope de cubos de un modelo de bloque `[DECIDIDO]` (igual al maiz_madurez detallado). */
-export const TOPE_CUBOS_BLOQUE = 55;
+/** Tope de cubos de un modelo de bloque `[DECIDIDO]` (Mompin con Mafer, 14/11: 24 sin caras de abajo). */
+export const TOPE_CUBOS_BLOQUE = 24;
 
 const caras = (i: number, sinAbajo = true): Record<NombreCara, number | null> => ({
   north: i,
