@@ -14,6 +14,15 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Evidencia:** `contratos/` 102/102, `api/` 162, catálogos en verde, `tsc --noEmit` limpio, `vitest` 1 004 (1 `todo`). Capturas en Chrome sin pantalla (SwiftShader) con la vista previa y elevación de la API: las orillas a 45° quedan rectas en 3D y en 2D. Medido con un solo cultivo: de 6 a 18 draw calls; los triángulos bajan un poco (316 120 a 311 535 con 1 516 celdas).
 - **Pendiente:** el marco de selección y la marca de la brocha siguen cuadrados; no se midió en hardware real; no se tocó `docs/14` (el cronograma no tiene una actividad para esto).
 
+### 2026-11-15 (madrugada) — Modelos de la ampliación del catálogo, tanda A: soya, frijol caupí, haba, chícharo y lenteja (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{soya,caupi,haba,chicharo,lenteja}.py` con sus 25 `.bbmodel` y visores; `modelos/cultivos/bloques/bloques.py` (25 bloques); `modelos/iconos2d/iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (42 colores, índices 110 a 151: los de esta tanda y los de la siguiente, para regenerar una sola vez); todos los `.bbmodel` regenerados (solo cambia la paleta incrustada); `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; `web/src/escena/ficha.ts` (nombres de los 10 cultivos de la tanda 1 del catálogo); pruebas `voxel.test.ts` (acepta cultivos con guion bajo, como `maiz_dulce`), `bloques.test.ts` e `iconos2d.test.ts` (13 cultivos); `modelos/iconos2d/iconos2d.py` separa la etapa por el último `_`; `docs/06`, `docs/07` (tabla de la ampliación), `docs/16` (M7).
+- **Cambio:** cada uno con 5 detallados (de 8 a 57 cubos), 5 bloques (de 15 a 21, con el trazado común para el recorte de bordes) y 5 iconos 2D (peor par nuevo de daltonismo 14.1 %), y su prefijo. La escena y la vista 2D los toman solos.
+- **Por qué:** encargo de Mompin por la sesión maestra: modelos para los cultivos que agrega la sesión "catalogo".
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` son de Mafer (con OK de Mompin); en `generar.py` solo el campo `modelo3d`. No se tocó `web/src/ui/`: `ui/planes.ts` (nombres y colores de la brocha) todavía no tiene los cultivos de la ampliación; queda para su dueño.
+- **Pendiente:** tanda B y los cultivos de las tandas 2 y 3 del catálogo; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 (madrugada) — Bordes diagonales, parte 2: piezas de medio cuadrado por recorte en el render `[DECIDIDO]` (Mompin; IA de Mompin, sesión "bordes", rama `Mompin-motor`)
 
 - **Archivos nuevos:** `web/src/escena/voxel/media.ts` (recorte de cualquier `.bbmodel` por la diagonal, con tapa), `web/src/escena/render/media-celda.ts` (prisma de suelo, giro por forma, placa y banderín en medio cuadrado), `web/src/escena/pruebas/media.test.ts` y `media-celda.test.ts`.

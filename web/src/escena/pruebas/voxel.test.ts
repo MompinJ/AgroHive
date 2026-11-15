@@ -30,7 +30,8 @@ describe('modelos de modelos/cultivos (A1.4, A2.11)', () => {
       const modelo = leerArchivo(f);
 
       it('sigue la convencion de nombre <cultivo>_<etapa>', () => {
-        expect(f).toMatch(/^[a-z]+_[a-z]+\.bbmodel$/);
+        // El cultivo puede llevar guion bajo (maiz_dulce); la etapa es el ultimo tramo.
+        expect(f).toMatch(/^[a-z]+(_[a-z]+)*_(siembra|brote|crecimiento|madurez|podrida)\.bbmodel$/);
       });
 
       it('su paleta incrustada coincide con modelos/paleta.md', async () => {

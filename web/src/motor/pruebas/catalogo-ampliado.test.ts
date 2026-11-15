@@ -49,12 +49,14 @@ const SIEMBRA = { PV: '2016-06-15', OI: '2016-11-01' } as const;
 const casos = catalogo.cultivos.flatMap((c) => (['PV', 'OI'] as const).map((t) => [c.id, t] as const));
 
 describe('catalogo ampliado: todos los cultivos se simulan con estados honestos', () => {
-  it('ids unicos y sin modelo3d en los cultivos de la ampliacion', () => {
+  it('ids unicos; el modelo3d de la ampliacion, si ya lo tiene, usa el id como prefijo', () => {
     const ids = catalogo.cultivos.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
     const i = ids.indexOf('soya');
     expect(i).toBeGreaterThan(0);
-    for (const c of catalogo.cultivos.slice(i)) expect(c.modelo3d, c.id).toBeUndefined();
+    // Los modelos llegan por tandas (sesion "cultivos", docs/07); la escena busca <id>_<etapa>.bbmodel y sin el usa la
+    // planta provisional declarada.
+    for (const c of catalogo.cultivos.slice(i)) if (c.modelo3d) expect(c.modelo3d.prefijo, c.id).toBe(c.id);
   });
 
   it('cada cultivo tiene sus parametros esenciales con fuente', () => {

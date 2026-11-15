@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
-VERSION_CONTRATO = "0.13.0"
+VERSION_CONTRATO = "0.14.0"
 VERSION_CATALOGO = "0.1.0"
 CONSULTADO = "2026-11-14"
 
@@ -377,6 +377,7 @@ AMPLIACION = [
     # -- tanda 1: leguminosas y cereales para rotaciones
     {
         "id": "soya",
+        "modelo3d": "soya",
         "nombreComun": "Soya",
         "nombreCientifico": "Glycine max (L.) Merr.",
         "esLeguminosa": True,
@@ -397,6 +398,7 @@ AMPLIACION = [
     },
     {
         "id": "caupi",
+        "modelo3d": "caupi",
         "nombreComun": "Frijol caupi",
         "nombreCientifico": "Vigna unguiculata (L.) Walp.",
         "esLeguminosa": True,
@@ -416,6 +418,7 @@ AMPLIACION = [
     },
     {
         "id": "haba",
+        "modelo3d": "haba",
         "nombreComun": "Haba",
         "nombreCientifico": "Vicia faba L.",
         "esLeguminosa": True,
@@ -437,6 +440,7 @@ AMPLIACION = [
     },
     {
         "id": "chicharo",
+        "modelo3d": "chicharo",
         "nombreComun": "Chicharo",
         "nombreCientifico": "Pisum sativum L.",
         "esLeguminosa": True,
@@ -457,6 +461,7 @@ AMPLIACION = [
     },
     {
         "id": "lenteja",
+        "modelo3d": "lenteja",
         "nombreComun": "Lenteja",
         "nombreCientifico": "Lens culinaris Medik.",
         "esLeguminosa": True,
