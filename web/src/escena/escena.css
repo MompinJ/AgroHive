@@ -237,3 +237,16 @@
 }
 .escena-hud-graficos button:hover { background: rgb(17 34 26 / 6%); }
 .escena-hud-graficos button[aria-checked="true"] { background: var(--escena-tinta); color: #fff; }
+
+/* Vistas de luz y temperatura. */
+.escena-vista-luz { background: linear-gradient(90deg, #4a5d78, #ffd447); }
+.escena-vista-temperatura { background: linear-gradient(90deg, #3b66b0, #58a868, #c4412b); }
+.escena-hud-barra { flex-wrap: wrap; justify-content: center; max-width: min(100%, 520px); border-radius: 22px; }
+
+/* Mini marca de problema: una por grupo de cultivo. */
+.marca-problema { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; margin-left: 6px; border-radius: 50%; vertical-align: middle; font-size: .68rem; font-weight: 800; line-height: 1; box-shadow: 0 0 0 2px #fff, 0 1px 3px rgb(0 0 0 / 30%); cursor: help; }
+.marca-aviso { background: #e2bf3a; color: #3d2b00; }
+.marca-alto { background: #e0782f; color: #fff; }
+.marca-critico { background: #bf3326; color: #fff; }
+@media (prefers-reduced-motion: no-preference) { .marca-critico { animation: marca-latido 1.6s ease-in-out infinite; } }
+@keyframes marca-latido { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }

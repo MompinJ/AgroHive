@@ -8,6 +8,8 @@ import { useSerieBalance } from '../useSerieBalance';
 import { rangoDelCiclo } from '../tiempo';
 import { aplicarAcomodando, colorCultivo, cultivoDeCelda, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
 import { EventoPantalla } from './EventoPantalla';
+import { rangosTemperatura } from '../../escena/clima-vista';
+import { problemasPorCultivo } from '../../escena/problemas';
 import { eventosAlAvanzar, PAUSA_EXTRA_EVENTO_MS, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
 import type { PincelEscena } from '../../escena/pincel';
 import { PanelCultivos } from './PanelCultivos';
@@ -179,6 +181,10 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     if (nuevos.length) setCola((c) => [...c, ...nuevos]);
   }, [paso, fecha, rango, plan?.rotacionId, visible?.ciclo, escenario]);
 
+  // Luz y temperatura (paso Escenarios): rangos de temperatura de cada cultivo (FAO EcoCrop, del catalogo) y problemas por cultivo en la fecha mostrada.
+  const rangosCultivos = useMemo(() => rangosTemperatura(datos?.catalogo), [datos?.catalogo]);
+  const problemasCultivos = useMemo(() => (celdasListas && celdas ? problemasPorCultivo(celdas.valor.registros) : []), [celdasListas, celdas]);
+
   const pincel: PincelEscena | null = useMemo(() => {
     if (paso !== 'cultivos' || herramienta === 'mover' || !plan || !visible || !datos) return null;
     if (herramienta === 'insecticida') return { tamano, color: '#7cc3ea', onTrazo: rociar };
@@ -214,7 +220,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
   const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
     : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
-      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} onCeldaElegida={setCentroPlaga} tMediaDia={clima.tMediaDia} rociado={rociado} bioma={bioma ?? undefined} />
+      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} onCeldaElegida={setCentroPlaga} tMediaDia={clima.tMediaDia} serieClima={datos.serie} rangosTemperatura={rangosCultivos} rociado={rociado} bioma={bioma ?? undefined} />
     </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
 
   const comun = { estado, onAvanzar };
@@ -238,7 +244,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     {paso === 'cultivos' && datos && <BarraHerramientas herramienta={herramienta} setHerramienta={setHerramienta} tamano={tamano} setTamano={setTamano}
       onSembrarTodo={sembrarTodo} sembrarTexto={`Sembrar ${nombresCultivos[cultivoActivo ?? ''] ?? cultivoActivo ?? ''} en toda la parcela`}
       onRociarTodo={presentes.length ? rociarTodo : null} deshacer={estado.deshacer} rehacer={estado.rehacer} puedeDeshacer={estado.puedeDeshacer} puedeRehacer={estado.puedeRehacer} />}
-    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} retener={retener} />}
+    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} retener={retener} problemas={problemasCultivos} />}
     {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} plagasDe={(id) => {
       const p = estado.planes.find((x) => x.rotacionId === id);
       return p ? riesgosDelPlan(p, celdasZona, presentes, proteccion).map((r) => ({ ciclo: r.ciclo, plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })) : [];

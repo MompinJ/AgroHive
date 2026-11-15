@@ -5,6 +5,8 @@ import type { LaboratorioEstado } from '../useLaboratorio';
 import type { EstadoSerieBalance } from '../useSerieBalance';
 import type { RangoTiempo } from '../tiempo';
 import { ControlTiempo } from '../ControlTiempo';
+import { MarcaProblema } from '../../escena/MarcaProblema';
+import type { ProblemaCultivo } from '../../escena/problemas';
 import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, nombreCultivo, nombreEscenario, numero, porcentaje } from './piezas';
 import { nombreRotacion } from '../planes';
 import type { PasoLab } from './Laboratorio';
@@ -12,10 +14,12 @@ import type { PasoLab } from './Laboratorio';
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 export const nombresPilares: Record<string, string> = { deficitHidrico: 'Déficit hídrico', excesoHidrico: 'Exceso de agua', compatibilidadCiclo: 'Compatibilidad de fechas', proteccionSuelo: 'Protección del suelo', riesgoCalor: 'Riesgo por calor', aporteIndirecto: 'Aporte indirecto' };
 
-export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdasListas, errorCeldas, onFecha, claveTiempo, retener = false }: {
+export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdasListas, errorCeldas, onFecha, claveTiempo, retener = false, problemas = [] }: {
   estado: LaboratorioEstado; onAvanzar: (d: PasoLab) => void;
   fecha: string; rango: RangoTiempo | null; serie: EstadoSerieBalance; celdasListas: boolean; errorCeldas: string;
   onFecha: (f: string) => void; claveTiempo: string; retener?: boolean;
+  /** Cultivos con problemas en la fecha mostrada: una entrada por grupo de celdas de la misma planta. */
+  problemas?: readonly ProblemaCultivo[];
 }) {
   const { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario } = estado.seleccion;
   const plan = estado.planes.find((p) => p.rotacionId === rotacion) ?? estado.planes[0];
@@ -45,12 +49,14 @@ export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdas
         <div className="lab-iconos" role="radiogroup" aria-label="Ciclo que ves">
           {plan.ciclos.map((c) => <button type="button" role="radio" key={c.ciclo} aria-checked={c.ciclo === visible.ciclo} className="lab-tip" data-tip={`Ciclo ${c.ciclo}: ${nombreCultivo(c.cultivo)}`} aria-label={`Ciclo ${c.ciclo}: ${nombreCultivo(c.cultivo)}`} onClick={() => setCiclo(c.ciclo)}>
             <IconoCultivo cultivo={c.cultivo} tamano={22} />
+            {c.ciclo === visible.ciclo && problemas.filter((p) => p.cultivo === c.cultivo).map((p) => <MarcaProblema key={p.cultivo} problema={p} nombre={nombreCultivo(c.cultivo)} />)}
           </button>)}
         </div>
       </div>
 
       <div className="panel-bloque">
-        <p className="lab-resumen" role="status"><strong>{nombreCultivo(visible.cultivo)}</strong>, ciclo {visible.ciclo}, en el {nombreEscenario[escenario]!.toLowerCase()}{metricas?.anioReal ? ` (${metricas.anioReal})` : ''}</p>
+        <p className="lab-resumen" role="status"><strong>{nombreCultivo(visible.cultivo)}</strong>{problemas.filter((p) => p.cultivo === visible.cultivo).map((p) => <MarcaProblema key={p.cultivo} problema={p} nombre={nombreCultivo(p.cultivo)} />)}, ciclo {visible.ciclo}, en el {nombreEscenario[escenario]!.toLowerCase()}{metricas?.anioReal ? ` (${metricas.anioReal})` : ''}</p>
+        {problemas.some((p) => p.cultivo !== visible.cultivo) && <p className="lab-otros-problemas">También en esta fecha: {problemas.filter((p) => p.cultivo !== visible.cultivo).map((p) => <span key={p.cultivo}>{nombreCultivo(p.cultivo)}<MarcaProblema problema={p} nombre={nombreCultivo(p.cultivo)} /></span>)}</p>}
         {!estado.calculo ? <Cargando>Calculando…</Cargando> : <dl className="lab-metricas">
           <div className="lab-tip" data-tip="Agua que el cultivo necesitó y no tuvo en todo el plan"><dt>Agua que faltó</dt><dd>{numero(pilar?.deficitHidrico.deficitTotalMm, ' mm')}</dd></div>
           <div className="lab-tip" data-tip="Parte de lo que el cultivo pidió de agua que no recibió"><dt>Sed del cultivo</dt><dd>{porcentaje(pilar?.deficitHidrico.proporcionDemandaNoCubierta)}</dd></div>
