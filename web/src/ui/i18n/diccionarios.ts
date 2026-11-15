@@ -57,7 +57,7 @@ const en: Record<ClaveTexto, string> = {
   'pasos.escenarios': 'Dry to wet years',
   'pasos.comparacion': 'The most robust',
   'escenario.seco': 'Dry year',
-  'escenario.habitual': 'Typical year',
+  'escenario.habitual': 'Normal year',
   'escenario.lluvioso': 'Wet year',
   'estado.EVALUABLE': 'Evaluable',
   'estado.NO_EVALUABLE': 'Not evaluable',

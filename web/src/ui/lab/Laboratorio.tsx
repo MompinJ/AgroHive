@@ -6,7 +6,7 @@ import type { ResultadoCeldas } from '../../../../contratos/tipos/contratos';
 import { conLimite, type LaboratorioEstado } from '../useLaboratorio';
 import { useSerieBalance } from '../useSerieBalance';
 import { fechaEnIndice, rangoDelCiclo } from '../tiempo';
-import { aplicarAcomodando, colorCultivo, cultivoDeCelda, diasCultivo, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
+import { aplicarAcomodando, colorCultivo, cultivoDeCelda, diasCultivo, fechaParaVer, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
 import { EventoPantalla } from './EventoPantalla';
 import { tocar } from '../sonido';
 import { PanelHistorial } from './PanelHistorial';
@@ -29,7 +29,7 @@ import type { Bioma } from '../../escena/render/entorno';
 const BIOMA_NEUTRO: Bioma = 'templado';
 import { PanelEscenarios } from './PanelEscenarios';
 import { PanelComparacion } from './PanelComparacion';
-import { Aviso, textoMovidos } from './piezas';
+import { Aviso, nombreCultivo, textoMovidos } from './piezas';
 import { Globo } from './Globo';
 import { Mascota } from './Mascota';
 import { consejos } from './consejos';
@@ -169,12 +169,12 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     return [...n].sort((a, b) => b[1] - a[1]).map(([c, celdas]) => {
       const propia = diaSim(c);
       const fecha = propia && rango ? (propia > rango.hasta ? rango.hasta : propia) : propia ?? rango?.hasta ?? visible.siembra;
-      return { nombre: nombresCultivos[c] ?? c, celdas, fecha };
+      return { nombre: nombreCultivo(c), celdas, fecha };
     });
   }, [plan, visible, celdasParcela, datos, rango]);
   const plagaActiva = useMemo<PlagaActiva | null>(() => {
     const r = [...riesgos].sort((a, b) => b.sinProteger.length - a.sinProteger.length)[0];
-    return r ? { plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length } : null;
+    return r ? { plaga: r.plaga.nombreComun, cultivo: nombreCultivo(r.cultivo), bloques: r.sinProteger.length } : null;
   }, [riesgos]);
   // Con un aviso o una animacion en pantalla, la reproduccion espera; y unos segundos mas despues, para que se alcance a leer.
   const [retener, setRetener] = useState(false);
@@ -212,7 +212,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     const prev = estadosPrevios.current;
     const registros = celdas.valor.registros.filter((r) => r.ciclo === visible.ciclo);
     if (prev && prev.clave === clave && fecha > prev.fecha) {
-      const muertas = plantasQueMueren(prev.estados, registros, (c) => nombresCultivos[c] ?? c);
+      const muertas = plantasQueMueren(prev.estados, registros, nombreCultivo);
       if (muertas.length) {
         const e = eventoMuerte(fecha, muertas, clave);
         setCola((c) => [...c, e]);
@@ -234,7 +234,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
       const llave = `${estado.claveGuardado}:${plan.rotacionId}:${visible.ciclo}:${escenario}:${p.cultivo}:${p.gravedad}`;
       if (problemasVistos.current.has(llave)) continue;
       problemasVistos.current.add(llave);
-      historial.agregar({ tipo: 'problema', titulo: textoProblema(p, nombresCultivos[p.cultivo] ?? p.cultivo), fechaSim: fecha, ciclo: visible.ciclo });
+      historial.agregar({ tipo: 'problema', titulo: textoProblema(p, nombreCultivo(p.cultivo)), fechaSim: fecha, ciclo: visible.ciclo });
     }
   }, [problemasCultivos, paso, celdasListas]);
 
@@ -255,7 +255,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
         setPendientes((p) => { const m = new Map(p); for (const id of ids) m.set(id, color); return m; });
         estado.actualizar(r.plan);
         tocar('pintar');
-        historial.agregar({ tipo: 'siembra', sujeto: cultivo ? nombresCultivos[cultivo] ?? cultivo : null, celdas: ids.length, ciclo: visible.ciclo, clave: `${plan.rotacionId}:${visible.ciclo}:${cultivo ?? 'general'}` });
+        historial.agregar({ tipo: 'siembra', sujeto: cultivo ? nombreCultivo(cultivo) : null, celdas: ids.length, ciclo: visible.ciclo, clave: `${plan.rotacionId}:${visible.ciclo}:${cultivo ?? 'general'}` });
       },
     };
   }, [paso, herramienta, plan, visible, datos, cultivoActivo, tamano, estado, rociar, historial.agregar]);
@@ -266,7 +266,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     setNota(textoMovidos(r.movidos));
     estado.actualizar(r.plan);
     setCultivoPincel(null);
-    historial.agregar({ tipo: 'siembra', sujeto: nombresCultivos[cultivoActivo] ?? cultivoActivo, celdas: celdasParcela.length, ciclo: visible.ciclo, clave: `${plan.rotacionId}:${visible.ciclo}:${cultivoActivo}` });
+    historial.agregar({ tipo: 'siembra', sujeto: nombreCultivo(cultivoActivo), celdas: celdasParcela.length, ciclo: visible.ciclo, clave: `${plan.rotacionId}:${visible.ciclo}:${cultivoActivo}` });
   } : null;
   const rociarTodo = () => rociar(celdasParcela);
   const protegerRiesgo = () => rociar(celdasEnRiesgo(riesgos));
@@ -290,7 +290,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     ordenadas: ordenarRotaciones(estado.calculo?.ranking.rotaciones ?? []),
     nombreRotacion: (id) => nombreRotacion(id, estado.planes), leguminosas, ndvi: evidencia.ndvi, smap: evidencia.smap,
     bioma: koppen.estado === 'EVALUABLE' ? { nombre: `clima ${koppen.descripcion}`, tMedia: clima.tMediaAnual, lluvia: clima.lluviaAnualMm } : null,
-    riesgos: riesgos.map((r) => ({ plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })),
+    riesgos: riesgos.map((r) => ({ plaga: r.plaga.nombreComun, cultivo: nombreCultivo(r.cultivo), bloques: r.sinProteger.length })),
   }), [paso, plan, ciclo, datos, escenario, estado.calculo, estado.planes, leguminosas, evidencia, riesgos, koppen, clima]);
   return <div className={`lab lab-paso-${paso}`}>
     <Globo />
@@ -301,12 +301,12 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
     {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} calculando={!estado.calculo || !celdasListas} riesgos={riesgos} hayPlagas={presentes.some((p) => plan?.ciclos.some((c) => p.cultivos.includes(c.cultivo)))} onProteger={riesgos.length ? protegerRiesgo : null} presentes={presentes} />}
     {paso === 'cultivos' && datos && <BarraHerramientas herramienta={herramienta} setHerramienta={setHerramienta} tamano={tamano} setTamano={setTamano}
-      onSembrarTodo={sembrarTodo} sembrarTexto={`Sembrar ${nombresCultivos[cultivoActivo ?? ''] ?? cultivoActivo ?? ''} en toda la parcela`}
+      onSembrarTodo={sembrarTodo} sembrarTexto={`Sembrar ${cultivoActivo ? nombreCultivo(cultivoActivo) : ''} en toda la parcela`}
       onRociarTodo={presentes.length ? rociarTodo : null} deshacer={estado.deshacer} rehacer={estado.rehacer} puedeDeshacer={estado.puedeDeshacer} puedeRehacer={estado.puedeRehacer} />}
     {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} retener={retener} problemas={problemasCultivos} />}
     {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} hechos={historial.hechos} plagasDe={(id) => {
       const p = estado.planes.find((x) => x.rotacionId === id);
-      return p ? riesgosDelPlan(p, celdasParcela, presentes, proteccion, focosDelPlan(p, celdasIJ, presentes)).map((r) => ({ ciclo: r.ciclo, plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })) : [];
+      return p ? riesgosDelPlan(p, celdasParcela, presentes, proteccion, focosDelPlan(p, celdasIJ, presentes)).map((r) => ({ ciclo: r.ciclo, plaga: r.plaga.nombreComun, cultivo: nombreCultivo(r.cultivo), bloques: r.sinProteger.length })) : [];
     }} />}
     {aviso && <Aviso tipo="error" className="lab-toast" onCerrar={() => setAviso('')}>{aviso}</Aviso>}
     {!aviso && nota && <Aviso tipo="info" className="lab-toast" onCerrar={() => setNota('')}>{nota}</Aviso>}
