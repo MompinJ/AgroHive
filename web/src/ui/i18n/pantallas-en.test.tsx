@@ -39,3 +39,76 @@ describe('B7, Terreno en ingles (T3a y T6g)', () => {
     expect(mensajeCuadricula('Hay vértices repetidos.')).toBe('Hay vértices repetidos.');
   });
 });
+
+import { TarjetaTutorial } from '../tutorial/Tutorial';
+import { TUTORIALES } from '../tutorial/pasos';
+import { TUTORIALES_EN } from './textos/tutorial';
+import { BarraHerramientas } from '../lab/BarraHerramientas';
+import { PanelHistorial } from '../lab/PanelHistorial';
+import { ControlTiempo } from '../ControlTiempo';
+import { eventoCosecha, eventoMuerte, eventoPlaga } from '../lab/eventos';
+import { textoHecho } from '../lab/historial';
+import { consejos } from '../lab/consejos';
+import { fechaCorta, nombreCultivo, nombreEscenario, rangoVentana } from '../lab/piezas';
+import { nombrePlaga } from './textos/laboratorio';
+import { nombreRotacion } from '../planes';
+import { conveniencia } from '../lab/conveniencia';
+
+const nada = () => {};
+/** Corre `f` con el idioma activo en ingles (lo que hace ProveedorIdioma) y lo regresa a espanol. */
+function enIngles<T>(f: () => T): T {
+  fijarIdiomaActual('en');
+  try { return f(); } finally { fijarIdiomaActual('es'); }
+}
+const sinEspanol = (textos: string[]) => textos.filter((x) => enEspanol(`<p>${x}</p>`).length > 0);
+
+describe('B7, Laboratorio en ingles (T3b, T4a, T4b y T4c)', () => {
+  it('el tutorial de Esquilote tiene los mismos pasos, resaltes e iconos en los dos idiomas', () => {
+    for (const id of Object.keys(TUTORIALES) as (keyof typeof TUTORIALES)[]) {
+      expect(TUTORIALES_EN[id].map((p) => p.destacar)).toEqual(TUTORIALES[id].map((p) => p.destacar));
+      const iconos = (t: string) => (t.match(/\{[a-z]+\}/g) ?? []).join();
+      expect(TUTORIALES_EN[id].map((p) => iconos(p.texto))).toEqual(TUTORIALES[id].map((p) => iconos(p.texto)));
+      for (let k = 0; k < TUTORIALES_EN[id].length; k++) {
+        expect(enEspanol(en(<TarjetaTutorial pasos={TUTORIALES_EN[id]} paso={k} onSiguiente={nada} onAnterior={nada} onCerrar={nada} />))).toEqual([]);
+      }
+    }
+  });
+  it('la barra de la brocha, la linea de tiempo y el historial no dejan espanol', () => {
+    expect(enEspanol(en(<BarraHerramientas herramienta="brocha" setHerramienta={nada} tamano={1} setTamano={nada} onSembrarTodo={nada} sembrarTexto="Plant maize on the whole plot" onRociarTodo={nada} deshacer={nada} rehacer={nada} puedeDeshacer puedeRehacer />))).toEqual([]);
+    const rango = { desde: '2016-06-20', hasta: '2016-10-17', pasos: 120 };
+    expect(enEspanol(en(<ControlTiempo fecha="2016-07-01" rango={rango as never} listo onFecha={nada} />))).toEqual([]);
+    expect(enEspanol(en(<PanelHistorial hechos={[]} onBorrar={nada} abiertoInicial />))).toEqual([]);
+  });
+  it('cosecha, plaga, muertes, historial, consejos y fechas en ingles', () => {
+    const textos = enIngles(() => {
+      const plaga = { plaga: nombrePlaga('Gusano cogollero'), cultivo: nombreCultivo('maiz'), bloques: 3 };
+      const c = eventoCosecha('2016-10-17', [{ nombre: nombreCultivo('maiz'), celdas: 40, fecha: '2016-10-17' }], plaga, 'k');
+      const c2 = eventoCosecha('2016-10-17', [{ nombre: nombreCultivo('maiz'), celdas: 40, fecha: '2016-10-17' }, { nombre: nombreCultivo('frijol'), celdas: 1, fecha: '2016-10-17' }], null, 'k');
+      const p = eventoPlaga('2016-08-10', plaga, 'k');
+      const m = eventoMuerte('2016-08-10', [{ nombre: nombreCultivo('maiz'), estado: 'marchita', celdas: 2 }, { nombre: nombreCultivo('sorgo'), estado: 'podrida', celdas: 1 }], 'k');
+      expect(c.titulo).toBe('Maize is harvested on October 17, 2016');
+      expect(p.titulo).toBe('Fall armyworm is eating your maize');
+      const hechos = [
+        textoHecho({ id: 1, tipo: 'siembra', cuando: 0, sujeto: nombreCultivo('maiz'), celdas: 5, ciclo: 1 }),
+        textoHecho({ id: 2, tipo: 'siembra', cuando: 0, sujeto: null, celdas: 1, ciclo: 1 }),
+        textoHecho({ id: 3, tipo: 'insecticida', cuando: 0, celdas: 2, ciclo: 2 }),
+      ];
+      const consejosEn = (['cultivos', 'escenarios'] as const).flatMap((paso) => consejos({
+        paso, plan: null, ciclo: 1, calendario: null, escenario: 'seco', resultado: null, ordenadas: [], nombreRotacion: (id) => nombreRotacion(id, [{ rotacionId: id }]),
+        leguminosas: new Set(), ndvi: null, smap: null, riesgos: [plaga], bioma: { nombre: 'temperate climate', tMedia: 19, lluvia: 700 },
+      }).map((x) => x.texto));
+      const conv = conveniencia({ id: 'maiz', umbrales: {} } as never, { clima: { lluviaAnualMm: null, tMediaDia: [] } as never, siembra: '2016-06-20', temporada: 'PV', dias: 400, disponibles: null, calendario: null, plagas: [{ nombreComun: 'Gusano cogollero', cultivos: ['maiz'] }] }).motivos;
+      return [c.titulo, c.detalle, c2.titulo, c2.detalle, p.titulo, p.detalle, m.titulo, m.detalle, ...hechos, ...consejosEn, ...conv,
+        fechaCorta('2016-06-20'), rangoVentana({ desdeMes: 6, desdeDia: 1, hastaMes: 7, hastaDia: 15 }), rangoVentana({ desdeMes: 5, desdeDia: 29, hastaMes: 5, hastaDia: 29 }),
+        nombreEscenario.seco!, nombreEscenario.habitual!, nombreEscenario.lluvioso!, nombreRotacion('R2', [{ rotacionId: 'R1' }, { rotacionId: 'R2' }])];
+    });
+    expect(sinEspanol(textos)).toEqual([]);
+    expect(textos).toContain('Jun 20, 2016');
+    expect(textos).toContain('around May 29');
+    expect(textos).toContain('Normal year');
+    expect(textos).toContain('Rotation 2');
+    // Y en espanol, igual que antes.
+    expect(fechaCorta('2016-06-20')).toBe('20 jun 2016');
+    expect(nombreEscenario.habitual).toBe('Año normal');
+  });
+});

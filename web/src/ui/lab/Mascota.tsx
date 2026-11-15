@@ -5,8 +5,10 @@ import type { Consejo } from './consejos';
 import { TextoConIconos } from '../tutorial/TextoConIconos';
 import { textoPlano } from '../tutorial/texto';
 import { useEscribir } from '../tutorial/useEscribir';
+import { useIdioma } from '../i18n/Idioma';
 
 export function Mascota({ consejos, paso }: { consejos: Consejo[]; paso: string }) {
+  const { t } = useIdioma();
   const [imagen, setImagen] = useState<string | null>(null);
   const [indice, setIndice] = useState(0);
   // En pantallas chicas empieza plegada para no tapar la parcela; se abre al tocarla.
@@ -29,12 +31,12 @@ export function Mascota({ consejos, paso }: { consejos: Consejo[]; paso: string 
       <p onClick={completar} aria-label={textoPlano(actual.texto)}><TextoConIconos texto={actual.texto} visibles={visibles} /></p>
       <div className="mascota-pie">
         {total > 1 && <span className="mascota-cuenta" aria-hidden="true">{Math.min(indice, total - 1) + 1}/{total}</span>}
-        {total > 1 && <button type="button" onClick={() => setIndice((i) => (i + 1) % total)}>Otro consejo</button>}
-        <button type="button" className="mascota-cerrar" onClick={() => setAbierta(false)} aria-label="Ocultar consejos">×</button>
+        {total > 1 && <button type="button" onClick={() => setIndice((i) => (i + 1) % total)}>{t('mascota.otro')}</button>}
+        <button type="button" className="mascota-cerrar" onClick={() => setAbierta(false)} aria-label={t('mascota.ocultar')}>×</button>
       </div>
     </div>}
     <button type="button" className="mascota-boton" onClick={() => { if (abierta) setIndice((i) => (i + 1) % Math.max(1, total)); else setAbierta(true); }}
-      aria-label={abierta ? 'Siguiente consejo de Esquilote' : 'Mostrar consejos de Esquilote'} title={abierta ? 'Otro consejo' : 'Consejos de Esquilote'}>
+      aria-label={abierta ? t('mascota.siguiente') : t('mascota.mostrar')} title={abierta ? t('mascota.otro') : t('mascota.consejos')}>
       {imagen ? <img className={escribiendo ? 'mascota-habla' : undefined} src={imagen} alt="" width={96} height={96} /> : <span className="mascota-respaldo" aria-hidden="true" />}
     </button>
   </div>;

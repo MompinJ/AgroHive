@@ -2,6 +2,12 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, pantalla 3: Laboratorio en inglés, parte de la interfaz (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/ui/tutorial/Tutorial.tsx` (usa el tutorial en inglés `TUTORIALES_EN`, mismos pasos, resaltes e iconos), `web/src/ui/lab/` (`Laboratorio.tsx`, `BarraHerramientas.tsx`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `PanelIzq.tsx`, `EventoPantalla.tsx`, `eventos.ts`, `Mascota.tsx`, `consejos.ts`, `historial.ts`, `PanelHistorial.tsx`, `piezas.tsx`, `conveniencia.ts`), `web/src/ui/ControlTiempo.tsx`, `web/src/ui/planes.ts` (nombre de la rotación y mensajes de ciclos encimados), `web/src/ui/i18n/textos/tutorial.ts` y `laboratorio.ts` (nuevos), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
+- **Cambio:** el tutorial de Esquilote, la brocha y la barra de herramientas, la paleta y su conveniencia, las plagas y el insecticida, los años Dry / Normal / Wet, la línea de tiempo, los avisos de cosecha, plaga y plantas muertas, el historial y los consejos de la mascota salen en inglés (tomas T3b, T4a, T4b y T4c). Las plagas llevan su nombre común en inglés (Entomological Society of America para cinco; el chapulín de la milpa, *Sphenarium purpurascens*, sin nombre en esa lista, como "Chapulín grasshopper"). `nombreEscenario`, `nombresPilares` y `NOMBRE_TIPO_HECHO` se siguen leyendo igual (`nombreEscenario[e]`) y dan el texto del idioma activo. Sin cambios visuales.
+- **Pendiente (fuera de lo autorizado, `web/src/escena/`):** el HUD de la escena (gráficos, leyenda de cultivos), la ficha de la celda, las marcas de problema y sus textos (`problemas.ts`) y los avisos de datos (`AvisosDatos.tsx`). Lo que el historial guardó antes de cambiar de idioma queda en el idioma en que se escribió.
+
 ### 2026-11-15 — B7, pantalla 2: Terreno en inglés (IA de Mompin, sesión "ingles")
 
 - **Archivos:** `web/src/paginas/Terreno.tsx`, `web/src/ui/DibujarParcela.tsx`, `web/src/ui/MapaParcela.tsx`, `web/src/ui/SelectorTamanoCelda.tsx`, `web/src/ui/i18n/diccionarios.ts` (une los textos por pantalla), `web/src/ui/i18n/textos/terreno.ts` (nuevo), `web/src/ui/i18n/sin-espanol.ts` (detector de español sin traducir para las pruebas) y `web/src/ui/i18n/pantallas-en.test.tsx` (nuevo).

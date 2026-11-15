@@ -12,10 +12,13 @@ import { PENTATONICA, tocar } from '../sonido';
 import { textoPlano } from './texto';
 import { marcarVisto, navegar, TUTORIALES, tutorialDeRuta, tutorialVisto, type EstadoTutorial, type IdTutorial, type PasoTutorial } from './pasos';
 import './tutorial.css';
+import { useIdioma } from '../i18n/Idioma';
+import { TUTORIALES_EN } from '../i18n/textos/tutorial';
 
 export function TarjetaTutorial({ pasos, paso, onSiguiente, onAnterior, onCerrar, enfocar = false }: {
   pasos: readonly PasoTutorial[]; paso: number; onSiguiente: () => void; onAnterior: () => void; onCerrar: () => void; enfocar?: boolean;
 }) {
+  const { t } = useIdioma();
   const actual = pasos[paso]!;
   const ultimo = paso === pasos.length - 1;
   // El texto se escribe de a poco y Esquilote "habla" mientras tanto; tocar el texto lo completa.
@@ -24,13 +27,13 @@ export function TarjetaTutorial({ pasos, paso, onSiguiente, onAnterior, onCerrar
   return <section className="esquilote esquilote-tarjeta" role="dialog" aria-modal="false" aria-labelledby="esquilote-titulo" aria-describedby="esquilote-texto">
     <Esquilote saluda={paso === 0 && !escribiendo} habla={escribiendo} />
     <div className="esquilote-cuerpo">
-      <p className="esquilote-nombre">Esquilote · paso {paso + 1} de {pasos.length}</p>
+      <p className="esquilote-nombre">{t('tutorial.paso', { paso: paso + 1, total: pasos.length })}</p>
       <h2 id="esquilote-titulo">{actual.titulo}</h2>
       <p id="esquilote-texto" aria-live="polite" aria-label={textoPlano(actual.texto)} onClick={completar}><TextoConIconos texto={actual.texto} visibles={visibles} /></p>
       <div className="esquilote-acciones">
-        <button type="button" className="esquilote-saltar" data-sin-sonido onClick={onCerrar}>{ultimo ? 'Cerrar' : 'Saltar tutorial'}</button>
-        {paso > 0 && <button type="button" className="esquilote-atras" data-sin-sonido onClick={onAnterior}>Anterior</button>}
-        <button type="button" className="esquilote-siguiente" data-sin-sonido onClick={onSiguiente} autoFocus={enfocar}>{ultimo ? '¡Entendido!' : 'Siguiente'}</button>
+        <button type="button" className="esquilote-saltar" data-sin-sonido onClick={onCerrar}>{ultimo ? t('tutorial.cerrar') : t('tutorial.saltar')}</button>
+        {paso > 0 && <button type="button" className="esquilote-atras" data-sin-sonido onClick={onAnterior}>{t('tutorial.anterior')}</button>}
+        <button type="button" className="esquilote-siguiente" data-sin-sonido onClick={onSiguiente} autoFocus={enfocar}>{ultimo ? t('tutorial.entendido') : t('tutorial.siguiente')}</button>
       </div>
     </div>
   </section>;
@@ -39,6 +42,8 @@ export function TarjetaTutorial({ pasos, paso, onSiguiente, onAnterior, onCerrar
 export function TutorialEsquilote() {
   const { path } = usePage();
   const id = tutorialDeRuta(path);
+  const { idioma, t } = useIdioma();
+  const tutoriales = idioma === 'en' ? TUTORIALES_EN : TUTORIALES;
   const [estado, setEstado] = useState<EstadoTutorial | null>(null);
   const [manual, setManual] = useState(false);
 
@@ -71,17 +76,17 @@ export function TutorialEsquilote() {
     return () => window.removeEventListener('keydown', alTeclear);
   }, [estado]);
 
-  const selector = estado ? TUTORIALES[estado.id][estado.paso]?.destacar : undefined;
+  const selector = estado ? tutoriales[estado.id][estado.paso]?.destacar : undefined;
 
   if (!id) return null;
   if (!estado) {
-    return <button type="button" className="esquilote esquilote-boton" onClick={() => { setManual(true); setEstado({ id: id as IdTutorial, paso: 0 }); }} aria-label="Abrir el tutorial con Esquilote">
+    return <button type="button" className="esquilote esquilote-boton" onClick={() => { setManual(true); setEstado({ id: id as IdTutorial, paso: 0 }); }} aria-label={t('tutorial.abrir')}>
       <Esquilote ancho={44} />
-      <span>Tutorial</span>
+      <span>{t('tutorial.boton')}</span>
     </button>;
   }
   return <>
     <Resalte selector={selector} />
-    <TarjetaTutorial pasos={TUTORIALES[estado.id]} paso={estado.paso} onSiguiente={() => mover('siguiente')} onAnterior={() => mover('anterior')} onCerrar={() => mover('cerrar')} enfocar={manual} />
+    <TarjetaTutorial pasos={tutoriales[estado.id]} paso={estado.paso} onSiguiente={() => mover('siguiente')} onAnterior={() => mover('anterior')} onCerrar={() => mover('cerrar')} enfocar={manual} />
   </>;
 }
