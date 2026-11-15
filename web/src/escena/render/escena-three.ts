@@ -15,6 +15,7 @@ import { rgbaPlaca } from '../placa';
 import { colorSuelo } from '../suelo';
 import type { ModeloVoxel, Vec3 } from '../voxel/bbmodel';
 import { AMPLITUD_VIENTO, DURACION_TRANSICION_MS, escalaInicial, interpolar, saleEncogiendo, type PlantaPrevia } from '../animacion';
+import { AJUSTES_GRAFICOS, type NivelGraficos } from '../graficos';
 import { agruparPorModelo, claveModelo, escalaPorAvance, giroCelda, giroSurcos, modeloRespaldo } from '../voxel/catalogo';
 import { bloqueProvisional, claveBloque } from '../voxel/bloque';
 import { cargarModelo, MODELOS_DISPONIBLES } from '../voxel/fuente-modelos';
@@ -68,6 +69,8 @@ export interface OpcionesRender {
   entorno?: boolean;
   /** Bioma del entorno (colores, vegetacion y luz); lo decide la interfaz. Por defecto, tropical humedo. */
   bioma?: Bioma;
+  /** Nivel de graficos (resolucion, aves y viento, tope de insectos). Por defecto, alto: lo de siempre. */
+  nivelGraficos?: NivelGraficos;
   /**
    * Al elegir una celda con clic (sin pincel) la camara vuela y acerca a ella; al deseleccionar
    * vuelve a la vista de antes. Por defecto, no (escena.html y pruebas sin cambios).
@@ -407,7 +410,7 @@ export class EscenaThree {
     } catch {
       throw new ErrorWebGL();
     }
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.aplicarGraficos();
     // Fondo desde la variable --escena-lienzo de escena.css (un solo lugar para cambiar el tema).
     // Con entorno, el lienzo es transparente y el cielo es el degradado CSS de .escena-fondo.
     const fondo = getComputedStyle(lienzo).getPropertyValue('--escena-lienzo').trim();
@@ -495,6 +498,7 @@ export class EscenaThree {
     const biomaAntes = this.opciones.bioma ?? BIOMA_DEFECTO;
     const desplazamientoAntes = this.opciones.desplazamiento;
     this.opciones = opciones;
+    this.aplicarGraficos();
     if (desplazamientoAntes?.x !== opciones.desplazamiento?.x || desplazamientoAntes?.y !== opciones.desplazamiento?.y) this.ajustarTamano();
     if (opciones.pastoSinCultivo && this.modeloActual) this.colorearBase(this.coloresBase);
     this.aplicarMovimiento();
@@ -629,8 +633,24 @@ export class EscenaThree {
   }
 
   /** Aves y viento se mueven solo con entorno, sin reducir movimiento, a la vista y con la pestana visible. */
+  private nivelAplicado: NivelGraficos | null = null;
+
+  /** Resolucion y tope de insectos segun el nivel de graficos; solo hace algo cuando el nivel cambia. */
+  private aplicarGraficos() {
+    const nivel = this.opciones.nivelGraficos ?? 'alto';
+    if (nivel === this.nivelAplicado) return;
+    this.nivelAplicado = nivel;
+    const a = AJUSTES_GRAFICOS[nivel];
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, a.pixelRatioMax));
+    this.plagas.setTope(a.insectosMax);
+    if (this.modeloActual) {
+      this.ajustarTamano();
+      this.plagas.construir(this.apoyos(this.modeloActual), this.plagasActuales);
+    }
+  }
+
   private ambienteActivo(): boolean {
-    return !!this.ambiente && !this.opciones.reducirMovimiento && this.enPantalla && document.visibilityState === 'visible';
+    return !!this.ambiente && AJUSTES_GRAFICOS[this.opciones.nivelGraficos ?? 'alto'].ambiente && !this.opciones.reducirMovimiento && this.enPantalla && document.visibilityState === 'visible';
   }
 
   /** Los insectos se mueven con las mismas condiciones que el ambiente. */

@@ -7,6 +7,7 @@ import type { Advertencia, Parcela, ResultadoCeldas, SerieBalance, Suelo } from 
 import { CORTES_LLUVIA, lluviaDelDia, textoLluvia } from './lluvia';
 import { describirCelda } from '../geo/escala-celda';
 import { climaFondo, epocaRelativa, NOMBRE_CLIMA_FONDO } from './clima-fondo';
+import { AJUSTES_GRAFICOS, guardarNivel, leerNivelGuardado, NIVELES_GRAFICOS, NOMBRE_NIVEL_GRAFICOS, type NivelGraficos } from './graficos';
 import { construirEscena } from './adaptador';
 import type { AvisoDatos } from '../api/datosParcela';
 import { CODIGOS_TERRENO } from './avisos-datos';
@@ -126,6 +127,9 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     return () => consulta.removeEventListener('change', cambio);
   }, []);
   const [seleccion, setSeleccion] = useState<BloqueEscena | null>(null);
+  // Nivel de graficos: lo guarda el navegador; cambia resolucion, aves y viento y el tope de insectos, nunca los datos.
+  const [nivelGraficos, setNivelGraficos] = useState<NivelGraficos>(leerNivelGuardado);
+  const elegirNivel = (n: NivelGraficos) => { setNivelGraficos(n); guardarNivel(n); };
   const alElegirRef = useRef(onCeldaElegida);
   alElegirRef.current = onCeldaElegida;
   useEffect(() => { alElegirRef.current?.(seleccion?.celdaId ?? null); }, [seleccion?.celdaId]);
@@ -197,6 +201,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       entorno: modo === 'fondo',
       enfocarAlElegir: modo === 'fondo',
       bioma,
+      nivelGraficos,
       ...(desplazamiento ? { desplazamiento } : {}),
       onSeleccion: setSeleccion,
       onContexto: (estado: 'perdido' | 'restaurado') => setContexto(estado),
@@ -205,7 +210,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
         setAvisosRender((prev) => (prev.some((a) => a.mensaje === mensaje) ? prev : [...prev, { codigo, mensaje, severidad: 'aviso' }])),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reducirMovimiento, viento, mascota, !!pincel, onPintar, desplazamiento?.x, desplazamiento?.y, bioma],
+    [reducirMovimiento, viento, mascota, !!pincel, onPintar, desplazamiento?.x, desplazamiento?.y, bioma, nivelGraficos],
   );
 
   useEffect(() => {
@@ -533,6 +538,12 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
                 {sinDato > 0 && <p className="escena-detalle">Sin color: {sinDato} {sinDato === 1 ? 'celda' : 'celdas'} sin dato del motor.</p>}
               </div>
             )}
+            <div className="escena-hud-graficos" role="radiogroup" aria-label="Nivel de gráficos">
+              <span>Gráficos</span>
+              {NIVELES_GRAFICOS.map((n) => (
+                <button key={n} type="button" role="radio" aria-checked={nivelGraficos === n} title={AJUSTES_GRAFICOS[n].detalle} onClick={() => elegirNivel(n)}>{NOMBRE_NIVEL_GRAFICOS[n]}</button>
+              ))}
+            </div>
             {leyendaCelda && <p className="escena-hud-escala-celda" role="note" aria-label="Escala de la celda">
               <span className="escena-escala-regla" aria-hidden="true" />{leyendaCelda.texto}
             </p>}

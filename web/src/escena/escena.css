@@ -223,3 +223,17 @@
 .escena-fondo.escena-clima-llovizna { --cielo-1: #9db0bf; --cielo-2: #b6c5d0; --cielo-3: #cfdae0; --cielo-4: #dce2df; --cielo-5: #ced7d1; }
 .escena-fondo.escena-clima-lluvia { --cielo-1: #7e93a6; --cielo-2: #98adbc; --cielo-3: #b3c3cd; --cielo-4: #c4cfd1; --cielo-5: #b7c5c0; }
 .escena-fondo.escena-clima-tormenta { --cielo-1: #4f6174; --cielo-2: #697f91; --cielo-3: #879cab; --cielo-4: #9eafb7; --cielo-5: #92a4a5; }
+
+/* Nivel de graficos: Bajo, Medio o Alto. */
+.escena-hud-graficos {
+  display: flex; align-items: center; gap: 2px; padding: 4px 4px 4px 12px; border-radius: 999px;
+  background: rgb(255 255 255 / 84%); backdrop-filter: saturate(1.5) blur(16px); -webkit-backdrop-filter: saturate(1.5) blur(16px);
+  box-shadow: 0 1px 2px rgb(17 34 26 / 8%), 0 8px 24px -8px rgb(17 34 26 / 22%);
+}
+.escena-hud-graficos span { margin-right: 6px; color: var(--escena-tinta); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.escena-hud-graficos button {
+  min-width: 44px; min-height: 34px; padding: 4px 12px; border: 0; border-radius: 999px; background: transparent;
+  color: var(--escena-tinta); font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer;
+}
+.escena-hud-graficos button:hover { background: rgb(17 34 26 / 6%); }
+.escena-hud-graficos button[aria-checked="true"] { background: var(--escena-tinta); color: #fff; }
