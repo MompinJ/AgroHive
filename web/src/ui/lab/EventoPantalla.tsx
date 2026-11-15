@@ -3,6 +3,7 @@
 // bloquea la parcela. Con "reducir movimiento" solo se muestra el aviso. Se cierra sola.
 import { useEffect } from 'react';
 import type { EventoPantalla as Evento } from './eventos';
+import { tocar } from '../sonido';
 import './evento.css';
 
 export const DURACION_EVENTO_MS = 3800;
@@ -38,6 +39,7 @@ function Bicho({ tam }: { tam: number }) {
 export function EventoPantalla({ evento, onTerminar }: { evento: Evento | null; onTerminar: () => void }) {
   useEffect(() => {
     if (!evento) return;
+    tocar(evento.tipo === 'cosecha' ? 'cosecha' : 'plaga');
     const t = window.setTimeout(onTerminar, DURACION_EVENTO_MS);
     return () => window.clearTimeout(t);
   }, [evento?.clave]);

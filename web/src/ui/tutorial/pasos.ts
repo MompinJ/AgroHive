@@ -21,7 +21,7 @@ export const TUTORIALES: Record<IdTutorial, readonly PasoTutorial[]> = {
     { titulo: 'Aquí siembras', texto: 'Elige un cultivo y pinta las celdas con la brocha {brocha} (B). La goma {goma} (X) las devuelve al cultivo general.', destacar: '.barra-herr' },
     { titulo: 'Mueve y corrige', texto: 'La mano {mover} (M) mueve la vista. Si te equivocas, deshaz {deshacer} o rehaz {rehacer} tus cambios.', destacar: '.barra-herr' },
     { titulo: 'Cuidado con las plagas', texto: 'Si hay registros de plagas cerca, verás insectos {bicho} en las celdas atacadas. Usa el insecticida {insecticida} (I) o "Proteger los bloques en riesgo". Aquí el insecticida no cuesta ni cambia el rendimiento: el simulador no lo modela.', destacar: '.lab-plagas' },
-    { titulo: 'La zona de plagas', texto: 'Los insectos solo aparecen alrededor de la celda que elijas. Cambia el radio o toca otra celda para mover la zona.', destacar: '.lab-zona-plaga' },
+    { titulo: 'La plaga no está en todas partes', texto: 'En cada grupo de celdas del mismo cultivo, la plaga aparece solo en cerca del 20 %, y juntas. Con "Proteger los bloques en riesgo" cubres justo esas.', destacar: '.lab-plagas' },
     { titulo: 'Si se traba', texto: 'Abajo a la derecha puedes bajar el nivel de gráficos. Cambia la resolución, las aves, el viento y cuántos insectos se dibujan; no cambia tus resultados.', destacar: '.escena-hud-graficos' },
     { titulo: 'Sigue con los escenarios', texto: 'Cuando termines de sembrar, avanza al siguiente paso.' },
   ],

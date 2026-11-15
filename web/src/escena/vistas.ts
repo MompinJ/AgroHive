@@ -1,11 +1,18 @@
 // Vistas de la base de los bloques (laboratorio por pasos): por cultivo, por validacion y por
-// necesidad de agua. Solo traducen a color lo que entrega el motor en cada registro de celda;
+// necesidad de agua; y, en el paso Escenarios, por luz y por temperatura (clima de la semana, clima-vista.ts).
+// Solo traducen a color lo que entrega el motor en cada registro de celda o la serie climatica real;
 // sin dato no hay color (nunca se pinta como "poca agua" ni como "mala idea"). No importa Three.js.
 
 import { NOMBRES_CULTIVO_ESCENA, NOMBRES_ETAPA_ESCENA } from './ficha';
 import type { BloqueEscena } from './modelo';
+import { colorLuz, colorNivelTemperatura, etiquetaNivelTemperatura, grados, megajoules, nivelTemperatura, type ClimaSemana, type RangoTemperatura } from './clima-vista';
 
-export type VistaBase = 'cultivo' | 'validacion' | 'agua';
+export type VistaBase = 'cultivo' | 'validacion' | 'agua' | 'luz' | 'temperatura';
+/** Vistas que dependen del clima de la fecha: solo se ofrecen cuando la escena tiene la serie del escenario. */
+export const VISTAS_CLIMA: readonly VistaBase[] = ['luz', 'temperatura'];
+
+/** Lo que necesitan las vistas de luz y temperatura: el clima de la semana y el rango de cada cultivo. */
+export interface ContextoVista { clima: ClimaSemana | null; rangos: Readonly<Record<string, RangoTemperatura>> }
 
 /** Color de cada cultivo (base de sus bloques y brocha). Tonos tierra de saturacion media. */
 export const COLORES_CULTIVO: Record<string, string> = {
@@ -90,7 +97,7 @@ export function colorAgua(etcMm: number | null | undefined): string | null {
 }
 
 /** Color de la base de cada celda para una vista; las celdas sin dato no aparecen. */
-export function coloresBase(bloques: readonly BloqueEscena[], vista: VistaBase, dentroDeVentana?: DentroDeVentana): Map<string, string> {
+export function coloresBase(bloques: readonly BloqueEscena[], vista: VistaBase, dentroDeVentana?: DentroDeVentana, contexto?: ContextoVista): Map<string, string> {
   const salida = new Map<string, string>();
   for (const b of bloques) {
     let color: string | null = null;
@@ -98,6 +105,11 @@ export function coloresBase(bloques: readonly BloqueEscena[], vista: VistaBase, 
     else if (vista === 'validacion') {
       const v = validarBloque(b, dentroDeVentana);
       color = v.nivel == null ? null : NIVELES_VALIDACION.find((n) => n.nivel === v.nivel)!.color;
+    } else if (vista === 'luz') color = colorLuz(contexto?.clima?.radiacionMjM2Dia); // la misma para toda la parcela
+    else if (vista === 'temperatura') {
+      const rango = b.cultivo ? contexto?.rangos[b.cultivo] : undefined;
+      const t = contexto?.clima?.tMediaC;
+      color = rango && t != null ? colorNivelTemperatura(nivelTemperatura(t, rango)) : null;
     } else color = b.registro?.estado === 'EVALUABLE' ? colorAgua(b.registro.etcMm) : null;
     if (color) salida.set(b.celdaId, color);
   }
@@ -105,7 +117,7 @@ export function coloresBase(bloques: readonly BloqueEscena[], vista: VistaBase, 
 }
 
 /** Lineas del globo al pasar el cursor, segun la vista. */
-export function detalleVista(b: BloqueEscena, vista: VistaBase, dentroDeVentana?: DentroDeVentana): { titulo: string; lineas: string[] } {
+export function detalleVista(b: BloqueEscena, vista: VistaBase, dentroDeVentana?: DentroDeVentana, contexto?: ContextoVista): { titulo: string; lineas: string[] } {
   const r = b.registro;
   const cultivo = b.cultivo ? NOMBRES_CULTIVO_ESCENA[b.cultivo] ?? b.cultivo : 'Sin cultivo';
   const mm = (n: number | null | undefined) => (n == null ? 'NO_EVALUABLE' : `${n.toLocaleString('es-MX', { maximumFractionDigits: 1 })} mm`);
@@ -115,6 +127,27 @@ export function detalleVista(b: BloqueEscena, vista: VistaBase, dentroDeVentana?
   if (vista === 'validacion') {
     const v = validarBloque(b, dentroDeVentana);
     return { titulo: `${cultivo}: ${v.etiqueta}`, lineas: v.motivos };
+  }
+  const clima = contexto?.clima ?? null;
+  if (vista === 'luz') {
+    if (clima?.radiacionMjM2Dia == null) return { titulo: 'Luz: sin dato', lineas: ['No hay radiación solar con dato en esa semana; no se inventa.'] };
+    return { titulo: `Luz: ${megajoules(clima.radiacionMjM2Dia)}`, lineas: ['Radiación solar de onda corta, promedio de la semana (NASA POWER).', 'Es la misma en toda la parcela: el dato es de una celda de unos 56 × 66 km.', `Semana que termina el ${clima.fechaClima}.`] };
+  }
+  if (vista === 'temperatura') {
+    const rango = b.cultivo ? contexto?.rangos[b.cultivo] : undefined;
+    if (!b.cultivo) return { titulo: 'Sin cultivo', lineas: ['La celda no tiene cultivo en esta fecha.'] };
+    if (clima?.tMediaC == null) return { titulo: `${cultivo}: sin dato`, lineas: ['No hay temperatura con dato en esa semana; no se inventa.'] };
+    if (!rango) return { titulo: `${cultivo}: sin rango`, lineas: [`Temperatura media de la semana: ${grados(clima.tMediaC)}.`, 'El catálogo no trae un rango de temperatura con fuente para este cultivo.'] };
+    const nivel = nivelTemperatura(clima.tMediaC, rango);
+    return {
+      titulo: `${cultivo}: ${etiquetaNivelTemperatura(nivel).toLowerCase()}`,
+      lineas: [
+        `Temperatura media de la semana: ${grados(clima.tMediaC)} (máxima ${grados(clima.tMaxC)}, mínima ${grados(clima.tMinC)}).`,
+        `Ideal para el cultivo (FAO EcoCrop): ${grados(rango.tOptMinC)} a ${grados(rango.tOptMaxC)}.`,
+        `Límites del cultivo: ${grados(rango.tMinAbsC)} a ${grados(rango.tMaxAbsC)}.`,
+        ...(r?.estresCalor === true ? ['El motor marca calor sobre el umbral del cultivo ese día.'] : []),
+      ],
+    };
   }
   const evaluable = r?.estado === 'EVALUABLE';
   return {

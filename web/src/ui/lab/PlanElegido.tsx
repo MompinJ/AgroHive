@@ -10,9 +10,11 @@ import { IconoBicho, IconoEscudo } from './iconos';
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 const sumarDias = (f: string, d: number) => new Date(Date.parse(`${f}T00:00:00Z`) + d * 86400000).toISOString().slice(0, 10);
 
-export function PlanElegido({ nombre, plan, resultado, catalogo, plagas, onCerrar }: {
+export function PlanElegido({ nombre, plan, resultado, catalogo, plagas, onCerrar, onDescargar }: {
   nombre: string; plan: PlanSiembra; resultado: ResultadoRotacion | undefined; catalogo: CatalogoCultivos;
   plagas: readonly { ciclo: number; plaga: string; cultivo: string; bloques: number }[]; onCerrar: () => void;
+  /** Descarga el resumen de la comparacion en PDF (con este plan marcado como elegido). */
+  onDescargar?: () => void;
 }) {
   const dialogo = useRef<HTMLDialogElement>(null);
   useEffect(() => { dialogo.current?.showModal(); }, []);
@@ -55,7 +57,8 @@ export function PlanElegido({ nombre, plan, resultado, catalogo, plagas, onCerra
 
       <footer className="plan-pie">
         <button type="button" className="lab-boton lab-boton-suave" onClick={() => dialogo.current?.close()}>Seguir comparando</button>
-        <button type="button" className="lab-boton lab-boton-primario" onClick={() => window.print()}>Imprimir o guardar PDF</button>
+        {onDescargar && <button type="button" className="lab-boton lab-boton-primario" onClick={onDescargar}>Descargar resumen (PDF)</button>}
+        <button type="button" className={`lab-boton ${onDescargar ? 'lab-boton-suave' : 'lab-boton-primario'}`} onClick={() => window.print()}>Imprimir esta hoja</button>
       </footer>
       <p className="panel-legal">Fechas de cosecha aproximadas con la duración del ciclo del catálogo. La decisión final es tuya; valídala con un agrónomo.</p>
     </div>
