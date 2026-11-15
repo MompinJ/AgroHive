@@ -54,7 +54,7 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
         if (!respuesta.clima.ok) throw new Error(respuesta.clima.error.motivo);
         if (!respuesta.suelo.ok) throw new Error(respuesta.suelo.error.motivo);
         if (!respuesta.cultivos.ok) throw new Error(respuesta.cultivos.error.motivo);
-        siguiente = { parcela: { ...parcela, sueloId: respuesta.suelo.datos.id }, serie: respuesta.clima.datos, suelo: respuesta.suelo.datos, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: null, avisos: [...remotos.avisos.map((a) => a.mensaje), 'Sin calendario local verificado para esta parcela.'], avisosDatos: remotos.avisos };
+        siguiente = { parcela: { ...parcela, sueloId: respuesta.suelo.datos.id }, serie: respuesta.clima.datos, suelo: respuesta.suelo.datos, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: respuesta.calendario?.ok ? respuesta.calendario.datos : null, avisos: [...remotos.avisos.map((a) => a.mensaje), ...(respuesta.calendario?.ok ? [] : ['Sin calendario local verificado para esta parcela.'])], avisosDatos: remotos.avisos };
       }
       if (activo) setDatos({ clave: claveParcela, datos: siguiente });
     }

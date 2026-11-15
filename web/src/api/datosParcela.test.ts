@@ -4,10 +4,10 @@ import { avisosDe, cargarDatosParcela, fallaObligatoria } from './datosParcela';
 const json = (cuerpo: unknown, estado = 200) => new Response(JSON.stringify(cuerpo), { status: estado, headers: { 'Content-Type': 'application/json' } });
 const meta = { versionContrato: '0.9.0', esEjemplo: false };
 
-type Mapa = Partial<Record<'clima' | 'suelo' | 'cultivos' | 'proxima', () => Response>>;
+type Mapa = Partial<Record<'clima' | 'suelo' | 'cultivos' | 'proxima' | 'calendario', () => Response>>;
 /** API simulada: responde segun la ruta pedida y registra las llamadas. */
 function api(mapa: Mapa, llamadas: string[] = []) {
-  const por = (ruta: string) => (ruta.includes('/api/clima') ? 'clima' : ruta.includes('/api/suelo') ? 'suelo' : ruta.includes('/api/cultivos') ? 'cultivos' : 'proxima') as keyof Mapa;
+  const por = (ruta: string) => (ruta.includes('/api/clima') ? 'clima' : ruta.includes('/api/suelo') ? 'suelo' : ruta.includes('/api/cultivos') ? 'cultivos' : ruta.includes('/api/calendario') ? 'calendario' : 'proxima') as keyof Mapa;
   return (async (url: RequestInfo | URL) => {
     llamadas.push(String(url));
     const r = mapa[por(String(url))];
@@ -17,14 +17,16 @@ function api(mapa: Mapa, llamadas: string[] = []) {
 const climaOk = () => json({ meta, estado: 'EVALUABLE', respaldo: false, coordenada: [-95.53, 18.03], fuente: { nombre: 'NASA POWER' }, diario: [], advertencias: [] });
 const sueloOk = () => json({ meta, id: 'suelo-1', advertencias: [{ codigo: 'SUELO_SUPUESTO', mensaje: 'estimado por un modelo global', severidad: 'aviso' }] });
 const cultivosOk = () => json({ meta, cultivos: [] });
+const calendarioOk = () => json({ meta, id: 'calendario-isla', ubicacion: { pais: 'Mexico' }, entradas: [], advertencias: [] });
 const proximaOk = () => json({ meta, advertencias: [{ codigo: 'SIN_TENDENCIA', mensaje: 'sin tendencia', severidad: 'info' }] });
 
 describe('cargarDatosParcela (A4.6)', () => {
   it('pide clima de la ventana estandar, suelo, cultivos y proxima temporada para el centroide', async () => {
     const llamadas: string[] = [];
-    const d = await cargarDatosParcela([-95.53, 18.03], { fetchFn: api({ clima: climaOk, suelo: sueloOk, cultivos: cultivosOk, proxima: proximaOk }, llamadas) });
-    expect(Object.values(d).every((r) => r.ok)).toBe(true);
-    expect(llamadas).toHaveLength(4);
+    const d = await cargarDatosParcela([-95.53, 18.03], { fetchFn: api({ clima: climaOk, suelo: sueloOk, cultivos: cultivosOk, proxima: proximaOk, calendario: calendarioOk }, llamadas) });
+    expect(Object.values(d).every((r) => r?.ok)).toBe(true);
+    expect(llamadas).toHaveLength(5);
+    expect(llamadas.find((u) => u.includes('/api/calendario'))).toContain('lat=18.03&lon=-95.53');
     expect(llamadas.find((u) => u.includes('/api/clima'))).toContain('desde=2005-10-01&hasta=2025-12-31');
     expect(llamadas.find((u) => u.includes('/api/suelo'))).toContain('lat=18.03&lon=-95.53');
     expect(fallaObligatoria(d)).toBeNull();
@@ -35,6 +37,19 @@ describe('cargarDatosParcela (A4.6)', () => {
       fetchFn: api({ clima: climaOk, suelo: () => json({ estado: 'ERROR_DATOS', motivo: 'SoilGrids no respondio' }, 503), cultivos: cultivosOk, proxima: proximaOk }),
     });
     expect(fallaObligatoria(d)).toEqual({ falla: 'suelo', error: { estado: 'ERROR_DATOS', motivo: 'SoilGrids no respondio', codigo: 503 } });
+  });
+
+  it('el calendario es opcional: sin el la parcela carga y se avisa (el motor marca las fechas NO_EVALUABLE, no inventa uno)', async () => {
+    const d = await cargarDatosParcela([-3.7, 40.4], { fetchFn: api({ clima: climaOk, suelo: sueloOk, cultivos: cultivosOk, proxima: proximaOk, calendario: () => json({ detail: 'sin pais' }, 422) }) });
+    expect(fallaObligatoria(d)).toBeNull();
+    expect(d.calendario?.ok).toBe(false);
+    expect(avisosDe(d).map((a) => a.codigo)).toContain('CALENDARIO_NO_DISPONIBLE');
+  });
+
+  it('con calendario, sus advertencias llegan a la interfaz', async () => {
+    const d = await cargarDatosParcela([-95.53, 18.03], { fetchFn: api({ clima: climaOk, suelo: sueloOk, cultivos: cultivosOk, proxima: proximaOk,
+      calendario: () => json({ meta, id: 'calendario-ggcmi', entradas: [], advertencias: [{ codigo: 'CALENDARIO_REGIONAL', mensaje: 'celda de 0.5 grados', severidad: 'aviso' }] }) }) });
+    expect(avisosDe(d).map((a) => a.codigo)).toContain('CALENDARIO_REGIONAL');
   });
 
   it('la proxima temporada es opcional: si falla no bloquea, pero se avisa', async () => {
