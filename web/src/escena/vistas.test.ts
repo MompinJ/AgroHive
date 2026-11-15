@@ -4,7 +4,7 @@ import { AGUA_MAX_MM, colorAgua, colorCultivo, coloresBase, detalleVista, valida
 
 function bloque(cambios: Partial<BloqueEscena> = {}, registro: Record<string, unknown> = {}): BloqueEscena {
   return {
-    celdaId: 'c-0-0', i: 0, j: 0, x: 0, z: 0, relieve: { tipo: 'medido', alturaEscena: 0 } as BloqueEscena['relieve'], pendientePct: 1,
+    celdaId: 'c-0-0', i: 0, j: 0, x: 0, z: 0, forma: 'completa', relieve: { tipo: 'medido', alturaEscena: 0 } as BloqueEscena['relieve'], pendientePct: 1,
     fraccionDentro: 1, estadoVisual: 'normal' as BloqueEscena['estadoVisual'], estadoEvaluacion: 'EVALUABLE', motivo: null, cultivo: 'maiz',
     etapa: 'crecimiento', avanceEtapa: 0.5, noRecomendadoEnLugar: false, losa: null,
     registro: { celdaId: 'c-0-0', fecha: '2026-08-01', estado: 'EVALUABLE', ciclo: 1, cultivo: 'maiz', etapa: 'crecimiento', avanceEtapa: 0.5, estadoPlanta: 'normal', humedad: 0.8, deficitMm: 0, excesoMm: 10, etcMm: 4, estresCalor: null, ...registro } as BloqueEscena['registro'],
@@ -45,5 +45,14 @@ describe('vistas de la base', () => {
     expect(coloresBase([bloque()], 'validacion', () => true).get('c-0-0')).toBe('#2f8a4e');
     expect(detalleVista(bloque(), 'agua').titulo).toContain('4 mm/día');
     expect(detalleVista(bloque(), 'cultivo').titulo).toBe('Maíz');
+  });
+});
+
+describe('color de cultivo', () => {
+  it('los cultivos sin color a mano reciben uno estable y distinto', () => {
+    expect(colorCultivo('maiz')).toBe('#d9a62e');
+    expect(colorCultivo('tomate')).toBe(colorCultivo('tomate'));
+    expect(colorCultivo('tomate')).not.toBe(colorCultivo('papa'));
+    expect(colorCultivo('tomate')).toMatch(/^hsl\(/);
   });
 });

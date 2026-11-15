@@ -1,8 +1,9 @@
 // Paso 2: que se siembra en cada ciclo. Solo se elige el cultivo y se pinta; la temporada y
 // la fecha salen del calendario local (SIAP/INIFAP o GGCMI via API) y se pueden ajustar.
 import { useState } from 'react';
+import type { Cultivo } from '../../../../contratos/tipos/contratos';
 import type { LaboratorioEstado } from '../useLaboratorio';
-import { cambiarSiembra, conflictosPlan, conteoPintado, diasCultivo, explicarFecha, inicioDeVentana, referenciaSiembra, rellenarCiclo } from '../planes';
+import { agruparCultivos, cambiarSiembra, conflictosPlan, conteoPintado, cultivosDelCiclo, diasCultivo, explicarFecha, inicioDeVentana, referenciaSiembra, rellenarCiclo } from '../planes';
 import { Aviso, Cargando, EncabezadoPanel, FuenteVisible, IconoCultivo, fechaCorta, nombreCultivo, nombreTemporada } from './piezas';
 import type { PasoLab } from './Laboratorio';
 import { AvisosDatos } from '../../escena/AvisosDatos';
@@ -19,6 +20,8 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
 }) {
   const { rotacion, setRotacion, ciclo, setCiclo } = estado.seleccion;
   const [errorFecha, setErrorFecha] = useState('');
+  const [busqueda, setBusqueda] = useState('');
+  const [verTodos, setVerTodos] = useState(false);
   const datos = estado.datos;
   const plan = estado.planes.find((p) => p.rotacionId === rotacion) ?? estado.planes[0];
   const visible = plan?.ciclos.find((c) => c.ciclo === ciclo) ?? plan?.ciclos[0];
@@ -39,6 +42,23 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
   const ventana = local?.ventana.estado === 'EVALUABLE' ? local.ventana : null;
   const inicioVentana = ventana ? inicioDeVentana(ventana, Number(visible.siembra.slice(0, 4))) : null;
   const disponibles = siguiente ? Math.round((Date.parse(siguiente.siembra) - Date.parse(visible.siembra)) / 86400000) : null;
+
+  // Paleta: sugeridos (los del plan, el de la brocha y los que la fuente local registra aqui),
+  // busqueda por nombre o todos agrupados por tipo. El orden del catalogo se conserva.
+  const normal = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const gruposPaleta: { nombre: string; cultivos: Cultivo[] }[] = (() => {
+    const todos = datos.catalogo.cultivos;
+    if (busqueda.trim()) {
+      const q = normal(busqueda.trim());
+      const hallados = todos.filter((c) => normal(nombreCultivo(c.id)).includes(q) || normal(c.nombreComun).includes(q) || normal(c.nombreCientifico ?? '').includes(q));
+      return hallados.length ? [{ nombre: '', cultivos: hallados }] : [];
+    }
+    if (verTodos) return agruparCultivos(todos);
+    const enPlan = new Set(plan!.ciclos.flatMap((c) => cultivosDelCiclo(plan!, c.ciclo)));
+    const sugeridos = todos.filter((c) => enPlan.has(c.id) || c.id === cultivoActivo || referenciaSiembra(c.id, visible!.temporada, datos.calendario)?.presencia.estado === 'registrado');
+    const base = sugeridos.length >= 4 ? sugeridos : [...sugeridos, ...todos.filter((c) => !sugeridos.includes(c))].slice(0, 8);
+    return [{ nombre: '', cultivos: base.slice(0, 12) }];
+  })();
 
   function aplicar(nuevo: typeof plan) {
     const conflictos = conflictosPlan(nuevo!, datos!.catalogo);
@@ -76,8 +96,11 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
 
     <div className="panel-bloque">
       <p className="panel-etiqueta" id="paleta-etiqueta">Cultivo de la brocha</p>
-      <div className="lab-paleta" role="radiogroup" aria-labelledby="paleta-etiqueta">
-        {datos.catalogo.cultivos.map((c) => {
+      <input className="lab-buscar" type="search" placeholder={`Buscar entre ${datos.catalogo.cultivos.length} cultivos`} aria-label="Buscar cultivo" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+      {gruposPaleta.map((g) => <div key={g.nombre} className="lab-paleta-grupo">
+        {g.nombre && <p className="lab-paleta-titulo">{g.nombre}</p>}
+        <div className="lab-paleta" role="radiogroup" aria-labelledby="paleta-etiqueta">
+        {g.cultivos.map((c) => {
           const dias = diasCultivo(c.id, datos.catalogo);
           const noCabe = disponibles != null && dias != null && dias > disponibles;
           const presencia = referenciaSiembra(c.id, visible.temporada, datos.calendario)?.presencia;
@@ -91,7 +114,10 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
             <span className="sr-only">. {motivo}</span>
           </button>;
         })}
-      </div>
+        </div>
+      </div>)}
+      {gruposPaleta.length === 0 && <p className="panel-ayuda">Ningún cultivo coincide con “{busqueda}”.</p>}
+      {!busqueda && <button type="button" className="lab-enlace" aria-expanded={verTodos} onClick={() => setVerTodos((v) => !v)}>{verTodos ? 'Ver solo los sugeridos' : `Ver los ${datos.catalogo.cultivos.length} cultivos por tipo`}</button>}
     </div>
 
     <div className="panel-bloque lab-herramientas">

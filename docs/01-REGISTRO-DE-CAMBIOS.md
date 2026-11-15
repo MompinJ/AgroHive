@@ -8,7 +8,8 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Cambio:** el panel de abajo a la derecha queda con tres vistas que colorean la base de los bloques (por cultivo; validación de verde a rojo; necesidad de agua de gris a azul marino) y un globo con información de cada vista. Se quita el modo 2D. Detalle en 06, "Vistas de la base y retiro del 2D".
 - **Por qué:** pedido de Eduardo.
 - **Fuente:** los colores salen del registro de celda del motor (`estadoPlanta`, `etcMm`, `estresCalor`, `noRecomendadoEnLugar`) y de la ventana del calendario local; sin dato no hay color.
-- **Pendiente:** confirmar con Mompin el retiro del 2D (era respaldo decidido en la reunión) y los cortes de validación y agua (`[PROPUESTA]`).
+- **Catálogo de 40 cultivos (tras integrar `main`):** paleta con sugeridos, buscador y grupos por tipo; color estable para cada cultivo; `NOMBRES_CULTIVO_ESCENA` con los 40 nombres con acentos (única fuente, la interfaz ya no tiene su propia tabla).
+- **Pendiente:** confirmar con Mompin el retiro del 2D (era respaldo decidido en la reunión; B1 y B3 de `docs/16` mencionan la vista 2D) y los cortes de validación y agua (`[PROPUESTA]`).
 - **Decisiones afectadas:** "3D en el MVP ... con modo 2D de respaldo" (11).
 
 ### 2026-11-15 (madrugada) — Modelos de la ampliación del catálogo, tanda A: soya, frijol caupí, haba, chícharo y lenteja (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)

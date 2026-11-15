@@ -97,3 +97,15 @@ describe('brocha y fechas derivadas', () => {
     expect(rellenarCiclo(r1(), parcela, 3, 'calabaza', calendarioIsla, cat).ciclos[2]!.siembra).toBe('2027-06-15');
   });
 });
+
+describe('paleta de cultivos', () => {
+  it('agrupa el catalogo por tipo sin perder ni repetir cultivos', async () => {
+    const { agruparCultivos } = await import('./planes');
+    const cultivos = (catalogo as CatalogoCultivos).cultivos;
+    const grupos = agruparCultivos(cultivos);
+    const ids = grupos.flatMap((g) => g.cultivos.map((c) => c.id));
+    expect(ids.sort()).toEqual(cultivos.map((c) => c.id).sort());
+    expect(grupos.find((g) => g.nombre === 'Leguminosas')!.cultivos.every((c) => c.esLeguminosa === true)).toBe(true);
+    expect(grupos[0]!.nombre).toBe('Cereales');
+  });
+});

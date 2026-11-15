@@ -5,7 +5,9 @@ import version from '../../../contratos/package.json';
 import { dentroDeVentana } from '../motor/pilares';
 
 export const calendarioIsla = calendarioJson as CalendarioLocal;
-export const nombresCultivos: Record<string, string> = { maiz: 'Maíz', frijol: 'Frijol', calabaza: 'Calabaza', chile: 'Chile', sorgo: 'Sorgo', sandia: 'Sandía', camote: 'Camote', cacahuate: 'Cacahuate' };
+/** Nombres con acentos: una sola fuente, la de la escena (ficha.ts). */
+import { NOMBRES_CULTIVO_ESCENA } from '../escena/ficha';
+export const nombresCultivos: Record<string, string> = NOMBRES_CULTIVO_ESCENA;
 /** Colores por cultivo: los define la escena (base de los bloques y brocha). */
 export { COLORES_CULTIVO as coloresCultivo, colorCultivo } from '../escena/vistas';
 export function referenciaSiembra(cultivo: string, temporada: Ciclo['temporada'], calendario: CalendarioLocal | null) {
@@ -195,4 +197,28 @@ export function ventanaDelPlan(plan: PlanSiembra, calendario: CalendarioLocal | 
 export function fechaParaVer(siembra: string, cultivo: string, catalogo: CatalogoCultivos): string {
   const dias = diasCultivo(cultivo, catalogo);
   return dias ? deDia(aDia(siembra) + Math.round(dias * 0.6)) : siembra;
+}
+
+/**
+ * Grupos de la paleta (solo para ordenar la interfaz, no es un dato agronomico del catalogo).
+ * Las leguminosas salen del campo esLeguminosa del catalogo; lo que no esta en la lista va en "Otros".
+ */
+const GRUPOS_PALETA: [string, string[]][] = [
+  ['Cereales', ['maiz', 'maiz_dulce', 'sorgo', 'trigo', 'cebada', 'avena']],
+  ['Cucurbitáceas', ['calabaza', 'calabacita', 'sandia', 'melon', 'pepino']],
+  ['Raíces y tubérculos', ['camote', 'yuca', 'papa', 'zanahoria', 'rabano', 'betabel']],
+  ['Hortalizas', ['chile', 'tomate', 'cebolla', 'lechuga', 'berenjena', 'brocoli', 'col', 'coliflor', 'espinaca']],
+  ['Industriales y oleaginosas', ['cana', 'ajonjoli', 'girasol', 'algodon', 'cartamo', 'higuerilla']],
+];
+export function agruparCultivos<T extends { id: string; esLeguminosa?: boolean | null }>(cultivos: readonly T[]): { nombre: string; cultivos: T[] }[] {
+  const leguminosas = cultivos.filter((c) => c.esLeguminosa === true);
+  const resto = cultivos.filter((c) => c.esLeguminosa !== true);
+  const grupos = [
+    { nombre: 'Cereales', cultivos: resto.filter((c) => GRUPOS_PALETA[0]![1].includes(c.id)) },
+    { nombre: 'Leguminosas', cultivos: leguminosas },
+    ...GRUPOS_PALETA.slice(1).map(([nombre, ids]) => ({ nombre, cultivos: resto.filter((c) => ids.includes(c.id)) })),
+  ];
+  const agrupados = new Set(grupos.flatMap((g) => g.cultivos.map((c) => c.id)));
+  grupos.push({ nombre: 'Otros', cultivos: resto.filter((c) => !agrupados.has(c.id)) });
+  return grupos.filter((g) => g.cultivos.length > 0);
 }

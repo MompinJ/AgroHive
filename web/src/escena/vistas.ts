@@ -12,7 +12,19 @@ export const COLORES_CULTIVO: Record<string, string> = {
   maiz: '#d9a62e', frijol: '#8a4b2f', calabaza: '#d9772b', chile: '#b73a2e',
   sorgo: '#9a5470', sandia: '#3f8a52', camote: '#74539c', cacahuate: '#b08a5c',
 };
-export const colorCultivo = (cultivo: string) => COLORES_CULTIVO[cultivo] ?? '#6b7a72';
+
+/**
+ * Los cultivos sin color elegido a mano reciben uno estable derivado de su id (tono por
+ * angulo aureo, saturacion y luz medias), para que dos cultivos de la parcela se distingan.
+ */
+function colorDerivado(id: string): string {
+  let h = 0;
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const tono = (h * 137.508) % 360;
+  const luz = 38 + (h % 3) * 8;
+  return `hsl(${tono.toFixed(0)}, 48%, ${luz}%)`;
+}
+export const colorCultivo = (cultivo: string) => COLORES_CULTIVO[cultivo] ?? colorDerivado(cultivo);
 
 /** Niveles de validacion, de mejor a peor `[PROPUESTA]`. */
 export const NIVELES_VALIDACION = [
