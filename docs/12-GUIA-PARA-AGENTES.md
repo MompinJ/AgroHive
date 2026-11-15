@@ -11,7 +11,7 @@ Para cualquier persona o IA (Claude, ChatGPT, Cursor) que lea o edite esta carpe
 
 ## Cómo editar
 - La documentación vive en el repo (`docs/`, `AgroVault/`, README, `AGENTS.md`); se edita en la rama propia y solo Mompin integra a `main` (13). Google Drive queda como respaldo del historial.
-- Seguir las **reglas de organización `[DECIDIDO]`** de [16, sección 5](16-PLAN-DIA-FINAL.md#5-reglas-de-organización-decidido-mompin-1411-noche): apartar archivos por el buzón antes de empezar, dueños por carpeta, ramas cortas, integración por ventanas y archivos calientes (`docs/01`, cronograma, `QUEJAS.md`) con un solo editor por ventana.
+- Seguir las **reglas de organización `[DECIDIDO]`** de [16, sección 4](16-PLAN-DIA-FINAL.md#4-reglas-de-organización-decidido-mompin-1411-noche): apartar archivos por el buzón antes de empezar, dueños por carpeta, ramas cortas, integración por ventanas y archivos calientes (`docs/01`, cronograma, `QUEJAS.md`) con un solo editor por ventana.
 - Editar el archivo existente; **no crear duplicados** ni copias "v2-final".
 - Registrar cada cambio en **01**: fecha, archivo, qué y por qué (o mandar la entrada por el buzón si otra persona tiene los archivos calientes en esa ventana).
 - **No modificar** las carpetas anteriores de Drive (`docs/` y `00 — AGROHIVE DOCUMENTACIÓN CONSOLIDADA v1.2/`): son historial.

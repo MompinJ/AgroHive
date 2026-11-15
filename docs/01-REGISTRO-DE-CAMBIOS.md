@@ -2,6 +2,12 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — La entrega sale del plan del día final `[DECIDIDO]` (Mompin; sesión "estado")
+
+- **Archivos:** `docs/16` (secciones 2 a 6), `docs/00`, `docs/11`, `docs/12`, `docs/13` (fila "Reglas de organización del día final"), `docs/14` (enlace en "Fase de revisión"), `AgroVault/Compartido/Reglas.md` (número de sección).
+- **Cambio:** el plan del día final ya no trae tareas, responsables ni horas de la entrega, ni la cuenta regresiva hacia las 23:59. La entrega es una fase posterior y, antes de mandar nada, pasa por una fase de aprobación de todo el equipo. En 16 queda solo la lista de lo que va a requerir (envío, Team Owner, página del portal, video, presentación) y las decisiones de la entrega, sin fecha ni asignación. El horario del juicio local (V-01) deja de condicionar el plan de trabajo. Las decisiones del plan se renumeran D1 a D7; se quitan de la cola las tareas de entrega (borrador A5.9, formulario, README de A5.7) y de la lista de relleno las de entrega, que se reemplazan por pruebas y revisiones de la app.
+- **Decisiones afectadas:** corrige la entrada anterior de esta noche (las horas del cierre `[PROPUESTA]` se retiran).
+
 ### 2026-11-14 (noche, 23:10) — Auditoría global y plan del día final; reglas de organización `[DECIDIDO]` (Mompin; sesión "estado")
 
 - **Archivos:** `docs/16-PLAN-DIA-FINAL.md` (nuevo); `docs/00` (índice, orden de lectura y "Cómo editar" apuntan a 16), `docs/11` (sección "Decisiones abiertas del día final", apunta a 16), `docs/12` (quita rclone, Drive como lugar de edición y "no código antes del inicio"; ruta correcta del agente; reglas de 16), `docs/13` (fila "Reglas de organización del día final"), `docs/14` (nota de redespliegue en A4.7 y enlace a 16 en "Fase de revisión"; vistas regeneradas), `docs/15` (el prompt ya no dice "abre un pull request"), `AGENTS.md` (integración por aviso en el buzón y ventanas, no por PR; enlace a 16), `AgroVault/Compartido/Reglas.md` (lo mismo), `AgroVault/Compartido/Pendientes.md` (A4.13: el front ya pide `GET /api/calendario`), `README.md` de Mafer (solo la línea del despliegue: `f56450c`, contratos 0.13.0).

@@ -68,7 +68,7 @@ Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Al
 
 ## Decisiones abiertas del día final
 
-Team Owner y envío, horario de juicio local (V-01), inglés, placa de estado, licencia del repo, revisión humana de términos (Esri, Planetary Computer, CDL) y de las imágenes generadas, deploy y formato de la demo: lista D1 a D15, con a quién bloquea cada una, en [16, sección 2](16-PLAN-DIA-FINAL.md#2-bloqueos-y-decisiones-abiertas-de-mompin).
+Del plan de trabajo (líder del rediseño del front, placa de estado, respaldo de SSH para el deploy, cultivos nuevos, cámara, A4.4 y A0.3, ramas muertas): D1 a D7 en [16, sección 2](16-PLAN-DIA-FINAL.md#2-decisiones-abiertas-de-mompin-para-el-plan-de-trabajo). Las de la entrega (Team Owner, portal, V-01, inglés, licencia, términos, imágenes generadas, video y presentación) quedan para la fase de entrega, que es posterior y pasa por la aprobación de todo el equipo: [16, sección 5](16-PLAN-DIA-FINAL.md#5-entrega).
 
 ## Se decide después (menor)
 - Numeración y nombres de documentos.

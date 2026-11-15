@@ -172,7 +172,7 @@ El desarrollo de funciones terminó: el equipo entra en **fase de revisión**. A
 - Las cuatro actividades que quedaban (A0.3, A4.4, A5.7 y A5.9) quedan **pospuestas hasta el final**, con su estado de siempre y la nota en su fila. Video y presentación (A5.6) siguen fuera del tablero y se definen al final.
 - Cada hallazgo se avisa por el buzón con la pantalla, qué pasa, quién es el dueño y su estado; se arregla en la rama del dueño y entra a `main` en verde.
 - **El envío (A5.9) se hace solo cuando todos digan que están satisfechos.**
-- Día final (15/11): cola por persona, decisiones abiertas, horas límite y reglas de organización en [16](16-PLAN-DIA-FINAL.md). Este documento sigue siendo la fuente de las marcas de cada actividad.
+- Día final (15/11): cola por persona, decisiones abiertas y reglas de organización en [16](16-PLAN-DIA-FINAL.md); la entrega es una fase posterior, fuera de ese plan. Este documento sigue siendo la fuente de las marcas de cada actividad.
 
 ## Fuera del tablero hasta el final
 

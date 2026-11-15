@@ -1,6 +1,6 @@
 # AgroHive 2.0 — LEER PRIMERO
 
-> **Documentación vigente del equipo Code Hive — 13/11/2026.** Esta carpeta consolida en una sola fuente las dos carpetas anteriores y las decisiones que el equipo tomó el 13/11/2026. Las carpetas anteriores **se conservan intactas** como historial (ver al final). **El hackathon inició oficialmente el 14/11/2026**: ya se puede escribir código. Las decisiones tomadas ese día están en [13 · Decisiones del hackathon](13-DECISIONES-HACKATHON.md) y el plan de trabajo en [14 · Cronograma](14-CRONOGRAMA.md); donde contradigan a 03, 08 o 09, mandan 13 y 14. **Día final (15/11):** estado real, decisiones abiertas, cola por persona, cierre y reglas de organización en [16 · Plan del día final](16-PLAN-DIA-FINAL.md).
+> **Documentación vigente del equipo Code Hive — 13/11/2026.** Esta carpeta consolida en una sola fuente las dos carpetas anteriores y las decisiones que el equipo tomó el 13/11/2026. Las carpetas anteriores **se conservan intactas** como historial (ver al final). **El hackathon inició oficialmente el 14/11/2026**: ya se puede escribir código. Las decisiones tomadas ese día están en [13 · Decisiones del hackathon](13-DECISIONES-HACKATHON.md) y el plan de trabajo en [14 · Cronograma](14-CRONOGRAMA.md); donde contradigan a 03, 08 o 09, mandan 13 y 14. **Día final (15/11):** estado real, decisiones abiertas, cola por persona y reglas de organización en [16 · Plan del día final](16-PLAN-DIA-FINAL.md).
 
 ## En dos minutos: ¿qué estamos construyendo?
 
@@ -30,7 +30,7 @@
 | [13 · Decisiones del hackathon](13-DECISIONES-HACKATHON.md) | Decisiones del 14/11: stack, servidor, pronóstico, suelo, cultivos, ranking. Mandan sobre 03, 08 y 09. |
 | [14 · Cronograma](14-CRONOGRAMA.md) | Actividades por esfuerzo de IA, compuertas, recorte y tablero de reparto. |
 | [15 · Prompts de arranque](15-PROMPTS-DE-ARRANQUE.md) | Prompt inicial para la IA de cada integrante. |
-| [16 · Plan del día final](16-PLAN-DIA-FINAL.md) | Estado real al 14/11 noche, ramas, decisiones abiertas, cola por persona, cierre hacia las 23:59, reglas de organización `[DECIDIDO]` y tareas de relleno. |
+| [16 · Plan del día final](16-PLAN-DIA-FINAL.md) | Estado real al 14/11 noche, ramas, decisiones abiertas, cola por persona, reglas de organización `[DECIDIDO]` y tareas de relleno. La entrega es una fase posterior, fuera de este plan. |
 | [Agente `modelador-voxel`](agente-modelador-voxel-README.md) | Cómo funciona el agente de modelos 3D (definición en `.claude/agents/`, librería en `herramientas/voxelkit.py`). |
 | [Buzón del equipo](../herramientas/buzon/README.md) | Mensajes entre las sesiones de IA por la red local del evento (servidor en la laptop de Mompin). No reemplaza a git. |
 | [`AgroVault/`](../AgroVault/Bienvenido.md) | Vault de Obsidian: resumen para Claude, Codex y Cursor, APIs investigadas y pendientes. Resume `docs/` y `contratos/`, no decide. |
@@ -66,9 +66,9 @@
 
 ## Cómo editar sin perder trabajo
 
-1. La documentación vive en el **repositorio** (`docs/`, ramas por integrante; solo Mompin integra a `main`, ver las reglas de [16](16-PLAN-DIA-FINAL.md#5-reglas-de-organización-decidido-mompin-1411-noche)). Google Drive queda solo como respaldo del historial. `[DECIDIDO]` (13)
+1. La documentación vive en el **repositorio** (`docs/`, ramas por integrante; solo Mompin integra a `main`, ver las reglas de [16](16-PLAN-DIA-FINAL.md#4-reglas-de-organización-decidido-mompin-1411-noche)). Google Drive queda solo como respaldo del historial. `[DECIDIDO]` (13)
 2. Leer el documento que se va a tocar y el **11** antes de cambiar el alcance.
-3. Evitar que dos personas o agentes editen **el mismo archivo** al mismo tiempo: apartar antes por el buzón y respetar los archivos calientes (reglas 1 y 7 de [16](16-PLAN-DIA-FINAL.md)).
+3. Evitar que dos personas o agentes editen **el mismo archivo** al mismo tiempo: apartar antes por el buzón y respetar los archivos calientes (reglas 1 y 7 de [16](16-PLAN-DIA-FINAL.md#4-reglas-de-organización-decidido-mompin-1411-noche)).
 4. Registrar cada cambio en **01** (fecha, archivo, qué y por qué).
 5. El hackathon ya inició (14/11): se puede escribir código. Antes y después de trabajar: `git fetch`, revisar lo que subieron otros, correr las pruebas y actualizar la documentación afectada (`docs/`, `AgroVault/`, README, `AGENTS.md`) sin dejarla desfasada ni duplicarla.
 
