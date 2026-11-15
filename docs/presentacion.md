@@ -2,7 +2,7 @@
 
 > **Qué es:** la presentación de AgroHive en inglés, de 7 diapositivas contando portada e introducción, que la regla de la entrega permite en lugar del video de 30 s (`docs/02`, A0.5). Parte del esquema de "Presentación de respaldo (7 diapositivas)" de [`trailer-30s.md`](trailer-30s.md) y lo sustituye como texto vigente.
 >
-> **Deck:** <https://claude.ai/artifact/9at5wxSRsVZGkQNNBeDDnv> (tipo Slides de Claude, privado hasta que Mompin lo comparta desde su menú Share; se descarga como PDF o PPTX). Este archivo guarda el mismo texto (diapositivas y notas del orador) para revisarlo en el repo.
+> **Deck:** <https://claude.ai/artifact/9at5wxSRsVZGkQNNBeDDnv> (tipo Slides de Claude, privado hasta que Mompin lo comparta desde su menú Share; se descarga como PDF o PPTX). Este archivo guarda el mismo texto (diapositivas y notas del orador) para revisarlo en el repo. **Versión en español:** [`presentacion-es.md`](presentacion-es.md) (deck aparte, no se entrega).
 >
 > **Estado (15/11):** borrador para revisión del equipo. Falta la captura de Comparison (hueco marcado abajo) y la aprobación de todo el equipo antes de enviarla (`docs/13`, "Reglas de organización del día final").
 
