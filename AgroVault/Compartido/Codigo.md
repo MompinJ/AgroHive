@@ -41,7 +41,7 @@ Comandos: `cd web && npm test`, `npm run dev`, `npx tsc --noEmit`. Corrida del 1
 
 ## `api/`
 
-FastAPI. Rutas en `app/rutas/`: `clima`, `suelo`, `cultivos`, `proxima`, `terreno` (`POST /api/elevacion`), `smap`, `ndvi` (`GET /api/ndvi`, A4.11, Planetary Computer), `calendario` (`GET /api/calendario`, A4.13). `versionContrato` de `/health` sigue a `contratos/package.json` (0.12.2).
+FastAPI. Rutas en `app/rutas/`: `clima`, `suelo`, `cultivos`, `proxima`, `terreno` (`POST /api/elevacion`), `smap`, `ndvi` (`GET /api/ndvi`, A4.11, Planetary Computer), `calendario` (`GET /api/calendario`, A4.13), `regional` (`GET /api/ee-uu/cdl` y `/api/ee-uu/ssurgo`, A4.12, clientes `app/clientes/cropscape.py` y `sda.py`). `versionContrato` de `/health` sigue a `contratos/package.json` (0.12.2).
 
 | Pieza | Archivo |
 | --- | --- |

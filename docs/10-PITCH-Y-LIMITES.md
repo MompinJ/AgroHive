@@ -40,7 +40,7 @@ Presentar los límites como fortaleza: la honestidad científica es parte de lo 
 | --- | --- |
 | ¿Por qué no predicen el clima? | No es el objetivo. Decidimos bajo incertidumbre con años históricos reales. |
 | ¿Qué tan precisos son los datos? | Resolución gruesa; los combinamos con suelo, relieve y cultivo locales, y pedimos validación de expertos. |
-| ¿Qué requisitos mínimos tiene? | (Medir y tener la cifra.) Hay modo 2D ligero para equipos modestos. |
+| ¿Qué requisitos mínimos tiene? | Un navegador con WebGL2. Medido el 15/11 con 518 celdas (191 mil triángulos, 5 a 8 draw calls): 105 a 115 cuadros/s con GPU y unos 9 cuadros/s dibujando por software, es decir, sin GPU; la escena solo dibuja cuando algo cambia. Sin WebGL2 se abre solo el modo 2D, con los mismos valores. Medido en una Mac de gama alta; no en un celular (`docs/06`). |
 | ¿Por qué la rotación "segura" y no la más rentable? | Un mal año puede arruinar la inversión. Minimizamos el arrepentimiento. |
 | ¿Reemplaza al agrónomo? | No. Hace visible el riesgo antes de sembrar y deja la decisión al agricultor. |
 | ¿Qué datasets de NASA usan? | NASA POWER como base; SRTM para el relieve. (Completar con lo que efectivamente se integre: GPM, SMAP, MODIS.) |

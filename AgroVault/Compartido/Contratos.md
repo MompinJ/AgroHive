@@ -68,6 +68,8 @@ El motor corre en el Web Worker; el backend no simula ni rankea. `POST /api/simu
 | `GET /api/suelo?lat=&lon=` | Textura, pH y TAW (Saxton y Rawls si hay carbono) de 0 a 30 cm. ISRIC es `estimacionUsada`; OpenLandMap va en `estimaciones` y sustituye si ISRIC falla. Siempre `SUPUESTO`. Sin dato: 503 y el front usa el selector manual. Implementado | `suelo` |
 | `GET /api/smap?lon=&lat=&desde=&hasta=` | Humedad superficial SMAP L3, contraste, máximo 10 días. Sin `EARTHDATA_TOKEN`: 503. Implementado. No entra al balance | `smap` |
 | `GET /api/ndvi?lat=&lon=&desde=&hasta=` | NDVI MOD13Q1 V061 por Planetary Computer, evidencia, máximo 400 días. No entra al ranking. Implementado (A4.11). Desde 0.12.2 la descripción del schema cita Planetary Computer y Didan (2021) | `ndvi` |
+| `GET /api/ee-uu/cdl?lat=&lon=&desde=&hasta=` | Rotación real por año (USDA NASS CDL, 30 m), solo EE. UU. contiguos; contraste, no entra al ranking. Implementado (A4.12). Schema propuesto en `api/propuestas-contrato/ee-uu.schema.json`, pedido a Mompin | `ee-uu#/$defs/cdl` (propuesta) |
+| `GET /api/ee-uu/ssurgo?lat=&lon=` | Suelo de campo SSURGO (componente dominante, horizontes, agua disponible a 100 cm), solo EE. UU.; contraste. Implementado (A4.12) | `ee-uu#/$defs/ssurgo` (propuesta) |
 | `GET /api/calendario?lat=&lon=` | En Isla, el calendario SIAP/INIFAP. Fuera de México, maíz de temporal de GGCMI (un día, madurez en la nota). Frijol, calabaza y chile: `NO_EVALUABLE`. Implementado (A4.13) | `calendario-local` |
 
 Los estados de falla son visibles: `RESPALDO_HISTORICO` con advertencia, o 503 con `{estado: ERROR_DATOS, motivo}`. Detalle y cómo correr la API en `api/README.md`.
