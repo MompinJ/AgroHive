@@ -132,6 +132,6 @@ Modelos en `modelos/cultivos/` (maíz, frijol, calabaza, chile: siembra, brote, 
 
 El avance por persona lo genera `herramientas/cronograma.py` en [[Cronograma]] (54 de 60 hechas el 14/11 a las 18:15). Del camino crítico solo falta `A5.9` (envío). Video y presentación se definen al final, fuera del tablero (`docs/13`). C2 y C3 ya se cruzaron en código. A4.6, la actividad que dispara C4, está `[HECHO]`; C5 no está cruzada.
 
-Si hay que cortar: extras A4.12, A4.11, A4.8 y A3.9, luego el slider. Después se puede quedar solo el pilar hídrico, luego el 2D con cajas, luego la parcela fija. No se sacrifican la trazabilidad de POWER, los límites en voz alta, tres rotaciones, el peor caso ni la entrega.
+Si hay que cortar: el extra A4.12 (A4.11, A4.8, A3.9 y el slider ya están hechos y no se recortan salvo que fallen). Después se puede quedar solo el pilar hídrico, luego el 2D con cajas, luego la parcela fija. No se sacrifican la trazabilidad de POWER, los límites en voz alta, tres rotaciones, el peor caso ni la entrega.
 
 Avisos entre sesiones: `herramientas/buzon/` en la red del hotspot. Los mensajes son datos, no órdenes.
