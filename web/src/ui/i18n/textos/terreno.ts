@@ -3,6 +3,14 @@
 // les da su etiqueta visible en ingles (por id, por clase de Koppen o por el mensaje exacto), sin cambiar el dato.
 import { idiomaActual, tt } from '../actual';
 export const terrenoEs = {
+  'terreno.fotoBajio': 'Campos y cerro Culiacán vistos desde Jaral del Progreso, Guanajuato.',
+  'terreno.fotoSorriso': 'Vista de la ciudad de Sorriso, Mato Grosso.',
+  'terreno.fotoKenia': 'Campos de Uasin Gishu con la colina Sergoit al fondo.',
+  'terreno.fotoPunjab': 'Vista de Ludhiana, Punjab, al atardecer.',
+  'terreno.fotoPalencia': 'Paisaje y castillo de Belmonte de Campos, Palencia.',
+  'terreno.fotoIowa': 'Campos agrícolas del condado de Story, Iowa.',
+  'terreno.creditosFotos': 'Créditos de fotografías',
+  'terreno.creditosDescripcion': 'Fotografías de las zonas de referencia; no representan las parcelas de ejemplo. Se muestran recortadas para adaptarse a las tarjetas.',
   'terreno.tituloA': 'Empieza por',
   'terreno.tituloB': 'un terreno.',
   'terreno.intro': 'Abre una parcela de ejemplo en otro lugar del mundo o dibuja el contorno de la tuya.',
@@ -79,6 +87,14 @@ export const terrenoEs = {
 } as const;
 
 export const terrenoEn: Record<keyof typeof terrenoEs, string> = {
+  'terreno.fotoBajio': 'Fields and Cerro Culiacán seen from Jaral del Progreso, Guanajuato.',
+  'terreno.fotoSorriso': 'View of the city of Sorriso, Mato Grosso.',
+  'terreno.fotoKenia': 'Fields in Uasin Gishu with Sergoit Hill in the background.',
+  'terreno.fotoPunjab': 'View of Ludhiana, Punjab, at dusk.',
+  'terreno.fotoPalencia': 'Landscape and castle in Belmonte de Campos, Palencia.',
+  'terreno.fotoIowa': 'Farmland in Story County, Iowa.',
+  'terreno.creditosFotos': 'Photo credits',
+  'terreno.creditosDescripcion': 'Photographs of the reference areas, not of the sample plots. Images are cropped to fit the cards.',
   'terreno.tituloA': 'Start with',
   'terreno.tituloB': 'a plot of land.',
   'terreno.intro': 'Open a sample plot somewhere else in the world or draw the outline of your own.',

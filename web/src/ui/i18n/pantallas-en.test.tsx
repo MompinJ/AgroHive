@@ -8,11 +8,30 @@ import { DibujarParcela } from '../DibujarParcela';
 import { SelectorTamanoCelda } from '../SelectorTamanoCelda';
 import { koppenEn, mensajeCuadricula } from './textos/terreno';
 import { fijarIdiomaActual } from './actual';
+import { fotosEjemplos } from '../fotosEjemplos';
 
 const en = (nodo: React.ReactNode) => renderToStaticMarkup(<ProveedorIdioma idiomaInicial="en">{nodo}</ProveedorIdioma>);
 const es = (nodo: React.ReactNode) => renderToStaticMarkup(<ProveedorIdioma idiomaInicial="es">{nodo}</ProveedorIdioma>);
 
 describe('B7, Terreno en ingles (T3a y T6g)', () => {
+  it('los nombres propios de las fotos no ocultan texto sin traducir', () => {
+    expect(enEspanol('<p>Landscape in Belmonte de Campos, near Cerro Culiacán.</p>')).toEqual([]);
+    expect(enEspanol('<p>Campos de cultivo cerca de Cerro Culiacán.</p>')).not.toEqual([]);
+  });
+  it.each([
+    ['en', en, 'Sample plots, not field surveys', 'Photo credits'],
+    ['es', es, 'Parcelas de ejemplo, no son levantamientos', 'Créditos de fotografías'],
+  ] as const)('conserva aviso y atribuciones visibles en %s', (_idioma, render, aviso, titulo) => {
+    const html = render(<Terreno polygonMode={false} onElegirEjemplo={() => {}} ejemplo={null} parcela={null} onGuardar={() => {}} />);
+    expect(html).toContain(aviso);
+    expect(html).toContain(titulo);
+    expect(html).not.toContain('<details');
+    for (const foto of fotosEjemplos) {
+      expect(html).toContain(foto.autor);
+      expect(html).toContain(foto.licenciaUrl);
+      expect(html).toContain(foto.fuente);
+    }
+  });
   it('la lista de ejemplos y el dibujo no dejan espanol', () => {
     const html = en(<Terreno polygonMode={false} onElegirEjemplo={() => {}} ejemplo={null} parcela={null} onGuardar={() => {}} />);
     expect(html).toContain('Six places around the world');

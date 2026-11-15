@@ -207,15 +207,25 @@
 .dibujo-escala .parcel-scale-leyenda { margin: 0; font-size: var(--text-caption); color: var(--color-text); }
 
 /* Parcelas de ejemplo (E10): seis lugares del mundo con datos grabados. */
-.terrain-ejemplos { grid-template-columns: minmax(0, 1fr); }
+.terrain-ejemplos { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); }
 .terrain-ejemplos h2:focus { outline: none; }
 .terrain-ejemplos h2:focus-visible { outline: 3px solid var(--terrain-ink); outline-offset: 4px; }
-.terrain-ejemplos-lista { list-style: none; margin: 20px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.terrain-ejemplo { display: grid; gap: 2px; height: 100%; padding: 14px 16px; border: 1px solid var(--color-border); border-radius: 18px; color: var(--terrain-ink); text-decoration: none; background: var(--terrain-canvas); }
+.terrain-ejemplos-lista { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+.terrain-ejemplo { display: grid; grid-template-columns: minmax(0, 1fr) clamp(88px, 28%, 132px); min-height: 170px; height: 100%; overflow: hidden; border: 1px solid var(--color-border); border-radius: 18px; color: var(--terrain-ink); text-decoration: none; background: var(--terrain-canvas); }
+.terrain-ejemplo-texto { display: grid; align-content: center; gap: var(--space-2); min-width: 0; padding: 20px; }
+.terrain-ejemplo-imagen { position: relative; min-width: 0; align-self: stretch; }
+.terrain-ejemplo-imagen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.terrain-foto-creditos { margin-top: var(--space-4); color: var(--terrain-muted); font-size: .8125rem; line-height: 1.5; }
+.terrain-foto-creditos h3 { margin: 0; font: inherit; font-weight: 500; }
+.terrain-foto-creditos summary { cursor: pointer; min-height: 44px; display: list-item; align-content: center; }
+.terrain-foto-creditos p { max-width: 75ch; }
+.terrain-foto-creditos ul { padding-inline-start: 20px; }
+.terrain-foto-creditos li + li { margin-top: 8px; }
 .terrain-ejemplo strong { font-size: 16px; font-weight: 500; letter-spacing: -.01em; }
 .terrain-ejemplo-lugar { font-size: 13px; color: var(--terrain-body); }
 .terrain-ejemplo-cultivos { font-size: 12px; color: var(--terrain-muted); }
 .terrain-ejemplo[aria-current] { border-color: var(--terrain-ink); box-shadow: inset 0 0 0 1px var(--terrain-ink); }
 .terrain-option-copy > p.terrain-ejemplos-aviso { margin-top: 14px; font-size: 12px; color: var(--terrain-muted); }
 @media (hover: hover) { .terrain-ejemplo:hover { background: var(--terrain-panel); } }
+@media (max-width: 960px) { .terrain-ejemplos-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .terrain-ejemplos-lista { grid-template-columns: 1fr; } }

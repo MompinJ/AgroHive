@@ -189,3 +189,7 @@ Vite construye index.html y medir.html. Tras desplegar dist, la herramienta de A
 > Desde el 15/11 ya no hay vista 2D; los íconos se usan en la paleta de la brocha.
 
 Parcela2D consume los 20 SVG originales de modelos/iconos2d mediante ui/iconosCultivo2D.ts, sin copiar archivos ni importar Three.js. Cultivo/etapa del motor a 32 px y placa de estado completa debajo en celda cuadrada de 80 px. Sin datos, suelo desnudo o recurso desconocido no se inventa planta. Podrida solo por estado explícito. Ficha, leyenda y teclado se conservan. QA en producción sin WebGL: maíz/frijol y etapa al cambiar fecha, 320 px sin desborde, axe sin incidencias; captura evidencia/iconos-2d-frijol-320.png. Las condiciones de IA y revisión humana del arte permanecen en el README de origen.
+
+### Terreno: buscador y fotografías (15/11)
+El buscador vive dentro del mapa y conserva los vértices al trasladar la vista. Las seis tarjetas usan fotos de referencia con descripciones en español e inglés; debajo se muestran el aviso de parcela ficticia y los créditos, autores y enlaces de licencia, sin ocultarlos en un desplegable. Los textos están en ui/i18n/textos/terreno.ts y la procedencia original en ui/assets/lugares/creditos.json. La prueba pantallas-en comprueba ambos idiomas y la presencia de aviso y atribuciones.
+

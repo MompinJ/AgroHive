@@ -3,7 +3,7 @@
 // Los nombres propios de lugares y fuentes y los estados del contrato (NO_EVALUABLE, EXPLORATORIO) no cuentan.
 const PALABRAS = /\b(el|la|los|las|del|de|que|para|con|por|una|uno|sin|año|años|días|lluvia|cultivo|cultivos|siembra|suelo|agua|parcela|ejemplo|ejemplos|terreno|clima|mapa|celda|celdas|vértice|vértices|tamaño|elige|dibuja|usar|cargando|consultando|aviso|riesgo|fecha|seco|lluvioso|escenario|escenarios|comparación|método|fuentes)\b|[áéíóúñ¿¡]/i;
 const PERMITIDOS = [
-  /Bajío|Guanajuato|Jaral del Progreso|Castilla y León|Tierra de Campos|Uasin Gishu|Sorriso|Mato Grosso|Ludhiana|Punjab|Story County|Iowa|Rift Valley|Esquilote/g,
+  /Bajío|Guanajuato|Jaral del Progreso|Cerro Culiacán|Belmonte de Campos|Castilla y León|Tierra de Campos|Uasin Gishu|Sorriso|Mato Grosso|Ludhiana|Punjab|Story County|Iowa|Rift Valley|Esquilote/g,
   /NO_EVALUABLE|EXPLORATORIO|ERROR_DATOS|RESPALDO_HISTORICO|SUPUESTO/g,
   /México|Español/g,
 ];
