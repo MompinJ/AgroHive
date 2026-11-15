@@ -70,8 +70,8 @@ describe('tarjetas en ingles con la demo de Isla', () => {
     expect(r.porQue).toContain('dry year 2023, normal year 2016, wet year 2024');
     expect(r.beneficios).toContain('Dates: every planting falls within the windows recommended by INIFAP for the area.');
     expect(r.avisoExperto).toBe(AVISOS_EXPERTO.en);
-    // El nombre del cultivo sale del catalogo (nombreComunEn); aqui solo se fija la frase.
-    expect(en.R1!.explicacion.riesgos.some((x) => /^The \S+ of cycle 2 is planted on November 1, outside the window recommended by INIFAP \(from September 20 to October 20\)\.$/.test(x))).toBe(true);
+    // El nombre del cultivo sale del catalogo (nombreComunEn).
+    expect(en.R1!.explicacion.riesgos.some((x) => /^The common bean of cycle 2 is planted on November 1, outside the window recommended by INIFAP \(from September 20 to October 20\)\.$/.test(x))).toBe(true);
   });
 
   it('mismas cifras y fuentes en la evidencia; nada fuera de la tarjeta cambia', () => {

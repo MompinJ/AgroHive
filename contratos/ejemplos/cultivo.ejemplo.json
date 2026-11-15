@@ -9,6 +9,7 @@
     {
       "id": "maiz",
       "nombreComun": "Maiz",
+      "nombreComunEn": "Maize",
       "nombreCientifico": "Zea mays",
       "estado": "NO_EVALUABLE",
       "esLeguminosa": false,

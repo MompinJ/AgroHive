@@ -3,7 +3,7 @@
 // - suelos.json contra contratos/tabla-suelos.schema.json
 // - calendario-isla.json contra contratos/calendario-local.schema.json
 // Ademas comprueba reglas que el schema no ve: etapas suman el ciclo, clases sin repetir,
-// cada grupo del selector apunta a una clase EVALUABLE.
+// cada grupo del selector apunta a una clase EVALUABLE, cada cultivo tiene nombreComunEn con su fuente en notas.
 // Uso (desde la raiz): node datos/catalogos/validar.mjs   (requiere `npm install` en contratos/)
 
 import { readFileSync, readdirSync } from "node:fs";
@@ -44,6 +44,9 @@ const validarContra = (archivo, id) => {
 
 const cultivos = validarContra("cultivos.json", "https://agrohive.example/contratos/cultivo.schema.json");
 for (const c of cultivos.cultivos) {
+  // 0.16.0: el catalogo real trae el nombre en ingles de cada cultivo, con su fila citada en notas (generar.py, NOMBRES_EN).
+  if (!c.nombreComunEn) fallar(`${c.id}: falta nombreComunEn`);
+  else if (!(c.notas ?? "").includes(`Nombre en ingles '${c.nombreComunEn}'`)) fallar(`${c.id}: nombreComunEn sin su fuente en notas`);
   const ciclo = c.cicloDias;
   const etapas = Object.values(c.duracionEtapasDias);
   if (ciclo.estado === "EVALUABLE" && etapas.every((e) => e.estado === "EVALUABLE")) {

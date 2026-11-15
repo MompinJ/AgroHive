@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
-VERSION_CONTRATO = "0.14.0"
+VERSION_CONTRATO = "0.16.0"
 VERSION_CATALOGO = "0.1.0"
 CONSULTADO = "2026-11-14"
 
@@ -1011,6 +1011,71 @@ ADVERTENCIAS_ISLA_AMPLIACION = [
 ]
 
 
+# Nombre comun en ingles (contrato 0.16.0, [DECIDIDO] 15/11: la app tiene espanol e ingles). Sale de una fila que el
+# cultivo YA usa: "t11" o "t12" (FAO-56 Tabla 11 o 12) o "eco" (FAO EcoCrop); "grin" solo para el chile, que no tiene fila
+# propia. Si el nombre no es la fila tal cual (singular, orden invertido o un nombre comun en vez del tecnico), se dice en
+# "como"; las elecciones marcadas revisar=True estan en la tabla de datos/catalogos/README.md para revision humana.
+GRIN_CHILE = ("GRIN-Global (USDA ARS), Capsicum annuum L. var. annuum, nombres comunes en ingles (Hortus third): 'chili pepper'",
+              "https://npgsweb.ars-grin.gov/gringlobal/taxon/taxonomydetail?id=311784")
+NOMBRES_EN = {
+    "maiz": ("Maize", "eco", None, False),
+    "frijol": ("Common bean", "eco", "orden invertido de 'Bean, Common'", False),
+    "calabaza": ("Pumpkin", "eco", None, False),
+    "chile": ("Chili pepper", "grin", "FAO-56 y EcoCrop solo traen 'Sweet peppers (bell)', el pimiento dulce", True),
+    "sorgo": ("Sorghum", "t11", None, False),
+    "sandia": ("Watermelon", "t12", None, False),
+    "camote": ("Sweet potato", "t11", None, False),
+    "cacahuate": ("Peanut", "t12", "el nombre entre parentesis de 'Groundnut (Peanut)', el usual en America", False),
+    "soya": ("Soybean", "t12", "singular de 'Soybeans'", False),
+    "caupi": ("Cowpea", "eco", None, False),
+    "haba": ("Faba bean", "t11", "primer nombre de 'Faba bean, broad bean'", False),
+    "chicharo": ("Pea", "eco", None, False),
+    "lenteja": ("Lentil", "t11", None, False),
+    "ejote": ("Green bean", "t12", "orden invertido y singular de 'Beans, green'", False),
+    "cebada": ("Barley", "t12", None, False),
+    "trigo": ("Wheat", "eco", "sin el calificativo de 'Wheat, common'", False),
+    "avena": ("Oats", "t12", None, False),
+    "maiz_dulce": ("Sweet corn", "eco", None, False),
+    "yuca": ("Cassava", "eco", None, False),
+    "cana": ("Sugarcane", "eco", None, False),
+    "ajonjoli": ("Sesame", "t11", None, False),
+    "girasol": ("Sunflower", "t11", None, False),
+    "algodon": ("Cotton", "t11", None, False),
+    "cartamo": ("Safflower", "t11", None, False),
+    "higuerilla": ("Castor bean", "t11", "singular de 'Castor beans'", False),
+    "tomate": ("Tomato", "t11", None, False),
+    "papa": ("Potato", "t11", None, False),
+    "calabacita": ("Zucchini", "t12", "el nombre del cultivo en 'Squash, Zucchini'", False),
+    "cebolla": ("Onion", "eco", None, False),
+    "pepino": ("Cucumber", "t11", None, False),
+    "melon": ("Melon", "t12", "nombre comun en vez de 'Sweet Melons' (EcoCrop: 'Musk melon')", True),
+    "lechuga": ("Lettuce", "t11", None, False),
+    "zanahoria": ("Carrot", "eco", None, False),
+    "berenjena": ("Eggplant", "eco", None, False),
+    "brocoli": ("Broccoli", "t11", None, False),
+    "col": ("Cabbage", "t11", None, False),
+    "coliflor": ("Cauliflower", "t11", None, False),
+    "espinaca": ("Spinach", "t11", None, False),
+    "rabano": ("Radish", "t11", None, False),
+    "betabel": ("Table beet", "t12", "orden invertido y singular de 'Beets, table'", False),
+}
+
+
+def nombre_en(c):
+    """(nombre, frase de la fuente) del nombre en ingles; la frase va en notas."""
+    nombre, origen, como, revisar = NOMBRES_EN[c["id"]]
+    if origen == "grin":
+        donde = f"{GRIN_CHILE[0]}, {GRIN_CHILE[1]}"
+    else:
+        donde = {"t11": f"FAO-56 Tabla 11, fila '{c['t11']['fila']}'", "t12": f"FAO-56 Tabla 12, fila '{c['t12']['fila']}'",
+                 "eco": f"FAO EcoCrop, fila '{c['eco']['fila']}'"}[origen]
+        fila = {"t11": c["t11"]["fila"], "t12": c["t12"]["fila"], "eco": c["eco"]["fila"]}[origen]
+        assert como or nombre.lower() == fila.lower(), (c["id"], nombre, fila)  # si no es la fila tal cual, se dice como se tomo
+    detalle = f"; {como}" if como else ""
+    marca = "; eleccion marcada para revision humana (datos/catalogos/README.md)" if revisar else ""
+    return nombre, f"Nombre en ingles '{nombre}': {donde}{detalle}{marca}."
+
+
 def cultivo(c):
     t11, t12, t22, eco = c["t11"], c["t12"], c["t22"], c["eco"]
     f11 = fuente(f"{FAO56}, Tabla 11", URL_FAO56_CAP6,
@@ -1037,9 +1102,11 @@ def cultivo(c):
     nota_lluvia = (f"Rango absoluto de lluvia anual de EcoCrop; el optimo es {eco['ropmn']} a {eco['ropmx']} mm/anio "
                    f"(ROPMN, ROPMX). No es lluvia del ciclo. " + NOTA_ECOCROP)
     lluvia_ciclo = no_evaluable(MOTIVO_LLUVIA_CICLO)
+    en, nota_en = nombre_en(c)
     return {
         "id": c["id"],
         "nombreComun": c["nombreComun"],
+        "nombreComunEn": en,
         "nombreCientifico": c["nombreCientifico"],
         "estado": "EVALUABLE",
         "esLeguminosa": c["esLeguminosa"],
@@ -1068,6 +1135,7 @@ def cultivo(c):
             "Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
             + (" " + c["equivalencia"] if "equivalencia" in c else "")
             + (" " + c["nota_extra"] if "nota_extra" in c else "")
+            + " " + nota_en
         ),
     }
 
