@@ -9,6 +9,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Evidencia:** lectura pública sin sesión: repo accesible; aplicación 200; `/health` aún declara commit `23f8a53` y contratos `0.12.2`; `/medir.html?auto=0` devuelve Inicio, sin control de medición, aunque el código local incluye esa página. Eduardo fue avisado (#260). La página de Boca del Río confirma sede y Local Lead; no se obtuvo horario local verificable. Capturas del portal de equipo, demo, membresía, OK del equipo y confirmación de envío siguen pendientes.
 - **Límites:** textos sujetos a revisión científica y de A5.7, idioma y atribuciones pendientes. No se crea cuenta/equipo, no se publica, no se aceptan declaraciones y no se envía formulario.
 
+### 2026-11-14 (noche) — Fase de revisión `[DECIDIDO]` (Mompin; registrado por la cronista)
+
+- **Archivos:** `docs/13` (filas "Fase de revisión" y "Envío cuando todos estén satisfechos"), `docs/14` (sección "Fase de revisión" y nota "pospuesta hasta el final" en A0.3, A4.4, A5.7 y A5.9; vistas regeneradas), `AgroVault/Compartido/Pendientes.md` y `Resumen.md`.
+- **Cambio:** Mompin decidió entrar en fase de revisión: ahora se revisa y valida, sobre todo el frontend. Las cuatro actividades restantes quedan pospuestas hasta el final; conservan su estado (`cronograma.py` no tiene un estado nuevo) y llevan la nota en su fila. El envío se hace solo cuando todos digan que están satisfechos. No se agregó una fase F6 al tablero: basta la sección.
+- **Evidencia:** `origin/main` 7931059; `cronograma.py`: 56 de 60 hechas, 1 en curso (A5.7) y 3 pendientes (A0.3, A4.4, A5.9).
+- **Decisiones afectadas:** A0.3, A4.4, A5.7 y A5.9 (pospuestas); A5.9 (condición de envío).
+- **Fechas:** varias entradas y notas decían 15/11 para trabajo de esta noche (commits del 14/11 entre 18:30 y 18:40, hora de la sede; en UTC ya era 15/11). Se pasan a 14/11 (noche) en 01, 11, 13, 14 y la vault; el cierre del 15/11 a las 23:59 no cambia.
+
 ### 2026-11-14 (noche) — A4.12: se borra la propuesta `ee-uu` (Eduardo)
 
 - **Archivos:** se elimina `api/propuestas-contrato/ee-uu.schema.json` (el directorio queda vacío y también se quita); `api/app/modelos_regional.py` (docstring).
@@ -16,28 +24,34 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Pendiente:** desplegar la API cuando Mompin dé el OK. `VERIFICAR` términos de uso de CDL antes de redistribuir datos.
 - **Decisiones afectadas:** ninguna. Cierra el pendiente de borrar la propuesta.
 
-### 2026-11-15 — A4.12 hecha: CDL y SSURGO para coordenadas de EE. UU. (Eduardo)
+### 2026-11-14 (noche) — A4.12 hecha: CDL y SSURGO para coordenadas de EE. UU. (Eduardo)
 
 - **Archivos:** `api/app/clientes/cropscape.py`, `api/app/clientes/sda.py`, `api/app/regional.py`, `api/app/modelos_regional.py`, `api/app/rutas/regional.py`, `api/app/main.py`; `api/tests/test_regional.py` y `conftest.py` (carga las propuestas de contrato); `api/propuestas-contrato/ee-uu.schema.json` (nuevo); `datos/pruebas-apis/respuestas/cropscape_iowa_2008_2025.json` y `sda_ssurgo_iowa.json`; `api/README.md`, `docs/11`, `docs/14`, `AgroVault/Compartido/{APIs,Contratos,Codigo,Pendientes}.md`.
 - **Cambio:** `GET /api/ee-uu/cdl` da el cultivo de cada año (2008 a 2025) en el pixel de 30 m del punto (USDA NASS CDL por CropScape, en EPSG:5070). `GET /api/ee-uu/ssurgo` da el componente dominante de SSURGO (Soil Data Access), sus horizontes y el agua disponible a 100 cm (suma de awc_r x espesor, sin extrapolar). Fuera de EE. UU. contiguos responden `NO_EVALUABLE` sin llamar. La categoría de CDL va tal cual; solo se enlaza al catálogo si el nombre coincide exacto. La interfaz no las llama; no cambian motor, contratos ni paquete de demo.
-- **Por qué ahora:** la fila decía "después de C5". Eduardo decidió el 15/11 hacerla ya porque es aditiva y el resto de sus actividades estaba cerrado.
+- **Por qué ahora:** la fila decía "después de C5". Eduardo decidió el 14/11 (noche) hacerla ya porque es aditiva y el resto de sus actividades estaba cerrado.
 - **Fuente / evidencia:** respuestas reales del 14/11 en Iowa (-93.4, 42.05; punto de prueba): CDL maíz y soya alternados de 2014 a 2025 (2011 a 2013 maíz); SSURGO Webster clay loam (90 %), grupo C/D, 180 mm a 100 cm. 13 pruebas nuevas; 137 en total en `api/`.
 - **Pendiente:** Mompin pasa `api/propuestas-contrato/ee-uu.schema.json` a `contratos/` si lo acepta (las pruebas usan la de `contratos/` en cuanto exista). `VERIFICAR` términos de uso de CDL antes de redistribuir datos.
 - **Decisiones afectadas:** ninguna de alcance del MVP. Eduardo 19 de 19.
 
-### 2026-11-15 — A5.4 hecha: requisitos medidos con GPU real y sin GPU (Eduardo)
+### 2026-11-14 (noche) — A5.4 hecha: requisitos medidos con GPU real y sin GPU (Eduardo)
 
 - **Archivos:** `docs/06` (tabla de requisitos), `docs/10` (respuesta a jueces), `docs/11` (V-11), `docs/14`; evidencia en `docs/capturas/medicion-a5-4/`.
 - **Cambio:** se corrió `herramientas/medir-escena/medir.mjs` con la escena de `main` (518 celdas, bloques de 24 cubos). Con GPU real (Apple M5 Max, WebGL2): 114.8 cuadros/s con maíz en madurez y 105.1 con la mezcla; sin GPU (SwiftShader, mismo equipo): 9.4 en ambos. 191 416 triángulos, 5 a 8 draw calls, primera escena en 0.3 a 1.2 s. Pérdida y recuperación del contexto WebGL sin errores.
 - **Límites:** la Mac es de gama alta; no se midió un celular ni una laptop modesta física. Con GPU real el reposo no llegó siempre a 0 cuadros (demo y mezcla); con software sí. Causa no identificada; se avisa a Mompin.
 - **Decisiones afectadas:** ninguna. V-11 queda con evidencia.
 
-### 2026-11-15 — Token de SMAP verificado, README y A5.4 corregidos (Eduardo)
+### 2026-11-14 (noche) — Token de SMAP verificado, README y A5.4 corregidos (Eduardo)
 
 - **Archivos:** `README.md` (tabla de fuentes NASA), `docs/14` (A5.4; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`.
 - **Verificado:** `GET /api/smap` en `https://64-23-143-102.sslip.io` (Isla, 2024-06-01 a 2024-06-03) responde 200 `EVALUABLE`, asi que `EARTHDATA_TOKEN` esta en el entorno del servicio. No se leyo ni se copio su valor y no hay llaves en el repo. A4.8 ya estaba `[HECHO]` en `docs/14`; las entradas anteriores de este registro que dicen "falta el OK del token" eran de antes y se conservan como historia.
 - **Cambio:** el README decia que SMAP "no esta en la demo pública" por falta del token y que MODIS NDVI estaba "pendiente"; ahora dice lo que hay (SMAP en la API publica; NDVI en la API y en el paquete de demo; la interfaz no muestra ninguno de los dos). A5.4 pasa de `[BLOQUEADO]` a `[EN CURSO]`: sus dependencias (A3.6 y la herramienta de medicion, con `medir.html` en el build) estan en `main`; la nota usa las cifras mas recientes de Mompin (191 416 triangulos y 6.7 cuadros/s con los 20 bloques) en lugar de las anteriores. Falta solo medir en hardware real y publicar `medir.html` en el droplet (despliegue con la senal de Mompin).
 - **Decisiones afectadas:** ninguna. Proyecto en 54 de 60 hechas (90 %), 2 en curso (A5.4 y A5.7), 0 bloqueadas, segun `herramientas/cronograma.py`.
+
+### 2026-11-14 — Reposo con GPU real: desglose por motivo; sorgo en la escena (Mompin)
+
+- **Archivos:** `web/src/escena/render/escena-three.ts` (`pedirCuadro(motivo)` y `cuadrosPorMotivo` en las estadísticas), `medir/medir.tsx` y `herramientas/medir-escena/medir.mjs` (motivos del reposo), `ficha.ts` (nombres de sorgo, sandía, camote y cacahuate), `voxel/catalogo.ts` y `fuente-modelos.ts` (cómo entra un cultivo nuevo), `demo-motor.ts` y `vista-previa.tsx` (rotación de prueba R3 con sorgo); `docs/06`.
+- **Investigación:** no se reproduce sin GPU real. Probado con SwiftShader a densidad 1, 1.5 y 2 y anchos impares (siempre 0). Descartado `KHR_parallel_shader_compile`, que three.js solo usa en `compileAsync`. Queda el desglose para que Eduardo vuelva a medir.
+- **Sorgo:** se ve en sus etapas en manchón y en la celda elegida; sin cambios de código.
 
 ### 2026-11-14 (noche) — Nota de A5.4 y plan de recorte al día (cronista, pedido de Mompin)
 
@@ -95,6 +109,13 @@ Cambio y motivo:
 Fuente / evidencia:
 Decisiones afectadas:
 ```
+
+### 2026-11-14 (noche) — Íconos 2D del sorgo (encargo #198, Mafer)
+
+- **Archivos:** `modelos/iconos2d/iconos2d.py`, `sorgo_<etapa>.svg` (5), `visor_iconos.html`, `README.md`; `web/src/escena/pruebas/iconos2d.test.ts` (ahora 25 íconos).
+- **Cambio:** íconos 16 × 16 del sorgo en sus 5 etapas con la paleta compartida y sin colores nuevos: semillas redondas rojizas, plantita con hojas caídas, planta con hojas caídas, planta con panoja rojiza y desenlace podrido con la panoja colgando a la izquierda. Se rediseñaron brote, crecimiento y podrida hasta que todo par de los 25 pasó el criterio de daltonismo (12 % de píxeles con dE ≥ 15 en las 4 vistas, `[PROPUESTA]`). `web/src/ui/iconosCultivo2D.ts` (de balam) los toma solo del directorio, sin cambios.
+- **Pendiente:** revisión visual humana; los de sandía, camote y cacahuate.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-14 (noche) — Modelo 3D del sorgo y sus 5 bloques (encargo #198, Mafer)
 

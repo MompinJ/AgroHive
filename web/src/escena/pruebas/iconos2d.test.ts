@@ -9,7 +9,7 @@ import { diferenciaColor, VISTAS_COLOR, type VistaColor } from '../daltonismo';
 // de iconos se distinga bajo las tres dicromacias.
 const raiz = fileURLToPath(new URL('../../../../', import.meta.url));
 const carpeta = `${raiz}modelos/iconos2d/`;
-const CULTIVOS = ['maiz', 'frijol', 'calabaza', 'chile'];
+const CULTIVOS = ['maiz', 'frijol', 'calabaza', 'chile', 'sorgo'];
 const ETAPAS = ['siembra', 'brote', 'crecimiento', 'madurez', 'podrida'];
 const NOMBRES = CULTIVOS.flatMap((c) => ETAPAS.map((e) => `${c}_${e}`));
 const LADO = 16;
@@ -49,7 +49,7 @@ function fraccionDistinta(a: Pixeles, b: Pixeles, vista: VistaColor): number {
 const iconos = new Map(NOMBRES.filter((n) => existsSync(`${carpeta}${n}.svg`)).map((n) => [n, leerSvg(n)] as const));
 
 describe('iconos 2D de modelos/iconos2d', () => {
-  it('estan los 20 (4 cultivos x 5 etapas) y el visor', () => {
+  it('estan los 25 (5 cultivos x 5 etapas) y el visor', () => {
     for (const n of NOMBRES) expect(existsSync(`${carpeta}${n}.svg`), `falta ${n}.svg`).toBe(true);
     expect(existsSync(`${carpeta}visor_iconos.html`)).toBe(true);
   });

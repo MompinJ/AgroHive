@@ -1,6 +1,6 @@
 // Cliente de la API de AgroHive (A4.6). Los datos usan los tipos de contratos/ (fuente de verdad); el cliente generado
 // desde OpenAPI (api/cliente/api.d.ts) solo describe las llamadas HTTP: la entrada y la respuesta de /api/elevacion.
-import type { CatalogoCultivos, ProximaTemporadaAproximada, SerieClima, Suelo } from '../../../contratos/tipos/contratos';
+import type { CalendarioLocal, CatalogoCultivos, ProximaTemporadaAproximada, SerieClima, Suelo } from '../../../contratos/tipos/contratos';
 import type { components } from '../../../api/cliente/api';
 
 export type TerrenoEntrada = components['schemas']['TerrenoEntrada'];
@@ -79,6 +79,8 @@ export const obtenerSuelo = (lon: number, lat: number, o?: Opciones) => pedir<Su
 export const obtenerProximaTemporada = (lon: number, lat: number, o?: Opciones) =>
   pedir<ProximaTemporadaAproximada>(`/api/proxima-temporada?${consulta({ lat, lon })}`, {}, o);
 export const obtenerCultivos = (o?: Opciones) => pedir<CatalogoCultivos>('/api/cultivos', {}, o);
+/** Calendario de siembra del punto: SIAP/INIFAP en Isla; fuera de Mexico, maiz de temporal de GGCMI fase 3 (A4.13). */
+export const obtenerCalendario = (lon: number, lat: number, o?: Opciones) => pedir<CalendarioLocal>(`/api/calendario?${consulta({ lat, lon })}`, {}, o);
 /** Elevacion y pendiente de una cuadricula ya generada por el front (tope 1600 celdas). */
 export const obtenerTerreno = (entrada: TerrenoEntrada, o?: Opciones) =>
   pedir<TerrenoRespuesta>('/api/elevacion', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(entrada) }, o);

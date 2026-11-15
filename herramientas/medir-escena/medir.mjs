@@ -114,7 +114,7 @@ const lineas = [
   `Equipo: ${resultado.equipo.nucleos ?? '?'} nucleos · memoria ${resultado.equipo.memoriaGB ?? '?'} GB · pantalla ${resultado.equipo.pantalla} · dpr ${resultado.equipo.dpr}`,
   ...resultado.medidas.map(
     (m) =>
-      `- ${m.caso}: primera escena ${m.primeraEscenaMs ?? 'sin dato'} ms · ${m.triangulos} triangulos · ${m.drawCalls} draw calls · ${m.cuadrosEnReposo} cuadros en ${m.segundosReposo} s de reposo · ${m.cuadrosPorSegundoConViento} cuadros/s con viento · memoria ${m.memoriaMB ?? 'no disponible'} MB · lluvia del dia ${m.lluviaDelDia}${m.nota ? ` · ${m.nota}` : ''}`,
+      `- ${m.caso}: primera escena ${m.primeraEscenaMs ?? 'sin dato'} ms · ${m.triangulos} triangulos · ${m.drawCalls} draw calls · ${m.cuadrosEnReposo} cuadros en ${m.segundosReposo} s de reposo${Object.keys(m.reposoPorMotivo ?? {}).length ? ` (${Object.entries(m.reposoPorMotivo).map(([k, v]) => `${k}: ${v}`).join(', ')})` : ''} · ${m.cuadrosPorSegundoConViento} cuadros/s con viento · memoria ${m.memoriaMB ?? 'no disponible'} MB · lluvia del dia ${m.lluviaDelDia}${m.nota ? ` · ${m.nota}` : ''}`,
   ),
   `Perdida de contexto: ${resultado.perdidaContexto ? (resultado.perdidaContexto.extension ? `perdido ${resultado.perdidaContexto.perdido ? 'si' : 'no'}, recuperado ${resultado.perdidaContexto.restaurado ? 'si' : 'no'}` : 'sin WEBGL_lose_context') : 'no se probo'}`,
   `Errores: ${[...resultado.errores, ...errores].length === 0 ? 'ninguno' : [...resultado.errores, ...errores].join(' | ')}`,

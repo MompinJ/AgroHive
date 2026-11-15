@@ -1,6 +1,6 @@
 # Iconos 2D de cultivos
 
-20 sprites SVG (maiz, frijol, calabaza y chile x siembra, brote, crecimiento, madurez, podrida) para el modo 2D (A3.6).
+25 sprites SVG (maiz, frijol, calabaza, chile y sorgo x siembra, brote, crecimiento, madurez, podrida) para el modo 2D (A3.6).
 Nombre del archivo: `<cultivo>_<etapa>.svg`, igual que los modelos 3D de `modelos/cultivos/`.
 
 - Pixel art de 16 x 16, fondo transparente, `shape-rendering="crispEdges"`: nitidos a 32 px (x2) y 64 px (x4).

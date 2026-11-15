@@ -62,7 +62,7 @@ Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Al
 | Calendario de siembra mundial | **GGCMI fase 3** `[DECIDIDO]` (13): respaldo fuera de México, A4.13 `[HECHO]` (Eduardo, `GET /api/calendario`) | GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food; doi:10.5281/zenodo.5062513, CC BY 4.0): siembra y madurez de temporal a 0.5°, maíz `mai_rf` (servido) y frijol `bea_rf` (`[VERIFICAR]`: la ficha de Zenodo y el NetCDF, leídos el 14/11, no dicen que "bea" sea frijol; la API lo deja `NO_EVALUABLE`). GEOGLAM Crop Monitor (doi:10.5281/zenodo.15850408, CC BY 4.0): por estado, con temporadas de maíz equivalentes a PV y OI; que México venga en la descarga está `[VERIFICAR]`. SAGE (Sacks et al. 2010) es de los años 90 y débil en leguminosas. La API de FAO Crop Calendar (sin documentar) no respondió el 14/11. Ninguna trae calabaza ni chile: para esos cultivos, `NO_EVALUABLE` fuera de México |
 | Landsat / HLS / Sentinel-2 | No antes de C4 | Resolución útil (10 a 30 m), pero nubes en temporal y procesamiento pesado |
 | GLDAS, ECOSTRESS, GEDI | No | Repite `GWETROOT`; revisita irregular y nubes; estructura de bosque |
-| WSS, SSURGO/STATSGO2, CDL, PRISM, NAIP, NLCD, OpenET, LANDFIRE, NWIS, AMS, NASS, Ag Data Commons | Extra fase 2 (A4.12) | Solo EE. UU.; CDL y SSURGO son los únicos que aportan algo propio (rotación real y suelo de campo). CDL y SSURGO ya están en la API (`/api/ee-uu/cdl` y `/api/ee-uu/ssurgo`, 15/11); el resto no se integra |
+| WSS, SSURGO/STATSGO2, CDL, PRISM, NAIP, NLCD, OpenET, LANDFIRE, NWIS, AMS, NASS, Ag Data Commons | Extra fase 2 (A4.12) | Solo EE. UU.; CDL y SSURGO son los únicos que aportan algo propio (rotación real y suelo de campo). CDL y SSURGO ya están en la API (`/api/ee-uu/cdl` y `/api/ee-uu/ssurgo`, 14/11 noche); el resto no se integra |
 | NLDAS | No | Su dominio llega al sur solo hasta 25°N; Isla está en ~18°N |
 | CoCoRaHS | No | Sin evidencia de que opere en México `[VERIFICAR]` |
 
@@ -84,7 +84,7 @@ Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Al
 | V-08 | ~~Acceso a elevación~~ Decidido 14/11 (13): Terrarium por defecto, Open-Meteo de respaldo | — |
 | V-09 | Kc, ciclos, umbrales y calendarios por cultivo | Citar FAO/INIFAP; si no hay, `NO_EVALUABLE` |
 | V-10 | TAW por tipo de suelo | FAO-56 |
-| V-11 | Rendimiento del 3D en hardware real | Medido el 15/11 en GPU real y por software (A5.4, `docs/06`); falta un celular o laptop modesta; modo 2D |
+| V-11 | Rendimiento del 3D en hardware real | Medido el 14/11 (noche) en GPU real y por software (A5.4, `docs/06`); falta un celular o laptop modesta; modo 2D |
 | V-12 | Hosting (CORS, suspensión por inactividad) | Demo local y video de respaldo |
 | V-13 | Validación por profesional local | Si no hay, decir "sin validación local" |
 | V-14 | Cargar `.bbmodel` del agente en la escena real con instancing | Probar con el primer cultivo |

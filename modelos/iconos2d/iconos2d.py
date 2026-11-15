@@ -23,7 +23,7 @@ from paleta import PALETA_AGROHIVE as PAL  # noqa: E402
 
 N = 16
 ETAPAS = ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')
-NOMBRES = {'maiz': 'Maíz', 'frijol': 'Frijol', 'calabaza': 'Calabaza', 'chile': 'Chile'}
+NOMBRES = {'maiz': 'Maíz', 'frijol': 'Frijol', 'calabaza': 'Calabaza', 'chile': 'Chile', 'sorgo': 'Sorgo'}
 ETIQUETAS = {'siembra': 'en siembra', 'brote': 'en brote', 'crecimiento': 'en crecimiento', 'madurez': 'en madurez',
              'podrida': 'podrida'}
 
@@ -231,6 +231,49 @@ def chile_podrida(c):
     c.r(3, 10, 5, 10, 'hoja_marchita')
     c.r(9, 5, 10, 9, 'podrido'); c.p(9, 10, 'podrido_dark'); c.r(9, 4, 10, 4, 'moho')
     c.r(5, 12, 6, 12, 'moho_dark')
+
+
+# ---------------- sorgo ----------------
+def sorgo_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((1, 10), (5, 11), (9, 10), (13, 11)):
+        c.r(x, y, x + 1, y + 1, 'cabello'); c.p(x, y, 'cabello_light'); c.p(x + 1, y + 1, 'wood')
+
+
+def sorgo_brote(c):
+    c.suelo()
+    c.r(7, 6, 8, 12, 'maiz_tallo'); c.r(7, 4, 8, 5, 'maiz_hoja_light')
+    for x, y in ((6, 6), (5, 7), (4, 8), (3, 9), (2, 10), (6, 9), (5, 10), (4, 11)):
+        c.p(x, y, 'maiz_hoja_dark')
+    for x, y in ((9, 6), (10, 7), (11, 8), (12, 9), (13, 10), (9, 9), (10, 10), (11, 11)):
+        c.p(x, y, 'maiz_hoja_light')
+
+
+def sorgo_crecimiento(c):
+    c.suelo()
+    c.r(7, 2, 8, 12, 'maiz_tallo_dark'); c.r(8, 2, 8, 12, 'maiz_tallo_light')
+    for x, y in ((6, 5), (5, 6), (4, 7), (3, 8), (6, 9), (5, 10), (4, 11)):
+        c.p(x, y, 'maiz_hoja_light'); c.p(x, y + 1 if y < 11 else y, 'maiz_hoja_dark')
+    for x, y in ((9, 4), (10, 5), (11, 6), (12, 7), (9, 9), (10, 10), (11, 11)):
+        c.p(x, y, 'maiz_hoja_light')
+    c.r(7, 0, 8, 1, 'maiz_hoja_light')
+
+
+def sorgo_madurez(c):
+    c.suelo()
+    c.r(7, 5, 8, 12, 'maiz_tallo')
+    c.r(3, 9, 6, 9, 'maiz_hoja'); c.p(2, 10, 'maiz_hoja')
+    c.r(9, 8, 12, 8, 'maiz_hoja_light'); c.p(13, 9, 'maiz_hoja_light')
+    c.r(6, 1, 9, 4, 'cabello'); c.r(7, 0, 8, 0, 'cabello'); c.r(7, 5, 8, 5, 'cabello')
+    c.r(6, 1, 7, 2, 'cabello_light'); c.r(9, 3, 9, 4, 'wood'); c.p(8, 4, 'wood')
+
+
+def sorgo_podrida(c):
+    c.suelo(seco=True)
+    c.r(7, 9, 8, 12, 'hoja_seca_dark'); c.p(7, 8, 'hoja_seca_dark'); c.r(5, 7, 6, 7, 'hoja_seca_dark')
+    c.r(3, 8, 5, 12, 'podrido'); c.r(3, 7, 4, 7, 'moho_light'); c.r(3, 10, 3, 11, 'moho'); c.p(5, 12, 'podrido_dark')
+    c.r(10, 10, 13, 10, 'hoja_seca'); c.p(14, 11, 'hoja_seca_dark')
+    c.r(9, 12, 10, 12, 'moho_dark')
 
 
 DIBUJOS = {f'{cultivo}_{etapa}': globals()[f'{cultivo}_{etapa}'] for cultivo in NOMBRES for etapa in ETAPAS}

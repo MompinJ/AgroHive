@@ -33,6 +33,8 @@ interface Medida {
   triangulos: number;
   drawCalls: number;
   cuadrosEnReposo: number;
+  /** Desglose de los cuadros en reposo: que los pidio (deberia estar vacio). */
+  reposoPorMotivo: Record<string, number>;
   segundosReposo: number;
   cuadrosPorSegundoConViento: number;
   segundosViento: number;
@@ -65,6 +67,16 @@ declare global {
 }
 
 const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Cuadros por motivo entre dos lecturas de estadisticas (solo los que crecieron). */
+function diferencia(antes: Record<string, number | undefined>, despues: Record<string, number | undefined>): Record<string, number> {
+  const d: Record<string, number> = {};
+  for (const [k, v] of Object.entries(despues)) {
+    const n = (v ?? 0) - (antes[k] ?? 0);
+    if (n > 0) d[k] = n;
+  }
+  return d;
+}
 
 function infoGpu(): Resultado['gpu'] {
   const c = document.createElement('canvas');
@@ -222,6 +234,7 @@ function Medidor() {
           triangulos: quieto.triangulos,
           drawCalls: quieto.drawCalls,
           cuadrosEnReposo: tras.cuadros - quieto.cuadros,
+          reposoPorMotivo: diferencia(quieto.cuadrosPorMotivo, tras.cuadrosPorMotivo),
           segundosReposo: SEG_REPOSO,
           cuadrosPorSegundoConViento: Math.round(((b.cuadros - a.cuadros) / segundos) * 10) / 10,
           segundosViento: SEG_VIENTO,
@@ -285,7 +298,7 @@ function Medidor() {
           <table style={{ fontSize: '0.8rem', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                {['Caso', 'Celdas', 'Primera escena (ms)', 'Triángulos', 'Draw calls', 'Cuadros en reposo', 'Cuadros/s con viento', 'Memoria (MB)'].map((h) => (
+                {['Caso', 'Celdas', 'Primera escena (ms)', 'Triángulos', 'Draw calls', 'Cuadros en reposo (motivo)', 'Cuadros/s con viento', 'Memoria (MB)'].map((h) => (
                   <th key={h} style={{ textAlign: 'left', padding: 4, borderBottom: '1px solid #ccc' }}>{h}</th>
                 ))}
               </tr>
@@ -293,7 +306,7 @@ function Medidor() {
             <tbody>
               {resultado.medidas.map((m) => (
                 <tr key={m.caso}>
-                  {[m.caso, m.celdas, m.primeraEscenaMs ?? 'sin dato', m.triangulos, m.drawCalls, `${m.cuadrosEnReposo} en ${m.segundosReposo} s`, m.cuadrosPorSegundoConViento, m.memoriaMB ?? 'no disponible'].map((v, k) => (
+                  {[m.caso, m.celdas, m.primeraEscenaMs ?? 'sin dato', m.triangulos, m.drawCalls, `${m.cuadrosEnReposo} en ${m.segundosReposo} s${Object.keys(m.reposoPorMotivo).length ? ` (${Object.entries(m.reposoPorMotivo).map(([k, v]) => `${k}: ${v}`).join(', ')})` : ''}`, m.cuadrosPorSegundoConViento, m.memoriaMB ?? 'no disponible'].map((v, k) => (
                     <td key={k} style={{ padding: 4 }}>{String(v)}</td>
                   ))}
                 </tr>
