@@ -20,6 +20,16 @@ npm run preview
 
 ## Vistas y estado
 
+### B7: idioma, primera parte (15/11/2026)
+
+Base propia sin dependencias en `src/ui/i18n/`: `ProveedorIdioma`, `useIdioma`, `SelectorIdioma`, diccionarios tipados y preferencia `agrohive-idioma`. Prioridad: elección guardada válida, idioma inglés del navegador y, en los demás casos, español. Lectura y escritura de almacenamiento protegidas con `try/catch`; si falla, el selector sigue funcionando en memoria. El proveedor actualiza `html[lang]` sin recargar la página.
+
+Integrados y traducidos: Inicio y la barra de pasos. El selector aparece en ambos; en cabecera móvil la etiqueta permanece accesible y los cuatro pasos conservan sus enlaces o estado bloqueado. La etiqueta y el campo no heredan el ancho global del 100 % de los formularios. Verificados español/inglés a 320, 390, 760, 860, 1024 y 1440 px y cabecera en RTL sin desbordamiento; zoom nativo al 200 % no verificado.
+
+Esta parte no constituye una traducción completa: Terreno, laboratorio, tutorial, Método, avisos de API, títulos de página y textos compartidos pendientes se migran después de coordinar con Eduardo. Las claves `estado.*` y `escenario.*` traducen etiquetas, nunca los valores de contratos ni las cifras. Los nombres ingleses de cultivos requieren un campo de catálogo acordado con Mompin; las explicaciones de tarjetas se traducirán en el motor por su responsable, no en la UI. No se cambia la selección de parcela, el plan ni los cálculos al elegir idioma.
+
+Patrón: envolver componentes con `ProveedorIdioma`, consumir `const { idioma, cambiarIdioma, t } = useIdioma()` y añadir cada clave a ambos diccionarios; TypeScript exige paridad. Las pruebas de `src/ui/i18n/idioma.test.tsx` cubren persistencia fallida, preferencias inválidas, interpolación, selector y navegación bloqueada en inglés. No concatenar traducciones con salidas científicas del motor para inventar una explicación nueva.
+
 - `#/`: P0, presentación y acceso a demo o entrada de polígono.
 - `#/terreno`: paso 1, una de las seis parcelas de ejemplo mundiales (`demo/ejemplos.ts`) o `?modo=poligono` para dibujar la parcela.
 - `#/laboratorio`: paso 2, Cultivos: rotación, ciclo y brocha sobre la escena de fondo.

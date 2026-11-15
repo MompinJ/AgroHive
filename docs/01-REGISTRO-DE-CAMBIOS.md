@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, parte 1: base de idioma español/inglés (balam; registrado por Mompin)
+
+- **Archivos:** `web/src/ui/i18n/` (nuevo: `Idioma.tsx` con `ProveedorIdioma` y `useIdioma` con `idioma`, `cambiarIdioma` y `t`; `diccionarios.ts`; `preferencia.ts`; `SelectorIdioma.tsx`; `idioma.css`; prueba), Inicio y `BarraPasos` traducidos (rama `balam`, `06ada93`, PR #13).
+- **Cambio:** `[DECIDIDO]` (Mompin, 15/11): la app tendrá selector de idioma español/inglés. Esta parte trae la base y las dos primeras pantallas. Los textos de las tarjetas los arma el motor (`web/src/motor/tarjetas.ts`) y se traducen ahí, no en la UI.
+- **Propuesto:** campo opcional `nombreComunEn` en el contrato de cultivo, con fuente.
+- **Toca archivos de otros:** front de Eduardo (D1), acordado por el buzón.
+- **Decisiones afectadas:** idioma de la app (antes pendiente de la fase de entrega).
+
 ### 2026-11-15 — Tarjetas del motor: «año habitual» pasa a «año normal» (Mompin)
 
 - **Archivos:** `web/src/motor/tarjetas.ts`, `web/src/motor/pruebas/tarjetas.test.ts`, `web/src/motor/pruebas/regresion/demo-isla.json` (regenerada con `ACTUALIZAR_REGRESION=1`).

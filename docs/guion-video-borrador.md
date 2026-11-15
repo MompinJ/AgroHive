@@ -1,5 +1,7 @@
 # Guion base del video de demo (borrador)
 
+> **Reemplazado para la entrega por [`trailer-30s.md`](trailer-30s.md)** (15/11): la regla del evento es un video de hasta 30 s (`docs/02`), la voz va en inglés con subtítulos en inglés y español, y la demo es mundial. Este guion largo se conserva como referencia de ideas y tono; sus cifras son de Isla, que ya no es la demo.
+
 > **Borrador para el final, no es tarea activa** `[DECIDIDO]` (Mompin, 14/11; docs/13 y docs/14): el video y la presentación se definen cuando el front esté conforme; no están en el tablero ni asignados, pero **no están cancelados**. Este archivo se conserva como punto de partida.
 
 > **Borrador de A5.6, sin responsable por ahora.** Duración objetivo: **2 a 3 minutos** `[VERIFICAR]`. El formato, la duración máxima y las reglas de uso de IA, marca e imágenes de NASA dependen de las reglas oficiales (V-03, V-04 en `docs/11`; A0.5 en `docs/14`). Todas las cifras salen de `web/src/motor/pruebas/regresion/demo-isla.json` (versión de contrato 0.10.0) y de `docs/05`, `docs/13` y `api/README.md`. Si el paquete de demo se regenera, hay que volver a revisarlas.

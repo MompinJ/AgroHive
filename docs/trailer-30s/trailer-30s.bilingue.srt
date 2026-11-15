@@ -1,0 +1,30 @@
+1
+00:00:00,300 --> 00:00:03,000
+What if next season is a dry one?
+¿Y si la próxima temporada viene seca?
+
+2
+00:00:03,200 --> 00:00:06,900
+One bad year can wipe out a whole season.
+Un mal año puede acabar con toda una temporada.
+
+3
+00:00:07,100 --> 00:00:11,800
+AgroHive tests your crop rotation against 20 years of real NASA climate.
+AgroHive pone a prueba tu rotación con 20 años de clima real de la NASA.
+
+4
+00:00:12,100 --> 00:00:16,800
+Dry year, normal year, wet year. Watch your field react.
+Año seco, normal y lluvioso. Mira cómo reacciona tu campo.
+
+5
+00:00:17,000 --> 00:00:20,900
+It ranks rotations by their worst year, not their best.
+Ordena las rotaciones por su peor año, no por el mejor.
+
+6
+00:00:26,200 --> 00:00:28,600
+AgroHive. Plan for the bad year.
+AgroHive. Planea para el año malo.
+
