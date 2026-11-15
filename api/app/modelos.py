@@ -274,7 +274,16 @@ class ProximaTemporada(BaseModel):
     advertencias: list[Advertencia] = []
 
 
+class CultivoCatalogo(BaseModel):
+    """Un cultivo de contratos/cultivo.schema.json. Se tipan los nombres; el resto (parametros citados) pasa tal cual."""
+    model_config = ConfigDict(extra="allow")
+    id: str = Field(min_length=1)
+    nombreComun: str = Field(min_length=1)
+    # 0.16.0: nombre comun en ingles, opcional (catalogos viejos sin el campo siguen siendo validos; sin el, se omite).
+    nombreComunEn: str | None = Field(default=None, min_length=1)
+
+
 class CatalogoCultivos(BaseModel):
     """Catalogo de datos/catalogos/cultivos.json (A1.5). Cada cultivo cumple contratos/cultivo.schema.json; sin catalogo, 503 (H-B8)."""
     model_config = ConfigDict(extra="allow")  # meta y versionCatalogo del archivo pasan tal cual
-    cultivos: list[dict[str, Any]]
+    cultivos: list[CultivoCatalogo]

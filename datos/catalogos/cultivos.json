@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.14.0",
+    "versionContrato": "0.16.0",
     "esEjemplo": false,
     "aviso": "Parametros de tablas generales (FAO-56, FAO EcoCrop), no calibrados para Isla, Veracruz. Requieren validacion agronomica local."
   },
@@ -9,6 +9,7 @@
     {
       "id": "maiz",
       "nombreComun": "Maiz",
+      "nombreComunEn": "Maize",
       "nombreCientifico": "Zea mays L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -252,11 +253,12 @@
       "modelo3d": {
         "prefijo": "maiz"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 65 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 65 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Maize': FAO EcoCrop, fila 'Maize'."
     },
     {
       "id": "frijol",
       "nombreComun": "Frijol",
+      "nombreComunEn": "Common bean",
       "nombreCientifico": "Phaseolus vulgaris L.",
       "estado": "EVALUABLE",
       "esLeguminosa": true,
@@ -500,11 +502,12 @@
       "modelo3d": {
         "prefijo": "frijol"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 95 dias). EcoCrop da un ciclo de 50 a 270 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 95 dias). EcoCrop da un ciclo de 50 a 270 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Common bean': FAO EcoCrop, fila 'Bean, Common'; orden invertido de 'Bean, Common'."
     },
     {
       "id": "calabaza",
       "nombreComun": "Calabaza",
+      "nombreComunEn": "Pumpkin",
       "nombreCientifico": "Cucurbita moschata Duchesne",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -748,11 +751,12 @@
       "modelo3d": {
         "prefijo": "calabaza"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 100 dias). EcoCrop da un ciclo de 80 a 140 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 100 dias). EcoCrop da un ciclo de 80 a 140 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Pumpkin': FAO EcoCrop, fila 'Pumpkin'."
     },
     {
       "id": "chile",
       "nombreComun": "Chile",
+      "nombreComunEn": "Chili pepper",
       "nombreCientifico": "Capsicum annuum L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -996,11 +1000,12 @@
       "modelo3d": {
         "prefijo": "chile"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 60 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. FAO-56 y EcoCrop no traen 'chile verde': se usa el pimiento dulce (Sweet pepper, Sweet Peppers (bell)), que es la misma especie, Capsicum annuum. Es una equivalencia, no un dato medido en chile serrano o jalapeno: una persona debe revisarla. 'Hot pepper' de EcoCrop es otra especie (Capsicum frutescens) y no se uso."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 60 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. FAO-56 y EcoCrop no traen 'chile verde': se usa el pimiento dulce (Sweet pepper, Sweet Peppers (bell)), que es la misma especie, Capsicum annuum. Es una equivalencia, no un dato medido en chile serrano o jalapeno: una persona debe revisarla. 'Hot pepper' de EcoCrop es otra especie (Capsicum frutescens) y no se uso. Nombre en ingles 'Chili pepper': GRIN-Global (USDA ARS), Capsicum annuum L. var. annuum, nombres comunes en ingles (Hortus third): 'chili pepper', https://npgsweb.ars-grin.gov/gringlobal/taxon/taxonomydetail?id=311784; FAO-56 y EcoCrop solo traen 'Sweet peppers (bell)', el pimiento dulce; eleccion marcada para revision humana (datos/catalogos/README.md)."
     },
     {
       "id": "sorgo",
       "nombreComun": "Sorgo",
+      "nombreComunEn": "Sorghum",
       "nombreCientifico": "Sorghum bicolor (L.) Moench",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -1244,11 +1249,12 @@
       "modelo3d": {
         "prefijo": "sorgo"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias; la tabla imprime 130). EcoCrop da un ciclo de 90 a 300 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. EcoCrop trae tres filas de la misma especie por altitud (baja, media, alta); se uso la de altitud baja por ser Isla zona de tierras bajas del sur de Veracruz (la altitud exacta de la parcela no se verifico). Una persona debe revisarlo."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias; la tabla imprime 130). EcoCrop da un ciclo de 90 a 300 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. EcoCrop trae tres filas de la misma especie por altitud (baja, media, alta); se uso la de altitud baja por ser Isla zona de tierras bajas del sur de Veracruz (la altitud exacta de la parcela no se verifico). Una persona debe revisarlo. Nombre en ingles 'Sorghum': FAO-56 Tabla 11, fila 'Sorghum'."
     },
     {
       "id": "sandia",
       "nombreComun": "Sandia",
+      "nombreComunEn": "Watermelon",
       "nombreCientifico": "Citrullus lanatus (Thunb.) Matsum. & Nakai",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -1492,11 +1498,12 @@
       "modelo3d": {
         "prefijo": "sandia"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 110 dias). EcoCrop da un ciclo de 80 a 160 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 110 dias). EcoCrop da un ciclo de 80 a 160 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Watermelon': FAO-56 Tabla 12, fila 'Watermelon'."
     },
     {
       "id": "camote",
       "nombreComun": "Camote",
+      "nombreComunEn": "Sweet potato",
       "nombreCientifico": "Ipomoea batatas (L.) Lam.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -1740,11 +1747,12 @@
       "modelo3d": {
         "prefijo": "camote"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 80 a 170 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra camote en Isla entre 2021 y 2025; si lo registra en San Andres Tuxtla y Santiago Tuxtla, del mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 80 a 170 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra camote en Isla entre 2021 y 2025; si lo registra en San Andres Tuxtla y Santiago Tuxtla, del mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Sweet potato': FAO-56 Tabla 11, fila 'Sweet potato'."
     },
     {
       "id": "cacahuate",
       "nombreComun": "Cacahuate",
+      "nombreComunEn": "Peanut",
       "nombreCientifico": "Arachis hypogaea L.",
       "estado": "EVALUABLE",
       "esLeguminosa": true,
@@ -1988,11 +1996,12 @@
       "modelo3d": {
         "prefijo": "cacahuate"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 90 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra cacahuate en Isla entre 2021 y 2025; si lo registra en Catemaco, del mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 90 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra cacahuate en Isla entre 2021 y 2025; si lo registra en Catemaco, del mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Peanut': FAO-56 Tabla 12, fila 'Groundnut (Peanut)'; el nombre entre parentesis de 'Groundnut (Peanut)', el usual en America."
     },
     {
       "id": "soya",
       "nombreComun": "Soya",
+      "nombreComunEn": "Soybean",
       "nombreCientifico": "Glycine max (L.) Merr.",
       "estado": "EVALUABLE",
       "esLeguminosa": true,
@@ -2236,11 +2245,12 @@
       "modelo3d": {
         "prefijo": "soya"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 85 dias). EcoCrop da un ciclo de 75 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra soya en Isla entre 2021 y 2025; en Veracruz solo en Panuco, al norte del estado. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 85 dias). EcoCrop da un ciclo de 75 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra soya en Isla entre 2021 y 2025; en Veracruz solo en Panuco, al norte del estado. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Soybean': FAO-56 Tabla 12, fila 'Soybeans'; singular de 'Soybeans'."
     },
     {
       "id": "caupi",
       "nombreComun": "Frijol caupi",
+      "nombreComunEn": "Cowpea",
       "nombreCientifico": "Vigna unguiculata (L.) Walp.",
       "estado": "EVALUABLE",
       "esLeguminosa": true,
@@ -2484,11 +2494,12 @@
       "modelo3d": {
         "prefijo": "caupi"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 100 dias; la tabla imprime 110). EcoCrop da un ciclo de 60 a 240 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 100 dias; la tabla imprime 110). EcoCrop da un ciclo de 60 a 240 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Cowpea': FAO EcoCrop, fila 'Cowpea'."
     },
     {
       "id": "haba",
       "nombreComun": "Haba",
+      "nombreComunEn": "Faba bean",
       "nombreCientifico": "Vicia faba L.",
       "estado": "EVALUABLE",
       "esLeguminosa": true,
@@ -2732,11 +2743,12 @@
       "modelo3d": {
         "prefijo": "haba"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 100 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la subfila de grano seco (Dry/Seed) porque SIAP registra 'haba grano'; la de cosecha en fresco tiene Kc end 1.10. SIAP no registra haba en Isla entre 2021 y 2025."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 100 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la subfila de grano seco (Dry/Seed) porque SIAP registra 'haba grano'; la de cosecha en fresco tiene Kc end 1.10. SIAP no registra haba en Isla entre 2021 y 2025. Nombre en ingles 'Faba bean': FAO-56 Tabla 11, fila 'Faba bean, broad bean'; primer nombre de 'Faba bean, broad bean'."
     },
     {
       "id": "chicharo",
       "nombreComun": "Chicharo",
+      "nombreComunEn": "Pea",
       "nombreCientifico": "Pisum sativum L.",
       "estado": "EVALUABLE",
       "esLeguminosa": true,
@@ -2980,11 +2992,12 @@
       "modelo3d": {
         "prefijo": "chicharo"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 60 a 140 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la subfila de cosecha en fresco (chicharo verde); la de grano seco (Dry/Seed) da Kc end 0.30 y p 0.40. Eleccion del equipo: una persona debe revisarla."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 60 a 140 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la subfila de cosecha en fresco (chicharo verde); la de grano seco (Dry/Seed) da Kc end 0.30 y p 0.40. Eleccion del equipo: una persona debe revisarla. Nombre en ingles 'Pea': FAO EcoCrop, fila 'Pea'."
     },
     {
       "id": "lenteja",
       "nombreComun": "Lenteja",
+      "nombreComunEn": "Lentil",
       "nombreCientifico": "Lens culinaris Medik.",
       "estado": "EVALUABLE",
       "esLeguminosa": true,
@@ -3228,11 +3241,12 @@
       "modelo3d": {
         "prefijo": "lenteja"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 70 a 240 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 70 a 240 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Lentil': FAO-56 Tabla 11, fila 'Lentil'."
     },
     {
       "id": "ejote",
       "nombreComun": "Ejote",
+      "nombreComunEn": "Green bean",
       "nombreCientifico": "Phaseolus vulgaris L.",
       "estado": "EVALUABLE",
       "esLeguminosa": true,
@@ -3476,11 +3490,12 @@
       "modelo3d": {
         "prefijo": "ejote"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 75 dias). EcoCrop da un ciclo de 50 a 270 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Misma especie que el frijol, cosechada en vaina verde: EcoCrop no separa el ejote y se usa la fila del frijol comun."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 75 dias). EcoCrop da un ciclo de 50 a 270 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Misma especie que el frijol, cosechada en vaina verde: EcoCrop no separa el ejote y se usa la fila del frijol comun. Nombre en ingles 'Green bean': FAO-56 Tabla 12, fila 'Beans, green'; orden invertido y singular de 'Beans, green'."
     },
     {
       "id": "cebada",
       "nombreComun": "Cebada",
+      "nombreComunEn": "Barley",
       "nombreCientifico": "Hordeum vulgare L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -3724,11 +3739,12 @@
       "modelo3d": {
         "prefijo": "cebada"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 90 a 240 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 90 a 240 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Barley': FAO-56 Tabla 12, fila 'Barley'."
     },
     {
       "id": "trigo",
       "nombreComun": "Trigo",
+      "nombreComunEn": "Wheat",
       "nombreCientifico": "Triticum aestivum L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -3972,11 +3988,12 @@
       "modelo3d": {
         "prefijo": "trigo"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 90 a 250 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa trigo de primavera (Spring Wheat): las filas de trigo de invierno de Tabla 12 suponen suelos helados o latencia invernal."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 90 a 250 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa trigo de primavera (Spring Wheat): las filas de trigo de invierno de Tabla 12 suponen suelos helados o latencia invernal. Nombre en ingles 'Wheat': FAO EcoCrop, fila 'Wheat, common'; sin el calificativo de 'Wheat, common'."
     },
     {
       "id": "avena",
       "nombreComun": "Avena",
+      "nombreComunEn": "Oats",
       "nombreCientifico": "Avena sativa L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -4220,11 +4237,12 @@
       "modelo3d": {
         "prefijo": "avena"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 110 a 270 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Avena para grano: la avena forrajera de corte no tiene fila propia en FAO-56."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 110 a 270 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Avena para grano: la avena forrajera de corte no tiene fila propia en FAO-56. Nombre en ingles 'Oats': FAO-56 Tabla 12, fila 'Oats'."
     },
     {
       "id": "maiz_dulce",
       "nombreComun": "Maiz dulce (elote)",
+      "nombreComunEn": "Sweet corn",
       "nombreCientifico": "Zea mays L. var. saccharata",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -4468,11 +4486,12 @@
       "modelo3d": {
         "prefijo": "maiz_dulce"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 80 dias). EcoCrop da un ciclo de 65 a 100 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Maiz dulce cosechado en fresco. El elote de maiz criollo que se cosecha tierno no es esta variedad: para el se usaria la fila del maiz de grano con otra fecha de cosecha, que FAO-56 no publica."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 80 dias). EcoCrop da un ciclo de 65 a 100 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Maiz dulce cosechado en fresco. El elote de maiz criollo que se cosecha tierno no es esta variedad: para el se usaria la fila del maiz de grano con otra fecha de cosecha, que FAO-56 no publica. Nombre en ingles 'Sweet corn': FAO EcoCrop, fila 'Sweet Corn'."
     },
     {
       "id": "yuca",
       "nombreComun": "Yuca",
+      "nombreComunEn": "Cassava",
       "nombreCientifico": "Manihot esculenta Crantz",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -4716,11 +4735,12 @@
       "modelo3d": {
         "prefijo": "yuca"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 210 dias). EcoCrop da un ciclo de 180 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra yuca en ningun municipio de Veracruz entre 2021 y 2025 (temporal). Ver datos/catalogos/fuentes/LEEME.md."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 210 dias). EcoCrop da un ciclo de 180 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra yuca en ningun municipio de Veracruz entre 2021 y 2025 (temporal). Ver datos/catalogos/fuentes/LEEME.md. Nombre en ingles 'Cassava': FAO EcoCrop, fila 'Cassava'."
     },
     {
       "id": "cana",
       "nombreComun": "Cana de azucar",
+      "nombreComunEn": "Sugarcane",
       "nombreCientifico": "Saccharum officinarum L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -4964,11 +4984,12 @@
       "modelo3d": {
         "prefijo": "cana"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 480 dias). EcoCrop da un ciclo de 210 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Cultivo perenne: SIAP la registra en Isla en el ciclo 'Perennes', no por temporada PV u OI. EcoCrop trae dos filas 'Sugarcane'; se uso la de Saccharum officinarum (la otra es S. robustum)."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 480 dias). EcoCrop da un ciclo de 210 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Cultivo perenne: SIAP la registra en Isla en el ciclo 'Perennes', no por temporada PV u OI. EcoCrop trae dos filas 'Sugarcane'; se uso la de Saccharum officinarum (la otra es S. robustum). Nombre en ingles 'Sugarcane': FAO EcoCrop, fila 'Sugarcane'."
     },
     {
       "id": "ajonjoli",
       "nombreComun": "Ajonjoli",
+      "nombreComunEn": "Sesame",
       "nombreCientifico": "Sesamum indicum L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -5212,11 +5233,12 @@
       "modelo3d": {
         "prefijo": "ajonjoli"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 110 dias; la tabla imprime 100). EcoCrop da un ciclo de 40 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra ajonjoli en Isla entre 2021 y 2025; en Veracruz si, en 7 a 9 municipios. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 110 dias; la tabla imprime 100). EcoCrop da un ciclo de 40 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra ajonjoli en Isla entre 2021 y 2025; en Veracruz si, en 7 a 9 municipios. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Sesame': FAO-56 Tabla 11, fila 'Sesame'."
     },
     {
       "id": "girasol",
       "nombreComun": "Girasol",
+      "nombreComunEn": "Sunflower",
       "nombreCientifico": "Helianthus annuus L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -5460,11 +5482,12 @@
       "modelo3d": {
         "prefijo": "girasol"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 70 a 200 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 70 a 200 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Sunflower': FAO-56 Tabla 11, fila 'Sunflower'."
     },
     {
       "id": "algodon",
       "nombreComun": "Algodon",
+      "nombreComunEn": "Cotton",
       "nombreCientifico": "Gossypium hirsutum L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -5708,11 +5731,12 @@
       "modelo3d": {
         "prefijo": "algodon"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 195 dias). EcoCrop da un ciclo de 150 a 200 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Algodon americano de tierras altas (upland), la especie que se siembra en Mexico; EcoCrop trae otras tres especies de Gossypium."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 195 dias). EcoCrop da un ciclo de 150 a 200 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Algodon americano de tierras altas (upland), la especie que se siembra en Mexico; EcoCrop trae otras tres especies de Gossypium. Nombre en ingles 'Cotton': FAO-56 Tabla 11, fila 'Cotton'."
     },
     {
       "id": "cartamo",
       "nombreComun": "Cartamo",
+      "nombreComunEn": "Safflower",
       "nombreCientifico": "Carthamus tinctorius L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -5956,11 +5980,12 @@
       "modelo3d": {
         "prefijo": "cartamo"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 120 a 245 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. EcoCrop escribe 'Carthamus tinctoius' (errata de la base); el nombre correcto es Carthamus tinctorius."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 120 a 245 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. EcoCrop escribe 'Carthamus tinctoius' (errata de la base); el nombre correcto es Carthamus tinctorius. Nombre en ingles 'Safflower': FAO-56 Tabla 11, fila 'Safflower'."
     },
     {
       "id": "higuerilla",
       "nombreComun": "Higuerilla",
+      "nombreComunEn": "Castor bean",
       "nombreCientifico": "Ricinus communis L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -6204,11 +6229,12 @@
       "modelo3d": {
         "prefijo": "higuerilla"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 135 dias). EcoCrop da un ciclo de 140 a 210 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 135 dias). EcoCrop da un ciclo de 140 a 210 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Castor bean': FAO-56 Tabla 11, fila 'Castor beans'; singular de 'Castor beans'."
     },
     {
       "id": "tomate",
       "nombreComun": "Jitomate",
+      "nombreComunEn": "Tomato",
       "nombreCientifico": "Solanum lycopersicum L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -6452,11 +6478,12 @@
       "modelo3d": {
         "prefijo": "tomate"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 145 dias). EcoCrop da un ciclo de 70 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 145 dias). EcoCrop da un ciclo de 70 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Tomato': FAO-56 Tabla 11, fila 'Tomato'."
     },
     {
       "id": "papa",
       "nombreComun": "Papa",
+      "nombreComunEn": "Potato",
       "nombreCientifico": "Solanum tuberosum L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -6700,11 +6727,12 @@
       "modelo3d": {
         "prefijo": "papa"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 90 a 160 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 90 a 160 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Potato': FAO-56 Tabla 11, fila 'Potato'."
     },
     {
       "id": "calabacita",
       "nombreComun": "Calabacita",
+      "nombreComunEn": "Zucchini",
       "nombreCientifico": "Cucurbita pepo L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -6948,11 +6976,12 @@
       "modelo3d": {
         "prefijo": "calabacita"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 40 a 100 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Calabacita tierna (zucchini), cosechada inmadura; la calabaza de milpa madura es el cultivo 'calabaza'."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 40 a 100 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Calabacita tierna (zucchini), cosechada inmadura; la calabaza de milpa madura es el cultivo 'calabaza'. Nombre en ingles 'Zucchini': FAO-56 Tabla 12, fila 'Squash, Zucchini'; el nombre del cultivo en 'Squash, Zucchini'."
     },
     {
       "id": "cebolla",
       "nombreComun": "Cebolla",
+      "nombreComunEn": "Onion",
       "nombreCientifico": "Allium cepa L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -7196,11 +7225,12 @@
       "modelo3d": {
         "prefijo": "cebolla"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 85 a 175 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Cebolla de bulbo seco; la cebolla de rabo (green) tiene otra fila."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 85 a 175 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Cebolla de bulbo seco; la cebolla de rabo (green) tiene otra fila. Nombre en ingles 'Onion': FAO EcoCrop, fila 'Onion'."
     },
     {
       "id": "pepino",
       "nombreComun": "Pepino",
+      "nombreComunEn": "Cucumber",
       "nombreCientifico": "Cucumis sativus L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -7444,11 +7474,12 @@
       "modelo3d": {
         "prefijo": "pepino"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 105 dias). EcoCrop da un ciclo de 40 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Pepino para mercado en fresco (la subfila de cosecha mecanica tiene Kc end 0.90)."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 105 dias). EcoCrop da un ciclo de 40 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Pepino para mercado en fresco (la subfila de cosecha mecanica tiene Kc end 0.90). Nombre en ingles 'Cucumber': FAO-56 Tabla 11, fila 'Cucumber'."
     },
     {
       "id": "melon",
       "nombreComun": "Melon",
+      "nombreComunEn": "Melon",
       "nombreCientifico": "Cucumis melo L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -7692,11 +7723,12 @@
       "modelo3d": {
         "prefijo": "melon"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 120 dias). EcoCrop da un ciclo de 50 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la fila general de melon (Sweet melons); FAO-56 trae aparte el cantaloupe (Kc 0.5/0.85/0.60) solo con filas de California. EcoCrop 'Musk melon' es Cucumis melo."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 120 dias). EcoCrop da un ciclo de 50 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la fila general de melon (Sweet melons); FAO-56 trae aparte el cantaloupe (Kc 0.5/0.85/0.60) solo con filas de California. EcoCrop 'Musk melon' es Cucumis melo. Nombre en ingles 'Melon': FAO-56 Tabla 12, fila 'Sweet Melons'; nombre comun en vez de 'Sweet Melons' (EcoCrop: 'Musk melon'); eleccion marcada para revision humana (datos/catalogos/README.md)."
     },
     {
       "id": "lechuga",
       "nombreComun": "Lechuga",
+      "nombreComunEn": "Lettuce",
       "nombreCientifico": "Lactuca sativa L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -7940,11 +7972,12 @@
       "modelo3d": {
         "prefijo": "lechuga"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 75 dias). EcoCrop da un ciclo de 35 a 85 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 75 dias). EcoCrop da un ciclo de 35 a 85 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Lettuce': FAO-56 Tabla 11, fila 'Lettuce'."
     },
     {
       "id": "zanahoria",
       "nombreComun": "Zanahoria",
+      "nombreComunEn": "Carrot",
       "nombreCientifico": "Daucus carota L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -8188,11 +8221,12 @@
       "modelo3d": {
         "prefijo": "zanahoria"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 40 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 40 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Carrot': FAO EcoCrop, fila 'Carrot'."
     },
     {
       "id": "berenjena",
       "nombreComun": "Berenjena",
+      "nombreComunEn": "Eggplant",
       "nombreCientifico": "Solanum melongena L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -8436,11 +8470,12 @@
       "modelo3d": {
         "prefijo": "berenjena"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 70 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 70 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Eggplant': FAO EcoCrop, fila 'Eggplant'."
     },
     {
       "id": "brocoli",
       "nombreComun": "Brocoli",
+      "nombreComunEn": "Broccoli",
       "nombreCientifico": "Brassica oleracea var. italica Plenck",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -8684,11 +8719,12 @@
       "modelo3d": {
         "prefijo": "brocoli"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 135 dias). EcoCrop da un ciclo de 80 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 135 dias). EcoCrop da un ciclo de 80 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Broccoli': FAO-56 Tabla 11, fila 'Broccoli'."
     },
     {
       "id": "col",
       "nombreComun": "Col (repollo)",
+      "nombreComunEn": "Cabbage",
       "nombreCientifico": "Brassica oleracea var. capitata L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -8932,11 +8968,12 @@
       "modelo3d": {
         "prefijo": "col"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 165 dias). EcoCrop da un ciclo de 60 a 200 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 165 dias). EcoCrop da un ciclo de 60 a 200 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Cabbage': FAO-56 Tabla 11, fila 'Cabbage'."
     },
     {
       "id": "coliflor",
       "nombreComun": "Coliflor",
+      "nombreComunEn": "Cauliflower",
       "nombreCientifico": "Brassica oleracea var. botrytis L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -9180,11 +9217,12 @@
       "modelo3d": {
         "prefijo": "coliflor"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 140 dias). EcoCrop da un ciclo de 60 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 140 dias). EcoCrop da un ciclo de 60 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Cauliflower': FAO-56 Tabla 11, fila 'Cauliflower'."
     },
     {
       "id": "espinaca",
       "nombreComun": "Espinaca",
+      "nombreComunEn": "Spinach",
       "nombreCientifico": "Spinacia oleracea L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -9428,11 +9466,12 @@
       "modelo3d": {
         "prefijo": "espinaca"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 100 dias). EcoCrop da un ciclo de 40 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 100 dias). EcoCrop da un ciclo de 40 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Nombre en ingles 'Spinach': FAO-56 Tabla 11, fila 'Spinach'."
     },
     {
       "id": "rabano",
       "nombreComun": "Rabano",
+      "nombreComunEn": "Radish",
       "nombreCientifico": "Raphanus sativus L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -9676,11 +9715,12 @@
       "modelo3d": {
         "prefijo": "rabano"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 35 dias). EcoCrop da un ciclo de 21 a 135 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Rabano pequeno de mesa: EcoCrop 'Radish, Western' (S.R., small radish)."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 35 dias). EcoCrop da un ciclo de 21 a 135 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Rabano pequeno de mesa: EcoCrop 'Radish, Western' (S.R., small radish). Nombre en ingles 'Radish': FAO-56 Tabla 11, fila 'Radish'."
     },
     {
       "id": "betabel",
       "nombreComun": "Betabel",
+      "nombreComunEn": "Table beet",
       "nombreCientifico": "Beta vulgaris L.",
       "estado": "EVALUABLE",
       "esLeguminosa": false,
@@ -9924,7 +9964,7 @@
       "modelo3d": {
         "prefijo": "betabel"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 70 dias). EcoCrop da un ciclo de 55 a 90 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Betabel de mesa; la remolacha azucarera tiene otra fila."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 70 dias). EcoCrop da un ciclo de 55 a 90 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Betabel de mesa; la remolacha azucarera tiene otra fila. Nombre en ingles 'Table beet': FAO-56 Tabla 12, fila 'Beets, table'; orden invertido y singular de 'Beets, table'."
     }
   ]
 }
