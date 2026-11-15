@@ -4439,6 +4439,2456 @@
         }
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 80 dias). EcoCrop da un ciclo de 65 a 100 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Maiz dulce cosechado en fresco. El elote de maiz criollo que se cosecha tierno no es esta variedad: para el se usaria la fila del maiz de grano con otra fecha de cosecha, que FAO-56 no publica."
+    },
+    {
+      "id": "yuca",
+      "nombreComun": "Yuca",
+      "nombreCientifico": "Manihot esculenta Crantz",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 210,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 40,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 90,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 60,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.3,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Cassava - year 1', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 0.8,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Cassava - year 1', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Nota 3: el Kc medio supone condiciones sin estres durante o despues de la temporada de lluvias; el Kc end considera la latencia en la temporada seca. Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.3,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Cassava - year 1', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 0.8,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Cassava - year 1', Zr maximo 0.5-0.8 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.35,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Cassava - year 1', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 10,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cassava' (Manihot esculenta Crantz.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 35,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cassava' (Manihot esculenta Crantz.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cassava' (Manihot esculenta Crantz.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 29,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cassava' (Manihot esculenta Crantz.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 500,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cassava' (Manihot esculenta Crantz.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 1000 a 1500 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 5000,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cassava' (Manihot esculenta Crantz.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 1000 a 1500 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 210 dias). EcoCrop da un ciclo de 180 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra yuca en ningun municipio de Veracruz entre 2021 y 2025 (temporal). Ver datos/catalogos/fuentes/LEEME.md."
+    },
+    {
+      "id": "cana",
+      "nombreComun": "Cana de azucar",
+      "nombreCientifico": "Saccharum officinarum L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 480,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Sugarcane, virgin', region 'Tropics', siembra 'sin fecha impresa'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Fila tropical de cana de planta (virgin), la que corresponde a una siembra nueva. La de soca (ratoon, Tropics, 320 d) es el rebrote tras el corte, sin siembra. Con 480 dias el ciclo solo cabe en la serie del escenario (1 de octubre de t-1 al 31 de marzo de t+1, doc 05) si se siembra en octubre a diciembre (OI); otra fecha deja el ciclo NO_EVALUABLE. La tabla no imprime fecha de siembra."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 50,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sugarcane, virgin', region 'Tropics', siembra 'sin fecha impresa'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Fila tropical de cana de planta (virgin), la que corresponde a una siembra nueva. La de soca (ratoon, Tropics, 320 d) es el rebrote tras el corte, sin siembra. Con 480 dias el ciclo solo cabe en la serie del escenario (1 de octubre de t-1 al 31 de marzo de t+1, doc 05) si se siembra en octubre a diciembre (OI); otra fecha deja el ciclo NO_EVALUABLE. La tabla no imprime fecha de siembra."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 70,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sugarcane, virgin', region 'Tropics', siembra 'sin fecha impresa'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Fila tropical de cana de planta (virgin), la que corresponde a una siembra nueva. La de soca (ratoon, Tropics, 320 d) es el rebrote tras el corte, sin siembra. Con 480 dias el ciclo solo cabe en la serie del escenario (1 de octubre de t-1 al 31 de marzo de t+1, doc 05) si se siembra en octubre a diciembre (OI); otra fecha deja el ciclo NO_EVALUABLE. La tabla no imprime fecha de siembra."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 220,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sugarcane, virgin', region 'Tropics', siembra 'sin fecha impresa'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Fila tropical de cana de planta (virgin), la que corresponde a una siembra nueva. La de soca (ratoon, Tropics, 320 d) es el rebrote tras el corte, sin siembra. Con 480 dias el ciclo solo cabe en la serie del escenario (1 de octubre de t-1 al 31 de marzo de t+1, doc 05) si se siembra en octubre a diciembre (OI); otra fecha deja el ciclo NO_EVALUABLE. La tabla no imprime fecha de siembra."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 140,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sugarcane, virgin', region 'Tropics', siembra 'sin fecha impresa'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Fila tropical de cana de planta (virgin), la que corresponde a una siembra nueva. La de soca (ratoon, Tropics, 320 d) es el rebrote tras el corte, sin siembra. Con 480 dias el ciclo solo cabe en la serie del escenario (1 de octubre de t-1 al 31 de marzo de t+1, doc 05) si se siembra en octubre a diciembre (OI); otra fecha deja el ciclo NO_EVALUABLE. La tabla no imprime fecha de siembra."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.4,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sugar Cane', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.25,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sugar Cane', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.75,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sugar Cane', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 2.0,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Sugar Cane', Zr maximo 1.2-2.0 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.65,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Sugar Cane', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 15,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sugarcane' (Saccharum officinarum L.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 41,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sugarcane' (Saccharum officinarum L.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 24,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sugarcane' (Saccharum officinarum L.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 37,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sugarcane' (Saccharum officinarum L.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 1000,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sugarcane' (Saccharum officinarum L.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 1500 a 2000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 5000,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sugarcane' (Saccharum officinarum L.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 1500 a 2000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 480 dias). EcoCrop da un ciclo de 210 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Cultivo perenne: SIAP la registra en Isla en el ciclo 'Perennes', no por temporada PV u OI. EcoCrop trae dos filas 'Sugarcane'; se uso la de Saccharum officinarum (la otra es S. robustum)."
+    },
+    {
+      "id": "ajonjoli",
+      "nombreComun": "Ajonjoli",
+      "nombreCientifico": "Sesamum indicum L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 110,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 40,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.35,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sesame', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "Kc ini general del grupo h. Oil Crops (la fila del ajonjoli no da Kc ini propio). FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.1,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sesame', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.25,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sesame', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 1.5,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Sesame', Zr maximo 1.0-1.5 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.6,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Sesame', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 10,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sesame seed' (Sesamum indicum L.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 40,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sesame seed' (Sesamum indicum L.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sesame seed' (Sesamum indicum L.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sesame seed' (Sesamum indicum L.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 300,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sesame seed' (Sesamum indicum L.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 500 a 1000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 1500,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sesame seed' (Sesamum indicum L.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 500 a 1000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 110 dias; la tabla imprime 100). EcoCrop da un ciclo de 40 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra ajonjoli en Isla entre 2021 y 2025; en Veracruz si, en 7 a 9 municipios. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."
+    },
+    {
+      "id": "girasol",
+      "nombreComun": "Girasol",
+      "nombreCientifico": "Helianthus annuus L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 130,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Sunflower', region 'Medit.; California', siembra 'April/May'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Unica fila de Tabla 11 para girasol; no hay fila tropical."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 25,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sunflower', region 'Medit.; California', siembra 'April/May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila de Tabla 11 para girasol; no hay fila tropical."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 35,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sunflower', region 'Medit.; California', siembra 'April/May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila de Tabla 11 para girasol; no hay fila tropical."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 45,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sunflower', region 'Medit.; California', siembra 'April/May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila de Tabla 11 para girasol; no hay fila tropical."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 25,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Sunflower', region 'Medit.; California', siembra 'April/May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila de Tabla 11 para girasol; no hay fila tropical."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.35,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sunflower', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "Kc ini general del grupo h. Oil Crops (la fila del girasol no da Kc ini propio). FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.0,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sunflower', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Tabla 12 da 1.0-1.15 (nota 9): los valores menores son para cultivos de temporal con menor densidad; se usa 1.0, temporal. Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.35,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Sunflower', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 1.5,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Sunflower', Zr maximo 0.8-1.5 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.45,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Sunflower', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 5,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sunflower' (Helianthus annuus L v macro), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 45,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sunflower' (Helianthus annuus L v macro), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 17,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sunflower' (Helianthus annuus L v macro), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 34,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sunflower' (Helianthus annuus L v macro), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 300,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sunflower' (Helianthus annuus L v macro), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 1600,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Sunflower' (Helianthus annuus L v macro), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 70 a 200 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+    },
+    {
+      "id": "algodon",
+      "nombreComun": "Algodon",
+      "nombreCientifico": "Gossypium hirsutum L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 195,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 50,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 60,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 55,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.35,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Cotton', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "Kc ini general del grupo g. Fibre Crops (la fila del algodon no da Kc ini propio). FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.175,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Cotton', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Tabla 12 da el rango 1.15-1.20; 1.175 es su punto medio (eleccion del equipo, no de la fuente). Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.6,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Cotton', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Tabla 12 da el rango 0.70-0.50; 0.60 es su punto medio (eleccion del equipo, no de la fuente). Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 1.7,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Cotton', Zr maximo 1.0-1.7 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.65,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Cotton', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 15,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cotton, American upland' (Gossypium hirsutum L.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 42,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cotton, American upland' (Gossypium hirsutum L.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 22,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cotton, American upland' (Gossypium hirsutum L.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 36,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cotton, American upland' (Gossypium hirsutum L.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 450,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cotton, American upland' (Gossypium hirsutum L.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 750 a 1200 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 1500,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Cotton, American upland' (Gossypium hirsutum L.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 750 a 1200 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 195 dias). EcoCrop da un ciclo de 150 a 200 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Algodon americano de tierras altas (upland), la especie que se siembra en Mexico; EcoCrop trae otras tres especies de Gossypium."
+    },
+    {
+      "id": "cartamo",
+      "nombreComun": "Cartamo",
+      "nombreCientifico": "Carthamus tinctorius L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 125,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 35,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 45,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 25,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.35,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Safflower', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "Kc ini general del grupo h. Oil Crops (la fila del cartamo no da Kc ini propio). FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.0,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Safflower', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Tabla 12 da 1.0-1.15 (nota 9): los valores menores son para cultivos de temporal con menor densidad; se usa 1.0, temporal. Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.25,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Safflower', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 2.0,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Safflower', Zr maximo 1.0-2.0 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.6,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Safflower', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 5,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Safflower' (Carthamus tinctoius L.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 45,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Safflower' (Carthamus tinctoius L.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Safflower' (Carthamus tinctoius L.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 32,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Safflower' (Carthamus tinctoius L.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 300,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Safflower' (Carthamus tinctoius L.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 1400,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Safflower' (Carthamus tinctoius L.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 120 a 245 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. EcoCrop escribe 'Carthamus tinctoius' (errata de la base); el nombre correcto es Carthamus tinctorius."
+    },
+    {
+      "id": "higuerilla",
+      "nombreComun": "Higuerilla",
+      "nombreCientifico": "Ricinus communis L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 135,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 40,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 50,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 25,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.35,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Castorbean (Ricinus)', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "Kc ini general del grupo h. Oil Crops (la fila de la higuerilla no da Kc ini propio). FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.15,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Castorbean (Ricinus)', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.55,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Castorbean (Ricinus)', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 2.0,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Castorbean (Ricinus)', Zr maximo 1.0-2.0 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.5,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Castorbean (Ricinus)', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 15,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Castor' (Ricinus communis L.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 39,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Castor' (Ricinus communis L.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Castor' (Ricinus communis L.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Castor' (Ricinus communis L.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 400,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Castor' (Ricinus communis L.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 2000,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Castor' (Ricinus communis L.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1000 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 135 dias). EcoCrop da un ciclo de 140 a 210 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+    },
+    {
+      "id": "tomate",
+      "nombreComun": "Jitomate",
+      "nombreCientifico": "Solanum lycopersicum L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 145,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Tomato', region 'Mediterranean', siembra 'April/May'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Tabla 11 no tiene fila tropical para jitomate. Las de siembra mas cercana a junio son abril/mayo en California (155 d) y en el Mediterraneo (145 d); se eligio la mediterranea, como con la calabaza."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Tomato', region 'Mediterranean', siembra 'April/May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para jitomate. Las de siembra mas cercana a junio son abril/mayo en California (155 d) y en el Mediterraneo (145 d); se eligio la mediterranea, como con la calabaza."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 40,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Tomato', region 'Mediterranean', siembra 'April/May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para jitomate. Las de siembra mas cercana a junio son abril/mayo en California (155 d) y en el Mediterraneo (145 d); se eligio la mediterranea, como con la calabaza."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 45,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Tomato', region 'Mediterranean', siembra 'April/May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para jitomate. Las de siembra mas cercana a junio son abril/mayo en California (155 d) y en el Mediterraneo (145 d); se eligio la mediterranea, como con la calabaza."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Tomato', region 'Mediterranean', siembra 'April/May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para jitomate. Las de siembra mas cercana a junio son abril/mayo en California (155 d) y en el Mediterraneo (145 d); se eligio la mediterranea, como con la calabaza."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.6,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Tomato', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "Kc ini general del grupo b. Vegetables - Solanum Family (la fila del jitomate no da Kc ini propio). FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.15,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Tomato', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Nota 2: si crece en estacas de 1.5 a 2 m puede tomarse 1.20. Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.8,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Tomato', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Tabla 12 da el rango 0.70-0.90; 0.80 es su punto medio (eleccion del equipo, no de la fuente). Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 1.5,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Tomato', Zr maximo 0.7-1.5 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.4,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Tomato', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 7,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Tomato' (Lycopersicon esculentum M.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 35,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Tomato' (Lycopersicon esculentum M.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Tomato' (Lycopersicon esculentum M.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 27,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Tomato' (Lycopersicon esculentum M.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 400,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Tomato' (Lycopersicon esculentum M.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1300 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 1800,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Tomato' (Lycopersicon esculentum M.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1300 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 145 dias). EcoCrop da un ciclo de 70 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+    },
+    {
+      "id": "papa",
+      "nombreComun": "Papa",
+      "nombreCientifico": "Solanum tuberosum L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 130,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 25,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 45,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.5,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Potato', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "Kc ini general del grupo d. Roots and Tubers (la fila de la papa no da Kc ini propio). FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 1.15,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Potato', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.75,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Potato', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Nota 4: para papas de ciclo largo con defoliacion el Kc end es de unos 0.40. Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 0.6,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Potato', Zr maximo 0.4-0.6 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.35,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Potato', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 7,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Potato' (Solanum tuberosum L.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Potato' (Solanum tuberosum L.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 15,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Potato' (Solanum tuberosum L.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 25,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Potato' (Solanum tuberosum L.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 250,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Potato' (Solanum tuberosum L.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 500 a 800 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 2000,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Potato' (Solanum tuberosum L.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 500 a 800 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 90 a 160 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
+    },
+    {
+      "id": "calabacita",
+      "nombreComun": "Calabacita",
+      "nombreCientifico": "Cucurbita pepo L.",
+      "estado": "EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "EVALUABLE",
+        "valor": 90,
+        "unidad": "dias",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+          "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
+          "consultado": "2026-11-14",
+          "unidades": "dias",
+          "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 20,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "desarrollo": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 25,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 15,
+          "unidad": "dias",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 11",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
+            "consultado": "2026-11-14",
+            "unidades": "dias",
+            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "EVALUABLE",
+          "valor": 0.5,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Squash, Zucchini', Kc ini",
+            "consultado": "2026-11-14",
+            "nota": "Kc ini general del grupo c. Vegetables - Cucumber Family (la fila de la calabacita no da Kc ini propio). FAO-56 Tabla 12 nota 1: con mojado frecuente (lluvia diaria) el Kc ini puede subir hasta 1.0-1.2; para temporal lluvioso conviene calcularlo con el procedimiento del capitulo 6 de FAO-56."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "media": {
+          "estado": "EVALUABLE",
+          "valor": 0.95,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Squash, Zucchini', Kc mid",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "final": {
+          "estado": "EVALUABLE",
+          "valor": 0.75,
+          "unidad": "adimensional",
+          "fuente": {
+            "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 12",
+            "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+            "cita": "Tabla 12, fila 'Squash, Zucchini', Kc end",
+            "consultado": "2026-11-14",
+            "nota": "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45 %, u2 ~2 m/s); ajustar por clima segun FAO-56 ec. 62 y 65."
+          },
+          "etiqueta": "FUENTE"
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "EVALUABLE",
+        "valor": 1.0,
+        "unidad": "m",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Squash, Zucchini', Zr maximo 0.6-1.0 m",
+          "consultado": "2026-11-14",
+          "nota": "Se toma el extremo mayor del rango: Tabla 22 nota 1 indica los valores mayores para modelar estres hidrico o temporal."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "fraccionAgotamientoP": {
+        "estado": "EVALUABLE",
+        "valor": 0.5,
+        "unidad": "fraccion",
+        "fuente": {
+          "nombre": "FAO-56 (Allen, Pereira, Raes y Smith, 1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56, Tabla 22",
+          "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+          "cita": "Tabla 22, fila 'Squash, Zucchini', p (para ETc ~ 5 mm/dia)",
+          "consultado": "2026-11-14",
+          "nota": "Valido para ETc ~ 5 mm/dia; ajustar con p = p_tabla + 0.04 (5 - ETc), limitado a 0.1 <= p <= 0.8 (FAO-56, cap. 8)."
+        },
+        "etiqueta": "FUENTE"
+      },
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 6,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Vegetable marrow' (Cucurbita pepo L.), campo TMIN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tMaxAbsC": {
+          "estado": "EVALUABLE",
+          "valor": 40,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Vegetable marrow' (Cucurbita pepo L.), campo TMAX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMinC": {
+          "estado": "EVALUABLE",
+          "valor": 17,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Vegetable marrow' (Cucurbita pepo L.), campo TOPMN",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tOptMaxC": {
+          "estado": "EVALUABLE",
+          "valor": 30,
+          "unidad": "grados C",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Vegetable marrow' (Cucurbita pepo L.), campo TOPMX",
+            "consultado": "2026-11-14",
+            "unidades": "grados C (media mensual)",
+            "nota": "Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada de lluvia por ciclo. EcoCrop publica lluvia anual, que va en lluviaAnualMinMm/MaxMm y no se convierte a lluvia del ciclo."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "EVALUABLE",
+          "valor": 300,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Vegetable marrow' (Cucurbita pepo L.), campo RMIN",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1500 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "EVALUABLE",
+          "valor": 2800,
+          "unidad": "mm/anio",
+          "fuente": {
+            "nombre": "FAO EcoCrop",
+            "url": "https://raw.githubusercontent.com/cropmodels/Recocrop/3a013150a27dde03f458aeec23c3d3589bce0282/inst/parameters/ecocrop.rds",
+            "cita": "Fila 'Vegetable marrow' (Cucurbita pepo L.), campo RMAX",
+            "consultado": "2026-11-14",
+            "unidades": "mm por anio",
+            "nota": "Rango absoluto de lluvia anual de EcoCrop; el optimo es 600 a 1500 mm/anio (ROPMN, ROPMX). No es lluvia del ciclo. Base FAO EcoCrop distribuida en el paquete R Recocrop (archivo ecocrop.rds, sha256 6d2d1280...4e42b2). ecocrop.fao.org respondio HTTP 503 el 2026-11-14, por eso se uso esta copia. En EcoCrop las temperaturas se comparan con medias mensuales, no con maximas diarias."
+          },
+          "etiqueta": "FUENTE"
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
+        }
+      },
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 40 a 100 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Calabacita tierna (zucchini), cosechada inmadura; la calabaza de milpa madura es el cultivo 'calabaza'."
     }
   ]
 }
