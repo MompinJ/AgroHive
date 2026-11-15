@@ -8,6 +8,9 @@
 import type { RangoTiempo } from '../tiempo';
 import { fechaEnIndice } from '../tiempo';
 
+/** Segundos extra (ms) que la reproduccion espera despues de que un aviso o una animacion termina, para que se alcance a leer. */
+export const PAUSA_EXTRA_EVENTO_MS = 2500;
+
 export type TipoEvento = 'cosecha' | 'plaga';
 export interface EventoPantalla { tipo: TipoEvento; clave: string; titulo: string; detalle: string }
 export interface CultivoCosechado { nombre: string; celdas: number }

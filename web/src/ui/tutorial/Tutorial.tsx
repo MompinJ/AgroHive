@@ -1,9 +1,14 @@
 // Tutorial guiado por Esquilote. La primera vez que se entra a cada pantalla del flujo se abre solo; despues,
 // el boton con la mascota lo vuelve a abrir. No bloquea la pantalla: es una tarjeta que se puede ignorar o cerrar
-// (Escape tambien). Resalta el elemento del paso si esta en pantalla.
+// (Escape tambien). Esquilote escribe el texto de a poco y "habla" mientras tanto; un anillo encierra e ilumina el
+// componente del que habla, si esta en pantalla.
 import { useEffect, useState } from 'react';
 import { usePage } from '../navigation';
 import { Esquilote } from './Esquilote';
+import { Resalte } from './Resalte';
+import { TextoConIconos } from './TextoConIconos';
+import { useEscribir } from './useEscribir';
+import { textoPlano } from './texto';
 import { marcarVisto, navegar, TUTORIALES, tutorialDeRuta, tutorialVisto, type EstadoTutorial, type IdTutorial, type PasoTutorial } from './pasos';
 import './tutorial.css';
 
@@ -12,12 +17,14 @@ export function TarjetaTutorial({ pasos, paso, onSiguiente, onAnterior, onCerrar
 }) {
   const actual = pasos[paso]!;
   const ultimo = paso === pasos.length - 1;
+  // El texto se escribe de a poco y Esquilote "habla" mientras tanto; tocar el texto lo completa.
+  const { visibles, escribiendo, completar } = useEscribir(actual.texto);
   return <section className="esquilote esquilote-tarjeta" role="dialog" aria-modal="false" aria-labelledby="esquilote-titulo" aria-describedby="esquilote-texto">
-    <Esquilote saluda={paso === 0} />
+    <Esquilote saluda={paso === 0 && !escribiendo} habla={escribiendo} />
     <div className="esquilote-cuerpo">
       <p className="esquilote-nombre">Esquilote · paso {paso + 1} de {pasos.length}</p>
       <h2 id="esquilote-titulo">{actual.titulo}</h2>
-      <p id="esquilote-texto" aria-live="polite">{actual.texto}</p>
+      <p id="esquilote-texto" aria-live="polite" aria-label={textoPlano(actual.texto)} onClick={completar}><TextoConIconos texto={actual.texto} visibles={visibles} /></p>
       <div className="esquilote-acciones">
         <button type="button" className="esquilote-saltar" onClick={onCerrar}>{ultimo ? 'Cerrar' : 'Saltar tutorial'}</button>
         {paso > 0 && <button type="button" className="esquilote-atras" onClick={onAnterior}>Anterior</button>}
@@ -61,15 +68,7 @@ export function TutorialEsquilote() {
     return () => window.removeEventListener('keydown', alTeclear);
   }, [estado]);
 
-  // Resalta el elemento del paso (si esta en pantalla) y lo deja como estaba al cambiar de paso.
   const selector = estado ? TUTORIALES[estado.id][estado.paso]?.destacar : undefined;
-  useEffect(() => {
-    if (!selector) return;
-    const elemento = document.querySelector<HTMLElement>(selector);
-    if (!elemento) return;
-    elemento.classList.add('esquilote-resalte');
-    return () => elemento.classList.remove('esquilote-resalte');
-  }, [selector, estado?.id, estado?.paso]);
 
   if (!id) return null;
   if (!estado) {
@@ -78,5 +77,8 @@ export function TutorialEsquilote() {
       <span>Tutorial</span>
     </button>;
   }
-  return <TarjetaTutorial pasos={TUTORIALES[estado.id]} paso={estado.paso} onSiguiente={() => mover('siguiente')} onAnterior={() => mover('anterior')} onCerrar={() => mover('cerrar')} enfocar={manual} />;
+  return <>
+    <Resalte selector={selector} />
+    <TarjetaTutorial pasos={TUTORIALES[estado.id]} paso={estado.paso} onSiguiente={() => mover('siguiente')} onAnterior={() => mover('anterior')} onCerrar={() => mover('cerrar')} enfocar={manual} />
+  </>;
 }

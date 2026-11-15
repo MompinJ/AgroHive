@@ -1,15 +1,11 @@
-// Orden de la paleta (de mas a menos conveniente para la tierra y la fecha) y bioma de la parcela.
+// Orden de la paleta (de mas a menos conveniente para la tierra y la fecha). El bioma de la escena sale
+// de Koppen-Geiger (geo/koppen.ts).
 // Pura. Usa el clima diario de NASA POWER de la parcela, los rangos de FAO EcoCrop del catalogo
 // (temperatura optima y absoluta, lluvia anual), el calendario local y las plagas registradas.
 // Es una ayuda para elegir `[PROPUESTA]`: no es un indicador del motor ni entra al ranking.
 import type { CalendarioLocal, Cultivo, SerieClima } from '../../../../contratos/tipos/contratos';
 import { dentroDeVentana } from '../../motor/pilares';
 import { DIAS_MAX_CLIMA, referenciaSiembra } from '../planes';
-
-export type Bioma = 'tropical_humedo' | 'tropical_seco' | 'arido' | 'templado' | 'frio';
-export const NOMBRE_BIOMA: Record<Bioma, string> = {
-  tropical_humedo: 'trópico húmedo', tropical_seco: 'trópico seco', arido: 'zona árida', templado: 'clima templado', frio: 'clima frío',
-};
 
 export interface Climatologia {
   /** Temperatura media por dia del anio (0 = 1 de enero), promedio de todos los anios. */
@@ -46,16 +42,6 @@ export function climatologia(serie: SerieClima | null | undefined): Climatologia
     tMediaAnual: validos.length ? validos.reduce((a, b) => a + b, 0) / validos.length : null,
     lluviaAnualMm: completos.length ? completos.reduce((a, b) => a + b, 0) / completos.length : null,
   };
-}
-
-/** Bioma aproximado por temperatura media y lluvia anual (simplificacion tipo Koppen) `[PROPUESTA]`. */
-export function biomaDe(c: Climatologia): Bioma | null {
-  const { tMediaAnual: t, lluviaAnualMm: p } = c;
-  if (t == null || p == null) return null;
-  if (p < 400) return 'arido';
-  if (t < 10) return 'frio';
-  if (t >= 20) return p >= 1500 ? 'tropical_humedo' : 'tropical_seco';
-  return 'templado';
 }
 
 /** Temperatura media del ciclo: promedio climatologico de los dias entre siembra y cosecha. */

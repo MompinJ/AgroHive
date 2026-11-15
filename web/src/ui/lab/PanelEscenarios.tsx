@@ -12,10 +12,10 @@ import type { PasoLab } from './Laboratorio';
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 export const nombresPilares: Record<string, string> = { deficitHidrico: 'Déficit hídrico', excesoHidrico: 'Exceso de agua', compatibilidadCiclo: 'Compatibilidad de fechas', proteccionSuelo: 'Protección del suelo', riesgoCalor: 'Riesgo por calor', aporteIndirecto: 'Aporte indirecto' };
 
-export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdasListas, errorCeldas, onFecha, claveTiempo }: {
+export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdasListas, errorCeldas, onFecha, claveTiempo, retener = false }: {
   estado: LaboratorioEstado; onAvanzar: (d: PasoLab) => void;
   fecha: string; rango: RangoTiempo | null; serie: EstadoSerieBalance; celdasListas: boolean; errorCeldas: string;
-  onFecha: (f: string) => void; claveTiempo: string;
+  onFecha: (f: string) => void; claveTiempo: string; retener?: boolean;
 }) {
   const { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario } = estado.seleccion;
   const plan = estado.planes.find((p) => p.rotacionId === rotacion) ?? estado.planes[0];
@@ -54,7 +54,7 @@ export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdas
         {!estado.calculo ? <Cargando>Calculando…</Cargando> : <dl className="lab-metricas">
           <div className="lab-tip" data-tip="Agua que el cultivo necesitó y no tuvo en todo el plan"><dt>Agua que faltó</dt><dd>{numero(pilar?.deficitHidrico.deficitTotalMm, ' mm')}</dd></div>
           <div className="lab-tip" data-tip="Parte de lo que el cultivo pidió de agua que no recibió"><dt>Sed del cultivo</dt><dd>{porcentaje(pilar?.deficitHidrico.proporcionDemandaNoCubierta)}</dd></div>
-          <div className="lab-tip" data-tip="Agua de lluvia que sobró y escurrió o se fue al subsuelo"><dt>Agua de más</dt><dd>{numero(pilar?.excesoHidrico?.excesoTotalMm, ' mm')}</dd></div>
+          <div className="lab-tip" data-tip="Lluvia que sobró y bajó más allá de la raíz: el cultivo ya no la aprovecha"><dt>Agua de más</dt><dd>{numero(pilar?.excesoHidrico?.excesoTotalMm, ' mm')}</dd></div>
         </dl>}
       </div>
 
@@ -68,7 +68,7 @@ export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdas
     </aside>
 
     <section className="lab-dock" aria-label="Recorrido en el tiempo">
-      <ControlTiempo key={claveTiempo} fecha={fecha} rango={rango} listo={!!estado.calculo && celdasListas} fallo={!!errorCeldas} onFecha={onFecha} />
+      <ControlTiempo key={claveTiempo} fecha={fecha} rango={rango} listo={!!estado.calculo && celdasListas} fallo={!!errorCeldas} retener={retener} onFecha={onFecha} />
       {serie.error && <Aviso tipo="error" accion={{ texto: 'Reintentar', onClick: serie.reintentar }}>No se pudo cargar el recorrido en el tiempo.</Aviso>}
     </section>
   </>;

@@ -1,10 +1,8 @@
 import type { CalendarioLocal, CatalogoCultivos, Ciclo, Fuente, Parcela, PlanSiembra } from '../../../contratos/tipos/contratos';
 import { parametrosCultivo } from '../motor/cultivo';
-import calendarioJson from '../../../datos/catalogos/calendario-isla.json';
 import version from '../../../contratos/package.json';
 import { dentroDeVentana } from '../motor/pilares';
 
-export const calendarioIsla = calendarioJson as CalendarioLocal;
 /** Nombres con acentos: una sola fuente, la de la escena (ficha.ts). */
 import { NOMBRES_CULTIVO_ESCENA } from '../escena/ficha';
 export const nombresCultivos: Record<string, string> = NOMBRES_CULTIVO_ESCENA;
@@ -13,11 +11,21 @@ export { COLORES_CULTIVO as coloresCultivo, colorCultivo } from '../escena/vista
 export function referenciaSiembra(cultivo: string, temporada: Ciclo['temporada'], calendario: CalendarioLocal | null) {
   return calendario?.entradas.find((e) => e.cultivo === cultivo && e.temporada === temporada && e.regimen === 'temporal');
 }
+/** Nombre del lugar del calendario para el texto: municipio (Mexico), si no la region o el pais en espanol. */
+export function lugarDelCalendario(calendario: CalendarioLocal): string {
+  const u = calendario.ubicacion;
+  if (u.municipio) return u.estado ? `${u.municipio}, ${u.estado}` : u.municipio;
+  // La region de GGCMI es una celda ("celda GGCMI 20.25,-101.25"): no es un nombre para mostrar.
+  if (u.region && !/^celda\b/i.test(u.region)) return u.region;
+  let pais = u.pais;
+  try { if (u.paisIso) pais = new Intl.DisplayNames(['es'], { type: 'region' }).of(u.paisIso) ?? u.pais; } catch { /* sin Intl: nombre del contrato */ }
+  return pais ? `esta zona de ${pais}` : 'esta zona';
+}
 export function explicarFecha(c: Pick<Ciclo, 'cultivo' | 'temporada'>, calendario: CalendarioLocal | null): { texto: string; fuente?: Fuente } {
   const e = referenciaSiembra(c.cultivo, c.temporada, calendario);
   if (!e || e.ventana.estado !== 'EVALUABLE') return { texto: 'Sin calendario local con ventana evaluable para este cultivo y temporada.' };
   const v = e.ventana;
-  return { texto: `Referencia para ${calendario!.ubicacion.municipio}, ${c.temporada}: ${v.desdeDia ?? 1}/${v.desdeMes} a ${v.hastaDia ?? 'fin'}/${v.hastaMes}. Requiere validación local.`, fuente: v.fuente };
+  return { texto: `Referencia para ${lugarDelCalendario(calendario!)}, ${c.temporada}: ${v.desdeDia ?? 1}/${v.desdeMes} a ${v.hastaDia ?? 'fin'}/${v.hastaMes}. Requiere validación local.`, fuente: v.fuente };
 }
 export function armarPlan(id: string, parcela: Parcela, ciclos: Ciclo[], calendario: CalendarioLocal | null, porCelda: PlanSiembra['porCelda'] = null): PlanSiembra {
   return {
@@ -32,13 +40,60 @@ export function armarPlan(id: string, parcela: Parcela, ciclos: Ciclo[], calenda
     }) as PlanSiembra['ciclos'],
   };
 }
-export function planesIniciales(parcela: Parcela, calendario: CalendarioLocal | null): PlanSiembra[] {
+/** Rotaciones de arranque. Con los cultivos sugeridos de un ejemplo, salen de esos cultivos y de las ventanas del calendario del lugar. */
+export function planesIniciales(parcela: Parcela, calendario: CalendarioLocal | null, opciones?: { sugeridos: readonly string[]; catalogo: CatalogoCultivos }): PlanSiembra[] {
+  const deEjemplo = opciones && opciones.sugeridos.length ? planesDeSugeridos(parcela, calendario, opciones.sugeridos, opciones.catalogo) : null;
+  if (deEjemplo?.length) return deEjemplo;
   const definiciones: Record<string, [string, string, Ciclo['temporada']][]> = {
     R1: [['maiz', '2026-06-15', 'PV'], ['frijol', '2026-11-01', 'OI'], ['maiz', '2027-06-15', 'PV']],
     R2: [['maiz', '2026-06-15', 'PV'], ['maiz', '2027-06-15', 'PV']],
     R3: [['maiz', '2026-06-01', 'PV'], ['frijol', '2026-10-10', 'OI'], ['maiz', '2027-06-01', 'PV']],
   };
   return Object.entries(definiciones).map(([id, lista]) => armarPlan(id, parcela, lista.map(([cultivo, siembra, temporada], i) => ({ ciclo: i + 1, cultivo, siembra, temporada, porQue: 'Plan de demostración editable, no recomendación.' })), calendario));
+}
+
+/**
+ * Primera fecha desde `desde` que cae en una ventana de siembra de temporal del cultivo (si `desde` ya esta dentro,
+ * `desde`). Sin ventana en el calendario, `desde` con la temporada que le toca por mes.
+ */
+export function fechaEnVentana(cultivo: string, desde: string, calendario: CalendarioLocal | null): { fecha: string; temporada: Ciclo['temporada']; enVentana: boolean } {
+  const anio0 = Number(desde.slice(0, 4));
+  let mejor: { fecha: string; temporada: Ciclo['temporada'] } | null = null;
+  for (const e of calendario?.entradas ?? []) {
+    if (e.cultivo !== cultivo || e.regimen !== 'temporal' || e.ventana.estado !== 'EVALUABLE') continue;
+    const v = e.ventana;
+    for (let anio = anio0 - 1; anio <= anio0 + 2; anio++) {
+      const inicio = inicioDeVentana(v, anio);
+      const cruza = v.hastaMes < v.desdeMes || (v.hastaMes === v.desdeMes && (v.hastaDia ?? 31) < (v.desdeDia ?? 1));
+      const anioFin = cruza ? anio + 1 : anio;
+      const fin = v.hastaDia ? `${anioFin}-${dos(v.hastaMes)}-${dos(v.hastaDia)}` : deDia(aDia(`${v.hastaMes === 12 ? anioFin + 1 : anioFin}-${dos(v.hastaMes === 12 ? 1 : v.hastaMes + 1)}-01`) - 1);
+      const candidata = desde >= inicio && desde <= fin ? desde : inicio >= desde ? inicio : null;
+      if (candidata && (!mejor || candidata < mejor.fecha)) mejor = { fecha: candidata, temporada: e.temporada };
+    }
+  }
+  return mejor ? { ...mejor, enVentana: true } : { fecha: desde, temporada: temporadaDeFecha(desde), enVentana: false };
+}
+
+const POR_QUE_EJEMPLO = 'Ejemplo editable con cultivos de la región, no recomendación.';
+function planesDeSugeridos(parcela: Parcela, calendario: CalendarioLocal | null, sugeridos: readonly string[], catalogo: CatalogoCultivos): PlanSiembra[] {
+  const enCatalogo = sugeridos.filter((c) => catalogo.cultivos.some((x) => x.id === c));
+  const [a, b] = enCatalogo;
+  if (!a) return [];
+  const leguminosa = (id: string) => catalogo.cultivos.find((x) => x.id === id)?.esLeguminosa === true;
+  const tercero = enCatalogo.find((c) => c !== a && c !== b && leguminosa(c)) ?? enCatalogo.find((c) => c !== a && c !== b);
+  const secuencia = (lista: string[]): Ciclo[] => {
+    const ciclos: Ciclo[] = [];
+    let desde = '2026-01-01';
+    lista.forEach((cultivo, i) => {
+      const f = fechaEnVentana(cultivo, desde, calendario);
+      ciclos.push({ ciclo: i + 1, cultivo, siembra: f.fecha, temporada: f.temporada, porQue: POR_QUE_EJEMPLO });
+      desde = deDia(aDia(f.fecha) + (diasCultivo(cultivo, catalogo) ?? 120) + 1);
+    });
+    return ciclos;
+  };
+  const listas: string[][] = [b ? [a, b, a] : [a, a, a], [a, a]];
+  if (b && tercero) listas.push([a, tercero, a]);
+  return listas.map((lista, i) => armarPlan(`R${i + 1}`, parcela, secuencia(lista), calendario));
 }
 
 const dos = (n: number) => String(n).padStart(2, '0');

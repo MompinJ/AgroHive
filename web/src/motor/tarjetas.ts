@@ -28,7 +28,7 @@ export interface ContextoTarjetas {
 }
 
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-const NOMBRE_ESC: Record<Escenario, string> = { seco: 'año seco', habitual: 'año habitual', lluvioso: 'año lluvioso' };
+const NOMBRE_ESC: Record<Escenario, string> = { seco: 'año seco', habitual: 'año normal', lluvioso: 'año lluvioso' };
 const PILAR: Record<string, string> = {
   deficitHidrico: 'falta de agua',
   excesoHidrico: 'exceso de agua',
@@ -207,7 +207,7 @@ export function tarjetaRotacion(ctx: ContextoTarjetas, r: ResultadoRotacion): Re
     const propios = dias(r);
     const otros = evaluadas.filter((x) => x.rotacionId !== r.rotacionId).map(dias).filter((d): d is number => d !== null);
     if (propios !== null && otros.length > 0 && propios < Math.min(...otros)) {
-      beneficios.push(`Suelo: es la que menos tiempo deja el terreno sin cultivo (${propios} días en el año habitual, contra ${Math.min(...otros)} a ${Math.max(...otros)} días de las demás).`);
+      beneficios.push(`Suelo: es la que menos tiempo deja el terreno sin cultivo (${propios} días en el año normal, contra ${Math.min(...otros)} a ${Math.max(...otros)} días de las demás).`);
     }
     const ex = (x: ResultadoRotacion) => x.porEscenario.lluvioso.pilares.excesoHidrico?.fraccionLluviaPercolada ?? null;
     const fx = ex(r);
