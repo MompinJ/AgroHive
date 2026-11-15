@@ -30,8 +30,8 @@ Complementa [[Resumen]]. Si esta nota y el archivo discrepan, manda el archivo.
 | `src/motor/pruebas/regresion/demo-isla.json` | Cifras congeladas de Isla (prueba interna; Isla dejó de ser la demo el 15/11) |
 | `src/motor/pruebas/regresion/ejemplos/` | Cifras congeladas de cada parcela de ejemplo mundial (`regresion-ejemplos.test.ts`) |
 | `src/escena/` | Three.js: relieve, `.bbmodel`, placas, losas. `EscenaParcela.tsx` es el componente que monta el laboratorio |
-| `src/ui/useLaboratorio.ts` | Carga demo o API, arma R1–R4 y llama al Worker |
-| `src/ui/planes.ts` | Definición de R1–R4 y calendario de Isla |
+| `src/ui/useLaboratorio.ts` | Carga demo o API, arma R1–R3 y llama al Worker |
+| `src/ui/planes.ts` | Definición de R1–R3 y calendario de Isla |
 | `src/ui/lab/` | Laboratorio por pasos sobre la escena de fondo: `PanelCultivos` (brocha), `PanelEscenarios` (métricas y tiempo), `PanelComparacion` (ranking y tarjetas) |
 | `src/ui/BarraPasos.tsx` | Stepper obligatorio Terreno → Cultivos → Escenarios → Comparación |
 | `src/ui/cuadricula.ts` | Polígono → celdas. `i` crece al norte desde el sur |
