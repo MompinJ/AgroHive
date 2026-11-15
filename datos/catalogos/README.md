@@ -9,7 +9,7 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 
 | Archivo | Contrato | Contenido |
 | --- | --- | --- |
-| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa (maiz, frijol, calabaza), chile (cultivo extra de la demo), del encargo #198 sorgo, sandia, camote y cacahuate (aun sin modelo 3D: no declaran `modelo3d`) y la ampliacion del 15/11 (lista abajo), tambien sin `modelo3d` |
+| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa (maiz, frijol, calabaza), chile (cultivo extra de la demo), del encargo #198 sorgo, sandia, camote y cacahuate (con `modelo3d`) y la ampliacion del 15/11 (lista abajo), sin `modelo3d` |
 | `suelos.json` | `contratos/tabla-suelos.schema.json` | TAW por clase USDA, FAO-56 Tabla 19 |
 | `calendario-isla.json` | `contratos/calendario-local.schema.json` | Ventanas de siembra y presencia en SIAP de Isla, por cultivo y temporada |
 | `saxton_rawls.py` | `agua` de `contratos/suelo.schema.json` | TAW y retencion (θsat, θFC, θWP) por pedotransferencia de Saxton y Rawls (2006) para cualquier textura; pruebas contra la Tabla 3 del articulo con `python -m unittest discover -s datos/catalogos` |
@@ -21,6 +21,10 @@ Meta: 30 a 50 cultivos con prioridad para Mexico, el tropico humedo y las rotaci
 | Tanda | Cultivos |
 | --- | --- |
 | 1, leguminosas y cereales | soya, frijol caupi, haba, chicharo, lenteja, ejote, cebada, trigo, avena, maiz dulce |
+| 2, cultivos de campo del tropico y de Mexico | yuca, cana de azucar, ajonjoli, girasol, algodon, cartamo, higuerilla, jitomate, papa, calabacita |
+| 3, hortalizas | cebolla, pepino, melon, lechuga, zanahoria, berenjena, brocoli, col, coliflor, espinaca, rabano, betabel |
+
+Total: 40 cultivos (8 anteriores y 32 de la ampliacion).
 
 **Criterio de fila de Tabla 11 para la ampliacion:** (a) la fila tropical si existe; (b) si no, la de siembra mas cercana a junio (temporal PV de Isla, como maiz, frijol, chile y sorgo); (c) en empate, la region mas calida; (d) se salta una fila con etapas impresas ambiguas (por ejemplo `50/30`) o que no suman su total, si otra fila cumple. Kc ini, Zr y p siguen las reglas de la tabla de abajo; un rango de Kc sin nota que elija se resuelve con el punto medio (como el Kc medio del sorgo).
 
@@ -75,6 +79,22 @@ Meta: 30 a 50 cultivos con prioridad para Mexico, el tropico humedo y las rotaci
 | Cebada, trigo y avena | Fila comun `Barley/Oats/Wheat`, Africa Oriental, julio: 15/30/65/40 = 150 d | De las dos filas tropicales (India central, noviembre; Africa Oriental, julio) la de julio es la mas cercana al PV. La tabla no dice la altitud: revisar |
 | Trigo, Kc end | 0.25 de 0.25-0.4 (nota 10: el mayor es para cosecha manual) | Se supone cosecha mecanica; revisar. Se usa trigo de primavera: el de invierno supone suelo helado o latencia |
 | Maiz dulce (elote) | `Maize (sweet)`, Filipinas, marzo: 80 d; Kc end 1.05 (nota 12, cosecha en fresco) | Unica fila tropical. No es el elote de maiz criollo cosechado tierno, que FAO-56 no publica |
+| Yuca | `Cassava: year 1`, regiones tropicales, temporada de lluvias: 20/40/90/60 = 210 d; Kc y p de la subfila `year 1` | Unica fila tropical; el ano 2 (360 d) continua el mismo cultivo y no cabe en la serie. La pagina parte "Rainy season" entre dos filas: cotejar |
+| Cana de azucar | `Sugarcane, virgin`, Tropics: 50/70/220/140 = 480 d; EcoCrop `Sugarcane` de *S. officinarum* | Cana de planta (siembra nueva); la soca (320 d) es rebrote sin siembra. Con 480 d solo cabe en la serie del escenario si se siembra de octubre a diciembre; en PV el motor la deja `NO_EVALUABLE` con motivo. SIAP la registra en Isla como `Perennes`: la presencia usa ese ciclo para PV y OI |
+| Ajonjoli | `Sesame`, China, junio: etapas 20/30/40/20 = 110 d | La fila imprime total 100 pero las etapas suman 110 (como el sorgo: se guardan las etapas, el ciclo es la suma; cotejar con el PDF) |
+| Girasol y cartamo, Kc medio | 1.0 de 1.0-1.15 (nota 9: los menores son para temporal con menor densidad) | Temporal. Cartamo: fila de California, abril (125 d) |
+| Algodon | `Cotton`, Egipto/Pakistan/California, marzo a mayo: 195 d; Kc medio 1.175 y Kc end 0.60 (puntos medios de 1.15-1.20 y 0.70-0.50) | Sin nota que elija dentro del rango; EcoCrop `Cotton, American upland` (*G. hirsutum*) |
+| Higuerilla | `Castor beans`, Indonesia, noviembre: 135 d | Unica fila tropical; cae en OI |
+| Jitomate | `Tomato`, Mediterraneo, abril/mayo: 145 d; Kc end 0.80 (punto medio de 0.70-0.90) | Empate de siembra con California (155 d); se eligio el Mediterraneo, como con la calabaza. El id es `tomate` y el nombre "Jitomate" para no confundirlo con el tomate verde |
+| Papa | `Potato`, clima continental, mayo: 130 d | Siembra mas cercana a junio; la fila (semi)arida imprime etapas ambiguas (30/45) |
+| Calabacita | `Squash, Zucchini`, Mediterraneo/Europa, mayo/junio: 90 d; EcoCrop `Vegetable marrow` (*C. pepo*) | Calabacita tierna; la calabaza de milpa madura sigue siendo `calabaza` |
+| Hortalizas pequenas (cebolla, lechuga, zanahoria, brocoli, col, coliflor, espinaca, rabano) | Kc ini 0.7 del grupo a. Small Vegetables; betabel 0.5 (Roots and Tubers), berenjena 0.6 (Solanum), melon 0.5 (Cucumber Family); el pepino trae Kc ini propio (0.6) | Mismo criterio de Kc ini de grupo que los ocho primeros |
+| Cebolla | `Onion (dry)`, Mediterraneo, abril: 150 d | Bulbo seco; la de rabo tiene otra fila |
+| Pepino | `Cucumber`, region arida, junio/agosto: 105 d; subfila `Fresh Market` | Para consumo en fresco; la de cosecha mecanica tiene Kc end 0.90 |
+| Melon | `Sweet melons`, Mediterraneo, mayo: 120 d | Fila general de *Cucumis melo*; el cantaloupe tiene fila aparte, solo de California |
+| Zanahoria y espinaca | Zanahoria: Mediterraneo, febrero/marzo (150 d). Espinaca: region arida, noviembre (100 d) | Se saltaron filas con etapas ambiguas (`50/30`; `15/25` y `60/70`), regla (d) |
+| Berenjena | `Egg plant`, region arida, octubre: 30/40/40/20 = 130 d | La fila de mayo/junio imprime total 40 y sus etapas suman 140; se salto, regla (d). La pagina imprime el total elegido como `130\1` |
+| Brocoli, col y coliflor | Unica fila de cada una: desierto de California, septiembre (135, 165 y 140 d) | Nota 1 de Tabla 11: la duracion de las cruciferas varia mucho con la variedad |
 
 ## Huecos (NO_EVALUABLE)
 

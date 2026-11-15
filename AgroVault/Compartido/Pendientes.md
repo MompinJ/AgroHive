@@ -10,7 +10,7 @@ No cierres una fila "para ir avanzando". Si un default es inevitable para compil
 
 ## Hecho y que el vault no debe volver a abrir
 
-Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo, años análogos, tarjetas en el motor, regresión, contratos 0.12.2, catálogo y calendario de Isla, TAW de Saxton y Rawls conectado a `/api/suelo`, ISRIC y OpenLandMap, IMERG como evidencia, escena 3D con modelos de los 8 cultivos del catálogo (milpa, chile, sorgo, sandía, camote y cacahuate; los cuatro últimos en `Mompin-escena` el 14/11 noche), losas de suelo en la escena, estados con daltonismo, selector R1–R4, banda en la interfaz, paquete de demo, API y front en el droplet. Detalle en [[Resumen]] y `docs/13`.
+Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo, años análogos, tarjetas en el motor, regresión, contratos 0.12.2, catálogo y calendario de Isla, TAW de Saxton y Rawls conectado a `/api/suelo`, ISRIC y OpenLandMap, IMERG como evidencia, escena 3D con modelos de los 8 cultivos del catálogo (milpa, chile, sorgo, sandía, camote y cacahuate; los cuatro últimos en `Mompin-escena` el 14/11 noche), catálogo ampliado a 40 cultivos (los 32 nuevos sin modelo 3D, con planta provisional; `Mompin-features`, 15/11), losas de suelo en la escena, estados con daltonismo, selector R1–R4, banda en la interfaz, paquete de demo, API y front en el droplet. Detalle en [[Resumen]] y `docs/13`.
 
 ## Marcas de `docs/14` que ya no describen el código
 
@@ -21,7 +21,7 @@ Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo,
 | A4.8 | Falta el schema `smap` | `[HECHO]` el 14/11 noche: el schema existe desde 0.10.0 y `GET /api/smap` publico devolvio humedad real. La interfaz no llama a SMAP (contraste, fuera del ranking) |
 | A2.12 / A3.1 | La escena no carga losas o no está en el Laboratorio | La escena carga las 9 losas y el Laboratorio la monta en diferido |
 | C2 en `docs/14` | El TAW de Isla es `NO_EVALUABLE` | El suelo del paquete trae TAW 122.3 mm/m y la rotación sale `EVALUABLE` |
-| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.13.0 en `contratos/`: 16 schemas (más `comun`), ejemplos, `npm test` (101/101) y tipos TS. Ver [[Contratos]] |
+| A1.1 | **`[HECHO]`** (14/11): `main` en verde y contratos revisados por el equipo en persona | Contratos v0.14.0 en `contratos/`: 16 schemas (más `comun`), ejemplos, `npm test` (102/102) y tipos TS. Ver [[Contratos]] |
 | A2.5, A2.6, A2.7 | Hechas (Mompin, integradas a `main`) | Motor en `web/src/motor/` (funciones puras + Web Worker; la interfaz usa `crearClienteMotor()`): escenarios por lluvia de temporadas PV+OI de SIAP, ET0 Penman-Monteith FAO-56, cubeta FAO-56 cap. 8, pilar de déficit hídrico y estados. Pruebas 1 a 5 de doc 05 en verde (`cd web && npm test`; la parte de erosión de la prueba 2 pasa a A3.7). Ver `docs/05` |
 | A4.1 | Parte del motor hecha (Mompin), contrato `serie-balance` 0.11.0; balam lo grafica en el dashboard (`[HECHO]`) | `cliente.serieBalance(rotacionId, escenario)`: lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo. La interfaz no recalcula |
 | A4.3 | `[HECHO]`: lógica de Mompin; `TarjetasRotacion` la muestra en el laboratorio y la comparación (balam) | `web/src/motor/tarjetas.ts` llena `explicacion` (por qué, evidencia con fuente, beneficios, huecos, riesgos) y el Worker la devuelve en `rankear`. Plantilla sin LLM; nada sin número o fuente |

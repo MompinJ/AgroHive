@@ -49,6 +49,14 @@ const SIEMBRA = { PV: '2016-06-15', OI: '2016-11-01' } as const;
 const casos = catalogo.cultivos.flatMap((c) => (['PV', 'OI'] as const).map((t) => [c.id, t] as const));
 
 describe('catalogo ampliado: todos los cultivos se simulan con estados honestos', () => {
+  it('ids unicos y sin modelo3d en los cultivos de la ampliacion', () => {
+    const ids = catalogo.cultivos.map((c) => c.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    const i = ids.indexOf('soya');
+    expect(i).toBeGreaterThan(0);
+    for (const c of catalogo.cultivos.slice(i)) expect(c.modelo3d, c.id).toBeUndefined();
+  });
+
   it('cada cultivo tiene sus parametros esenciales con fuente', () => {
     for (const c of catalogo.cultivos) expect(parametrosCultivo(c).ok, c.id).toBe(true);
   });
@@ -81,6 +89,19 @@ describe('catalogo ampliado: todos los cultivos se simulan con estados honestos'
     if (celdas) expect(validarCelda(celdas)).toEqual([]);
     const serie = serieBalance(res, 'habitual');
     if (serie) expect(validarSerie(serie)).toEqual([]);
+  });
+
+  it('un ciclo que no cabe en la serie del escenario sale NO_EVALUABLE con motivo, sin numeros (cana de 480 d en PV)', () => {
+    const pv = simularRotacion(entradas(plan('cana', SIEMBRA.PV, 'PV'))).rotacion;
+    expect(pv.estado).toBe('NO_EVALUABLE');
+    expect(pv.advertencias?.some((a) => a.mensaje.includes('la serie termina antes de terminar el ciclo'))).toBe(true);
+    for (const e of ESCENARIOS) {
+      const x = pv.porEscenario[e];
+      expect(x.estado).toBe('NO_EVALUABLE');
+      expect(x.pilares.deficitHidrico?.proporcionDemandaNoCubierta ?? null).toBeNull();
+    }
+    const oi = simularRotacion(entradas(plan('cana', SIEMBRA.OI, 'OI'))).rotacion;
+    for (const e of ESCENARIOS) expect(oi.porEscenario[e].pilares.deficitHidrico?.proporcionDemandaNoCubierta).toEqual(expect.any(Number));
   });
 
   it('las tarjetas y el ranking aguantan una comparacion con cultivos nuevos', () => {

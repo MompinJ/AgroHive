@@ -13,6 +13,7 @@ import type {
   IdCultivo,
   RegistroCelda,
 } from '../../../contratos/tipos/contratos';
+import type { FormaCelda } from '../geo/forma-celda';
 
 /** Tope de celdas de la cuadricula (doc 08 y contrato parcela, A2.9). */
 export const TOPE_CELDAS = 1600;
@@ -63,6 +64,11 @@ export interface BloqueEscena {
   /** Pendiente tal como la entrega la parcela; null si no se calculo. */
   pendientePct: number | null;
   fraccionDentro: number | null;
+  /**
+   * Como se dibuja la celda: completa o medio cuadrado (contrato parcela 0.14.0, celda.forma).
+   * Sale tal cual de la parcela; sin el campo, 'completa'. No pesa en ningun calculo.
+   */
+  forma: FormaCelda;
   estadoVisual: EstadoVisual;
   /** Estado de evaluacion del registro (doc 04); null si no hay registro. */
   estadoEvaluacion: EstadoEvaluacion | null;
