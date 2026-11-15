@@ -2,6 +2,12 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 — Los 20 bloques de Mafer en la escena, medidos (Mompin)
+
+- **Archivos:** `web/src/escena/voxel/bloque.ts` (tope de 24; el provisional queda solo de respaldo), `medir/medir.tsx` (caso nuevo: mezcla de los 4 cultivos con `plan.porCelda`); `docs/06`.
+- **Medido (518 celdas, SwiftShader):** maíz en madurez, 191 416 triángulos y 6.7 cuadros/s; antes 449 380 y 3.2 con el detallado. Mezcla de 4 cultivos: 8 draw calls y 6.5 cuadros/s; reposo 0. Los 20 bloques revisados uno por uno y en la escena; la celda elegida sigue resaltando.
+- **Observación para Mompin:** con bloques bajos, las placas de estado dominan la vista de lejos.
+
 ### 2026-11-14 — A5.2 y A5.3: tiempo compartido, móvil y accesibilidad (balam)
 
 - **Archivos:** `web/src/ui/ControlTiempo.tsx`, `tiempo.ts`, `useSerieBalance.ts`, `tiempo.css` y pruebas; `LaboratorioConectado`, `DashboardBalance`, `InicioHeader`, `system.css`, `terreno.css`; `docs/06`, `docs/14`, vistas del tablero y `web/README.md`.

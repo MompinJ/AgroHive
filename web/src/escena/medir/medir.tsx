@@ -1,7 +1,7 @@
 // Medicion de la escena en el equipo real (A5.4, la corre Eduardo): abre web/medir.html en
 // el navegador del equipo (laptop sin GPU dedicada, celular) o con herramientas/medir-escena/.
-// Mide con la parcela demo (paquete sin internet) y con el poligono de 518 celdas (elevacion
-// de la API), y prueba la perdida del contexto WebGL. No cambia nada de la app: solo monta
+// Mide con la parcela demo (paquete sin internet), con el poligono de 518 celdas (elevacion
+// de la API) y con ese poligono sembrado con una mezcla de los 4 cultivos, y prueba la perdida del contexto WebGL. No cambia nada de la app: solo monta
 // EscenaParcela con datos y lee sus estadisticas.
 //
 // Parametros de la URL: ?api=<url de la API> (por defecto la de la app), ?viento=<segundos>
@@ -9,7 +9,7 @@
 
 import { StrictMode, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import type { Parcela, ResultadoCeldas, SerieBalance, SerieClima, Suelo } from '../../../../contratos/tipos/contratos';
+import type { Parcela, PlanSiembra, ResultadoCeldas, SerieBalance, SerieClima, Suelo } from '../../../../contratos/tipos/contratos';
 import { obtenerTerreno, urlBase } from '../../api/cliente';
 import { crearClienteMotor } from '../../motor';
 import { generarCuadricula } from '../../ui/cuadricula';
@@ -24,6 +24,7 @@ const SEG_REPOSO = Number(parametros.get('reposo') ?? 3);
 const AUTO = parametros.get('auto') !== '0';
 const POLIGONO_518: [number, number][] = [[-95.526, 18.028], [-95.5236, 18.028], [-95.5236, 18.0302], [-95.5248, 18.0302], [-95.5248, 18.0292], [-95.526, 18.0292]];
 const FECHA = '2016-09-29'; // maiz en madurez en la rotacion de prueba R1 (el caso mas pesado)
+const FECHA_MEZCLA = '2016-08-15'; // los 4 cultivos del ciclo 1 en etapas distintas
 
 interface Medida {
   caso: string;
@@ -88,7 +89,7 @@ function memoriaMB(): number | null {
 /** El cliente de la API pide a urlBase(); para medir contra otra API se reescribe la URL. */
 const fetchApi: typeof fetch = (entrada, init) => fetch(String(entrada).replace(urlBase(), API), init);
 
-type Caso = { nombre: string; parcela: Parcela; resultado: ResultadoCeldas | null; serie: SerieBalance | null; suelo: Suelo | null; nota?: string };
+type Caso = { nombre: string; parcela: Parcela; resultado: ResultadoCeldas | null; serie: SerieBalance | null; suelo: Suelo | null; fecha?: string; nota?: string };
 
 async function prepararCasos(registrar: (t: string) => void): Promise<Caso[]> {
   const cliente = crearClienteMotor();
@@ -119,6 +120,16 @@ async function prepararCasos(registrar: (t: string) => void): Promise<Caso[]> {
     await cliente.simular({ ...demo, parcela: conTerreno, plan: planPrueba(conTerreno.id), escenarios: sel.escenarios });
     casos.push({ nombre: 'poligono propio (518 celdas)', parcela: conTerreno, resultado: await cliente.celdas('R1', 'seco', FECHA), serie: await cliente.serieBalance('R1', 'seco'), suelo: demo.suelo, ...(nota ? { nota } : {}) });
     registrar('Poligono de 518 celdas listo.');
+    // Mezcla: el mismo poligono con franjas de maiz, frijol, calabaza y chile en el ciclo 1
+    // (plan.porCelda); a mediados de agosto cada cultivo va en una etapa distinta.
+    const cultivos = ['maiz', 'frijol', 'calabaza', 'chile'];
+    const planMezcla = planPrueba(conTerreno.id);
+    planMezcla.porCelda = Object.fromEntries(
+      conTerreno.celdas.map((c) => [c.id, [{ ciclo: 1, cultivo: cultivos[Math.floor(c.j / 4) % 4]! }, { ciclo: 2, cultivo: 'frijol' }, { ciclo: 3, cultivo: 'maiz' }]]),
+    ) as PlanSiembra['porCelda'];
+    await cliente.simular({ ...demo, parcela: conTerreno, plan: planMezcla, escenarios: sel.escenarios });
+    casos.push({ nombre: 'mezcla de 4 cultivos (518 celdas)', parcela: conTerreno, resultado: await cliente.celdas('R1', 'seco', FECHA_MEZCLA), serie: await cliente.serieBalance('R1', 'seco'), suelo: demo.suelo, fecha: FECHA_MEZCLA, ...(nota ? { nota } : {}) });
+    registrar('Mezcla de cultivos lista.');
     return casos;
   } finally {
     cliente.terminar();
@@ -311,7 +322,7 @@ function Medidor() {
             key={caso.nombre}
             parcela={caso.parcela}
             resultado={caso.resultado}
-            fecha={FECHA}
+            fecha={caso.fecha ?? FECHA}
             suelo={caso.suelo}
             serieBalance={caso.serie}
             onEscena={(e) => {
