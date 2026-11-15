@@ -1,6 +1,7 @@
 // Cliente del motor para la interfaz: crea el Web Worker y expone promesas. La interfaz no recalcula indicadores:
 // solo pide y muestra lo que devuelve el motor.
 import type { SeleccionEscenarios } from './escenarios';
+import type { IdiomaMotor } from './idioma';
 import type { EntradasMotor } from './motor';
 import type { Peticion, Respuesta } from './protocolo';
 import type { VistaProximaTemporada } from './proxima';
@@ -17,8 +18,10 @@ export interface ClienteMotor {
   simular(entradas: EntradasMotor): Promise<ResultadoRotacion>;
   /** resultado-celda de todas las celdas en una fecha del plan (para la escena 3D, el 2D y los tooltips). */
   celdas(rotacionId: string, escenario: Escenario, fecha: string): Promise<ResultadoCeldas>;
-  /** A4.2: ranking por robustez de las rotaciones simuladas. Pedirlo de nuevo despues de cada simular. */
-  rankear(rotacionIds?: string[], opciones?: OpcionesRanking): Promise<ResultadoRanking>;
+  /** A4.2: ranking por robustez de las rotaciones simuladas. Pedirlo de nuevo despues de cada simular.
+   * `idioma` ('es' | 'en', por defecto 'es'): idioma de las tarjetas (`explicacion`) y de los motivos de noOrdenadas.
+   * Cambiar de idioma solo pide rankear otra vez (no vuelve a simular). */
+  rankear(rotacionIds?: string[], opciones?: OpcionesRanking, idioma?: IdiomaMotor): Promise<ResultadoRanking>;
   /** A2.13: valida la banda de proxima temporada y la compara con los escenarios. Nunca devuelve una cifra unica. */
   proxima(proxima: ProximaTemporadaAproximada | null, escenarios: SeleccionEscenarios['escenarios']): Promise<VistaProximaTemporada>;
   /** A4.1: series del balance de agua (diarias y por mes) de una rotacion en un escenario, para el dashboard. */
@@ -77,8 +80,8 @@ export function crearClienteMotor(crear: () => WorkerMotor = crearWorker): Clien
     escenarios: (serie) => pedir({ tipo: 'escenarios', serie }),
     simular: (entradas) => pedir({ tipo: 'simular', entradas }),
     celdas: (rotacionId, escenario, fecha) => pedir({ tipo: 'celdas', rotacionId, escenario, fecha }),
-    rankear: (rotacionIds, opciones) =>
-      pedir({ tipo: 'rankear', ...(rotacionIds ? { rotacionIds } : {}), ...(opciones ? { opciones } : {}) }),
+    rankear: (rotacionIds, opciones, idioma) =>
+      pedir({ tipo: 'rankear', ...(rotacionIds ? { rotacionIds } : {}), ...(opciones ? { opciones } : {}), ...(idioma ? { idioma } : {}) }),
     proxima: (proxima, escenarios) => pedir({ tipo: 'proxima', proxima, escenarios }),
     serieBalance: (rotacionId, escenario) => pedir({ tipo: 'serieBalance', rotacionId, escenario }),
     olvidar: async (rotacionId) => {

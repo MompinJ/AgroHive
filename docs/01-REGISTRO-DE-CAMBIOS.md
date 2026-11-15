@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Tarjetas del motor en inglés: `idioma` opcional en `rankear` (IA de Mompin, sesión "ingles", parte 1)
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; balam traduce la interfaz (B7) y el motor arma sus propios textos en los dos idiomas.
+- **Archivos:** `web/src/motor/idioma.ts` (nuevo: `IdiomaMotor`, `IDIOMA_MOTOR_POR_DEFECTO`, `esIdiomaMotor`, `idiomaMotor`), `web/src/motor/tarjetas.ts` (las frases pasan a un diccionario `TEXTOS` por idioma; `ContextoTarjetas.idioma`; `AVISOS_EXPERTO`, `nombreEscenario`; `ventanasDe` con idioma), `web/src/motor/ranking.ts` (`rankear(entrada, opciones, idioma)`: `mensaje` y motivos de `noOrdenadas`), `web/src/motor/protocolo.ts` (`idioma?` en la petición `rankear`), `web/src/motor/cliente.ts` (`rankear(rotacionIds?, opciones?, idioma?)`; solo manda `idioma` si se lo pasan), `web/src/motor/index.ts`; pruebas nuevas `web/src/motor/pruebas/tarjetas-ingles.test.ts` y `regresion-ingles.test.ts` con `regresion/ingles/bajio-guanajuato.json`; `docs/05` (paso 8: cómo se usa, qué se traduce y qué no), `docs/16` (fila B7), `AgroVault/Compartido/Resumen.md`.
+- **Cambio:** con `idioma: 'en'` las tarjetas salen en inglés con las mismas cifras y fuentes; sin idioma, en español. Los motivos técnicos de `NO_EVALUABLE` se citan en español, marcados ("Engine reason (in Spanish)"); las fuentes y sus citas no se traducen. Detalle en `docs/05`.
+- **Evidencia:** la regresión A5.5 en español (`demo-isla.json`) no cambia; la de los ejemplos mundiales tampoco.
+- **Pendiente:** (1) la UI pasa `idioma` desde `useIdioma` (balam, B7; línea exacta en `docs/05`); (2) los nombres de cultivo en inglés llegan con `nombreComunEn` del catálogo (parte 2); mientras, la tarjeta en inglés usa el nombre en español.
+- **No se tocó:** `web/src/ui/`, `web/src/paginas/`.
+
 ### 2026-11-15 — B7, parte 1: base de idioma español/inglés (balam; registrado por Mompin)
 
 - **Archivos:** `web/src/ui/i18n/` (nuevo: `Idioma.tsx` con `ProveedorIdioma` y `useIdioma` con `idioma`, `cambiarIdioma` y `t`; `diccionarios.ts`; `preferencia.ts`; `SelectorIdioma.tsx`; `idioma.css`; prueba), Inicio y `BarraPasos` traducidos (rama `balam`, `06ada93`, PR #13).

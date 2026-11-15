@@ -24,6 +24,7 @@
 // lugar) recibe sus metricas y peor caso, pero no posicion: se ilustra, no se recomienda.
 import { juntarAdvertencias } from './estados';
 import { diasAnioAgricola } from './pilares';
+import { IDIOMA_MOTOR_POR_DEFECTO, idiomaMotor, type IdiomaMotor } from './idioma';
 import {
   ESCENARIOS,
   type Advertencia,
@@ -42,6 +43,21 @@ const PILARES: readonly PilarPuntaje[] = ['deficitHidrico', 'excesoHidrico', 'co
 const COMPLEMENTARIOS: readonly PilarPuntaje[] = ['riesgoCalor', 'aporteIndirecto'];
 const TOL = 1e-9;
 export const SIN_OPCION_ROBUSTA = 'No podemos determinar una opcion mas robusta con estos datos.';
+/** Mensaje y motivos del ranking que la interfaz muestra, por idioma ([DECIDIDO] 15/11; por defecto espanol). */
+const TEXTOS_RANKING: Record<IdiomaMotor, { sinOpcion: string; escenariosDistintos: string; exploratorio: string; sinMetricas: (estado: string) => string }> = {
+  es: {
+    sinOpcion: SIN_OPCION_ROBUSTA,
+    escenariosDistintos: 'Las rotaciones no usan los mismos anios de escenario.',
+    exploratorio: 'EXPLORATORIO: se muestra, pero no se recomienda (por ejemplo, un cultivo que la fuente local no registra en el lugar).',
+    sinMetricas: (estado) => `${estado}: sin metricas completas en los tres escenarios.`,
+  },
+  en: {
+    sinOpcion: 'We cannot determine a more robust option with these data.',
+    escenariosDistintos: 'The rotations do not use the same scenario years.',
+    exploratorio: 'EXPLORATORIO: shown, but not recommended (for example, a crop the local source does not record in the place).',
+    sinMetricas: (estado) => `${estado}: metrics are not complete in the three scenarios.`,
+  },
+};
 
 export interface RotacionParaRanking {
   rotacion: ResultadoRotacion;
@@ -113,7 +129,9 @@ function conNumeros(r: ResultadoRotacion): boolean {
 const ordenable = (r: ResultadoRotacion) => r.estado === 'EVALUABLE' || r.estado === 'RESPALDO_HISTORICO';
 
 /** Ordena las rotaciones por robustez. Puras: no modifica la entrada, devuelve copias. */
-export function rankear(entrada: readonly RotacionParaRanking[], opciones: OpcionesRanking = {}): ResultadoRanking {
+/** `idioma` solo cambia el mensaje y los motivos de noOrdenadas (el orden y las cifras no dependen de el). */
+export function rankear(entrada: readonly RotacionParaRanking[], opciones: OpcionesRanking = {}, idioma: IdiomaMotor = IDIOMA_MOTOR_POR_DEFECTO): ResultadoRanking {
+  const T = TEXTOS_RANKING[idiomaMotor(idioma)];
   const rotaciones = entrada.map((x) => structuredClone(x.rotacion));
   const siembras = new Map(entrada.map((x) => [x.rotacion.rotacionId, x.numeroSiembras]));
   const advertencias: Advertencia[] = [];
@@ -127,9 +145,9 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
       criterio: null,
       ponderacion: null,
       orden: [],
-      noOrdenadas: rotaciones.map((r) => ({ rotacionId: r.rotacionId, motivo: 'Las rotaciones no usan los mismos anios de escenario.' })),
+      noOrdenadas: rotaciones.map((r) => ({ rotacionId: r.rotacionId, motivo: T.escenariosDistintos })),
       rotaciones,
-      mensaje: SIN_OPCION_ROBUSTA,
+      mensaje: T.sinOpcion,
       advertencias: [{ codigo: 'ESCENARIOS_DISTINTOS', mensaje: 'Solo se comparan rotaciones calculadas con los mismos tres anios reales.', severidad: 'critico' }],
     };
   }
@@ -142,13 +160,13 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
         rotacionId: r.rotacionId,
         motivo:
           r.estado === 'EXPLORATORIO'
-            ? 'EXPLORATORIO: se muestra, pero no se recomienda (por ejemplo, un cultivo que la fuente local no registra en el lugar).'
-            : `${r.estado}: sin metricas completas en los tres escenarios.`,
+            ? T.exploratorio
+            : T.sinMetricas(r.estado),
       });
     }
   }
   if (ordenar.length === 0) {
-    return { criterio: null, ponderacion: null, orden: [], noOrdenadas, rotaciones, mensaje: SIN_OPCION_ROBUSTA, advertencias };
+    return { criterio: null, ponderacion: null, orden: [], noOrdenadas, rotaciones, mensaje: T.sinOpcion, advertencias };
   }
 
   // Pilares que entran al puntaje.
@@ -162,7 +180,7 @@ export function rankear(entrada: readonly RotacionParaRanking[], opciones: Opcio
   }
   const criterio: CriterioRanking = opciones.criterio ?? (entran.length >= 2 ? 'B_minimax_arrepentimiento' : 'A_exposicion_hidrica_peor_caso');
   if (criterio === 'B_minimax_arrepentimiento' && entran.length < 1) {
-    return { criterio: null, ponderacion: null, orden: [], noOrdenadas, rotaciones, mensaje: SIN_OPCION_ROBUSTA, advertencias };
+    return { criterio: null, ponderacion: null, orden: [], noOrdenadas, rotaciones, mensaje: T.sinOpcion, advertencias };
   }
 
   let ponderacion: Ponderacion | null = null;

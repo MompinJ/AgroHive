@@ -6,6 +6,7 @@ import { resultadoCeldas, type EntradasMotor, type ResultadoMotor } from './moto
 import { vistaProximaTemporada, type VistaProximaTemporada } from './proxima';
 import { rankear, type OpcionesRanking, type ResultadoRanking } from './ranking';
 import { serieBalance } from './series';
+import { idiomaMotor, type IdiomaMotor } from './idioma';
 import { conTarjetas } from './tarjetas';
 import type { ProximaTemporadaAproximada } from '../../../contratos/tipos/contratos';
 import type { Escenario, ResultadoCeldas, ResultadoRotacion, SerieBalance, SerieClima } from './tipos';
@@ -14,8 +15,10 @@ export type Peticion =
   | { id: number; tipo: 'escenarios'; serie: SerieClima }
   | { id: number; tipo: 'simular'; entradas: EntradasMotor }
   | { id: number; tipo: 'celdas'; rotacionId: string; escenario: Escenario; fecha: string }
-  /** A4.2: ordena las rotaciones ya simuladas (todas, o las de rotacionIds). Se vuelve a pedir tras cada 'simular'. */
-  | { id: number; tipo: 'rankear'; rotacionIds?: string[]; opciones?: OpcionesRanking }
+  /** A4.2: ordena las rotaciones ya simuladas (todas, o las de rotacionIds). Se vuelve a pedir tras cada 'simular'.
+   * `idioma` (opcional, por defecto 'es'): idioma de las tarjetas y de los motivos de noOrdenadas. Volver a pedir
+   * 'rankear' con otro idioma no vuelve a simular: reordena lo guardado y rehace los textos. */
+  | { id: number; tipo: 'rankear'; rotacionIds?: string[]; opciones?: OpcionesRanking; idioma?: IdiomaMotor }
   /** A2.13: banda de proxima temporada (GET /api/proxima-temporada) junto a los escenarios de A2.5. */
   | { id: number; tipo: 'proxima'; proxima: ProximaTemporadaAproximada | null; escenarios: SeleccionEscenarios['escenarios'] }
   /** A4.1: series del balance de agua de una rotacion en un escenario (bajo demanda, para el dashboard). */
@@ -61,18 +64,19 @@ export class EstadoMotor {
         }
         case 'rankear': {
           const ids = p.rotacionIds ?? [...this.rotaciones.keys()].sort();
-          if (ids.length === 0) return { id: p.id, ok: true, resultado: rankear([], p.opciones ?? {}) }; // sin rotaciones no hay tarjetas que armar
+          const idioma = idiomaMotor(p.idioma);
+          if (ids.length === 0) return { id: p.id, ok: true, resultado: rankear([], p.opciones ?? {}, idioma) }; // sin rotaciones no hay tarjetas que armar
           const faltan = ids.filter((i) => !this.rotaciones.has(i));
           if (faltan.length > 0) return { id: p.id, ok: false, error: `Rotaciones sin calcular: ${faltan.join(', ')}.` };
           const entrada = ids.map((i) => {
             const r = this.rotaciones.get(i) as ResultadoMotor;
             return { rotacion: r.rotacion, numeroSiembras: r.plan.ciclos.length };
           });
-          const ranking = rankear(entrada, p.opciones ?? {});
+          const ranking = rankear(entrada, p.opciones ?? {}, idioma);
           // A4.3: cada rotacion sale con su tarjeta en `explicacion` (plantilla, sin LLM).
           const e0 = this.entradas.get(ids[0] as string) as EntradasMotor;
           const motores = Object.fromEntries(ids.map((i) => [i, this.rotaciones.get(i) as ResultadoMotor]));
-          const rotaciones = conTarjetas({ ranking, motores, catalogo: e0.catalogo, calendario: e0.calendario ?? null, suelo: e0.suelo });
+          const rotaciones = conTarjetas({ ranking, motores, catalogo: e0.catalogo, calendario: e0.calendario ?? null, suelo: e0.suelo, idioma });
           return { id: p.id, ok: true, resultado: { ...ranking, rotaciones } };
         }
         case 'serieBalance': {
