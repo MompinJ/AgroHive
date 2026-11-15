@@ -6,6 +6,7 @@ export { simularRotacion, resultadoCeldas, siembraEnEscenario, type EntradasMoto
 export { rankear, SIN_OPCION_ROBUSTA, type OpcionesRanking, type ResultadoRanking, type FilaRanking } from './ranking';
 export { vistaProximaTemporada, mesEnEscenario, type VistaProximaTemporada, type MesProximaTemporada } from './proxima';
 export { proximaTemporadaRotacion, simularRotacionCompleta, candidatosAnalogos, AVISO_ANALOGOS } from './analogos';
-export { tarjetaRotacion, conTarjetas, AVISO_EXPERTO, type ContextoTarjetas } from './tarjetas';
+export { tarjetaRotacion, conTarjetas, nombreEscenario, AVISO_EXPERTO, AVISOS_EXPERTO, type ContextoTarjetas } from './tarjetas';
+export { IDIOMA_MOTOR_POR_DEFECTO, esIdiomaMotor, idiomaMotor, type IdiomaMotor } from './idioma';
 export { serieBalance } from './series';
 export { VERSION_CONTRATO, ESCENARIOS, type SerieBalance } from './tipos';
