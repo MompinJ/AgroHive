@@ -308,3 +308,48 @@
 .cmp-fuerte li::before { background: var(--color-forest-700); }
 .cmp-acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 .cmp-acciones .lab-boton { flex: 1 1 auto; min-height: 38px; padding: 6px 12px; font-size: .82rem; }
+
+/* Mascota en pantalla (arriba a la derecha) con globo de consejos */
+.mascota { position: absolute; z-index: 15; top: calc(var(--lab-top) - 4px); right: var(--lab-borde); display: flex; align-items: flex-start; gap: 6px; pointer-events: none; }
+.mascota > * { pointer-events: auto; }
+.mascota-boton { width: 124px; height: 124px; padding: 0; border: 0; background: transparent; cursor: pointer; filter: drop-shadow(0 8px 14px rgb(17 34 26 / 28%)); }
+.mascota-boton img { width: 100%; height: 100%; image-rendering: auto; }
+@media (prefers-reduced-motion: no-preference) {
+  .mascota-boton { transition: transform 200ms ease; }
+  .mascota-boton:hover { transform: translateY(-3px) rotate(-3deg); }
+  .mascota-abierta .mascota-globo { animation: mascota-entra 220ms ease-out; }
+}
+@keyframes mascota-entra { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
+.mascota-respaldo { display: block; width: 56px; height: 76px; margin: 8px auto; border-radius: 28px 28px 18px 18px; background: linear-gradient(#f3cf4a, #d9a62e); }
+.mascota-globo { position: relative; width: min(300px, calc(100vw - 140px)); margin-top: 10px; padding: 12px 14px 10px; border-radius: 16px; background: #fff; box-shadow: var(--shadow-float); border-top: 4px solid var(--tono, var(--color-forest-700)); }
+.mascota-globo::after { content: ''; position: absolute; right: -7px; top: 28px; width: 14px; height: 14px; background: #fff; transform: rotate(45deg); box-shadow: 3px -3px 6px -3px rgb(17 34 26 / 12%); }
+.mascota-dato { --tono: #2f6690; }
+.mascota-ojo { --tono: #d9772b; }
+.mascota-idea { --tono: var(--color-forest-700); }
+.mascota-globo p { margin: 0; font-size: .86rem; line-height: 1.45; color: var(--color-forest-950); }
+.mascota-pie { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.mascota-cuenta { font-size: .72rem; color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+.mascota-pie button { border: 0; background: transparent; font: inherit; font-size: .8rem; font-weight: 650; color: var(--color-forest-700); cursor: pointer; padding: 4px 6px; border-radius: 8px; }
+.mascota-pie button:hover { background: var(--color-forest-100); }
+.mascota-pie .mascota-cerrar { margin-left: auto; font-size: 1.1rem; line-height: 1; color: var(--color-text-muted); }
+@media (max-width: 760px) {
+  .mascota { top: calc(var(--lab-top) + 2px); }
+  .lab-paso-escenarios .mascota { top: calc(var(--lab-top) + 96px); }
+  .mascota-boton { width: 76px; height: 76px; }
+  .mascota-globo { width: min(260px, calc(100vw - 96px)); margin-top: 4px; }
+  .mascota-globo p { font-size: .8rem; }
+}
+
+/* Toques de color (15/11): botones con degradado y cifras tenidas segun lo que miden. */
+.lab-boton-primario { background: linear-gradient(180deg, #2c8c5c, #1f6e48); }
+.lab-boton-primario:hover:not(:disabled) { background: linear-gradient(180deg, #279055, #1a5f3e); }
+.lab-metricas > div:nth-child(1) { background: #fdf0e4; }
+.lab-metricas > div:nth-child(2) { background: #fdf6dc; }
+.lab-metricas > div:nth-child(3) { background: #e6f0f8; }
+.lab-metricas > div:nth-child(1) dd { color: #8a4416; }
+.lab-metricas > div:nth-child(2) dd { color: #7a5a0c; }
+.lab-metricas > div:nth-child(3) dd { color: #1f4f78; }
+.cmp-tarjeta { border-top-width: 5px; }
+.cmp-primera { border-top-color: #2c8c5c; }
+.lab-rotaciones > button[aria-checked="true"] { background: linear-gradient(180deg, #2c8c5c, #1f6e48); }
+.lab-paleta button[aria-checked="true"] { background: #f7fbf3; }

@@ -13,6 +13,11 @@ import { PanelEscenarios } from './PanelEscenarios';
 import { PanelComparacion } from './PanelComparacion';
 import { Aviso } from './piezas';
 import { Globo } from './Globo';
+import { Mascota } from './Mascota';
+import { consejos } from './consejos';
+import { useEvidencia } from './useEvidencia';
+import { ordenarRotaciones } from '../ordenRotaciones';
+import { nombreRotacion } from '../planes';
 import './lab.css';
 
 const Escena = lazy(() => import('../../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
@@ -129,12 +134,21 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
   const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
     : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
-      <Escena modo="fondo" hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} />
+      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} />
     </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
 
   const comun = { estado, onAvanzar };
+  const evidencia = useEvidencia(datos?.parcela.centroide ?? null, datos?.esDemo ?? false);
+  const leguminosas = useMemo(() => new Set((datos?.catalogo.cultivos ?? []).filter((c) => c.esLeguminosa === true).map((c) => c.id)), [datos]);
+  const listaConsejos = useMemo(() => consejos({
+    paso, plan: plan ?? null, ciclo, calendario: datos?.calendario ?? null, escenario,
+    resultado: estado.calculo?.ranking.rotaciones.find((r) => r.rotacionId === plan?.rotacionId) ?? null,
+    ordenadas: ordenarRotaciones(estado.calculo?.ranking.rotaciones ?? []),
+    nombreRotacion: (id) => nombreRotacion(id, estado.planes), leguminosas, ndvi: evidencia.ndvi, smap: evidencia.smap,
+  }), [paso, plan, ciclo, datos, escenario, estado.calculo, estado.planes, leguminosas, evidencia]);
   return <div className={`lab lab-paso-${paso}`}>
     <Globo />
+    {datos && paso !== 'comparacion' && <Mascota consejos={listaConsejos} paso={paso} />}
     <div className="lab-fondo">{fondo}</div>
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
     {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} tamano={tamano} setTamano={setTamano} calculando={!estado.calculo || !celdasListas} />}

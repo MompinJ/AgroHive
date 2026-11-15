@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Mascota en pantalla con consejos, NDVI y SMAP en el front, entorno 3D y más color (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/` (`Mascota.tsx`, `consejos.ts` y su prueba, `useEvidencia.ts`, `Laboratorio.tsx`, `lab.css`), `web/src/api/cliente.ts` (`obtenerNdvi`, `obtenerSmap`), `web/src/ui/useLaboratorio.ts` (`esDemo`), `web/src/ui/tokens.css`; `web/src/escena/render/retrato.ts` y `entorno.ts` (nuevos), `escena-three.ts`, `EscenaParcela.tsx`, `escena.css`; `docs/06`.
+- **Cambio:** la mascota sale de la parcela y aparece en la pantalla con consejos por paso; el front usa por primera vez NDVI (verdor de la zona) y SMAP (humedad del suelo reciente) como evidencia en esos consejos; la escena del laboratorio tiene cielo, isla de pasto, árboles y luz cálida; colores un poco más vivos. Detalle en 06, "Mascota en pantalla, consejos y evidencia satelital".
+- **Por qué:** pedido de Eduardo.
+- **Fuente:** NDVI MOD13Q1 V061 (paquete de demo o `/api/ndvi`) y SMAP L3 (`/api/smap`); evidencia, no entra al motor ni al ranking. Hoy SMAP en Isla trae los últimos días con calidad baja y sin humedad válida, así que ese consejo no aparece.
+- **Decisiones afectadas:** ninguna de alcance; cortes de NDVI y SMAP como `[PROPUESTA]`.
+
 ### 2026-11-15 — Terreno, rotaciones sin límite, laboratorio sin fuentes y comparación directa (Eduardo)
 
 - **Archivos:** `web/src/paginas/Terreno.tsx`, `ui/MapaParcela.tsx`, `ui/DibujarParcela.tsx`, `ui/terreno.css`, `ui/system.css`; `ui/planes.ts` y `planes.test.ts`, `ui/useLaboratorio.ts`, `ui/ControlTiempo.tsx`, `ui/DashboardBalance.tsx`, `ui/lab/` (`PanelCultivos`, `PanelEscenarios`, `PanelComparacion`, `Laboratorio`, `piezas`, `lab.css`, nuevos `iconos.tsx` y `Globo.tsx`); `escena/render/escena-three.ts`, `escena/EscenaParcela.tsx`; `docs/06`.

@@ -6,6 +6,7 @@
 
 import * as THREE from 'three';
 import { CamaraGranja } from './camara';
+import { crearEntorno, LUZ_ENTORNO } from './entorno';
 import { ESTILO_SIN_ELEVACION, ESTILOS_ESTADO } from '../estilos-estado';
 import { GROSOR_BASE, type BloqueEscena, type EscenaModelo, type EstadoVisual } from '../modelo';
 import { rgbaPlaca } from '../placa';
@@ -58,6 +59,11 @@ export interface OpcionesRender {
    * en vez del suelo gris; solo cuando no hay una vista de color activa. Por defecto, no.
    */
   pastoSinCultivo?: boolean;
+  /**
+   * Entorno decorativo (laboratorio): cielo transparente sobre el degradado CSS, isla de pasto,
+   * arboles y luz mas calida. Solo decoracion; se lee al crear la escena. Por defecto, no.
+   */
+  entorno?: boolean;
   /** Azimut de la camara en grados (para la brujula); se avisa solo cuando cambia. */
   onAzimut?: (grados: number) => void;
   onPintar?: (bloque: BloqueEscena | null, fase: 'inicio' | 'trazo' | 'fin') => void;
@@ -376,14 +382,16 @@ export class EscenaThree {
     if (!soportaWebGL()) throw new ErrorWebGL();
     this.opciones = opciones;
     try {
-      this.renderer = new THREE.WebGLRenderer({ canvas: lienzo, antialias: true, powerPreference: 'low-power' });
+      this.renderer = new THREE.WebGLRenderer({ canvas: lienzo, antialias: true, powerPreference: 'low-power', alpha: !!opciones.entorno });
     } catch {
       throw new ErrorWebGL();
     }
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     // Fondo desde la variable --escena-lienzo de escena.css (un solo lugar para cambiar el tema).
+    // Con entorno, el lienzo es transparente y el cielo es el degradado CSS de .escena-fondo.
     const fondo = getComputedStyle(lienzo).getPropertyValue('--escena-lienzo').trim();
-    this.scene.background = new THREE.Color(fondo || '#e9efe6');
+    if (opciones.entorno) this.renderer.setClearColor(0x000000, 0);
+    else this.scene.background = new THREE.Color(fondo || '#e9efe6');
 
     this.camara = new THREE.OrthographicCamera(-1, 1, 1, -1, -100, 100);
     this.scene.add(this.raiz);
@@ -398,8 +406,9 @@ export class EscenaThree {
       this.observadorVisible.observe(lienzo);
     }
     document.addEventListener('visibilitychange', this.alCambiarVisibilidad);
-    this.scene.add(new THREE.HemisphereLight('#ffffff', '#6b5a45', 1.6));
-    const sol = new THREE.DirectionalLight('#ffffff', 1.4);
+    const e = opciones.entorno ? LUZ_ENTORNO : null;
+    this.scene.add(e ? new THREE.HemisphereLight(e.cielo, e.suelo, e.hemisferica) : new THREE.HemisphereLight('#ffffff', '#6b5a45', 1.6));
+    const sol = e ? new THREE.DirectionalLight(e.sol, e.intensidadSol) : new THREE.DirectionalLight('#ffffff', 1.4);
     sol.position.set(4, 8, 3);
     this.scene.add(sol);
 
@@ -531,8 +540,11 @@ export class EscenaThree {
     this.modeloActual = modelo;
     // Media altura visible: la parcela mas margen para las plantas altas.
     this.extension = Math.max(modelo.filas, modelo.columnas, 2) * 0.6 + 0.6;
+    // Con entorno el encuadre se abre un poco: la parcela queda como diorama sobre el cielo.
+    if (this.opciones.entorno) this.extension = this.extension * 1.15 + 0.9;
     this.lluvia.caja(modelo.columnas, Math.max(modelo.filas, modelo.columnas) * 0.8 + 2, modelo.filas);
     this.construirTerreno(modelo);
+    if (this.opciones.entorno && modelo.bloques.length > 0) this.raiz.add(crearEntorno(modelo, (r) => this.registrar(r)));
     this.camaraGranja.fijarLimites(modelo.columnas, modelo.filas);
     this.ajustarTamano();
     // La camara solo vuelve a la vista inicial si cambia la parcela, no al cambiar fecha o escenario.

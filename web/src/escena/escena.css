@@ -176,3 +176,11 @@
 .escena-vista-agua { background: linear-gradient(90deg, #c9cdd1, #0b2a5b); }
 .escena-hud-barra button[aria-pressed="true"] .escena-vista-icono { box-shadow: 0 0 0 1.5px #fff; }
 @media (max-width: 760px) { .escena-escala .escena-detalle { display: none; } .escena-escala { gap: 6px; padding: 10px 12px; } }
+
+/* Cielo del entorno (modo fondo): el lienzo es transparente y este degradado queda detras.
+   Celeste arriba, horizonte calido abajo; saturacion baja para no competir con los datos. */
+.escena-fondo .escena-lienzo-caja {
+  background:
+    radial-gradient(120% 70% at 70% 8%, rgb(255 255 255 / 55%) 0%, rgb(255 255 255 / 0%) 60%),
+    linear-gradient(180deg, #a9d4ef 0%, #c7e4f4 38%, #e6f1ee 66%, #f3e9cf 88%, #ead9b3 100%);
+}

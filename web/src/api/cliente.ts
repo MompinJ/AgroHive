@@ -1,6 +1,6 @@
 // Cliente de la API de AgroHive (A4.6). Los datos usan los tipos de contratos/ (fuente de verdad); el cliente generado
 // desde OpenAPI (api/cliente/api.d.ts) solo describe las llamadas HTTP: la entrada y la respuesta de /api/elevacion.
-import type { CalendarioLocal, CatalogoCultivos, ProximaTemporadaAproximada, SerieClima, Suelo } from '../../../contratos/tipos/contratos';
+import type { CalendarioLocal, CatalogoCultivos, Ndvi, ProximaTemporadaAproximada, SerieClima, Smap, Suelo } from '../../../contratos/tipos/contratos';
 import type { components } from '../../../api/cliente/api';
 
 export type TerrenoEntrada = components['schemas']['TerrenoEntrada'];
@@ -84,5 +84,9 @@ export const obtenerCalendario = (lon: number, lat: number, o?: Opciones) => ped
 /** Elevacion y pendiente de una cuadricula ya generada por el front (tope 1600 celdas). */
 export const obtenerTerreno = (entrada: TerrenoEntrada, o?: Opciones) =>
   pedir<TerrenoRespuesta>('/api/elevacion', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(entrada) }, o);
+/** NDVI de MODIS (250 m, 16 dias) en el punto; evidencia, no entra al ranking. Maximo 400 dias por consulta. */
+export const obtenerNdvi = (lon: number, lat: number, desde: string, hasta: string, o?: Opciones) => pedir<Ndvi>(`/api/ndvi?${consulta({ lat, lon, desde, hasta })}`, {}, o);
+/** Humedad del suelo SMAP L3 (36 km) por dia: hasta 10 dias, hasta 3 dias antes de hoy. Sin token responde 503. */
+export const obtenerSmap = (lon: number, lat: number, desde: string, hasta: string, o?: Opciones) => pedir<Smap>(`/api/smap?${consulta({ lat, lon, desde, hasta })}`, {}, o);
 export const obtenerSalud = (o?: Opciones) =>
   pedir<{ status: string; servicio: string; version: string; versionContrato?: string; commit?: string | null }>('/health', {}, o);

@@ -7,7 +7,7 @@ import type { ResultadoRanking } from '../motor/ranking';
 import type { VistaProximaTemporada } from '../motor/proxima';
 import { calendarioIsla, planesIniciales } from './planes';
 
-export interface DatosLaboratorio { parcela: Parcela; serie: SerieClima; suelo: Suelo | null; catalogo: CatalogoCultivos; tabla: TablaSuelos; calendario: CalendarioLocal | null; capa: ProximaTemporadaAproximada | null; avisos: string[]; avisosDatos: AvisoDatos[] }
+export interface DatosLaboratorio { esDemo: boolean; parcela: Parcela; serie: SerieClima; suelo: Suelo | null; catalogo: CatalogoCultivos; tabla: TablaSuelos; calendario: CalendarioLocal | null; capa: ProximaTemporadaAproximada | null; avisos: string[]; avisosDatos: AvisoDatos[] }
 type Calculo = { clave: string; ranking: ResultadoRanking; proxima: VistaProximaTemporada; cliente: ClienteMotor };
 
 /**
@@ -64,14 +64,14 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
         const clima = serie.default as unknown as SerieClima;
         const sueloDatos = suelo.default as Suelo;
         const proxima = capa.default as ProximaTemporadaAproximada;
-        siguiente = { parcela: p.parcelaConTerrenoDemo(), serie: clima, suelo: sueloDatos, capa: proxima, catalogo: cat.default as CatalogoCultivos, tabla: tab.default as TablaSuelos, calendario: calendarioIsla, avisos: ['Paquete precargado de Isla: parcela ficticia con datos climáticos y estimaciones de suelo de fuentes reales. No representa un levantamiento de campo.'], avisosDatos: avisosDe({ clima: { ok: true, datos: clima }, suelo: { ok: true, datos: sueloDatos }, cultivos: { ok: true, datos: cat.default as CatalogoCultivos }, proximaTemporada: { ok: true, datos: proxima } }) };
+        siguiente = { esDemo: true, parcela: p.parcelaConTerrenoDemo(), serie: clima, suelo: sueloDatos, capa: proxima, catalogo: cat.default as CatalogoCultivos, tabla: tab.default as TablaSuelos, calendario: calendarioIsla, avisos: ['Paquete precargado de Isla: parcela ficticia con datos climáticos y estimaciones de suelo de fuentes reales. No representa un levantamiento de campo.'], avisosDatos: avisosDe({ clima: { ok: true, datos: clima }, suelo: { ok: true, datos: sueloDatos }, cultivos: { ok: true, datos: cat.default as CatalogoCultivos }, proximaTemporada: { ok: true, datos: proxima } }) };
       } else {
         if (!datosRemotos || remotos.state !== 'ready') return;
         const respuesta = datosRemotos;
         if (!respuesta.clima.ok) throw new Error(respuesta.clima.error.motivo);
         if (!respuesta.suelo.ok) throw new Error(respuesta.suelo.error.motivo);
         if (!respuesta.cultivos.ok) throw new Error(respuesta.cultivos.error.motivo);
-        siguiente = { parcela: { ...parcela, sueloId: respuesta.suelo.datos.id }, serie: respuesta.clima.datos, suelo: respuesta.suelo.datos, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: respuesta.calendario?.ok ? respuesta.calendario.datos : null, avisos: [...remotos.avisos.map((a) => a.mensaje), ...(respuesta.calendario?.ok ? [] : ['Sin calendario local verificado para esta parcela.'])], avisosDatos: remotos.avisos };
+        siguiente = { esDemo: false, parcela: { ...parcela, sueloId: respuesta.suelo.datos.id }, serie: respuesta.clima.datos, suelo: respuesta.suelo.datos, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: respuesta.calendario?.ok ? respuesta.calendario.datos : null, avisos: [...remotos.avisos.map((a) => a.mensaje), ...(respuesta.calendario?.ok ? [] : ['Sin calendario local verificado para esta parcela.'])], avisosDatos: remotos.avisos };
       }
       if (activo) setDatos({ clave: claveParcela, datos: siguiente });
     }
