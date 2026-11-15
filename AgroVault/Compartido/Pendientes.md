@@ -44,7 +44,7 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 
 | ID | Qué falta |
 | --- | --- |
-| A3.6 | Hecho en `origin/main` y en la rama `Eduardo`. A5.4 sigue bloqueada: faltan hardware real y la pérdida de contexto WebGL |
+| A3.6 | Hecho en `origin/main` y en la rama `Eduardo`. A5.4 está `[EN CURSO]` (no la bloquea nadie): la pérdida de contexto WebGL ya se probó con SwiftShader y falta la medición en hardware real |
 | A3.8 | Tooltip o toque: humedad, déficit, pendiente |
 | A3.9 | Chile y mascota hechos. Falta revisión humana del visor y de la equivalencia pimiento dulce. La escena no muestra la mascota. Props descartados |
 | A4.1 | Gráficas de lluvia, demanda y balance (balam). El motor ya entrega las series: `cliente.serieBalance(rotacionId, escenario)` con lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo (contrato `serie-balance` 0.11.0). La interfaz no recalcula |

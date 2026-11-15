@@ -84,8 +84,8 @@ El reto pide detallar qué datos NASA se usaron, y para un premio global hace fa
 | --- | --- | --- |
 | **NASA POWER** (API diaria, comunidad AG) | Lluvia, temperaturas, radiación, humedad, viento y `GWETROOT`. **Es la base del cálculo** | **En uso** |
 | **GPM IMERG** (variable `IMERG_PRECTOT`, vía POWER) | Lluvia satelital diaria como evidencia; no entra al balance ni a los escenarios (A4.10) | **En uso** (evidencia). POWER devuelve datos desde 1998-01-01 (medido el 14/11/2026 en la parcela demo; antes responde `-999`) |
-| **SMAP L3** (`SPL3SMP`, 36 km) | Humedad del suelo superficial, como contraste (A4.8) | **No está en la demo pública**: el servicio existe, pero falta autorizar el token de Earthdata en el servidor |
-| **MODIS MOD13Q1** (NDVI) | NDVI como evidencia (A4.11) | **Pendiente**, no se usa todavía |
+| **SMAP L3** (`SPL3SMP`, 36 km) | Humedad del suelo superficial, como contraste (A4.8) | **En uso en la API pública** (`GET /api/smap`, token de Earthdata solo en el entorno del servicio; 14/11 respondió 200 con humedad real en la parcela demo). Contraste informativo: no entra al ranking y la interfaz no lo muestra todavía |
+| **MODIS MOD13Q1** (NDVI) | NDVI como evidencia (A4.11) | **En la API y en el paquete de demo** (`GET /api/ndvi`, `datos/demo/respuestas/ndvi.json`, 454 compuestos de Terra vía Microsoft Planetary Computer, estado `EXPLORATORIO`). La interfaz no lo muestra todavía |
 | **Elevación** | Relieve de la parcela. El proveedor por defecto es AWS Terrain Tiles (Terrarium), no un producto NASA directo | En uso; ver fuentes del DEM abajo |
 
 ### Cómo se cita cada uno
