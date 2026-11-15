@@ -2,6 +2,9 @@
 // Su imagen es el retrato del mismo .bbmodel (escena/render/retrato.ts, carga diferida).
 import { useEffect, useState } from 'react';
 import type { Consejo } from './consejos';
+import { TextoConIconos } from '../tutorial/TextoConIconos';
+import { textoPlano } from '../tutorial/texto';
+import { useEscribir } from '../tutorial/useEscribir';
 
 export function Mascota({ consejos, paso }: { consejos: Consejo[]; paso: string }) {
   const [imagen, setImagen] = useState<string | null>(null);
@@ -18,10 +21,12 @@ export function Mascota({ consejos, paso }: { consejos: Consejo[]; paso: string 
   useEffect(() => { setIndice(0); setAbierta(amplia()); }, [paso]);
   const total = consejos.length;
   const actual = total ? consejos[Math.min(indice, total - 1)]! : null;
+  // El consejo se escribe de a poco y la mascota "habla" mientras tanto; con reducir movimiento sale completo.
+  const { visibles, escribiendo, completar } = useEscribir(actual?.texto ?? '');
   return <div className={`mascota${abierta && actual ? ' mascota-abierta' : ''}`}>
     {abierta && actual && <div className={`mascota-globo mascota-${actual.tono}`} role="status" aria-live="polite">
       <p className="mascota-nombre">Esquilote</p>
-      <p>{actual.texto}</p>
+      <p onClick={completar} aria-label={textoPlano(actual.texto)}><TextoConIconos texto={actual.texto} visibles={visibles} /></p>
       <div className="mascota-pie">
         {total > 1 && <span className="mascota-cuenta" aria-hidden="true">{Math.min(indice, total - 1) + 1}/{total}</span>}
         {total > 1 && <button type="button" onClick={() => setIndice((i) => (i + 1) % total)}>Otro consejo</button>}
@@ -30,7 +35,7 @@ export function Mascota({ consejos, paso }: { consejos: Consejo[]; paso: string 
     </div>}
     <button type="button" className="mascota-boton" onClick={() => { if (abierta) setIndice((i) => (i + 1) % Math.max(1, total)); else setAbierta(true); }}
       aria-label={abierta ? 'Siguiente consejo de Esquilote' : 'Mostrar consejos de Esquilote'} title={abierta ? 'Otro consejo' : 'Consejos de Esquilote'}>
-      {imagen ? <img src={imagen} alt="" width={96} height={96} /> : <span className="mascota-respaldo" aria-hidden="true" />}
+      {imagen ? <img className={escribiendo ? 'mascota-habla' : undefined} src={imagen} alt="" width={96} height={96} /> : <span className="mascota-respaldo" aria-hidden="true" />}
     </button>
   </div>;
 }

@@ -12,7 +12,7 @@ import { fechaEnIndice } from '../tiempo';
 export const PAUSA_EXTRA_EVENTO_MS = 2500;
 
 export type TipoEvento = 'cosecha' | 'plaga';
-export interface EventoPantalla { tipo: TipoEvento; clave: string; titulo: string; detalle: string }
+export interface EventoPantalla { tipo: TipoEvento; clave: string; titulo: string; detalle: string; /** Fecha de la simulacion a la que se refiere. */ fecha: string }
 export interface CultivoCosechado { nombre: string; celdas: number }
 export interface PlagaActiva { plaga: string; cultivo: string; bloques: number }
 
@@ -51,13 +51,14 @@ export function eventoCosecha(fecha: string, cultivos: readonly CultivoCosechado
     : `Se cosechan ${lista(cultivos.map((c) => c.nombre.toLowerCase()))} el ${fechaLarga(fecha)}`;
   const partes = [cultivos.length > 1 ? cultivos.map((c) => `${c.nombre}: ${celdas(c.celdas)}`).join(' · ') : `Se cosechan ${celdas(total)}`];
   if (plaga) partes.push(`Quedaron ${bloques(plaga.bloques)} sin insecticida frente a ${plaga.plaga.toLowerCase()} (ilustración, no un pronóstico de daño).`);
-  return { tipo: 'cosecha', clave: `${clave}:cosecha`, titulo, detalle: partes.join('. ').replace(/\.\./g, '.') };
+  return { tipo: 'cosecha', clave: `${clave}:cosecha`, fecha, titulo, detalle: partes.join('. ').replace(/\.\./g, '.') };
 }
 
 export function eventoPlaga(fecha: string, plaga: PlagaActiva, clave: string): EventoPantalla {
   return {
     tipo: 'plaga',
     clave: `${clave}:plaga`,
+    fecha,
     titulo: `${plaga.plaga} se está comiendo tu ${plaga.cultivo.toLowerCase()}`,
     detalle: `${bloques(plaga.bloques)} sin insecticida, hacia el ${fechaLarga(fecha)}. Es una ilustración: la plaga está registrada en tu zona, pero no se predice cuándo ataca ni cuánto daño haría.`,
   };
