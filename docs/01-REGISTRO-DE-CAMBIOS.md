@@ -47,6 +47,33 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Catálogo: camote y cacahuate (encargo #198 punto 2, Mafer)
+
+- **Archivos:** `datos/catalogos/generar.py`, `cultivos.json` (8 cultivos), `calendario-isla.json` (16 entradas), `README.md`.
+- **Cambio:** se agregan camote (*Ipomoea batatas*) y cacahuate (*Arachis hypogaea*) con FAO-56 (Tablas 11, 12 y 22, copiadas de la página oficial el 14/11/2026) y EcoCrop (misma copia, mismo hash). Camote: fila tropical de la Tabla 11 (temporada de lluvias, 15/30/50/30 = 125 d), Kc 0.5 (grupo Roots and Tubers) / 1.15 / 0.65, raíz 1.5 m (máximo de 1.0-1.5), p 0.65. Cacahuate: fila de África Occidental (25/35/45/25 = 130 d), Kc 0.4 (grupo Legumes) / 1.15 / 0.60, raíz 1.0 m (máximo de 0.5-1.0), p 0.50. Sin ventana de siembra (`NO_EVALUABLE`) y sin `modelo3d` hasta que existan sus modelos. SIAP no los registra en Isla (sí en San Andrés y Santiago Tuxtla el camote y en Catemaco el cacahuate, del mismo DDR): aviso `CAMOTE_CACAHUATE_NO_REGISTRADOS` en el calendario.
+- **A revisar por una persona:** la fila del cacahuate: la Tabla 11 no tiene fila tropical etiquetada, se usó África Occidental, cuya fecha impresa es temporada seca (no el temporal de lluvias de Isla), y la página parte las fechas en celdas, así que la asignación es una lectura que hay que cotejar con el PDF. El Kc inicial de ambos es el del grupo, como el maíz.
+- **Pruebas:** `validar.mjs` y unittest de catálogos en verde; `contratos` 92; `web` 581 en verde, `tsc` y `build` bien; pytest de `api` no corre en esta máquina.
+- **Pendiente:** modelos 3D, bloques e íconos 2D de los cuatro cultivos nuevos; lo de sorgo y sandía de la entrada anterior.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Catálogo: sorgo y sandía (encargo #198 punto 2, Mafer)
+
+- **Archivos:** `datos/catalogos/generar.py`, `cultivos.json` (6 cultivos), `calendario-isla.json` (12 entradas), `README.md`; `web/src/motor/pruebas/series.test.ts` y `tarjetas.test.ts` (ver abajo).
+- **Cambio:** se agregan sorgo (*Sorghum bicolor*) y sandía (*Citrullus lanatus*) con ciclo, etapas, Kc, raíz, p y umbrales de FAO-56 (Tablas 11, 12 y 22) y EcoCrop (copia Recocrop, mismo commit y hash que el resto), y su presencia en Isla según SIAP (sorgo solo primavera-verano, unas 49 ha por año; sandía en los dos ciclos). Sin ventana de siembra (no se ha consultado INIFAP): `NO_EVALUABLE` con motivo. No declaran `modelo3d` hasta que existan sus modelos (la escena usa la planta de respaldo). Lluvia por ciclo y estrés por calor siguen `NO_EVALUABLE`, como en los demás.
+- **Elecciones que una persona debe revisar:** sorgo, Tabla 11: la fila imprime 20/35/40/30 pero total 130 (las etapas suman 125); se guardan las etapas impresas y el ciclo es 125, y la diferencia queda por cotejar contra el PDF (no pude bajarlo: la URL devuelve HTML). Sorgo, Kc medio 1.05 = punto medio de 1.00-1.10. Sorgo, EcoCrop: fila de altitud baja (hay tres filas por altitud; la altitud de la parcela no se verificó). Sandía: fila de Italia (110 d), sin fila tropical. Raíz en el máximo del rango, como el resto (sorgo 2.0 de 1.0-2.0; sandía 1.5 de 0.8-1.5). Kc inicial del sorgo: valor del grupo cereales (0.3), como el maíz.
+- **Cambio fuera de mi carpeta:** `series.test.ts` y `tarjetas.test.ts` (del motor) usaban `sorgo` como ejemplo de cultivo fuera del catálogo; ahora que está, usan `quinua`. Solo cambia el nombre en 4 líneas.
+- **Pruebas:** `validar.mjs` y unittest de catálogos en verde; `contratos` 92; `web` 581 en verde, `tsc` y `build` bien; pytest de `api` no corre en esta máquina (no encontré pruebas que cuenten cultivos o entradas del calendario, pero no lo verifiqué ejecutándolas).
+- **Pendiente:** camote y cacahuate; modelos 3D, bloques e íconos 2D de sorgo y sandía.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Candidatos para ampliar el catálogo: SIAP de Veracruz y FAO-56 (Mafer)
+
+- **Archivos:** `datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv` (nuevo), `fuentes/LEEME.md`.
+- **Cambio:** para el encargo #198 punto 2 se sumó la superficie sembrada de temporal 2021-2025 de 8 candidatos en Veracruz, en el DDR 175 y en Isla, desde los cierres municipales del SIAP. Resultado: sorgo (Isla 48 a 50 ha por año) y sandía (Isla unas 425 ha por año hasta 2024) están en Isla; camote (San Andrés y Santiago Tuxtla, 54 a 58 ha) y cacahuate (Catemaco, 66 a 68 ha) están en el DDR 175 pero no en Isla; la soya de Veracruz está solo en Pánuco (norte, 10 150 a 15 233 ha), lejos de Isla; la yuca no aparece. Lista aprobada por la usuaria: sorgo, sandía, camote, soya y cacahuate; se propone retirar la soya.
+- **Fuente / evidencia:** SIAP cierre agrícola municipal 2021-2025 (descargado el 14/11/2026); FAO-56 Tablas 11, 12 y 22 leídas de la página oficial: Kc inicial de varios cultivos y raíz o p de otros no se pudieron leer y quedarían `NO_EVALUABLE`; la página es una versión con OCR corregido a mano, hay que cotejarla con el PDF.
+- **Pendiente:** EcoCrop de los cinco sin revisar; la decisión sobre la soya (la usuaria y Mompin); `[VERIFICAR]` por una persona la redistribución de los datos del SIAP.
+- **Decisiones afectadas:** ninguna todavía.
+
 ### 2026-11-14 (noche) — Iconos 2D de los cultivos, encargo #198 punto 1 (Mafer)
 
 - **Archivos:** `modelos/iconos2d/` (`iconos2d.py`, 20 `<cultivo>_<etapa>.svg`, `visor_iconos.html`, `README.md`); `web/src/escena/pruebas/iconos2d.test.ts`.
