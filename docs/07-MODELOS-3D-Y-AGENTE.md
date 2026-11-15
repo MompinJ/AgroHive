@@ -104,6 +104,11 @@ La sesión "catalogo" agregó cultivos a `datos/catalogos/` sin modelo; la sesi�
 | Jitomate | Amarrado a un tutor de madera, hoja compuesta dentada; racimos de jitomates rojos con cáliz | 11, 12, 30, 59, 51 | 15 a 21 |
 | Papa | Mata redondeada de hoja compuesta; siembra con papa semilla brotada; madurez con la mata que amarillea y papas asomando | 12, 12, 30, 60, 48 | 20 a 24 |
 | Calabacita | Mata compacta sin guías, hoja grande con manchas plateadas, flor de trompeta; frutos alargados moteados en la base | 10, 11, 30, 58, 50 | 15 a 21 |
+| Cebolla | Hojas tubulares verde azulado sobre bulbo blanco; madurez con hojas acamadas y bulbo con túnica dorada | 11, 12, 29, 50, 42 | 17 a 24 |
+| Pepino | Trepa por una espaldera de madera con zarcillos; pepinos alargados verde oscuro colgando | 12, 12, 30, 60, 49 | 15 a 21 |
+| Melón | Rastrero de hoja redondeada y zarcillo simple; fruto beige con red clara y pulpa naranja | 10, 10, 28, 59, 50 | 15 a 21 |
+| Lechuga | Roseta baja de hojas onduladas verde claro; madurez con cabeza rizada y corazón claro | 11, 11, 28, 54, 46 | 15 a 21 |
+| Zanahoria | Penacho plumoso de hojas muy divididas; hombro naranja asomando y una raíz arrancada en madurez | 11, 11, 29, 60, 54 | 15 a 21 |
 
 ## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
 

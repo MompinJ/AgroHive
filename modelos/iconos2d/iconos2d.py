@@ -3,9 +3,10 @@
 Correr desde la raiz del repo:
     python modelos/iconos2d/iconos2d.py
 
-Genera 140 SVG de 28 cultivos (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba,
+Genera 165 SVG de 33 cultivos (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba,
 chicharo, lenteja, ejote, cebada, trigo, avena, maiz dulce, yuca, cana de azucar, ajonjoli, girasol, algodon,
-cartamo, higuerilla, jitomate, papa y calabacita x siembra, brote, crecimiento, madurez, podrida) y visor_iconos.html. El id puede llevar guion bajo
+cartamo, higuerilla, jitomate, papa, calabacita, cebolla, pepino, melon, lechuga y zanahoria x siembra, brote,
+crecimiento, madurez, podrida) y visor_iconos.html. El id puede llevar guion bajo
 (maiz_dulce_madurez.svg): la etapa se separa con rsplit.
 Cada icono es pixel art de 16 x 16 con fondo transparente: `shape-rendering="crispEdges"` y rectangulos por tramo
 de color, asi que a 32 px (x2) y 64 px (x4) conserva los pixeles. Usa SOLO colores de modelos/paleta.py (los mismos
@@ -14,9 +15,9 @@ espanol. La prueba web/src/escena/pruebas/iconos2d.test.ts mide, con daltonismo.
 distinga bajo protanopia, deuteranopia y tritanopia.
 
 Todos comparten el mismo suelo abajo (3 filas), como la losa de la celda. Cada etapa tiene su forma: siembra =
-semillas (estacas en yuca, trozo de tallo en cana, papa semilla con brotes en papa; el jitomate lleva su tutor de
-madera desde la siembra), brote = tallito con dos hojas, crecimiento = planta media,
-madurez = planta alta con su fruto, podrida = tallo acamado, moho y fruto negro.
+semillas (estacas en yuca, trozo de tallo en cana, papa semilla con brotes en papa, cebollitas clavadas en cebolla,
+monticulo en melon; el jitomate lleva su tutor de madera y el pepino su espaldera desde la siembra),
+brote = tallito con dos hojas, crecimiento = planta media, madurez = planta alta con su fruto, podrida = tallo acamado, moho y fruto negro.
 """
 import os
 import sys
@@ -33,7 +34,8 @@ NOMBRES = {'maiz': 'Maíz', 'frijol': 'Frijol', 'calabaza': 'Calabaza', 'chile':
            'trigo': 'Trigo', 'avena': 'Avena', 'maiz_dulce': 'Maíz dulce', 'yuca': 'Yuca',
            'cana': 'Caña de azúcar', 'ajonjoli': 'Ajonjolí', 'girasol': 'Girasol', 'algodon': 'Algodón',
            'cartamo': 'Cártamo', 'higuerilla': 'Higuerilla', 'tomate': 'Jitomate', 'papa': 'Papa',
-           'calabacita': 'Calabacita'}
+           'calabacita': 'Calabacita', 'cebolla': 'Cebolla', 'pepino': 'Pepino', 'melon': 'Melón',
+           'lechuga': 'Lechuga', 'zanahoria': 'Zanahoria'}
 ETIQUETAS = {'siembra': 'en siembra', 'brote': 'en brote', 'crecimiento': 'en crecimiento', 'madurez': 'en madurez',
              'podrida': 'podrida'}
 
@@ -2057,6 +2059,409 @@ def calabacita_podrida(c):
         '.kPpPpPPOO.ffPff',
         '.....P..kfFpPPfP',
     ), CALABACITA)
+
+
+# ---------------- cebolla ----------------
+CEBOLLA = {**SECO, 'h': 'cebolla_hoja', 'd': 'calabaza_hoja_dark', 'b': 'cebolla_bulbo', 't': 'cebolla_tunica',
+           'w': 'white', 'u': 'suelo_humedo'}
+
+
+def cebolla_siembra(c):
+    c.suelo('suelo_humedo')
+    for x in (0, 6, 12):
+        mapa(c, x, 8, ('..S.', '.tt.', 'tbtt', 'tbtt', '.tt.'), CEBOLLA)
+    for x in (3, 9):
+        mapa(c, x, 3, ('.S..', '.tt.', 'tbtt', 'uttu'), CEBOLLA)
+
+
+def cebolla_brote(c):
+    c.suelo()
+    mapa(c, 0, 2, (
+        '....h...........',
+        '....h......h....',
+        '...d.h.....h....',
+        '...d.h....d.h...',
+        '..d..h....d.h...',
+        '..d..h....d..h..',
+        '..d..h...d...h..',
+        '...d.h...d..h...',
+        '...dh.....dh....',
+        '...bbb....bbb...',
+        '..tbwt...tbwt...',
+    ), CEBOLLA)
+
+
+def cebolla_crecimiento(c):
+    c.suelo()
+    mapa(c, 0, 1, (
+        '..h.....h.......',
+        '..h..d..h..h....',
+        '..h..d..h..h..d.',
+        '...h.d..h..h..d.',
+        '...h.d..h.h..d..',
+        'd..h.d..h.h..d..',
+        '.d..hd..h.h.d...',
+        '..d.h.d.hh.d....',
+        '...d.hdhhhd.....',
+        '.....tbbbbt.....',
+        '....tbwbbbbt....',
+        '....tbwbbbbt....',
+    ), CEBOLLA)
+
+
+def cebolla_madurez(c):
+    c.suelo()
+    mapa(c, 0, 1, (
+        '....hhh..ddd....',
+        '...h...hd...d...',
+        '..h....hd....d..',
+        '.h.....hd.....d.',
+        '.m.....hd.....m.',
+        'm......hd......m',
+        'm.....thdt.....m',
+        '.....tbbbbt.....',
+        '....tbwbbbbt....',
+        '...tbwbbbbbbt...',
+        '...tbwbbbbbbt...',
+        '...ttbbbbbbtt...',
+        '....tttbbttt....',
+    ), CEBOLLA)
+
+
+def cebolla_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 5, (
+        '.......S........',
+        '........S.......',
+        '..q.....S...q...',
+        '...s..tpppt..s..',
+        '....stpOkppts...',
+        '....tpkpppPpt...',
+        'sss.tpppPPppt.ss',
+        '..stPPPPPPPPts..',
+    ), CEBOLLA)
+
+
+# ---------------- pepino ----------------
+PEPINO = {**SECO, 'h': 'pepino_hoja', 'd': 'leaf_dark', 'l': 'leaf_light', 'f': 'pepino_fruto',
+          'F': 'pepino_fruto_light', 'y': 'yellow', 'w': 'white', 'c': 'calabaza_crema'}
+
+
+def espaldera(c, arriba=2):
+    """Espaldera de madera: dos postes con punta, travesano arriba y un alambre punteado a media altura."""
+    c.r(0, arriba, 15, arriba, 'wood')
+    c.r(1, arriba - 1, 1, 12, 'wood'); c.r(14, arriba - 1, 14, 12, 'wood_dark')
+    for x in range(2, 14, 2):
+        c.p(x, arriba + 5, 'wood_dark')
+
+
+def pepino_siembra(c):
+    c.suelo('suelo_humedo')
+    espaldera(c)
+    for x, y in ((3, 11), (7, 10), (11, 11), (5, 8), (9, 8)):
+        mapa(c, x, y, ('.ww', 'cwc'), PEPINO)
+
+
+def pepino_brote(c):
+    c.suelo()
+    espaldera(c)
+    mapa(c, 2, 5, (
+        '.........l..',
+        '....hhh...l.',
+        '...hhhhh.l..',
+        '....hdh.l...',
+        '.....dddl...',
+        '.lll.d.lll..',
+        'lllllddlllll',
+        '.....d......',
+        '.....d......',
+    ), PEPINO)
+
+
+def pepino_crecimiento(c):
+    c.suelo()
+    espaldera(c)
+    mapa(c, 2, 3, (
+        '..l.......l.',
+        '...lhhh..l..',
+        '..hhhhhd.d..',
+        '...hdh..d...',
+        'l.....dd.ll.',
+        '.l..yd....l.',
+        '..hhhd.hhh..',
+        '.hhhhd.hhhh.',
+        '..hdhdddhdh.',
+        '.....d......',
+    ), PEPINO)
+
+
+def pepino_madurez(c):
+    c.suelo()
+    espaldera(c)
+    mapa(c, 0, 0, (
+        '..hhh.....hhh...',
+        '.hhhhh...hhhhh..',
+        '..hdh.d.d.hdh...',
+        '...d...d...d....',
+        '..fFf..d..fFf...',
+        '..fff.hdh.fff...',
+        '..fFf.hdh.fFf.l.',
+        '..fff..d..fff.l.',
+        '..fFf.hd..fFf...',
+        '...f..hdh..f....',
+        '..hh..yd.hh.....',
+        '.hhhh..d.hhhh...',
+        '..dd...dd..dd...',
+    ), PEPINO)
+
+
+def pepino_podrida(c):
+    c.suelo(seco=True)
+    espaldera(c)
+    mapa(c, 2, 3, (
+        '...S....S...',
+        '..sSs..sSs..',
+        '...S....q...',
+        '...S........',
+        '..S.........',
+        '.qS....s....',
+        '..S...sSs...',
+        '..S....S....',
+        '...S...S....',
+        'mmmmP..S..k.',
+    ), PEPINO)
+    c.r(9, 12, 13, 12, 'podrido'); c.r(10, 11, 12, 11, 'moho'); c.p(11, 10, 'moho_light')
+
+
+# ---------------- melon ----------------
+MELON = {**SECO, 'h': 'calabaza_hoja', 'd': 'calabaza_hoja_dark', 'l': 'calabaza_hoja_light', 'c': 'melon_cascara',
+         'r': 'melon_red', 'n': 'melon_pulpa', 'y': 'yellow', 'u': 'soil_light', 'U': 'soil', 'v': 'hoja_marchita'}
+
+
+def melon_siembra(c):
+    c.suelo('suelo_humedo')
+    mapa(c, 0, 5, (
+        '...rc......cr...',
+        '........rc......',
+        '................',
+        '.....rc....rc...',
+        '......uuuuu.....',
+        '....uUUUUUUUu...',
+        '..uUUUUUUUUUUUu.',
+        '.UUUUUUUUUUUUUUU',
+    ), MELON)
+
+
+def melon_brote(c):
+    c.suelo()
+    mapa(c, 0, 6, (
+        '.........hhh....',
+        '..ll....hhhhh...',
+        '.llll...hhdhh...',
+        '..lll..d.hd.....',
+        '....lddd..d.....',
+        '..uuuuuddd......',
+        '.uUUUUUUUUUUu...',
+    ), MELON)
+
+
+def melon_crecimiento(c):
+    c.suelo()
+    mapa(c, 0, 4, (
+        '..hhh.......hhh.',
+        '.hhhhh.....hhhhh',
+        '.hhdhh..l..hhdhh',
+        '..hdh..l.y..hdh.',
+        '...d...hyny..d..',
+        '.hhhd..hhy...d..',
+        'hhhhhd.hdh...d..',
+        'hhdhh.d.d...d.l.',
+        'dddddddddddddl..',
+    ), MELON)
+
+
+def melon_madurez(c):
+    c.suelo()
+    mapa(c, 0, 0, (
+        '..hhh...........',
+        '.hhhhh.hhh......',
+        '.hhdhhhhhhh.....',
+        '..hdh.hhdhh.....',
+        '...d...hd.......',
+        '...d....dd.ccc..',
+        '....d...crcccrc.',
+        '.....d.crcccrccc',
+        '......dcccrcrccc',
+        'n....n.ccrcccrcc',
+        'nnrrnn.crcccrcrc',
+        'cnnnnc.vccrcccrv',
+        '.cccc...vvcccvv.',
+    ), MELON)
+
+
+def melon_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 4, (
+        '..ss............',
+        '.sssS.....q.....',
+        '..sS.......S....',
+        '...S........S...',
+        '....S...kOo..S..',
+        '.....S.ppPpPpq..',
+        'q.....pPkpOPPPp.',
+        '.SSSSSPpPPpPkPPp',
+        '......kPPPPPPPP.',
+    ), MELON)
+
+
+# ---------------- lechuga ----------------
+LECHUGA = {**SECO, 'd': 'lechuga_hoja_dark', 'h': 'lechuga_hoja', 'l': 'lechuga_hoja_light', 'g': 'leaf_dark'}
+
+
+def lechuga_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((2, 2), (7, 3), (12, 2), (4, 5), (10, 6), (1, 8), (7, 8), (13, 8), (4, 10), (10, 10), (2, 12),
+                 (13, 12), (7, 11)):
+        c.p(x, y, 'hoja_seca_light'); c.p(x + 1, y, 'hoja_seca')
+
+
+def lechuga_brote(c):
+    c.suelo()
+    mapa(c, 0, 7, (
+        '......h..h......',
+        '.....hlhhlh.....',
+        '...h.hhllhh.h...',
+        '..hhhdhhlhdhhh..',
+        '.ddhhhdhhdhhhdd.',
+        '..dddddddddddd..',
+    ), LECHUGA)
+
+
+def lechuga_crecimiento(c):
+    c.suelo()
+    mapa(c, 0, 4, (
+        '.......l........',
+        '.h.h..lll..h.h..',
+        'hhhhh.lhl.hhhhh.',
+        'hhlhhhlhlhhhlhh.',
+        '.hhlhhhlhhhlhhh.',
+        'h.hhlhlllhlhhh.h',
+        'ddhhhllllllhhhdd',
+        '.dddhhhlhhhhddd.',
+        'd.ddddddddddd.dd',
+    ), LECHUGA)
+
+
+def lechuga_madurez(c):
+    c.suelo()
+    mapa(c, 0, 2, (
+        '.....h.h.h......',
+        '...h.hhhhhh.h...',
+        '..hhhhlhlhlhhh..',
+        '..hhlllllllhhh..',
+        '.hhllllhllllhhh.',
+        '.hhlllhlllllhhh.',
+        '.hhhlllllllhhhh.',
+        '..hhhhllllhhhh..',
+        'd.dhhhhhhhhhhd.d',
+        'dddddhdhhdhddddd',
+        '.dd.dddddddd.dd.',
+    ), LECHUGA)
+
+
+def lechuga_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 6, (
+        '................',
+        '.....m.m.m......',
+        '....mmPpmmm.....',
+        '..q.mpkOpPm..s..',
+        '.ss.mPpoPpm.sS..',
+        'sSssmmPPPmmssSs.',
+        '.SsSSSSSSSSSsSss',
+    ), LECHUGA)
+
+
+# ---------------- zanahoria ----------------
+ZANAHORIA = {**SECO, 'h': 'zanahoria_hoja', 'd': 'leaf_dark', 'l': 'leaf_light', 'n': 'zanahoria_raiz',
+             'N': 'zanahoria_raiz_dark', 'y': 'orange', 'U': 'soil_dark'}
+
+
+def zanahoria_siembra(c):
+    c.suelo('suelo_humedo')
+    mapa(c, 0, 3, (
+        '....q.s.q.s.....',
+        '....UUUUUUUU....',
+        '................',
+        '..s.q.s.q.s.q...',
+        '..UUUUUUUUUUUU..',
+        '................',
+        '.q.s.q.s.q.s.q.s',
+        '.UUUUUUUUUUUUUU.',
+    ), ZANAHORIA)
+
+
+def zanahoria_brote(c):
+    c.suelo()
+    mapa(c, 0, 4, (
+        '....l...........',
+        '...hdh......l...',
+        '....d......hdh..',
+        '...hdh.....hdh..',
+        '.h..d..h....d...',
+        '..h.d.h..h..d.h.',
+        '...hdh....h.d.h.',
+        '....d......hdh..',
+        '....d.......d...',
+    ), ZANAHORIA)
+
+
+def pluma(c, x0, y0, x1, y1, raquis='leaf_dark', foliolo='zanahoria_hoja', punta='leaf_light'):
+    """Fronda plumosa (zanahoria): raquis de la base (x0, y0) a la punta (x1, y1) con foliolos en V cada 2 pixeles."""
+    n = max(abs(x1 - x0), abs(y1 - y0))
+    empinada = abs(y1 - y0) >= abs(x1 - x0)
+    sx = (x1 > x0) - (x1 < x0)
+    for i in range(n + 1):
+        x, y = round(x0 + (x1 - x0) * i / n), round(y0 + (y1 - y0) * i / n)
+        c.p(x, y, punta if i == n else raquis)
+        if i >= 2 and i < n and i % 2 == n % 2:
+            lados = ((x - 1, y - 1), (x + 1, y - 1)) if empinada else ((x - sx, y - 1), (x - sx, y + 1))
+            for a, b in lados:
+                if 0 <= a < N and 0 <= b < N and (a, b) not in c.px:
+                    c.p(a, b, foliolo)
+
+
+def zanahoria_crecimiento(c):
+    c.suelo()
+    for tip in ((2, 3), (5, 1), (9, 1), (13, 2), (14, 7), (1, 8)):
+        pluma(c, 7 + (tip[0] > 7), 11, *tip)
+    mapa(c, 6, 11, ('.dd.', 'yynn', '.nN.'), ZANAHORIA)
+
+
+def zanahoria_madurez(c):
+    c.suelo()
+    for tip in ((4, 3), (7, 0), (11, 0), (14, 1), (15, 6), (5, 8)):
+        pluma(c, 11 + (tip[0] > 11), 9, *tip)
+    mapa(c, 0, 10, (
+        '..........yynnn.',
+        'lhyynnnN..ynnnN.',
+        '.hynnnN...nnNN..',
+    ), ZANAHORIA)
+
+
+def zanahoria_podrida(c):
+    c.suelo(seco=True)
+    mapa(c, 0, 5, (
+        '..q.............',
+        '.s.s......s.....',
+        '..S...q..sSs....',
+        '...S..s...S.....',
+        '....S..S.S......',
+        '.....S.S.S...s..',
+        '......SSS...sSs.',
+        '.kO...PpP....S..',
+        'PpPkPPPPPP......',
+    ), ZANAHORIA)
 
 
 DIBUJOS ={f'{cultivo}_{etapa}': globals()[f'{cultivo}_{etapa}'] for cultivo in NOMBRES for etapa in ETAPAS}

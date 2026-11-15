@@ -7193,6 +7193,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "cebolla"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 85 a 175 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Cebolla de bulbo seco; la cebolla de rabo (green) tiene otra fila."
     },
     {
@@ -7437,6 +7440,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "pepino"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 105 dias). EcoCrop da un ciclo de 40 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Pepino para mercado en fresco (la subfila de cosecha mecanica tiene Kc end 0.90)."
     },
@@ -7683,6 +7689,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "melon"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 120 dias). EcoCrop da un ciclo de 50 a 120 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la fila general de melon (Sweet melons); FAO-56 trae aparte el cantaloupe (Kc 0.5/0.85/0.60) solo con filas de California. EcoCrop 'Musk melon' es Cucumis melo."
     },
     {
@@ -7928,6 +7937,9 @@
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
       },
+      "modelo3d": {
+        "prefijo": "lechuga"
+      },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 75 dias). EcoCrop da un ciclo de 35 a 85 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },
     {
@@ -8172,6 +8184,9 @@
           "estado": "NO_EVALUABLE",
           "motivo": "Sin fuente verificada para un umbral de temperatura maxima diaria de estres. EcoCrop solo da rangos para medias mensuales (TOPMX, TMAX), que no equivalen a este umbral."
         }
+      },
+      "modelo3d": {
+        "prefijo": "zanahoria"
       },
       "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 150 dias). EcoCrop da un ciclo de 40 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui."
     },

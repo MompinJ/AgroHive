@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Modelos de la ampliación del catálogo, tanda E: cebolla, pepino, melón, lechuga y zanahoria (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{cebolla,pepino,melon,lechuga,zanahoria}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; ayudas `espaldera`, `poste`, `colgado`, `al_pie`, `roseta`, `abanico`, `hombro`, `fronda`); `iconos2d.py` (25 SVG; ayudas `espaldera` y `pluma`) y su README; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; pruebas con 33 cultivos; `docs/07` (tabla) y `docs/16` (M7). La paleta no cambia (sus colores, 191 a 205, entraron con la tanda D).
+- **Cambio:** cada uno con 5 detallados (de 10 a 60 cubos), 5 bloques (de 15 a 24, sin piezas fuera de las plantas) y 5 iconos 2D (sobre los 165, peor par nuevo de daltonismo 14.8 %), y su prefijo. La zanahoria del proyecto es nueva (no la de práctica de `docs/agente-modelador-voxel/`).
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` de Mafer, con OK de Mompin; en `generar.py` solo `modelo3d`.
+- **Pendiente:** tandas F y G; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Modelos de la ampliación del catálogo, tanda D: cártamo, higuerilla, jitomate, papa y calabacita (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
 
 - **Archivos:** `modelos/cultivos/{cartamo,higuerilla,tomate,papa,calabacita}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; ayudas `con_arriba` y `punta_color`, `mata` con `arriba` opcional); `iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (15 colores más, índices 191 a 205, para la tanda E; quedan 50 libres); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; pruebas con 28 cultivos; `docs/07` (tabla) y `docs/16` (M7).

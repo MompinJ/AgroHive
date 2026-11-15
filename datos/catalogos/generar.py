@@ -776,6 +776,7 @@ AMPLIACION = [
     # -- tanda 3: hortalizas
     {
         "id": "cebolla",
+        "modelo3d": "cebolla",
         "nombreComun": "Cebolla",
         "nombreCientifico": "Allium cepa L.",
         "esLeguminosa": False,
@@ -794,6 +795,7 @@ AMPLIACION = [
     },
     {
         "id": "pepino",
+        "modelo3d": "pepino",
         "nombreComun": "Pepino",
         "nombreCientifico": "Cucumis sativus L.",
         "esLeguminosa": False,
@@ -812,6 +814,7 @@ AMPLIACION = [
     },
     {
         "id": "melon",
+        "modelo3d": "melon",
         "nombreComun": "Melon",
         "nombreCientifico": "Cucumis melo L.",
         "esLeguminosa": False,
@@ -830,6 +833,7 @@ AMPLIACION = [
     },
     {
         "id": "lechuga",
+        "modelo3d": "lechuga",
         "nombreComun": "Lechuga",
         "nombreCientifico": "Lactuca sativa L.",
         "esLeguminosa": False,
@@ -847,6 +851,7 @@ AMPLIACION = [
     },
     {
         "id": "zanahoria",
+        "modelo3d": "zanahoria",
         "nombreComun": "Zanahoria",
         "nombreCientifico": "Daucus carota L.",
         "esLeguminosa": False,
