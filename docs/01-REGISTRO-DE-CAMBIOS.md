@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — R12: rejillas de los 40 bloques ligeros vistos a distancia de escena (Mafer)
+
+- **Archivos:** `docs/capturas/rejilla-bloques-madurez.png`, `rejilla-bloques-crecimiento.png` y `rejilla-bloques-podrida.png`.
+- **Cambio:** capturas de los 40 bloques ligeros de cada etapa en una rejilla de 8 por 5, rotulados por cultivo (visor de `bloques/` con una disposición propia, sin tocar el repo). Insumo de la tarea R12 de `docs/16`.
+- **Hallazgos (madurez):** se confunden cebada y trigo (casi idénticos; la avena un poco menos); brócoli y espinaca (y rábano y betabel, solo por sus raíces rojas pequeñas); col, coliflor y lechuga; calabaza, calabacita, pepino y melón; caña y yuca. En crecimiento casi todo es verde parecido y en podrida todo es escombro marrón, lo esperable en esas etapas.
+- **Límites:** vista a una sola distancia y ángulo, en el visor y no en la escena de la app; los rótulos tapan parte de algunos bloques.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — MF5: cacahuate, yuca y berenjena cotejados con la edición web de FAO-56 (Mafer)
 
 - **Archivos:** `datos/catalogos/README.md` (tres filas).
