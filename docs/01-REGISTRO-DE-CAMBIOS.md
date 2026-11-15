@@ -2,6 +2,12 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, pantalla 3: Laboratorio en inglés, parte de la interfaz (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/ui/tutorial/Tutorial.tsx` (usa el tutorial en inglés `TUTORIALES_EN`, mismos pasos, resaltes e iconos), `web/src/ui/lab/` (`Laboratorio.tsx`, `BarraHerramientas.tsx`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `PanelIzq.tsx`, `EventoPantalla.tsx`, `eventos.ts`, `Mascota.tsx`, `consejos.ts`, `historial.ts`, `PanelHistorial.tsx`, `piezas.tsx`, `conveniencia.ts`), `web/src/ui/ControlTiempo.tsx`, `web/src/ui/planes.ts` (nombre de la rotación y mensajes de ciclos encimados), `web/src/ui/i18n/textos/tutorial.ts` y `laboratorio.ts` (nuevos), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
+- **Cambio:** el tutorial de Esquilote, la brocha y la barra de herramientas, la paleta y su conveniencia, las plagas y el insecticida, los años Dry / Normal / Wet, la línea de tiempo, los avisos de cosecha, plaga y plantas muertas, el historial y los consejos de la mascota salen en inglés (tomas T3b, T4a, T4b y T4c). Las plagas llevan su nombre común en inglés (Entomological Society of America para cinco; el chapulín de la milpa, *Sphenarium purpurascens*, sin nombre en esa lista, como "Chapulín grasshopper"). `nombreEscenario`, `nombresPilares` y `NOMBRE_TIPO_HECHO` se siguen leyendo igual (`nombreEscenario[e]`) y dan el texto del idioma activo. Sin cambios visuales.
+- **Pendiente (fuera de lo autorizado, `web/src/escena/`):** el HUD de la escena (gráficos, leyenda de cultivos), la ficha de la celda, las marcas de problema y sus textos (`problemas.ts`) y los avisos de datos (`AvisosDatos.tsx`). Lo que el historial guardó antes de cambiar de idioma queda en el idioma en que se escribió.
+
 ### 2026-11-15 — B7, pantalla 2: Terreno en inglés (IA de Mompin, sesión "ingles")
 
 - **Archivos:** `web/src/paginas/Terreno.tsx`, `web/src/ui/DibujarParcela.tsx`, `web/src/ui/MapaParcela.tsx`, `web/src/ui/SelectorTamanoCelda.tsx`, `web/src/ui/i18n/diccionarios.ts` (une los textos por pantalla), `web/src/ui/i18n/textos/terreno.ts` (nuevo), `web/src/ui/i18n/sin-espanol.ts` (detector de español sin traducir para las pruebas) y `web/src/ui/i18n/pantallas-en.test.tsx` (nuevo).
@@ -192,6 +198,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** la protección guardaba ids de celda que cambian con el tamaño de celda (mismo problema que el plan `porCelda`), y el botón anterior protegía celdas sin plaga, lo que no reflejaba una decisión.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
+
+### 2026-11-15 — Plaga siempre presente en cultivos atacados y plegado animado del panel (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/plagas.ts` y su prueba, `PanelIzq.tsx`, `panelColapsable.ts`, `lab.css`, `PanelIzq.test.tsx`; `docs/06`.
+- **Cambio:** (1) reporte del equipo: "ya no hay evento de plaga ni suenan los sonidos". Causa probable de lo primero: con la zona fija por cultivo, un cultivo pintado solo fuera de su zona no tenía plaga y por tanto tampoco evento. Ahora, si ninguna celda de un cultivo atacado cae en su zona, la plaga va a su propio foco. (2) El panel izquierdo se pliega con animación (se desliza) y mueve con él la barra de herramientas y el control de tiempo.
+- **Evidencia:** en Chrome con un ejemplo (Bajío) los eventos de plaga y de cosecha salieron y no hubo errores de consola; el audio programó 29 osciladores y 2 soplidos con el contexto en `running`. Prueba nueva del cultivo plantado fuera de su zona.
+- **Límites:** **el sonido no se pudo oír** (solo se comprobó que el código lo programa), así que si sigue sin sonar en el navegador del equipo no se ha encontrado la causa; puede ser el botón de silencio, el volumen o la política de audio del navegador. La animación del plegado no se vio.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-15 — La plaga se come las plantas y la paleta solo ofrece cultivos completos (Eduardo)
 

@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import type { EventoPantalla as Evento } from './eventos';
 import { tocar } from '../sonido';
 import './evento.css';
+import { useIdioma } from '../i18n/Idioma';
 
 export const DURACION_EVENTO_MS = 3800;
 
@@ -37,6 +38,7 @@ function Bicho({ tam }: { tam: number }) {
 }
 
 export function EventoPantalla({ evento, onTerminar }: { evento: Evento | null; onTerminar: () => void }) {
+  const { t } = useIdioma();
   useEffect(() => {
     if (!evento) return;
     tocar(evento.tipo);
@@ -55,7 +57,7 @@ export function EventoPantalla({ evento, onTerminar }: { evento: Evento | null; 
       </> : BICHOS.map((b, k) => <span key={k} className="evento-bicho" style={{ top: `${b.y}%`, animationDelay: `${b.retraso}s`, animationDuration: `${b.duracion}s` }}><Bicho tam={b.tam} /></span>)}
     </div>
     <div className="evento-aviso" role="status" aria-live="polite">
-      <p className="evento-tipo">{evento.tipo === 'cosecha' ? 'Cosecha' : evento.tipo === 'muerte' ? 'Plantas muertas' : 'Plaga'}</p>
+      <p className="evento-tipo">{evento.tipo === 'cosecha' ? t('ev.tipoCosecha') : evento.tipo === 'muerte' ? t('ev.tipoMuerte') : t('ev.tipoPlaga')}</p>
       <p className="evento-titulo">{evento.titulo}</p>
       <p className="evento-detalle">{evento.detalle}</p>
     </div>

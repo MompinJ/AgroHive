@@ -81,15 +81,21 @@ export function focoDelGrupo(grupo: readonly CeldaIJ[], semilla: string, fraccio
  * Asi, plantar o borrar algo solo hace aparecer o desaparecer la plaga en las celdas afectadas; las demas no se mueven. Es ilustrativo.
  */
 export function celdasConPlaga(plan: PlanSiembra, celdas: readonly CeldaIJ[], presentes: readonly PlagaZona[], ciclo: number): Set<string> {
-  const zonas = new Map<string, Set<string>>();
-  const salida = new Set<string>();
+  const grupos = new Map<string, { semilla: string; celdas: CeldaIJ[] }>();
   for (const c of celdas) {
     const cultivo = cultivoDeCelda(plan, c.id, ciclo);
     const plaga = plagaDeCultivo(presentes, cultivo);
     if (!plaga || !cultivo) continue;
-    let zona = zonas.get(cultivo);
-    if (!zona) { zona = new Set(focoDelGrupo(celdas, `${plan.rotacionId}:${ciclo}:${cultivo}:${plaga.id}`)); zonas.set(cultivo, zona); }
-    if (zona.has(c.id)) salida.add(c.id);
+    const g = grupos.get(cultivo) ?? { semilla: `${plan.rotacionId}:${ciclo}:${cultivo}:${plaga.id}`, celdas: [] };
+    g.celdas.push(c);
+    grupos.set(cultivo, g);
+  }
+  const salida = new Set<string>();
+  for (const g of grupos.values()) {
+    const zona = new Set(focoDelGrupo(celdas, g.semilla));
+    const dentro = g.celdas.filter((c) => zona.has(c.id));
+    // Un cultivo atacado siempre tiene plaga: si no cayo nada en su zona fija, la plaga va a su propio foco (el 20 % de ese cultivo, al menos una celda).
+    for (const id of dentro.length > 0 ? dentro.map((c) => c.id) : focoDelGrupo(g.celdas, g.semilla)) salida.add(id);
   }
   return salida;
 }

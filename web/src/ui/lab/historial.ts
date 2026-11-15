@@ -4,6 +4,7 @@
 // cultivo). Un solo trazo de la brocha suele tocar varias celdas y se suelta muchas veces seguidas: los trazos consecutivos del mismo cultivo
 // y ciclo se agrupan en un hecho, para que la lista cuente lo que paso y no cada movimiento del raton.
 
+import { tt } from '../i18n/actual';
 export type TipoHecho = 'siembra' | 'insecticida' | 'cosecha' | 'plaga' | 'problema' | 'muerte';
 
 export interface Hecho {
@@ -27,20 +28,24 @@ export interface Hecho {
 export const TOPE_HECHOS = 200;
 export const VENTANA_AGRUPAR_MS = 4000;
 
-export const NOMBRE_TIPO_HECHO: Record<TipoHecho, string> = { siembra: 'Siembra', insecticida: 'Insecticida', cosecha: 'Cosecha', plaga: 'Plaga', problema: 'Problema', muerte: 'Plantas muertas' };
+/** Nombre visible de cada tipo de hecho en el idioma activo (se lee como antes: NOMBRE_TIPO_HECHO[tipo]). */
+export const NOMBRE_TIPO_HECHO: Record<TipoHecho, string> = {
+  get siembra() { return tt('hecho.siembra'); }, get insecticida() { return tt('hecho.insecticida'); }, get cosecha() { return tt('hecho.cosecha'); },
+  get plaga() { return tt('hecho.plaga'); }, get problema() { return tt('hecho.problema'); }, get muerte() { return tt('hecho.muerte'); },
+};
 
-const celdas = (n: number) => `${n} ${n === 1 ? 'celda' : 'celdas'}`;
+const celdas = (n: number) => tt(n === 1 ? 'ev.celda' : 'ev.celdas', { n });
 
 /** El texto del hecho. Siembra e insecticida dependen de cuantas celdas llevan; el resto trae su texto. */
 export function textoHecho(h: Hecho): string {
   if (h.tipo === 'siembra') {
     const n = h.celdas ?? 0;
-    const ciclo = h.ciclo != null ? ` (ciclo ${h.ciclo})` : '';
-    return h.sujeto ? `Sembraste ${h.sujeto} en ${celdas(n)}${ciclo}` : `Devolviste ${celdas(n)} al cultivo general${ciclo}`;
+    const ciclo = h.ciclo != null ? tt('hecho.ciclo', { n: h.ciclo }) : '';
+    return h.sujeto ? tt('hecho.sembraste', { cultivo: h.sujeto, celdas: celdas(n), ciclo }) : tt('hecho.devolviste', { celdas: celdas(n), ciclo });
   }
   if (h.tipo === 'insecticida') {
     const n = h.celdas ?? 0;
-    return `Aplicaste insecticida en ${n} ${n === 1 ? 'bloque' : 'bloques'}${h.ciclo != null ? ` (ciclo ${h.ciclo})` : ''}`;
+    return tt('hecho.aplicaste', { n, bloques: n === 1 ? tt('cultivos.bloque') : tt('cultivos.bloques'), ciclo: h.ciclo != null ? tt('hecho.ciclo', { n: h.ciclo }) : '' });
   }
   return h.titulo ?? NOMBRE_TIPO_HECHO[h.tipo];
 }

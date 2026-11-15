@@ -1,5 +1,7 @@
 export type Idioma = 'es' | 'en';
 import { terrenoEn, terrenoEs } from './textos/terreno';
+import { tutorialEn, tutorialEs } from './textos/tutorial';
+import { laboratorioEn, laboratorioEs } from './textos/laboratorio';
 
 const es = {
   'idioma.etiqueta': 'Idioma',
@@ -36,6 +38,8 @@ const es = {
   'inicio.dibujar': 'Dibujar un terreno',
   'inicio.aviso': 'Prototipo de demostración · Los datos ilustrativos no son predicciones agrícolas.',
   ...terrenoEs,
+  ...tutorialEs,
+  ...laboratorioEs,
 } as const;
 
 export type ClaveTexto = keyof typeof es;
@@ -75,6 +79,8 @@ const en: Record<ClaveTexto, string> = {
   'inicio.dibujar': 'Draw a plot',
   'inicio.aviso': 'Demonstration prototype · Illustrative data are not agricultural predictions.',
   ...terrenoEn,
+  ...tutorialEn,
+  ...laboratorioEn,
 };
 
 export const diccionarios: Record<Idioma, Record<ClaveTexto, string>> = { es, en };
