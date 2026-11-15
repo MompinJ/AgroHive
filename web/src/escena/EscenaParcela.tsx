@@ -5,6 +5,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import type { Advertencia, Parcela, ResultadoCeldas, SerieBalance, Suelo } from '../../../contratos/tipos/contratos';
 import { CORTES_LLUVIA, lluviaDelDia, textoLluvia } from './lluvia';
+import { describirCelda } from '../geo/escala-celda';
 import { construirEscena } from './adaptador';
 import type { AvisoDatos } from '../api/datosParcela';
 import { CODIGOS_TERRENO } from './avisos-datos';
@@ -463,6 +464,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   );
 
   if (fondo) {
+    const leyendaCelda = describirCelda(parcela.tamanoCeldaM);
     const presentes = vista === 'cultivo' ? [...new Set(modelo.bloques.map((b) => b.cultivo).filter((c): c is string => !!c))] : [];
     const sinDato = vista ? modelo.bloques.length - (coloresVista?.size ?? 0) : 0;
     const globo = (b: BloqueEscena) => {
@@ -518,6 +520,9 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
                 {sinDato > 0 && <p className="escena-detalle">Sin color: {sinDato} {sinDato === 1 ? 'celda' : 'celdas'} sin dato del motor.</p>}
               </div>
             )}
+            {leyendaCelda && <p className="escena-hud-escala-celda" role="note" aria-label="Escala de la celda">
+              <span className="escena-escala-regla" aria-hidden="true" />{leyendaCelda.texto}
+            </p>}
             <div className="escena-hud-barra" role="toolbar" aria-label="Vistas de la parcela">
               {(['cultivo', 'validacion', 'agua'] as const).map((v) => (
                 <button key={v} type="button" aria-pressed={vista === v} onClick={() => setVista((a) => (a === v ? null : v))} title={AYUDA_VISTA[v]}>

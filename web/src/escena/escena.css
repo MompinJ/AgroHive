@@ -198,3 +198,12 @@
     linear-gradient(180deg, var(--cielo-1) 0%, var(--cielo-2) 38%, var(--cielo-3) 66%, var(--cielo-4) 88%, var(--cielo-5) 100%);
 }
 .escena-globo .escena-globo-plaga { color: #ffd2a6; font-weight: 600; }
+
+/* Leyenda de escala: cuanto equivale una celda en el terreno real. */
+.escena-hud-escala-celda {
+  display: flex; align-items: center; gap: 8px; margin: 0; padding: 6px 12px; border-radius: 999px;
+  background: rgb(255 255 255 / 84%); backdrop-filter: saturate(1.5) blur(16px); -webkit-backdrop-filter: saturate(1.5) blur(16px);
+  box-shadow: 0 1px 2px rgb(17 34 26 / 8%), 0 8px 24px -8px rgb(17 34 26 / 22%);
+  color: var(--escena-tinta); font-size: .78rem; font-weight: 600; white-space: nowrap;
+}
+.escena-escala-regla { width: 22px; height: 8px; border: 2px solid var(--escena-tinta); border-top: 0; flex-shrink: 0; }
