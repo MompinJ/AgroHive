@@ -2,6 +2,22 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — README al día con el alcance mundial y lo hecho el 15/11 (Mafer)
+
+- **Archivos:** `README.md`.
+- **Cambio:** fecha del documento al 15/11; catálogo de 40 cultivos y calendario mundial (GGCMI, MIRCA2000, FAO Crop Calendar, SIAP e INIFAP) en «Qué es», estructura y método; despliegue más reciente anotado en `docs/01` (`5f985da`, contrato 0.15.0); SMAP y NDVI pasan de «la interfaz no lo muestra» a «lo usa Esquilote»; escenarios «seco, normal y lluvioso»; el calor aparece como `NO_EVALUABLE`; fuentes nuevas en la tabla (GGCMI, MIRCA2000, FAO Crop Calendar, geoBoundaries, GBIF y EPPO, ESA WorldCover, CDL y SSURGO, Köppen-Geiger); límites nuevos (totales de FAO-56 que no cuadran, calendario mundial, plagas, calor); declaración de IA con los 40 modelos, los iconos 2D y los cotejos; licencia del proyecto condicionada por FAO Crop Calendar (CC BY-NC-SA); y en «Lo que falta verificar» las licencias nuevas y que «Método y fuentes» aún no lista SMAP, NDVI ni plagas.
+- **Límites:** las licencias y citas nuevas salen de `docs/04` y `docs/01` y no se contrastaron con sus páginas; las de GBIF, WorldCover, CDL y SSURGO quedan `[VERIFICAR]`. Sigue pendiente la revisión humana de licencias, de la declaración de IA y de las reglas del reto, la licencia del código, el uso de los tiles de Esri y la atribución de OpenStreetMap (la interfaz sigue mostrando «© OpenStreetMap» sin «contributors»). Quedan sin revisar los apartados de reglas del reto y de IA fuera de lo tocado.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — Tarjetas del motor en inglés: `idioma` opcional en `rankear` (IA de Mompin, sesión "ingles", parte 1)
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; balam traduce la interfaz (B7) y el motor arma sus propios textos en los dos idiomas.
+- **Archivos:** `web/src/motor/idioma.ts` (nuevo: `IdiomaMotor`, `IDIOMA_MOTOR_POR_DEFECTO`, `esIdiomaMotor`, `idiomaMotor`), `web/src/motor/tarjetas.ts` (las frases pasan a un diccionario `TEXTOS` por idioma; `ContextoTarjetas.idioma`; `AVISOS_EXPERTO`, `nombreEscenario`; `ventanasDe` con idioma), `web/src/motor/ranking.ts` (`rankear(entrada, opciones, idioma)`: `mensaje` y motivos de `noOrdenadas`), `web/src/motor/protocolo.ts` (`idioma?` en la petición `rankear`), `web/src/motor/cliente.ts` (`rankear(rotacionIds?, opciones?, idioma?)`; solo manda `idioma` si se lo pasan), `web/src/motor/index.ts`; pruebas nuevas `web/src/motor/pruebas/tarjetas-ingles.test.ts` y `regresion-ingles.test.ts` con `regresion/ingles/bajio-guanajuato.json`; `docs/05` (paso 8: cómo se usa, qué se traduce y qué no), `docs/16` (fila B7), `AgroVault/Compartido/Resumen.md`.
+- **Cambio:** con `idioma: 'en'` las tarjetas salen en inglés con las mismas cifras y fuentes; sin idioma, en español. Los motivos técnicos de `NO_EVALUABLE` se citan en español, marcados ("Engine reason (in Spanish)"); las fuentes y sus citas no se traducen. Detalle en `docs/05`.
+- **Evidencia:** la regresión A5.5 en español (`demo-isla.json`) no cambia; la de los ejemplos mundiales tampoco.
+- **Pendiente:** (1) la UI pasa `idioma` desde `useIdioma` (balam, B7; línea exacta en `docs/05`); (2) los nombres de cultivo en inglés llegan con `nombreComunEn` del catálogo (parte 2); mientras, la tarjeta en inglés usa el nombre en español.
+- **No se tocó:** `web/src/ui/`, `web/src/paginas/`.
+
 ### 2026-11-15 — B7, parte 1: base de idioma español/inglés (balam; registrado por Mompin)
 
 - **Archivos:** `web/src/ui/i18n/` (nuevo: `Idioma.tsx` con `ProveedorIdioma` y `useIdioma` con `idioma`, `cambiarIdioma` y `t`; `diccionarios.ts`; `preferencia.ts`; `SelectorIdioma.tsx`; `idioma.css`; prueba), Inicio y `BarraPasos` traducidos (rama `balam`, `06ada93`, PR #13).

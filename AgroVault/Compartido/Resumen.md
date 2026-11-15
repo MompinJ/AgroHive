@@ -89,7 +89,7 @@ Motor (`web/src/motor/`, independiente del render):
 4. Pilares con número: déficit; exceso (percolación profunda, FAO-56 ec. 88, subpuntaje 1 − fracción percolada, normalización `SUPUESTO`); compatibilidad (fracción de siembras en ventana; si falta una ventana con fuente, el pilar es `NO_EVALUABLE`); protección del suelo (fracción del año con cultivo, por días de suelo desnudo). El índice de erosión y el estrés por calor siguen `NO_EVALUABLE`.
 5. Ranking B `[DECIDIDO]`: puntaje por escenario, robustez = peor puntaje, arrepentimiento minimax, desempate por promedio. Pesos iguales `SUPUESTO` si el usuario no da los suyos. Un pilar entra solo si todas las rotaciones comparadas lo tienen. Respaldo A si solo hay un pilar hídrico. `EXPLORATORIO` no recibe posición.
 6. Próxima temporada: años cuya lluvia mensual cae en la banda p10–p90 de los 6 meses; si ninguno, los que caen en más meses, declarado. Sin fecha de emisión no se emite el bloque (`PROXIMA_TEMPORADA_NO_DISPONIBLE`).
-7. Tarjetas (`tarjetas.ts`): plantilla sin LLM. Cada frase sale de un número o una fuente. La UI las muestra en el laboratorio y en la comparación (`TarjetasRotacion`, A4.3).
+7. Tarjetas (`tarjetas.ts`): plantilla sin LLM, en español o en inglés (`idioma` en `rankear`, docs/05). Cada frase sale de un número o una fuente. La UI las muestra en el laboratorio y en la comparación (`TarjetasRotacion`, A4.3).
 
 `estadoPlanta` no llega a `podrida`: no hay umbral de encharcamiento con fuente. Las etapas podridas de los modelos existen para cuando el motor lo decida.
 

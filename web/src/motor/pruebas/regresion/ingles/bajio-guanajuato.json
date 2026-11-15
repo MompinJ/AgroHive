@@ -1,0 +1,173 @@
+{
+  "versionContrato": "0.15.0",
+  "grabado": "2026-11-15T16:27:45+00:00",
+  "orden": [
+    "R1",
+    "R3",
+    "R2"
+  ],
+  "noOrdenadas": [
+    {
+      "rotacionId": "R4",
+      "motivo": "EXPLORATORIO: shown, but not recommended (for example, a crop the local source does not record in the place)."
+    }
+  ],
+  "mensaje": null,
+  "tarjetas": {
+    "R1": {
+      "porQue": "It is the most robust option of the 3 rotations compared. In the year it falls furthest behind the best option, it is 0 points below it (the score combines water shortage, excess water, planting dates and days without a crop; 1 is best). Its worst year is the dry year (2009), with 0.52 out of 1. Crops: maíz and sorgo.",
+      "beneficios": [
+        "Water: even in the dry year (2009) the soil gave the crop 78.9% of the water it needed.",
+        "Rainwater: in the wet year it loses the least rain below the roots (0%).",
+        "Rotation: it combines 2 species."
+      ],
+      "riesgos": [
+        "Its worst year is the dry year (2009): 21.1% of the water was missing.",
+        "Excess water: in the wet year (2018) the hardest month was October 2018, with 0 mm the soil could not hold.",
+        "Water shortage: in the dry year the hardest month was August 2009 (142 mm the crop needed and did not get).",
+        "The maíz of cycle 1 is planted on June 20, outside the GGCMI Phase 3 crop calendar v1.01 planting window (from May 29 to May 29).",
+        "The sorgo of cycle 2 is planted on June 20, outside the GGCMI Phase 3 crop calendar v1.01 planting window (from May 10 to May 10)."
+      ],
+      "huecos": [
+        "Heat is not evaluated: the catalog has no sourced temperature threshold for these crops.",
+        "Erosion risk is not calculated: it would need rainfall intensity over 30-minute intervals and sourced cover and slope data; only the days without a crop are counted.",
+        "The soil (clay, 127 mm of available water per meter) is an estimate (global map), not a measurement of your field.",
+        "NASA POWER climate is regional (cells of 0.5 by 0.625 degrees, about 56 by 65 km here): it is the same for the whole field.",
+        "Soil moisture at planting comes from a regional model (NASA POWER), not from a field measurement.",
+        "Prices, costs, yield and pests are not considered."
+      ],
+      "evidencia": [
+        "Dry year (2009): 562 mm of rain fell in the PV and OI planting seasons.",
+        "Dry year (2009): the crop lacked 21.1% of the water it needed (125 days short of water, 181 mm).",
+        "Dry year (2009): 0 mm of rain drained below the roots on 0 days (0% of the rain that fell during the cycles).",
+        "Dry year (2009): the field is left without a crop 262 of the 365 days of the agricultural year.",
+        "Normal year (2016): 725 mm of rain fell in the PV and OI planting seasons.",
+        "Normal year (2016): the crop lacked 4.3% of the water it needed (42 days short of water, 35 mm).",
+        "Normal year (2016): 18 mm of rain drained below the roots on 9 days (1.7% of the rain that fell during the cycles).",
+        "Normal year (2016): the field is left without a crop 263 of the 366 days of the agricultural year.",
+        "Wet year (2018): 835 mm of rain fell in the PV and OI planting seasons.",
+        "Wet year (2018): the crop lacked 1.1% of the water it needed (17 days short of water, 9 mm).",
+        "Wet year (2018): 0 mm of rain drained below the roots on 1 day (0% of the rain that fell during the cycles).",
+        "Wet year (2018): the field is left without a crop 262 of the 365 days of the agricultural year.",
+        "Cycle 1, maíz planted on June 20: outside the recommended window (from May 29 to May 29).",
+        "Cycle 2, sorgo planted on June 20: outside the recommended window (from May 10 to May 10)."
+      ],
+      "avisoExperto": "This is a comparison with real past years, not a prediction. Before deciding, review it with a local technician or agronomist."
+    },
+    "R2": {
+      "porQue": "It ranks 3 of 3 by robustness. In the year it falls furthest behind the best option, it is 0.03 points below it (the score combines water shortage, excess water, planting dates and days without a crop; 1 is best). Its worst year is the dry year (2009), with 0.49 out of 1. Crops: sorgo and frijol.",
+      "beneficios": [
+        "Water: even in the dry year (2009) the soil gave the crop 73.6% of the water it needed.",
+        "Rotation: it combines 2 species and includes a legume (frijol). This simulator does not measure its contribution to the soil."
+      ],
+      "riesgos": [
+        "Its worst year is the dry year (2009): 26.4% of the water was missing and 51 mm of rain drained below the roots.",
+        "Excess water: in the wet year (2018) the hardest month was September 2018, with 77 mm the soil could not hold.",
+        "Water shortage: in the dry year the hardest month was August 2009 (159 mm the crop needed and did not get).",
+        "The sorgo of cycle 1 is planted on June 20, outside the GGCMI Phase 3 crop calendar v1.01 planting window (from May 10 to May 10).",
+        "The frijol of cycle 2 is planted on June 20, outside the GGCMI Phase 3 crop calendar v1.01 planting window (from June 1 to June 1)."
+      ],
+      "huecos": [
+        "Heat is not evaluated: the catalog has no sourced temperature threshold for these crops.",
+        "Erosion risk is not calculated: it would need rainfall intensity over 30-minute intervals and sourced cover and slope data; only the days without a crop are counted.",
+        "The soil (clay, 127 mm of available water per meter) is an estimate (global map), not a measurement of your field.",
+        "NASA POWER climate is regional (cells of 0.5 by 0.625 degrees, about 56 by 65 km here): it is the same for the whole field.",
+        "Soil moisture at planting comes from a regional model (NASA POWER), not from a field measurement.",
+        "Prices, costs, yield and pests are not considered."
+      ],
+      "evidencia": [
+        "Dry year (2009): 562 mm of rain fell in the PV and OI planting seasons.",
+        "Dry year (2009): the crop lacked 26.4% of the water it needed (125 days short of water, 209 mm).",
+        "Dry year (2009): 51 mm of rain drained below the roots on 8 days (5.8% of the rain that fell during the cycles).",
+        "Dry year (2009): the field is left without a crop 262 of the 365 days of the agricultural year.",
+        "Normal year (2016): 725 mm of rain fell in the PV and OI planting seasons.",
+        "Normal year (2016): the crop lacked 5.1% of the water it needed (38 days short of water, 37 mm).",
+        "Normal year (2016): 79 mm of rain drained below the roots on 18 days (7.9% of the rain that fell during the cycles).",
+        "Normal year (2016): the field is left without a crop 263 of the 366 days of the agricultural year.",
+        "Wet year (2018): 835 mm of rain fell in the PV and OI planting seasons.",
+        "Wet year (2018): the crop lacked 1.9% of the water it needed (24 days short of water, 13 mm).",
+        "Wet year (2018): 77 mm of rain drained below the roots on 17 days (6.8% of the rain that fell during the cycles).",
+        "Wet year (2018): the field is left without a crop 262 of the 365 days of the agricultural year.",
+        "Cycle 1, sorgo planted on June 20: outside the recommended window (from May 10 to May 10).",
+        "Cycle 2, frijol planted on June 20: outside the recommended window (from June 1 to June 1)."
+      ],
+      "avisoExperto": "This is a comparison with real past years, not a prediction. Before deciding, review it with a local technician or agronomist."
+    },
+    "R3": {
+      "porQue": "It ranks 2 of 3 by robustness. In the year it falls furthest behind the best option, it is 0 points below it (the score combines water shortage, excess water, planting dates and days without a crop; 1 is best). Its worst year is the dry year (2009), with 0.52 out of 1. Crops: maíz.",
+      "beneficios": [
+        "Water: even in the dry year (2009) the soil gave the crop 78.1% of the water it needed."
+      ],
+      "riesgos": [
+        "Its worst year is the dry year (2009): 21.9% of the water was missing.",
+        "Excess water: in the wet year (2018) the hardest month was October 2018, with 1 mm the soil could not hold.",
+        "Water shortage: in the dry year the hardest month was August 2009 (159 mm the crop needed and did not get).",
+        "The maíz of cycle 1 is planted on June 20, outside the GGCMI Phase 3 crop calendar v1.01 planting window (from May 29 to May 29).",
+        "The maíz of cycle 2 is planted on June 20, outside the GGCMI Phase 3 crop calendar v1.01 planting window (from May 29 to May 29)."
+      ],
+      "huecos": [
+        "Heat is not evaluated: the catalog has no sourced temperature threshold for these crops.",
+        "Erosion risk is not calculated: it would need rainfall intensity over 30-minute intervals and sourced cover and slope data; only the days without a crop are counted.",
+        "The soil (clay, 127 mm of available water per meter) is an estimate (global map), not a measurement of your field.",
+        "NASA POWER climate is regional (cells of 0.5 by 0.625 degrees, about 56 by 65 km here): it is the same for the whole field.",
+        "Soil moisture at planting comes from a regional model (NASA POWER), not from a field measurement.",
+        "Prices, costs, yield and pests are not considered."
+      ],
+      "evidencia": [
+        "Dry year (2009): 562 mm of rain fell in the PV and OI planting seasons.",
+        "Dry year (2009): the crop lacked 21.9% of the water it needed (114 days short of water, 196 mm).",
+        "Dry year (2009): 0 mm of rain drained below the roots on 0 days (0% of the rain that fell during the cycles).",
+        "Dry year (2009): the field is left without a crop 262 of the 365 days of the agricultural year.",
+        "Normal year (2016): 725 mm of rain fell in the PV and OI planting seasons.",
+        "Normal year (2016): the crop lacked 3.9% of the water it needed (40 days short of water, 33 mm).",
+        "Normal year (2016): 34 mm of rain drained below the roots on 14 days (3.3% of the rain that fell during the cycles).",
+        "Normal year (2016): the field is left without a crop 263 of the 366 days of the agricultural year.",
+        "Wet year (2018): 835 mm of rain fell in the PV and OI planting seasons.",
+        "Wet year (2018): the crop lacked 1% of the water it needed (16 days short of water, 8 mm).",
+        "Wet year (2018): 1 mm of rain drained below the roots on 2 days (0.1% of the rain that fell during the cycles).",
+        "Wet year (2018): the field is left without a crop 262 of the 365 days of the agricultural year.",
+        "Cycle 1, maíz planted on June 20: outside the recommended window (from May 29 to May 29).",
+        "Cycle 2, maíz planted on June 20: outside the recommended window (from May 29 to May 29)."
+      ],
+      "avisoExperto": "This is a comparison with real past years, not a prediction. Before deciding, review it with a local technician or agronomist."
+    },
+    "R4": {
+      "porQue": "Shown for exploration, but not recommended: SIAP does not record rainfed trigo in Jaral del Progreso in the OI season.",
+      "beneficios": [
+        "Rotation: it combines 2 species."
+      ],
+      "riesgos": [
+        "Trigo: SIAP does not record rainfed trigo in Jaral del Progreso in the OI season.",
+        "Excess water: in the wet year (2018) the hardest month was October 2018, with 1 mm the soil could not hold.",
+        "Water shortage: in the dry year the hardest month was March 2009 (190 mm the crop needed and did not get).",
+        "The maíz of cycle 1 is planted on June 20, outside the GGCMI Phase 3 crop calendar v1.01 planting window (from May 29 to May 29).",
+        "The maíz of cycle 3 is planted on June 20, outside the GGCMI Phase 3 crop calendar v1.01 planting window (from May 29 to May 29)."
+      ],
+      "huecos": [
+        "Heat is not evaluated: the catalog has no sourced temperature threshold for these crops.",
+        "Erosion risk is not calculated: it would need rainfall intensity over 30-minute intervals and sourced cover and slope data; only the days without a crop are counted.",
+        "The soil (clay, 127 mm of available water per meter) is an estimate (global map), not a measurement of your field.",
+        "NASA POWER climate is regional (cells of 0.5 by 0.625 degrees, about 56 by 65 km here): it is the same for the whole field.",
+        "Soil moisture at planting comes from a regional model (NASA POWER), not from a field measurement.",
+        "Prices, costs, yield and pests are not considered."
+      ],
+      "evidencia": [
+        "Dry year (2009): 562 mm of rain fell in the PV and OI planting seasons.",
+        "Dry year (2009): the crop lacked 52.6% of the water it needed (264 days short of water, 786 mm).",
+        "Dry year (2009): 0 mm of rain drained below the roots on 0 days (0% of the rain that fell during the cycles).",
+        "Dry year (2009): the field is left without a crop 112 of the 365 days of the agricultural year.",
+        "Normal year (2016): 725 mm of rain fell in the PV and OI planting seasons.",
+        "Normal year (2016): the crop lacked 39.5% of the water it needed (190 days short of water, 553 mm).",
+        "Normal year (2016): 34 mm of rain drained below the roots on 14 days (3.1% of the rain that fell during the cycles).",
+        "Normal year (2016): the field is left without a crop 113 of the 366 days of the agricultural year.",
+        "Wet year (2018): 835 mm of rain fell in the PV and OI planting seasons.",
+        "Wet year (2018): the crop lacked 39.2% of the water it needed (166 days short of water, 543 mm).",
+        "Wet year (2018): 1 mm of rain drained below the roots on 2 days (0.1% of the rain that fell during the cycles).",
+        "Wet year (2018): the field is left without a crop 112 of the 365 days of the agricultural year.",
+        "Cycle 1, maíz planted on June 20: outside the recommended window (from May 29 to May 29).",
+        "Cycle 3, maíz planted on June 20: outside the recommended window (from May 29 to May 29)."
+      ],
+      "avisoExperto": "This is a comparison with real past years, not a prediction. Before deciding, review it with a local technician or agronomist."
+    }
+  }
+}
