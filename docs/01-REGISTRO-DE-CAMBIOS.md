@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Cultivos completos: auditoría, Vite vigila modelos, cultivos largos recorren ciclos (Eduardo)
+
+- **Archivos:** `web/vite.config.ts`; `web/src/ui/planes.ts` (`acomodarCiclos`, `aplicarAcomodando`, `DIAS_MAX_CLIMA`) y su prueba; `web/src/ui/lab/` (`cultivos-completos.test.ts` nuevo, `conveniencia.ts` y su prueba, `PanelCultivos.tsx`, `Laboratorio.tsx`, `piezas.tsx`, `lab.css`); `web/src/escena/render/escena-three.ts` (banderín); `docs/06`.
+- **Cambio:** detalle en 06, "Cultivos completos y que funcionan".
+- **Por qué:** Eduardo vio "plantas incompletas o que no funcionan": en desarrollo eran los modelos nuevos que Vite no veía; en todas partes, 12 cultivos largos bloqueados en la paleta y la caña que el motor no puede evaluar.
+- **Pendiente:** que el motor evalúe ciclos de más de un año de clima (caña); es del motor (Mompin).
+
 ### 2026-11-15 — Insecticida: protege solo el riesgo y ligado a la malla (Eduardo)
 
 - **Archivos:** `web/src/ui/lab/plagas.ts` (`firmaMalla`, `celdasEnRiesgo`), `web/src/ui/lab/Laboratorio.tsx`, `web/src/ui/lab/PanelCultivos.tsx`, `web/src/ui/lab/plagas.test.ts`; `docs/06`.

@@ -290,9 +290,10 @@ function geometriaBanderin(): THREE.BufferGeometry {
     nombre: 'banderin',
     textura: { ancho: 16, alto: 16, fuente: '' },
     cubos: [
-      { nombre: 'asta', desde: [-0.4, 0, -0.4], hasta: [0.4, 8, 0.4], origen: [0, 0, 0], rotacion: [0, 0, 0], caras: caras(0) },
-      { nombre: 'borde', desde: [0.4, 4.5, -0.25], hasta: [5, 8, 0.25], origen: [0, 0, 0], rotacion: [0, 0, 0], caras: caras(0) },
-      { nombre: 'bandera', desde: [0.4, 5, -0.35], hasta: [4.5, 7.5, 0.35], origen: [0, 0, 0], rotacion: [0, 0, 0], caras: caras(1) },
+      // Mas chico (15/11): con muchos cultivos no registrados en el lugar, el de antes llenaba la parcela.
+      { nombre: 'asta', desde: [-0.3, 0, -0.3], hasta: [0.3, 5.5, 0.3], origen: [0, 0, 0], rotacion: [0, 0, 0], caras: caras(0) },
+      { nombre: 'borde', desde: [0.3, 3.1, -0.2], hasta: [3.6, 5.5, 0.2], origen: [0, 0, 0], rotacion: [0, 0, 0], caras: caras(0) },
+      { nombre: 'bandera', desde: [0.3, 3.45, -0.28], hasta: [3.25, 5.15, 0.28], origen: [0, 0, 0], rotacion: [0, 0, 0], caras: caras(1) },
     ],
   };
   const g = unirCubos(modelo, (i) => (i === 0 ? [0, 0, 0] : [1, 1, 1]));

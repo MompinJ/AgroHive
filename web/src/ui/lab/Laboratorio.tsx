@@ -6,7 +6,7 @@ import type { ResultadoCeldas } from '../../../../contratos/tipos/contratos';
 import { conLimite, type LaboratorioEstado } from '../useLaboratorio';
 import { useSerieBalance } from '../useSerieBalance';
 import { rangoDelCiclo } from '../tiempo';
-import { colorCultivo, conflictosPlan, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
+import { aplicarAcomodando, colorCultivo, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
 import type { PincelEscena } from '../../escena/pincel';
 import { PanelCultivos } from './PanelCultivos';
 import { BarraHerramientas, type Herramienta } from './BarraHerramientas';
@@ -15,7 +15,7 @@ import { usePlagasZona, useProteccion } from './usePlagas';
 import { biomaDe, climatologia, NOMBRE_BIOMA } from './conveniencia';
 import { PanelEscenarios } from './PanelEscenarios';
 import { PanelComparacion } from './PanelComparacion';
-import { Aviso } from './piezas';
+import { Aviso, textoMovidos } from './piezas';
 import { Globo } from './Globo';
 import { Mascota } from './Mascota';
 import { consejos } from './consejos';
@@ -60,6 +60,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const [tamano, setTamano] = useState(1);
   const [pendientes, setPendientes] = useState<ReadonlyMap<string, string>>(() => new Map());
   const [aviso, setAviso] = useState('');
+  const [nota, setNota] = useState('');
   const [graficas, setGraficas] = useState(false);
   const [rociado, setRociado] = useState<{ celdas: string[]; clave: number } | null>(null);
   const ventana = useVentana();
@@ -103,10 +104,10 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   useEffect(() => { if (celdasListas) setPendientes((p) => (p.size ? new Map() : p)); }, [celdasListas, claveCeldas]);
   // Los avisos de la brocha se apagan solos.
   useEffect(() => {
-    if (!aviso) return;
-    const t = setTimeout(() => setAviso(''), 6000);
+    if (!aviso && !nota) return;
+    const t = setTimeout(() => { setAviso(''); setNota(''); }, 6000);
     return () => clearTimeout(t);
-  }, [aviso]);
+  }, [aviso, nota]);
 
   // La escena conserva el ultimo resultado de la misma rotacion y ciclo mientras llega el nuevo
   // (otra fecha, escenario o plan recalculado), para que no parpadee vacia; lo pintado se cubre
@@ -141,22 +142,23 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     return {
       tamano, color,
       onTrazo: (ids: string[]) => {
-        const nuevo = pintarCeldas(plan, datos.parcela, visible.ciclo, ids, cultivo, datos.calendario);
-        const conflictos = conflictosPlan(nuevo, datos.catalogo);
-        if (conflictos.length) { setAviso(conflictos[0]!); return; }
-        if (JSON.stringify(nuevo.porCelda) === JSON.stringify(plan.porCelda)) return;
+        const pintado = pintarCeldas(plan, datos.parcela, visible.ciclo, ids, cultivo, datos.calendario);
+        if (JSON.stringify(pintado.porCelda) === JSON.stringify(plan.porCelda)) return;
+        const r = aplicarAcomodando(pintado, datos.parcela, datos.calendario, datos.catalogo);
+        if ('error' in r) { setAviso(r.error); return; }
         setAviso('');
+        setNota(textoMovidos(r.movidos));
         setPendientes((p) => { const m = new Map(p); for (const id of ids) m.set(id, color); return m; });
-        estado.actualizar(nuevo);
+        estado.actualizar(r.plan);
       },
     };
   }, [paso, herramienta, plan, visible, datos, cultivoActivo, tamano, estado, rociar]);
 
   const sembrarTodo = plan && visible && datos && cultivoActivo && cultivoActivo !== visible.cultivo && herramienta === 'brocha' ? () => {
-    const nuevo = rellenarCiclo(plan, datos.parcela, visible.ciclo, cultivoActivo, datos.calendario, datos.catalogo);
-    const conflictos = conflictosPlan(nuevo, datos.catalogo);
-    if (conflictos.length) { setAviso(conflictos[0]!); return; }
-    estado.actualizar(nuevo);
+    const r = aplicarAcomodando(rellenarCiclo(plan, datos.parcela, visible.ciclo, cultivoActivo, datos.calendario, datos.catalogo), datos.parcela, datos.calendario, datos.catalogo);
+    if ('error' in r) { setAviso(r.error); return; }
+    setNota(textoMovidos(r.movidos));
+    estado.actualizar(r.plan);
     setCultivoPincel(null);
   } : null;
   const rociarTodo = () => rociar(celdasParcela);
@@ -196,6 +198,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
       return p ? riesgosDelPlan(p, celdasParcela, presentes, proteccion).map((r) => ({ ciclo: r.ciclo, plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })) : [];
     }} />}
     {aviso && <Aviso tipo="error" className="lab-toast" onCerrar={() => setAviso('')}>{aviso}</Aviso>}
+    {!aviso && nota && <Aviso tipo="info" className="lab-toast" onCerrar={() => setNota('')}>{nota}</Aviso>}
     {paso !== 'cultivos' && errorCeldas && <Aviso tipo="error" className="lab-toast" accion={{ texto: 'Reintentar', onClick: () => setIntentoCeldas((n) => n + 1) }}>{errorCeldas}</Aviso>}
   </div>;
 }

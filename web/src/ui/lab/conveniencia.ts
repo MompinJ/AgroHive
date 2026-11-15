@@ -4,7 +4,7 @@
 // Es una ayuda para elegir `[PROPUESTA]`: no es un indicador del motor ni entra al ranking.
 import type { CalendarioLocal, Cultivo, SerieClima } from '../../../../contratos/tipos/contratos';
 import { dentroDeVentana } from '../../motor/pilares';
-import { referenciaSiembra } from '../planes';
+import { DIAS_MAX_CLIMA, referenciaSiembra } from '../planes';
 
 export type Bioma = 'tropical_humedo' | 'tropical_seco' | 'arido' | 'templado' | 'frio';
 export const NOMBRE_BIOMA: Record<Bioma, string> = {
@@ -66,7 +66,7 @@ export function tMediaCiclo(c: Climatologia, siembra: string, dias: number): num
   return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
 }
 
-export interface Conveniencia { puntos: number; nivel: 'buena' | 'regular' | 'mala'; motivos: string[]; noCabe: boolean }
+export interface Conveniencia { puntos: number; nivel: 'buena' | 'regular' | 'mala'; motivos: string[]; noCabe: boolean; demasiadoLargo: boolean }
 const valor = (x: { estado: string; valor?: number | null } | undefined) => (x?.estado === 'EVALUABLE' && x.valor != null ? x.valor : null);
 const redondo = (n: number) => Math.round(n).toLocaleString('es-MX');
 
@@ -77,8 +77,10 @@ export function conveniencia(cultivo: Cultivo, entrada: {
   const motivos: string[] = [];
   let puntos = 0;
   const u = cultivo.umbrales as unknown as Record<string, { estado: string; valor?: number | null } | undefined>;
-  const noCabe = entrada.disponibles != null && entrada.dias != null && entrada.dias > entrada.disponibles;
-  if (noCabe) motivos.push(`Tarda ${entrada.dias} días: no termina antes del siguiente ciclo.`);
+  const demasiadoLargo = entrada.dias != null && entrada.dias > DIAS_MAX_CLIMA;
+  const noCabe = !demasiadoLargo && entrada.disponibles != null && entrada.dias != null && entrada.dias > entrada.disponibles;
+  if (demasiadoLargo) motivos.push(`Tarda ${entrada.dias} días: más que el año de clima del simulador, no se puede evaluar.`);
+  else if (noCabe) { puntos -= 1; motivos.push(`Tarda ${entrada.dias} días: los ciclos siguientes se recorren para que quepa.`); }
   const t = entrada.dias ? tMediaCiclo(entrada.clima, entrada.siembra, entrada.dias) : null;
   const [optMin, optMax, absMin, absMax] = [valor(u.tOptMinC), valor(u.tOptMaxC), valor(u.tMinAbsC), valor(u.tMaxAbsC)];
   if (t != null && optMin != null && optMax != null) {
@@ -101,6 +103,6 @@ export function conveniencia(cultivo: Cultivo, entrada: {
   }
   const plaga = entrada.plagas.find((x) => x.cultivos.includes(cultivo.id));
   if (plaga) { puntos -= 1; motivos.push(`${plaga.nombreComun} registrada cerca lo ataca.`); }
-  const nivel = noCabe || puntos < 0 ? 'mala' : puntos >= 3 ? 'buena' : 'regular';
-  return { puntos: noCabe ? -99 : puntos, nivel, motivos, noCabe };
+  const nivel = demasiadoLargo || puntos < 0 ? 'mala' : puntos >= 3 ? 'buena' : 'regular';
+  return { puntos: demasiadoLargo ? -99 : puntos, nivel, motivos, noCabe, demasiadoLargo };
 }

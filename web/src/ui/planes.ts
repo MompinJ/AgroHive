@@ -300,3 +300,38 @@ export function claveDeParcela(parcela: Parcela, esDemo: boolean): string {
   const [lon, lat] = parcela.centroide;
   return `${parcela.id}@${lon.toFixed(5)},${lat.toFixed(5)}#${parcela.celdas.length}`;
 }
+
+/**
+ * Corre hacia adelante los ciclos que se enciman con el anterior: cada uno empieza, como pronto,
+ * el dia siguiente a que termina el ciclo previo (su cultivo mas largo, contando lo pintado).
+ * Devuelve el plan rearmado y que ciclos se movieron. No mueve nada hacia atras.
+ */
+export function acomodarCiclos(plan: PlanSiembra, parcela: Parcela, calendario: CalendarioLocal | null, catalogo: CatalogoCultivos): { plan: PlanSiembra; movidos: { ciclo: number; antes: string; despues: string }[] } {
+  const ciclos = [...plan.ciclos].sort((a, b) => a.ciclo - b.ciclo).map((c) => ({ ...c }));
+  const movidos: { ciclo: number; antes: string; despues: string }[] = [];
+  for (let k = 1; k < ciclos.length; k++) {
+    const previo = ciclos[k - 1]!;
+    const dias = Math.max(1, ...cultivosDelCiclo(plan, previo.ciclo).map((c) => diasCultivo(c, catalogo) ?? 0));
+    const libre = aDia(previo.siembra) + dias + 1;
+    const actual = ciclos[k]!;
+    if (aDia(actual.siembra) < libre) {
+      const despues = deDia(libre);
+      movidos.push({ ciclo: actual.ciclo, antes: actual.siembra, despues });
+      actual.siembra = despues;
+      actual.temporada = temporadaDeFecha(despues);
+    }
+  }
+  return { plan: movidos.length ? armarPlan(plan.rotacionId, parcela, ciclos, calendario, plan.porCelda) : plan, movidos };
+}
+
+/** Aplica un cambio: si se encima con otros ciclos, los acomoda; si ni asi se puede, devuelve el motivo. */
+export function aplicarAcomodando(nuevo: PlanSiembra, parcela: Parcela, calendario: CalendarioLocal | null, catalogo: CatalogoCultivos):
+  { plan: PlanSiembra; movidos: { ciclo: number; antes: string; despues: string }[] } | { error: string } {
+  const conflictos = conflictosPlan(nuevo, catalogo);
+  if (!conflictos.length) return { plan: nuevo, movidos: [] };
+  const r = acomodarCiclos(nuevo, parcela, calendario, catalogo);
+  return conflictosPlan(r.plan, catalogo).length ? { error: conflictos[0]! } : r;
+}
+
+/** Ciclo mas largo que el motor puede evaluar con un anio de clima de escenario (la serie llega a marzo del anio siguiente). */
+export const DIAS_MAX_CLIMA = 290;

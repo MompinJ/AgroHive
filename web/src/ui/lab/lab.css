@@ -375,7 +375,7 @@
 .lab-plagas .lab-boton { min-height: 38px; font-size: .82rem; }
 .lab-protegido { margin: 0; display: flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--color-forest-700); }
 .lab-paleta button { position: relative; }
-.lab-conv-punto { position: absolute; bottom: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; }
+.lab-conv-punto { position: absolute; top: 6px; left: 6px; width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 0 2px #fff; }
 .lab-conv-buena .lab-conv-punto, .lab-conv-leyenda .lab-conv-buena { background: #2f8a4e; }
 .lab-conv-regular .lab-conv-punto, .lab-conv-leyenda .lab-conv-regular { background: #e2bf3a; }
 .lab-conv-mala .lab-conv-punto, .lab-conv-leyenda .lab-conv-mala { background: #bf3326; }
@@ -406,4 +406,11 @@
   .plan-elegido, .plan-elegido * { visibility: visible !important; }
   .plan-elegido { position: absolute; inset: 0; width: auto; max-height: none; box-shadow: none; }
   .plan-pie, .plan-cabeza .lab-aviso-cerrar { display: none !important; }
+}
+.lab-ciclo-texto strong { display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 760px) {
+  .barra-herr { flex-wrap: nowrap; overflow-x: auto; max-width: calc(100% - 96px); scrollbar-width: none; }
+  .barra-herr::-webkit-scrollbar { display: none; }
+  .barra-herr button { flex: 0 0 auto; }
+  .lab-paso-cultivos .lab-toast { top: calc(var(--lab-top) + 60px); }
 }

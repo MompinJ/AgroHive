@@ -2,10 +2,10 @@
 // la fecha salen del calendario local (SIAP/INIFAP o GGCMI via API) y se pueden ajustar.
 import { useMemo, useState } from 'react';
 import type { LaboratorioEstado } from '../useLaboratorio';
-import { agregarCiclo, cambiarSiembra, conflictosPlan, conteoPintado, diasCultivo, inicioDeVentana, nombreRotacion, nuevaRotacion, quitarCiclo, referenciaSiembra } from '../planes';
+import { agregarCiclo, aplicarAcomodando, cambiarSiembra, conteoPintado, diasCultivo, inicioDeVentana, nombreRotacion, nuevaRotacion, quitarCiclo, referenciaSiembra } from '../planes';
 import { climatologia, conveniencia } from './conveniencia';
 import type { PlagaZona, riesgosDelPlan } from './plagas';
-import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, fechaCorta, nombreCultivo, rangoVentana } from './piezas';
+import { Aviso, Cargando, EncabezadoPanel, IconoCultivo, fechaCorta, nombreCultivo, rangoVentana, textoMovidos } from './piezas';
 import { IconoBasura, IconoBicho, IconoCalendario, IconoEscudo, IconoInfo, IconoInsecticida, IconoMas, IconoQuitar } from './iconos';
 import type { Herramienta } from './BarraHerramientas';
 import type { PasoLab } from './Laboratorio';
@@ -23,6 +23,7 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
   const { rotacion, setRotacion, ciclo, setCiclo } = estado.seleccion;
   const [errorFecha, setErrorFecha] = useState('');
   const [busqueda, setBusqueda] = useState('');
+  const [nota, setNota] = useState('');
   const [verTodos, setVerTodos] = useState(false);
   const datos = estado.datos;
   const clima = useMemo(() => climatologia(datos?.serie), [datos?.serie]);
@@ -56,10 +57,11 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
   const visibles = q || verTodos ? filtrados : filtrados.slice(0, 8);
 
   function aplicar(nuevo: typeof plan) {
-    const conflictos = conflictosPlan(nuevo!, datos!.catalogo);
-    if (conflictos.length) { setErrorFecha(conflictos[0]!); return false; }
+    const r = aplicarAcomodando(nuevo!, datos!.parcela, datos!.calendario, datos!.catalogo);
+    if ('error' in r) { setErrorFecha(r.error); setNota(''); return false; }
     setErrorFecha('');
-    estado.actualizar(nuevo!);
+    setNota(textoMovidos(r.movidos));
+    estado.actualizar(r.plan);
     return true;
   }
 
@@ -109,8 +111,8 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
       <div className="lab-paleta" role="radiogroup" aria-labelledby="paleta-etiqueta">
         {visibles.map(({ c, v }) => {
           const tip = `${nombreCultivo(c.id)}: ${v.nivel === 'buena' ? 'buena opción' : v.nivel === 'regular' ? 'opción regular' : 'mala opción'}. ${v.motivos.join(' ')}`;
-          return <button type="button" role="radio" key={c.id} className={`lab-tip lab-conv-${v.nivel}`} data-tip={tip} aria-checked={cultivoActivo === c.id && herramienta !== 'goma'} aria-disabled={v.noCabe}
-            onClick={() => { if (v.noCabe) return; setCultivoPincel(c.id); if (herramienta !== 'brocha') setHerramienta('brocha'); }}>
+          return <button type="button" role="radio" key={c.id} className={`lab-tip lab-conv-${v.nivel}`} data-tip={tip} aria-checked={cultivoActivo === c.id && herramienta !== 'goma'} aria-disabled={v.demasiadoLargo}
+            onClick={() => { if (v.demasiadoLargo) return; setCultivoPincel(c.id); if (herramienta !== 'brocha') setHerramienta('brocha'); }}>
             <IconoCultivo cultivo={c.id} tamano={30} />
             <span>{nombreCultivo(c.id)}</span>
             <span className="lab-conv-punto" aria-hidden="true" />
@@ -143,6 +145,7 @@ export function PanelCultivos({ estado, onAvanzar, herramienta, setHerramienta, 
       {inicioVentana && inicioVentana !== visible.siembra && <button type="button" className="lab-boton lab-boton-suave" onClick={() => aplicar(cambiarSiembra(plan, datos.parcela, visible.ciclo, inicioVentana, datos.calendario))}>Usar la mejor fecha ({fechaCorta(inicioVentana)})</button>}
     </details>
     {errorFecha && <Aviso tipo="error" onCerrar={() => setErrorFecha('')}>{errorFecha}</Aviso>}
+    {nota && <Aviso tipo="info" onCerrar={() => setNota('')}>{nota}</Aviso>}
     {local?.presencia.estado === 'no_registrado' && <Aviso tipo="aviso"><strong>{nombreCultivo(visible.cultivo)}</strong> casi no se siembra en esta zona.</Aviso>}
     <div className="lab-datos"><AvisosDatos avisos={datos.avisosDatos} advertenciasParcela={datos.parcela.advertencias ?? []} /></div>
 
