@@ -72,7 +72,7 @@ Con el selector, el usuario puede armar sus propias secuencias además de estas.
 | --- | --- | --- |
 | **F1** | Terreno en el mapa: parcela de demo fija; dibujar polígono propio y autogenerar cuadrícula de bloques | Parcela demo `[DECIDIDO]`; dibujo libre `[EN EVENTO]` |
 | **F2** | **Relieve real**: elevación y pendiente por bloque | `[DECIDIDO]` |
-| **F3** | **Selector de cultivos "what if"** con modelos propios por etapa | `[DECIDIDO]`; asignar por parcela completa o pintar por bloques `[EN EVENTO]` |
+| **F3** | **Selector de cultivos "what if"** con modelos propios por etapa | `[DECIDIDO]`; asignar por parcela completa y pintar por bloques `[DECIDIDO]` 14/11 noche (ver 06) |
 | **F4** | Línea de tiempo: como mínimo cambiar ciclo 1/2/3; slider de meses con animación de crecimiento | Ciclos `[DECIDIDO]`; slider `[EN EVENTO]` |
 | **F5** | Valores visibles: cultivo, etapa, humedad, déficit/exceso, riesgo; gráficas de lluvia, demanda y balance | `[DECIDIDO]` |
 | **F6** | Escenarios seco / habitual / lluvioso con años reales visibles; sliders "qué pasa si" (lluvia -20 %, temperatura +2 °C) | Escenarios `[DECIDIDO]`; sliders `[MEJORA]` |

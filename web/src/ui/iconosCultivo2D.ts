@@ -13,3 +13,8 @@ export function iconoCultivo2D(b: Pick<BloqueEscena, 'cultivo' | 'etapa' | 'esta
   const url = porClave.get(clave);
   return url ? { clave, url } : null;
 }
+
+/** Dibujo de un cultivo en madurez para la paleta de la brocha; null si no hay sprite. */
+export function iconoDeCultivo(cultivo: string): string | null {
+  return porClave.get(`${cultivo}_madurez`) ?? null;
+}

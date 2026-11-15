@@ -1,14 +1,29 @@
 :root {
-  --color-aubergine-ink: #1b0624;
-  --color-espresso: #160f0c;
-  --color-warm-ash: #766a7c;
-  --color-graphite: #444444;
-  --color-stone: #898683;
+  /* Paleta AgroHive: verdes de campo profundos, neutros salvia y un acento trigo. Saturacion baja. */
+  --color-forest-950: #11221a;
+  --color-forest-800: #184a37;
+  --color-forest-700: #1f5a43;
+  --color-forest-100: #e1ece5;
+  --color-sage-25: #fafbf8;
+  --color-sage-50: #f3f5f0;
+  --color-sage-100: #e8ede5;
+  --color-sage-150: #eef1eb;
+  --color-ink-700: #3c4a43;
+  --color-ink-500: #5b6961;
+  --color-line: #c3ccc3;
+  --color-wheat: #c4902f;
+  --color-clay: #a5452f;
+  /* Nombres anteriores, conservados para las hojas que ya los usan. */
+  --color-aubergine-ink: var(--color-forest-950);
+  --color-espresso: var(--color-forest-700);
+  --color-warm-ash: var(--color-ink-500);
+  --color-graphite: var(--color-ink-700);
+  --color-stone: var(--color-line);
   --color-paper-white: #ffffff;
-  --color-linen: #f7f7f5;
-  --color-bone: #edece7;
-  --color-mist: #eeeeee;
-  --color-charcoal: #292421;
+  --color-linen: var(--color-sage-50);
+  --color-bone: var(--color-sage-100);
+  --color-mist: var(--color-sage-150);
+  --color-charcoal: var(--color-forest-800);
   --color-text: var(--color-aubergine-ink);
   --color-text-body: var(--color-graphite);
   --color-text-muted: var(--color-warm-ash);
@@ -22,7 +37,9 @@
   --color-action-hover: var(--color-charcoal);
   --color-on-action: var(--color-paper-white);
   --color-focus: var(--color-aubergine-ink);
-  --font-ui: 'GT America', Arial, Helvetica, sans-serif;
+  --font-ui: 'GT America', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --shadow-float: 0 1px 2px rgb(17 34 26 / 8%), 0 12px 32px -8px rgb(17 34 26 / 22%);
+  --radius-panel: 18px;
   --text-caption: .875rem;
   --text-body: 1rem;
   --text-intro: 1.125rem;

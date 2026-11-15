@@ -1,4 +1,6 @@
 # Duna — Style Reference
+
+> Nota AgroHive (14/11 noche, Eduardo): los valores de color de `web/src/ui/tokens.css` ya no son los de esta referencia; pasaron a verdes de campo con neutros salvia (se conservan los nombres de variables). Ver `docs/06`, "Laboratorio por pasos y brocha".
 > Sunset watercolor on warm marble — a single painted landscape over a quiet, editorial compliance document.
 
 **Theme:** light

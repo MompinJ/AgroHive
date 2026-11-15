@@ -2,7 +2,7 @@
 // parcela y el resultado del motor tal cual (contratos) y solo los representa.
 // Punto de integracion propuesto: ver web/src/escena/INTEGRACION.md.
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import type { Advertencia, Parcela, ResultadoCeldas, SerieBalance, Suelo } from '../../../contratos/tipos/contratos';
 import { CORTES_LLUVIA, lluviaDelDia, textoLluvia } from './lluvia';
 import { construirEscena } from './adaptador';
@@ -12,6 +12,7 @@ import { AvisosDatos } from './AvisosDatos';
 import { bloqueCentral, fichaBloque, vecino } from './ficha';
 import { describirBloque, entradasLeyenda, type EntradaLeyenda } from './leyenda';
 import { EXAGERACION_VERTICAL_DEFECTO, type BloqueEscena } from './modelo';
+import { huellaPincel, type PincelEscena } from './pincel';
 import { rgbaPlaca } from './placa';
 import { EscenaThree, ErrorWebGL } from './render/escena-three';
 import { textoEscalaSuelo } from './suelo';
@@ -37,7 +38,23 @@ export interface EscenaParcelaProps {
   className?: string;
   /** Solo para mediciones (vista previa, A5.4): recibe la escena three ya creada. */
   onEscena?: (escena: EscenaThree | null) => void;
+  /**
+   * 'panel' (por defecto): la escena con sus controles y leyenda en columna.
+   * 'fondo': el lienzo cubre la pantalla y los controles van en un panel flotante compacto
+   * (laboratorio por pasos). Los valores y la leyenda son los mismos en ambos.
+   */
+  modo?: 'panel' | 'fondo';
+  /** Sin panel flotante (por ejemplo, cuando otra vista ocupa la pantalla). Solo en modo 'fondo'. */
+  hud?: boolean;
+  /** Brocha (PAINT_BLOCK): con valor, el clic o el dedo pinta en vez de girar. */
+  pincel?: PincelEscena | null;
+  /** Celdas pintadas que el motor aun no evalua, con el color del cultivo pintado. */
+  marcas?: ReadonlyMap<string, string>;
+  /** Corrimiento del centro de la vista en px (paneles encima del lienzo). */
+  desplazamiento?: { x: number; y: number };
 }
+
+const SIN_MARCAS: ReadonlyMap<string, string> = new Map();
 
 function prefiereMenosMovimiento(): boolean {
   try {
@@ -58,7 +75,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -104,18 +121,51 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   const lluvia = useMemo(() => lluviaDelDia(serieValida, modelo.fecha), [serieValida, modelo.fecha]);
   const intensidadLluvia = lluvia?.estado === 'con_dato' ? lluvia.intensidad : 0;
 
+  // Brocha: el trazo en curso vive aqui; al soltar se entrega al plan (pincel.onTrazo).
+  const [trazo, setTrazo] = useState<ReadonlySet<string>>(() => new Set());
+  const trazoRef = useRef<Set<string>>(new Set());
+  const pincelRef = useRef(pincel);
+  const modeloRef = useRef<typeof modelo | null>(null);
+  pincelRef.current = pincel;
+  const [abierto, setAbierto] = useState<'celdas' | 'leyenda' | 'vista' | null>(null);
+  const onPintar = useMemo(
+    () => (bloque: BloqueEscena | null, fase: 'inicio' | 'trazo' | 'fin') => {
+      const p = pincelRef.current;
+      const m = modeloRef.current;
+      if (!p || !m) return;
+      if (fase === 'inicio') trazoRef.current = new Set();
+      if (bloque) for (const id of huellaPincel(m.bloques, bloque, p.tamano)) trazoRef.current.add(id);
+      if (fase === 'fin') {
+        const celdas = [...trazoRef.current];
+        trazoRef.current = new Set();
+        setTrazo(new Set());
+        if (celdas.length) p.onTrazo(celdas);
+      } else {
+        setTrazo(new Set(trazoRef.current));
+      }
+    },
+    [],
+  );
+
   const opciones = useMemo(
     () => ({
       reducirMovimiento,
       viento,
       mascota,
-      onSeleccion: setSeleccion,
+      pincel: !!pincel,
+      onPintar,
+      ...(desplazamiento ? { desplazamiento } : {}),
+      onSeleccion: (b: BloqueEscena | null) => {
+        setSeleccion(b);
+        if (b) setAbierto('celdas');
+      },
       onContexto: (estado: 'perdido' | 'restaurado') => setContexto(estado),
       onHover: (bloque: BloqueEscena | null, x: number, y: number) => setHover(bloque ? { bloque, x, y } : null),
       onAviso: (codigo: string, mensaje: string) =>
         setAvisosRender((prev) => (prev.some((a) => a.mensaje === mensaje) ? prev : [...prev, { codigo, mensaje, severidad: 'aviso' }])),
     }),
-    [reducirMovimiento, viento, mascota],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [reducirMovimiento, viento, mascota, !!pincel, onPintar, desplazamiento?.x, desplazamiento?.y],
   );
 
   useEffect(() => {
@@ -141,6 +191,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   }, [opciones]);
 
   useEffect(() => {
+    modeloRef.current = modelo;
     // La seleccion se conserva si la celda sigue en la escena (otra fecha, ciclo o escenario).
     setSeleccion((prev) => (prev ? (modelo.bloques.find((b) => b.celdaId === prev.celdaId) ?? null) : null));
     setHover(null);
@@ -163,172 +214,249 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     escena.current?.setLluvia(intensidadLluvia);
   }, [intensidadLluvia, modelo]);
 
+  // Marcas: lo pintado que espera al motor mas el trazo en curso.
+  const colorPincel = pincel?.color;
+  useEffect(() => {
+    if (!marcas.size && !trazo.size) {
+      escena.current?.marcarPintura(SIN_MARCAS);
+      return;
+    }
+    const todas = new Map(marcas);
+    for (const id of trazo) todas.set(id, colorPincel ?? '#ffffff');
+    escena.current?.marcarPintura(todas);
+  }, [marcas, trazo, colorPincel, modelo]);
+
+  // Teclado con pincel: Enter o espacio pintan alrededor de la celda elegida.
+  const pintarConTeclado = () => {
+    const actual = seleccion ?? bloqueCentral(modelo.bloques);
+    if (!pincel || !actual) return;
+    pincel.onTrazo(huellaPincel(modelo.bloques, actual, pincel.tamano));
+  };
+
   const avisos = [...modelo.avisos, ...avisosRender];
   const criticos = avisos.filter((a) => a.severidad === 'critico');
   // Los avisos del terreno van en la franja de datos, no repetidos en la lista general.
   const otros = avisos.filter((a) => a.severidad !== 'critico' && !CODIGOS_TERRENO.has(a.codigo));
+  const fondo = modo === 'fondo';
+
+  const avisosCriticos = criticos.map((a) => (
+    <p key={a.codigo + a.mensaje} className="escena-aviso escena-aviso-critico" role="note">
+      <strong>{a.codigo === 'DATOS_DE_EJEMPLO' ? 'Datos de ejemplo' : 'Aviso'}:</strong> {a.mensaje}
+    </p>
+  ));
+
+  const lienzoCaja = (
+    <div className="escena-lienzo-caja">
+      {sinWebGL ? (
+        <div className="escena-sin-webgl" role="alert">
+          <strong>{contexto === 'perdido' ? 'Se perdió la escena 3D (el navegador quitó el contexto WebGL).' : 'WebGL no esta disponible.'}</strong>
+          <p>La escena 3D no puede dibujarse en este equipo. Usa el modo 2D; los valores son los mismos.</p>
+        </div>
+      ) : (
+        <canvas
+          ref={lienzo}
+          className={`escena-lienzo${pincel ? ' escena-lienzo-pincel' : ''}`}
+          tabIndex={0}
+          aria-label={
+            pincel
+              ? 'Parcela en 3D, modo brocha. Arrastra para pintar celdas; clic derecho o dos dedos para girar, rueda o pellizca para acercar. Enter pinta alrededor de la celda elegida.'
+              : 'Parcela en 3D. Arrastra para girar, rueda o pellizca para acercar, flechas para desplazar. Toca un bloque o pulsa Enter para ver su estado; Escape quita la seleccion. La lista de celdas permite elegir cualquier celda.'
+          }
+          onKeyDown={(e) => {
+            if ((e.key === 'Enter' || e.key === ' ') && pincel) {
+              e.preventDefault();
+              pintarConTeclado();
+            } else if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              elegir(seleccion ?? bloqueCentral(modelo.bloques));
+            } else if (e.key === 'Escape') {
+              elegir(null);
+            }
+          }}
+        />
+      )}
+      {lluvia && (
+        <p className={`escena-lluvia escena-lluvia-${lluvia.estado === 'con_dato' ? lluvia.clase : 'sin_dato'}`} role="status">
+          {textoLluvia(lluvia)}
+        </p>
+      )}
+      {hover && !sinWebGL && (
+        <div className="escena-globo" style={{ left: hover.x, top: hover.y }} aria-hidden="true">
+          <strong>{hover.bloque.celdaId}</strong> {fichaBloque(hover.bloque).resumen}
+        </div>
+      )}
+    </div>
+  );
+
+  const controles = (
+    <div className="escena-controles">
+      <label className="escena-control">
+        <span>
+          Exageracion vertical: <strong>x{exageracion}</strong>
+        </span>
+        <input type="range" min={1} max={30} step={1} value={exageracion} onChange={(e) => setExageracion(Number(e.target.value))} />
+      </label>
+      <label className="escena-control escena-check">
+        <input type="checkbox" checked={reducirMovimiento} onChange={(e) => setReducirMovimiento(e.target.checked)} />
+        <span>Reducir movimiento</span>
+      </label>
+      <label className="escena-control escena-check">
+        <input type="checkbox" checked={viento && !reducirMovimiento} disabled={reducirMovimiento} onChange={(e) => setViento(e.target.checked)} />
+        <span>Viento leve{reducirMovimiento ? ' (apagado: reducir movimiento)' : ''}</span>
+      </label>
+      <button type="button" className="escena-boton" onClick={() => escena.current?.restablecerVista()} disabled={sinWebGL}>
+        Restablecer vista
+      </button>
+    </div>
+  );
+
+  const fichaPanel = (
+    <div className="escena-ficha">
+      <div className="escena-elegir">
+        <label className="escena-control">
+          <span>Celda</span>
+          <select value={seleccion?.celdaId ?? ''} onChange={(e) => elegir(modelo.bloques.find((b) => b.celdaId === e.target.value) ?? null)}>
+            <option value="">Elige una celda</option>
+            {modelo.bloques.map((b) => (
+              <option key={b.celdaId} value={b.celdaId}>
+                {b.celdaId} · {fichaBloque(b).resumen}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="escena-flechas" role="group" aria-label="Moverse a la celda vecina">
+          <button type="button" className="escena-boton" onClick={() => mover(0, -1)} aria-label="Celda al norte">N</button>
+          <button type="button" className="escena-boton" onClick={() => mover(-1, 0)} aria-label="Celda al oeste">O</button>
+          <button type="button" className="escena-boton" onClick={() => mover(1, 0)} aria-label="Celda al este">E</button>
+          <button type="button" className="escena-boton" onClick={() => mover(0, 1)} aria-label="Celda al sur">S</button>
+        </div>
+      </div>
+      <div aria-live="polite" className="escena-ficha-cuerpo">
+        {ficha ? (
+          <>
+            <h3>{ficha.titulo}</h3>
+            <dl>
+              {ficha.filas.map((f) => (
+                <div key={f.etiqueta} className={f.faltante ? 'escena-faltante' : undefined}>
+                  <dt>{f.etiqueta}</dt>
+                  <dd>
+                    {f.valor}
+                    {f.nota && <span className="escena-detalle">{f.faltante ? `Falta: ${f.nota}` : f.nota}</span>}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </>
+        ) : (
+          <p className="escena-detalle">Toca o haz clic en un bloque, o elige una celda en la lista, para ver sus valores.</p>
+        )}
+      </div>
+    </div>
+  );
+
+  const leyendaPanel = (
+    <div className="escena-leyenda">
+      <h3>Leyenda{modelo.fecha ? ` · ${modelo.fecha}` : ''}</h3>
+      <ul>
+        {leyenda.map((e) => (
+          <li key={e.clave}>
+            <MuestraEstado entrada={e} />
+            <span aria-hidden="true">
+              <strong>{e.etiqueta}</strong> <span className="escena-cuenta">({e.celdas})</span>
+              <span className="escena-detalle">{e.descripcionPatron}</span>
+            </span>
+            <span className="sr-only">{e.textoAccesible}</span>
+          </li>
+        ))}
+      </ul>
+      {noRecomendados > 0 && (
+        <p className="escena-detalle">
+          Banderin blanco con borde negro: cultivo no recomendado en el lugar segun la fuente local ({noRecomendados} {noRecomendados === 1 ? 'celda' : 'celdas'}).
+        </p>
+      )}
+      <p className="escena-detalle">
+        Cada celda se dibuja como un manchón de plantas en surcos: la densidad es visual, no a escala. La celda elegida muestra el modelo detallado de su planta.
+      </p>
+      <p className="escena-detalle">{textoEscalaSuelo(modelo.grupoSuelo)}</p>
+      <p className="escena-detalle">
+        Lluvia del día (serie del motor, mm/día): llovizna desde {CORTES_LLUVIA.minimaMm} mm, moderada desde {CORTES_LLUVIA.moderadaDesdeMm} mm,
+        fuerte desde {CORTES_LLUVIA.fuerteDesdeMm} mm; más gotas con más lluvia. Sin dato no se dibuja lluvia.
+        {reducirMovimiento ? ' Con reducir movimiento solo se muestra el texto, sin animación.' : ''}
+      </p>
+    </div>
+  );
+
+  const avisosOtros = otros.length > 0 && (
+    <ul className="escena-avisos">
+      {otros.map((a) => (
+        <li key={a.codigo + a.mensaje} className={`escena-aviso escena-aviso-${a.severidad}`}>
+          {a.mensaje}
+        </li>
+      ))}
+    </ul>
+  );
+
+  const listaCeldas = (
+    <details className="escena-lista">
+      <summary>Lista de celdas en texto ({modelo.bloques.length})</summary>
+      <ul>
+        {modelo.bloques.map((b) => (
+          <li key={b.celdaId}>{describirBloque(b)}</li>
+        ))}
+      </ul>
+    </details>
+  );
+
+  if (fondo) {
+    const alternar = (panel: 'celdas' | 'leyenda' | 'vista') => setAbierto((a) => (a === panel ? null : panel));
+    return (
+      <section className={`escena escena-fondo ${className}`} aria-label="Escena 3D de la parcela" style={{ '--escena-centro-x': `${desplazamiento?.x ?? 0}px` } as CSSProperties}>
+        {lienzoCaja}
+        {hud && (
+          <div className="escena-hud">
+            {abierto && (
+              <div className="escena-hud-panel" role="region" aria-labelledby="escena-hud-titulo">
+                <div className="escena-hud-cabeza">
+                  <p id="escena-hud-titulo">{abierto === 'celdas' ? 'Ficha de la celda' : abierto === 'leyenda' ? 'Leyenda y avisos' : 'Opciones de vista'}</p>
+                  <button type="button" className="escena-hud-cerrar" onClick={() => setAbierto(null)} aria-label="Cerrar panel">×</button>
+                </div>
+                {abierto === 'celdas' && fichaPanel}
+                {abierto === 'leyenda' && (
+                  <>
+                    {avisosCriticos}
+                    <AvisosDatos avisos={avisosDatos} advertenciasParcela={parcela.advertencias ?? []} />
+                    {leyendaPanel}
+                    {avisosOtros}
+                    {listaCeldas}
+                  </>
+                )}
+                {abierto === 'vista' && controles}
+              </div>
+            )}
+            <div className="escena-hud-barra" role="toolbar" aria-label="Escena">
+              <button type="button" aria-pressed={abierto === 'celdas'} onClick={() => alternar('celdas')}>Celda</button>
+              <button type="button" aria-pressed={abierto === 'leyenda'} onClick={() => alternar('leyenda')}>
+                Leyenda{criticos.length + otros.length > 0 ? <span className="escena-hud-punto" aria-label=" (hay avisos)" /> : null}
+              </button>
+              <button type="button" aria-pressed={abierto === 'vista'} onClick={() => alternar('vista')}>Vista</button>
+              <button type="button" onClick={() => escena.current?.restablecerVista()} disabled={sinWebGL} aria-label="Restablecer vista" title="Restablecer vista">⟲</button>
+            </div>
+          </div>
+        )}
+      </section>
+    );
+  }
 
   return (
     <section className={`escena ${className}`} aria-label="Escena 3D de la parcela">
-      {criticos.map((a) => (
-        <p key={a.codigo + a.mensaje} className="escena-aviso escena-aviso-critico" role="note">
-          <strong>{a.codigo === 'DATOS_DE_EJEMPLO' ? 'Datos de ejemplo' : 'Aviso'}:</strong> {a.mensaje}
-        </p>
-      ))}
-
+      {avisosCriticos}
       <AvisosDatos avisos={avisosDatos} advertenciasParcela={parcela.advertencias ?? []} />
-
-      <div className="escena-lienzo-caja">
-        {sinWebGL ? (
-          <div className="escena-sin-webgl" role="alert">
-            <strong>{contexto === 'perdido' ? 'Se perdió la escena 3D (el navegador quitó el contexto WebGL).' : 'WebGL no esta disponible.'}</strong>
-            <p>La escena 3D no puede dibujarse en este equipo. Usa el modo 2D; los valores son los mismos.</p>
-          </div>
-        ) : (
-          <canvas
-            ref={lienzo}
-            className="escena-lienzo"
-            tabIndex={0}
-            aria-label="Parcela en 3D. Arrastra para girar, rueda o pellizca para acercar, flechas para desplazar. Toca un bloque o pulsa Enter para ver su estado; Escape quita la seleccion. La lista de celdas de abajo permite elegir cualquier celda."
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                elegir(seleccion ?? bloqueCentral(modelo.bloques));
-              } else if (e.key === 'Escape') {
-                elegir(null);
-              }
-            }}
-          />
-        )}
-        {lluvia && (
-          <p className={`escena-lluvia escena-lluvia-${lluvia.estado === 'con_dato' ? lluvia.clase : 'sin_dato'}`} role="status">
-            {textoLluvia(lluvia)}
-          </p>
-        )}
-        {hover && !sinWebGL && (
-          <div className="escena-globo" style={{ left: hover.x, top: hover.y }} aria-hidden="true">
-            <strong>{hover.bloque.celdaId}</strong> {fichaBloque(hover.bloque).resumen}
-          </div>
-        )}
-      </div>
-
-      <div className="escena-controles">
-        <label className="escena-control">
-          <span>
-            Exageracion vertical: <strong>x{exageracion}</strong>
-          </span>
-          <input
-            type="range"
-            min={1}
-            max={30}
-            step={1}
-            value={exageracion}
-            onChange={(e) => setExageracion(Number(e.target.value))}
-          />
-        </label>
-        <label className="escena-control escena-check">
-          <input type="checkbox" checked={reducirMovimiento} onChange={(e) => setReducirMovimiento(e.target.checked)} />
-          <span>Reducir movimiento</span>
-        </label>
-        <label className="escena-control escena-check">
-          <input type="checkbox" checked={viento && !reducirMovimiento} disabled={reducirMovimiento} onChange={(e) => setViento(e.target.checked)} />
-          <span>Viento leve{reducirMovimiento ? ' (apagado: reducir movimiento)' : ''}</span>
-        </label>
-        <button type="button" className="escena-boton" onClick={() => escena.current?.restablecerVista()} disabled={sinWebGL}>
-          Restablecer vista
-        </button>
-      </div>
-
-      <div className="escena-ficha">
-        <div className="escena-elegir">
-          <label className="escena-control">
-            <span>Celda</span>
-            <select value={seleccion?.celdaId ?? ''} onChange={(e) => elegir(modelo.bloques.find((b) => b.celdaId === e.target.value) ?? null)}>
-              <option value="">Elige una celda</option>
-              {modelo.bloques.map((b) => (
-                <option key={b.celdaId} value={b.celdaId}>
-                  {b.celdaId} · {fichaBloque(b).resumen}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="escena-flechas" role="group" aria-label="Moverse a la celda vecina">
-            <button type="button" className="escena-boton" onClick={() => mover(0, -1)} aria-label="Celda al norte">N</button>
-            <button type="button" className="escena-boton" onClick={() => mover(-1, 0)} aria-label="Celda al oeste">O</button>
-            <button type="button" className="escena-boton" onClick={() => mover(1, 0)} aria-label="Celda al este">E</button>
-            <button type="button" className="escena-boton" onClick={() => mover(0, 1)} aria-label="Celda al sur">S</button>
-          </div>
-        </div>
-        <div aria-live="polite" className="escena-ficha-cuerpo">
-          {ficha ? (
-            <>
-              <h3>{ficha.titulo}</h3>
-              <dl>
-                {ficha.filas.map((f) => (
-                  <div key={f.etiqueta} className={f.faltante ? 'escena-faltante' : undefined}>
-                    <dt>{f.etiqueta}</dt>
-                    <dd>
-                      {f.valor}
-                      {f.nota && <span className="escena-detalle">{f.faltante ? `Falta: ${f.nota}` : f.nota}</span>}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </>
-          ) : (
-            <p className="escena-detalle">Toca o haz clic en un bloque, o elige una celda en la lista, para ver sus valores.</p>
-          )}
-        </div>
-      </div>
-
-      <div className="escena-leyenda">
-        <h3>Leyenda{modelo.fecha ? ` · ${modelo.fecha}` : ''}</h3>
-        <ul>
-          {leyenda.map((e) => (
-            <li key={e.clave}>
-              <MuestraEstado entrada={e} />
-              <span aria-hidden="true">
-                <strong>{e.etiqueta}</strong> <span className="escena-cuenta">({e.celdas})</span>
-                <span className="escena-detalle">{e.descripcionPatron}</span>
-              </span>
-              <span className="sr-only">{e.textoAccesible}</span>
-            </li>
-          ))}
-        </ul>
-        {noRecomendados > 0 && (
-          <p className="escena-detalle">
-            Banderin blanco con borde negro: cultivo no recomendado en el lugar segun la fuente local ({noRecomendados} {noRecomendados === 1 ? 'celda' : 'celdas'}).
-          </p>
-        )}
-        <p className="escena-detalle">
-          Cada celda se dibuja como un manchón de plantas en surcos: la densidad es visual, no a escala. La celda elegida muestra el modelo detallado de su planta.
-        </p>
-        <p className="escena-detalle">{textoEscalaSuelo(modelo.grupoSuelo)}</p>
-        <p className="escena-detalle">
-          Lluvia del día (serie del motor, mm/día): llovizna desde {CORTES_LLUVIA.minimaMm} mm, moderada desde {CORTES_LLUVIA.moderadaDesdeMm} mm,
-          fuerte desde {CORTES_LLUVIA.fuerteDesdeMm} mm; más gotas con más lluvia. Sin dato no se dibuja lluvia.
-          {reducirMovimiento ? ' Con reducir movimiento solo se muestra el texto, sin animación.' : ''}
-        </p>
-      </div>
-
-      {otros.length > 0 && (
-        <ul className="escena-avisos">
-          {otros.map((a) => (
-            <li key={a.codigo + a.mensaje} className={`escena-aviso escena-aviso-${a.severidad}`}>
-              {a.mensaje}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <details className="escena-lista">
-        <summary>Lista de celdas en texto ({modelo.bloques.length})</summary>
-        <ul>
-          {modelo.bloques.map((b) => (
-            <li key={b.celdaId}>{describirBloque(b)}</li>
-          ))}
-        </ul>
-      </details>
+      {lienzoCaja}
+      {controles}
+      {fichaPanel}
+      {leyendaPanel}
+      {avisosOtros}
+      {listaCeldas}
     </section>
   );
 }

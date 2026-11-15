@@ -21,9 +21,13 @@ npm run preview
 ## Vistas y estado
 
 - `#/`: P0, presentación y acceso a demo o entrada de polígono.
-- `#/terreno`: P1, Isla, Veracruz, 2 hectáreas ficticias (doc 06). `?modo=poligono` explica la integración pendiente de A2.10.
-- `#/laboratorio`: P2, tres paneles y selección de rotación/cultivo/ciclo/escenario de ejemplo.
-- `#/comparacion`: P3, secuencias y estados NO_EVALUABLE por escenario. Orden R0–R2, sin ranking.
+- `#/terreno`: paso 1, Isla, Veracruz (2 hectáreas ficticias) o `?modo=poligono` para dibujar la parcela.
+- `#/laboratorio`: paso 2, Cultivos: rotación, ciclo y brocha sobre la escena de fondo.
+- `#/escenarios`: paso 3, escenario seco/habitual/lluvioso, métricas del motor y dock del tiempo.
+- `#/comparacion`: paso 4, ranking por robustez, explicación, gráficas de agua y próxima temporada.
+- `#/metodo`: método y fuentes, fuera de la secuencia.
+
+Los pasos se siguen en orden (`ui/BarraPasos.tsx`): una ruta de un paso aún cerrado lleva al paso abierto más lejano. Detalle en `docs/06`, "Laboratorio por pasos y brocha".
 
 App conserva las selecciones de interfaz mientras permanece montada, incluso al navegar atrás/adelante. Recargar la página restaura los ejemplos iniciales. Las rutas hash funcionan en alojamiento estático sin reglas de reescritura. Rutas desconocidas muestran una página con regreso al inicio. Al navegar cambian el título y el foco al encabezado.
 
@@ -112,7 +116,7 @@ Referencias técnicas: [Leaflet](https://leafletjs.com/reference.html), [Turf in
 
 La referencia visual está en `../DESIGN.md`. `src/ui/tokens.css` contiene los valores globales; `system.css`, los componentes y estados comunes. Inicio y Terreno usan alias semánticos. Los colores de estados del motor en la escena se conservan. No se incorporó GT America porque no se proporcionó; se usa la pila local declarada.
 
-P2/P3 ahora usan `LaboratorioConectado` y `useLaboratorio`. La demo carga datos precargados de Isla con contorno ficticio y mediciones regionales reales; una parcela propia llama al cargador de Eduardo (`cargarDatosParcela`) con su centroide, ventana estándar y cancelación. Clima, suelo y catálogo deben responder; la capa próxima temporada es opcional. Se muestran motivos de error y reintento. No se hereda el calendario de Isla para otras parcelas.
+Los pasos 2 a 4 usan `ui/lab/` (antes `LaboratorioConectado`) y `useLaboratorio`. La demo carga datos precargados de Isla con contorno ficticio y mediciones regionales reales; una parcela propia llama al cargador de Eduardo (`cargarDatosParcela`) con su centroide, ventana estándar y cancelación. Clima, suelo y catálogo deben responder; la capa próxima temporada es opcional. Se muestran motivos de error y reintento. No se hereda el calendario de Isla para otras parcelas.
 
 Los planes R1 a R4, las selecciones y la banda se conservan en App durante la navegación. Los cultivos usan ids del catálogo; las fechas muestran por qué y su fuente. Cada cambio de plan invalida resultados y reemplaza el Worker, ignorando respuestas obsoletas. Escenario/ciclo/fecha solo consultan resultados de celdas. La escena se carga diferida. El rango de próxima temporada se puede apagar; sus números, años análogos, advertencias y exclusiones salen del motor.
 

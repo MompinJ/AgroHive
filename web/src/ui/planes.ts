@@ -1,10 +1,17 @@
-import type { CalendarioLocal, Ciclo, Fuente, Parcela, PlanSiembra } from '../../../contratos/tipos/contratos';
+import type { CalendarioLocal, CatalogoCultivos, Ciclo, Fuente, Parcela, PlanSiembra } from '../../../contratos/tipos/contratos';
+import { parametrosCultivo } from '../motor/cultivo';
 import calendarioJson from '../../../datos/catalogos/calendario-isla.json';
 import version from '../../../contratos/package.json';
 import { dentroDeVentana } from '../motor/pilares';
 
 export const calendarioIsla = calendarioJson as CalendarioLocal;
-export const nombresCultivos: Record<string, string> = { maiz: 'Maíz', frijol: 'Frijol', calabaza: 'Calabaza', chile: 'Chile' };
+export const nombresCultivos: Record<string, string> = { maiz: 'Maíz', frijol: 'Frijol', calabaza: 'Calabaza', chile: 'Chile', sorgo: 'Sorgo', sandia: 'Sandía', camote: 'Camote', cacahuate: 'Cacahuate' };
+/**
+ * Color de la brocha por cultivo. Solo identifica lo que pinta el usuario mientras el motor
+ * lo evalua; no es un estado ni un indicador. Tonos tierra de saturacion media.
+ */
+export const coloresCultivo: Record<string, string> = { maiz: '#d9a62e', frijol: '#8a4b2f', calabaza: '#d9772b', chile: '#b73a2e', sorgo: '#9a5470', sandia: '#3f8a52', camote: '#74539c', cacahuate: '#b08a5c' };
+export const colorCultivo = (cultivo: string) => coloresCultivo[cultivo] ?? '#6b7a72';
 export function referenciaSiembra(cultivo: string, temporada: Ciclo['temporada'], calendario: CalendarioLocal | null) {
   return calendario?.entradas.find((e) => e.cultivo === cultivo && e.temporada === temporada && e.regimen === 'temporal');
 }
@@ -14,14 +21,16 @@ export function explicarFecha(c: Pick<Ciclo, 'cultivo' | 'temporada'>, calendari
   const v = e.ventana;
   return { texto: `Referencia para ${calendario!.ubicacion.municipio}, ${c.temporada}: ${v.desdeDia ?? 1}/${v.desdeMes} a ${v.hastaDia ?? 'fin'}/${v.hastaMes}. Requiere validación local.`, fuente: v.fuente };
 }
-export function armarPlan(id: string, parcela: Parcela, ciclos: Ciclo[], calendario: CalendarioLocal | null): PlanSiembra {
+export function armarPlan(id: string, parcela: Parcela, ciclos: Ciclo[], calendario: CalendarioLocal | null, porCelda: PlanSiembra['porCelda'] = null): PlanSiembra {
   return {
     meta: { versionContrato: version.version, esEjemplo: false }, rotacionId: id, parcelaId: parcela.id,
-    asignacionClima: 'temporada_tipica', porCelda: null,
+    asignacionClima: 'temporada_tipica', porCelda: porCelda && Object.keys(porCelda).length ? porCelda : null,
     calendarioLocal: calendario ? { calendarioId: calendario.id } : { sinCalendarioLocal: true, motivo: 'No hay calendario verificado para el municipio de esta parcela.' },
     ciclos: ciclos.map((c) => {
       const ventana = referenciaSiembra(c.cultivo, c.temporada, calendario)?.ventana;
-      return { ...c, porQue: `Fecha elegida en el selector. ${explicarFecha(c, calendario).texto}`, dentroDeVentana: ventana?.estado === 'EVALUABLE' ? dentroDeVentana(c.siembra, ventana) : null };
+      const inicio = ventana?.estado === 'EVALUABLE' ? inicioDeVentana(ventana, Number(c.siembra.slice(0, 4))) : null;
+      const origen = inicio === c.siembra ? 'Inicio de la ventana del calendario local.' : 'Fecha elegida en el selector.';
+      return { ...c, porQue: `${origen} ${explicarFecha(c, calendario).texto}`, dentroDeVentana: ventana?.estado === 'EVALUABLE' ? dentroDeVentana(c.siembra, ventana) : null };
     }) as PlanSiembra['ciclos'],
   };
 }
@@ -32,4 +41,150 @@ export function planesIniciales(parcela: Parcela, calendario: CalendarioLocal | 
     R4: [['maiz', '2026-06-01', 'PV'], ['frijol', '2026-10-10', 'OI'], ['maiz', '2027-06-01', 'PV']],
   };
   return Object.entries(definiciones).map(([id, lista]) => armarPlan(id, parcela, lista.map(([cultivo, siembra, temporada], i) => ({ ciclo: i + 1, cultivo, siembra, temporada, porQue: 'Plan de demostración editable, no recomendación.' })), calendario));
+}
+
+const dos = (n: number) => String(n).padStart(2, '0');
+const DIA_MS = 86400000;
+const aDia = (fecha: string) => Math.round(Date.parse(`${fecha}T00:00:00Z`) / DIA_MS);
+const deDia = (dia: number) => new Date(dia * DIA_MS).toISOString().slice(0, 10);
+
+export function inicioDeVentana(v: { desdeMes: number; desdeDia?: number }, anio: number): string {
+  return `${anio}-${dos(v.desdeMes)}-${dos(v.desdeDia ?? 1)}`;
+}
+
+/**
+ * Temporada agricola del SIAP segun el mes de siembra: primavera-verano (PV) de abril a
+ * septiembre y otono-invierno (OI) de octubre a marzo. Asi el usuario no tiene que elegirla.
+ */
+export function temporadaDeFecha(fecha: string): Ciclo['temporada'] {
+  const mes = Number(fecha.slice(5, 7));
+  return mes >= 4 && mes <= 9 ? 'PV' : 'OI';
+}
+
+/** Dias del ciclo del cultivo segun el motor (suma de etapas FAO-56); null si no es evaluable. */
+export function diasCultivo(cultivo: string, catalogo: CatalogoCultivos): number | null {
+  const c = catalogo.cultivos.find((x) => x.id === cultivo);
+  if (!c) return null;
+  const r = parametrosCultivo(c);
+  return r.ok ? r.parametros.totalDias : null;
+}
+
+/** Cultivos que siembra el plan en un ciclo: el general mas los pintados por celda. */
+export function cultivosDelCiclo(plan: PlanSiembra, ciclo: number): string[] {
+  const general = plan.ciclos.find((c) => c.ciclo === ciclo)?.cultivo;
+  const pintados = Object.values(plan.porCelda ?? {}).flatMap((l) => l.filter((x) => x.ciclo === ciclo).map((x) => x.cultivo));
+  return [...new Set([...(general ? [general] : []), ...pintados])];
+}
+
+/** Celdas pintadas por cultivo en un ciclo (sin contar las que siguen al cultivo general). */
+export function conteoPintado(plan: PlanSiembra, ciclo: number): Map<string, number> {
+  const conteo = new Map<string, number>();
+  for (const lista of Object.values(plan.porCelda ?? {})) {
+    const x = lista.find((r) => r.ciclo === ciclo);
+    if (x) conteo.set(x.cultivo, (conteo.get(x.cultivo) ?? 0) + 1);
+  }
+  return conteo;
+}
+
+/** Cultivo que tiene una celda en un ciclo (el pintado o, si no, el general). */
+export function cultivoDeCelda(plan: PlanSiembra, celdaId: string, ciclo: number): string | undefined {
+  return plan.porCelda?.[celdaId]?.find((x) => x.ciclo === ciclo)?.cultivo ?? plan.ciclos.find((c) => c.ciclo === ciclo)?.cultivo;
+}
+
+/**
+ * Lo que el motor rechazaria (motor.ts, validarPlan): ciclos fuera de orden o un cultivo que
+ * no termina antes de la siembra del ciclo siguiente. Se revisa antes de enviar el plan para
+ * no perder el calculo de todas las rotaciones por un trazo.
+ */
+export function conflictosPlan(plan: PlanSiembra, catalogo: CatalogoCultivos): string[] {
+  const ciclos = [...plan.ciclos].sort((a, b) => a.ciclo - b.ciclo);
+  const errores: string[] = [];
+  for (let k = 1; k < ciclos.length; k++) {
+    const a = ciclos[k - 1]!;
+    const b = ciclos[k]!;
+    if (aDia(b.siembra) <= aDia(a.siembra)) {
+      errores.push(`La siembra del ciclo ${b.ciclo} debe ser posterior a la del ciclo ${a.ciclo}.`);
+      continue;
+    }
+    for (const cultivo of cultivosDelCiclo(plan, a.ciclo)) {
+      const dias = diasCultivo(cultivo, catalogo);
+      if (dias != null && aDia(a.siembra) + dias > aDia(b.siembra)) {
+        errores.push(`${nombresCultivos[cultivo] ?? cultivo} del ciclo ${a.ciclo} dura ${dias} días y termina el ${deDia(aDia(a.siembra) + dias)}, después de la siembra del ciclo ${b.ciclo} (${b.siembra}).`);
+      }
+    }
+  }
+  return errores;
+}
+
+/**
+ * Cambia el cultivo general de un ciclo y quita lo pintado en ese ciclo. La fecha sale del
+ * calendario local (inicio de su ventana en la temporada del ciclo) si existe y no choca con
+ * los otros ciclos; si no, se conserva la fecha del plan. La temporada se deduce de la fecha.
+ */
+export function rellenarCiclo(plan: PlanSiembra, parcela: Parcela, ciclo: number, cultivo: string, calendario: CalendarioLocal | null, catalogo: CatalogoCultivos): PlanSiembra {
+  const actual = plan.ciclos.find((c) => c.ciclo === ciclo);
+  if (!actual) return plan;
+  const porCelda = limpiarCiclo(plan.porCelda, ciclo);
+  const armar = (siembra: string) => armarPlan(plan.rotacionId, parcela, plan.ciclos.map((c) => c.ciclo === ciclo ? { ...c, cultivo, siembra, temporada: temporadaDeFecha(siembra) } : c), calendario, porCelda);
+  for (const siembra of candidatasSiembra(cultivo, actual.siembra, calendario)) {
+    const nuevo = armar(siembra);
+    if (!conflictosPlan(nuevo, catalogo).length) return nuevo;
+  }
+  return armar(actual.siembra);
+}
+
+/** Fechas candidatas: inicio de la ventana local (en el anio mas cercano a la fecha actual) y la fecha actual. */
+function candidatasSiembra(cultivo: string, actual: string, calendario: CalendarioLocal | null): string[] {
+  const temporada = temporadaDeFecha(actual);
+  const entradas = (calendario?.entradas ?? []).filter((e) => e.cultivo === cultivo && e.regimen === 'temporal' && e.ventana.estado === 'EVALUABLE');
+  const entrada = entradas.find((e) => e.temporada === temporada) ?? entradas[0];
+  const fechas: string[] = [];
+  if (entrada && entrada.ventana.estado === 'EVALUABLE') {
+    const v = entrada.ventana;
+    const anio = Number(actual.slice(0, 4));
+    const opciones = [anio - 1, anio, anio + 1].map((a) => inicioDeVentana(v, a)).sort((x, y) => Math.abs(aDia(x) - aDia(actual)) - Math.abs(aDia(y) - aDia(actual)));
+    fechas.push(opciones[0]!);
+  }
+  fechas.push(actual);
+  return fechas;
+}
+
+function limpiarCiclo(porCelda: PlanSiembra['porCelda'], ciclo: number): PlanSiembra['porCelda'] {
+  if (!porCelda) return null;
+  const salida: NonNullable<PlanSiembra['porCelda']> = {};
+  for (const [celda, lista] of Object.entries(porCelda)) {
+    const resto = lista.filter((x) => x.ciclo !== ciclo);
+    if (resto.length) salida[celda] = resto as typeof lista;
+  }
+  return Object.keys(salida).length ? salida : null;
+}
+
+/**
+ * Brocha: asigna `cultivo` a las celdas en un ciclo (porCelda). Pintar con el cultivo general
+ * o con la goma (cultivo null) devuelve la celda al cultivo general del ciclo.
+ */
+export function pintarCeldas(plan: PlanSiembra, parcela: Parcela, ciclo: number, celdas: readonly string[], cultivo: string | null, calendario: CalendarioLocal | null): PlanSiembra {
+  const general = plan.ciclos.find((c) => c.ciclo === ciclo)?.cultivo;
+  if (!general) return plan;
+  const validas = new Set(parcela.celdas.map((c) => c.id));
+  const salida: NonNullable<PlanSiembra['porCelda']> = { ...(plan.porCelda ?? {}) };
+  for (const celda of celdas) {
+    if (!validas.has(celda)) continue;
+    const resto = (salida[celda] ?? []).filter((x) => x.ciclo !== ciclo);
+    const lista = cultivo && cultivo !== general ? [...resto, { ciclo, cultivo }].sort((a, b) => a.ciclo - b.ciclo) : resto;
+    if (lista.length) salida[celda] = lista as NonNullable<PlanSiembra['porCelda']>[string];
+    else delete salida[celda];
+  }
+  return armarPlan(plan.rotacionId, parcela, plan.ciclos, calendario, salida);
+}
+
+/** Cambia la fecha de siembra de un ciclo; la temporada se deduce de la fecha. */
+export function cambiarSiembra(plan: PlanSiembra, parcela: Parcela, ciclo: number, siembra: string, calendario: CalendarioLocal | null): PlanSiembra {
+  return armarPlan(plan.rotacionId, parcela, plan.ciclos.map((c) => c.ciclo === ciclo ? { ...c, siembra, temporada: temporadaDeFecha(siembra) } : c), calendario, plan.porCelda);
+}
+
+/** Fecha a mitad del ciclo: en el paso de cultivos se ven las plantas crecidas, no recien sembradas. */
+export function fechaParaVer(siembra: string, cultivo: string, catalogo: CatalogoCultivos): string {
+  const dias = diasCultivo(cultivo, catalogo);
+  return dias ? deDia(aDia(siembra) + Math.round(dias * 0.6)) : siembra;
 }

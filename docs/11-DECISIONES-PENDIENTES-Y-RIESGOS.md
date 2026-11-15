@@ -29,10 +29,10 @@
 | ~~Cronograma~~ | Decidido 14/11: por esfuerzo de IA, sin horas (13, 14) | 09 |
 | ~~Cultivos iniciales~~ | Decidido 14/11: milpa (maíz, frijol, calabaza) y chile como extra (13) | 03 |
 | ~~Parcela~~ | Decidido 14/11: el polígono libre entra al MVP, además de la demo de Isla (13) | 03 |
-| Asignación de cultivos | Por parcela completa · pintar por bloques | 03, 06 |
+| ~~Asignación de cultivos~~ | Decidido 14/11 noche (equipo): ambas, "Sembrar en toda la parcela" y brocha sobre `porCelda` | 03, 06 |
 | ~~Slider de meses~~ | Hecho (A5.2) | 03, 06 |
 | ~~Stack final y motor en navegador o servidor~~ | Decidido 14/11: motor TypeScript en Web Worker, backend FastAPI (13) | 08 |
-| Disposición exacta de paneles | Ver propuesta | 06 |
+| ~~Disposición exacta de paneles~~ | Decidido 14/11 noche (equipo): laboratorio por pasos con stepper obligatorio, escena de fondo y paneles flotantes | 06 |
 
 ## Depende de los datos `[DEPENDE-DATOS]`
 

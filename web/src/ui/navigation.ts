@@ -1,12 +1,23 @@
 import { useEffect, useState } from 'react';
 
-export const pages = [
-  { path: '/', label: 'Inicio', step: '01' },
-  { path: '/terreno', label: 'Terreno', step: '02' },
-  { path: '/laboratorio', label: 'Laboratorio', step: '03' },
-  { path: '/comparacion', label: 'Comparación', step: '04' },
-  { path: '/metodo', label: 'Método y fuentes', step: '05' },
+/** Pasos del flujo, en orden obligatorio (stepper). Inicio y Metodo quedan fuera de la secuencia. */
+export const pasos = [
+  { path: '/terreno', label: 'Terreno', ayuda: 'Elige tu parcela' },
+  { path: '/laboratorio', label: 'Cultivos', ayuda: 'Pinta tus siembras' },
+  { path: '/escenarios', label: 'Escenarios', ayuda: 'Años seco a lluvioso' },
+  { path: '/comparacion', label: 'Comparación', ayuda: 'La más robusta' },
 ] as const;
+
+export const pages = [
+  { path: '/', label: 'Inicio' },
+  ...pasos,
+  { path: '/metodo', label: 'Método y fuentes' },
+] as const;
+
+/** Indice del paso de una ruta, o -1 si la ruta no es un paso. */
+export function indicePaso(path: string): number {
+  return pasos.findIndex((p) => p.path === path);
+}
 
 function readLocation() {
   const location = new URL(window.location.hash.slice(1) || '/', window.location.origin);
@@ -21,4 +32,10 @@ export function usePage() {
     return () => window.removeEventListener('hashchange', update);
   }, []);
   return location;
+}
+
+export function irA(path: string, reemplazar = false) {
+  const destino = `#${path}`;
+  if (reemplazar) window.location.replace(destino);
+  else window.location.hash = path;
 }

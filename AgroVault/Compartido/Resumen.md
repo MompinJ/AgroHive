@@ -122,7 +122,7 @@ El Worker acelera el cálculo. No acelera la red ni el render.
 
 ## Interfaz y modelos
 
-Tres paneles en el laboratorio (`web/src/ui/LaboratorioConectado.tsx`): selector, escena, métricas. Pantallas P0 inicio, P1 terreno, P2 laboratorio, P3 comparación. Sistema visual en `DESIGN.md`, `ui/tokens.css` y `ui/system.css`.
+Laboratorio por pasos (`web/src/ui/lab/`, decidido el 14/11 noche): stepper obligatorio Terreno → Cultivos (brocha) → Escenarios → Comparación, con la escena 3D de fondo y paneles flotantes. Sistema visual en `DESIGN.md`, `ui/tokens.css` y `ui/system.css`.
 
 Estados visuales: color, icono y patrón, probados con la simulación de daltonismo de Machado et al. 2009. `NO_EVALUABLE` es `#ececec`. Íconos: gota partida, hoja colgando, equis, surcos.
 

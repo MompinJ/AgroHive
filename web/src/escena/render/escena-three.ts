@@ -38,6 +38,18 @@ export interface OpcionesRender {
   onHover?: (bloque: BloqueEscena | null, x: number, y: number) => void;
   /** Avisos del render (por ejemplo, modelo de respaldo o .bbmodel que no se pudo leer). */
   onAviso?: (codigo: string, mensaje: string) => void;
+  /**
+   * Brocha (PAINT_BLOCK, doc 06): con el pincel activo, el boton principal (o un dedo) pinta
+   * en vez de girar; girar pasa al boton derecho (o a dos dedos). Solo informa que bloques
+   * toco el trazo: quien decide el cultivo de cada celda es el plan, y el motor lo evalua.
+   */
+  pincel?: boolean;
+  /**
+   * Corrimiento del centro de la vista, en px de pantalla (paneles flotantes encima del lienzo):
+   * x positivo mueve la parcela a la derecha, y positivo la sube. Por defecto, centrada.
+   */
+  desplazamiento?: { x: number; y: number };
+  onPintar?: (bloque: BloqueEscena | null, fase: 'inicio' | 'trazo' | 'fin') => void;
 }
 
 export interface EstadisticasRender {
@@ -81,7 +93,8 @@ export type MotivoCuadro =
   | 'inercia'
   | 'transicion'
   | 'viento'
-  | 'lluvia-animada';
+  | 'lluvia-animada'
+  | 'pintura';
 
 /** Hueco de una celda sin elevacion: por debajo del punto mas bajo, nunca "a nivel cero". */
 const TOPE_HUECO = -GROSOR_BASE * 0.6;
@@ -325,6 +338,11 @@ export class EscenaThree {
   private readonly lluvia = crearLluvia();
   private intensidadLluvia = 0;
   private cuadros = 0;
+  // Brocha: trazo en curso y marcas de lo pintado que el motor aun no evalua (solo entrada del usuario).
+  private pintando = false;
+  private cuadroPintura = 0;
+  private marcas: THREE.InstancedMesh | null = null;
+  private marcasActuales: ReadonlyMap<string, string> = new Map();
 
   constructor(private readonly lienzo: HTMLCanvasElement, opciones: OpcionesRender) {
     if (!soportaWebGL()) throw new ErrorWebGL();
@@ -412,7 +430,9 @@ export class EscenaThree {
 
   setOpciones(opciones: OpcionesRender) {
     const mascotaAntes = this.opciones.mascota;
+    const desplazamientoAntes = this.opciones.desplazamiento;
     this.opciones = opciones;
+    if (desplazamientoAntes?.x !== opciones.desplazamiento?.x || desplazamientoAntes?.y !== opciones.desplazamiento?.y) this.ajustarTamano();
     this.aplicarMovimiento();
     if (opciones.reducirMovimiento) this.terminarTransiciones();
     if (mascotaAntes !== opciones.mascota && this.modeloActual) void this.construirMascota(this.modeloActual, this.version);
@@ -423,6 +443,50 @@ export class EscenaThree {
     // Reducir movimiento: sin inercia al girar ni animaciones.
     this.controles.enableDamping = !this.opciones.reducirMovimiento;
     this.controles.dampingFactor = 0.12;
+    // Con pincel, el boton principal y un dedo pintan; girar queda en el derecho y en dos dedos.
+    if (this.opciones.pincel) {
+      this.controles.mouseButtons = { LEFT: null, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
+      this.controles.touches = { ONE: null, TWO: THREE.TOUCH.DOLLY_ROTATE };
+    } else {
+      this.controles.mouseButtons = { LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.PAN };
+      this.controles.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
+      this.pintando = false;
+    }
+  }
+
+  /**
+   * Marcas de pintura: un azulejo translucido del color del cultivo pintado sobre cada celda,
+   * mientras el motor no entrega su resultado. Es la entrada del usuario, no un resultado.
+   */
+  marcarPintura(marcas: ReadonlyMap<string, string>) {
+    this.marcasActuales = marcas;
+    if (this.marcas) {
+      this.marcas.removeFromParent();
+      this.marcas.geometry.dispose();
+      (this.marcas.material as THREE.Material).dispose();
+      this.marcas.dispose();
+      this.marcas = null;
+    }
+    const modelo = this.modeloActual;
+    const bloques = modelo ? modelo.bloques.filter((b) => marcas.has(b.celdaId)) : [];
+    if (bloques.length > 0) {
+      const geo = new THREE.BoxGeometry(LADO_BLOQUE * 0.94, 0.03, LADO_BLOQUE * 0.94);
+      const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.62, depthWrite: false });
+      const malla = new THREE.InstancedMesh(geo, mat, bloques.length);
+      const m = new THREE.Matrix4();
+      const color = new THREE.Color();
+      bloques.forEach((b, k) => {
+        const y = this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0) + 0.02;
+        m.makeTranslation(b.x, y, b.z);
+        malla.setMatrixAt(k, m);
+        malla.setColorAt(k, color.set(marcas.get(b.celdaId) ?? '#ffffff'));
+      });
+      malla.renderOrder = 3;
+      malla.name = 'marcas-pintura';
+      this.scene.add(malla);
+      this.marcas = malla;
+    }
+    this.pedirCuadro('pintura');
   }
 
   /** Vuelve a la vista inicial (casi isometrica, toda la parcela visible). */
@@ -462,6 +526,7 @@ export class EscenaThree {
     void this.construirMascota(modelo, version);
     // Conserva la seleccion si la celda sigue existiendo (cambio de fecha, ciclo o escenario).
     this.seleccionar(this.seleccionId ? (modelo.bloques.find((b) => b.celdaId === this.seleccionId) ?? null) : null);
+    if (this.marcasActuales.size > 0) this.marcarPintura(this.marcasActuales);
   }
 
   /**
@@ -544,6 +609,8 @@ export class EscenaThree {
     this.lienzo.removeEventListener('pointermove', this.alMoverPuntero);
     this.lienzo.removeEventListener('pointerleave', this.alSalirPuntero);
     cancelAnimationFrame(this.cuadroHover);
+    cancelAnimationFrame(this.cuadroPintura);
+    this.marcarPintura(new Map());
     this.observadorVisible?.disconnect();
     document.removeEventListener('visibilitychange', this.alCambiarVisibilidad);
     this.terminarTransiciones();
@@ -986,11 +1053,15 @@ export class EscenaThree {
     const alto = this.lienzo.clientHeight || 1;
     this.renderer.setSize(ancho, alto, false);
     const aspecto = ancho / alto;
-    const e = this.extension;
+    // En pantallas verticales manda el ancho: la parcela entera cabe de lado a lado.
+    const e = aspecto < 1 ? this.extension / aspecto : this.extension;
     this.camara.left = -e * aspecto;
     this.camara.right = e * aspecto;
     this.camara.top = e;
     this.camara.bottom = -e;
+    const d = this.opciones.desplazamiento;
+    if (d && (d.x || d.y)) this.camara.setViewOffset(ancho, alto, -d.x, d.y, ancho, alto);
+    else this.camara.clearViewOffset();
     this.camara.updateProjectionMatrix();
     this.pedirCuadro('tamano');
   }
@@ -1032,10 +1103,23 @@ export class EscenaThree {
   }
 
   private readonly alBajarPuntero = (ev: PointerEvent) => {
+    if (this.opciones.pincel && ev.button === 0 && ev.isPrimary) {
+      this.pintando = true;
+      this.inicioPuntero = null;
+      this.opciones.onPintar?.(this.bloqueEn(ev.clientX, ev.clientY), 'inicio');
+      return;
+    }
     this.inicioPuntero = { x: ev.clientX, y: ev.clientY };
   };
 
   private readonly alSubirPuntero = (ev: PointerEvent) => {
+    if (this.pintando) {
+      this.pintando = false;
+      cancelAnimationFrame(this.cuadroPintura);
+      this.cuadroPintura = 0;
+      this.opciones.onPintar?.(this.bloqueEn(ev.clientX, ev.clientY), 'fin');
+      return;
+    }
     const inicio = this.inicioPuntero;
     this.inicioPuntero = null;
     if (!inicio || Math.hypot(ev.clientX - inicio.x, ev.clientY - inicio.y) > 5) return; // fue arrastre
@@ -1057,6 +1141,17 @@ export class EscenaThree {
 
   // Globo al pasar el cursor: solo con raton (en tactil se usa el toque) y como mucho una vez por cuadro.
   private readonly alMoverPuntero = (ev: PointerEvent) => {
+    if (this.pintando && ev.isPrimary) {
+      // Como mucho un bloque por cuadro durante el trazo.
+      this.ultimoPuntero = { x: ev.clientX, y: ev.clientY };
+      if (this.cuadroPintura) return;
+      this.cuadroPintura = requestAnimationFrame(() => {
+        this.cuadroPintura = 0;
+        const p = this.ultimoPuntero;
+        if (p && this.pintando) this.opciones.onPintar?.(this.bloqueEn(p.x, p.y), 'trazo');
+      });
+      return;
+    }
     if (ev.pointerType !== 'mouse' || !this.opciones.onHover || ev.buttons !== 0) return;
     this.ultimoPuntero = { x: ev.clientX, y: ev.clientY };
     if (this.cuadroHover) return;
@@ -1070,6 +1165,10 @@ export class EscenaThree {
   };
 
   private readonly alSalirPuntero = () => {
+    if (this.pintando) {
+      this.pintando = false;
+      this.opciones.onPintar?.(null, 'fin');
+    }
     this.ultimoPuntero = null;
     this.opciones.onHover?.(null, 0, 0);
   };

@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — Front: laboratorio por pasos, escena de fondo y brocha `[DECIDIDO]` (Eduardo)
+
+- **Archivos:** `web/src/App.tsx`, `ui/navigation.ts`, `ui/BarraPasos.tsx` y `ui/barra.css` (nuevos), `ui/lab/` (nuevo: `Laboratorio`, `PanelCultivos`, `PanelEscenarios`, `PanelComparacion`, `piezas`, `lab.css`), se borra `ui/LaboratorioConectado.tsx`; `ui/planes.ts`, `ui/Parcela2D.tsx`, `ui/parcela2d.css`, `ui/iconosCultivo2D.ts`, `ui/components.tsx`, `ui/tokens.css`, `main.tsx`; `escena/EscenaParcela.tsx`, `escena/render/escena-three.ts`, `escena/escena.css`, `escena/pincel.ts` (nuevo); pruebas `ui/planes.test.ts` y `escena/pincel.test.ts`; `docs/03`, `docs/06`, `docs/11`, `web/README.md`, `AgroVault/Compartido/{Codigo,Resumen}.md`, nota en `DESIGN.md`.
+- **Cambio:** stepper obligatorio Terreno → Cultivos → Escenarios → Comparación; la escena 3D cubre la pantalla con paneles flotantes; el laboratorio se reparte en tres pasos y solo pide el cultivo (temporada y fecha salen del calendario); brocha para pintar `porCelda`; paleta verde de campo. Detalle en 06, "Laboratorio por pasos y brocha".
+- **Por qué:** pedido de Eduardo en la fase de revisión del front: el laboratorio tenía demasiado texto y opciones a la vez.
+- **Toca archivos de otros:** la interfaz era de balam y la escena de Mompin; se avisó por el buzón y el equipo aprobó todos los cambios. El modo panel de `EscenaParcela` no cambia (`escena.html` y la vista previa siguen igual).
+- **Pendiente:** revisión con lector de pantalla y táctil real.
+- **Decisiones afectadas:** "Asignación de cultivos" y "Disposición exacta de paneles" en 11 pasan a decididas.
+
 ### 2026-11-14 (noche) — Fase de revisión `[DECIDIDO]` (Mompin; registrado por la cronista)
 
 - **Archivos:** `docs/13` (filas "Fase de revisión" y "Envío cuando todos estén satisfechos"), `docs/14` (sección "Fase de revisión" y nota "pospuesta hasta el final" en A0.3, A4.4, A5.7 y A5.9; vistas regeneradas), `AgroVault/Compartido/Pendientes.md` y `Resumen.md`.

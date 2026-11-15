@@ -1,0 +1,67 @@
+/* Barra superior con stepper (pasos obligatorios). */
+.barra {
+  position: sticky; top: 0; z-index: 30;
+  background: color-mix(in srgb, var(--color-sage-50) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-line) 70%, transparent);
+}
+.barra-sobre-escena {
+  position: fixed; inset: 0 0 auto 0;
+  background: color-mix(in srgb, #ffffff 72%, transparent);
+  border-bottom-color: rgb(255 255 255 / 50%);
+  box-shadow: 0 1px 0 rgb(17 34 26 / 6%);
+}
+.barra-interior {
+  height: 68px; width: min(1440px, calc(100% - 2 * clamp(16px, 2.4vw, 32px))); margin-inline: auto;
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px;
+}
+.barra .brand { font-size: 1.4rem; color: var(--color-forest-700); }
+.barra .brand svg { width: 30px; height: 30px; }
+.barra-fuentes {
+  font-size: .875rem; color: var(--color-text-body); text-decoration: none; padding: 10px 14px;
+  border-radius: var(--radius-pill); min-height: 40px; display: inline-flex; align-items: center; white-space: nowrap;
+}
+.barra-fuentes:hover, .barra-fuentes[aria-current] { background: var(--color-forest-100); color: var(--color-forest-800); }
+
+.stepper { justify-self: center; min-width: 0; }
+.stepper ol { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 4px; }
+.stepper-paso { display: flex; align-items: center; min-width: 0; }
+.stepper-paso + .stepper-paso::before {
+  content: ''; width: clamp(12px, 3vw, 44px); height: 2px; border-radius: 2px; margin-inline: 4px;
+  background: var(--color-line);
+}
+.stepper-hecho + .stepper-paso::before, .stepper-hecho + .stepper-actual::before { background: var(--color-forest-700); }
+.stepper-enlace {
+  display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; border-radius: var(--radius-pill);
+  text-decoration: none; color: var(--color-text-body); min-height: 44px; min-width: 0;
+}
+a.stepper-enlace:hover { background: rgb(17 34 26 / 5%); }
+.stepper-num {
+  flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+  font-size: .85rem; font-weight: 600; font-variant-numeric: tabular-nums;
+  border: 1.5px solid var(--color-line); background: #fff; color: var(--color-text-muted);
+}
+.stepper-texto { display: grid; line-height: 1.2; min-width: 0; }
+.stepper-nombre { font-size: .9rem; font-weight: 600; color: inherit; white-space: nowrap; }
+.stepper-ayuda { font-size: .72rem; color: var(--color-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 18ch; }
+.stepper-actual .stepper-enlace { background: var(--color-forest-100); color: var(--color-forest-950); }
+.stepper-actual .stepper-num { background: var(--color-forest-700); border-color: var(--color-forest-700); color: #fff; box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-forest-700) 18%, transparent); }
+.stepper-hecho .stepper-num { background: var(--color-forest-100); border-color: var(--color-forest-700); color: var(--color-forest-700); }
+.stepper-hecho .stepper-enlace { color: var(--color-forest-800); }
+.stepper-abierto .stepper-num { border-color: var(--color-forest-700); color: var(--color-forest-700); }
+.stepper-bloqueado .stepper-enlace { cursor: not-allowed; color: var(--color-text-muted); opacity: .75; }
+.stepper-bloqueado .stepper-num { border-style: dashed; }
+
+@media (max-width: 1100px) { .stepper-ayuda { display: none; } }
+@media (max-width: 860px) {
+  .barra-interior { grid-template-columns: auto 1fr; gap: 12px; height: auto; min-height: 60px; padding-block: 8px; }
+  .barra-fuentes { display: none; }
+  .stepper { justify-self: end; }
+  .stepper-paso:not(.stepper-actual) .stepper-texto { display: none; }
+  .stepper-enlace { padding: 4px; }
+  .stepper-actual .stepper-enlace { padding-right: 12px; }
+  .stepper-paso + .stepper-paso::before { width: 10px; margin-inline: 2px; }
+}
+@media (max-width: 420px) { .barra .brand > span { display: none; } }
+@media (prefers-reduced-motion: no-preference) { .stepper-enlace, .stepper-num { transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease; } }
+@media (forced-colors: active) { .stepper-actual .stepper-num { forced-color-adjust: none; } }

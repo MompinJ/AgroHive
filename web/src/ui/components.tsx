@@ -1,5 +1,4 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
-import { pages } from './navigation';
 
 export function Brand() {
   return <a className="brand" href="#/" aria-label="AgroHive, inicio">
@@ -9,14 +8,6 @@ export function Brand() {
     </svg>
     <span>Agro<span className="brand-light">Hive</span></span>
   </a>;
-}
-
-export function Navigation({ path }: { path: string }) {
-  return <nav aria-label="Navegación principal" className="navigation">
-    {pages.map((page) => <a key={page.path} href={`#${page.path}`} aria-current={path === page.path ? 'page' : undefined}>
-      <span className="nav-step" aria-hidden="true">{page.step}</span>{page.label}
-    </a>)}
-  </nav>;
 }
 
 export function ActionLink({ href, children, secondary = false }: { href: string; children: ReactNode; secondary?: boolean }) {
