@@ -195,7 +195,7 @@ CULTIVOS = [
         "esLeguminosa": False,
         "t11": {"fila": "Maize (grain)", "region": "Nigeria (humid)", "siembra": "June",
                 "etapas": (20, 35, 40, 30), "total": 125,
-                "porque": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano de Isla, Veracruz."},
+                "porque": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano (siembra hacia junio)."},
         "t12": {"fila": "Maize, Field (grain) (field corn)",
                 "ini": (0.3, "Kc ini general del grupo i. Cereals (la fila del maiz no da Kc ini propio)."),
                 "mid": (1.20, None),
@@ -253,7 +253,7 @@ CULTIVOS = [
         "t11": {"fila": "Sweet peppers (bell)", "region": "Europe and Medit.", "siembra": "April/June",
                 "etapas": (30, 35, 40, 20), "total": 125,
                 "porque": ("Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal "
-                           "primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30.")},
+                           "primavera-verano (siembra hacia junio). La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30.")},
         "t12": {"fila": "Sweet Peppers (bell)",
                 "ini": (0.6, "Kc ini general del grupo b. Vegetables - Solanum Family (la fila del pimiento no da Kc ini propio)."),
                 "mid": (1.05, "Nota 2: si el chile crece en estacas de 1.5 a 2 m puede tomarse 1.15."),
@@ -272,7 +272,7 @@ CULTIVOS = [
         "t11": {"fila": "Sorghum", "region": "USA, Pakis., Med.", "siembra": "May/June",
                 "etapas": (20, 35, 40, 30), "total": 125, "total_impreso": 130,
                 "porque": ("Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal "
-                           "primavera-verano de Isla. La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. "
+                           "primavera-verano (siembra hacia junio). La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. "
                            "Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por "
                            "cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano).")},
         "t12": {"fila": "Sorghum - grain",
@@ -284,7 +284,7 @@ CULTIVOS = [
                 "tmin": 8, "topmn": 27, "topmx": 35, "tmax": 40,
                 "rmin": 300, "ropmn": 500, "ropmx": 1000, "rmax": 3000},
         "nota_extra": ("EcoCrop trae tres filas de la misma especie por altitud (baja, media, alta); se uso la de altitud baja por ser "
-                       "Isla zona de tierras bajas del sur de Veracruz (la altitud exacta de la parcela no se verifico). Una persona debe revisarlo."),
+                       "la zona de referencia del catalogo (tierras bajas del sur de Veracruz; la altitud exacta no se verifico). Una persona debe revisarlo."),
         "modelo3d": "sorgo",
     },
     {
@@ -313,7 +313,7 @@ CULTIVOS = [
         "esLeguminosa": False,
         "t11": {"fila": "Sweet potato", "region": "Tropical regions", "siembra": "Rainy seas.",
                 "etapas": (15, 30, 50, 30), "total": 125,
-                "porque": ("Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano de Isla. "
+                "porque": ("Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). "
                            "La otra fila es de siembra en abril en el Mediterraneo (150 dias).")},
         "t12": {"fila": "Sweet Potato",
                 "ini": (0.5, "Kc ini general del grupo d. Roots and Tubers (la fila del camote no da Kc ini propio)."),
@@ -323,7 +323,7 @@ CULTIVOS = [
         "eco": {"fila": "Sweet potato", "sci": "Ipomoea batatas (L.) Lam.", "gmin": 80, "gmax": 170,
                 "tmin": 10, "topmn": 18, "topmx": 28, "tmax": 38,
                 "rmin": 500, "ropmn": 750, "ropmx": 1250, "rmax": 5000},
-        "nota_extra": ("SIAP no registra camote en Isla entre 2021 y 2025; si lo registra en San Andres Tuxtla y Santiago Tuxtla, del "
+        "nota_extra": ("SIAP (municipio de Isla, Veracruz; calendario local) no registra camote entre 2021 y 2025; si lo registra en San Andres Tuxtla y Santiago Tuxtla, del "
                        "mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
         "modelo3d": "camote",
     },
@@ -335,7 +335,7 @@ CULTIVOS = [
         "t11": {"fila": "Groundnut", "region": "West Africa", "siembra": "Dry season",
                 "etapas": (25, 35, 45, 25), "total": 130,
                 "porque": ("Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). "
-                           "Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias de Isla: es una analogia de ciclo, "
+                           "Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias: es una analogia de ciclo, "
                            "no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte "
                            "las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar.")},
         "t12": {"fila": "Groundnut (Peanut)",
@@ -346,7 +346,7 @@ CULTIVOS = [
         "eco": {"fila": "Groundnut", "sci": "Arachis hypogaea L.", "gmin": 90, "gmax": 150,
                 "tmin": 10, "topmn": 22, "topmx": 32, "tmax": 45,
                 "rmin": 400, "ropmn": 600, "ropmx": 1500, "rmax": 4000},
-        "nota_extra": ("SIAP no registra cacahuate en Isla entre 2021 y 2025; si lo registra en Catemaco, del mismo distrito (DDR 175). "
+        "nota_extra": ("SIAP (municipio de Isla, Veracruz; calendario local) no registra cacahuate entre 2021 y 2025; si lo registra en Catemaco, del mismo distrito (DDR 175). "
                        "Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
         "modelo3d": "cacahuate",
     },
@@ -363,7 +363,7 @@ NOTA_CLIMA_KC = "Kc mid y Kc end de Tabla 12 son para clima subhumedo (RHmin ~45
 # ---------------------------------------------------------------- ampliacion del catalogo (15/11, decidido por Mompin)
 # Cultivos nuevos, al final de la lista y sin modelo3d. Mismas fuentes y criterios que los ocho de arriba; las elecciones
 # nuevas estan en la tabla "Elecciones que una persona debe revisar" de README.md. Criterio de fila de Tabla 11:
-# (a) fila tropical si existe; (b) si no, la de siembra mas cercana a junio (temporal PV de Isla); (c) empate: la region
+# (a) fila tropical si existe; (b) si no, la de siembra mas cercana a junio (temporal PV, siembra hacia junio); (c) empate: la region
 # mas calida; (d) se salta una fila con etapas impresas ambiguas o que no suman su total si otra fila cumple.
 MOTIVO_SIN_VENTANA_AMPLIACION = ("Cultivo de la ampliacion del catalogo (15/11): aun no se consulta una fuente de calendario de "
                                  "siembra (INIFAP) para {nombre}.")
@@ -372,7 +372,7 @@ FILA_CEREALES = {"fila": "Barley/Oats/Wheat", "region": "East Africa", "siembra"
                  "etapas": (15, 30, 65, 40), "total": 150,
                  "porque": ("Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, "
                             "noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal "
-                            "primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo.")}
+                            "primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo.")}
 AMPLIACION = [
     # -- tanda 1: leguminosas y cereales para rotaciones
     {
@@ -383,7 +383,7 @@ AMPLIACION = [
         "esLeguminosa": True,
         "t11": {"fila": "Soybeans", "region": "Tropics", "siembra": "Dec",
                 "etapas": (15, 15, 40, 15), "total": 85,
-                "porque": ("Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno en Isla). Las otras filas son "
+                "porque": ("Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno). Las otras filas son "
                            "del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d).")},
         "t12": {"fila": "Soybeans",
                 "ini": (0.4, "Kc ini general del grupo e. Legumes (la fila de la soya no da Kc ini propio)."),
@@ -393,7 +393,7 @@ AMPLIACION = [
         "eco": {"fila": "Soyabean", "sci": "Glycine max (L.) Merrill", "gmin": 75, "gmax": 180,
                 "tmin": 10, "topmn": 20, "topmx": 33, "tmax": 38,
                 "rmin": 450, "ropmn": 600, "ropmx": 1500, "rmax": 1800},
-        "nota_extra": ("SIAP no registra soya en Isla entre 2021 y 2025; en Veracruz solo en Panuco, al norte del estado. "
+        "nota_extra": ("SIAP (municipio de Isla, Veracruz; calendario local) no registra soya entre 2021 y 2025; en Veracruz solo en Panuco, al norte del estado. "
                        "Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
     },
     {
@@ -425,7 +425,7 @@ AMPLIACION = [
         "t11": {"fila": "Faba bean, broad bean", "region": "Europe", "siembra": "May",
                 "etapas": (15, 25, 35, 15), "total": 90,
                 "porque": ("Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal "
-                           "primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa "
+                           "primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa "
                            "(haba de invierno, 235 d).")},
         "t12": {"fila": "Fababean (broad bean) - Dry/Seed",
                 "ini": (0.5, None),
@@ -436,7 +436,7 @@ AMPLIACION = [
                 "tmin": 5, "topmn": 18, "topmx": 28, "tmax": 32,
                 "rmin": 250, "ropmn": 650, "ropmx": 1000, "rmax": 2600},
         "nota_extra": ("Se usa la subfila de grano seco (Dry/Seed) porque SIAP registra 'haba grano'; la de cosecha en fresco "
-                       "tiene Kc end 1.10. SIAP no registra haba en Isla entre 2021 y 2025."),
+                       "tiene Kc end 1.10. SIAP (municipio de Isla, Veracruz; calendario local) no registra haba entre 2021 y 2025."),
     },
     {
         "id": "chicharo",
@@ -447,7 +447,7 @@ AMPLIACION = [
         "t11": {"fila": "Peas", "region": "Europe", "siembra": "May",
                 "etapas": (15, 25, 35, 15), "total": 90,
                 "porque": ("Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal "
-                           "primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d).")},
+                           "primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d).")},
         "t12": {"fila": "Peas - Fresh",
                 "ini": (0.5, None),
                 "mid": (1.15, NOTA_ESTACAS + " Para chicharo con tutores la nota da 1.20."),
@@ -468,7 +468,7 @@ AMPLIACION = [
         "t11": {"fila": "Lentil", "region": "Europe", "siembra": "April",
                 "etapas": (20, 30, 60, 40), "total": 150,
                 "porque": ("Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal "
-                           "primavera-verano de Isla. La otra es de octubre/noviembre en region arida (170 d).")},
+                           "primavera-verano (siembra hacia junio). La otra es de octubre/noviembre en region arida (170 d).")},
         "t12": {"fila": "Lentil",
                 "ini": (0.4, "Kc ini general del grupo e. Legumes (la fila de la lenteja no da Kc ini propio)."),
                 "mid": (1.10, None),
@@ -487,7 +487,7 @@ AMPLIACION = [
         "t11": {"fila": "Beans (green)", "region": "Calif., Egypt, Lebanon", "siembra": "Aug/Sep",
                 "etapas": (15, 25, 25, 10), "total": 75,
                 "porque": ("Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al "
-                           "temporal primavera-verano de Isla. La otra es de febrero/marzo en California y el Mediterraneo (90 d).")},
+                           "temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo en California y el Mediterraneo (90 d).")},
         "t12": {"fila": "Beans, green",
                 "ini": (0.5, None),
                 "mid": (1.05, "Nota 2: si crece con tutores de 1.5 a 2 m puede tomarse 1.15."),
@@ -577,7 +577,7 @@ AMPLIACION = [
         "esLeguminosa": False,
         "t11": {"fila": "Cassava: year 1", "region": "Tropical regions", "siembra": "Rainy season",
                 "etapas": (20, 40, 90, 60), "total": 210,
-                "porque": ("Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el "
+                "porque": ("Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). Se usa el "
                            "primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. "
                            "La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF.")},
         "t12": {"fila": "Cassava - year 1",
@@ -612,7 +612,7 @@ AMPLIACION = [
         "eco": {"fila": "Sugarcane", "sci": "Saccharum officinarum L.", "gmin": 210, "gmax": 365,
                 "tmin": 15, "topmn": 24, "topmx": 37, "tmax": 41,
                 "rmin": 1000, "ropmn": 1500, "ropmx": 2000, "rmax": 5000},
-        "nota_extra": ("Cultivo perenne: SIAP la registra en Isla en el ciclo 'Perennes', no por temporada PV u OI. EcoCrop trae dos "
+        "nota_extra": ("Cultivo perenne: SIAP (municipio de Isla, Veracruz; calendario local) la registra en el ciclo 'Perennes', no por temporada PV u OI. EcoCrop trae dos "
                        "filas 'Sugarcane'; se uso la de Saccharum officinarum (la otra es S. robustum)."),
     },
     {
@@ -623,7 +623,7 @@ AMPLIACION = [
         "esLeguminosa": False,
         "t11": {"fila": "Sesame", "region": "China", "siembra": "June",
                 "etapas": (20, 30, 40, 20), "total": 110, "total_impreso": 100,
-                "porque": ("Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. "
+                "porque": ("Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano (siembra hacia junio). "
                            "La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se "
                            "guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56.")},
         "t12": {"fila": "Sesame",
@@ -634,7 +634,7 @@ AMPLIACION = [
         "eco": {"fila": "Sesame seed", "sci": "Sesamum indicum L.", "gmin": 40, "gmax": 180,
                 "tmin": 10, "topmn": 20, "topmx": 30, "tmax": 40,
                 "rmin": 300, "ropmn": 500, "ropmx": 1000, "rmax": 1500},
-        "nota_extra": ("SIAP no registra ajonjoli en Isla entre 2021 y 2025; en Veracruz si, en 7 a 9 municipios. "
+        "nota_extra": ("SIAP (municipio de Isla, Veracruz; calendario local) no registra ajonjoli entre 2021 y 2025; en Veracruz si, en 7 a 9 municipios. "
                        "Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
     },
     {
@@ -664,7 +664,7 @@ AMPLIACION = [
         "t11": {"fila": "Cotton", "region": "Egypt; Pakistan; Calif.", "siembra": "Mar-May",
                 "etapas": (30, 50, 60, 55), "total": 195,
                 "porque": ("Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal "
-                           "primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el "
+                           "primavera-verano (siembra hacia junio). Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el "
                            "desierto de California (225 d).")},
         "t12": {"fila": "Cotton",
                 "ini": (0.35, "Kc ini general del grupo g. Fibre Crops (la fila del algodon no da Kc ini propio)."),
@@ -685,7 +685,7 @@ AMPLIACION = [
         "t11": {"fila": "Safflower", "region": "California, USA", "siembra": "April",
                 "etapas": (20, 35, 45, 25), "total": 125,
                 "porque": ("Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal "
-                           "primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d).")},
+                           "primavera-verano (siembra hacia junio). Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d).")},
         "t12": {"fila": "Safflower",
                 "ini": (0.35, "Kc ini general del grupo h. Oil Crops (la fila del cartamo no da Kc ini propio)."),
                 "mid": (1.0, "Tabla 12 da 1.0-1.15 (nota 9): los valores menores son para cultivos de temporal con menor densidad; se usa 1.0, temporal."),
@@ -704,7 +704,7 @@ AMPLIACION = [
         "esLeguminosa": False,
         "t11": {"fila": "Castor beans", "region": "Indonesia", "siembra": "Nov.",
                 "etapas": (20, 40, 50, 25), "total": 135,
-                "porque": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."},
+                "porque": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno). La otra es de marzo en clima (semi)arido (180 d)."},
         "t12": {"fila": "Castorbean (Ricinus)",
                 "ini": (0.35, "Kc ini general del grupo h. Oil Crops (la fila de la higuerilla no da Kc ini propio)."),
                 "mid": (1.15, None),
@@ -742,7 +742,7 @@ AMPLIACION = [
         "t11": {"fila": "Potato", "region": "Continental Climate", "siembra": "May",
                 "etapas": (25, 30, 45, 30), "total": 130,
                 "porque": ("Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal "
-                           "primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre "
+                           "primavera-verano (siembra hacia junio). Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre "
                            "en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45).")},
         "t12": {"fila": "Potato",
                 "ini": (0.5, "Kc ini general del grupo d. Roots and Tubers (la fila de la papa no da Kc ini propio)."),
@@ -762,7 +762,7 @@ AMPLIACION = [
         "t11": {"fila": "Squash, Zucchini", "region": "Medit.; Europe", "siembra": "May/June",
                 "etapas": (20, 30, 25, 15), "total": 90,
                 "porque": ("Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el "
-                           "temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d).")},
+                           "temporal primavera-verano (siembra hacia junio). La otra es de abril y diciembre (100 d).")},
         "t12": {"fila": "Squash, Zucchini",
                 "ini": (0.5, "Kc ini general del grupo c. Vegetables - Cucumber Family (la fila de la calabacita no da Kc ini propio)."),
                 "mid": (0.95, None),
@@ -782,7 +782,7 @@ AMPLIACION = [
         "esLeguminosa": False,
         "t11": {"fila": "Onion (dry)", "region": "Mediterranean", "siembra": "April",
                 "etapas": (15, 25, 70, 40), "total": 150,
-                "porque": 'Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre o enero en region arida y California (210 d).'},
+                "porque": 'Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre o enero en region arida y California (210 d).'},
         "t12": {"fila": "Onions - dry",
                 "ini": (0.70, 'Kc ini general del grupo a. Small Vegetables (la fila de la cebolla no da Kc ini propio).'),
                 "mid": (1.05, None),
@@ -801,7 +801,7 @@ AMPLIACION = [
         "esLeguminosa": False,
         "t11": {"fila": "Cucumber", "region": "Arid Region", "siembra": "June/Aug",
                 "etapas": (20, 30, 40, 15), "total": 105,
-                "porque": 'Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano de Isla. La otra es de noviembre o febrero (130 d).'},
+                "porque": 'Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de noviembre o febrero (130 d).'},
         "t12": {"fila": "Cucumber - Fresh Market",
                 "ini": (0.60, None),
                 "mid": (1.00, 'Nota 2: si crece con tutores de 1.5 a 2 m puede tomarse 1.15.'),
@@ -820,7 +820,7 @@ AMPLIACION = [
         "esLeguminosa": False,
         "t11": {"fila": "Sweet melons", "region": "Mediterranean", "siembra": "May",
                 "etapas": (25, 35, 40, 20), "total": 120,
-                "porque": 'Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d).'},
+                "porque": 'Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d).'},
         "t12": {"fila": "Sweet Melons",
                 "ini": (0.50, 'Kc ini general del grupo c. Vegetables - Cucumber Family (la fila de el melon no da Kc ini propio).'),
                 "mid": (1.05, None),
@@ -839,7 +839,7 @@ AMPLIACION = [
         "esLeguminosa": False,
         "t11": {"fila": "Lettuce", "region": "Mediterranean", "siembra": "April",
                 "etapas": (20, 30, 15, 10), "total": 75,
-                "porque": 'Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son de noviembre a febrero (100 a 140 d).'},
+                "porque": 'Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de noviembre a febrero (100 a 140 d).'},
         "t12": {"fila": "Lettuce",
                 "ini": (0.70, 'Kc ini general del grupo a. Small Vegetables (la fila de la lechuga no da Kc ini propio).'),
                 "mid": (1.00, None),
@@ -965,7 +965,7 @@ AMPLIACION = [
         "esLeguminosa": False,
         "t11": {"fila": "Radish", "region": "Medit.; Europe", "siembra": "Mar/Apr",
                 "etapas": (5, 10, 15, 5), "total": 35,
-                "porque": 'Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano de Isla. La otra es de invierno en region arida (40 d).'},
+                "porque": 'Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de invierno en region arida (40 d).'},
         "t12": {"fila": "Radish",
                 "ini": (0.70, 'Kc ini general del grupo a. Small Vegetables (la fila de el rabano no da Kc ini propio).'),
                 "mid": (0.90, None),
@@ -984,7 +984,7 @@ AMPLIACION = [
         "esLeguminosa": False,
         "t11": {"fila": "Beets, table", "region": "Mediterranean", "siembra": "Apr/May",
                 "etapas": (15, 25, 20, 10), "total": 70,
-                "porque": 'Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo (90 d).'},
+                "porque": 'Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo (90 d).'},
         "t12": {"fila": "Beets, table",
                 "ini": (0.50, 'Kc ini general del grupo d. Roots and Tubers (la fila de el betabel no da Kc ini propio).'),
                 "mid": (1.05, None),
@@ -1222,7 +1222,7 @@ def suelos():
 def main():
     catalogo = {
         "meta": {"versionContrato": VERSION_CONTRATO, "esEjemplo": False,
-                 "aviso": "Parametros de tablas generales (FAO-56, FAO EcoCrop), no calibrados para Isla, Veracruz. Requieren validacion agronomica local."},
+                 "aviso": "Parametros de tablas generales (FAO-56, FAO EcoCrop), no calibrados para el lugar de la parcela. Requieren validacion agronomica local."},
         "versionCatalogo": VERSION_CATALOGO,
         "cultivos": [cultivo(c) for c in CULTIVOS],
     }

@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Notas del catálogo sin «Isla» como lugar de referencia (R9, Mafer)
+
+- **Archivos:** `datos/catalogos/generar.py` y `datos/catalogos/cultivos.json` regenerado (`suelos.json` y `calendario-isla.json` quedan iguales).
+- **Cambio (pedido de Mompin, buzón #382, a partir de R9):** «Método y fuentes» mostraba «Isla» 24 veces en cualquier parcela, porque las notas de elección de filas de FAO-56 decían «análoga al temporal primavera-verano de Isla». Ahora dicen «temporal primavera-verano (siembra hacia junio)», «otoño-invierno» y «la zona de referencia del catálogo (tierras bajas del sur de Veracruz; la altitud exacta no se verificó)», y el aviso del catálogo dice «no calibrados para el lugar de la parcela». Los datos que de verdad vienen de SIAP de Isla se conservan con la forma «SIAP (municipio de Isla, Veracruz; calendario local) no registra X entre 2021 y 2025» (camote, cacahuate, soya, haba, ajonjolí y caña: 6 menciones). `cultivos.json` pasa de 138 a 6 menciones de «Isla». No cambia ningún valor ni ninguna fuente.
+- **Fuera de alcance:** el calendario local de Isla (`calendario-isla.json`) sigue hablando de Isla porque es el calendario de ese municipio.
+- **Evidencia:** catálogos en verde (`validar.mjs` y `unittest`), `contratos` 108, `api` 196, `tsc` limpio y `vitest` 3493.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — R9, parte 1: Francia, Noruega y Kosovo en el mapa de países del calendario (IA de Mompin, sesión "calendario")
 
 - **Archivos:** `datos/calendario/extraer_paises.py` (nuevo), `datos/calendario/paises-110m.json` (regenerado, 172 a 175 países), `datos/calendario/LEEME.md`, `api/tests/test_calendario.py`.
