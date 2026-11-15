@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — README al día con el alcance mundial y lo hecho el 15/11 (Mafer)
+
+- **Archivos:** `README.md`.
+- **Cambio:** fecha del documento al 15/11; catálogo de 40 cultivos y calendario mundial (GGCMI, MIRCA2000, FAO Crop Calendar, SIAP e INIFAP) en «Qué es», estructura y método; despliegue más reciente anotado en `docs/01` (`5f985da`, contrato 0.15.0); SMAP y NDVI pasan de «la interfaz no lo muestra» a «lo usa Esquilote»; escenarios «seco, normal y lluvioso»; el calor aparece como `NO_EVALUABLE`; fuentes nuevas en la tabla (GGCMI, MIRCA2000, FAO Crop Calendar, geoBoundaries, GBIF y EPPO, ESA WorldCover, CDL y SSURGO, Köppen-Geiger); límites nuevos (totales de FAO-56 que no cuadran, calendario mundial, plagas, calor); declaración de IA con los 40 modelos, los iconos 2D y los cotejos; licencia del proyecto condicionada por FAO Crop Calendar (CC BY-NC-SA); y en «Lo que falta verificar» las licencias nuevas y que «Método y fuentes» aún no lista SMAP, NDVI ni plagas.
+- **Límites:** las licencias y citas nuevas salen de `docs/04` y `docs/01` y no se contrastaron con sus páginas; las de GBIF, WorldCover, CDL y SSURGO quedan `[VERIFICAR]`. Sigue pendiente la revisión humana de licencias, de la declaración de IA y de las reglas del reto, la licencia del código, el uso de los tiles de Esri y la atribución de OpenStreetMap (la interfaz sigue mostrando «© OpenStreetMap» sin «contributors»). Quedan sin revisar los apartados de reglas del reto y de IA fuera de lo tocado.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Tarjetas del motor en inglés: `idioma` opcional en `rankear` (IA de Mompin, sesión "ingles", parte 1)
 
 - **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; balam traduce la interfaz (B7) y el motor arma sus propios textos en los dos idiomas.
