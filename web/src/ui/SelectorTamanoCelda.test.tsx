@@ -7,7 +7,7 @@ it('ofrece automático y los tamaños decididos, con el tope a la vista', () => 
   const html = renderToStaticMarkup(<SelectorTamanoCelda valor="auto" onCambio={() => {}} />);
   for (const t of ['auto', '10', '20', '30', '50', '100']) expect(html).toContain(`value="${t}"`);
   expect(html).toContain('Automático');
-  expect(html).toContain('1,600 celdas');
+  expect(html).toContain('200 celdas');
 });
 
 it('avisa cuando el tamaño pedido se subió para no pasar del tope', () => {

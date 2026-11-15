@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Cultivos completos: auditoría, Vite vigila modelos, cultivos largos recorren ciclos (Eduardo)
+
+- **Archivos:** `web/vite.config.ts`; `web/src/ui/planes.ts` (`acomodarCiclos`, `aplicarAcomodando`, `DIAS_MAX_CLIMA`) y su prueba; `web/src/ui/lab/` (`cultivos-completos.test.ts` nuevo, `conveniencia.ts` y su prueba, `PanelCultivos.tsx`, `Laboratorio.tsx`, `piezas.tsx`, `lab.css`); `web/src/escena/render/escena-three.ts` (banderín); `docs/06`.
+- **Cambio:** detalle en 06, "Cultivos completos y que funcionan".
+- **Por qué:** Eduardo vio "plantas incompletas o que no funcionan": en desarrollo eran los modelos nuevos que Vite no veía; en todas partes, 12 cultivos largos bloqueados en la paleta y la caña que el motor no puede evaluar.
+- **Pendiente:** que el motor evalúe ciclos de más de un año de clima (caña); es del motor (Mompin).
+
 ### 2026-11-15 — MF3: sorgo, caupí y ajonjolí cotejados con la edición web de FAO-56 (Mafer)
 
 - **Archivos:** `datos/catalogos/README.md` (tres filas).
@@ -73,6 +80,31 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** la protección guardaba ids de celda que cambian con el tamaño de celda (mismo problema que el plan `porCelda`), y el botón anterior protegía celdas sin plaga, lo que no reflejaba una decisión.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
+
+### 2026-11-15 — Animaciones a pantalla completa de cosecha y plaga (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/eventos.ts`, `EventoPantalla.tsx`, `evento.css` (nuevos) y pruebas; `Laboratorio.tsx`; `ui/tutorial/pasos.ts`; `docs/06`.
+- **Cambio:** en el paso Escenarios, al avanzar la fecha hasta el último día del ciclo (la cosecha según el motor) una guadaña barre la pantalla con una estela y caen briznas, con el aviso "X se cosecha el D" y cuántas celdas. A la mitad del ciclo, si quedan bloques con plaga sin insecticida en la zona, un enjambre cruza la pantalla con "X se está comiendo tu cultivo". Solo al avanzar; con "reducir movimiento" solo se muestra el aviso.
+- **Por qué:** pedido del equipo el 15/11: que la cosecha se represente como cosecha y no como plantas que desaparecen, y algo parecido para las plagas.
+- **Fuente / evidencia:** pruebas de `eventos.ts` y del componente; `tsc` sin errores; suite del front 3308 en verde. En Chrome con SwiftShader, demo de Isla: cosecha el 17/10/2026 con "Se cosechan 4 celdas", sin evento al retroceder, plaga al cruzar el 16/08/2026.
+- **Límites:** la animación de plaga es ilustrativa. El motor no tiene fechas de ataque (GBIF solo dice que la plaga está en la región) y no modela daño ni pérdida de cosecha, así que la mitad del ciclo es una convención de dibujo `[PROPUESTA]` y el aviso lo dice. Las plantas de la escena no cambian: lo que se agrega es el aviso y la animación.
+- **Decisiones afectadas:** ninguna de alcance del MVP. Momento de la animación de plaga (mitad del ciclo) `[PROPUESTA]` hasta que el equipo decida otro.
+
+### 2026-11-15 — Tope de 200 celdas, leyenda de escala, plagas por radio, gráficos, cielo por clima y tutorial de Esquilote (Eduardo)
+
+- **Archivos:** `web/src/geo/tamano-celda.ts`, `escala-celda.ts` (nuevo), `ui/SelectorTamanoCelda.tsx`, `ui/DibujarParcela.tsx`; `ui/lab/plagas.ts`, `Laboratorio.tsx`, `PanelCultivos.tsx`, `BarraHerramientas.tsx`, `Mascota.tsx`; `escena/EscenaParcela.tsx`, `escena/graficos.ts` y `escena/clima-fondo.ts` (nuevos), `escena/render/escena-three.ts` y `plagas.ts`, `escena/escena.css`; `ui/tutorial/` (nuevo); `main.tsx`; pruebas de cada pieza; `docs/06`, `web/README.md`.
+- **Cambio:** (1) la cuadrícula que genera la interfaz no pasa de **200 celdas**, también en automático (antes 1 600); el contrato y la escena siguen admitiendo 1 600. (2) Leyenda "1 celda = X m × X m (≈ Y)" en el selector de Terreno y en el HUD del laboratorio. (3) Las plagas se dibujan solo dentro de un radio de 1 a 3 celdas (o toda la parcela) alrededor de la celda elegida; riesgos, insecticida y "Tu plan" cuentan solo esa zona. (4) Nivel de gráficos Bajo, Medio o Alto (resolución, aves y viento, tope de insectos). (5) El cielo de la escena cambia con la lluvia del día y, sin lluvia, con la época del año frente a la propia parcela. (6) Tutorial guiado por Esquilote, el elote mascota (la misma de los consejos), en las cuatro pantallas del flujo. (7) La mascota de los consejos lleva el nombre Esquilote.
+- **Por qué:** pedido del equipo el 15/11: la escena se trababa a gran escala; cada celda debía mostrar cuánto equivale en el terreno; menos modelos de plagas cargados; fondo que reaccione al clima; tutorial con la mascota.
+- **Fuente / evidencia:** `tsc` sin errores; pruebas del front 3295 en verde (nuevas: escala de celda, radio de plagas, clima del fondo, gráficos, tope de insectos y tutorial). En Chrome con SwiftShader, parcela demo de Isla: leyenda "1 celda = 70.7 m × 70.7 m (≈ 0.50 ha)", nivel de gráficos guardado, radio cambiado, cielo gris en tormenta (72.2 mm el 05/08), llovizna y lluvia al mover la fecha, tutorial con resalte del elemento.
+- **Límites:** el rendimiento a gran escala no se perfiló: el tope de 200 celdas, el radio de plagas y el nivel Bajo reducen la carga, pero no se midieron cuadros por segundo con ellos. El radio de plagas solo se vio con la parcela demo (4 celdas, la zona la cubre toda); la geometría del radio se prueba con una malla de 9 × 9. El tamaño de celda en la escena sigue siendo igual para todas: la leyenda dice cuánto equivale, pero no se dibujó a escala. La contraseña de root se pegó dos veces en el chat y debe cambiarse.
+- **Decisiones afectadas:** tope de celdas de la interfaz, de 1 600 a 200 `[DECIDIDO]` por el equipo el 15/11. Esquilote es el nombre de la mascota `[DECIDIDO]`.
+
+### 2026-11-15 — Landing sin menú ni demo, contenido centrado (Eduardo)
+
+- **Archivos:** `web/src/paginas/Inicio.tsx`, `web/src/ui/inicio.css`, `web/src/App.tsx`; eliminado `web/src/ui/InicioHeader.tsx` (menú, enlace "Explorar demo" y diálogo de Cómo funciona/Recursos); `web/README.md`, `docs/06`.
+- **Cambio:** la landing ya no muestra el encabezado con menú ni los botones de demo. El bloque de texto y el botón "Dibujar un terreno" van centrados verticalmente. La demo sigue en la página de terreno.
+- **Evidencia:** `tsc` sin errores; pruebas del front 3267 en verde. No se revisó visualmente en el navegador.
+- **Decisiones afectadas:** ninguna de alcance del MVP; es un cambio de presentación pedido por el equipo.
 
 ### 2026-11-15 — Arreglo: rotaciones guardadas de otra parcela en parcelas dibujadas (Eduardo)
 

@@ -20,6 +20,7 @@ export function Mascota({ consejos, paso }: { consejos: Consejo[]; paso: string 
   const actual = total ? consejos[Math.min(indice, total - 1)]! : null;
   return <div className={`mascota${abierta && actual ? ' mascota-abierta' : ''}`}>
     {abierta && actual && <div className={`mascota-globo mascota-${actual.tono}`} role="status" aria-live="polite">
+      <p className="mascota-nombre">Esquilote</p>
       <p>{actual.texto}</p>
       <div className="mascota-pie">
         {total > 1 && <span className="mascota-cuenta" aria-hidden="true">{Math.min(indice, total - 1) + 1}/{total}</span>}
@@ -28,7 +29,7 @@ export function Mascota({ consejos, paso }: { consejos: Consejo[]; paso: string 
       </div>
     </div>}
     <button type="button" className="mascota-boton" onClick={() => { if (abierta) setIndice((i) => (i + 1) % Math.max(1, total)); else setAbierta(true); }}
-      aria-label={abierta ? 'Siguiente consejo de la mascota' : 'Mostrar consejos de la mascota'} title={abierta ? 'Otro consejo' : 'Consejos'}>
+      aria-label={abierta ? 'Siguiente consejo de Esquilote' : 'Mostrar consejos de Esquilote'} title={abierta ? 'Otro consejo' : 'Consejos de Esquilote'}>
       {imagen ? <img src={imagen} alt="" width={96} height={96} /> : <span className="mascota-respaldo" aria-hidden="true" />}
     </button>
   </div>;

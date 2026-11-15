@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { calendarioIsla, pintarCeldas, planesIniciales } from '../planes';
 import { parcelaConTerrenoDemo } from '../../escena/demo-motor';
-import { celdasEnRiesgo, firmaMalla, mapaPlagas, plagaDeCultivo, plagasPresentes, proteger, protegidas, riesgosDelPlan, type PlagaZona } from './plagas';
+import { celdaCentral, celdasEnRadio, celdasEnRiesgo, firmaMalla, mapaPlagas, plagaDeCultivo, plagasPresentes, proteger, protegidas, riesgosDelPlan, type PlagaZona } from './plagas';
 
 const zona: PlagaZona[] = [
   { id: 'cogollero', nombreComun: 'Gusano cogollero', tipoVisual: 'gusano', estado: 'presente', registros: 40, cultivos: ['maiz', 'sorgo'] },
@@ -63,5 +63,36 @@ describe('plagas en el simulador', () => {
     expect(enRiesgo).toHaveLength(celdas.length); // maiz y frijol: el chapulin ataca ambos
     expect(celdasEnRiesgo([{ sinProteger: [celdas[1]!, celdas[1]!] }])).toEqual([celdas[1]]);
     expect(celdasEnRiesgo([])).toEqual([]);
+  });
+
+  describe('zona de plagas por radio', () => {
+    const malla = Array.from({ length: 9 * 9 }, (_, n) => ({ id: `c-${Math.floor(n / 9)}-${n % 9}`, i: Math.floor(n / 9), j: n % 9 }));
+    it('la celda central de una malla de 9 x 9 es la del medio', () => {
+      expect(celdaCentral(malla)).toBe('c-4-4');
+      expect(celdaCentral([])).toBeNull();
+    });
+    it('el radio cubre un circulo de celdas alrededor de la elegida', () => {
+      expect([...celdasEnRadio(malla, 'c-4-4', 1)].sort()).toHaveLength(9); // 3 x 3
+      const r2 = celdasEnRadio(malla, 'c-4-4', 2);
+      expect(r2.size).toBe(21); // circulo, no cuadrado de 25
+      expect(r2.has('c-2-3')).toBe(true);
+      expect(r2.has('c-2-2')).toBe(false); // la esquina queda fuera
+      expect(celdasEnRadio(malla, 'c-4-4', 3).size).toBeGreaterThan(r2.size);
+    });
+    it('sin celda elegida usa la central, y una elegida que ya no existe tambien', () => {
+      expect(celdasEnRadio(malla, null, 1).has('c-4-4')).toBe(true);
+      expect(celdasEnRadio(malla, 'c-99-99', 1).has('c-4-4')).toBe(true);
+    });
+    it('en una esquina la zona se recorta a la parcela y toda la parcela es radio null', () => {
+      expect(celdasEnRadio(malla, 'c-0-0', 1).size).toBe(4);
+      expect(celdasEnRadio(malla, 'c-0-0', null).size).toBe(81);
+      expect(celdasEnRadio([], null, 2).size).toBe(0);
+    });
+    it('la zona reduce los bloques con plaga dibujados', () => {
+      const todas = celdas.map((id) => ({ celdaId: id, cultivo: 'maiz', ciclo: 1 }));
+      const dentro = new Set([celdas[0]!]);
+      const mapa = mapaPlagas(todas.filter((r) => dentro.has(r.celdaId)), plagasPresentes(zona), {}, 'R1');
+      expect(mapa.size).toBe(1);
+    });
   });
 });

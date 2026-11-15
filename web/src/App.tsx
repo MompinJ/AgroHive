@@ -7,7 +7,6 @@ import { ActionLink, MethodNotes, PageHeading } from './ui/components';
 import { indicePaso, irA, pages, pasos, usePage } from './ui/navigation';
 import { BarraPasos } from './ui/BarraPasos';
 import { Laboratorio, type PasoLab } from './ui/lab/Laboratorio';
-import { InicioHeader } from './ui/InicioHeader';
 import type { Parcela } from '../../contratos/tipos/contratos';
 
 const rutaDePaso: Record<PasoLab, string> = { cultivos: '/laboratorio', escenarios: '/escenarios', comparacion: '/comparacion' };
@@ -60,7 +59,6 @@ export default function App() {
 
   if (isHome) return <div className="app-shell app-shell-home">
     <a className="skip-link" href="#contenido" onClick={(event) => { event.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
-    <InicioHeader />
     <main id="contenido" className="landing-main" tabIndex={-1}><Inicio /></main>
   </div>;
 
