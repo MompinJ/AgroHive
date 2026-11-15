@@ -36,3 +36,7 @@ Lectura: ambas fuentes coinciden en los anios extremos (2019 seco, 2010 lluvioso
 - V-21, V-22, V-06 y V-08 tienen ya evidencia; falta que el equipo los marque como cerrados en `docs/11` y `docs/13`, y anotar el resultado en `docs/04` (carril de Mafer) y `docs/01`.
 - V-08: con esta evidencia se podria elegir Open-Meteo Elevation (90 m, 100 puntos por llamada, sin descargar tiles) como cliente por defecto de A2.3 y Terrarium como respaldo. Es propuesta, no decision.
 - Sin medir: limites de tasa de POWER, ISRIC WCS (V-23, es de A2.14) y earthaccess.
+
+## Calendario de siembra mundial (15/11/2026)
+
+`respuestas/calendario_puntos_mundiales.json`: resumen de `GET /api/calendario` en 11 puntos de varios continentes (México: Isla, Texcoco, Culiacán y un punto urbano de CDMX; EE. UU.: Iowa; Brasil: Mato Grosso; Kenia; India: Madhya Pradesh; España: Castilla; Australia: Nueva Gales del Sur; Marruecos). Por cultivo y temporada trae la ventana, el nombre de su fuente y el estado de la presencia. No llama a ninguna API en vivo: sale de los extractos de `datos/calendario/` (GGCMI fase 3, MIRCA2000, SIAP y FAO Crop Calendar). Las coordenadas de Isla quedan solo como dato de prueba interno: AgroHive es mundial (`docs/13`, "AgroHive MUNDIAL"). Conteo del 15/11: 18 de 40 cultivos con ventana en todos los puntos, 23 en Kenia y 33 en Marruecos (FAO Crop Calendar encima).
