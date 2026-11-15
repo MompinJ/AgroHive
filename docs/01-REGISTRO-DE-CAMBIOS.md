@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — R9: siete parcelas dibujadas fuera de los ejemplos (Mafer, con un agente de revisión)
+
+- **Archivos:** `web/evidencia/r9-mundial.md` (nuevo).
+- **Cambio:** revisión de solo lectura de siete lugares sin ejemplo grabado (Sinaloa, Chiapas, Argentina, Nigeria, Francia, Vietnam y Australia) con la interfaz local sobre la API publicada (formulario «Agregar por coordenadas») y la API directa (`/api/calendario`, clima, suelo, próxima temporada y plagas), sobre `main` `687ca23`. Cumple lo pedido: lo que falta sale `NO_EVALUABLE` con motivo y sin número, 18 de 40 cultivos con ventana por lugar y ningún «undefined», «NaN» ni «null» visible. Fallas: **Francia** da 422 en `/api/calendario` («sin un solo pais en Natural Earth 110m», comprobado de nuevo con la API pública) y la interfaz muestra el texto crudo; la etiqueta PV/OI usa el corte del hemisferio norte en Argentina y Australia; fechas en el día 1 de un mes en Nigeria y Vietnam; la rotación por defecto trae fechas pensadas para México; cultivos sin ventana aparecen como «buena opción»; y **Método y fuentes dice «Isla» 24 veces** en los siete lugares, por las notas del catálogo (carril de Mafer).
+- **Límites:** polígonos por formulario de coordenadas, no con clics en el mapa; no se verificó que cada punto sea tierra de cultivo ni se contrastó ninguna ventana con fuente externa; no se revisó la comparación final, ni inglés, ni móvil.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — B7, pantalla 3: Laboratorio en inglés, parte de la interfaz (IA de Mompin, sesión "ingles")
 
 - **Archivos:** `web/src/ui/tutorial/Tutorial.tsx` (usa el tutorial en inglés `TUTORIALES_EN`, mismos pasos, resaltes e iconos), `web/src/ui/lab/` (`Laboratorio.tsx`, `BarraHerramientas.tsx`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `PanelIzq.tsx`, `EventoPantalla.tsx`, `eventos.ts`, `Mascota.tsx`, `consejos.ts`, `historial.ts`, `PanelHistorial.tsx`, `piezas.tsx`, `conveniencia.ts`), `web/src/ui/ControlTiempo.tsx`, `web/src/ui/planes.ts` (nombre de la rotación y mensajes de ciclos encimados), `web/src/ui/i18n/textos/tutorial.ts` y `laboratorio.ts` (nuevos), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
