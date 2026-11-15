@@ -26,6 +26,14 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Iconos 2D de los cultivos, encargo #198 punto 1 (Mafer)
+
+- **Archivos:** `modelos/iconos2d/` (`iconos2d.py`, 20 `<cultivo>_<etapa>.svg`, `visor_iconos.html`, `README.md`); `web/src/escena/pruebas/iconos2d.test.ts`.
+- **Cambio:** un sprite plano de 16 × 16 por cultivo y etapa (maíz, frijol, calabaza, chile × 5), con la paleta compartida y sin colores nuevos, legible a 32 y 64 px (escalas enteras). Cada SVG lleva `<title>` en español, sin scripts ni imágenes externas.
+- **Pruebas:** paleta, tamaño, suelo en la última fila, y que todo par de los 20 iconos se distinga en al menos 12 % de sus píxeles (dE ≥ 15) bajo visión normal, protanopia, deuteranopia y tritanopia, con `daltonismo.ts`. El 12 % y el dE de 15 son `[PROPUESTA]` (el 15 es el de `estilos-estado.ts`); ajustar si el equipo prefiere otro. 65 pruebas del archivo en verde.
+- **Pendiente:** ninguna pantalla los carga aún; dónde se muestran en `ui/Parcela2D.tsx` es de balam. Revisión visual humana. El punto 2 del encargo (ampliar el catálogo) no se ha empezado.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — A4.8 sigue en curso: SMAP en el droplet responde 503 (Eduardo)
 
 - **Archivos:** `docs/14` (nota de A4.8; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`.
