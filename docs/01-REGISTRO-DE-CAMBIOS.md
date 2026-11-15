@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Calendario de siembra MUNDIAL, parte 1: GGCMI fase 3 para 13 cultivos, también en México (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
+
+- **Decisión:** `[DECIDIDO]` Mompin, 15/11: AgroHive es mundial; Isla deja de ser zona demo. Registrada en `docs/13` ("AgroHive MUNDIAL y calendario base"); ajusta "Alcance geográfico", "Zona y cultivo" y "Calendario y aptitud fuera de México".
+- **Archivos:** `api/app/calendario.py`, `api/tests/test_calendario.py`, `api/tests/test_hallazgos_back.py` (código de advertencia), `api/requirements.txt` (`numpy` explícito), `datos/calendario/extraer_ggcmi.py` (nuevo), `ggcmi-rf.npz` y `ggcmi-rf.json` (nuevos, 480 KB), `datos/calendario/LEEME.md`; se quita del repo `datos/calendario/ggcmi/mai_rf_*.nc4` (lo reemplaza el extracto); `docs/04`, `docs/11`, `docs/13`, `datos/catalogos/README.md`, `api/README.md`, `AgroVault/Compartido/APIs.md` y `Resumen.md`.
+- **Cambio:** `GET /api/calendario` arma una **base mundial** en cualquier coordenada, también en México (se quita "No se usa GGCMI"): día de siembra de temporal de GGCMI fase 3 para maíz, sorgo, soya, cacahuate, trigo (`swh`), cebada, papa, yuca, caña, girasol y algodón, más chícharo (`pea`) y maíz dulce (`mai`) como equivalencias de la misma especie `SUPUESTO`. Las entradas cubren los 40 cultivos del catálogo (PV y OI); los que no tienen fuente mundial van `NO_EVALUABLE` con motivo. En el recuadro de Isla, SIAP/INIFAP se suman encima: su ventana manda y su presencia reemplaza el `sin_dato` de GGCMI. **Para el front:** el contrato no cambia, pero cambian los `id` (`calendario-ggcmi-<iso>-<i>-<j>`, y en Isla `calendario-isla-ggcmi-<i>-<j>` en vez de `calendario-isla`) y la respuesta genérica no trae `ubicacion.municipio` (usar `region` o `unidadAdministrativa.nombre`).
+- **Por qué:** fuera de Isla 39 de 40 cultivos salían `NO_EVALUABLE` y el pilar de compatibilidad no entraba al ranking.
+- **Fuente / evidencia:** Jägermeyr et al. 2021, Nature Food 2: 873-885; GGCMI Phase 3 crop calendar v1.01, doi:10.5281/zenodo.5062513, CC BY 4.0 (md5 de cada NetCDF en `ggcmi-rf.json`). Pruebas con puntos en México (CDMX, Sinaloa), EE. UU. (Iowa), Brasil (Mato Grosso), Kenia, India (Madhya Pradesh), España y Australia (NSW). Suites: `contratos/`, `api/` (pytest), catálogos, `tsc` y `vitest` en verde.
+- **Pendiente:** más fuentes (SAGE, MIRCA2000) y la presencia de SIAP en todo México.
+
 ### 2026-11-15 — Buzón: IP por defecto del hotspot de la sede (sesión "buzon")
 
 - `herramientas/buzon/enviar.sh`, `escuchar.sh`, `README.md`, `AGENTS.md` y `docs/16` (P1): la IP por defecto pasa de `192.168.0.102` (casa) a `172.20.10.3` (hotspot, `wlo1`); `BUZON_URL` sigue mandando.
