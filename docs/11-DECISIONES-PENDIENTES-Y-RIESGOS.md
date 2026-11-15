@@ -68,7 +68,7 @@ Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Al
 
 ## Decisiones abiertas del día final
 
-Del plan de trabajo: decididas D1 (Eduardo lleva el rediseño del front), D4 (se terminan sandía, camote y cacahuate) y los hallazgos H-B6, H-M1 y H-M9; abiertas D2 (placa, la decide Eduardo), D3 (llave SSH), D5 (cámara), D6 (A4.4 y A0.3) y D7 (ramas muertas). Detalle en [16, sección 2](16-PLAN-DIA-FINAL.md#2-decisiones-de-mompin-para-el-plan-de-trabajo). Las de la entrega (Team Owner, portal, V-01, inglés, licencia, términos, imágenes generadas, video y presentación) quedan para la fase de entrega, que es posterior y pasa por la aprobación de todo el equipo: [16, sección 5](16-PLAN-DIA-FINAL.md#5-entrega).
+Del plan de trabajo: decididas D1 (Eduardo lleva el rediseño del front), D4 (se terminan sandía, camote y cacahuate) y los hallazgos H-B6, H-M1 y H-M9; abiertas D8 (respaldo sin WebGL, tras retirar el modo 2D), D9 (R4 pasa a R3 en la interfaz), D10 (fuentes fuera del laboratorio), D2 (placa, la decide Eduardo), D3 (llave SSH), D5 (cámara), D6 (A4.4 y A0.3), D7 (ramas muertas) y H-M7. Detalle en [16, sección 2](16-PLAN-DIA-FINAL.md#2-decisiones-de-mompin-para-el-plan-de-trabajo). Las de la entrega (Team Owner, portal, V-01, inglés, licencia, términos, imágenes generadas, video y presentación) quedan para la fase de entrega, que es posterior y pasa por la aprobación de todo el equipo: [16, sección 5](16-PLAN-DIA-FINAL.md#5-entrega).
 
 ## Se decide después (menor)
 - Numeración y nombres de documentos.

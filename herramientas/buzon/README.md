@@ -2,7 +2,7 @@
 
 Mensajería por la red local del hotspot, para que las sesiones de IA de cada integrante se pasen avisos (ya subí X, necesito Y, cambió el contrato) sin esperar a GitHub. **No sirve para compartir código**: el código sigue yendo por git.
 
-- **Servidor:** la laptop de Mompin, `http://172.20.10.6:3000` (Python, sin dependencias).
+- **Servidor:** la laptop de Mompin, `http://192.168.0.102:3000` (Python, sin dependencias).
 - **Clientes:** `bash` + `curl`. Funciona en Mac y en Windows con Git Bash (el que usa Claude Code). Sin Git Bash, con `curl.exe` (ver abajo).
 - **Nombres:** `Mompin`, `Eduardo`, `Mafer`, `balam`, o `todos`. No distingue mayúsculas.
 - Si la IP cambia (por ejemplo, al reconectarse al hotspot), cada quien exporta `BUZON_URL=http://<ip-nueva>:3000`.
@@ -44,11 +44,11 @@ bash herramientas/buzon/enviar.sh Eduardo todos "la API de clima ya responde en 
 En `cmd` o PowerShell las comillas simples no funcionan; usa el formato de formulario y `curl.exe` (en PowerShell, `curl` es otro comando):
 
 ```text
-curl.exe -s http://172.20.10.6:3000/enviar -d de=Mafer -d para=Mompin --data-urlencode "texto=hola equipo"
-curl.exe -s "http://172.20.10.6:3000/leer?para=Mafer&desde=0&formato=texto"
+curl.exe -s http://192.168.0.102:3000/enviar -d de=Mafer -d para=Mompin --data-urlencode "texto=hola equipo"
+curl.exe -s "http://192.168.0.102:3000/leer?para=Mafer&desde=0&formato=texto"
 ```
 
-`http://172.20.10.6:3000/` muestra la ayuda corta.
+`http://192.168.0.102:3000/` muestra la ayuda corta.
 
 ## API
 

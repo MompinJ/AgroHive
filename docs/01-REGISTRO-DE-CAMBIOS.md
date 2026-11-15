@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 (madrugada) — Pasada final de la noche: docs/16 al día y resumen para Mompin (sesión "estado")
+
+- **Archivos:** `docs/16` (secciones 1 a 3 y 6 reescritas sobre `e355bb3`), `docs/RESUMEN-NOCHE-14-11.md` (nuevo, 25 líneas), `docs/11` (resumen de decisiones abiertas), `herramientas/buzon/README.md`, `enviar.sh` y `escuchar.sh` y `AGENTS.md` (IP del buzón por defecto: `192.168.0.102`, la nueva de la laptop de Mompin; `BUZON_URL` sigue mandando).
+- **Cambio:** HECHAS de la noche (M2, M4 a M7, MF1, MF2, MF4, E4, E7 y B1); primeras acciones de la mañana (buzón, desplegar `e355bb3`, avisar a Eduardo de los archivos que tocó bordes, reunión, integrar `cfded82`); cola con la carga que pidió Mompin (Eduardo lo grande; Mafer y balam con tareas cortas: cotejo de FAO-56, elecciones del catálogo por revisar, revisión de los 32 modelos nuevos, pruebas de interfaz). Decisiones nuevas para Mompin, encontradas al revisar el front de Eduardo contra los docs: D8 (se retiró el modo 2D y no hay respaldo sin WebGL; docs/00, docs/11, A3.6, A5.4 y el plan de recorte dicen otra cosa), D9 (R4 pasa a R3 en la interfaz; docs/13, docs/05 y README siguen con R4) y D10 (el laboratorio ya no muestra fuentes). Punto para la reunión: 7 commits de front empujados directo a `main` (regla 4).
+- **Evidencia:** sobre `e355bb3`: `contratos/` 102/102, `api/` 162, catálogos en verde, `tsc --noEmit` limpio, `vitest` 3254 (1 `todo`). `/health` público en `bdc792f`, contratos 0.14.0. `origin/Eduardo` lleva 1 commit (`cfded82`) sin integrar.
+- **No se corrigieron** docs/00, 05, 11, 13, 14 ni el README por D8 y D9: esperan la decisión de Mompin.
+
 ### 2026-11-15 — Modelos de la ampliación del catálogo, tandas F y G: berenjena, brócoli, col, coliflor, espinaca, rábano y betabel; los 40 cultivos con modelo (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
 
 - **Archivos:** `modelos/cultivos/{berenjena,brocoli,col,coliflor,espinaca,rabano,betabel}.py` con sus 35 `.bbmodel` y visores; `bloques.py` (35 bloques; ayuda `con_cara`); `iconos2d.py` (35 SVG) y su README; `modelos/paleta.py` y `paleta.md` (17 colores más, índices 206 a 222, con una hoja de brásica compartida por brócoli, col y coliflor; quedan 33 libres); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los siete) y `cultivos.json`; pruebas con 40 cultivos; `docs/07` (tabla), `docs/16` (M7 hecha) y `AgroVault/Compartido/Pendientes.md`.
