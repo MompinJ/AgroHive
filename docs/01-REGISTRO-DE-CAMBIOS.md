@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Calendario MUNDIAL, parte 2: presencia de SIAP en todos los municipios de México (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
+
+- **Archivos:** `api/app/calendario.py`, `api/tests/test_calendario.py`, `datos/calendario/extraer_siap_mexico.py` (nuevo), `siap-mexico.npz` y `siap-mexico.json` (nuevos, 165 KB y 790 KB), `datos/calendario/LEEME.md`; se quita `datos/calendario/isla-recuadro.json` (Isla se reconoce por su clave INEGI); `docs/04`, `docs/13`, `datos/catalogos/README.md`, `api/README.md`, `AgroVault/Compartido/APIs.md`.
+- **Cambio:** en cualquier municipio de México, `GET /api/calendario` suma encima de GGCMI la presencia de SIAP (cierre agrícola municipal 2021-2025, modalidad temporal) para 38 de los 40 cultivos (caupí y maíz dulce no tienen nombre equivalente en SIAP): `registrado` con la superficie por año, o `no_registrado`. La ubicación trae `claveEstadoInegi`, `estado`, `claveMunicipioInegi` y `municipio`, y el `id` pasa a `calendario-mx-<ent><mun>-ggcmi-<i>-<j>` (Isla: `calendario-mx-30077-ggcmi-143-168`). En Isla las ventanas de INIFAP siguen mandando. Un municipio sin pareja (urbano o ambiguo) deja la presencia `sin_dato` con la advertencia `SIAP_SIN_MUNICIPIO`.
+- **Para el front:** en México vuelve a venir `ubicacion.municipio`; fuera de México no. Contrato sin cambios.
+- **Fuente / evidencia:** SIAP, datos abiertos (`https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php`, descargado el 15/11); límites de geoBoundaries gbOpen MEX ADM2 (CC BY 4.0) y ADM1 (CC BY 3.0 IGO). 2428 de 2457 municipios emparejados por nombre dentro del estado; los 29 sin pareja están en `sinPareja`. Memoria medida: la API pasa de 92 a 126 MB de RSS con los dos extractos. Pruebas: Texcoco (15/099, maíz, frijol, cebada, trigo, avena y haba registrados), Culiacán, Isla y un punto urbano de CDMX.
+
 ### 2026-11-15 — Calendario de siembra MUNDIAL, parte 1: GGCMI fase 3 para 13 cultivos, también en México (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
 
 - **Decisión:** `[DECIDIDO]` Mompin, 15/11: AgroHive es mundial; Isla deja de ser zona demo. Registrada en `docs/13` ("AgroHive MUNDIAL y calendario base"); ajusta "Alcance geográfico", "Zona y cultivo" y "Calendario y aptitud fuera de México".

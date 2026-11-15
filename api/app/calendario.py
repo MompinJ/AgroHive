@@ -1,8 +1,10 @@
 """GET /api/calendario (A4.13). Base MUNDIAL (15/11): GGCMI fase 3 en cualquier coordenada, tambien en Mexico.
 
-Las fuentes de un pais se suman encima, nunca como base (docs/13, "Alcance geografico"): en el recuadro de Isla, las
-ventanas de SIAP/INIFAP de `datos/catalogos/calendario-isla.json` reemplazan a las de GGCMI y su presencia (SIAP) reemplaza
-el `sin_dato` de GGCMI. Un cultivo del catalogo sin fuente mundial queda NO_EVALUABLE con su motivo.
+Las fuentes de un pais se suman encima, nunca como base (docs/13, "Alcance geografico"):
+- En cualquier municipio de Mexico, la presencia de SIAP (cierre agricola municipal 2021-2025, temporal) reemplaza el
+  `sin_dato` de GGCMI (extracto `datos/calendario/siap-mexico.*`, script `extraer_siap_mexico.py`).
+- En Isla (INEGI 30/077), las ventanas de INIFAP de `datos/catalogos/calendario-isla.json` reemplazan a las de GGCMI.
+Un cultivo del catalogo sin fuente mundial queda NO_EVALUABLE con su motivo.
 """
 import json
 import math
@@ -96,8 +98,12 @@ def _paises() -> tuple:
 
 
 @lru_cache(maxsize=1)
-def _recuadro_isla() -> dict:
-    return json.loads((config.CALENDARIO_DIR / "isla-recuadro.json").read_text(encoding="utf-8"))
+def _siap() -> tuple[np.ndarray, tuple, dict]:
+    """Rejilla de municipios (0.01 grados, unos 12 MB en memoria) y la tabla de SIAP por municipio."""
+    with np.load(config.CALENDARIO_DIR / "siap-mexico.npz") as z:
+        rejilla, origen = z["municipio"], tuple(float(x) for x in z["rejilla"])
+    tabla = json.loads((config.CALENDARIO_DIR / "siap-mexico.json").read_text(encoding="utf-8"))
+    return rejilla, origen, tabla
 
 
 @lru_cache(maxsize=1)
@@ -158,9 +164,59 @@ def _aviso_cercania(lugar: dict) -> list[dict]:
                          f"el unico pais a menos de {TOLERANCIA_COSTA_KM:.0f} km (a {lugar['distanciaKm']} km de su borde en ese mapa).")}]
 
 
-def _en_isla(lon: float, lat: float) -> bool:
-    r = _recuadro_isla()
-    return r["sur"] <= lat <= r["norte"] and r["oeste"] <= lon <= r["este"]
+CLAVE_ISLA = ("30", "077")
+CONSULTADO_SIAP = "2026-11-15"
+
+
+def municipio_mx(lon: float, lat: float) -> dict | None:
+    """Municipio de SIAP en el punto, o None si cae fuera de la rejilla o en un municipio sin pareja en SIAP."""
+    rejilla, (oeste, norte, paso), tabla = _siap()
+    i, j = int((norte - lat) / paso), int((lon - oeste) / paso)
+    if not (0 <= i < rejilla.shape[0] and 0 <= j < rejilla.shape[1]) or not rejilla[i, j]:
+        return None
+    return tabla["municipios"][int(rejilla[i, j]) - 1]
+
+
+def _fuente_siap(m: dict) -> dict:
+    _, _, tabla = _siap()
+    return {"nombre": "SIAP, cierre agricola municipal (datos abiertos)", "url": tabla["url"],
+            "cita": (f"{m['municipio']}, {m['estado']} (INEGI {m['ent']}/{m['mun']}), {tabla['anios'][0]}-{tabla['anios'][-1]}, modalidad "
+                     "temporal; extracto en datos/calendario/siap-mexico.json"),
+            "unidades": "hectareas sembradas (temporal)", "consultado": CONSULTADO_SIAP,
+            "resolucion": "municipio",
+            "nota": ("El municipio sale del punto en una rejilla de 0.01 grados sobre los limites de geoBoundaries (2012, CC BY 4.0); "
+                     "a menos de 1 km de un limite puede ser el vecino.")}
+
+
+def _siap_encima(entradas: list, m: dict) -> tuple[list, list]:
+    """Presencia de SIAP del municipio sobre la base mundial. La ventana no cambia: SIAP no publica ventanas."""
+    _, _, tabla = _siap()
+    fuente = _fuente_siap(m)
+    desde, hasta = f"{tabla['anios'][0]}-01-01", f"{tabla['anios'][-1]}-12-31"
+    salida, sin_nombre = [], set()
+    for e in entradas:
+        nombre = tabla["cultivoSiap"].get(e["cultivo"])
+        if not nombre:
+            sin_nombre.add(e["cultivo"])
+            salida.append(e)
+            continue
+        ciclo = tabla["cicloPropio"].get(e["cultivo"])
+        anios = m["presencia"].get(f"{e['cultivo']}|{e['temporada']}")
+        extra = f" SIAP lo registra en el ciclo '{ciclo}', no por temporada PV u OI." if ciclo else ""
+        if anios:
+            lista = ", ".join(f"{a}: {h:,.0f} ha" for a, h in anios.items())
+            presencia = {"estado": "registrado", "periodo": {"desde": f"{min(anios)}-01-01", "hasta": f"{max(anios)}-12-31"},
+                         "fuente": fuente, "nota": f"SIAP registra '{nombre}' de temporal en {m['municipio']}: {lista}.{extra}"}
+        else:
+            presencia = {"estado": "no_registrado", "periodo": {"desde": desde, "hasta": hasta}, "fuente": fuente,
+                         "nota": (f"SIAP no registra '{nombre}' de temporal en {m['municipio']} en este ciclo, "
+                                  f"{tabla['anios'][0]}-{tabla['anios'][-1]}: se muestra, pero no se recomienda.{extra}")}
+        salida.append({**e, "presencia": presencia})
+    adv = [{"codigo": "CAPA_SIAP_MUNICIPIO", "severidad": "info",
+            "mensaje": (f"Presencia de SIAP (cierre agricola municipal, temporal) de {m['municipio']}, {m['estado']} (INEGI {m['ent']}/{m['mun']}) "
+                        f"encima de la base mundial. SIAP no publica ventanas de siembra."
+                        + (f" Sin nombre equivalente en SIAP (presencia sin_dato): {', '.join(sorted(sin_nombre))}." if sin_nombre else ""))}]
+    return salida, adv
 
 
 def _meta() -> dict:
@@ -284,12 +340,10 @@ def _isla_encima(entradas: list) -> tuple[list, list, dict]:
         else:
             salida.append({**e, "presencia": l["presencia"]})
             presencia_siap.append(f"{e['cultivo']} {e['temporada']}")
-    r = _recuadro_isla()
     adv = [*local.get("advertencias", []), {
         "codigo": "CAPA_LOCAL_ISLA", "severidad": "info",
-        "mensaje": (f"El punto cae en el recuadro OSM de Isla, Veracruz (sur {r['sur']}, norte {r['norte']}, oeste {r['oeste']}, "
-                    f"este {r['este']}, consultado {r['consultado']}; es un rectangulo, no el poligono). Encima de la base mundial: "
-                    f"ventana de SIAP/INIFAP en {', '.join(de_isla) or 'ninguna entrada'}; presencia de SIAP con ventana de GGCMI en "
+        "mensaje": (f"Municipio de Isla, Veracruz (INEGI 30/077): encima de la base mundial y de SIAP, ventana de INIFAP en "
+                    f"{', '.join(de_isla) or 'ninguna entrada'}; presencia del extracto de Isla con ventana de GGCMI en "
                     f"{', '.join(presencia_siap) or 'ninguna entrada'}."),
     }]
     return salida, adv, local["ubicacion"]
@@ -303,11 +357,22 @@ def armar(lon: float, lat: float) -> dict:
     ubicacion = {"pais": lugar["nombre"], "paisIso": lugar["iso"], "region": f"celda GGCMI {lat_c:.2f},{lon_c:.2f}",
                  "unidadAdministrativa": {"sistema": "Natural Earth 110m", "clave": lugar["iso"], "nombre": lugar["nombre"], "nivel": 0}}
     ident = f"calendario-ggcmi-{lugar['iso'].lower()}-{i}-{j}"
-    if lugar["iso"] == "MX" and _en_isla(lon, lat):
-        entradas, adv_local, inegi = _isla_encima(entradas)
-        adv = adv_local + adv
-        ubicacion = {**inegi, **ubicacion, "pais": inegi.get("pais", lugar["nombre"])}
-        ident = f"calendario-isla-ggcmi-{i}-{j}"
+    m = municipio_mx(lon, lat) if lugar["iso"] == "MX" else None
+    if m is not None:
+        entradas, adv_siap = _siap_encima(entradas, m)
+        adv = adv_siap + adv
+        ubicacion = {**ubicacion, "claveEstadoInegi": m["ent"], "estado": m["estado"],
+                     "claveMunicipioInegi": m["mun"], "municipio": m["municipio"]}
+        ident = f"calendario-mx-{m['ent']}{m['mun']}-ggcmi-{i}-{j}"
+        if (m["ent"], m["mun"]) == CLAVE_ISLA:
+            entradas, adv_local, inegi = _isla_encima(entradas)
+            adv = adv_local + adv
+            ubicacion = {**ubicacion, **{k: v for k, v in inegi.items() if k != "pais"}}
+    elif lugar["iso"] == "MX":
+        adv.insert(0, {"codigo": "SIAP_SIN_MUNICIPIO", "severidad": "aviso",
+                       "mensaje": ("El punto no cae en un municipio con pareja en SIAP (zona urbana sin agricultura registrada, "
+                                   "nombre ambiguo o fuera de la rejilla): la presencia queda sin_dato. Ver sinPareja en "
+                                   "datos/calendario/siap-mexico.json.")})
     adv.append({"codigo": "PAIS_NATURAL_EARTH_110M", "severidad": "info",
                 "mensaje": "El pais sale de Natural Earth 1:110m. En la costa el limite es grueso."})
     adv.extend(_aviso_cercania(lugar))

@@ -74,7 +74,7 @@ export interface paths {
         };
         /**
          * Obtener Calendario
-         * @description Calendario de siembra del punto. Base mundial: GGCMI fase 3 en cualquier coordenada, tambien en Mexico. SIAP/INIFAP encima donde hay dato (hoy Isla).
+         * @description Calendario de siembra del punto. Base mundial: GGCMI fase 3 en cualquier coordenada, tambien en Mexico. SIAP (presencia) encima en cada municipio de Mexico e INIFAP (ventanas) en Isla.
          */
         get: operations["obtener_calendario_api_calendario_get"];
         put?: never;
