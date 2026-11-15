@@ -7,6 +7,7 @@ import { crearClienteMotor, type ClienteMotor } from '../motor/cliente';
 import type { ResultadoRanking } from '../motor/ranking';
 import type { VistaProximaTemporada } from '../motor/proxima';
 import { claveDeParcela, planesIniciales, reconstruirPlan } from './planes';
+import { useIdioma } from './i18n/Idioma';
 
 export interface DatosLaboratorio {
   esDemo: boolean; parcela: Parcela; serie: SerieClima; suelo: Suelo | null; catalogo: CatalogoCultivos; tabla: TablaSuelos; calendario: CalendarioLocal | null; capa: ProximaTemporadaAproximada | null; avisos: string[]; avisosDatos: AvisoDatos[];
@@ -45,6 +46,9 @@ export function conLimite<T>(promesa: Promise<T>, ms = 120000): Promise<T> {
     promesa.then((r) => { clearTimeout(reloj); resolve(r); }, (e: unknown) => { clearTimeout(reloj); reject(e); });
   });
 }
+/** Id del suelo de una parcela cuyo lugar no tiene datos de suelo: el contrato pide un id, y el suelo en si va `null` (NO_EVALUABLE). */
+export const SUELO_SIN_DATOS = 'sin-datos-de-suelo';
+
 export function useLaboratorio(parcela: Parcela | null, habilitado: boolean, ejemploId: string = EJEMPLO_INICIAL) {
   const [rotacion, setRotacion] = useState('R1');
   const [ciclo, setCiclo] = useState(1);
@@ -78,9 +82,8 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean, eje
         const tab = await import('../../../datos/catalogos/suelos.json');
         const respuesta = datosRemotos;
         if (!respuesta.clima.ok) throw new Error(respuesta.clima.error.motivo);
-        if (!respuesta.suelo.ok) throw new Error(respuesta.suelo.error.motivo);
         if (!respuesta.cultivos.ok) throw new Error(respuesta.cultivos.error.motivo);
-        siguiente = { esDemo: false, parcela: { ...parcela, sueloId: respuesta.suelo.datos.id }, serie: respuesta.clima.datos, suelo: respuesta.suelo.datos, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: respuesta.calendario?.ok ? respuesta.calendario.datos : null, avisos: [...remotos.avisos.map((a) => a.mensaje), ...(respuesta.calendario?.ok ? [] : ['Sin calendario local verificado para esta parcela.'])], avisosDatos: remotos.avisos };
+        siguiente = { esDemo: false, parcela: { ...parcela, sueloId: respuesta.suelo.ok ? respuesta.suelo.datos.id : SUELO_SIN_DATOS }, serie: respuesta.clima.datos, suelo: respuesta.suelo.ok ? respuesta.suelo.datos : null, capa: respuesta.proximaTemporada.ok ? respuesta.proximaTemporada.datos : null, catalogo: respuesta.cultivos.datos, tabla: tab.default as TablaSuelos, calendario: respuesta.calendario?.ok ? respuesta.calendario.datos : null, avisos: [...remotos.avisos.map((a) => a.mensaje), ...(respuesta.calendario?.ok ? [] : ['Sin calendario local verificado para esta parcela.'])], avisosDatos: remotos.avisos };
       }
       if (activo) setDatos({ clave: claveParcela, datos: siguiente });
     }
@@ -120,7 +123,9 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean, eje
     setHistoria({ clave: claveParcela, atras: [...pila.atras, planes], adelante: pila.adelante.slice(1) });
     volverA(siguiente);
   };
-  const clave = JSON.stringify([claveParcela, planes, revision, intento]);
+  const { idioma } = useIdioma();
+  // B7: el idioma entra a la clave para que las tarjetas del motor se rehagan al cambiarlo (docs/05, paso 8).
+  const clave = JSON.stringify([claveParcela, planes, revision, intento, idioma]);
   useEffect(() => {
     if (!actual || !planes.length) return;
     let activo = true; let cliente: ClienteMotor | undefined;
@@ -129,13 +134,13 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean, eje
       cliente = crearClienteMotor();
       const escenarios = await conLimite(cliente.escenarios(actual!.serie));
       for (const plan of planes) await conLimite(cliente.simular({ plan, parcela: actual!.parcela, suelo: actual!.suelo, catalogo: actual!.catalogo, tablaSuelos: actual!.tabla, calendario: actual!.calendario, escenarios: escenarios.escenarios, proximaTemporada: { capa: actual!.capa, serie: actual!.serie } }));
-      const ranking = await conLimite(cliente.rankear(planes.map((p) => p.rotacionId)));
+      const ranking = await conLimite(cliente.rankear(planes.map((p) => p.rotacionId), undefined, idioma));
       const proxima = await conLimite(cliente.proxima(actual!.capa, escenarios.escenarios));
       if (activo) setCalculo({ clave, ranking, proxima, cliente });
     }
     void simular().catch((e: unknown) => { if (activo) { setErrorMotor(e instanceof Error ? e.message : 'No se pudo simular.'); cliente?.terminar(); } });
     return () => { activo = false; cliente?.terminar(); };
-  }, [actual, planes, clave]);
+  }, [actual, planes, clave, idioma]);
   return { seleccion: { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda }, datos: actual, planes, calculo: calculo?.clave === clave && actual ? calculo : null, error: parcela && remotos.state === 'error' ? remotos.error.motivo : error || errorMotor, actualizar: (plan: PlanSiembra) => fijarPlanes(planes.map((p) => p.rotacionId === plan.rotacionId ? plan : p)),
     claveGuardado, deshacer, rehacer, puedeDeshacer: pila.atras.length > 0, puedeRehacer: pila.adelante.length > 0,
     agregarRotacion: (plan: PlanSiembra) => { fijarPlanes([...planes, plan]); setRotacion(plan.rotacionId); setCiclo(1); },

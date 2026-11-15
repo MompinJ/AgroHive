@@ -251,7 +251,7 @@ Mientras falten las tomas en inglés, los huecos pueden llevar el cartón del bl
 
 ## Presentación de respaldo (7 diapositivas)
 
-Por si el equipo la quiere además del video (la regla permite video de hasta 30 s **o** siete diapositivas, contando portada e introducción). En inglés. Se arma como deck (enlace aparte).
+Por si el equipo la quiere además del video (la regla permite video de hasta 30 s **o** siete diapositivas, contando portada e introducción). En inglés. **Ya está armada:** el deck, el texto vigente y las notas del orador están en [`presentacion.md`](presentacion.md), que sustituye a este esquema.
 
 1. **Cover** — AgroHive: Plan for the bad year. Team Code Hive · Field Shift challenge. Imagen: la escena 3D de un ejemplo.
 2. **The problem** — Rain-fed farmers bet a whole season on the weather. Planning for the best year breaks in the worst one. Climate has shifted; "it will rain as usual" is no longer a plan.

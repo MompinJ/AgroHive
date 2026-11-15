@@ -4,14 +4,16 @@
 import type { Advertencia } from '../../../contratos/tipos/contratos';
 import type { AvisoDatos } from '../api/datosParcela';
 import { NOMBRE_SEVERIDAD, resumirAvisos } from './avisos-datos';
+import { useIdioma } from '../ui/i18n/Idioma';
 
 export function AvisosDatos({ avisos, advertenciasParcela = [] }: { avisos: readonly AvisoDatos[]; advertenciasParcela?: readonly Advertencia[] }) {
+  const { t } = useIdioma();
   const r = resumirAvisos(avisos, advertenciasParcela);
   if (!r.maxima) return null;
   return (
     <details className={`escena-datos escena-datos-${r.maxima}`} open={r.maxima === 'critico'}>
       <summary>
-        <span className="escena-datos-titulo">Datos de esta parcela:</span>{' '}
+        <span className="escena-datos-titulo">{t('datos.titulo')}</span>{' '}
         {r.etiquetas.map((e) => (
           <span key={e.texto} className={`escena-etiqueta escena-etiqueta-${e.severidad}`}>
             {e.texto}
@@ -19,7 +21,7 @@ export function AvisosDatos({ avisos, advertenciasParcela = [] }: { avisos: read
         ))}
         {r.notas > 0 && (
           <span className="escena-etiqueta">
-            {r.notas} {r.notas === 1 ? 'nota' : 'notas'}
+            {r.notas} {r.notas === 1 ? t('datos.nota') : t('datos.notas')}
           </span>
         )}
       </summary>

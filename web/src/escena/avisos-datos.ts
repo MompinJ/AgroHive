@@ -2,6 +2,7 @@
 // usarDatosParcela (web/src/api/) mas lo que trae el terreno de la parcela. Puro: solo
 // agrupa y pone nombre corto; el texto completo es el de la API, sin cambiarlo.
 
+import { tt } from '../ui/i18n/actual';
 import type { Advertencia } from '../../../contratos/tipos/contratos';
 import type { AvisoDatos } from '../api/datosParcela';
 
@@ -20,23 +21,23 @@ export interface ResumenAvisos {
 
 const ORDEN: Record<Advertencia['severidad'], number> = { critico: 0, aviso: 1, info: 2 };
 
-export const NOMBRE_SEVERIDAD: Record<Advertencia['severidad'], string> = { critico: 'Importante', aviso: 'Aviso', info: 'Nota' };
+export const NOMBRE_SEVERIDAD: Record<Advertencia['severidad'], string> = { get critico() { return tt('sev.critico'); }, get aviso() { return tt('sev.aviso'); }, get info() { return tt('sev.info'); } };
 
 function etiquetaDe(a: AvisoDatos): string {
   const c = a.codigo.toUpperCase();
   if (a.origen === 'clima') {
-    if (c.includes('RESPALDO')) return 'Clima de respaldo (no NASA POWER)';
-    if (c.includes('IMERG') || c.includes('SATELITAL')) return 'Lluvia satelital (IMERG)';
-    return 'Clima: revisar aviso';
+    if (c.includes('RESPALDO')) return tt('datos.climaRespaldo');
+    if (c.includes('IMERG') || c.includes('SATELITAL')) return tt('datos.imerg');
+    return tt('datos.climaRevisar');
   }
-  if (a.origen === 'suelo') return c.includes('SUPUESTO') ? 'Suelo SUPUESTO' : 'Suelo: revisar aviso';
+  if (a.origen === 'suelo') return c.includes('SUPUESTO') ? tt('datos.sueloSupuesto') : tt('datos.sueloRevisar');
   if (a.origen === 'terreno') {
-    if (c === 'RESOLUCION_DEM_GRUESA') return 'Relieve interpolado';
-    if (c === 'ELEVACION_RESPALDO') return 'Elevación de respaldo';
-    if (c === 'ELEVACION_DE_EJEMPLO') return 'Elevación de ejemplo';
-    return 'Elevación: revisar aviso';
+    if (c === 'RESOLUCION_DEM_GRUESA') return tt('datos.relieve');
+    if (c === 'ELEVACION_RESPALDO') return tt('datos.elevRespaldo');
+    if (c === 'ELEVACION_DE_EJEMPLO') return tt('datos.elevEjemplo');
+    return tt('datos.elevRevisar');
   }
-  if (a.origen === 'proxima temporada') return c.includes('NO_DISPONIBLE') ? 'Próxima temporada no disponible' : 'Próxima temporada: revisar aviso';
+  if (a.origen === 'proxima temporada') return c.includes('NO_DISPONIBLE') ? tt('datos.proximaNo') : tt('datos.proximaRevisar');
   return `${a.origen}: revisar aviso`;
 }
 

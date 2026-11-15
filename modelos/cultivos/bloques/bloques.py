@@ -578,15 +578,15 @@ def al_pie(cols, size, dist):
     return resto
 
 
-def roseta(cols, ancho, alto, cols_cor, ancho_cor, alto_cor, arriba=None):
-    """Lechuga: roseta de hojas (1 cubo ancho y bajo) y, girado 45 grados sobre el mismo centro, el cogollo o la
-    segunda vuelta de hojas (1 cubo mas angosto y alto): desde arriba se lee como estrella de 8 puntas. arriba:
-    colores de la cara 'up' del cogollo (el corazon mas claro)."""
+def roseta(cols, ancho, alto, cols_cor, ancho_cor, alto_cor, arriba=None, giro_cor=45):
+    """Lechuga: roseta de hojas (1 cubo ancho y bajo) y, girado giro_cor grados (45 por omision) sobre el mismo
+    centro, el cogollo o la segunda vuelta de hojas (1 cubo mas angosto y alto): desde arriba se lee como estrella de
+    8 puntas. arriba: colores de la cara 'up' del cogollo (el corazon mas claro)."""
     def planta(m, nombre, base, rng, escala):
         yaw = r3(rng.uniform(-30, 30))
         caja_ajustada(m, nombre + '_hojas', base, (ancho * escala, alto * escala, ancho * escala), rng.choice(cols), yaw=yaw)
         e = caja_ajustada(m, nombre + '_cogollo', base, (ancho_cor * escala, alto_cor * escala, ancho_cor * escala),
-                          rng.choice(cols_cor), yaw=r3(yaw + 45 + rng.uniform(-8, 8)))
+                          rng.choice(cols_cor), yaw=r3(yaw + giro_cor + rng.uniform(-8, 8)))
         if arriba:
             pinta_cara(m, e, 'up', rng.choice(arriba))
     return planta
@@ -795,8 +795,10 @@ PLANTAS = {
     'cebada_brote': cereal(('cereal_hoja_light',), 1.4, 0.8, 0.6, ('cereal_hoja_light',), (0.5, 1.4, 0.25), (28, 42)),
     'cebada_crecimiento': cereal(('cereal_hoja', 'cereal_hoja_dark'), 2.8, 1.0, 0.8, ('cereal_hoja_light',),
                                  (0.55, 1.8, 0.55), (0, 8)),
-    'cebada_madurez': cereal(('hoja_seca',), 3.9, 0.9, 0.7, ('cebada_espiga',), (0.65, 2.2, 0.65), (95, 115),
-                             punta_col='cebada_arista'),
+    # MF11 (Mompin): se confundia con el trigo. Madurez = la mas BAJA de los tres cereales, paja palida, macollo
+    # recargado y la espiga COLGANDO hacia abajo (gancho), no erguida.
+    'cebada_madurez': cereal(('hoja_seca_light', 'hoja_seca'), 2.9, 0.9, 0.7, ('cebada_espiga',), (0.55, 2.3, 0.55),
+                             (128, 145), tilt=(14, 24), punta_col='cebada_arista'),
     'cebada_podrida': cereal(('hoja_seca_dark', 'podrido'), 3.6, 0.9, 0.7, ('podrido', 'moho'), (0.6, 2.0, 0.6), (15, 30),
                              tilt=(55, 72), punta_col='moho_dark'),
     # trigo (macollo; espiga compacta y erguida; madurez dorada intensa)
@@ -804,8 +806,9 @@ PLANTAS = {
     'trigo_brote': cereal(('cereal_hoja',), 1.5, 0.8, 0.6, ('cereal_hoja_light',), (0.5, 1.3, 0.25), (22, 36)),
     'trigo_crecimiento': cereal(('cereal_hoja', 'cereal_hoja_dark'), 2.8, 1.0, 0.8, ('cereal_hoja_light',),
                                 (0.8, 1.3, 0.8), (0, 5)),
-    'trigo_madurez': cereal(('trigo_espiga_dark',), 3.7, 0.9, 0.7, ('trigo_espiga', 'trigo_espiga_light'), (0.9, 1.7, 0.9),
-                            (0, 5), punta_col='trigo_espiga_light'),
+    # MF11: el mas ALTO y derecho de los cereales, con la espiga gruesa y erguida (columna dorada con remate claro).
+    'trigo_madurez': cereal(('trigo_espiga_dark',), 4.7, 1.0, 0.8, ('trigo_espiga', 'trigo_espiga_light'), (1.1, 2.1, 1.1),
+                            (0, 3), tilt=(0, 3), punta_col='trigo_espiga_light'),
     'trigo_podrida': cereal(('hoja_seca_dark', 'podrido'), 3.6, 0.9, 0.7, ('trigo_espiga_dark', 'moho_dark'), (0.9, 1.6, 0.9),
                             (5, 15), tilt=(55, 72), punta_col='moho'),
     # avena (macollo; panicula abierta y ancha, que cabecea, con espiguillas colgantes; madurez paja clara)
@@ -983,7 +986,8 @@ PLANTAS = {
     'lechuga_brote': roseta(('lechuga_hoja',), 1.4, 0.45, ('lechuga_hoja_light',), 1.0, 0.7),
     'lechuga_crecimiento': roseta(('lechuga_hoja', 'lechuga_hoja_dark'), 2.5, 0.7, ('lechuga_hoja',), 2.0, 1.1,
                                   arriba=('lechuga_hoja_light', 'lechuga_hoja')),
-    'lechuga_madurez': roseta(('lechuga_hoja_dark', 'lechuga_hoja'), 2.6, 0.7, ('lechuga_hoja',), 1.9, 1.9,
+    # MF11: roseton suelto y abierto: hojas anchas bajas y un cogollo chato girado 45 grados (estrella), sin bola.
+    'lechuga_madurez': roseta(('lechuga_hoja_dark', 'lechuga_hoja'), 3.0, 0.8, ('lechuga_hoja',), 2.3, 1.2,
                               arriba=('lechuga_hoja_light',)),
     'lechuga_podrida': roseta(('hoja_marchita', 'hoja_seca'), 2.5, 0.4, ('podrido', 'lechuga_hoja_dark', 'podrido_dark'), 1.6, 0.9,
                               arriba=('moho', 'moho_light', 'podrido_dark')),
@@ -1018,8 +1022,11 @@ PLANTAS = {
     'brocoli_brote': roseta(('chile_hoja',), 1.4, 0.6, ('chile_hoja_light',), 0.9, 1.0),
     'brocoli_crecimiento': roseta(('chile_hoja', 'chile_hoja_dark'), 2.4, 1.4, ('chile_hoja',), 1.7, 1.9,
                                   arriba=('chile_hoja_light', 'chile_hoja')),
-    'brocoli_madurez': roseta(('chile_hoja', 'chile_hoja_dark'), 2.6, 1.7, ('brocoli_cabeza',), 1.5, 2.4,
-                              arriba=('brocoli_cabeza_dark', 'brocoli_cabeza_dark', 'brocoli_cabeza')),
+    # MF11: se confundia con la espinaca. Madurez = arbolito: columna de hojas glaucas (gris azulado, no verde oscuro)
+    # y encima la cabeza oscura mas ancha que la columna; el mas alto de las brasicas.
+    'brocoli_madurez': tallo_punta(('brasica_hoja', 'brasica_hoja_dark'), 2.3, 1.3, copa(
+        ('brocoli_cabeza_dark', 'brocoli_cabeza_dark', 'brocoli_cabeza'), (2.3, 1.8, 2.3), t=(-4, 4),
+        arriba=('brocoli_cabeza', 'brocoli_cabeza_dark')), tilt=(0, 4)),
     'brocoli_podrida': roseta(('hoja_marchita', 'hoja_seca', 'chile_hoja_dark'), 2.4, 0.9, ('podrido', 'brocoli_cabeza_dark'),
                               1.3, 1.6, arriba=('yellow', 'moho', 'podrido_dark')),
     # col (hojas glaucas anchas y abiertas casi al ras; madurez: bola lisa verde claro; podrida: bola hundida con moho)
@@ -1027,8 +1034,10 @@ PLANTAS = {
     'col_brote': roseta(('brasica_hoja',), 1.6, 0.45, ('brasica_hoja_light',), 1.0, 0.7),
     'col_crecimiento': roseta(('brasica_hoja', 'brasica_hoja_dark'), 2.6, 0.7, ('brasica_hoja_light',), 1.6, 1.2,
                               arriba=('brasica_hoja_light', 'col_cabeza')),
-    'col_madurez': roseta(('brasica_hoja_dark', 'brasica_hoja'), 2.7, 0.7, ('col_cabeza',), 1.9, 1.6,
-                          arriba=('col_cabeza',)),
+    # MF11: se confundia con coliflor y lechuga. Madurez = plato de hojas glaucas casi al ras y encima la bola clara
+    # compacta (cubo casi tan alto como ancho, alineado con el plato, no estrella).
+    'col_madurez': roseta(('brasica_hoja_dark', 'brasica_hoja'), 3.1, 0.4, ('col_cabeza',), 1.9, 1.8,
+                          arriba=('col_cabeza',), giro_cor=0),
     'col_podrida': roseta(('hoja_marchita', 'hoja_seca', 'hoja_seca_dark'), 2.6, 0.4, ('podrido', 'col_cabeza', 'podrido_dark'),
                           1.8, 1.1, arriba=('moho', 'moho_light', 'podrido_dark')),
     # coliflor (hojas glaucas erguidas que abrazan la pella; madurez: pella crema que asoma arriba; podrida: pella
@@ -1037,15 +1046,18 @@ PLANTAS = {
     'coliflor_brote': roseta(('chicharo_hoja_light',), 1.3, 0.7, ('chicharo_hoja',), 0.8, 1.1),
     'coliflor_crecimiento': roseta(('chicharo_hoja', 'chicharo_hoja_dark'), 2.2, 1.8, ('chicharo_hoja',), 1.5, 2.2,
                                    arriba=('chicharo_hoja_light',)),
-    'coliflor_madurez': roseta(('chicharo_hoja', 'chicharo_hoja_dark'), 2.4, 2.0, ('coliflor_cabeza_dark',), 1.6, 2.4,
-                               arriba=('coliflor_cabeza',)),
+    # MF11: columna alta y angosta de hojas erguidas y la pella CREMA que asoma bien por encima (la mas alta de las
+    # tres cabezas claras).
+    'coliflor_madurez': roseta(('chicharo_hoja', 'chicharo_hoja_dark'), 2.4, 2.5, ('coliflor_cabeza',), 1.5, 3.3,
+                               arriba=('coliflor_cabeza',), giro_cor=0),
     'coliflor_podrida': roseta(('hoja_marchita', 'hoja_seca_dark', 'hoja_seca'), 2.2, 1.0, ('coliflor_cabeza_dark', 'podrido'),
                                1.4, 1.4, arriba=('podrido', 'moho', 'moho_dark')),
     # espinaca (roseta baja de hojas lisas verde oscuro brillante; podrida: espigada, roseta seca y tallo floral)
     'espinaca_siembra': semilla(('hoja_seca', 'hoja_seca_light'), (0.5, 0.35, 0.5)),
     'espinaca_brote': abanico(('espinaca_hoja',), (0.6, 1.3, 0.3), (28, 42)),
     'espinaca_crecimiento': roseta(('espinaca_hoja', 'espinaca_hoja_dark'), 2.0, 0.5, ('espinaca_hoja',), 1.5, 0.8),
-    'espinaca_madurez': roseta(('espinaca_hoja_dark',), 2.5, 0.6, ('espinaca_hoja_dark', 'espinaca_hoja'), 1.9, 1.0,
+    # MF11: tapete muy bajo, ancho y plano (estrella de 8 puntas casi al ras), sin cabeza.
+    'espinaca_madurez': roseta(('espinaca_hoja_dark',), 3.2, 0.4, ('espinaca_hoja_dark', 'espinaca_hoja'), 2.9, 0.65,
                                arriba=('espinaca_hoja',)),
     'espinaca_podrida': mata(('hoja_marchita', 'hoja_seca_dark', 'podrido'), 2.1, 0.4, 2.0,
                              con_arriba(('hoja_seca_light', 'hoja_marchita'), pieza(('hoja_marchita', 'hoja_seca'), 0.5, 0.4, 3.0,

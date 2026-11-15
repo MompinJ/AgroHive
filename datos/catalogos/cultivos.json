@@ -2,7 +2,7 @@
   "meta": {
     "versionContrato": "0.16.0",
     "esEjemplo": false,
-    "aviso": "Parametros de tablas generales (FAO-56, FAO EcoCrop), no calibrados para Isla, Veracruz. Requieren validacion agronomica local."
+    "aviso": "Parametros de tablas generales (FAO-56, FAO EcoCrop), no calibrados para el lugar de la parcela. Requieren validacion agronomica local."
   },
   "versionCatalogo": "0.1.0",
   "cultivos": [
@@ -23,7 +23,7 @@
           "cita": "Tabla 11, fila 'Maize (grain)', region 'Nigeria (humid)', siembra 'June'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano de Isla, Veracruz."
+          "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano (siembra hacia junio)."
         },
         "etiqueta": "FUENTE"
       },
@@ -38,7 +38,7 @@
             "cita": "Tabla 11, fila 'Maize (grain)', region 'Nigeria (humid)', siembra 'June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano de Isla, Veracruz."
+            "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano (siembra hacia junio)."
           },
           "etiqueta": "FUENTE"
         },
@@ -52,7 +52,7 @@
             "cita": "Tabla 11, fila 'Maize (grain)', region 'Nigeria (humid)', siembra 'June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano de Isla, Veracruz."
+            "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano (siembra hacia junio)."
           },
           "etiqueta": "FUENTE"
         },
@@ -66,7 +66,7 @@
             "cita": "Tabla 11, fila 'Maize (grain)', region 'Nigeria (humid)', siembra 'June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano de Isla, Veracruz."
+            "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano (siembra hacia junio)."
           },
           "etiqueta": "FUENTE"
         },
@@ -80,7 +80,7 @@
             "cita": "Tabla 11, fila 'Maize (grain)', region 'Nigeria (humid)', siembra 'June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano de Isla, Veracruz."
+            "nota": "Unica fila de tropico humedo con siembra en junio, analoga al temporal primavera-verano (siembra hacia junio)."
           },
           "etiqueta": "FUENTE"
         }
@@ -770,7 +770,7 @@
           "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+          "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
         },
         "etiqueta": "FUENTE"
       },
@@ -785,7 +785,7 @@
             "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
           },
           "etiqueta": "FUENTE"
         },
@@ -799,7 +799,7 @@
             "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
           },
           "etiqueta": "FUENTE"
         },
@@ -813,7 +813,7 @@
             "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
           },
           "etiqueta": "FUENTE"
         },
@@ -827,7 +827,7 @@
             "cita": "Tabla 11, fila 'Sweet peppers (bell)', region 'Europe and Medit.', siembra 'April/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano de Isla. La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
+            "nota": "Tabla 11 no tiene fila tropical para pimiento; se eligio la de siembra abril/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La etapa inicial se imprime '25/30' y el total 125 solo cuadra con 30, asi que se usa 30."
           },
           "etiqueta": "FUENTE"
         }
@@ -1019,7 +1019,7 @@
           "cita": "Tabla 11, fila 'Sorghum', region 'USA, Pakis., Med.', siembra 'May/June'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
+          "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
         },
         "etiqueta": "FUENTE"
       },
@@ -1034,7 +1034,7 @@
             "cita": "Tabla 11, fila 'Sorghum', region 'USA, Pakis., Med.', siembra 'May/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
+            "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
           },
           "etiqueta": "FUENTE"
         },
@@ -1048,7 +1048,7 @@
             "cita": "Tabla 11, fila 'Sorghum', region 'USA, Pakis., Med.', siembra 'May/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
+            "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
           },
           "etiqueta": "FUENTE"
         },
@@ -1062,7 +1062,7 @@
             "cita": "Tabla 11, fila 'Sorghum', region 'USA, Pakis., Med.', siembra 'May/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
+            "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
           },
           "etiqueta": "FUENTE"
         },
@@ -1076,7 +1076,7 @@
             "cita": "Tabla 11, fila 'Sorghum', region 'USA, Pakis., Med.', siembra 'May/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
+            "nota": "Tabla 11 no tiene fila tropical para sorgo; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/35/40/30 pero un total de 130 dias: las cuatro etapas suman 125. Se guardan las etapas tal como estan impresas y el ciclo es su suma (125); la diferencia de 5 dias queda por cotejar contra el PDF de FAO-56 (la pagina web es una version con OCR corregido a mano)."
           },
           "etiqueta": "FUENTE"
         }
@@ -1249,7 +1249,7 @@
       "modelo3d": {
         "prefijo": "sorgo"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias; la tabla imprime 130). EcoCrop da un ciclo de 90 a 300 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. EcoCrop trae tres filas de la misma especie por altitud (baja, media, alta); se uso la de altitud baja por ser Isla zona de tierras bajas del sur de Veracruz (la altitud exacta de la parcela no se verifico). Una persona debe revisarlo. Nombre en ingles 'Sorghum': FAO-56 Tabla 11, fila 'Sorghum'."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias; la tabla imprime 130). EcoCrop da un ciclo de 90 a 300 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. EcoCrop trae tres filas de la misma especie por altitud (baja, media, alta); se uso la de altitud baja por ser la zona de referencia del catalogo (tierras bajas del sur de Veracruz; la altitud exacta no se verifico). Una persona debe revisarlo. Nombre en ingles 'Sorghum': FAO-56 Tabla 11, fila 'Sorghum'."
     },
     {
       "id": "sandia",
@@ -1517,7 +1517,7 @@
           "cita": "Tabla 11, fila 'Sweet potato', region 'Tropical regions', siembra 'Rainy seas.'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano de Isla. La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
+          "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
         },
         "etiqueta": "FUENTE"
       },
@@ -1532,7 +1532,7 @@
             "cita": "Tabla 11, fila 'Sweet potato', region 'Tropical regions', siembra 'Rainy seas.'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano de Isla. La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
+            "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
           },
           "etiqueta": "FUENTE"
         },
@@ -1546,7 +1546,7 @@
             "cita": "Tabla 11, fila 'Sweet potato', region 'Tropical regions', siembra 'Rainy seas.'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano de Isla. La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
+            "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
           },
           "etiqueta": "FUENTE"
         },
@@ -1560,7 +1560,7 @@
             "cita": "Tabla 11, fila 'Sweet potato', region 'Tropical regions', siembra 'Rainy seas.'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano de Isla. La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
+            "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
           },
           "etiqueta": "FUENTE"
         },
@@ -1574,7 +1574,7 @@
             "cita": "Tabla 11, fila 'Sweet potato', region 'Tropical regions', siembra 'Rainy seas.'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano de Isla. La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
+            "nota": "Unica fila tropical de camote (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). La otra fila es de siembra en abril en el Mediterraneo (150 dias)."
           },
           "etiqueta": "FUENTE"
         }
@@ -1747,7 +1747,7 @@
       "modelo3d": {
         "prefijo": "camote"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 80 a 170 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra camote en Isla entre 2021 y 2025; si lo registra en San Andres Tuxtla y Santiago Tuxtla, del mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Sweet potato': FAO-56 Tabla 11, fila 'Sweet potato'."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 125 dias). EcoCrop da un ciclo de 80 a 170 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP (municipio de Isla, Veracruz; calendario local) no registra camote entre 2021 y 2025; si lo registra en San Andres Tuxtla y Santiago Tuxtla, del mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Sweet potato': FAO-56 Tabla 11, fila 'Sweet potato'."
     },
     {
       "id": "cacahuate",
@@ -1766,7 +1766,7 @@
           "cita": "Tabla 11, fila 'Groundnut', region 'West Africa', siembra 'Dry season'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias de Isla: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
+          "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
         },
         "etiqueta": "FUENTE"
       },
@@ -1781,7 +1781,7 @@
             "cita": "Tabla 11, fila 'Groundnut', region 'West Africa', siembra 'Dry season'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias de Isla: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
+            "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
           },
           "etiqueta": "FUENTE"
         },
@@ -1795,7 +1795,7 @@
             "cita": "Tabla 11, fila 'Groundnut', region 'West Africa', siembra 'Dry season'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias de Isla: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
+            "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
           },
           "etiqueta": "FUENTE"
         },
@@ -1809,7 +1809,7 @@
             "cita": "Tabla 11, fila 'Groundnut', region 'West Africa', siembra 'Dry season'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias de Isla: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
+            "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
           },
           "etiqueta": "FUENTE"
         },
@@ -1823,7 +1823,7 @@
             "cita": "Tabla 11, fila 'Groundnut', region 'West Africa', siembra 'Dry season'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias de Isla: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
+            "nota": "Tabla 11 no tiene fila tropical etiquetada para cacahuate; se eligio la de Africa Occidental (clima calido). Su fecha impresa es 'Dry season' (temporada seca), no el temporal de lluvias: es una analogia de ciclo, no de calendario. Las otras filas son de latitudes altas y del Mediterraneo. La extraccion de la pagina parte las fechas en celdas, asi que esta asignacion es una lectura que una persona debe cotejar."
           },
           "etiqueta": "FUENTE"
         }
@@ -1996,7 +1996,7 @@
       "modelo3d": {
         "prefijo": "cacahuate"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 90 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra cacahuate en Isla entre 2021 y 2025; si lo registra en Catemaco, del mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Peanut': FAO-56 Tabla 12, fila 'Groundnut (Peanut)'; el nombre entre parentesis de 'Groundnut (Peanut)', el usual en America."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 130 dias). EcoCrop da un ciclo de 90 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP (municipio de Isla, Veracruz; calendario local) no registra cacahuate entre 2021 y 2025; si lo registra en Catemaco, del mismo distrito (DDR 175). Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Peanut': FAO-56 Tabla 12, fila 'Groundnut (Peanut)'; el nombre entre parentesis de 'Groundnut (Peanut)', el usual en America."
     },
     {
       "id": "soya",
@@ -2015,7 +2015,7 @@
           "cita": "Tabla 11, fila 'Soybeans', region 'Tropics', siembra 'Dec'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno en Isla). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
+          "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -2030,7 +2030,7 @@
             "cita": "Tabla 11, fila 'Soybeans', region 'Tropics', siembra 'Dec'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno en Isla). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
+            "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -2044,7 +2044,7 @@
             "cita": "Tabla 11, fila 'Soybeans', region 'Tropics', siembra 'Dec'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno en Isla). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
+            "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -2058,7 +2058,7 @@
             "cita": "Tabla 11, fila 'Soybeans', region 'Tropics', siembra 'Dec'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno en Isla). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
+            "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -2072,7 +2072,7 @@
             "cita": "Tabla 11, fila 'Soybeans', region 'Tropics', siembra 'Dec'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno en Isla). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
+            "nota": "Unica fila tropical de soya; su siembra impresa es diciembre (otono-invierno). Las otras filas son del centro de EUA (mayo, 140 d) y de Japon (junio, 150 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -2245,7 +2245,7 @@
       "modelo3d": {
         "prefijo": "soya"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 85 dias). EcoCrop da un ciclo de 75 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra soya en Isla entre 2021 y 2025; en Veracruz solo en Panuco, al norte del estado. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Soybean': FAO-56 Tabla 12, fila 'Soybeans'; singular de 'Soybeans'."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 85 dias). EcoCrop da un ciclo de 75 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP (municipio de Isla, Veracruz; calendario local) no registra soya entre 2021 y 2025; en Veracruz solo en Panuco, al norte del estado. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Soybean': FAO-56 Tabla 12, fila 'Soybeans'; singular de 'Soybeans'."
     },
     {
       "id": "caupi",
@@ -2513,7 +2513,7 @@
           "cita": "Tabla 11, fila 'Faba bean, broad bean', region 'Europe', siembra 'May'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
+          "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -2528,7 +2528,7 @@
             "cita": "Tabla 11, fila 'Faba bean, broad bean', region 'Europe', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
+            "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -2542,7 +2542,7 @@
             "cita": "Tabla 11, fila 'Faba bean, broad bean', region 'Europe', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
+            "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -2556,7 +2556,7 @@
             "cita": "Tabla 11, fila 'Faba bean, broad bean', region 'Europe', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
+            "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -2570,7 +2570,7 @@
             "cita": "Tabla 11, fila 'Faba bean, broad bean', region 'Europe', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
+            "nota": "Tabla 11 no tiene fila tropical para haba; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y noviembre en Europa (haba de invierno, 235 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -2743,7 +2743,7 @@
       "modelo3d": {
         "prefijo": "haba"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 100 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la subfila de grano seco (Dry/Seed) porque SIAP registra 'haba grano'; la de cosecha en fresco tiene Kc end 1.10. SIAP no registra haba en Isla entre 2021 y 2025. Nombre en ingles 'Faba bean': FAO-56 Tabla 11, fila 'Faba bean, broad bean'; primer nombre de 'Faba bean, broad bean'."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 90 dias). EcoCrop da un ciclo de 100 a 150 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Se usa la subfila de grano seco (Dry/Seed) porque SIAP registra 'haba grano'; la de cosecha en fresco tiene Kc end 1.10. SIAP (municipio de Isla, Veracruz; calendario local) no registra haba entre 2021 y 2025. Nombre en ingles 'Faba bean': FAO-56 Tabla 11, fila 'Faba bean, broad bean'; primer nombre de 'Faba bean, broad bean'."
     },
     {
       "id": "chicharo",
@@ -2762,7 +2762,7 @@
           "cita": "Tabla 11, fila 'Peas', region 'Europe', siembra 'May'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
+          "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -2777,7 +2777,7 @@
             "cita": "Tabla 11, fila 'Peas', region 'Europe', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
+            "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -2791,7 +2791,7 @@
             "cita": "Tabla 11, fila 'Peas', region 'Europe', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
+            "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -2805,7 +2805,7 @@
             "cita": "Tabla 11, fila 'Peas', region 'Europe', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
+            "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -2819,7 +2819,7 @@
             "cita": "Tabla 11, fila 'Peas', region 'Europe', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
+            "nota": "Tabla 11 no tiene fila tropical para chicharo; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo/abril en el Mediterraneo (100 d) y abril en Idaho (110 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -3011,7 +3011,7 @@
           "cita": "Tabla 11, fila 'Lentil', region 'Europe', siembra 'April'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre/noviembre en region arida (170 d)."
+          "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre/noviembre en region arida (170 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -3026,7 +3026,7 @@
             "cita": "Tabla 11, fila 'Lentil', region 'Europe', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre/noviembre en region arida (170 d)."
+            "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre/noviembre en region arida (170 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -3040,7 +3040,7 @@
             "cita": "Tabla 11, fila 'Lentil', region 'Europe', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre/noviembre en region arida (170 d)."
+            "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre/noviembre en region arida (170 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -3054,7 +3054,7 @@
             "cita": "Tabla 11, fila 'Lentil', region 'Europe', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre/noviembre en region arida (170 d)."
+            "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre/noviembre en region arida (170 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -3068,7 +3068,7 @@
             "cita": "Tabla 11, fila 'Lentil', region 'Europe', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre/noviembre en region arida (170 d)."
+            "nota": "Tabla 11 no tiene fila tropical para lenteja; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre/noviembre en region arida (170 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -3260,7 +3260,7 @@
           "cita": "Tabla 11, fila 'Beans (green)', region 'Calif., Egypt, Lebanon', siembra 'Aug/Sep'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
+          "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -3275,7 +3275,7 @@
             "cita": "Tabla 11, fila 'Beans (green)', region 'Calif., Egypt, Lebanon', siembra 'Aug/Sep'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
+            "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -3289,7 +3289,7 @@
             "cita": "Tabla 11, fila 'Beans (green)', region 'Calif., Egypt, Lebanon', siembra 'Aug/Sep'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
+            "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -3303,7 +3303,7 @@
             "cita": "Tabla 11, fila 'Beans (green)', region 'Calif., Egypt, Lebanon', siembra 'Aug/Sep'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
+            "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -3317,7 +3317,7 @@
             "cita": "Tabla 11, fila 'Beans (green)', region 'Calif., Egypt, Lebanon', siembra 'Aug/Sep'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
+            "nota": "Tabla 11 no tiene fila tropical para ejote; se eligio la de siembra agosto/septiembre, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo en California y el Mediterraneo (90 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -3509,7 +3509,7 @@
           "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+          "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
         },
         "etiqueta": "FUENTE"
       },
@@ -3524,7 +3524,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         },
@@ -3538,7 +3538,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         },
@@ -3552,7 +3552,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         },
@@ -3566,7 +3566,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         }
@@ -3758,7 +3758,7 @@
           "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+          "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
         },
         "etiqueta": "FUENTE"
       },
@@ -3773,7 +3773,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         },
@@ -3787,7 +3787,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         },
@@ -3801,7 +3801,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         },
@@ -3815,7 +3815,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         }
@@ -4007,7 +4007,7 @@
           "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+          "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
         },
         "etiqueta": "FUENTE"
       },
@@ -4022,7 +4022,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         },
@@ -4036,7 +4036,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         },
@@ -4050,7 +4050,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         },
@@ -4064,7 +4064,7 @@
             "cita": "Tabla 11, fila 'Barley/Oats/Wheat', region 'East Africa', siembra 'July'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano de Isla. La tabla no dice la altitud de esa fila: una persona debe revisarlo."
+            "nota": "Tabla 11 da una sola fila para cebada, avena y trigo. De sus filas de latitudes tropicales (India central, noviembre, 120 d; Africa Oriental, julio, 150 d) se eligio la de julio, la mas cercana al temporal primavera-verano (siembra hacia junio). La tabla no dice la altitud de esa fila: una persona debe revisarlo."
           },
           "etiqueta": "FUENTE"
         }
@@ -4505,7 +4505,7 @@
           "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+          "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
         },
         "etiqueta": "FUENTE"
       },
@@ -4520,7 +4520,7 @@
             "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
           },
           "etiqueta": "FUENTE"
         },
@@ -4534,7 +4534,7 @@
             "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
           },
           "etiqueta": "FUENTE"
         },
@@ -4548,7 +4548,7 @@
             "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
           },
           "etiqueta": "FUENTE"
         },
@@ -4562,7 +4562,7 @@
             "cita": "Tabla 11, fila 'Cassava: year 1', region 'Tropical regions', siembra 'Rainy season'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
+            "nota": "Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano (siembra hacia junio). Se usa el primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF."
           },
           "etiqueta": "FUENTE"
         }
@@ -4984,7 +4984,7 @@
       "modelo3d": {
         "prefijo": "cana"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 480 dias). EcoCrop da un ciclo de 210 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Cultivo perenne: SIAP la registra en Isla en el ciclo 'Perennes', no por temporada PV u OI. EcoCrop trae dos filas 'Sugarcane'; se uso la de Saccharum officinarum (la otra es S. robustum). Nombre en ingles 'Sugarcane': FAO EcoCrop, fila 'Sugarcane'."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 480 dias). EcoCrop da un ciclo de 210 a 365 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. Cultivo perenne: SIAP (municipio de Isla, Veracruz; calendario local) la registra en el ciclo 'Perennes', no por temporada PV u OI. EcoCrop trae dos filas 'Sugarcane'; se uso la de Saccharum officinarum (la otra es S. robustum). Nombre en ingles 'Sugarcane': FAO EcoCrop, fila 'Sugarcane'."
     },
     {
       "id": "ajonjoli",
@@ -5003,7 +5003,7 @@
           "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+          "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
         },
         "etiqueta": "FUENTE"
       },
@@ -5018,7 +5018,7 @@
             "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
           },
           "etiqueta": "FUENTE"
         },
@@ -5032,7 +5032,7 @@
             "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
           },
           "etiqueta": "FUENTE"
         },
@@ -5046,7 +5046,7 @@
             "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
           },
           "etiqueta": "FUENTE"
         },
@@ -5060,7 +5060,7 @@
             "cita": "Tabla 11, fila 'Sesame', region 'China', siembra 'June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
+            "nota": "Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano (siembra hacia junio). La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56."
           },
           "etiqueta": "FUENTE"
         }
@@ -5233,7 +5233,7 @@
       "modelo3d": {
         "prefijo": "ajonjoli"
       },
-      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 110 dias; la tabla imprime 100). EcoCrop da un ciclo de 40 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP no registra ajonjoli en Isla entre 2021 y 2025; en Veracruz si, en 7 a 9 municipios. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Sesame': FAO-56 Tabla 11, fila 'Sesame'."
+      "notas": "Ciclo y etapas de FAO-56 Tabla 11 (total 110 dias; la tabla imprime 100). EcoCrop da un ciclo de 40 a 180 dias para la especie, demasiado amplio para el motor. Etapas sensibles al deficit: pendiente de fuente (FAO-33 / Ky), no se fijan aqui. SIAP (municipio de Isla, Veracruz; calendario local) no registra ajonjoli entre 2021 y 2025; en Veracruz si, en 7 a 9 municipios. Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv. Nombre en ingles 'Sesame': FAO-56 Tabla 11, fila 'Sesame'."
     },
     {
       "id": "girasol",
@@ -5501,7 +5501,7 @@
           "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+          "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -5516,7 +5516,7 @@
             "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -5530,7 +5530,7 @@
             "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -5544,7 +5544,7 @@
             "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -5558,7 +5558,7 @@
             "cita": "Tabla 11, fila 'Cotton', region 'Egypt; Pakistan; Calif.', siembra 'Mar-May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
+            "nota": "Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el desierto de California (225 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -5750,7 +5750,7 @@
           "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+          "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -5765,7 +5765,7 @@
             "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -5779,7 +5779,7 @@
             "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -5793,7 +5793,7 @@
             "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -5807,7 +5807,7 @@
             "cita": "Tabla 11, fila 'Safflower', region 'California, USA', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
+            "nota": "Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -5999,7 +5999,7 @@
           "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+          "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno). La otra es de marzo en clima (semi)arido (180 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -6014,7 +6014,7 @@
             "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno). La otra es de marzo en clima (semi)arido (180 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -6028,7 +6028,7 @@
             "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno). La otra es de marzo en clima (semi)arido (180 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -6042,7 +6042,7 @@
             "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno). La otra es de marzo en clima (semi)arido (180 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -6056,7 +6056,7 @@
             "cita": "Tabla 11, fila 'Castor beans', region 'Indonesia', siembra 'Nov.'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."
+            "nota": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno). La otra es de marzo en clima (semi)arido (180 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -6497,7 +6497,7 @@
           "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+          "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
         },
         "etiqueta": "FUENTE"
       },
@@ -6512,7 +6512,7 @@
             "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
           },
           "etiqueta": "FUENTE"
         },
@@ -6526,7 +6526,7 @@
             "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
           },
           "etiqueta": "FUENTE"
         },
@@ -6540,7 +6540,7 @@
             "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
           },
           "etiqueta": "FUENTE"
         },
@@ -6554,7 +6554,7 @@
             "cita": "Tabla 11, fila 'Potato', region 'Continental Climate', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
+            "nota": "Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45)."
           },
           "etiqueta": "FUENTE"
         }
@@ -6746,7 +6746,7 @@
           "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+          "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de abril y diciembre (100 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -6761,7 +6761,7 @@
             "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de abril y diciembre (100 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -6775,7 +6775,7 @@
             "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de abril y diciembre (100 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -6789,7 +6789,7 @@
             "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de abril y diciembre (100 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -6803,7 +6803,7 @@
             "cita": "Tabla 11, fila 'Squash, Zucchini', region 'Medit.; Europe', siembra 'May/June'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d)."
+            "nota": "Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de abril y diciembre (100 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -6995,7 +6995,7 @@
           "cita": "Tabla 11, fila 'Onion (dry)', region 'Mediterranean', siembra 'April'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre o enero en region arida y California (210 d)."
+          "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre o enero en region arida y California (210 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -7010,7 +7010,7 @@
             "cita": "Tabla 11, fila 'Onion (dry)', region 'Mediterranean', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre o enero en region arida y California (210 d)."
+            "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre o enero en region arida y California (210 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7024,7 +7024,7 @@
             "cita": "Tabla 11, fila 'Onion (dry)', region 'Mediterranean', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre o enero en region arida y California (210 d)."
+            "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre o enero en region arida y California (210 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7038,7 +7038,7 @@
             "cita": "Tabla 11, fila 'Onion (dry)', region 'Mediterranean', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre o enero en region arida y California (210 d)."
+            "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre o enero en region arida y California (210 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7052,7 +7052,7 @@
             "cita": "Tabla 11, fila 'Onion (dry)', region 'Mediterranean', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. La otra es de octubre o enero en region arida y California (210 d)."
+            "nota": "Tabla 11 no tiene fila tropical para cebolla; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de octubre o enero en region arida y California (210 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -7244,7 +7244,7 @@
           "cita": "Tabla 11, fila 'Cucumber', region 'Arid Region', siembra 'June/Aug'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano de Isla. La otra es de noviembre o febrero (130 d)."
+          "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de noviembre o febrero (130 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -7259,7 +7259,7 @@
             "cita": "Tabla 11, fila 'Cucumber', region 'Arid Region', siembra 'June/Aug'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano de Isla. La otra es de noviembre o febrero (130 d)."
+            "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de noviembre o febrero (130 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7273,7 +7273,7 @@
             "cita": "Tabla 11, fila 'Cucumber', region 'Arid Region', siembra 'June/Aug'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano de Isla. La otra es de noviembre o febrero (130 d)."
+            "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de noviembre o febrero (130 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7287,7 +7287,7 @@
             "cita": "Tabla 11, fila 'Cucumber', region 'Arid Region', siembra 'June/Aug'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano de Isla. La otra es de noviembre o febrero (130 d)."
+            "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de noviembre o febrero (130 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7301,7 +7301,7 @@
             "cita": "Tabla 11, fila 'Cucumber', region 'Arid Region', siembra 'June/Aug'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano de Isla. La otra es de noviembre o febrero (130 d)."
+            "nota": "Tabla 11 no tiene fila tropical para pepino; se eligio la de siembra junio/agosto, que coincide con el temporal primavera-verano (siembra hacia junio). La otra es de noviembre o febrero (130 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -7493,7 +7493,7 @@
           "cita": "Tabla 11, fila 'Sweet melons', region 'Mediterranean', siembra 'May'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
+          "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -7508,7 +7508,7 @@
             "cita": "Tabla 11, fila 'Sweet melons', region 'Mediterranean', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
+            "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7522,7 +7522,7 @@
             "cita": "Tabla 11, fila 'Sweet melons', region 'Mediterranean', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
+            "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7536,7 +7536,7 @@
             "cita": "Tabla 11, fila 'Sweet melons', region 'Mediterranean', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
+            "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7550,7 +7550,7 @@
             "cita": "Tabla 11, fila 'Sweet melons', region 'Mediterranean', siembra 'May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano de Isla. Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
+            "nota": "Tabla 11 no tiene fila tropical para melon; se eligio la de siembra en mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de marzo en California (140 d), agosto en el desierto de California (135 d) y diciembre/enero en region arida (160 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -7742,7 +7742,7 @@
           "cita": "Tabla 11, fila 'Lettuce', region 'Mediterranean', siembra 'April'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son de noviembre a febrero (100 a 140 d)."
+          "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de noviembre a febrero (100 a 140 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -7757,7 +7757,7 @@
             "cita": "Tabla 11, fila 'Lettuce', region 'Mediterranean', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son de noviembre a febrero (100 a 140 d)."
+            "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de noviembre a febrero (100 a 140 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7771,7 +7771,7 @@
             "cita": "Tabla 11, fila 'Lettuce', region 'Mediterranean', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son de noviembre a febrero (100 a 140 d)."
+            "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de noviembre a febrero (100 a 140 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7785,7 +7785,7 @@
             "cita": "Tabla 11, fila 'Lettuce', region 'Mediterranean', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son de noviembre a febrero (100 a 140 d)."
+            "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de noviembre a febrero (100 a 140 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -7799,7 +7799,7 @@
             "cita": "Tabla 11, fila 'Lettuce', region 'Mediterranean', siembra 'April'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano de Isla. Las otras son de noviembre a febrero (100 a 140 d)."
+            "nota": "Tabla 11 no tiene fila tropical para lechuga; se eligio la de siembra en abril, la mas cercana al temporal primavera-verano (siembra hacia junio). Las otras son de noviembre a febrero (100 a 140 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -9485,7 +9485,7 @@
           "cita": "Tabla 11, fila 'Radish', region 'Medit.; Europe', siembra 'Mar/Apr'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano de Isla. La otra es de invierno en region arida (40 d)."
+          "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de invierno en region arida (40 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -9500,7 +9500,7 @@
             "cita": "Tabla 11, fila 'Radish', region 'Medit.; Europe', siembra 'Mar/Apr'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano de Isla. La otra es de invierno en region arida (40 d)."
+            "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de invierno en region arida (40 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -9514,7 +9514,7 @@
             "cita": "Tabla 11, fila 'Radish', region 'Medit.; Europe', siembra 'Mar/Apr'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano de Isla. La otra es de invierno en region arida (40 d)."
+            "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de invierno en region arida (40 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -9528,7 +9528,7 @@
             "cita": "Tabla 11, fila 'Radish', region 'Medit.; Europe', siembra 'Mar/Apr'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano de Isla. La otra es de invierno en region arida (40 d)."
+            "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de invierno en region arida (40 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -9542,7 +9542,7 @@
             "cita": "Tabla 11, fila 'Radish', region 'Medit.; Europe', siembra 'Mar/Apr'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano de Isla. La otra es de invierno en region arida (40 d)."
+            "nota": "Tabla 11 no tiene fila tropical para rabano; se eligio la de siembra marzo/abril, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de invierno en region arida (40 d)."
           },
           "etiqueta": "FUENTE"
         }
@@ -9734,7 +9734,7 @@
           "cita": "Tabla 11, fila 'Beets, table', region 'Mediterranean', siembra 'Apr/May'",
           "consultado": "2026-11-14",
           "unidades": "dias",
-          "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo (90 d)."
+          "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo (90 d)."
         },
         "etiqueta": "FUENTE"
       },
@@ -9749,7 +9749,7 @@
             "cita": "Tabla 11, fila 'Beets, table', region 'Mediterranean', siembra 'Apr/May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo (90 d)."
+            "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo (90 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -9763,7 +9763,7 @@
             "cita": "Tabla 11, fila 'Beets, table', region 'Mediterranean', siembra 'Apr/May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo (90 d)."
+            "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo (90 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -9777,7 +9777,7 @@
             "cita": "Tabla 11, fila 'Beets, table', region 'Mediterranean', siembra 'Apr/May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo (90 d)."
+            "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo (90 d)."
           },
           "etiqueta": "FUENTE"
         },
@@ -9791,7 +9791,7 @@
             "cita": "Tabla 11, fila 'Beets, table', region 'Mediterranean', siembra 'Apr/May'",
             "consultado": "2026-11-14",
             "unidades": "dias",
-            "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano de Isla. La otra es de febrero/marzo (90 d)."
+            "nota": "Tabla 11 no tiene fila tropical para betabel; se eligio la de siembra abril/mayo, la mas cercana al temporal primavera-verano (siembra hacia junio). La otra es de febrero/marzo (90 d)."
           },
           "etiqueta": "FUENTE"
         }

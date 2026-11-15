@@ -105,9 +105,13 @@ Estado: `LISTA`, `ESPERA` (depende de algo), `EN CURSO`, `HECHA`. Cada persona t
 | --- | --- | --- | --- | --- |
 | B5 | Recorrer los 40 cultivos en el laboratorio publicado (o en la vista previa de la escena): que cada uno cargue su modelo en cada etapa, que no salga la planta provisional y que el nombre se vea con acentos | — (hallazgos por el buzón al dueño) | — | HECHA (cubierta por la auditoría de los 40 cultivos de Eduardo, `6429b70`) |
 | B3 | Pruebas de la interfaz contra cada despliegue: teclado, móvil, demo sin red, dibujo de parcela y selector "Tamaño de celda" | — | P2 | ESPERA |
-| B6 | Revisar los textos de la app contra los docs (rotaciones, escenarios "seco / normal / lluvioso", estados) y pasarle la lista a Eduardo | — | — | HECHA (balam, 15/11: 5 grupos de diferencias en `web/evidencia/revision-sistema.md`, lista entregada a Eduardo) |
-| R9 | Dibujar parcelas en varios países (México fuera de Veracruz, Brasil, Kenia, India, España) en la app publicada y revisar que lo que falte salga `NO_EVALUABLE` con su motivo, nunca un número | — (hallazgos por el buzón) | Deploy con el calendario mundial (`5f985da`, ya publicado) | EN CURSO (balam) |
-| B7 | Selector de idioma español/inglés: base i18n (`web/src/ui/i18n/`) y traducción por pantalla. Parte 1 (base, Inicio y BarraPasos) en `main`. Las tarjetas se traducen en el motor (Mompin): hecho en `Mompin-motor` (`cliente.rankear(ids, undefined, idioma)`, `docs/05`, paso 8); falta que la UI pase `idioma` | `web/src/ui/` (acordado con Eduardo) | — | EN CURSO (balam) |
+| B6 | Revisar los textos de la app contra los docs (rotaciones, escenarios "seco / normal / lluvioso", estados) y pasarle la lista a Eduardo | — | — | HECHA (balam, 15/11) |
+| R9 | Dibujar parcelas en varios países (México fuera de Veracruz, Brasil, Kenia, India, España) en la app publicada y revisar que lo que falte salga `NO_EVALUABLE` con su motivo, nunca un número | — (hallazgos por el buzón) | Deploy con el calendario mundial (`5f985da`, ya publicado) | HECHA (Mafer, 15/11: `web/evidencia/r9-mundial.md`; fallas 1-5 en arreglo por la sesión "calendario") |
+| B7 | Selector de idioma español/inglés: base i18n (`web/src/ui/i18n/`) y traducción por pantalla. Parte 1 (base, Inicio y BarraPasos) en `main`. Las tarjetas se traducen en el motor (Mompin): hecho en `Mompin-motor` (`cliente.rankear(ids, undefined, idioma)`, `docs/05`, paso 8); falta que la UI pase `idioma` | `web/src/ui/` (acordado con Eduardo) | — | EN CURSO (IA de Mompin, sesión "ingles"; balam hizo la base). Terreno, Laboratorio, escena y Comparación en inglés |
+| B8 | Revisar el inglés pantalla por pantalla | — | B7 | CANCELADA (Mompin, 15/11: por tiempo, el inglés entra directo) |
+| R6b | Demo sin red con los 6 ejemplos | — | — | HECHA (balam, 15/11: 6/6 sin red; `demo-sin-red.sh` no corre en Windows) |
+| R4 | Capturas en inglés para la presentación (`docs/capturas/presentacion/`) | — | B7 | LISTA (balam); la sesión "presentacion" ya sacó Scenarios y Crops |
+| README | README ES/EN final, limpio; pendientes a `docs/11` | `README.md`, `README.en.md` | — | EN CURSO (Mafer, dueña [DECIDIDO] 15/11) |
 | B4 | Apoyo al rediseño si Eduardo lo pide | según Eduardo | E2 | ESPERA |
 | B1 | Cultivos nuevos en el selector con aviso si no están registrados en el lugar | — | — | HECHA (Eduardo: sugeridos y aviso "casi no se siembra en esta zona"; la vista 2D se retiró) |
 
@@ -146,7 +150,7 @@ Decisiones para la fase de entrega (sin fecha ni asignación):
 
 - Team Owner y quién envía; página del equipo y proyecto en el portal; integrantes aceptados en la sede.
 - Horario de juicio local (V-01). No condiciona el plan de trabajo.
-- Inglés del README, de la página del portal y de la app.
+- Inglés del README, de la página del portal y de la app. **README:** `README.en.md` hecho (Mafer, 15/11; traducción con IA, falta que una persona revise las licencias y la declaración de IA). **App:** B7 en curso (IA de Mompin, sesión "ingles"). **Portal:** pendiente.
 - Licencia del repo.
 - Revisión humana de los términos de Esri World Imagery, Microsoft Planetary Computer (V-25) y CDL de USDA.
 - Las 3 imágenes generadas con IA (`terreno-hero-v1`, `terreno-demo-v1`, `terreno-poligono-v1`): marca de agua visible, cambiarlas o quitarlas; origen de `inicio-campo.png`, que no está registrado.
@@ -171,6 +175,10 @@ Se anuncian en el buzón al tomarlas ("tomo R3") para no repetirlas.
 | R8 | Comprobar que cada cifra visible en tarjetas, consejos de la mascota y comparación tenga su fuente en "Método y fuentes" (lo mismo que MF10, que verifica D10) | Lista de cifras sin fuente para Eduardo |
 | R9 | Dibujar una parcela propia fuera de México y comprobar que lo que falta sale `NO_EVALUABLE` con motivo, nunca un número | Hallazgos por el buzón |
 | B7 | Selector de idioma español/inglés: base i18n (`web/src/ui/i18n/`) y traducción por pantalla. Parte 1 (base, Inicio y BarraPasos) en `main`. Las tarjetas se traducen en el motor (Mompin): hecho en `Mompin-motor` (`cliente.rankear(ids, undefined, idioma)`, `docs/05`, paso 8); falta que la UI pase `idioma` | `web/src/ui/` (acordado con Eduardo) | — | EN CURSO (balam) |
+| B8 | Revisar el inglés pantalla por pantalla | — | B7 | CANCELADA (Mompin, 15/11: por tiempo, el inglés entra directo) |
+| R6b | Demo sin red con los 6 ejemplos | — | — | HECHA (balam, 15/11: 6/6 sin red; `demo-sin-red.sh` no corre en Windows) |
+| R4 | Capturas en inglés para la presentación (`docs/capturas/presentacion/`) | — | B7 | LISTA (balam); la sesión "presentacion" ya sacó Scenarios y Crops |
+| README | README ES/EN final, limpio; pendientes a `docs/11` | `README.md`, `README.en.md` | — | EN CURSO (Mafer, dueña [DECIDIDO] 15/11) |
 | R10 | Dibujar una parcela con orillas a 45° y probar los tamaños de celda 10 a 100 m: orillas rectas, aviso de tamaño ajustado (tope de 200 celdas) y tiempo de carga | Hallazgos por el buzón |
 | R11 | En la vista previa con `?vista=2d`, el icono de la celda de medio cuadrado queda centrado sobre la diagonal: proponer moverlo al centroide del triángulo o achicarlo (es una vista de desarrollo, D8: baja prioridad) | Nota para Mompin (escena) |
 | R12 | Abrir los visores de `modelos/` de los cultivos de la ampliación y anotar los que se confunden entre sí a la distancia de la escena | Lista para Mafer |

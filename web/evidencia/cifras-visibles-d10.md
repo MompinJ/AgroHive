@@ -26,7 +26,7 @@ Eduardo conectó los seis ejemplos mundiales (`2b78037`): Terreno ya no ofrece I
 - El hallazgo 4 se refuerza con un caso concreto. La etiqueta «La más robusta» no coincide con la única métrica visible: en Bajío la Rotación 1 es «La más robusta» con más agua faltante (588, 130 y 119 mm) que la Rotación 2 (384, 41 y 56 mm); en Sorriso la Rotación 3 es «La más robusta» con 65, 80 y 89 mm mientras la Rotación 2 (soya, soya) tiene 0, 0 y 0 mm y queda tercera. Puede ser correcto (otros pilares como rotación o compatibilidad de fechas), pero la pantalla no lo muestra. En Isla también ocurría (Rotación 3 «más robusta» con 24, 9 y 32 mm frente a 14, 0 y 0 de la Rotación 2) y no lo había anotado.
 
 **Nuevo:**
-- **SMAP casi igual en tres lugares.** Isla 0.19, Bajío 0.19 y Sorriso 0.2 m³/m³, los tres «el 11 de noviembre». Puede ser casualidad (SMAP es de 36 km y los valores se redondean), pero conviene comprobar que `useEvidencia.ts` pide el punto de la parcela y no uno fijo.
+- **SMAP casi igual en tres lugares: no es un error** (aclarado por Mompin, 15/11, buzón #332). Isla 0.19, Bajío 0.19 y Sorriso 0.2 m³/m³, los tres «el 11 de noviembre». Cada ejemplo usa su propia celda (Bajío en -101.017, 20.325; Sorriso en -55.83, -12.669; Kenia en 35.29, 0.424) y los valores se parecen (alrededor de 0.2) porque coinciden. Mi sospecha de un punto fijo era falsa y se retira.
 - **Notas de catálogo con Isla.** Las referencias que muestra Método para Bajío y Sorriso siguen diciendo «coincide con el temporal primavera-verano de Isla» (maíz, chile, sorgo): son notas del catálogo de la época en que Isla era la demo.
 - **Referencias de todo el catálogo.** Método lista los mismos grupos para cualquier ejemplo (GGCMI 48 y 54 referencias, SIAP 17 y 15, aunque SIAP es solo de México). No distingue qué fuente alimentó la parcela abierta.
 - **Consejo nuevo de leguminosas** («este simulador no mide su aporte al suelo»): honesto, no necesita fuente.
@@ -99,7 +99,7 @@ Eduardo conectó los seis ejemplos mundiales (`2b78037`): Terreno ya no ofrece I
 3. Corregir la leyenda de Validación (`EscenaParcela.tsx:528`): quitar «calor» o decir que no se evalúa.
 4. Mostrar en cada tarjeta de la comparación por qué gana la «más robusta» (qué pilares y pesos cuentan), o al menos no dejar visible solo el agua. En Bajío y Sorriso la ganadora no es la de menor déficit.
 5. Aclarar en el dashboard que el clima y el suelo son de fuentes reales y que solo el polígono es de ejemplo.
-6. Comprobar que la consulta de SMAP usa la coordenada de la parcela (mismo valor en Isla, Bajío y Sorriso) y cambiar las notas de catálogo que mencionan Isla.
+6. Cambiar las notas de catálogo que mencionan Isla. (La sospecha de que SMAP usaba un punto fijo se retiró: Mompin comprobó que cada ejemplo usa su propia celda.)
 7. Decidir si los cortes en palabras (`[PROPUESTA]`) se explican en Método o se quitan del texto.
 
 ## Límites de esta revisión

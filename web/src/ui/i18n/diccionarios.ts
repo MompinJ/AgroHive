@@ -1,4 +1,10 @@
 export type Idioma = 'es' | 'en';
+import { terrenoEn, terrenoEs } from './textos/terreno';
+import { tutorialEn, tutorialEs } from './textos/tutorial';
+import { laboratorioEn, laboratorioEs } from './textos/laboratorio';
+import { escenaEn, escenaEs } from './textos/escena';
+import { comparacionEn, comparacionEs } from './textos/comparacion';
+import { metodoEn, metodoEs } from './textos/metodo';
 
 const es = {
   'idioma.etiqueta': 'Idioma',
@@ -34,6 +40,12 @@ const es = {
   'inicio.descripcion': 'Explora rotaciones de cultivos con la historia climática de NASA y compara cómo responden en distintos escenarios.',
   'inicio.dibujar': 'Dibujar un terreno',
   'inicio.aviso': 'Prototipo de demostración · Los datos ilustrativos no son predicciones agrícolas.',
+  ...terrenoEs,
+  ...tutorialEs,
+  ...laboratorioEs,
+  ...escenaEs,
+  ...comparacionEs,
+  ...metodoEs,
 } as const;
 
 export type ClaveTexto = keyof typeof es;
@@ -57,7 +69,7 @@ const en: Record<ClaveTexto, string> = {
   'pasos.escenarios': 'Dry to wet years',
   'pasos.comparacion': 'The most robust',
   'escenario.seco': 'Dry year',
-  'escenario.habitual': 'Typical year',
+  'escenario.habitual': 'Normal year',
   'escenario.lluvioso': 'Wet year',
   'estado.EVALUABLE': 'Evaluable',
   'estado.NO_EVALUABLE': 'Not evaluable',
@@ -72,6 +84,12 @@ const en: Record<ClaveTexto, string> = {
   'inicio.descripcion': 'Explore crop rotations with NASA climate history and compare how they respond to different scenarios.',
   'inicio.dibujar': 'Draw a plot',
   'inicio.aviso': 'Demonstration prototype · Illustrative data are not agricultural predictions.',
+  ...terrenoEn,
+  ...tutorialEn,
+  ...laboratorioEn,
+  ...escenaEn,
+  ...comparacionEn,
+  ...metodoEn,
 };
 
 export const diccionarios: Record<Idioma, Record<ClaveTexto, string>> = { es, en };

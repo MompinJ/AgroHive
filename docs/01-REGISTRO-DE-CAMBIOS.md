@@ -2,6 +2,65 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, pantalla 5: Método y fuentes, tablero del balance y piezas comunes en inglés (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/paginas/MetodoFuentes.tsx`, `web/src/ui/components.tsx` (`DataState`, `PageHeading`, `MethodNotes`, `Brand`), `web/src/ui/licencias.ts` (resumen de cada licencia, en los dos idiomas), `web/src/ui/DashboardBalance.tsx`, `web/src/ui/BotonSonido.tsx`, `web/src/ui/i18n/textos/metodo.ts` (nuevo), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
+- **Cambio:** "Método y fuentes" (respaldo R1), el tablero de agua mes a mes, las notas de método y el botón de sonido salen en inglés. Los nombres de las fuentes, sus citas y los mensajes que llegan de la API (advertencias y avisos de la parcela) no se traducen: son datos. El resumen en inglés de las licencias es una traducción del resumen del equipo, no del texto legal.
+
+### 2026-11-15 — Notas del catálogo sin «Isla» como lugar de referencia (R9, Mafer)
+
+- **Archivos:** `datos/catalogos/generar.py` y `datos/catalogos/cultivos.json` regenerado (`suelos.json` y `calendario-isla.json` quedan iguales).
+- **Cambio (pedido de Mompin, buzón #382, a partir de R9):** «Método y fuentes» mostraba «Isla» 24 veces en cualquier parcela, porque las notas de elección de filas de FAO-56 decían «análoga al temporal primavera-verano de Isla». Ahora dicen «temporal primavera-verano (siembra hacia junio)», «otoño-invierno» y «la zona de referencia del catálogo (tierras bajas del sur de Veracruz; la altitud exacta no se verificó)», y el aviso del catálogo dice «no calibrados para el lugar de la parcela». Los datos que de verdad vienen de SIAP de Isla se conservan con la forma «SIAP (municipio de Isla, Veracruz; calendario local) no registra X entre 2021 y 2025» (camote, cacahuate, soya, haba, ajonjolí y caña: 6 menciones). `cultivos.json` pasa de 138 a 6 menciones de «Isla». No cambia ningún valor ni ninguna fuente.
+- **Fuera de alcance:** el calendario local de Isla (`calendario-isla.json`) sigue hablando de Isla porque es el calendario de ese municipio.
+- **Evidencia:** catálogos en verde (`validar.mjs` y `unittest`), `contratos` 108, `api` 196, `tsc` limpio y `vitest` 3493.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — R9, parte 1: Francia, Noruega y Kosovo en el mapa de países del calendario (IA de Mompin, sesión "calendario")
+
+- **Archivos:** `datos/calendario/extraer_paises.py` (nuevo), `datos/calendario/paises-110m.json` (regenerado, 172 a 175 países), `datos/calendario/LEEME.md`, `api/tests/test_calendario.py`.
+- **Cambio:** la revisión R9 de Mafer encontró que `GET /api/calendario` respondía 422 en toda Francia: el mapa de países se armó filtrando por `ISO_A2` de Natural Earth 110m, que vale -99 en Francia, Noruega, Kosovo, Chipre del Norte y Somalilandia. Ahora el código sale de `ISO_A2`, luego de `ISO_A2_EH` (FR, NO, XK) y, para los dos que no tienen ninguno, del país ISO que los contiene (CY, SO; las piezas se unen en un solo polígono). Taiwán pasa de `CN-TW`, que no cumplía el patrón `paisIso` del contrato, a TW. Ningún país queda en -99 (el extractor falla si aparece uno). Prueba con puntos en Francia, Noruega, Kosovo, Taiwán, Somalilandia y Chipre del Norte. El mensaje del 422 en la interfaz sigue siendo de Eduardo.
+
+### 2026-11-15 — R9: siete parcelas dibujadas fuera de los ejemplos (Mafer, con un agente de revisión)
+
+- **Archivos:** `web/evidencia/r9-mundial.md` (nuevo).
+- **Cambio:** revisión de solo lectura de siete lugares sin ejemplo grabado (Sinaloa, Chiapas, Argentina, Nigeria, Francia, Vietnam y Australia) con la interfaz local sobre la API publicada (formulario «Agregar por coordenadas») y la API directa (`/api/calendario`, clima, suelo, próxima temporada y plagas), sobre `main` `687ca23`. Cumple lo pedido: lo que falta sale `NO_EVALUABLE` con motivo y sin número, 18 de 40 cultivos con ventana por lugar y ningún «undefined», «NaN» ni «null» visible. Fallas: **Francia** da 422 en `/api/calendario` («sin un solo pais en Natural Earth 110m», comprobado de nuevo con la API pública) y la interfaz muestra el texto crudo; la etiqueta PV/OI usa el corte del hemisferio norte en Argentina y Australia; fechas en el día 1 de un mes en Nigeria y Vietnam; la rotación por defecto trae fechas pensadas para México; cultivos sin ventana aparecen como «buena opción»; y **Método y fuentes dice «Isla» 24 veces** en los siete lugares, por las notas del catálogo (carril de Mafer).
+- **Límites:** polígonos por formulario de coordenadas, no con clics en el mapa; no se verificó que cada punto sea tierra de cultivo ni se contrastó ninguna ventana con fuente externa; no se revisó la comparación final, ni inglés, ni móvil.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — B7, pantalla 4: Comparación en inglés (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/ui/lab/PanelComparacion.tsx`, `PlanElegido.tsx`, `armarResumen.ts`, `web/src/ui/pdf/resumenComparacion.ts` y `pdf.ts` (pie de página), `web/src/ui/i18n/textos/comparacion.ts` (nuevo), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx` (incluye el texto del PDF).
+- **Cambio:** el ranking ("The most robust", "Its worst year", barras Dry / Normal / Wet, debilidades y fortalezas que ya redacta el motor), el plan elegido, la próxima temporada y el resumen en PDF salen en inglés (toma T5). El PDF ya no busca los años por su nombre en español: usa el nombre del idioma activo. `TarjetasRotacion.tsx` no se tocó (la app no la usa).
+
+### 2026-11-15 — B7, pantalla 3: Laboratorio en inglés, parte de la interfaz (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/ui/tutorial/Tutorial.tsx` (usa el tutorial en inglés `TUTORIALES_EN`, mismos pasos, resaltes e iconos), `web/src/ui/lab/` (`Laboratorio.tsx`, `BarraHerramientas.tsx`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `PanelIzq.tsx`, `EventoPantalla.tsx`, `eventos.ts`, `Mascota.tsx`, `consejos.ts`, `historial.ts`, `PanelHistorial.tsx`, `piezas.tsx`, `conveniencia.ts`), `web/src/ui/ControlTiempo.tsx`, `web/src/ui/planes.ts` (nombre de la rotación y mensajes de ciclos encimados), `web/src/ui/i18n/textos/tutorial.ts` y `laboratorio.ts` (nuevos), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
+- **Cambio:** el tutorial de Esquilote, la brocha y la barra de herramientas, la paleta y su conveniencia, las plagas y el insecticida, los años Dry / Normal / Wet, la línea de tiempo, los avisos de cosecha, plaga y plantas muertas, el historial y los consejos de la mascota salen en inglés (tomas T3b, T4a, T4b y T4c). Las plagas llevan su nombre común en inglés (Entomological Society of America para cinco; el chapulín de la milpa, *Sphenarium purpurascens*, sin nombre en esa lista, como "Chapulín grasshopper"). `nombreEscenario`, `nombresPilares` y `NOMBRE_TIPO_HECHO` se siguen leyendo igual (`nombreEscenario[e]`) y dan el texto del idioma activo. Sin cambios visuales.
+- **Escena y `App.tsx` (Mompin aprobó lo que pidió la maestra, 15/11):** `web/src/escena/EscenaParcela.tsx` (HUD en modo fondo: vistas, leyendas, gráficos, ficha, brújula), `graficos.ts`, `vistas.ts`, `clima-vista.ts`, `ficha.ts`, `estilos-estado.ts`, `problemas.ts`, `avisos-datos.ts`, `AvisosDatos.tsx`, `render/plagas.ts` y el pie, el enlace "Saltar al contenido" y la página 404 de `web/src/App.tsx`, con sus textos en `web/src/ui/i18n/textos/escena.ts`. Las tablas de nombres (`NOMBRE_NIVEL_GRAFICOS`, `NIVELES_VALIDACION`, `ESTILOS_ESTADO`...) se leen igual y devuelven el texto del idioma activo. El modo panel de la escena (vista previa de desarrollo) queda en español. Lo que el historial guardó antes de cambiar de idioma queda en el idioma en que se escribió; los mensajes de la API dentro de los avisos de datos (plegados) llegan en español.
+
+### 2026-11-15 — MF11: siete bloques de madurez que se confundían, y corrección de la nota de SMAP de MF10 (Mafer)
+
+- **Archivos:** `modelos/cultivos/bloques/bloques.py` (entradas de madurez de siete cultivos y el parámetro opcional `giro_cor` de `roseta()`), los 7 `<cultivo>_madurez_bloque.bbmodel` y `bloques/visor_bloques.html`; `web/evidencia/cifras-visibles-d10.md`.
+- **Cambio (pedido de Mompin, buzón #301, a partir de R12):** solo forma, altura y silueta, con colores que ya estaban en la paleta; la paleta no cambió. Cebada: la más baja de los cereales, macollo recargado y espiga colgante (gancho); trigo: el más alto y derecho, espiga gruesa y erguida; la avena no se tocó. Brócoli: arbolito (columna de hojas glaucas con cabeza oscura más ancha encima, la más alta de las brásicas); espinaca: tapete bajo, ancho y plano. Col: plato de hojas casi al ras con una bola compacta encima; coliflor: columna alta de hojas erguidas con pella crema que asoma; lechuga: rosetón suelto y chato. Los 7 bloques quedan en 21 cubos (tope 24), sin cara inferior.
+- **Nota:** el brócoli del bloque ya no usa el verde oscuro `chile_hoja*` de MF9 sino las hojas glaucas `brasica_hoja*`, para separarlo de la espinaca. El modelo detallado del brócoli conserva el tono de MF9. Los iconos 2D no se tocaron.
+- **Límites:** revisado en la rejilla del visor (Three.js) y con el render de `voxelkit`, no en la escena de la app ni en Blockbench. Quedan para después, según Mompin, las cucurbitáceas, caña contra yuca y el verde de crecimiento. En la escena col y lechuga siguen siendo las más parecidas por color.
+- **SMAP (MF10):** se retira la sospecha de que SMAP usaba un punto fijo; Mompin comprobó (buzón #332) que cada ejemplo usa su propia celda y los valores (~0.2) coinciden. Corregido en `cifras-visibles-d10.md`.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — B7, pantalla 2: Terreno en inglés (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/paginas/Terreno.tsx`, `web/src/ui/DibujarParcela.tsx`, `web/src/ui/MapaParcela.tsx`, `web/src/ui/SelectorTamanoCelda.tsx`, `web/src/ui/i18n/diccionarios.ts` (une los textos por pantalla), `web/src/ui/i18n/textos/terreno.ts` (nuevo), `web/src/ui/i18n/sin-espanol.ts` (detector de español sin traducir para las pruebas) y `web/src/ui/i18n/pantallas-en.test.tsx` (nuevo).
+- **Cambio:** la lista de los seis ejemplos (países, clima de Köppen en inglés con los nombres de Peel et al. 2007 y aviso), el dibujo de la parcela, el mapa y el tamaño de celda salen en inglés (tomas T3a y T6g). Los datos no cambian: el país, el clima y los mensajes de `web/src/geo/` llegan en español y la interfaz les pone su etiqueta en inglés (por país, por clase de Köppen o por el mensaje exacto). Sin cambios visuales; los nombres propios de los lugares no se traducen.
+- **Base:** `useIdioma` sin `ProveedorIdioma` (pruebas o componentes sueltos) devuelve español en lugar de lanzar un error, para que los componentes que ahora usan `t` sigan funcionando como antes fuera del proveedor.
+- **Pendiente:** el pie de página y el enlace "Saltar al contenido" de `web/src/App.tsx` siguen en español: están fuera de lo autorizado (`web/src/ui/` y `web/src/paginas/`).
+
+### 2026-11-15 — B7, pantalla 1: tarjetas del motor y nombres de cultivo en el idioma elegido (IA de Mompin, sesión "ingles")
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la IA de Mompin toma B7 (interfaz en inglés); balam lo deja. Mompin autorizó editar `web/src/ui/` y `web/src/paginas/`, solo textos con `t('clave')`, avisando a Eduardo antes de cada pantalla (buzón).
+- **Archivos:** `web/src/ui/useLaboratorio.ts` (`useIdioma`; `cliente.rankear(ids, undefined, idioma)`; `idioma` en la clave del cálculo), `web/src/ui/i18n/actual.ts` (nuevo: idioma activo para el código que no es React, lo fija `ProveedorIdioma`), `web/src/ui/i18n/cultivos-en.ts` y su prueba (nombres en inglés, iguales a `nombreComunEn` del catálogo), `web/src/ui/i18n/Idioma.tsx`, `web/src/ui/i18n/diccionarios.ts` ("Typical year" pasa a "Normal year", como las tarjetas y el trailer), `web/src/ui/lab/piezas.tsx` (`nombreCultivo` según el idioma), `web/src/ui/lab/Laboratorio.tsx` y `web/src/paginas/Terreno.tsx` (usan `nombreCultivo`).
+- **Cambio:** con el idioma en inglés, las tarjetas y los nombres de cultivo de la paleta, el plan, los escenarios, la comparación y los ejemplos de Terreno salen en inglés. Sin cambios visuales.
+- **Pendiente:** la ficha de la celda y la leyenda de la escena (`web/src/escena/ficha.ts`, `vistas.ts`, `EscenaParcela.tsx`) siguen con sus nombres en español: están fuera de lo autorizado (`web/src/escena/`).
+
 ### 2026-11-15 — Contratos 0.16.0: `nombreComunEn` en el catálogo de cultivos (IA de Mompin, sesión "ingles", parte 2)
 
 - **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; los cultivos necesitan nombre en inglés con fuente.
@@ -11,6 +70,13 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Motor:** `VERSION_CONTRATO` 0.16.0. Las tarjetas en inglés usan `nombreComunEn` (maize, sorghum, common bean). Regresiones regeneradas con `ACTUALIZAR_REGRESION=1`: en `demo-isla.json` y en las seis de `regresion/ejemplos/` solo cambia `versionContrato` (0.15.0 a 0.16.0); en `regresion/ingles/bajio-guanajuato.json`, además, los nombres de cultivo pasan del español al inglés. Ninguna cifra cambia.
 - **Docs:** `docs/04` (catálogo), `docs/05` (paso 8), `datos/catalogos/README.md`.
 - **Pendiente:** revisión humana de chile y melón (y, si el equipo quiere, `Maize` frente a `Corn` y `Peanut` frente a `Groundnut`); desplegar para que `/api/cultivos` sirva el campo.
+
+### 2026-11-15 — README en inglés (Mafer)
+
+- **Archivos:** `README.en.md` (nuevo) y una línea de enlace al inicio de `README.md`.
+- **Cambio:** traducción completa del README al inglés, con la misma estructura y las mismas tablas; las rutas, los campos de la API, los códigos de estado y las marcas del equipo (`[VERIFICAR]`, `[DECIDIR]`, `[DECIDIDO]`, `[PROPUESTA]`, `SUPUESTO`) se dejan en español para poder buscarlos en los dos archivos, con una nota al inicio que las explica. Cubre el punto «Inglés del README» de `docs/16`.
+- **Límites:** la versión en español es la de referencia; hay que mantener los dos archivos al día. Quedan fuera «la página del portal» y «la app», que también lista `docs/16`. La traducción la hizo una IA; conviene que una persona la lea.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-15 — README al día con el alcance mundial y lo hecho el 15/11 (Mafer)
 
@@ -171,6 +237,47 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** la protección guardaba ids de celda que cambian con el tamaño de celda (mismo problema que el plan `porCelda`), y el botón anterior protegía celdas sin plaga, lo que no reflejaba una decisión.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
+
+### 2026-11-15 — Dibujar el terreno en cualquier lugar, con la información que haya (Eduardo)
+
+- **Archivos:** `web/src/api/datosParcela.ts` y su prueba, `web/src/ui/useLaboratorio.ts`, `web/src/api/README.md`.
+- **Cambio:** pedido del equipo: el terreno se puede dibujar en cualquier posición y solo se toma la información que haya de ese lugar o país. El mapa y el dibujo no tenían límites geográficos; la restricción estaba después: el laboratorio se detenía con un error si el lugar no tenía datos de **suelo** (SoilGrids no cubre océano, hielo ni algunos desiertos). Ahora solo el clima y el catálogo de cultivos son obligatorios (sin ellos no hay simulación); el suelo pasa a opcional, con el aviso `SUELO_NO_DISPONIBLE` (lo que depende del suelo, como el balance de agua, queda `NO_EVALUABLE`; el clima, las fechas, las plagas y las vistas de luz y temperatura siguen) y el id de suelo `sin-datos-de-suelo`. El calendario local, la próxima temporada, las plagas y los extras ya eran opcionales.
+- **Evidencia:** prueba nueva con un lugar sin dato de suelo (mar abierto): `fallaObligatoria` es nula y sale el aviso con el motivo del servidor; la prueba de falla obligatoria ahora usa el clima. El motor con `suelo: null` devuelve la rotación `NO_EVALUABLE` con motivo, sin lanzar error (pruebas existentes `motor.test.ts` y `hallazgos-back.test.ts`).
+- **Límites:** sin suelo la rotación queda `NO_EVALUABLE` en el ranking, así que en esos lugares la comparación no ordena nada; no hay selector manual de suelo en la interfaz. Sin clima de NASA POWER ni de Open-Meteo tampoco hay simulación. No se probó en el navegador.
+- **Decisiones afectadas:** ninguna de alcance del MVP.
+
+### 2026-11-15 — Arreglo del sonido: el audio se despierta en el primer gesto (Eduardo)
+
+- **Archivos:** `web/src/ui/sonido.ts` y `sonido.test.ts`; `docs/06`.
+- **Cambio:** el equipo reportó que "otra vez se rompieron los sonidos". El código de sonido no había cambiado; el fallo era de diseño: el audio se creaba la primera vez que algo sonaba, a veces sin ningún clic previo (por ejemplo, los blips de Esquilote al escribir), y los navegadores, sobre todo Safari, dejan dormido un audio así; además las notas se programaban antes de que despertara. Ahora el audio se crea y se reanuda en el primer gesto (clic, toque o tecla, y al volver a la pestaña), sin gesto no se crea ni suena nada, y las notas se programan solo cuando el reloj de audio corre.
+- **Evidencia:** 4 pruebas nuevas con un audio falso (sin gesto no suena, con gesto despierta, las notas esperan al reloj, un navegador que no deja despertar no falla); en Chrome headless se había visto antes que el audio programaba notas con el contexto activo.
+- **Límites:** **no se puede oír el sonido desde aquí**; el arreglo corrige la causa más probable en Safari y Chrome, pero si sigue sin sonar hay que revisar el botón de silencio, el volumen del equipo y el interruptor de silencio del iPhone.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — Dominio propio agrohive.space (Eduardo)
+
+- **Archivos:** `api/despliegue/agrohive.nginx.conf` (copia de la configuración real), `README.md`, `AgroVault/Compartido/Servidor.md`. En el droplet: `/etc/nginx/sites-available/agrohive`, `/opt/agrohive/agrohive.env`, certificado `agrohive-space`.
+- **Cambio:** el dominio `agrohive.space` (Namecheap) apunta al droplet con dos registros A (`@` y `www`; se borraron la redirección URL y el CNAME de estacionamiento). nginx sirve `agrohive.space` y `www.agrohive.space` con un certificado de Let's Encrypt nuevo (`agrohive-space`, vence 2027-02-13, renovación automática, con un correo de contacto del dueño del servidor para los avisos); HTTP redirige a HTTPS. Se agregó el dominio a `AGROHIVE_CORS_ORIGINS` y se reinició la API. El hostname `sslip.io` sigue funcionando.
+- **Por qué:** una red con FortiGuard bloqueaba `sslip.io` como "Dynamic DNS" y la demo quedaba inaccesible; un dominio propio no cae en esa categoría.
+- **Evidencia:** desde fuera, `agrohive.space` y `www` responden 200 en `/`, `/health`, `/api/cultivos` y `/medir.html` con el certificado de Let's Encrypt (CN=agrohive.space); `http` redirige 301 a `https`; `mediworks.mx` y `sslip.io` siguen en 200. Copias de seguridad de la configuración de nginx y del `.env` en `/root/respaldo-nginx/`.
+- **Límites:** no se probó el dominio desde la red con FortiGuard (un dominio nuevo puede clasificarse como "Newly Registered Domain" por un tiempo); el dominio vence según Namecheap y hay que renovarlo; la contraseña de root del droplet sigue sin cambiarse.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — Plaga siempre presente en cultivos atacados y plegado animado del panel (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/plagas.ts` y su prueba, `PanelIzq.tsx`, `panelColapsable.ts`, `lab.css`, `PanelIzq.test.tsx`; `docs/06`.
+- **Cambio:** (1) reporte del equipo: "ya no hay evento de plaga ni suenan los sonidos". Causa probable de lo primero: con la zona fija por cultivo, un cultivo pintado solo fuera de su zona no tenía plaga y por tanto tampoco evento. Ahora, si ninguna celda de un cultivo atacado cae en su zona, la plaga va a su propio foco. (2) El panel izquierdo se pliega con animación (se desliza) y mueve con él la barra de herramientas y el control de tiempo.
+- **Evidencia:** en Chrome con un ejemplo (Bajío) los eventos de plaga y de cosecha salieron y no hubo errores de consola; el audio programó 29 osciladores y 2 soplidos con el contexto en `running`. Prueba nueva del cultivo plantado fuera de su zona.
+- **Límites:** **el sonido no se pudo oír** (solo se comprobó que el código lo programa), así que si sigue sin sonar en el navegador del equipo no se ha encontrado la causa; puede ser el botón de silencio, el volumen o la política de audio del navegador. La animación del plegado no se vio.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — La plaga se come las plantas y la paleta solo ofrece cultivos completos (Eduardo)
+
+- **Archivos:** `web/src/escena/render/escena-three.ts`, `ui/lab/cultivosListos.ts`, `PanelCultivos.tsx`, `cultivosListos.test.ts`; `docs/06`.
+- **Cambio:** (1) en las celdas con plaga sin tratar la planta se encoge al 40 % y vuelve a crecer al tratarla o si la plaga se va; antes solo aparecían insectos. (2) La paleta de pintar solo muestra cultivos con parámetros del motor y todos sus modelos; un cultivo incompleto no se ofrece.
+- **Evidencia:** `tsc` y suite del front en verde; la prueba con los modelos reales confirma que hoy los 40 cultivos están completos, así que ninguno se oculta todavía.
+- **Límites:** el encogimiento de las plantas es dibujo y no se vio en el navegador (no hay prueba de la escena 3D, que pide WebGL); la regla de cultivos completos no cambia nada hoy.
+- **Decisiones afectadas:** ninguna.
 
 ### 2026-11-15 — Selector de idioma con banderas (Eduardo)
 
