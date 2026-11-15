@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — MF11: siete bloques de madurez que se confundían, y corrección de la nota de SMAP de MF10 (Mafer)
+
+- **Archivos:** `modelos/cultivos/bloques/bloques.py` (entradas de madurez de siete cultivos y el parámetro opcional `giro_cor` de `roseta()`), los 7 `<cultivo>_madurez_bloque.bbmodel` y `bloques/visor_bloques.html`; `web/evidencia/cifras-visibles-d10.md`.
+- **Cambio (pedido de Mompin, buzón #301, a partir de R12):** solo forma, altura y silueta, con colores que ya estaban en la paleta; la paleta no cambió. Cebada: la más baja de los cereales, macollo recargado y espiga colgante (gancho); trigo: el más alto y derecho, espiga gruesa y erguida; la avena no se tocó. Brócoli: arbolito (columna de hojas glaucas con cabeza oscura más ancha encima, la más alta de las brásicas); espinaca: tapete bajo, ancho y plano. Col: plato de hojas casi al ras con una bola compacta encima; coliflor: columna alta de hojas erguidas con pella crema que asoma; lechuga: rosetón suelto y chato. Los 7 bloques quedan en 21 cubos (tope 24), sin cara inferior.
+- **Nota:** el brócoli del bloque ya no usa el verde oscuro `chile_hoja*` de MF9 sino las hojas glaucas `brasica_hoja*`, para separarlo de la espinaca. El modelo detallado del brócoli conserva el tono de MF9. Los iconos 2D no se tocaron.
+- **Límites:** revisado en la rejilla del visor (Three.js) y con el render de `voxelkit`, no en la escena de la app ni en Blockbench. Quedan para después, según Mompin, las cucurbitáceas, caña contra yuca y el verde de crecimiento. En la escena col y lechuga siguen siendo las más parecidas por color.
+- **SMAP (MF10):** se retira la sospecha de que SMAP usaba un punto fijo; Mompin comprobó (buzón #332) que cada ejemplo usa su propia celda y los valores (~0.2) coinciden. Corregido en `cifras-visibles-d10.md`.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — B7, pantalla 2: Terreno en inglés (IA de Mompin, sesión "ingles")
 
 - **Archivos:** `web/src/paginas/Terreno.tsx`, `web/src/ui/DibujarParcela.tsx`, `web/src/ui/MapaParcela.tsx`, `web/src/ui/SelectorTamanoCelda.tsx`, `web/src/ui/i18n/diccionarios.ts` (une los textos por pantalla), `web/src/ui/i18n/textos/terreno.ts` (nuevo), `web/src/ui/i18n/sin-espanol.ts` (detector de español sin traducir para las pruebas) y `web/src/ui/i18n/pantallas-en.test.tsx` (nuevo).
