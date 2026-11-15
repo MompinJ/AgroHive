@@ -6,9 +6,13 @@ import { DibujarParcela } from '../ui/DibujarParcela';
 import hero from '../ui/assets/terreno-hero-v1.png';
 import polygon from '../ui/assets/terreno-poligono-v1.png';
 import '../ui/terreno.css';
+import { useIdioma } from '../ui/i18n/Idioma';
+import { koppenEn } from '../ui/i18n/textos/terreno';
+import type { ClaveTexto } from '../ui/i18n/diccionarios';
 
 const ejemplos = listarEjemplos();
 const nombreCultivo = (id: string) => nombreDelCultivo(id).toLowerCase();
+const PAISES = { 'pais.México': 1, 'pais.Brasil': 1, 'pais.Kenia': 1, 'pais.India': 1, 'pais.España': 1, 'pais.Estados Unidos': 1 };
 
 /** Baja a una seccion y le da el foco (sin animar si se pide menos movimiento). */
 function bajarA(seccion: HTMLElement | null) {
@@ -27,6 +31,9 @@ function irAlEditor(editor: HTMLElement | null) {
 }
 
 export function Terreno({ polygonMode, onElegirEjemplo, ejemplo, parcela, onGuardar }: { polygonMode: boolean; onElegirEjemplo: (id: string) => void; ejemplo: string | null; parcela: Parcela | null; onGuardar: (p: Parcela) => void }) {
+  const { idioma, t } = useIdioma();
+  const pais = (p: string) => (`pais.${p}` in PAISES ? t(`pais.${p}` as ClaveTexto) : p);
+  const clima = (c: { clase: string; descripcion: string }) => t('terreno.clima', { descripcion: idioma === 'en' ? koppenEn(c.clase) : c.descripcion });
   const editor = useRef<HTMLDivElement>(null);
   const lista = useRef<HTMLElement>(null);
   // Al entrar en modo poligono, despues de que App sube la pagina y enfoca el h1 al cambiar de ruta.
@@ -38,11 +45,11 @@ export function Terreno({ polygonMode, onElegirEjemplo, ejemplo, parcela, onGuar
   return <div className="terrain-page">
     <section className="terrain-hero" aria-labelledby="terreno-titulo">
       <div className="terrain-copy">
-        <h1 id="terreno-titulo" tabIndex={-1}>Empieza por<br />un terreno.</h1>
-        <p className="terrain-intro">Abre una parcela de ejemplo en otro lugar del mundo o dibuja el contorno de la tuya.</p>
+        <h1 id="terreno-titulo" tabIndex={-1}>{t('terreno.tituloA')}<br />{t('terreno.tituloB')}</h1>
+        <p className="terrain-intro">{t('terreno.intro')}</p>
         <div className="terrain-actions">
-          <button type="button" className="terrain-button" onClick={() => bajarA(lista.current)}>Ver ejemplos</button>
-          <a className="terrain-button terrain-button-secondary" href="#/terreno?modo=poligono" aria-current={polygonMode ? 'location' : undefined} onClick={() => { if (polygonMode) irAlEditor(editor.current); }}>Dibujar mi parcela</a>
+          <button type="button" className="terrain-button" onClick={() => bajarA(lista.current)}>{t('terreno.verEjemplos')}</button>
+          <a className="terrain-button terrain-button-secondary" href="#/terreno?modo=poligono" aria-current={polygonMode ? 'location' : undefined} onClick={() => { if (polygonMode) irAlEditor(editor.current); }}>{t('terreno.dibujarMia')}</a>
         </div>
       </div>
       <div className="terrain-art" aria-hidden="true">
@@ -52,27 +59,27 @@ export function Terreno({ polygonMode, onElegirEjemplo, ejemplo, parcela, onGuar
     <div className="terrain-options">
       <section ref={lista} className="terrain-option terrain-option-demo terrain-ejemplos" aria-labelledby="demo-titulo">
         <div className="terrain-option-copy">
-          <p className="terrain-eyebrow">Parcelas de ejemplo</p>
-          <h2 id="demo-titulo" tabIndex={-1}>Seis lugares del mundo</h2>
+          <p className="terrain-eyebrow">{t('terreno.ejemplosEtiqueta')}</p>
+          <h2 id="demo-titulo" tabIndex={-1}>{t('terreno.ejemplosTitulo')}</h2>
           <ul className="terrain-ejemplos-lista">
             {ejemplos.map((e) => <li key={e.id}>
               <a className="terrain-ejemplo" href="#/laboratorio" aria-current={ejemplo === e.id ? 'true' : undefined} onClick={() => onElegirEjemplo(e.id)}>
                 <strong>{e.nombre}</strong>
-                <span className="terrain-ejemplo-lugar">{e.pais}{e.clima ? ` · clima ${e.clima.descripcion}` : ''}</span>
+                <span className="terrain-ejemplo-lugar">{pais(e.pais)}{e.clima ? ` · ${clima(e.clima)}` : ''}</span>
                 <span className="terrain-ejemplo-cultivos">{e.cultivosSugeridos.map(nombreCultivo).join(', ')}</span>
               </a>
             </li>)}
           </ul>
-          <p className="terrain-ejemplos-aviso">{AVISO_EJEMPLOS}</p>
+          <p className="terrain-ejemplos-aviso">{idioma === 'en' ? t('terreno.avisoEjemplos') : AVISO_EJEMPLOS}</p>
         </div>
       </section>
       <section className={`terrain-option terrain-option-custom${polygonMode ? ' terrain-option-selected' : ''}`} aria-labelledby="poligono-titulo">
         <img className="terrain-option-image" src={polygon} alt="" width="1254" height="1254" />
         <div className="terrain-option-copy">
-          <p className="terrain-eyebrow">Polígono personalizado</p>
-          <h2 id="poligono-titulo">Tu propio terreno</h2>
-          <span className="terrain-status">Contorno y cuadrícula</span>
-          <p>Dibuja los límites, revisa la cuadrícula y consulta la elevación. El relieve faltante se muestra como no evaluable.</p>
+          <p className="terrain-eyebrow">{t('terreno.poligonoEtiqueta')}</p>
+          <h2 id="poligono-titulo">{t('terreno.poligonoTitulo')}</h2>
+          <span className="terrain-status">{t('terreno.poligonoEstado')}</span>
+          <p>{t('terreno.poligonoTexto')}</p>
         </div>
       </section>
     </div>

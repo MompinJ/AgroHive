@@ -2,6 +2,8 @@
 // medio de cada lado se arrastra para insertar uno nuevo; doble clic o clic derecho en un
 // vertice lo borra. El contorno se actualiza en vivo durante el arrastre y el cambio se
 // entrega al soltar. La vista se cambia con un interruptor Satelite / Mapa.
+import { useIdioma } from './i18n/Idioma';
+import { tt } from './i18n/actual';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -38,6 +40,7 @@ export default function MapaParcela({ puntos, bordes, onPunto, onMover, onInsert
   llamadas.current = { onPunto, onMover, onInsertar, onBorrar };
   const [vista, setVista] = useState<'satelite' | 'calles'>('satelite');
   const [error, setError] = useState(false);
+  const { t } = useIdioma();
 
   useEffect(() => {
     if (!contenedor.current) return;
@@ -110,7 +113,7 @@ export default function MapaParcela({ puntos, bordes, onPunto, onMover, onInsert
     redibujar(trabajo);
 
     trabajo.forEach((ll, i) => {
-      const m = L.marker(ll, { icon: icono('mapa-vertice', 18), draggable: true, keyboard: true, title: `Vértice ${i + 1}: arrastra para mover; doble clic o clic derecho para borrar`, alt: `Vértice ${i + 1}`, riseOnHover: true }).addTo(vertices);
+      const m = L.marker(ll, { icon: icono('mapa-vertice', 18), draggable: true, keyboard: true, title: tt('mapa.verticeTitulo', { n: i + 1 }), alt: tt('mapa.vertice', { n: i + 1 }), riseOnHover: true }).addTo(vertices);
       m.on('drag', () => { const p = m.getLatLng(); const copia = [...trabajo]; copia[i] = [p.lat, p.lng]; redibujar(copia); });
       m.on('dragend', () => llamadas.current.onMover(i, lonlat(m.getLatLng())));
       m.on('dblclick', (e) => { L.DomEvent.stop(e); llamadas.current.onBorrar(i); });
@@ -127,19 +130,19 @@ export default function MapaParcela({ puntos, bordes, onPunto, onMover, onInsert
       const a = trabajo[i]!;
       const b = trabajo[(i + 1) % trabajo.length]!;
       const medio: L.LatLngTuple = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-      const m = L.marker(medio, { icon: icono('mapa-medio', 14), draggable: true, keyboard: false, title: 'Arrastra para agregar un vértice en este lado', opacity: 0.85 }).addTo(vertices);
+      const m = L.marker(medio, { icon: icono('mapa-medio', 14), draggable: true, keyboard: false, title: tt('mapa.medioTitulo'), opacity: 0.85 }).addTo(vertices);
       m.on('drag', () => { const p = m.getLatLng(); const copia = [...trabajo]; copia.splice(i + 1, 0, [p.lat, p.lng]); redibujar(copia); });
       m.on('dragend', () => llamadas.current.onInsertar(i + 1, lonlat(m.getLatLng())));
     }
   }, [puntos]);
 
   return <div className="mapa-dibujo">
-    <div ref={contenedor} className="mapa-dibujo-lienzo" role="application" aria-label="Mapa para dibujar el contorno de la parcela. Clic agrega un vértice." />
-    <div className="mapa-capa mapa-capa-vista" role="radiogroup" aria-label="Vista del mapa">
-      <button type="button" role="radio" aria-checked={vista === 'satelite'} onClick={() => setVista('satelite')}>Satélite</button>
-      <button type="button" role="radio" aria-checked={vista === 'calles'} onClick={() => setVista('calles')}>Mapa</button>
+    <div ref={contenedor} className="mapa-dibujo-lienzo" role="application" aria-label={t('mapa.lienzo')} />
+    <div className="mapa-capa mapa-capa-vista" role="radiogroup" aria-label={t('mapa.vista')}>
+      <button type="button" role="radio" aria-checked={vista === 'satelite'} onClick={() => setVista('satelite')}>{t('mapa.satelite')}</button>
+      <button type="button" role="radio" aria-checked={vista === 'calles'} onClick={() => setVista('calles')}>{t('mapa.calles')}</button>
     </div>
-    {error && <p className="mapa-capa mapa-aviso" role="status">No cargó parte del mapa. Prueba la otra vista.</p>}
+    {error && <p className="mapa-capa mapa-aviso" role="status">{t('mapa.errorTeselas')}</p>}
     {children?.({ acercar: () => mapaRef.current?.zoomIn(), alejar: () => mapaRef.current?.zoomOut() })}
   </div>;
 }

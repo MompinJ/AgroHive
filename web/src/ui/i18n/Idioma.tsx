@@ -22,8 +22,9 @@ export function ProveedorIdioma({ children, idiomaInicial }: { children: ReactNo
   return <ContextoIdioma.Provider value={valor}>{children}</ContextoIdioma.Provider>;
 }
 
+/** Sin ProveedorIdioma (pruebas o vistas previas que montan un componente suelto), espanol: el componente se ve como antes de B7. */
+const SIN_PROVEEDOR: EstadoIdioma = { idioma: 'es', cambiarIdioma: () => {}, t: (clave, valores) => traducir('es', clave, valores) };
+
 export function useIdioma(): EstadoIdioma {
-  const idioma = useContext(ContextoIdioma);
-  if (!idioma) throw new Error('useIdioma requiere ProveedorIdioma.');
-  return idioma;
+  return useContext(ContextoIdioma) ?? SIN_PROVEEDOR;
 }

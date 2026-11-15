@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, pantalla 2: Terreno en inglés (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/paginas/Terreno.tsx`, `web/src/ui/DibujarParcela.tsx`, `web/src/ui/MapaParcela.tsx`, `web/src/ui/SelectorTamanoCelda.tsx`, `web/src/ui/i18n/diccionarios.ts` (une los textos por pantalla), `web/src/ui/i18n/textos/terreno.ts` (nuevo), `web/src/ui/i18n/sin-espanol.ts` (detector de español sin traducir para las pruebas) y `web/src/ui/i18n/pantallas-en.test.tsx` (nuevo).
+- **Cambio:** la lista de los seis ejemplos (países, clima de Köppen en inglés con los nombres de Peel et al. 2007 y aviso), el dibujo de la parcela, el mapa y el tamaño de celda salen en inglés (tomas T3a y T6g). Los datos no cambian: el país, el clima y los mensajes de `web/src/geo/` llegan en español y la interfaz les pone su etiqueta en inglés (por país, por clase de Köppen o por el mensaje exacto). Sin cambios visuales; los nombres propios de los lugares no se traducen.
+- **Base:** `useIdioma` sin `ProveedorIdioma` (pruebas o componentes sueltos) devuelve español en lugar de lanzar un error, para que los componentes que ahora usan `t` sigan funcionando como antes fuera del proveedor.
+- **Pendiente:** el pie de página y el enlace "Saltar al contenido" de `web/src/App.tsx` siguen en español: están fuera de lo autorizado (`web/src/ui/` y `web/src/paginas/`).
+
 ### 2026-11-15 — B7, pantalla 1: tarjetas del motor y nombres de cultivo en el idioma elegido (IA de Mompin, sesión "ingles")
 
 - **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la IA de Mompin toma B7 (interfaz en inglés); balam lo deja. Mompin autorizó editar `web/src/ui/` y `web/src/paginas/`, solo textos con `t('clave')`, avisando a Eduardo antes de cada pantalla (buzón).
