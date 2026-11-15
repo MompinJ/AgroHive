@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — Cámara de juego de granja en la escena 3D (Eduardo)
+
+- **Archivos:** `web/src/escena/render/camara.ts` y `camara.test.ts` (nuevos), `escena/render/escena-three.ts`, `escena/EscenaParcela.tsx`, `escena/escena.css`, `ui/lab/PanelCultivos.tsx`; `docs/06`.
+- **Cambio:** arrastrar desplaza sobre el suelo, derecho o dos dedos giran, rueda hacia el cursor; inclinación ligada al zoom; WASD, Q/E, +/− e Inicio; doble clic vuela a la celda; límites sobre la parcela; brújula con giros de 45°. Detalle en 06, "Cámara de juego de granja".
+- **Despliegue previo:** el droplet quedó en `f56450c` (laboratorio por pasos); `/health`, `/`, `/api/cultivos` y `mediworks.mx` en 200.
+- **Pendiente:** `herramientas/prueba-movimiento` A2 y G1b fallan desde antes por la lluvia animada de la vista previa (no por la cámara); avisar a Mompin.
+- **Decisiones afectadas:** ninguna de alcance; la inclinación por zoom queda como `[PROPUESTA]`.
+
 ### 2026-11-14 (noche) — Front: laboratorio por pasos, escena de fondo y brocha `[DECIDIDO]` (Eduardo)
 
 - **Archivos:** `web/src/App.tsx`, `ui/navigation.ts`, `ui/BarraPasos.tsx` y `ui/barra.css` (nuevos), `ui/lab/` (nuevo: `Laboratorio`, `PanelCultivos`, `PanelEscenarios`, `PanelComparacion`, `piezas`, `lab.css`), se borra `ui/LaboratorioConectado.tsx`; `ui/planes.ts`, `ui/Parcela2D.tsx`, `ui/parcela2d.css`, `ui/iconosCultivo2D.ts`, `ui/components.tsx`, `ui/tokens.css`, `main.tsx`; `escena/EscenaParcela.tsx`, `escena/render/escena-three.ts`, `escena/escena.css`, `escena/pincel.ts` (nuevo); pruebas `ui/planes.test.ts` y `escena/pincel.test.ts`; `docs/03`, `docs/06`, `docs/11`, `web/README.md`, `AgroVault/Compartido/{Codigo,Resumen}.md`, nota en `DESIGN.md`.

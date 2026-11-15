@@ -149,3 +149,7 @@
   .escena-hud { bottom: calc(48svh + 16px); right: 8px; max-height: calc(100% - 48svh - 100px); }
   .escena-hud-panel { width: min(340px, calc(100vw - 16px)); }
 }
+.escena-hud-separador { width: 1px; margin: 6px 2px; background: rgb(17 34 26 / 14%); }
+.escena-hud-barra .escena-brujula { position: relative; width: 44px; padding: 0; display: grid; place-items: center; overflow: visible; }
+.escena-brujula svg { transition: transform 120ms linear; }
+@media (prefers-reduced-motion: reduce) { .escena-brujula svg { transition: none; } }
