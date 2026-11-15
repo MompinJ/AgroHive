@@ -199,3 +199,8 @@
   .dibujo-tooltip { display: none; }
 }
 @media (forced-colors: active) { .mapa-capa { border: 1px solid CanvasText; } }
+.dibujo-nota { margin: 0; font-size: .78rem; color: var(--color-text-muted); max-width: 300px; }
+.dibujo-escala { font-size: .8rem; color: var(--color-text-body); }
+.dibujo-escala > summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
+.dibujo-escala .parcel-scale { display: grid; gap: 6px; padding-top: 6px; max-width: 300px; }
+.dibujo-escala select { min-height: 38px; border-radius: 10px; border: 1px solid var(--color-line); background: #fff; }

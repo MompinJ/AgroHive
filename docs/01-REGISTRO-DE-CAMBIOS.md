@@ -9,6 +9,7 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** pedido de Eduardo; front a su cargo (D1) y control administrativo dado por Mompin.
 - **Pendiente:** la consulta real de elevación desde el editor nuevo no se probó en vivo; mover vértices con flechas del teclado.
 - **Decisiones afectadas:** ninguna de alcance. Las fuentes siguen completas en Método y fuentes.
+- **Integración con `main`:** se conserva el selector de escala de celda de Mompin (bordes diagonales, parte 3) dentro del editor nuevo, plegado en la tarjeta final; el mapa dibuja los `contornos` diagonales. `ui/Parcela2D.tsx` vuelve solo para la vista previa de la escena (`escena.html?vista=2d`, capturas de Mompin); el laboratorio sigue sin modo 2D.
 
 ### 2026-11-15 — Vistas de la base (cultivos, validación, agua) y retiro del modo 2D (Eduardo)
 
@@ -19,6 +20,34 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Catálogo de 40 cultivos (tras integrar `main`):** paleta con sugeridos, buscador y grupos por tipo; color estable para cada cultivo; `NOMBRES_CULTIVO_ESCENA` con los 40 nombres con acentos (única fuente, la interfaz ya no tiene su propia tabla).
 - **Pendiente:** confirmar con Mompin el retiro del 2D (era respaldo decidido en la reunión; B1 y B3 de `docs/16` mencionan la vista 2D) y los cortes de validación y agua (`[PROPUESTA]`).
 - **Decisiones afectadas:** "3D en el MVP ... con modo 2D de respaldo" (11).
+### 2026-11-15 — Modelos de la ampliación del catálogo, tanda C: yuca, caña de azúcar, ajonjolí, girasol y algodón (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{yuca,cana,ajonjoli,girasol,algodon}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; `EXTRAS` para piezas fuera de las plantas, hoy solo las 3 raíces de `yuca_madurez`); `iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (15 colores más, índices 176 a 190, para la tanda D; quedan 65 libres); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; `web/src/escena/ficha.ts` (nombres de los 22 cultivos de las tandas 2 y 3 del catálogo); pruebas con 23 cultivos; `docs/07` (tabla) y `docs/16` (M7).
+- **Cambio:** cada uno con 5 detallados (de 9 a 60 cubos), 5 bloques (de 15 a 24) y 5 iconos 2D (sobre los 115, peor par nuevo de daltonismo 16.8 %), y su prefijo. La yuca y la caña se siembran por estaca y por trozo de tallo; el girasol usa giros en z, que la escena y el recorte de bordes ya admiten.
+- **Para "bordes":** `yuca_madurez_bloque` lleva 3 cubos de raíz sobre el lomo, fuera de las 9 plantas; `media.test.ts` pasa con ellos. Si estorban al recorte, se quita su entrada de `EXTRAS`.
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` de Mafer, con OK de Mompin; en `generar.py` solo `modelo3d`.
+- **Pendiente:** tandas D a G; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — Modelos de la ampliación del catálogo, tanda B: ejote, cebada, trigo, avena y maíz dulce (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `modelos/cultivos/{ejote,cebada,trigo,avena,maiz_dulce}.py` con sus 25 `.bbmodel` y visores; `bloques.py` (25 bloques; `con_tallo` acepta `giro`); `iconos2d.py` (25 SVG) y su README; `modelos/paleta.py` y `paleta.md` (24 colores más, índices 152 a 175, para la tanda C); todos los `.bbmodel` regenerados; `datos/catalogos/generar.py` (solo `modelo3d` de los cinco) y `cultivos.json`; pruebas `bloques.test.ts` e `iconos2d.test.ts` (18 cultivos); `docs/07` (tabla) y `docs/16` (M7).
+- **Cambio:** cada uno con 5 detallados (de 9 a 60 cubos), 5 bloques (de 15 a 21, trazado común) y 5 iconos 2D (sobre los 90, peor par nuevo de daltonismo 13.7 %), y su prefijo. Los tres cereales son macollos que se distinguen por la espiga (cebada con aristas que cabecea, trigo compacta erguida y dorada, avena en panícula abierta); el maíz dulce sigue verde en madurez para distinguirse del maíz de grano.
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` de Mafer, con OK de Mompin; en `generar.py` solo `modelo3d`.
+- **Pendiente:** tandas C a G; revisión humana en Blockbench y en la escena.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 (madrugada) — Bordes diagonales, parte 3: escena 3D, vista 2D y selector de escala `[DECIDIDO]` (Mompin; IA de Mompin, sesión "bordes", rama `Mompin-motor`)
+
+- **Archivos nuevos:** `web/src/ui/SelectorTamanoCelda.tsx` y su prueba, `web/src/escena/media-2d.ts` y `media-2d.css`, `docs/capturas/bordes-diagonales/` (4 comparaciones antes y después).
+- **Archivos de la escena (Mompin):** `web/src/escena/demo-motor.ts` (`POLIGONO_BORDES`; `parcelaCuadriculaBalam` acepta polígono, id y tamaño), `web/src/escena/vista-previa.tsx` (fuente "Bordes diagonales" y parámetros `?fuente=bordes`, `?tamano=N`, `?formas=0`, `?vista=2d`). Docs: `docs/06` (sección "Bordes diagonales y escala de celda").
+- **Toca archivos de Eduardo (con OK de Mompin por la maestra; buzón caído, la maestra le pasa el aviso). Para el merge de mañana, exactamente esto:**
+  - `web/src/escena/render/escena-three.ts` (+46 / −24): 3 imports nuevos (`unirCubosMedia`, `./media-celda`, tipo `FormaCelda`); `MetaPlantas.forma`; en `construirTerreno`, los `if (medidos.length > 0)` y `if (huecos.length > 0)` pasan a `for (const [forma, …] of porForma(…))` con la caja o el prisma (`geometriaPrisma`) y su giro (`giroForma`); la placa usa `placaEnCelda` (corrimiento y escala) y el banderín `banderinEnCelda`; las losas se agrupan por `losa|forma` y no giran si son medio cuadrado; `geometriaDe` recibe `forma` (entra en la llave de caché) y llama a `unirCubosMedia` en vez de `unirCubos` si no es completa; `construirPlantas` divide cada grupo por forma (`porForma`), pasa la forma a `geometriaDe` y no aplica `giroSurcos` al medio cuadrado; `aplicarDetalle` pide el detallado con `meta.forma`. Si Eduardo reescribió esas funciones, basta repetir esas llamadas: toda la lógica está en `render/media-celda.ts` y `voxel/media.ts`.
+  - `web/src/ui/Parcela2D.tsx` (+2 / −1): import de `claseMedia2D` y `${claseMedia2D(b.forma)}` al final del `className` de la celda.
+  - `web/src/ui/DibujarParcela.tsx` (+10 / −5): imports de `SelectorTamanoCelda` y `PedidoTamano`; estado `tamano`; `preparar(pedido)` llama a `generarCuadricula(puntos, { tamanoCeldaM: pedido })`, cancela la consulta en curso y antepone al mensaje el aviso de tamaño ajustado; el mapa recibe `cuadricula.contornos` en vez de `bordes`; al consultar la elevación se conservan las advertencias de la cuadrícula (`TAMANO_CELDA_AJUSTADO`) junto a las de la API; `<SelectorTamanoCelda>` debajo de los botones, que regenera la cuadrícula si ya existe.
+  - `web/src/ui/cuadricula.ts`: ya quedó como reexportación en la parte 1.
+- **Evidencia:** `contratos/` 102/102, `api/` 162, catálogos en verde, `tsc --noEmit` limpio, `vitest` 1 004 (1 `todo`). Capturas en Chrome sin pantalla (SwiftShader) con la vista previa y elevación de la API: las orillas a 45° quedan rectas en 3D y en 2D. Medido con un solo cultivo: de 6 a 18 draw calls; los triángulos bajan un poco (316 120 a 311 535 con 1 516 celdas).
+- **Pendiente:** el marco de selección y la marca de la brocha siguen cuadrados; no se midió en hardware real; no se tocó `docs/14` (el cronograma no tiene una actividad para esto).
 
 ### 2026-11-15 (madrugada) — Modelos de la ampliación del catálogo, tanda A: soya, frijol caupí, haba, chícharo y lenteja (M7; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
 

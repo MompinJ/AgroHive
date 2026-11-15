@@ -89,6 +89,16 @@ La sesión "catalogo" agregó cultivos a `datos/catalogos/` sin modelo; la sesi�
 | Haba | Erguida, la más alta de las leguminosas, tallo cuadrado, hoja glauca; flor blanca con mancha negra; vainas gruesas que se ennegrecen | 8, 12, 28, 57, 41 | 15 a 21 |
 | Chícharo | Trepa por un tutor de madera con zarcillos; flor blanca; vaina abierta con los chícharos en fila | 12, 12, 30, 54, 52 | 15 a 21 |
 | Lenteja | Chica, plumosa, muchos tallitos finos; madurez color paja con vainas cortas | 11, 12, 30, 55, 40 | 15 a 21 |
+| Ejote | Mata de frijol que se cosecha verde: vainas largas verde brillante colgando; semilla crema, no negra | 10, 11, 30, 60, 46 | 15 a 21 |
+| Cebada | Macollo; espiga con aristas largas que cabecea al madurar; paja pálida | 10, 10, 27, 54, 47 | 15 a 21 |
+| Trigo | Macollo; espiga compacta y erguida, dorada | 10, 11, 29, 52, 46 | 15 a 21 |
+| Avena | Macollo; panícula abierta con espiguillas colgantes; paja clara | 9, 10, 28, 50, 51 | 15 a 21 |
+| Maíz dulce | Planta de maíz más baja que sigue verde en madurez; elote tierno con totomoxtle verde y grano pálido; id con guion bajo (`maiz_dulce`) | 11, 10, 26, 57, 45 | 15 a 21 |
+| Yuca | Arbusto ralo de tallo leñoso con nudos, hoja palmeada en peciolo rojizo; siembra por estaca; raíces cafés de pulpa blanca | 9, 12, 29, 60, 58 | 15 a 24 (en madurez, 3 raíces sobre el lomo fuera de las plantas: `EXTRAS` de `bloques.py`) |
+| Caña de azúcar | Macollo de tallos gruesos segmentados con nudos morados, desnudos abajo; siembra por trozo; la más alta | 11, 12, 29, 57, 45 | 21 a 24 |
+| Ajonjolí | Tallo único recto con cápsulas paradas en fila y flores tubulares rosa pálido | 12, 9, 27, 60, 42 | 15 a 21 |
+| Girasol | Tallo único con hojas anchas y capítulo de disco café y pétalos amarillos que se inclina; usa giros en z | 12, 10, 29, 46, 48 | 15 a 21 |
+| Algodón | Arbusto piramidal de hoja palmeada; madurez con motas blancas en cápsulas cafés | 12, 11, 29, 52, 48 | 15 a 21 |
 
 ## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
 

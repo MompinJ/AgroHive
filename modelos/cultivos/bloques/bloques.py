@@ -3,8 +3,11 @@
 Correr desde la raiz del repo:
     python modelos/cultivos/bloques/bloques.py
 
-Genera los 65 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo y
-lenteja x siembra, brote, crecimiento, madurez, podrida) y visor_bloques.html.
+Genera los 115 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo,
+lenteja, ejote, cebada, trigo, avena, maiz_dulce, yuca, cana, ajonjoli, girasol y algodon x siembra, brote, crecimiento,
+madurez, podrida) y visor_bloques.html.
+El nombre es <cultivo>_<etapa>_bloque y el cultivo puede llevar guion bajo (maiz_dulce): la etapa es el penultimo
+tramo, nunca el segundo.
 
 En la escena cada bloque (celda de 10 x 10 m) usa uno de estos modelos en lugar de la planta detallada, que se
 queda para la celda seleccionada. Es una representacion visual, NO a escala: el numero de plantas, su tamano y la
@@ -22,8 +25,11 @@ Trazado comun (para que una parcela de bloques pegados se lea continua): 3 surco
 por surco con esa misma separacion (x = -16/3, 0, 16/3), tambien continuas entre bloques. Los lomos ocupan x[-8, 8].
 
 Para agregar un cultivo/etapa: agregar su planta (1 o 2 cubos) a PLANTAS con las ayudas con_tallo/hoja/pieza/semilla
-(o, para rastreras y matas bajas, guia/mata/esqueje/al_lado/encima; para leguminosas, en_v/costado/vaina_costado/con_tutor) y la pareja
-a CULTIVOS_ETAPAS.
+(o, para rastreras y matas bajas, guia/mata/esqueje/al_lado/encima; para leguminosas, en_v/costado/vaina_costado/con_tutor;
+para cereales de grano chico, cereal; para el maiz dulce, elote; para tallo con algo en la punta, tallo_punta con
+copa o cabeza; para capsulas pegadas al tallo, manguito; para arbusto piramidal, escalonada; para siembra de estaca o
+trozo, estaca/trozo) y la pareja a CULTIVOS_ETAPAS. Lo que va por surco ademas de las 9 plantas (la raiz de la yuca
+madura) va en EXTRAS, como la franja humeda de siembra.
 """
 import math
 import os
@@ -142,11 +148,12 @@ def semilla(cols, tam):
     return planta
 
 
-def con_tallo(col, alto, grueso, resto, tilt=None):
-    """Planta de 2 cubos: un tallo (derecho, o acamado si tilt=(min, max)) y lo que dibuje resto() en su lugar."""
+def con_tallo(col, alto, grueso, resto, tilt=None, giro=0):
+    """Planta de 2 cubos: un tallo (derecho, o acamado si tilt=(min, max)) y lo que dibuje resto() en su lugar.
+    giro=90 orienta hojas y acame a lo largo del surco (x), con menos abanico, para no salir del lomo en z."""
     def planta(m, nombre, base, rng, escala):
         h = alto * escala
-        yaw = lado_hoja(rng)
+        yaw = r3(giro + rng.choice((0, 180)) + rng.uniform(-15, 15)) if giro else lado_hoja(rng)
         if tilt:
             caja_ajustada(m, nombre + '_tallo', base, (grueso, h, grueso), col, tilt=r3(rng.uniform(*tilt)), yaw=yaw)
         else:
@@ -353,6 +360,153 @@ def con_tutor(alto_tutor, cols, ancho, alto, tilt=None):
     return planta
 
 
+# ---------------- ejote, cebada, trigo, avena y maiz dulce (ampliacion, tanda 2, 15/11) ----------------
+def pinta_cara(m, e, cara, col):
+    """Otro color de la paleta en una sola cara del cubo (p. ej. el cabello en la punta del elote)."""
+    i = m.names.index(col)
+    e['faces'][cara]['uv'] = [i % 16, i // 16, i % 16 + 1, i // 16 + 1]
+
+
+def cereal(cols_tallo, alto, ancho, fondo, cols_esp, tam_esp, t_esp, tilt=(0, 6), punta_col=None):
+    """Cereal de grano chico (2 cubos): un macollo (los tallos juntos en 1 cubo) que se inclina a lo largo del surco
+    (x), hacia el centro del bloque, y en su punta una espiga u hoja (1 cubo) que sigue esa direccion con t_esp
+    grados de mas: casi 0 erguida (trigo), 15-30 cabeceando (avena), 100 o mas doblada (cebada madura).
+    tilt=(55, 75) acama la planta (podrida). La espiga se calcula desde la punta real del macollo.
+    punta_col: color de la cara 'up' de la espiga (aristas claras de la cebada)."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = 90 * hacia_centro(base, rng) + rng.uniform(-15, 15)
+        e = caja_ajustada(m, nombre + '_macollo', base, (ancho, alto * escala, fondo), rng.choice(cols_tallo),
+                          tilt=r3(rng.uniform(*tilt)), yaw=r3(yaw))
+        t, y = e.get('rotation', [0, 0, 0])[:2]
+        tip = punta(base, e['to'][1] - e['from'][1], t, y)
+        w, h, d = tam_esp
+        esp = caja_ajustada(m, nombre + '_espiga', tuple(r3(v) for v in tip), (w, h * escala, d), rng.choice(cols_esp),
+                            tilt=r3(t + rng.uniform(*t_esp)), yaw=r3(y))
+        if punta_col:
+            pinta_cara(m, esp, 'up', punta_col)
+    return planta
+
+
+def elote(cols, f, grueso, largo, t0, t1, cabello, giro=180):
+    """Elote pegado al tallo a la fraccion f, inclinado entre t0 y t1, con el cabello pintado en su cara de arriba
+    (la punta, porque va inclinado): 1 cubo."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        e = caja_ajustada(m, nombre + '_elote', a_lo_alto(base, f * h), (grueso, largo * escala, grueso),
+                          rng.choice(cols), tilt=r3(rng.uniform(t0, t1)), yaw=yaw + giro)
+        pinta_cara(m, e, 'up', cabello)
+    return resto
+
+
+# ---------------- yuca, cana, ajonjoli, girasol y algodon (ampliacion, tanda 3, 15/11) ----------------
+def tallo_punta(cols, alto, grueso, cima, tilt=(0, 0)):
+    """Tallo (1 cubo) inclinado tilt grados a lo largo del surco (x), hacia el centro del bloque, y lo que dibuje
+    cima(m, nombre, tip, rng, escala, t, y) en su punta real (copa, cabeza, penacho): 2 cubos."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = 90 * hacia_centro(base, rng) + rng.uniform(-15, 15)
+        e = caja_ajustada(m, nombre + '_tallo', base, (grueso, alto * escala, grueso), rng.choice(cols),
+                          tilt=r3(rng.uniform(*tilt)), yaw=r3(yaw))
+        t, y = e.get('rotation', [0, 0, 0])[:2]
+        tip = tuple(r3(v) for v in punta(base, e['to'][1] - e['from'][1], t, y))
+        cima(m, nombre, tip, rng, escala, t, y)
+    return planta
+
+
+def copa(cols, size, t=(-8, 8), arriba=None):
+    """Copa de hojas (1 cubo mas ancho que alto) apoyada en la punta del tallo; arriba: color de su cara 'up'."""
+    def cima(m, nombre, tip, rng, escala, t_tallo, y):
+        e = caja_ajustada(m, nombre + '_copa', tip, tuple(v * escala for v in size), rng.choice(cols),
+                          tilt=r3(rng.uniform(*t)), yaw=r3(y + rng.uniform(-20, 20)))
+        if arriba:
+            pinta_cara(m, e, 'up', rng.choice(arriba))
+    return cima
+
+
+def cabeza(cols, size, t_rel, cara, atras=None):
+    """Cabeza de girasol (1 cubo delgado) CENTRADA en la punta del tallo (gira alrededor de ella, asi el tallo le
+    llega por detras), con la cara (sur, +z local) hacia donde se inclina el tallo; t_rel: grados de mas sobre el
+    tallo (negativo la levanta al cielo, 40-60 la agacha, 120 o mas la cuelga). cara/atras: colores de la cara del
+    disco y de la de atras. Si se sale de la huella, se encoge."""
+    def cima(m, nombre, tip, rng, escala, t_tallo, y):
+        w, h, d = size[0] * escala, size[1] * escala, size[2]
+        t = r3(t_tallo + rng.uniform(*t_rel))
+        col = rng.choice(cols)
+        for _ in range(8):
+            e = m.box(nombre + '_cabeza', (tip[0], r3(tip[1] - h / 2), tip[2]), (r3(w), r3(h), r3(d)), col, tilt=t,
+                      yaw=r3(y), pivot=tip)
+            lo, hi = esquinas(_Uno(e))
+            if max(abs(lo[0]), abs(hi[0]), abs(lo[2]), abs(hi[2])) <= HUELLA - 0.1 and lo[1] >= ALTO_LOMO:
+                break
+            m.els.pop()
+            w, h = w * 0.85, h * 0.85
+        else:
+            raise ValueError(f'{nombre}: la cabeza no cabe en la huella')
+        pinta_cara(m, e, 'south', cara)
+        if atras:
+            pinta_cara(m, e, 'north', atras)
+    return cima
+
+
+def manguito(cols, f, ancho, largo, arriba=None):
+    """Capsulas o follaje pegados al tallo derecho (1 cubo que lo envuelve desde la fraccion f de su altura):
+    ajonjoli con sus capsulas paradas en fila. arriba: color de la cara 'up' (las ultimas flores en la punta)."""
+    def resto(m, nombre, base, rng, escala, h, yaw):
+        e = caja_ajustada(m, nombre + '_mango', a_lo_alto(base, f * h), (ancho, largo * escala, ancho), rng.choice(cols),
+                          yaw=r3(rng.uniform(-20, 20)))
+        if arriba:
+            pinta_cara(m, e, 'up', rng.choice(arriba))
+    return resto
+
+
+def escalonada(cols_bajo, size_bajo, cols_alto, size_alto, arriba_bajo=None, arriba_alto=None, solo_bajo=0.0):
+    """Arbusto piramidal (algodon) en 2 cubos apilados: uno ancho abajo y uno angosto encima. arriba_*: colores para la
+    cara 'up' de cada uno (la fibra blanca que se ve desde arriba). solo_bajo: probabilidad de que falte el de arriba."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = r3(rng.uniform(-30, 30))
+        w, h, d = (v * escala for v in size_bajo)
+        e = caja_ajustada(m, nombre + '_bajo', base, (w, h, d), rng.choice(cols_bajo), yaw=yaw)
+        if arriba_bajo:
+            pinta_cara(m, e, 'up', rng.choice(arriba_bajo))
+        if rng.random() < solo_bajo:
+            return
+        e = caja_ajustada(m, nombre + '_alto', a_lo_alto(base, h), tuple(v * escala for v in size_alto), rng.choice(cols_alto),
+                          yaw=r3(yaw + rng.uniform(-25, 25)))
+        if arriba_alto:
+            pinta_cara(m, e, 'up', rng.choice(arriba_alto))
+    return planta
+
+
+def trozo(col, size, nudo, ancho_nudo):
+    """Cana en siembra: un trozo de tallo acostado sobre el lomo, a lo largo del surco, medio tapado, con su nudo
+    morado en medio (2 cubos con el mismo giro)."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = r3(rng.uniform(-20, 20))
+        w, h, d = size
+        e = caja_ajustada(m, nombre + '_trozo', base, (w * escala, h, d), col, yaw=yaw)
+        m.box(nombre + '_nudo', base, (ancho_nudo, r3(h + 0.12), r3(d + 0.12)), nudo, yaw=e.get('rotation', [0, 0, 0])[1])
+    return planta
+
+
+def estaca(col, largo, grueso, tilt, corte):
+    """Yuca en siembra: estaca de tallo clavada en el lomo, inclinada a lo largo del surco, con el corte claro arriba
+    (1 cubo)."""
+    def planta(m, nombre, base, rng, escala):
+        yaw = 90 * hacia_centro(base, rng) + rng.uniform(-15, 15)
+        e = caja_ajustada(m, nombre + '_estaca', base, (grueso, largo * escala, grueso), col, tilt=r3(rng.uniform(*tilt)),
+                          yaw=r3(yaw))
+        pinta_cara(m, e, 'up', corte)
+    return planta
+
+
+def raices_yuca(m, zs):
+    """Yuca en madurez: una raiz cafe asomando por el costado de cada lomo, entre dos plantas, con el corte blanco
+    de la pulpa en una punta (1 cubo por surco, fijo)."""
+    for k, z in enumerate(zs):
+        x = (-SEP_SURCO / 2, SEP_SURCO / 2, -SEP_SURCO / 2)[k]
+        lado = (1, -1, 1)[k]
+        e = m.box(f'raiz{k}', (r3(x), ALTO_LOMO - 0.3, r3(z + lado * 0.9)), (2.4, 0.9, 1.0), 'yuca_raiz', yaw=(15, -20, 25)[k])
+        pinta_cara(m, e, 'east', 'yuca_pulpa')
+
+
 PLANTAS = {
     # maiz
     'maiz_siembra': semilla(('grano', 'grano_dark', 'grano_light'), (1.0, 0.7, 1.2)),
@@ -489,16 +643,127 @@ PLANTAS = {
         nada)),
     'lenteja_podrida': mata(('podrido', 'hoja_seca_dark'), 1.4, 0.9, 1.4,
                             al_lado(('moho', 'podrido_dark'), (0.9, 0.4, 0.6), 1.1)),
+    # ejote (mata de frijol en domo verde; vainas largas verde brillante colgando; semilla blanca o crema)
+    'ejote_siembra': semilla(('white', 'calabaza_crema'), (0.8, 0.6, 1.1)),
+    'ejote_brote': con_tallo('frijol_hoja_dark', 1.6, 0.5, hoja_plana('frijol_hoja_light', 2.0, 1.2)),
+    'ejote_crecimiento': mata(('frijol_hoja', 'frijol_hoja_light'), 2.3, 2.2, 2.1, alterna(
+        encima('white', 0.5), encima('white', 0.5), nada)),
+    'ejote_madurez': mata(('frijol_hoja_dark', 'frijol_hoja_dark', 'frijol_hoja'), 2.6, 2.3, 2.3,
+                          vaina_costado(('ejote_vaina_light', 'ejote_vaina_light', 'ejote_vaina'), 0.05, 0.5, 2.7, 1.35, -8, 8)),
+    'ejote_podrida': mata(('hoja_seca_dark', 'podrido', 'hoja_marchita'), 2.3, 1.0, 2.0,
+                          al_lado(('moho', 'podrido_dark', 'ejote_vaina_dark'), (1.9, 0.45, 0.55), 1.9)),
+    # cebada (macollo de tallos finos; espiga con aristas largas que se dobla al madurar; paja palida)
+    'cebada_siembra': semilla(('cebada_espiga', 'espiga'), (0.6, 0.4, 0.9)),
+    'cebada_brote': cereal(('cereal_hoja_light',), 1.4, 0.8, 0.6, ('cereal_hoja_light',), (0.5, 1.4, 0.25), (28, 42)),
+    'cebada_crecimiento': cereal(('cereal_hoja', 'cereal_hoja_dark'), 2.8, 1.0, 0.8, ('cereal_hoja_light',),
+                                 (0.55, 1.8, 0.55), (0, 8)),
+    'cebada_madurez': cereal(('hoja_seca',), 3.9, 0.9, 0.7, ('cebada_espiga',), (0.65, 2.2, 0.65), (95, 115),
+                             punta_col='cebada_arista'),
+    'cebada_podrida': cereal(('hoja_seca_dark', 'podrido'), 3.6, 0.9, 0.7, ('podrido', 'moho'), (0.6, 2.0, 0.6), (15, 30),
+                             tilt=(55, 72), punta_col='moho_dark'),
+    # trigo (macollo; espiga compacta y erguida; madurez dorada intensa)
+    'trigo_siembra': semilla(('trigo_espiga_dark', 'trigo_espiga'), (0.6, 0.4, 0.9)),
+    'trigo_brote': cereal(('cereal_hoja',), 1.5, 0.8, 0.6, ('cereal_hoja_light',), (0.5, 1.3, 0.25), (22, 36)),
+    'trigo_crecimiento': cereal(('cereal_hoja', 'cereal_hoja_dark'), 2.8, 1.0, 0.8, ('cereal_hoja_light',),
+                                (0.8, 1.3, 0.8), (0, 5)),
+    'trigo_madurez': cereal(('trigo_espiga_dark',), 3.7, 0.9, 0.7, ('trigo_espiga', 'trigo_espiga_light'), (0.9, 1.7, 0.9),
+                            (0, 5), punta_col='trigo_espiga_light'),
+    'trigo_podrida': cereal(('hoja_seca_dark', 'podrido'), 3.6, 0.9, 0.7, ('trigo_espiga_dark', 'moho_dark'), (0.9, 1.6, 0.9),
+                            (5, 15), tilt=(55, 72), punta_col='moho'),
+    # avena (macollo; panicula abierta y ancha, que cabecea, con espiguillas colgantes; madurez paja clara)
+    'avena_siembra': semilla(('avena_espiga', 'avena_espiga_dark'), (0.5, 0.4, 1.0)),
+    'avena_brote': cereal(('cereal_hoja_light',), 1.6, 0.8, 0.6, ('cereal_hoja',), (0.55, 1.5, 0.25), (30, 45)),
+    'avena_crecimiento': cereal(('cereal_hoja', 'cereal_hoja_dark'), 3.0, 1.0, 0.8, ('cereal_hoja_light',),
+                                (0.45, 1.8, 1.4), (6, 14)),
+    'avena_madurez': cereal(('avena_espiga_dark',), 3.9, 0.9, 0.7, ('avena_espiga',), (0.5, 2.2, 2.0), (15, 28),
+                            punta_col='avena_espiga_dark'),
+    'avena_podrida': cereal(('hoja_seca_dark', 'podrido'), 3.8, 0.9, 0.7, ('avena_espiga_dark', 'moho'), (0.5, 2.0, 1.7),
+                            (10, 25), tilt=(55, 72), punta_col='moho_dark'),
+    # maiz dulce (planta de maiz mas baja que sigue VERDE en madurez; elote de totomoxtle verde con cabello)
+    'maiz_dulce_siembra': semilla(('maiz_dulce_grano', 'grano_light'), (0.9, 0.5, 1.1)),
+    'maiz_dulce_brote': con_tallo('maiz_tallo_light', 2.2, 0.6, hoja('maiz_hoja_light', 0.6, 1.0, 2.4, 40, 55), giro=90),
+    'maiz_dulce_crecimiento': con_tallo('maiz_tallo', 4.4, 0.8, hoja('maiz_hoja', 0.55, 1.5, 3.0, 48, 60), giro=90),
+    'maiz_dulce_madurez': con_tallo('maiz_tallo', 6.2, 0.8, alterna(
+        elote(('totomoxtle', 'totomoxtle', 'totomoxtle_dark'), 0.5, 1.2, 2.3, 20, 28, 'cabello'),
+        elote(('totomoxtle', 'totomoxtle', 'totomoxtle_dark'), 0.5, 1.2, 2.3, 20, 28, 'cabello_light'),
+        hoja('maiz_hoja', 0.62, 1.5, 3.4, 50, 62)), giro=90),
+    'maiz_dulce_podrida': con_tallo('hoja_seca_dark', 3.8, 0.8, alterna(
+        elote(('podrido', 'podrido_dark'), 0.0, 1.2, 2.0, 70, 82, 'moho'),
+        hoja('hoja_marchita', 0.3, 1.3, 2.6, 95, 110, 180)), tilt=(20, 32), giro=90),
+    # yuca (arbusto ralo: tallo lenoso gris pardo, copa de hojas palmeadas; siembra = estaca; raiz cafe al madurar)
+    'yuca_siembra': estaca('yuca_tallo', 2.2, 0.6, (15, 28), 'yuca_pulpa'),
+    'yuca_brote': tallo_punta(('yuca_tallo',), 2.2, 0.6, copa(('yuca_hoja_light',), (1.7, 0.5, 1.5)), tilt=(10, 20)),
+    'yuca_crecimiento': tallo_punta(('yuca_tallo',), 4.2, 0.5, copa(('yuca_hoja', 'yuca_hoja_dark'), (2.6, 0.9, 2.3),
+                                                                    arriba=('yuca_hoja_light', 'yuca_hoja')), tilt=(0, 8)),
+    'yuca_madurez': tallo_punta(('yuca_tallo',), 6.2, 0.6, copa(('yuca_hoja_dark', 'yuca_hoja'), (3.0, 1.1, 2.6),
+                                                                arriba=('yuca_hoja', 'yuca_hoja_light')), tilt=(2, 10)),
+    'yuca_podrida': tallo_punta(('hoja_seca_dark', 'yuca_tallo'), 4.0, 0.6, alterna(
+        copa(('hoja_seca', 'hoja_marchita'), (2.4, 0.7, 2.2), t=(35, 50)),
+        copa(('podrido', 'hoja_seca_dark'), (2.2, 0.7, 2.0), t=(40, 55), arriba=('moho', 'moho_dark'))), tilt=(14, 24)),
+    # cana de azucar (macollo de tallos gruesos verde amarillento, hojas solo arriba, la mas alta; siembra = trozo
+    # acostado con su nudo morado)
+    'cana_siembra': trozo('cana_tallo', (2.6, 0.7, 0.7), 'cana_nudo', 0.35),
+    'cana_brote': cereal(('maiz_hoja_light',), 2.0, 0.7, 0.5, ('maiz_hoja',), (0.45, 2.2, 0.25), (25, 40)),
+    'cana_crecimiento': tallo_punta(('cana_tallo_dark', 'cana_tallo'), 6.0, 0.9, copa(('maiz_hoja', 'maiz_hoja_dark'),
+                                                                                    (1.4, 2.2, 3.0), t=(-18, 18)), tilt=(0, 5)),
+    'cana_madurez': tallo_punta(('cana_tallo', 'cana_tallo_light'), 9.6, 1.0, copa(('maiz_hoja', 'maiz_hoja_dark'),
+                                                                                  (1.5, 2.4, 3.2), t=(-18, 18)), tilt=(0, 5)),
+    'cana_podrida': tallo_punta(('hoja_seca_dark', 'cana_tallo_dark'), 6.4, 1.0, alterna(
+        copa(('hoja_seca', 'hoja_marchita'), (1.3, 2.0, 2.6), t=(70, 90)),
+        copa(('podrido', 'cana_nudo'), (1.2, 1.8, 2.4), t=(75, 95), arriba=('moho', 'moho_dark'))), tilt=(20, 30)),
+    # ajonjoli (tallo unico recto; capsulas paradas en fila a lo largo del tallo; flor tubular rosa palido)
+    'ajonjoli_siembra': semilla(('ajonjoli_semilla',), (0.5, 0.3, 0.7)),
+    'ajonjoli_brote': con_tallo('ajonjoli_hoja', 1.4, 0.35, hoja_plana('ajonjoli_capsula', 1.6, 0.9)),
+    'ajonjoli_crecimiento': con_tallo('ajonjoli_hoja', 4.2, 0.4, alterna(
+        manguito(('ajonjoli_hoja',), 0.3, 1.3, 2.6, arriba=('ajonjoli_flor',)),
+        manguito(('ajonjoli_hoja',), 0.3, 1.3, 2.4),
+        costado('ajonjoli_flor', 0.6, 0.75))),
+    'ajonjoli_madurez': con_tallo('ajonjoli_hoja', 5.6, 0.4, manguito(('ajonjoli_capsula',), 0.4, 1.0, 2.8,
+                                                                      arriba=('ajonjoli_flor', 'ajonjoli_flor', 'ajonjoli_capsula'))),
+    'ajonjoli_podrida': tallo_punta(('hoja_seca_dark', 'podrido'), 4.0, 0.4, alterna(
+        copa(('podrido_dark', 'podrido'), (0.8, 1.8, 0.8), t=(130, 160)),
+        copa(('hoja_seca_dark',), (0.8, 1.6, 0.8), t=(120, 150), arriba=('moho', 'moho_light'))), tilt=(18, 32)),
+    # girasol (tallo unico alto; cabeza de petalos amarillos con disco cafe que mira al cielo y en madurez se agacha;
+    # podrida: cabeza negra colgando)
+    'girasol_siembra': semilla(('black', 'girasol_disco_dark'), (0.5, 0.35, 0.9)),
+    'girasol_brote': con_tallo('girasol_hoja', 1.6, 0.4, hoja_plana('girasol_hoja', 2.2, 1.0)),
+    'girasol_crecimiento': tallo_punta(('girasol_hoja',), 6.0, 0.55, alterna(
+        cabeza(('girasol_petalo',), (2.2, 2.2, 0.8), (-40, -25), 'girasol_disco'),
+        cabeza(('girasol_petalo',), (2.2, 2.2, 0.8), (-40, -25), 'girasol_disco'),
+        copa(('girasol_hoja',), (1.1, 1.0, 1.1), arriba=('girasol_petalo',))), tilt=(0, 6)),
+    'girasol_madurez': tallo_punta(('girasol_hoja',), 8.6, 0.6, cabeza(('girasol_petalo',), (2.6, 2.6, 0.8), (40, 55),
+                                                                       'girasol_disco_dark'), tilt=(2, 8)),
+    'girasol_podrida': tallo_punta(('hoja_seca_dark',), 6.0, 0.6, cabeza(('girasol_disco_dark', 'podrido_dark'), (2.2, 2.2, 0.7),
+                                                                         (110, 135), 'moho_dark', atras='podrido'), tilt=(15, 28)),
+    # algodon (arbusto piramidal en 2 escalones; madurez: motas blancas de fibra en las capsulas cafes, vistas desde arriba)
+    'algodon_siembra': semilla(('algodon_fibra', 'white', 'hoja_seca_light'), (0.6, 0.45, 0.8)),
+    'algodon_brote': con_tallo('yuca_peciolo', 1.3, 0.35, hoja_plana('algodon_hoja', 2.0, 1.1)),
+    'algodon_crecimiento': escalonada(('algodon_hoja',), (2.4, 1.6, 2.2), ('algodon_hoja', 'algodon_bellota'), (1.4, 1.3, 1.3),
+                                      arriba_alto=('algodon_hoja', 'algodon_flor', 'algodon_bellota')),
+    'algodon_madurez': escalonada(('algodon_capsula_seca', 'hoja_seca_dark', 'algodon_hoja'), (2.6, 1.8, 2.4),
+                                  ('algodon_capsula_seca', 'algodon_capsula_seca', 'algodon_fibra'), (1.6, 1.4, 1.5),
+                                  arriba_bajo=('algodon_fibra', 'algodon_fibra', 'algodon_capsula_seca'),
+                                  arriba_alto=('algodon_fibra',)),
+    'algodon_podrida': escalonada(('podrido', 'hoja_seca_dark'), (2.4, 1.3, 2.2), ('podrido_dark', 'algodon_capsula_seca'),
+                                  (1.4, 1.0, 1.3), arriba_bajo=('moho', 'hoja_seca_dark'), arriba_alto=('moho_light', 'moho'),
+                                  solo_bajo=0.3),
 }
 
 CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate',
-                                    'soya', 'caupi', 'haba', 'chicharo', 'lenteja')
+                                    'soya', 'caupi', 'haba', 'chicharo', 'lenteja',
+                                    'ejote', 'cebada', 'trigo', 'avena', 'maiz_dulce',
+                                    'yuca', 'cana', 'ajonjoli', 'girasol', 'algodon')
                    for e in ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')]
+
+
+# Detalles por surco ademas de las 9 plantas (fuera de siembra, que lleva su franja humeda)
+EXTRAS = {'yuca_madurez': raices_yuca}
 
 
 def modelo(cultivo, etapa):
     clave = f'{cultivo}_{etapa}'
-    return bloque(clave + '_bloque', PLANTAS[clave], clave + '_bloque', extra=franja_siembra if etapa == 'siembra' else None)
+    extra = franja_siembra if etapa == 'siembra' else EXTRAS.get(clave)
+    return bloque(clave + '_bloque', PLANTAS[clave], clave + '_bloque', extra=extra)
 
 
 MODELOS = [(f'{c}_{e}_bloque', (lambda c=c, e=e: modelo(c, e))) for c, e in CULTIVOS_ETAPAS]

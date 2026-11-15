@@ -5,6 +5,8 @@ import { forwardRef, lazy, Suspense, useEffect, useId, useMemo, useRef, useState
 import type { LonLat, Parcela } from '../../../contratos/tipos/contratos';
 import { obtenerTerreno } from '../api/cliente';
 import { generarCuadricula, type Cuadricula } from './cuadricula';
+import { SelectorTamanoCelda } from './SelectorTamanoCelda';
+import type { PedidoTamano } from '../geo/tamano-celda';
 
 const MapaParcela = lazy(() => import('./MapaParcela'));
 const sinBordes: LonLat[][] = [];
@@ -43,6 +45,8 @@ export function DibujarParcela({ onGuardar, guardada }: { onGuardar: (p: Parcela
   const [errorCoordenadas, setErrorCoordenadas] = useState('');
   const [aviso, setAviso] = useState('');
   const [estado, setEstado] = useState<Estado>({ tipo: 'nada' });
+  // Lado de celda pedido (escala elegida, Mompin 14/11 noche); 'auto' es la regla de siempre.
+  const [tamano, setTamano] = useState<PedidoTamano>('auto');
   const peticion = useRef<AbortController | null>(null);
   const botonCoordenadas = useRef<HTMLButtonElement>(null);
   useEffect(() => () => peticion.current?.abort(), []);
@@ -50,9 +54,9 @@ export function DibujarParcela({ onGuardar, guardada }: { onGuardar: (p: Parcela
   // La cuadricula se genera sola con un contorno de 3 o mas vertices.
   const cuadricula = useMemo<{ ok: true; valor: Cuadricula } | { ok: false; motivo: string } | null>(() => {
     if (puntos.length < 3) return null;
-    try { return { ok: true, valor: generarCuadricula(puntos) }; }
+    try { return { ok: true, valor: generarCuadricula(puntos, { tamanoCeldaM: tamano }) }; }
     catch (e) { return { ok: false, motivo: e instanceof Error ? e.message : 'No se pudo generar la cuadrícula.' }; }
-  }, [puntos]);
+  }, [puntos, tamano]);
 
   function cambiar(nuevos: LonLat[]) {
     peticion.current?.abort();
@@ -98,7 +102,7 @@ export function DibujarParcela({ onGuardar, guardada }: { onGuardar: (p: Parcela
     return {
       ...c.parcela, terreno: { estado: datos.datos.terreno.estado, fuente },
       celdas: c.parcela.celdas.map((x) => ({ ...x, elevacionM: alturas.get(x.id)?.elevacionM ?? null, pendientePct: alturas.get(x.id)?.pendientePct ?? null })) as Parcela['celdas'],
-      advertencias: [...datos.datos.advertencias, ...(datos.datos.meta.esEjemplo ? [{ codigo: 'ELEVACION_DE_EJEMPLO', severidad: 'critico' as const, mensaje: 'La elevación recibida es de ejemplo, no corresponde a mediciones reales.' }] : [])],
+      advertencias: [...(c.parcela.advertencias ?? []), ...datos.datos.advertencias, ...(datos.datos.meta.esEjemplo ? [{ codigo: 'ELEVACION_DE_EJEMPLO', severidad: 'critico' as const, mensaje: 'La elevación recibida es de ejemplo, no corresponde a mediciones reales.' }] : [])],
     };
   }
   function usar(parcela: Parcela) {
@@ -143,7 +147,7 @@ export function DibujarParcela({ onGuardar, guardada }: { onGuardar: (p: Parcela
       <p>Marca las esquinas en el mapa. Arrastra un vértice para moverlo o el punto de en medio de un lado para agregar uno.</p>
     </div>
     <Suspense fallback={<div className="mapa-dibujo mapa-dibujo-carga" role="status">Cargando mapa…</div>}>
-      <MapaParcela puntos={puntos} bordes={cuadricula?.ok ? cuadricula.valor.bordes : sinBordes} onPunto={agregar} onMover={mover} onInsertar={insertar} onBorrar={borrar} centrar={centrar}>
+      <MapaParcela puntos={puntos} bordes={cuadricula?.ok ? cuadricula.valor.contornos : sinBordes} onPunto={agregar} onMover={mover} onInsertar={insertar} onBorrar={borrar} centrar={centrar}>
         {(mapa) => <>
         <div className="mapa-capa dibujo-barra" role="toolbar" aria-label="Herramientas de dibujo" aria-orientation="vertical">
           <BotonHerramienta nombre="Deshacer" icono={iconos.deshacer} onClick={deshacer} disabled={!historial.length} />
@@ -176,6 +180,10 @@ export function DibujarParcela({ onGuardar, guardada }: { onGuardar: (p: Parcela
         {(cuadricula || aviso) && <div className="mapa-capa dibujo-final">
           {aviso && <p className="dibujo-error" role="alert">{aviso}</p>}
           {cuadricula && !cuadricula.ok && <p className="dibujo-error" role="alert">{cuadricula.motivo}</p>}
+          {cuadricula?.ok && cuadricula.valor.parcela.advertencias?.[0] && <p className="dibujo-nota">{cuadricula.valor.parcela.advertencias[0].mensaje}</p>}
+          {cuadricula?.ok && <details className="dibujo-escala"><summary>Tamaño de celda: {tamano === 'auto' ? 'automático' : `${tamano} m`}</summary>
+            <SelectorTamanoCelda valor={tamano} escala={cuadricula.valor.escala} onCambio={(t) => { peticion.current?.abort(); setEstado({ tipo: 'nada' }); setTamano(t); }} />
+          </details>}
           {cuadricula?.ok && estado.tipo === 'error' && <>
             <p className="dibujo-error" role="alert">No se pudo consultar la elevación. {estado.mensaje}</p>
             <button type="button" className="dibujo-enlace" onClick={() => usar(cuadricula.valor.parcela)}>Continuar sin elevación</button>

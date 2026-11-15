@@ -41,7 +41,7 @@ export const NOMBRES_CULTIVO_ESCENA: Record<string, string> = {
   trigo: 'Trigo',
   avena: 'Avena',
   maiz_dulce: 'Maíz dulce',
-  // Tandas 2 y 3 (nombres del catalogo con acentos; Eduardo, 15/11)
+  // Tandas 2 y 3 del catalogo
   yuca: 'Yuca',
   cana: 'Caña de azúcar',
   ajonjoli: 'Ajonjolí',

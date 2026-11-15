@@ -212,6 +212,55 @@ PALETA_AGROHIVE = {
     # 150-151: grano tierno de maiz dulce (elote; lo demas usa los colores del maiz)
     'maiz_dulce_grano': '#f2dc7a',
     'maiz_dulce_grano_light': '#faf0b8',
+    # 152-158: yuca (tallo lenoso con nudos, hoja palmeada en peciolo rojizo, raiz tuberosa cafe de pulpa blanca)
+    'yuca_tallo': '#8a7a62',
+    'yuca_hoja_dark': '#2d5c2f',
+    'yuca_hoja': '#4a8a3e',
+    'yuca_hoja_light': '#7cb35d',
+    'yuca_peciolo': '#a3443c',
+    'yuca_raiz': '#7a5232',
+    'yuca_pulpa': '#f1ead2',
+    # 159-162: cana de azucar (tallo segmentado verde amarillento, nudo y yema; la hoja usa maiz_hoja*)
+    'cana_tallo_dark': '#8c8a3a',
+    'cana_tallo': '#b8b54e',
+    'cana_tallo_light': '#d9d77c',
+    'cana_nudo': '#7a4f5a',
+    # 163-166: ajonjoli (hoja lanceolada, flor tubular rosa palido, capsula oblonga, semilla crema)
+    'ajonjoli_hoja': '#4e8c45',
+    'ajonjoli_flor': '#f0c6d4',
+    'ajonjoli_capsula': '#7aa24a',
+    'ajonjoli_semilla': '#efe4c4',
+    # 167-170: girasol (petalo amarillo dorado, disco cafe, hoja ancha aspera)
+    'girasol_petalo': '#f5b81c',
+    'girasol_disco_dark': '#3e2614',
+    'girasol_disco': '#6b4421',
+    'girasol_hoja': '#4f8a33',
+    # 171-175: algodon (hoja palmeada, flor crema, bellota verde, fibra blanca, capsula seca)
+    'algodon_hoja': '#3f7d3a',
+    'algodon_flor': '#f3e6a8',
+    'algodon_bellota': '#6f9a42',
+    'algodon_fibra': '#fbfbf6',
+    'algodon_capsula_seca': '#6e4c2c',
+    # 176-177: cartamo (hoja espinosa verde grisaceo, cabezuela tipo cardo naranja; lo demas reutiliza orange, red, white)
+    'cartamo_hoja': '#6f8f5a',
+    'cartamo_flor': '#f08a1c',
+    # 178-181: higuerilla (hoja palmeada bronce, tallo rojo vino, capsula espinosa, semilla moteada)
+    'higuerilla_hoja': '#55703c',
+    'higuerilla_tallo': '#7a2a33',
+    'higuerilla_capsula': '#b8343c',
+    'higuerilla_semilla': '#8a6a52',
+    # 182-185: jitomate (hoja compuesta dentada, fruto rojo con brillo, fruto verde; la flor usa yellow)
+    'tomate_hoja_dark': '#2f6a2c',
+    'tomate_hoja': '#4c9a3c',
+    'tomate_fruto': '#d8322a',
+    'tomate_verde': '#8cbf4a',
+    # 186-188: papa (hoja compuesta, tuberculo beige con ojos; la flor usa white o flor_lila con centro yellow)
+    'papa_hoja': '#4a8a40',
+    'papa_tuberculo': '#c9a46e',
+    'papa_tuberculo_dark': '#8f6c44',
+    # 189-190: calabacita (fruto alargado verde moteado; hoja y flor reutilizan calabaza_hoja*, calabaza_mancha, yellow y orange)
+    'calabacita_fruto': '#3f7a3a',
+    'calabacita_fruto_light': '#8fbf6c',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'
