@@ -64,7 +64,7 @@ Estado: `LISTA`, `ESPERA` (depende de algo), `EN CURSO`, `HECHA`. Cada persona t
 
 | # | Acción | Quién | Estado |
 | --- | --- | --- | --- |
-| P1 | Relanzar el buzón con la IP nueva: `python3 herramientas/buzon/buzon.py` en la laptop de Mompin; los scripts ya apuntan a `http://192.168.0.102:3000` (o `BUZON_URL`). Avisar a todos que relancen su escucha | Mompin | LISTA |
+| P1 | Relanzar el buzón con la IP nueva: `python3 herramientas/buzon/buzon.py` en la laptop de Mompin; los scripts ya apuntan a `http://172.20.10.3:3000`, la IP del hotspot en la sede (o `BUZON_URL`). Avisar a todos que relancen su escucha | Mompin | LISTA |
 | P2 | Desplegar `e355bb3` una sola vez, avisando antes y después (`/health` con el commit y contratos 0.14.0, `/medir.html` y `mediworks.mx` en 200) | Eduardo | LISTA |
 | P3 | Avisar a Eduardo de los archivos suyos que tocó bordes (detalle exacto en `docs/01`, "Bordes diagonales, parte 3"): `escena/render/escena-three.ts`, `ui/DibujarParcela.tsx`, `ui/Parcela2D.tsx` y `ui/cuadricula.ts` (reexportación) | Mompin | LISTA |
 | P4 | Reunión corta: decisiones D8, D9, D10, D3, D6, D7 y H-M7; punto de los pushes directos a `main` (sección 2) | Mompin con todos | LISTA |

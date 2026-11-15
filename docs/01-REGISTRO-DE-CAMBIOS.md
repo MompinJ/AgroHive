@@ -9,6 +9,10 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** Eduardo vio "plantas incompletas o que no funcionan": en desarrollo eran los modelos nuevos que Vite no veía; en todas partes, 12 cultivos largos bloqueados en la paleta y la caña que el motor no puede evaluar.
 - **Pendiente:** que el motor evalúe ciclos de más de un año de clima (caña); es del motor (Mompin).
 
+### 2026-11-15 — Buzón: IP por defecto del hotspot de la sede (sesión "buzon")
+
+- `herramientas/buzon/enviar.sh`, `escuchar.sh`, `README.md`, `AGENTS.md` y `docs/16` (P1): la IP por defecto pasa de `192.168.0.102` (casa) a `172.20.10.3` (hotspot, `wlo1`); `BUZON_URL` sigue mandando.
+
 ### 2026-11-15 — Insecticida: protege solo el riesgo y ligado a la malla (Eduardo)
 
 - **Archivos:** `web/src/ui/lab/plagas.ts` (`firmaMalla`, `celdasEnRiesgo`), `web/src/ui/lab/Laboratorio.tsx`, `web/src/ui/lab/PanelCultivos.tsx`, `web/src/ui/lab/plagas.test.ts`; `docs/06`.
