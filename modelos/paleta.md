@@ -12,7 +12,7 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 4. Por material, 3 tonos (oscuro, base, claro). Lo claro va en tapas y puntas; lo oscuro en bajos, nudos y arrugas.
 5. Los indices 0-15 son `PALETA_BASE` de `herramientas/voxelkit.py`, en el mismo orden.
 
-## Colores (191)
+## Colores (206)
 
 | Indice | Nombre | Hex | Uso |
 | --- | --- | --- | --- |
@@ -207,6 +207,21 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 | 188 | papa_tuberculo_dark | #8f6c44 | Ojos y sombra de la papa |
 | 189 | calabacita_fruto | #3f7a3a | Calabacita (fruto alargado), verde medio |
 | 190 | calabacita_fruto_light | #8fbf6c | Motas claras de la calabacita |
+| 191 | cebolla_hoja | #5b9a7a | Hoja tubular y hueca de cebolla, verde azulado |
+| 192 | cebolla_bulbo | #f0ecd8 | Bulbo blanco de la cebolla |
+| 193 | cebolla_tunica | #c99a52 | Tunica seca y dorada del bulbo de cebolla |
+| 194 | pepino_hoja | #3f8a3a | Hoja triangular y lobulada de pepino |
+| 195 | pepino_fruto | #2c5e2a | Pepino (fruto), verde oscuro |
+| 196 | pepino_fruto_light | #a9cf7a | Espinitas y franjas claras del pepino |
+| 197 | melon_cascara | #b9b07a | Cascara del melon, beige verdoso |
+| 198 | melon_red | #e4dcb0 | Red (reticulado) clara de la cascara del melon |
+| 199 | melon_pulpa | #f2a05a | Pulpa del melon, naranja salmon |
+| 200 | lechuga_hoja_dark | #4f9a3a | Hoja exterior de lechuga, verde medio |
+| 201 | lechuga_hoja | #86c45a | Hoja de lechuga, verde claro |
+| 202 | lechuga_hoja_light | #c4e38c | Corazon y bordes claros de la lechuga |
+| 203 | zanahoria_hoja | #3f8f3a | Follaje plumoso de zanahoria |
+| 204 | zanahoria_raiz | #e8741c | Raiz de zanahoria, naranja |
+| 205 | zanahoria_raiz_dark | #b8541a | Anillos y sombra de la zanahoria |
 
 Los hex son elegidos a ojo para el estilo voxel (no medidos de fotos). Las manchas plateadas de la hoja de calabaza y el fruto verde de C. moschata se tomaron de descripciones varietales (no de una variedad concreta).
 
@@ -224,4 +239,6 @@ Los tonos de ejote (137-139), hoja de cereal (140-142), cebada (143-144), trigo 
 
 Los tonos de yuca (152-158), cana (159-162), ajonjoli (163-166), girasol (167-170) y algodon (171-175) son cualitativos, elegidos a ojo (15/11, sesion de cultivos). La hoja de la cana reutiliza la del maiz (22-24). No estan medidos de fotos. 
 
-Los tonos de cartamo (176-177), higuerilla (178-181), jitomate (182-185), papa (186-188) y calabacita (189-190) son cualitativos, elegidos a ojo (15/11, sesion de cultivos); la calabacita reutiliza la hoja de la calabaza (52-55). No estan medidos de fotos. Quedan 65 indices libres: reutilizar antes de agregar.
+Los tonos de cartamo (176-177), higuerilla (178-181), jitomate (182-185), papa (186-188) y calabacita (189-190) son cualitativos, elegidos a ojo (15/11, sesion de cultivos); la calabacita reutiliza la hoja de la calabaza (52-55). No estan medidos de fotos.
+
+Los tonos de cebolla (191-193), pepino (194-196), melon (197-199), lechuga (200-202) y zanahoria (203-205) son cualitativos, elegidos a ojo (15/11, sesion de cultivos); el melon reutiliza la hoja de la calabaza. No estan medidos de fotos. Quedan 50 indices libres.

@@ -261,6 +261,26 @@ PALETA_AGROHIVE = {
     # 189-190: calabacita (fruto alargado verde moteado; hoja y flor reutilizan calabaza_hoja*, calabaza_mancha, yellow y orange)
     'calabacita_fruto': '#3f7a3a',
     'calabacita_fruto_light': '#8fbf6c',
+    # 191-193: cebolla (hoja tubular verde azulada, bulbo blanco, tunica dorada)
+    'cebolla_hoja': '#5b9a7a',
+    'cebolla_bulbo': '#f0ecd8',
+    'cebolla_tunica': '#c99a52',
+    # 194-196: pepino (hoja triangular lobulada, fruto alargado verde oscuro con espinitas claras; flor yellow)
+    'pepino_hoja': '#3f8a3a',
+    'pepino_fruto': '#2c5e2a',
+    'pepino_fruto_light': '#a9cf7a',
+    # 197-199: melon (cascara reticulada beige verdosa, red clara, pulpa salmon; hoja reutiliza calabaza_hoja*)
+    'melon_cascara': '#b9b07a',
+    'melon_red': '#e4dcb0',
+    'melon_pulpa': '#f2a05a',
+    # 200-202: lechuga (hojas onduladas en roseta, verde claro)
+    'lechuga_hoja_dark': '#4f9a3a',
+    'lechuga_hoja': '#86c45a',
+    'lechuga_hoja_light': '#c4e38c',
+    # 203-205: zanahoria (follaje plumoso, raiz naranja; orange existe para luces)
+    'zanahoria_hoja': '#3f8f3a',
+    'zanahoria_raiz': '#e8741c',
+    'zanahoria_raiz_dark': '#b8541a',
 }
 
 assert len(PALETA_AGROHIVE) <= 256, 'paleta de mas de 256 colores'

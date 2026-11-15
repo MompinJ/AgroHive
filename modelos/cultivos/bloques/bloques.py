@@ -3,9 +3,9 @@
 Correr desde la raiz del repo:
     python modelos/cultivos/bloques/bloques.py
 
-Genera los 115 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo,
-lenteja, ejote, cebada, trigo, avena, maiz_dulce, yuca, cana, ajonjoli, girasol y algodon x siembra, brote, crecimiento,
-madurez, podrida) y visor_bloques.html.
+Genera los 140 bloques (maiz, frijol, calabaza, chile, sorgo, sandia, camote, cacahuate, soya, caupi, haba, chicharo,
+lenteja, ejote, cebada, trigo, avena, maiz_dulce, yuca, cana, ajonjoli, girasol, algodon, cartamo, higuerilla, tomate
+(jitomate), papa y calabacita x siembra, brote, crecimiento, madurez, podrida) y visor_bloques.html.
 El nombre es <cultivo>_<etapa>_bloque y el cultivo puede llevar guion bajo (maiz_dulce): la etapa es el penultimo
 tramo, nunca el segundo.
 
@@ -28,7 +28,8 @@ Para agregar un cultivo/etapa: agregar su planta (1 o 2 cubos) a PLANTAS con las
 (o, para rastreras y matas bajas, guia/mata/esqueje/al_lado/encima; para leguminosas, en_v/costado/vaina_costado/con_tutor;
 para cereales de grano chico, cereal; para el maiz dulce, elote; para tallo con algo en la punta, tallo_punta con
 copa o cabeza; para capsulas pegadas al tallo, manguito; para arbusto piramidal, escalonada; para siembra de estaca o
-trozo, estaca/trozo) y la pareja a CULTIVOS_ETAPAS. Lo que va por surco ademas de las 9 plantas (la raiz de la yuca
+trozo, estaca/trozo; para pintar la cara de arriba, mata(arriba=...), con_arriba o punta_color) y la pareja a
+CULTIVOS_ETAPAS. Lo que va por surco ademas de las 9 plantas (la raiz de la yuca
 madura) va en EXTRAS, como la franja humeda de siembra.
 """
 import math
@@ -267,12 +268,15 @@ def nada(m, nombre, base, rng, escala, h, yaw):
     """Planta sin segundo cubo (para mezclar con alterna)."""
 
 
-def mata(cols, ancho, alto, fondo, resto=nada):
-    """Mata baja y densa (1 cubo de follaje, mas ancho que alto) y lo que dibuje resto()."""
+def mata(cols, ancho, alto, fondo, resto=nada, arriba=None):
+    """Mata baja y densa (1 cubo de follaje, mas ancho que alto) y lo que dibuje resto(). arriba: colores para su
+    cara 'up' (las manchas plateadas de la calabacita); sin arriba no gasta azar, asi las matas de antes no cambian."""
     def planta(m, nombre, base, rng, escala):
         yaw = r3(rng.uniform(-30, 30))
         h = alto * escala
-        caja_ajustada(m, nombre + '_mata', base, (ancho * escala, h, fondo * escala), rng.choice(cols), yaw=yaw)
+        e = caja_ajustada(m, nombre + '_mata', base, (ancho * escala, h, fondo * escala), rng.choice(cols), yaw=yaw)
+        if arriba:
+            pinta_cara(m, e, 'up', rng.choice(arriba))
         resto(m, nombre, base, rng, escala, h, yaw)
     return planta
 
@@ -505,6 +509,27 @@ def raices_yuca(m, zs):
         lado = (1, -1, 1)[k]
         e = m.box(f'raiz{k}', (r3(x), ALTO_LOMO - 0.3, r3(z + lado * 0.9)), (2.4, 0.9, 1.0), 'yuca_raiz', yaw=(15, -20, 25)[k])
         pinta_cara(m, e, 'east', 'yuca_pulpa')
+
+
+
+# ---------------- cartamo, higuerilla, jitomate, papa y calabacita (ampliacion, tanda 4, 15/11) ----------------
+def con_arriba(cols, resto):
+    """Pinta la cara 'up' del cubo que dibujo resto() (la pieza de al_lado, la flor de costado) con uno de cols."""
+    def r(m, nombre, base, rng, escala, h, yaw):
+        n = len(m.els)
+        resto(m, nombre, base, rng, escala, h, yaw)
+        if len(m.els) > n:
+            pinta_cara(m, m.els[-1], 'up', rng.choice(cols))
+    return r
+
+
+def punta_color(cols, resto):
+    """Pinta la cara 'up' del tallo (el cubo anterior a resto) y luego dibuja resto(): la higuerilla madura, cuyo
+    tallo asoma por encima de la hoja como racimo de capsulas rojas."""
+    def r(m, nombre, base, rng, escala, h, yaw):
+        pinta_cara(m, m.els[-1], 'up', rng.choice(cols))
+        resto(m, nombre, base, rng, escala, h, yaw)
+    return r
 
 
 PLANTAS = {
@@ -747,12 +772,67 @@ PLANTAS = {
     'algodon_podrida': escalonada(('podrido', 'hoja_seca_dark'), (2.4, 1.3, 2.2), ('podrido_dark', 'algodon_capsula_seca'),
                                   (1.4, 1.0, 1.3), arriba_bajo=('moho', 'hoja_seca_dark'), arriba_alto=('moho_light', 'moho'),
                                   solo_bajo=0.3),
+    # cartamo (erguido y ramificado arriba, hoja espinosa verde grisaceo; madurez: cabezuelas de penacho naranja en las
+    # puntas, vistas desde arriba; semilla blanca)
+    'cartamo_siembra': semilla(('white', 'hoja_seca_light'), (0.55, 0.4, 0.85)),
+    'cartamo_brote': con_tallo('cartamo_hoja', 1.0, 0.35, hoja_plana('cartamo_hoja', 2.1, 1.3)),
+    'cartamo_crecimiento': con_tallo('cartamo_hoja', 3.8, 0.4, manguito(('cartamo_hoja',), 0.25, 1.5, 2.8)),
+    'cartamo_madurez': tallo_punta(('cartamo_hoja',), 2.6, 0.45, copa(('cartamo_hoja',), (1.9, 2.3, 1.7), t=(-6, 6),
+                                                                     arriba=('cartamo_flor', 'cartamo_flor', 'orange')), tilt=(0, 6)),
+    'cartamo_podrida': tallo_punta(('hoja_seca_dark', 'hoja_seca'), 3.4, 0.45, alterna(
+        copa(('hoja_seca', 'hoja_seca_dark'), (1.2, 1.4, 1.1), t=(40, 60), arriba=('podrido_dark', 'hoja_seca_dark')),
+        copa(('podrido', 'hoja_seca_dark'), (1.1, 1.3, 1.0), t=(45, 65), arriba=('moho', 'moho_dark'))), tilt=(14, 26)),
+    # higuerilla (arbusto de tallo rojo vino y hoja grande en estrella verde bronce; madurez: el tallo asoma sobre la hoja
+    # con la punta roja del racimo de capsulas)
+    'higuerilla_siembra': semilla(('higuerilla_semilla',), (0.7, 0.45, 1.0)),
+    'higuerilla_brote': con_tallo('higuerilla_tallo', 1.6, 0.45, hoja_plana('higuerilla_hoja', 2.3, 1.4)),
+    'higuerilla_crecimiento': tallo_punta(('higuerilla_tallo',), 3.8, 0.55, copa(('higuerilla_hoja',), (2.9, 0.6, 2.7)),
+                                          tilt=(0, 8)),
+    'higuerilla_madurez': con_tallo('higuerilla_tallo', 6.4, 0.7, punta_color(('higuerilla_capsula',), alterna(
+        manguito(('higuerilla_hoja',), 0.55, 3.1, 0.7), manguito(('higuerilla_hoja',), 0.62, 3.0, 0.7)))),
+    'higuerilla_podrida': tallo_punta(('higuerilla_tallo', 'hoja_seca_dark'), 4.4, 0.6, alterna(
+        copa(('hoja_seca', 'hoja_marchita'), (2.5, 0.6, 2.3), t=(35, 50)),
+        copa(('podrido', 'hoja_seca_dark'), (2.3, 0.6, 2.1), t=(40, 55), arriba=('moho', 'moho_dark'))), tilt=(14, 24)),
+    # jitomate (planta amarrada a un tutor de madera, hoja compuesta verde oscuro; madurez: jitomates rojos, alguno verde)
+    'tomate_siembra': semilla(('hoja_seca_light', 'hoja_seca'), (0.5, 0.3, 0.7)),
+    'tomate_brote': con_tallo('tomate_hoja_dark', 1.5, 0.4, hoja_plana('tomate_hoja', 1.9, 1.3)),
+    'tomate_crecimiento': con_tutor(5.6, ('tomate_hoja', 'tomate_hoja_dark'), 1.4, 3.4),
+    'tomate_madurez': alterna_plantas(
+        con_tutor(6.0, ('tomate_hoja_dark', 'tomate_hoja'), 1.6, 4.6),
+        mata(('tomate_hoja_dark',), 1.6, 4.4, 1.6, alterna(costado('tomate_fruto', 1.2, 0.3), costado('tomate_fruto', 1.2, 0.5),
+                                                          costado('tomate_verde', 1.1, 0.45)))),
+    'tomate_podrida': alterna_plantas(
+        con_tutor(5.6, ('hoja_seca_dark', 'hoja_marchita', 'podrido'), 1.3, 2.4, tilt=(18, 30)),
+        mata(('hoja_seca_dark', 'podrido'), 1.5, 1.2, 1.4, al_lado(('podrido', 'podrido_dark', 'moho'), (1.0, 0.8, 1.0), 1.3))),
+    # papa (mata redondeada de hoja compuesta, flor blanca o lila; siembra = papa semilla brotada; madurez: la mata
+    # amarillea y asoman papas beige sobre el lomo)
+    'papa_siembra': mata(('papa_tuberculo', 'papa_tuberculo', 'papa_tuberculo_dark'), 1.4, 0.8, 1.1, encima('papa_hoja', 0.4)),
+    'papa_brote': con_tallo('papa_hoja', 1.3, 0.45, hoja_plana('papa_hoja', 1.9, 1.5)),
+    'papa_crecimiento': mata(('papa_hoja',), 2.6, 2.1, 2.5, alterna(encima('white', 0.6), encima('flor_lila', 0.6), nada)),
+    'papa_madurez': mata(('hoja_marchita', 'hoja_marchita', 'papa_hoja'), 2.4, 1.6, 2.3, alterna(
+        al_lado(('papa_tuberculo', 'papa_tuberculo'), (1.3, 0.8, 1.0), 2.0),
+        al_lado(('papa_tuberculo', 'papa_tuberculo_dark'), (1.2, 0.75, 0.95), 2.0))),
+    'papa_podrida': mata(('hoja_seca_dark', 'podrido', 'hoja_marchita'), 2.4, 0.8, 2.2,
+                         al_lado(('podrido', 'papa_tuberculo_dark', 'moho'), (1.1, 0.6, 0.85), 1.8)),
+    # calabacita (mata compacta de hoja grande con manchas plateadas, flor amarilla grande; madurez: calabacitas alargadas
+    # verdes moteadas en la base)
+    'calabacita_siembra': semilla(('calabaza_crema',), (0.9, 0.5, 1.3)),
+    'calabacita_brote': con_tallo('calabaza_hoja_dark', 1.1, 0.5, hoja_plana('calabaza_hoja_light', 2.2, 1.1)),
+    'calabacita_crecimiento': mata(('calabaza_hoja', 'calabaza_hoja_dark'), 3.0, 1.9, 2.8, alterna(
+        encima('yellow', 0.9), encima('orange', 0.8), nada), arriba=('calabaza_mancha', 'calabaza_hoja', 'calabaza_hoja')),
+    'calabacita_madurez': mata(('calabaza_hoja', 'calabaza_hoja_dark'), 2.4, 1.6, 2.3, alterna(
+        con_arriba(('calabacita_fruto_light',), al_lado(('calabacita_fruto',), (2.3, 0.95, 0.95), 2.55)),
+        con_arriba(('calabacita_fruto',), al_lado(('calabacita_fruto_light',), (2.1, 0.9, 0.9), 2.45)),
+        encima('yellow', 0.9))),
+    'calabacita_podrida': mata(('hoja_seca_dark', 'hoja_marchita', 'podrido'), 2.6, 0.9, 2.4,
+                               al_lado(('podrido', 'podrido_dark', 'moho'), (2.1, 0.6, 0.7), 2.3)),
 }
 
 CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo', 'sandia', 'camote', 'cacahuate',
                                     'soya', 'caupi', 'haba', 'chicharo', 'lenteja',
                                     'ejote', 'cebada', 'trigo', 'avena', 'maiz_dulce',
-                                    'yuca', 'cana', 'ajonjoli', 'girasol', 'algodon')
+                                    'yuca', 'cana', 'ajonjoli', 'girasol', 'algodon',
+                                    'cartamo', 'higuerilla', 'tomate', 'papa', 'calabacita')
                    for e in ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')]
 
 
