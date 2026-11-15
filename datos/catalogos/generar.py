@@ -139,7 +139,8 @@ def presencia_isla(cultivo_id, temporada, sup):
                          "Isla (Veracruz, municipio 77, DDR San Andres Tuxtla); extracto en datos/catalogos/fuentes/siap_isla_2021_2025.csv",
                          "hectareas sembradas (temporal)")
     nombre = CULTIVO_SIAP[cultivo_id]
-    anios = {a: h for a, h in sup.get((nombre, CICLO_SIAP[temporada]), {}).items() if h > 0} if nombre else {}
+    ciclo = CICLO_SIAP_PROPIO.get(cultivo_id, CICLO_SIAP[temporada])
+    anios = {a: h for a, h in sup.get((nombre, ciclo), {}).items() if h > 0} if nombre else {}
     if not anios:
         return {"estado": "no_registrado", "periodo": {"desde": PERIODO_SIAP[0], "hasta": PERIODO_SIAP[1]},
                 "fuente": fuente_siap,
@@ -147,7 +148,8 @@ def presencia_isla(cultivo_id, temporada, sup):
     a0, a1 = min(anios), max(anios)
     lista = ", ".join(f"{a}: {anios[a]:,.0f} ha" for a in sorted(anios))
     return {"estado": "registrado", "periodo": {"desde": f"{a0}-01-01", "hasta": f"{a1}-12-31"},
-            "fuente": fuente_siap, "nota": f"Superficie sembrada de temporal por anio: {lista}."}
+            "fuente": fuente_siap, "nota": f"Superficie sembrada de temporal por anio: {lista}."
+            + (f" SIAP lo registra en el ciclo '{ciclo}', no por temporada PV u OI." if cultivo_id in CICLO_SIAP_PROPIO else "")}
 
 
 def calendario_isla():
@@ -552,7 +554,204 @@ AMPLIACION = [
         "nota_extra": ("Maiz dulce cosechado en fresco. El elote de maiz criollo que se cosecha tierno no es esta variedad: "
                        "para el se usaria la fila del maiz de grano con otra fecha de cosecha, que FAO-56 no publica."),
     },
+    # -- tanda 2: cultivos de campo del tropico y de Mexico (raices, cana, oleaginosas, algodon, tomate, papa, calabacita)
+    {
+        "id": "yuca",
+        "nombreComun": "Yuca",
+        "nombreCientifico": "Manihot esculenta Crantz",
+        "esLeguminosa": False,
+        "t11": {"fila": "Cassava: year 1", "region": "Tropical regions", "siembra": "Rainy season",
+                "etapas": (20, 40, 90, 60), "total": 210,
+                "porque": ("Unica fila tropical de yuca (temporada de lluvias), analoga al temporal primavera-verano de Isla. Se usa el "
+                           "primer ano: el segundo (360 d) es la continuacion del mismo cultivo y no cabe en la serie del escenario. "
+                           "La pagina parte 'Rainy season' entre las filas del ano 1 y del ano 2: cotejar con el PDF.")},
+        "t12": {"fila": "Cassava - year 1",
+                "ini": (0.3, None),
+                "mid": (0.80, "Nota 3: el Kc medio supone condiciones sin estres durante o despues de la temporada de lluvias; el Kc end considera la latencia en la temporada seca."),
+                "end": (0.30, None)},
+        "t22": {"fila": "Cassava - year 1", "zr": 0.8, "zrRango": "0.5-0.8", "p": 0.35},
+        "eco": {"fila": "Cassava", "sci": "Manihot esculenta Crantz.", "gmin": 180, "gmax": 365,
+                "tmin": 10, "topmn": 20, "topmx": 29, "tmax": 35,
+                "rmin": 500, "ropmn": 1000, "ropmx": 1500, "rmax": 5000},
+        "nota_extra": ("SIAP no registra yuca en ningun municipio de Veracruz entre 2021 y 2025 (temporal). "
+                       "Ver datos/catalogos/fuentes/LEEME.md."),
+    },
+    {
+        "id": "cana",
+        "nombreComun": "Cana de azucar",
+        "nombreCientifico": "Saccharum officinarum L.",
+        "esLeguminosa": False,
+        "siap": "Caña de azúcar",
+        "t11": {"fila": "Sugarcane, virgin", "region": "Tropics", "siembra": "sin fecha impresa",
+                "etapas": (50, 70, 220, 140), "total": 480,
+                "porque": ("Fila tropical de cana de planta (virgin), la que corresponde a una siembra nueva. La de soca (ratoon, Tropics, "
+                           "320 d) es el rebrote tras el corte, sin siembra. Con 480 dias el ciclo solo cabe en la serie del escenario "
+                           "(1 de octubre de t-1 al 31 de marzo de t+1, doc 05) si se siembra en octubre a diciembre (OI); otra fecha "
+                           "deja el ciclo NO_EVALUABLE. La tabla no imprime fecha de siembra.")},
+        "t12": {"fila": "Sugar Cane",
+                "ini": (0.40, None),
+                "mid": (1.25, None),
+                "end": (0.75, None)},
+        "t22": {"fila": "Sugar Cane", "zr": 2.0, "zrRango": "1.2-2.0", "p": 0.65},
+        "eco": {"fila": "Sugarcane", "sci": "Saccharum officinarum L.", "gmin": 210, "gmax": 365,
+                "tmin": 15, "topmn": 24, "topmx": 37, "tmax": 41,
+                "rmin": 1000, "ropmn": 1500, "ropmx": 2000, "rmax": 5000},
+        "nota_extra": ("Cultivo perenne: SIAP la registra en Isla en el ciclo 'Perennes', no por temporada PV u OI. EcoCrop trae dos "
+                       "filas 'Sugarcane'; se uso la de Saccharum officinarum (la otra es S. robustum)."),
+    },
+    {
+        "id": "ajonjoli",
+        "nombreComun": "Ajonjoli",
+        "nombreCientifico": "Sesamum indicum L.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Sesame", "region": "China", "siembra": "June",
+                "etapas": (20, 30, 40, 20), "total": 110, "total_impreso": 100,
+                "porque": ("Unica fila de Tabla 11 para ajonjoli; su siembra en junio coincide con el temporal primavera-verano de Isla. "
+                           "La fila imprime 20/30/40/20 pero un total de 100 dias: las cuatro etapas suman 110. Como con el sorgo, se "
+                           "guardan las etapas impresas y el ciclo es su suma (110); la diferencia queda por cotejar contra el PDF de FAO-56.")},
+        "t12": {"fila": "Sesame",
+                "ini": (0.35, "Kc ini general del grupo h. Oil Crops (la fila del ajonjoli no da Kc ini propio)."),
+                "mid": (1.10, None),
+                "end": (0.25, None)},
+        "t22": {"fila": "Sesame", "zr": 1.5, "zrRango": "1.0-1.5", "p": 0.60},
+        "eco": {"fila": "Sesame seed", "sci": "Sesamum indicum L.", "gmin": 40, "gmax": 180,
+                "tmin": 10, "topmn": 20, "topmx": 30, "tmax": 40,
+                "rmin": 300, "ropmn": 500, "ropmx": 1000, "rmax": 1500},
+        "nota_extra": ("SIAP no registra ajonjoli en Isla entre 2021 y 2025; en Veracruz si, en 7 a 9 municipios. "
+                       "Ver datos/catalogos/fuentes/siap_veracruz_candidatos_2021_2025.csv."),
+    },
+    {
+        "id": "girasol",
+        "nombreComun": "Girasol",
+        "nombreCientifico": "Helianthus annuus L.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Sunflower", "region": "Medit.; California", "siembra": "April/May",
+                "etapas": (25, 35, 45, 25), "total": 130,
+                "porque": "Unica fila de Tabla 11 para girasol; no hay fila tropical."},
+        "t12": {"fila": "Sunflower",
+                "ini": (0.35, "Kc ini general del grupo h. Oil Crops (la fila del girasol no da Kc ini propio)."),
+                "mid": (1.0, "Tabla 12 da 1.0-1.15 (nota 9): los valores menores son para cultivos de temporal con menor densidad; se usa 1.0, temporal."),
+                "end": (0.35, None)},
+        "t22": {"fila": "Sunflower", "zr": 1.5, "zrRango": "0.8-1.5", "p": 0.45},
+        "eco": {"fila": "Sunflower", "sci": "Helianthus annuus L v macro", "gmin": 70, "gmax": 200,
+                "tmin": 5, "topmn": 17, "topmx": 34, "tmax": 45,
+                "rmin": 300, "ropmn": 600, "ropmx": 1000, "rmax": 1600},
+    },
+    {
+        "id": "algodon",
+        "nombreComun": "Algodon",
+        "nombreCientifico": "Gossypium hirsutum L.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Cotton", "region": "Egypt; Pakistan; Calif.", "siembra": "Mar-May",
+                "etapas": (30, 50, 60, 55), "total": 195,
+                "porque": ("Tabla 11 no tiene fila tropical para algodon; se eligio la de siembra marzo a mayo, la mas cercana al temporal "
+                           "primavera-verano de Isla. Las otras son de septiembre en Yemen (195 d), abril en Texas (180 d) y marzo en el "
+                           "desierto de California (225 d).")},
+        "t12": {"fila": "Cotton",
+                "ini": (0.35, "Kc ini general del grupo g. Fibre Crops (la fila del algodon no da Kc ini propio)."),
+                "mid": (1.175, "Tabla 12 da el rango 1.15-1.20; 1.175 es su punto medio (eleccion del equipo, no de la fuente)."),
+                "end": (0.60, "Tabla 12 da el rango 0.70-0.50; 0.60 es su punto medio (eleccion del equipo, no de la fuente).")},
+        "t22": {"fila": "Cotton", "zr": 1.7, "zrRango": "1.0-1.7", "p": 0.65},
+        "eco": {"fila": "Cotton, American upland", "sci": "Gossypium hirsutum L.", "gmin": 150, "gmax": 200,
+                "tmin": 15, "topmn": 22, "topmx": 36, "tmax": 42,
+                "rmin": 450, "ropmn": 750, "ropmx": 1200, "rmax": 1500},
+        "nota_extra": "Algodon americano de tierras altas (upland), la especie que se siembra en Mexico; EcoCrop trae otras tres especies de Gossypium.",
+    },
+    {
+        "id": "cartamo",
+        "nombreComun": "Cartamo",
+        "nombreCientifico": "Carthamus tinctorius L.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Safflower", "region": "California, USA", "siembra": "April",
+                "etapas": (20, 35, 45, 25), "total": 125,
+                "porque": ("Tabla 11 no tiene fila tropical para cartamo; se eligio la de siembra en abril, la mas cercana al temporal "
+                           "primavera-verano de Isla. Las otras son marzo en latitudes altas (145 d) y octubre/noviembre en region arida (190 d).")},
+        "t12": {"fila": "Safflower",
+                "ini": (0.35, "Kc ini general del grupo h. Oil Crops (la fila del cartamo no da Kc ini propio)."),
+                "mid": (1.0, "Tabla 12 da 1.0-1.15 (nota 9): los valores menores son para cultivos de temporal con menor densidad; se usa 1.0, temporal."),
+                "end": (0.25, None)},
+        "t22": {"fila": "Safflower", "zr": 2.0, "zrRango": "1.0-2.0", "p": 0.60},
+        "eco": {"fila": "Safflower", "sci": "Carthamus tinctoius L.", "gmin": 120, "gmax": 245,
+                "tmin": 5, "topmn": 20, "topmx": 32, "tmax": 45,
+                "rmin": 300, "ropmn": 600, "ropmx": 1000, "rmax": 1400},
+        "nota_extra": "EcoCrop escribe 'Carthamus tinctoius' (errata de la base); el nombre correcto es Carthamus tinctorius.",
+    },
+    {
+        "id": "higuerilla",
+        "nombreComun": "Higuerilla",
+        "nombreCientifico": "Ricinus communis L.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Castor beans", "region": "Indonesia", "siembra": "Nov.",
+                "etapas": (20, 40, 50, 25), "total": 135,
+                "porque": "Unica fila tropical de higuerilla (Indonesia, noviembre: otono-invierno en Isla). La otra es de marzo en clima (semi)arido (180 d)."},
+        "t12": {"fila": "Castorbean (Ricinus)",
+                "ini": (0.35, "Kc ini general del grupo h. Oil Crops (la fila de la higuerilla no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.55, None)},
+        "t22": {"fila": "Castorbean (Ricinus)", "zr": 2.0, "zrRango": "1.0-2.0", "p": 0.50},
+        "eco": {"fila": "Castor", "sci": "Ricinus communis L.", "gmin": 140, "gmax": 210,
+                "tmin": 15, "topmn": 20, "topmx": 30, "tmax": 39,
+                "rmin": 400, "ropmn": 600, "ropmx": 1000, "rmax": 2000},
+    },
+    {
+        "id": "tomate",
+        "nombreComun": "Jitomate",
+        "nombreCientifico": "Solanum lycopersicum L.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Tomato", "region": "Mediterranean", "siembra": "April/May",
+                "etapas": (30, 40, 45, 30), "total": 145,
+                "porque": ("Tabla 11 no tiene fila tropical para jitomate. Las de siembra mas cercana a junio son abril/mayo en California "
+                           "(155 d) y en el Mediterraneo (145 d); se eligio la mediterranea, como con la calabaza.")},
+        "t12": {"fila": "Tomato",
+                "ini": (0.6, "Kc ini general del grupo b. Vegetables - Solanum Family (la fila del jitomate no da Kc ini propio)."),
+                "mid": (1.15, "Nota 2: si crece en estacas de 1.5 a 2 m puede tomarse 1.20."),
+                "end": (0.80, "Tabla 12 da el rango 0.70-0.90; 0.80 es su punto medio (eleccion del equipo, no de la fuente).")},
+        "t22": {"fila": "Tomato", "zr": 1.5, "zrRango": "0.7-1.5", "p": 0.40},
+        "eco": {"fila": "Tomato", "sci": "Lycopersicon esculentum M.", "gmin": 70, "gmax": 150,
+                "tmin": 7, "topmn": 20, "topmx": 27, "tmax": 35,
+                "rmin": 400, "ropmn": 600, "ropmx": 1300, "rmax": 1800},
+    },
+    {
+        "id": "papa",
+        "nombreComun": "Papa",
+        "nombreCientifico": "Solanum tuberosum L.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Potato", "region": "Continental Climate", "siembra": "May",
+                "etapas": (25, 30, 45, 30), "total": 130,
+                "porque": ("Tabla 11 no tiene fila tropical para papa; se eligio la de siembra en mayo, la mas cercana al temporal "
+                           "primavera-verano de Isla. Las otras son de abril en Europa (145 d), abril/mayo en Idaho (165 d), diciembre "
+                           "en California (140 d) y enero/noviembre en clima (semi)arido, que imprime etapas ambiguas (30/45).")},
+        "t12": {"fila": "Potato",
+                "ini": (0.5, "Kc ini general del grupo d. Roots and Tubers (la fila de la papa no da Kc ini propio)."),
+                "mid": (1.15, None),
+                "end": (0.75, "Nota 4: para papas de ciclo largo con defoliacion el Kc end es de unos 0.40.")},
+        "t22": {"fila": "Potato", "zr": 0.6, "zrRango": "0.4-0.6", "p": 0.35},
+        "eco": {"fila": "Potato", "sci": "Solanum tuberosum L.", "gmin": 90, "gmax": 160,
+                "tmin": 7, "topmn": 15, "topmx": 25, "tmax": 30,
+                "rmin": 250, "ropmn": 500, "ropmx": 800, "rmax": 2000},
+    },
+    {
+        "id": "calabacita",
+        "nombreComun": "Calabacita",
+        "nombreCientifico": "Cucurbita pepo L.",
+        "esLeguminosa": False,
+        "t11": {"fila": "Squash, Zucchini", "region": "Medit.; Europe", "siembra": "May/June",
+                "etapas": (20, 30, 25, 15), "total": 90,
+                "porque": ("Tabla 11 no tiene fila tropical para calabacita; se eligio la de siembra mayo/junio, que coincide con el "
+                           "temporal primavera-verano de Isla. La otra es de abril y diciembre (100 d).")},
+        "t12": {"fila": "Squash, Zucchini",
+                "ini": (0.5, "Kc ini general del grupo c. Vegetables - Cucumber Family (la fila de la calabacita no da Kc ini propio)."),
+                "mid": (0.95, None),
+                "end": (0.75, None)},
+        "t22": {"fila": "Squash, Zucchini", "zr": 1.0, "zrRango": "0.6-1.0", "p": 0.50},
+        "eco": {"fila": "Vegetable marrow", "sci": "Cucurbita pepo L.", "gmin": 40, "gmax": 100,
+                "tmin": 6, "topmn": 17, "topmx": 30, "tmax": 40,
+                "rmin": 300, "ropmn": 600, "ropmx": 1500, "rmax": 2800},
+        "nota_extra": "Calabacita tierna (zucchini), cosechada inmadura; la calabaza de milpa madura es el cultivo 'calabaza'.",
+    },
 ]
+# SIAP registra algunos cultivos fuera de las temporadas PV u OI (por ejemplo, la cana como 'Perennes').
+CICLO_SIAP_PROPIO = {"cana": "Perennes"}
 CULTIVOS += AMPLIACION
 CULTIVO_SIAP.update({c["id"]: c.get("siap") for c in AMPLIACION})
 for _c in AMPLIACION:

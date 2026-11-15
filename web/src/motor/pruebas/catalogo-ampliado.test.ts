@@ -83,6 +83,19 @@ describe('catalogo ampliado: todos los cultivos se simulan con estados honestos'
     if (serie) expect(validarSerie(serie)).toEqual([]);
   });
 
+  it('un ciclo que no cabe en la serie del escenario sale NO_EVALUABLE con motivo, sin numeros (cana de 480 d en PV)', () => {
+    const pv = simularRotacion(entradas(plan('cana', SIEMBRA.PV, 'PV'))).rotacion;
+    expect(pv.estado).toBe('NO_EVALUABLE');
+    expect(pv.advertencias?.some((a) => a.mensaje.includes('la serie termina antes de terminar el ciclo'))).toBe(true);
+    for (const e of ESCENARIOS) {
+      const x = pv.porEscenario[e];
+      expect(x.estado).toBe('NO_EVALUABLE');
+      expect(x.pilares.deficitHidrico?.proporcionDemandaNoCubierta ?? null).toBeNull();
+    }
+    const oi = simularRotacion(entradas(plan('cana', SIEMBRA.OI, 'OI'))).rotacion;
+    for (const e of ESCENARIOS) expect(oi.porEscenario[e].pilares.deficitHidrico?.proporcionDemandaNoCubierta).toEqual(expect.any(Number));
+  });
+
   it('las tarjetas y el ranking aguantan una comparacion con cultivos nuevos', () => {
     const ids = catalogo.cultivos.slice(-3).map((c) => c.id);
     const motores = Object.fromEntries(ids.map((id, i) => [`R${i + 1}`, simularRotacion(entradas(plan(id, SIEMBRA.PV, 'PV', i + 1)))]));
