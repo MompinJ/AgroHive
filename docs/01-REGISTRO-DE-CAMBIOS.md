@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — README ES/EN: base de balam con lo pendiente de verificación humana devuelto (Mafer, con balam)
+
+- **Archivos:** `README.md` y `README.en.md`.
+- **Cambio:** se toma como base la reescritura de balam (`origin/balam` `2561f72`: dominio `agrohive.space`, comandos de Windows, método y fuentes más precisos, licencias de WorldCover, CDL y SSURGO, entrega de Space Apps) y se le devuelve lo que Mompin pidió en el buzón #352: el aviso al inicio de que falta la revisión humana de licencias, declaración de IA y reglas del reto; las marcas `[VERIFICAR]` y `[DECIDIR]` donde no se confirmó (POWER sin licencia declarada, uso comercial de FAO-56, datos de EcoCrop, tiles de Esri, GBIF por registro, FAO Crop Calendar CC BY contra CC BY-NC-SA, INIFAP, geoBoundaries por archivo, CDL y SSURGO por el catálogo de data.gov, licencia del código); y la sección «Pendiente de verificación humana» con seis puntos. Se quitan el commit de la API fijo (`47f6d35`, vencido; `/health` informa el vigente) y «esta rama» de la atribución de OpenStreetMap (ya está en `main`).
+- **Límites:** la lectura humana final queda para la fase de aprobación de la entrega (Mompin). Los enlaces a `web/src/ui/assets/lugares/creditos.json` solo funcionan cuando la rama de balam entre a `main`. Las licencias de GBIF y FAO Crop Calendar no se pudieron leer en sus páginas (403 y página con JavaScript). La traducción al inglés de lo añadido la hizo una IA.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Notas del catálogo sin «Isla» como lugar de referencia (R9, Mafer)
 
 - **Archivos:** `datos/catalogos/generar.py` y `datos/catalogos/cultivos.json` regenerado (`suelos.json` y `calendario-isla.json` quedan iguales).
