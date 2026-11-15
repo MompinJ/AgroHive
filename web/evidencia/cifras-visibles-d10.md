@@ -1,11 +1,35 @@
 # Cifras visibles y su fuente en «Método y fuentes» (MF10 / D10)
 
-15/11/2026. Revisión de Mafer (tarea MF10 de `docs/16`), solo lectura: no se cambió código. La lista va a Eduardo y a la reunión.
+15/11/2026, actualizada con una segunda pasada sobre `994170d`. Revisión de Mafer (tarea MF10 de `docs/16`), solo lectura: no se cambió código. La lista va a Eduardo y a la reunión.
 
 **Cómo se hizo.** Con Chrome sin pantalla sobre `npm run dev` (corte `origin/main` del 15/11, a la altura del merge `dea2e25`) se recorrió la demo: Terreno, «Abrir laboratorio demo», Cultivos (paleta, «Ver más», capas Validación y Agua, los 6 consejos de Esquilote), Escenarios (año seco, normal y lluvioso, 3 consejos), Comparación (3 rotaciones, «Ver su peor año», dashboard «Agua mes a mes», próxima temporada, «Lo que este cálculo no ve») y Método y fuentes. Se guardó el texto visible de cada pantalla y se cruzó cada cifra con lo que lista Método. La pantalla Método solo lista seis bloques de la sesión (`MetodoFuentes.tsx`: clima, relieve, suelo, cultivos y tabla de suelos, calendario local y próxima temporada) y las condiciones de licencia de `ui/licencias.ts`.
 
 **Qué fuentes sí aparecen en Método:** NASA POWER (MERRA-2, celda de 0.5 × 0.625 grados), GPM IMERG (como evidencia), Open-Meteo / ECMWF (SEAS5), ISRIC SoilGrids y OpenLandMap, AWS Terrain Tiles (Terrarium), Saxton y Rawls (2006), FAO-56 y FAO EcoCrop (cientos de filas), SIAP, INIFAP, OpenStreetMap y Esri.
 **Qué no aparece ni una vez en Método:** NASA SMAP, MODIS (NDVI), GBIF y plagas.
+
+## Segunda pasada sobre el código actual (`994170d`, con la demo mundial E10)
+
+Eduardo conectó los seis ejemplos mundiales (`2b78037`): Terreno ya no ofrece Isla y elegir un ejemplo lleva directo al laboratorio. Se repitió el recorrido completo con **Bajío, Guanajuato (México)** y **Sorriso, Mato Grosso (Brasil)**, con la misma lista de pantallas. La primera pasada (Isla) se conserva abajo como referencia.
+
+**Ya arreglado por Eduardo:**
+- El título del dashboard ya no expone claves internas: dice «Agua mes a mes · Rotación 1 · Año normal (2016)» (antes «R1 · habitual 2016»).
+- El texto de próxima temporada ya dice «lo que pasó en los últimos 20 años, corrido según la tendencia del pronóstico estacional» (antes «el rango de lo que pasó en años parecidos»).
+- Terreno ya no presenta Isla como «Parcela de demostración».
+
+**Sigue igual (los hallazgos 1, 2, 3 y 6 de la tabla de abajo se reproducen en los dos ejemplos nuevos):**
+- SMAP, MODIS, NDVI, GBIF y plagas siguen sin aparecer ni una vez en Método, y los consejos de Esquilote siguen dando humedad SMAP y NDVI (Bajío: NDVI 0.24; Sorriso: 0.87) y plagas (chapulín de la milpa en Bajío, gusano cogollero en Sorriso).
+- La leyenda de Validación sigue diciendo «baja con… calor» y «Lo que este cálculo no ve» sigue diciendo «No se evalúa el calor» y «No se consideran… plagas» mientras la comparación muestra «Plaga sin controlar».
+- El dashboard sigue diciendo «Calculado con entradas de ejemplo o sinteticas: no son datos reales», y ahora lo contradice la propia pantalla Método de la misma sesión: «Clima, suelo, terreno y evidencia son datos reales de la API grabados el 2026-11-15».
+
+**Cambia respecto de la primera pasada:**
+- El hallazgo 5 (dos tarjetas con los mismos cultivos y resultados distintos) **ya no se reproduce**: era un efecto del plan por defecto de Isla. En Bajío y en Sorriso las tres rotaciones tienen cultivos distintos.
+- El hallazgo 4 se refuerza con un caso concreto. La etiqueta «La más robusta» no coincide con la única métrica visible: en Bajío la Rotación 1 es «La más robusta» con más agua faltante (588, 130 y 119 mm) que la Rotación 2 (384, 41 y 56 mm); en Sorriso la Rotación 3 es «La más robusta» con 65, 80 y 89 mm mientras la Rotación 2 (soya, soya) tiene 0, 0 y 0 mm y queda tercera. Puede ser correcto (otros pilares como rotación o compatibilidad de fechas), pero la pantalla no lo muestra. En Isla también ocurría (Rotación 3 «más robusta» con 24, 9 y 32 mm frente a 14, 0 y 0 de la Rotación 2) y no lo había anotado.
+
+**Nuevo:**
+- **SMAP casi igual en tres lugares.** Isla 0.19, Bajío 0.19 y Sorriso 0.2 m³/m³, los tres «el 11 de noviembre». Puede ser casualidad (SMAP es de 36 km y los valores se redondean), pero conviene comprobar que `useEvidencia.ts` pide el punto de la parcela y no uno fijo.
+- **Notas de catálogo con Isla.** Las referencias que muestra Método para Bajío y Sorriso siguen diciendo «coincide con el temporal primavera-verano de Isla» (maíz, chile, sorgo): son notas del catálogo de la época en que Isla era la demo.
+- **Referencias de todo el catálogo.** Método lista los mismos grupos para cualquier ejemplo (GGCMI 48 y 54 referencias, SIAP 17 y 15, aunque SIAP es solo de México). No distingue qué fuente alimentó la parcela abierta.
+- **Consejo nuevo de leguminosas** («este simulador no mide su aporte al suelo»): honesto, no necesita fuente.
 
 ## Resumen para la reunión
 
@@ -14,12 +38,12 @@
 | 1 | Las cifras de SMAP y NDVI de los consejos de Esquilote no tienen fuente en Método ni licencia | Alta |
 | 2 | Las plagas (nombre, número de bloques, «Plaga sin controlar») no tienen fuente en Método, y «Lo que este cálculo no ve» dice que no se consideran plagas | Alta |
 | 3 | La leyenda de Validación dice que la planta «baja con calor», pero el motor no evalúa calor (`NO_EVALUABLE`) | Alta |
-| 4 | Método promete que «los pesos, exclusiones y supuestos se muestran junto al resultado», pero la comparación solo muestra el agua | Media |
-| 5 | Dos tarjetas de la comparación (Rotación 3 y Rotación 1) listan los mismos cultivos y dan resultados distintos sin mostrar qué cambia | Media |
-| 6 | El dashboard dice «Calculado con entradas de ejemplo o sinteticas: no son datos reales» aunque el clima es real | Media |
+| 4 | Método promete que «los pesos, exclusiones y supuestos se muestran junto al resultado», pero la comparación solo muestra el agua, y «La más robusta» no coincide con esa métrica (ver segunda pasada) | Alta |
+| 5 | ~~Dos tarjetas con los mismos cultivos y resultados distintos~~ (solo con el plan por defecto de Isla; ya no se reproduce) | Cerrado |
+| 6 | El dashboard dice «Calculado con entradas de ejemplo o sinteticas: no son datos reales» aunque el clima es real, y Método de la misma sesión dice que son datos reales de la API | Media |
 | 7 | Los umbrales de palabras (llovizna, lluvia fuerte, humedad media, vegetación moderada, buena/regular/mala) son `[PROPUESTA]` y no se explican en Método | Baja |
 
-## Laboratorio, paso Cultivos
+## Primera pasada (Isla): laboratorio, paso Cultivos
 
 | Cifra visible | Dónde se ve | De dónde sale | ¿Fuente en Método? |
 | --- | --- | --- | --- |
@@ -68,18 +92,19 @@
 | «122 mm de agua útil por metro» y «cuadros de 0.5 por 0.625 grados, unos 56 por 66 km» | «Lo que este cálculo no ve» | Saxton y Rawls, MERRA-2 | Sí (la resolución de MERRA-2 está en Método) |
 | «No se evalúa el calor: el catálogo no tiene un umbral de temperatura con fuente» | «Lo que este cálculo no ve» | `tarjetas.ts:240` | Contradice la leyenda de Validación (ver arriba) |
 
-## Propuestas para Eduardo (sin cambiar cifras)
+## Propuestas para Eduardo (sin cambiar cifras; vigentes tras la segunda pasada)
 
 1. En `MetodoFuentes.tsx` añadir dos bloques: «Evidencia satelital» (NDVI de MODIS y humedad de SMAP, con fecha de consulta y resolución) y «Plagas» (GBIF y la tabla de hospederos), más sus condiciones en `licencias.ts`. Hoy caen en el texto genérico «Licencia específica no verificada».
 2. Cambiar «No se consideran… plagas» en `tarjetas.ts` por una frase que distinga el motor (no modela daño) de la capa ilustrativa de plagas, o quitar la plaga de las debilidades.
 3. Corregir la leyenda de Validación (`EscenaParcela.tsx:528`): quitar «calor» o decir que no se evalúa.
-4. Mostrar en cada tarjeta de la comparación la fecha de siembra del primer ciclo, o explicar por qué dos rotaciones iguales dan distinto.
+4. Mostrar en cada tarjeta de la comparación por qué gana la «más robusta» (qué pilares y pesos cuentan), o al menos no dejar visible solo el agua. En Bajío y Sorriso la ganadora no es la de menor déficit.
 5. Aclarar en el dashboard que el clima y el suelo son de fuentes reales y que solo el polígono es de ejemplo.
-6. Decidir si los cortes en palabras (`[PROPUESTA]`) se explican en Método o se quitan del texto.
+6. Comprobar que la consulta de SMAP usa la coordenada de la parcela (mismo valor en Isla, Bajío y Sorriso) y cambiar las notas de catálogo que mencionan Isla.
+7. Decidir si los cortes en palabras (`[PROPUESTA]`) se explican en Método o se quitan del texto.
 
 ## Límites de esta revisión
 
-- Solo la parcela demo de Isla, con el plan por defecto (maíz, frijol y maíz) y el motor local; no se probó una parcela dibujada ni fuera de México (eso es R9).
+- Primera pasada: solo la parcela demo de Isla, con el plan por defecto. Segunda pasada: Bajío y Sorriso con su plan por defecto; no se abrieron Kenia, India, España ni Iowa (maíz, frijol y maíz) y el motor local; no se probó una parcela dibujada ni fuera de México (eso es R9).
 - Solo escritorio (1440 px); no se revisó móvil ni el texto al 200 %.
 - No se abrieron todos los cultivos de «Ver más (32)» ni todas las combinaciones de rotación y año.
 - La lista de fuentes de Método sale de la sesión demo; otra parcela podría mostrar otros bloques.

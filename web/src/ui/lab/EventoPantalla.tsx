@@ -3,6 +3,7 @@
 // bloquea la parcela. Con "reducir movimiento" solo se muestra el aviso. Se cierra sola.
 import { useEffect } from 'react';
 import type { EventoPantalla as Evento } from './eventos';
+import { tocar } from '../sonido';
 import './evento.css';
 
 export const DURACION_EVENTO_MS = 3800;
@@ -38,6 +39,7 @@ function Bicho({ tam }: { tam: number }) {
 export function EventoPantalla({ evento, onTerminar }: { evento: Evento | null; onTerminar: () => void }) {
   useEffect(() => {
     if (!evento) return;
+    tocar(evento.tipo);
     const t = window.setTimeout(onTerminar, DURACION_EVENTO_MS);
     return () => window.clearTimeout(t);
   }, [evento?.clave]);
@@ -48,10 +50,12 @@ export function EventoPantalla({ evento, onTerminar }: { evento: Evento | null; 
         <div className="evento-estela" />
         <div className="evento-guadana"><Guadana /></div>
         {BRIZNAS.map((b, k) => <span key={k} className={`evento-brizna${b.verde ? ' evento-brizna-verde' : ''}`} style={{ left: `${b.x}%`, width: b.largo, animationDelay: `${b.retraso}s`, ['--giro' as string]: `${b.giro}deg` }} />)}
+      </> : evento.tipo === 'muerte' ? <>
+        {BRIZNAS.map((b, k) => <span key={k} className="evento-brizna evento-brizna-marron" style={{ left: `${b.x}%`, width: b.largo + 4, animationDelay: `${(k % 12) * 0.12}s`, animationDuration: '2.4s', ['--giro' as string]: `${b.giro}deg` }} />)}
       </> : BICHOS.map((b, k) => <span key={k} className="evento-bicho" style={{ top: `${b.y}%`, animationDelay: `${b.retraso}s`, animationDuration: `${b.duracion}s` }}><Bicho tam={b.tam} /></span>)}
     </div>
     <div className="evento-aviso" role="status" aria-live="polite">
-      <p className="evento-tipo">{evento.tipo === 'cosecha' ? 'Cosecha' : 'Plaga'}</p>
+      <p className="evento-tipo">{evento.tipo === 'cosecha' ? 'Cosecha' : evento.tipo === 'muerte' ? 'Plantas muertas' : 'Plaga'}</p>
       <p className="evento-titulo">{evento.titulo}</p>
       <p className="evento-detalle">{evento.detalle}</p>
     </div>

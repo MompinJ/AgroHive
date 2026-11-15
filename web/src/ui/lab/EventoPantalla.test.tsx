@@ -4,7 +4,7 @@ import { EventoPantalla } from './EventoPantalla';
 import { eventoCosecha, eventoPlaga } from './eventos';
 
 const noop = () => {};
-const cosecha = eventoCosecha('2026-10-17', [{ nombre: 'Maíz', celdas: 4 }], null, 'R1:1:seco');
+const cosecha = eventoCosecha('2026-10-17', [{ nombre: 'Maíz', celdas: 4, fecha: '2026-10-17' }], null, 'R1:1:seco');
 const plaga = eventoPlaga('2026-08-16', { plaga: 'Chapulín de la milpa', cultivo: 'Maíz', bloques: 4 }, 'R1:1:seco');
 
 describe('animacion a pantalla completa', () => {

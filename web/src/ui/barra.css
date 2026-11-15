@@ -17,6 +17,7 @@
 }
 .barra .brand { font-size: 1.4rem; color: var(--color-forest-700); }
 .barra .brand svg { width: 30px; height: 30px; }
+.barra-acciones { display: flex; align-items: center; gap: 8px; }
 .barra-fuentes {
   font-size: .875rem; color: var(--color-text-body); text-decoration: none; padding: 10px 14px;
   border-radius: var(--radius-pill); min-height: 40px; display: inline-flex; align-items: center; white-space: nowrap;
@@ -54,13 +55,25 @@ a.stepper-enlace:hover { background: rgb(17 34 26 / 5%); }
 
 @media (max-width: 1100px) { .stepper-ayuda { display: none; } }
 @media (max-width: 860px) {
-  .barra-interior { grid-template-columns: auto 1fr; gap: 12px; height: auto; min-height: 60px; padding-block: 8px; }
+  .barra-interior { grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; height: auto; min-height: 60px; padding-block: 8px; }
   .barra-fuentes { display: none; }
+  .barra-acciones { justify-self: end; }
+  .barra .selector-idioma label { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .barra .selector-idioma { grid-template-columns: minmax(0, 1fr); }
+  .barra .selector-idioma select { min-inline-size: 0; inline-size: 6.5rem; }
   .stepper { justify-self: end; }
-  .stepper-paso:not(.stepper-actual) .stepper-texto { display: none; }
+  .stepper-texto { display: none; }
   .stepper-enlace { padding: 4px; }
-  .stepper-actual .stepper-enlace { padding-right: 12px; }
-  .stepper-paso + .stepper-paso::before { width: 10px; margin-inline: 2px; }
+  .stepper-actual .stepper-enlace { padding-inline-end: 4px; }
+  .stepper-paso + .stepper-paso::before { width: 4px; margin-inline: 0; }
+}
+@media (max-width: 580px) {
+  .barra .brand > span { display: none; }
+  .stepper ol { gap: 0; }
+  .stepper-paso + .stepper-paso::before { display: none; }
+  .stepper-num { inline-size: 24px; block-size: 24px; }
+  .stepper-enlace, .stepper-actual .stepper-enlace { padding-inline: 2px; }
+  .barra .selector-idioma select { inline-size: 6rem; padding-inline-end: 20px; }
 }
 @media (max-width: 420px) { .barra .brand > span { display: none; } }
 @media (prefers-reduced-motion: no-preference) { .stepper-enlace, .stepper-num { transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease; } }

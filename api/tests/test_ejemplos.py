@@ -14,6 +14,10 @@ EJEMPLOS = RAIZ / "datos" / "demo" / "ejemplos"
 INDICE = json.loads((EJEMPLOS / "indice.json").read_text(encoding="utf-8"))
 IDS = [e["id"] for e in INDICE["ejemplos"]]
 cliente = TestClient(app)
+# Versiones con las que un ejemplo grabado sigue valiendo sin regrabarlo. 0.16.0 solo agrega nombreComunEn (opcional) al
+# catalogo de cultivos, que los ejemplos no graban (usan datos/catalogos/cultivos.json): lo grabado en 0.15.0 no cambia.
+# Un cambio de contrato que toque lo grabado (clima, suelo, terreno, calendario, NDVI, SMAP, plagas, CDL) obliga a regrabar.
+COMPATIBLES = {config.VERSION_CONTRATO, "0.15.0"}
 
 
 def leer(id_, ruta):
@@ -29,7 +33,7 @@ def test_hay_de_5_a_6_ejemplos_en_varios_continentes():
 @pytest.mark.parametrize("id_", IDS)
 def test_lo_grabado_cumple_los_contratos(id_, validar):
     man = leer(id_, "manifiesto.json")
-    assert man["versionContrato"] == config.VERSION_CONTRATO, "el ejemplo se grabo con otra version del contrato: regrabarlo"
+    assert man["versionContrato"] in COMPATIBLES, "el ejemplo se grabo con otra version del contrato: regrabarlo"
     parcela = leer(id_, "parcela.json")
     validar(parcela, "parcela#")
     assert parcela["coordenadasIlustrativas"] is True and parcela["meta"]["esEjemplo"] is True

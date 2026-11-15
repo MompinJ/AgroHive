@@ -3,7 +3,7 @@
 // Punto de integracion propuesto: ver web/src/escena/INTEGRACION.md.
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import type { Advertencia, Parcela, ResultadoCeldas, SerieBalance, Suelo } from '../../../contratos/tipos/contratos';
+import type { Advertencia, Parcela, ResultadoCeldas, SerieBalance, SerieClima, Suelo } from '../../../contratos/tipos/contratos';
 import { CORTES_LLUVIA, lluviaDelDia, textoLluvia } from './lluvia';
 import { describirCelda } from '../geo/escala-celda';
 import { climaFondo, epocaRelativa, NOMBRE_CLIMA_FONDO } from './clima-fondo';
@@ -18,7 +18,10 @@ import { EXAGERACION_VERTICAL_DEFECTO, type BloqueEscena } from './modelo';
 import { huellaPincel, type PincelEscena } from './pincel';
 import { NOMBRES_PLAGA, type PlagaCelda, type TipoPlaga } from './render/plagas';
 import { BIOMA_DEFECTO, type Bioma } from './render/entorno';
-import { AGUA_MAX_MM, colorAgua, colorCultivo, coloresBase, detalleVista, NIVELES_VALIDACION, type DentroDeVentana, type VistaBase } from './vistas';
+import { AGUA_MAX_MM, colorAgua, colorCultivo, coloresBase, detalleVista, NIVELES_VALIDACION, VISTAS_CLIMA, type ContextoVista, type DentroDeVentana, type VistaBase } from './vistas';
+import { climaDeLaSemana, colorLuz, grados, LUZ_MAX_MJ, megajoules, NIVELES_TEMPERATURA, type RangoTemperatura } from './clima-vista';
+import { problemasPorCultivo } from './problemas';
+import { MarcaProblema } from './MarcaProblema';
 import { rgbaPlaca } from './placa';
 import { EscenaThree, ErrorWebGL } from './render/escena-three';
 import { textoEscalaSuelo } from './suelo';
@@ -71,17 +74,22 @@ export interface EscenaParcelaProps {
   nombresPlaga?: Partial<Record<TipoPlaga, string>> | undefined;
   /** Bioma del entorno decorativo (modo fondo): sale de Koppen-Geiger en el laboratorio; templado si no hay clima evaluable. */
   bioma?: Bioma | undefined;
-  /** Avisa cual es la celda elegida (null si se cierra la ficha): centra la zona de plagas. */
-  onCeldaElegida?: ((celdaId: string | null) => void) | undefined;
+  /** Serie climatica real de la parcela y rangos de temperatura por cultivo (FAO EcoCrop): con ellas, en el paso Escenarios, hay vistas de luz y temperatura. */
+  serieClima?: SerieClima | null | undefined;
+  /** Serie del motor solo para ubicar la fecha en el clima real: habilita las vistas de luz y temperatura en pasos donde no hay lluvia ni cielo por clima (Cultivos). */
+  serieVistas?: SerieBalance | null | undefined;
+  rangosTemperatura?: Readonly<Record<string, RangoTemperatura>> | undefined;
   /** Temperatura media tipica por dia del ano (climatologia de la parcela): con la lluvia del dia decide el color del cielo. */
   tMediaDia?: readonly (number | null)[] | undefined;
 }
 
-const NOMBRE_VISTA: Record<VistaBase, string> = { cultivo: 'Cultivos', validacion: 'Validación', agua: 'Agua' };
+const NOMBRE_VISTA: Record<VistaBase, string> = { cultivo: 'Cultivos', validacion: 'Validación', agua: 'Agua', luz: 'Luz', temperatura: 'Temperatura' };
 const AYUDA_VISTA: Record<VistaBase, string> = {
   cultivo: 'Colorea la base de cada bloque con el color de su cultivo',
   validacion: 'De verde (muy buena) a rojo (muy mala idea) según el motor',
   agua: 'De gris (casi nada) a azul marino (mucha agua) según la demanda del día',
+  luz: 'De azul pizarra (poca) a amarillo (mucha) según la radiación solar de la semana',
+  temperatura: 'Compara la temperatura media de la semana con el rango de cada cultivo (FAO EcoCrop)',
 };
 
 const SIN_MARCAS: ReadonlyMap<string, string> = new Map();
@@ -105,7 +113,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO, onCeldaElegida, tMediaDia }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO, tMediaDia, serieClima = null, serieVistas = null, rangosTemperatura }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -130,9 +138,6 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   // Nivel de graficos: lo guarda el navegador; cambia resolucion, aves y viento y el tope de insectos, nunca los datos.
   const [nivelGraficos, setNivelGraficos] = useState<NivelGraficos>(leerNivelGuardado);
   const elegirNivel = (n: NivelGraficos) => { setNivelGraficos(n); guardarNivel(n); };
-  const alElegirRef = useRef(onCeldaElegida);
-  alElegirRef.current = onCeldaElegida;
-  useEffect(() => { alElegirRef.current?.(seleccion?.celdaId ?? null); }, [seleccion?.celdaId]);
   const [hover, setHover] = useState<{ bloque: BloqueEscena; x: number; y: number } | null>(null);
   const [avisosRender, setAvisosRender] = useState<Advertencia[]>([]);
   const [sinWebGL, setSinWebGL] = useState(false);
@@ -161,6 +166,15 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     () => climaFondo(lluvia?.estado === 'con_dato' ? lluvia.clase : null, epocaRelativa(tMediaDia, modelo.fecha)),
     [lluvia, tMediaDia, modelo.fecha],
   );
+
+  // Luz y temperatura (paso Escenarios): el clima real de la semana que corresponde a la fecha; solo si la escena tiene la serie del escenario.
+  const serieDeVistas = serieValida ?? (serieVistas && resultado && serieVistas.rotacionId === resultado.rotacionId && serieVistas.escenario === resultado.escenario ? serieVistas : null);
+  const lluviaVistas = useMemo(() => (serieDeVistas === serieValida ? lluvia : lluviaDelDia(serieDeVistas, modelo.fecha)), [serieDeVistas, serieValida, lluvia, modelo.fecha]);
+  const tieneClima = modo === 'fondo' && !!serieDeVistas && !!serieClima;
+  const climaSemana = useMemo(() => (tieneClima ? climaDeLaSemana(serieClima, lluviaVistas?.estado === 'con_dato' ? lluviaVistas.fechaClima : null) : null), [tieneClima, serieClima, lluviaVistas]);
+  const contextoVista = useMemo<ContextoVista>(() => ({ clima: climaSemana, rangos: rangosTemperatura ?? {} }), [climaSemana, rangosTemperatura]);
+  // Mini marca por cultivo con problemas (un grupo de celdas de la misma planta = una marca).
+  const problemas = useMemo(() => problemasPorCultivo(modelo.bloques.map((b) => ({ cultivo: b.cultivo, ...(b.registro ?? {}) }))), [modelo]);
 
   // Brocha: el trazo en curso vive aqui; al soltar se entrega al plan (pincel.onTrazo).
   const [trazo, setTrazo] = useState<ReadonlySet<string>>(() => new Set());
@@ -272,7 +286,9 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   }, [marcas, trazo, colorPincel, modelo]);
 
   // Vista de la base: solo en modo fondo; sin vista, el suelo vuelve a su color por humedad.
-  const coloresVista = useMemo(() => (modo === 'fondo' && vista ? coloresBase(modelo.bloques, vista, dentroDeVentana) : null), [modo, vista, modelo, dentroDeVentana]);
+  const coloresVista = useMemo(() => (modo === 'fondo' && vista ? coloresBase(modelo.bloques, vista, dentroDeVentana, contextoVista) : null), [modo, vista, modelo, dentroDeVentana, contextoVista]);
+  // Las vistas de clima solo existen con la serie del escenario: si se pierde (otro paso), se vuelve al suelo por humedad.
+  useEffect(() => { if (vista && VISTAS_CLIMA.includes(vista) && !tieneClima) setVista(null); }, [vista, tieneClima]);
   useEffect(() => {
     escena.current?.colorearBase(coloresVista);
   }, [coloresVista]);
@@ -486,7 +502,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
     const presentes = vista === 'cultivo' ? [...new Set(modelo.bloques.map((b) => b.cultivo).filter((c): c is string => !!c))] : [];
     const sinDato = vista ? modelo.bloques.length - (coloresVista?.size ?? 0) : 0;
     const globo = (b: BloqueEscena) => {
-      const d = vista ? detalleVista(b, vista, dentroDeVentana) : { titulo: fichaBloque(b).resumen, lineas: [`Celda ${b.celdaId}`] };
+      const d = vista ? detalleVista(b, vista, dentroDeVentana, contextoVista) : { titulo: fichaBloque(b).resumen, lineas: [`Celda ${b.celdaId}`] };
       const plaga = plagas?.get(b.celdaId) as (PlagaCelda & { nombre?: string }) | undefined;
       const lineaPlaga = plaga ? `Plaga: ${plaga.nombre ?? nombresPlaga?.[plaga.tipo] ?? NOMBRES_PLAGA[plaga.tipo]} (${plaga.comiendo ? 'sin tratar' : 'tratada'})` : null;
       return <><strong>{d.titulo}</strong>{d.lineas.map((l) => <span key={l}>{l}</span>)}{lineaPlaga && <span className={plaga!.comiendo ? 'escena-globo-plaga' : undefined}>{lineaPlaga}</span>}</>;
@@ -515,7 +531,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
                 <p className="escena-escala-titulo">{NOMBRE_VISTA[vista]}</p>
                 {vista === 'cultivo' && (
                   <ul className="escena-escala-lista">
-                    {presentes.map((c) => <li key={c}><span className="escena-escala-muestra" style={{ background: colorCultivo(c) }} />{NOMBRES_CULTIVO_ESCENA[c] ?? c}</li>)}
+                    {presentes.map((c) => { const pr = problemas.find((x) => x.cultivo === c); return <li key={c}><span className="escena-escala-muestra" style={{ background: colorCultivo(c) }} />{NOMBRES_CULTIVO_ESCENA[c] ?? c}{pr && <MarcaProblema problema={pr} nombre={NOMBRES_CULTIVO_ESCENA[c] ?? c} />}</li>; })}
                     {presentes.length === 0 && <li>Sin cultivos en esta fecha.</li>}
                   </ul>
                 )}
@@ -535,6 +551,22 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
                     <p className="escena-detalle">Demanda de agua del cultivo ese día (ETc del motor).</p>
                   </>
                 )}
+                {vista === 'luz' && (
+                  <>
+                    <div className="escena-escala-degradado" style={{ background: `linear-gradient(90deg, ${colorLuz(0)}, ${colorLuz(LUZ_MAX_MJ)})` }} />
+                    <div className="escena-escala-extremos"><span>0</span><span>{LUZ_MAX_MJ}+ MJ/m² al día</span></div>
+                    <p className="escena-detalle">{climaSemana?.radiacionMjM2Dia == null ? 'Sin radiación con dato en esta semana.' : `Esta semana: ${megajoules(climaSemana.radiacionMjM2Dia)}.`} Radiación solar de NASA POWER; es la misma en toda la parcela (celda de unos 56 × 66 km), así que todas las celdas llevan el mismo color.</p>
+                  </>
+                )}
+                {vista === 'temperatura' && (
+                  <>
+                    <ul className="escena-escala-pasos">
+                      {NIVELES_TEMPERATURA.map((n) => <li key={n.nivel} style={{ background: n.color }} title={n.etiqueta} />)}
+                    </ul>
+                    <div className="escena-escala-extremos"><span>Demasiado frío</span><span>Demasiado calor</span></div>
+                    <p className="escena-detalle">{climaSemana?.tMediaC == null ? 'Sin temperatura con dato en esta semana.' : `Media de la semana: ${grados(climaSemana.tMediaC)}.`} Se compara con el rango de temperatura media de cada cultivo (FAO EcoCrop); no es un umbral de estrés diario.</p>
+                  </>
+                )}
                 {sinDato > 0 && <p className="escena-detalle">Sin color: {sinDato} {sinDato === 1 ? 'celda' : 'celdas'} sin dato del motor.</p>}
               </div>
             )}
@@ -548,7 +580,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
               <span className="escena-escala-regla" aria-hidden="true" />{leyendaCelda.texto}
             </p>}
             <div className="escena-hud-barra" role="toolbar" aria-label="Vistas de la parcela">
-              {(['cultivo', 'validacion', 'agua'] as const).map((v) => (
+              {(tieneClima ? (['cultivo', 'validacion', 'agua', 'luz', 'temperatura'] as const) : (['cultivo', 'validacion', 'agua'] as const)).map((v) => (
                 <button key={v} type="button" aria-pressed={vista === v} onClick={() => setVista((a) => (a === v ? null : v))} title={AYUDA_VISTA[v]}>
                   <span className={`escena-vista-icono escena-vista-${v}`} aria-hidden="true" />{NOMBRE_VISTA[v]}
                 </button>

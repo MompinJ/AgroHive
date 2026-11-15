@@ -2,6 +2,40 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Contratos 0.16.0: `nombreComunEn` en el catálogo de cultivos (IA de Mompin, sesión "ingles", parte 2)
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; los cultivos necesitan nombre en inglés con fuente.
+- **Contrato:** `cultivo` gana el campo opcional `nombreComunEn` (versión menor, compatible: un catálogo sin el campo sigue siendo válido). `contratos/package.json` 0.16.0 (la API lo lee para `/health`), tipos regenerados (`contratos/tipos/contratos.d.ts`), ejemplo con el campo en el maíz y sin él en el cultivo ficticio, caso inválido nuevo `pruebas/invalidos/cultivo.nombre-en-vacio.json`, historial en `contratos/README.md`.
+- **API:** `api/app/modelos.py` declara `CultivoCatalogo` con `nombreComunEn` opcional (el resto del cultivo pasa tal cual) dentro de `CatalogoCultivos`; `api/openapi.json` y `api/cliente/api.d.ts` regenerados (`exportar_openapi.py`, `npm run todo`); prueba nueva en `api/tests/test_contratos_api.py` (catálogo real con el campo y catálogo viejo sin él, sin `null`); `api/README.md`. `api/tests/test_ejemplos.py` acepta ejemplos grabados en 0.15.0 (`COMPATIBLES`): 0.16.0 solo toca el catálogo de cultivos, que los ejemplos no graban, así que no hace falta regrabarlos; un cambio que toque lo grabado sí obliga a regrabar.
+- **Catálogo:** `datos/catalogos/generar.py` (`NOMBRES_EN`, `nombre_en`; `VERSION_CONTRATO` de los catálogos de 0.14.0 a 0.16.0) llena los 40 cultivos desde la fila de FAO-56 (Tabla 11 o 12) o EcoCrop que ya usa cada uno, con la fila citada en `notas`; el chile, sin fila propia, desde GRIN-Global (USDA ARS, *Capsicum annuum* var. *annuum*, id 311784, consultado el 15/11). Chile ("Chili pepper") y melón ("Melon") quedan marcados para revisión humana. `cultivos.json`, `suelos.json` y `calendario-isla.json` regenerados con `generar.py`: en `cultivos.json` solo cambian `versionContrato`, `nombreComunEn` y `notas`; en los otros dos, solo `versionContrato`. `validar.mjs` comprueba que cada cultivo tenga el nombre y su fuente en `notas`. Tabla completa en `datos/catalogos/README.md` ("Nombres en inglés").
+- **Motor:** `VERSION_CONTRATO` 0.16.0. Las tarjetas en inglés usan `nombreComunEn` (maize, sorghum, common bean). Regresiones regeneradas con `ACTUALIZAR_REGRESION=1`: en `demo-isla.json` y en las seis de `regresion/ejemplos/` solo cambia `versionContrato` (0.15.0 a 0.16.0); en `regresion/ingles/bajio-guanajuato.json`, además, los nombres de cultivo pasan del español al inglés. Ninguna cifra cambia.
+- **Docs:** `docs/04` (catálogo), `docs/05` (paso 8), `datos/catalogos/README.md`.
+- **Pendiente:** revisión humana de chile y melón (y, si el equipo quiere, `Maize` frente a `Corn` y `Peanut` frente a `Groundnut`); desplegar para que `/api/cultivos` sirva el campo.
+
+### 2026-11-15 — README al día con el alcance mundial y lo hecho el 15/11 (Mafer)
+
+- **Archivos:** `README.md`.
+- **Cambio:** fecha del documento al 15/11; catálogo de 40 cultivos y calendario mundial (GGCMI, MIRCA2000, FAO Crop Calendar, SIAP e INIFAP) en «Qué es», estructura y método; despliegue más reciente anotado en `docs/01` (`5f985da`, contrato 0.15.0); SMAP y NDVI pasan de «la interfaz no lo muestra» a «lo usa Esquilote»; escenarios «seco, normal y lluvioso»; el calor aparece como `NO_EVALUABLE`; fuentes nuevas en la tabla (GGCMI, MIRCA2000, FAO Crop Calendar, geoBoundaries, GBIF y EPPO, ESA WorldCover, CDL y SSURGO, Köppen-Geiger); límites nuevos (totales de FAO-56 que no cuadran, calendario mundial, plagas, calor); declaración de IA con los 40 modelos, los iconos 2D y los cotejos; licencia del proyecto condicionada por FAO Crop Calendar (CC BY-NC-SA); y en «Lo que falta verificar» las licencias nuevas y que «Método y fuentes» aún no lista SMAP, NDVI ni plagas.
+- **Límites:** las licencias y citas nuevas salen de `docs/04` y `docs/01` y no se contrastaron con sus páginas; las de GBIF, WorldCover, CDL y SSURGO quedan `[VERIFICAR]`. Sigue pendiente la revisión humana de licencias, de la declaración de IA y de las reglas del reto, la licencia del código, el uso de los tiles de Esri y la atribución de OpenStreetMap (la interfaz sigue mostrando «© OpenStreetMap» sin «contributors»). Quedan sin revisar los apartados de reglas del reto y de IA fuera de lo tocado.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — Tarjetas del motor en inglés: `idioma` opcional en `rankear` (IA de Mompin, sesión "ingles", parte 1)
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; balam traduce la interfaz (B7) y el motor arma sus propios textos en los dos idiomas.
+- **Archivos:** `web/src/motor/idioma.ts` (nuevo: `IdiomaMotor`, `IDIOMA_MOTOR_POR_DEFECTO`, `esIdiomaMotor`, `idiomaMotor`), `web/src/motor/tarjetas.ts` (las frases pasan a un diccionario `TEXTOS` por idioma; `ContextoTarjetas.idioma`; `AVISOS_EXPERTO`, `nombreEscenario`; `ventanasDe` con idioma), `web/src/motor/ranking.ts` (`rankear(entrada, opciones, idioma)`: `mensaje` y motivos de `noOrdenadas`), `web/src/motor/protocolo.ts` (`idioma?` en la petición `rankear`), `web/src/motor/cliente.ts` (`rankear(rotacionIds?, opciones?, idioma?)`; solo manda `idioma` si se lo pasan), `web/src/motor/index.ts`; pruebas nuevas `web/src/motor/pruebas/tarjetas-ingles.test.ts` y `regresion-ingles.test.ts` con `regresion/ingles/bajio-guanajuato.json`; `docs/05` (paso 8: cómo se usa, qué se traduce y qué no), `docs/16` (fila B7), `AgroVault/Compartido/Resumen.md`.
+- **Cambio:** con `idioma: 'en'` las tarjetas salen en inglés con las mismas cifras y fuentes; sin idioma, en español. Los motivos técnicos de `NO_EVALUABLE` se citan en español, marcados ("Engine reason (in Spanish)"); las fuentes y sus citas no se traducen. Detalle en `docs/05`.
+- **Evidencia:** la regresión A5.5 en español (`demo-isla.json`) no cambia; la de los ejemplos mundiales tampoco.
+- **Pendiente:** (1) la UI pasa `idioma` desde `useIdioma` (balam, B7; línea exacta en `docs/05`); (2) los nombres de cultivo en inglés llegan con `nombreComunEn` del catálogo (parte 2, entrada de arriba).
+- **No se tocó:** `web/src/ui/`, `web/src/paginas/`.
+
+### 2026-11-15 — B7, parte 1: base de idioma español/inglés (balam; registrado por Mompin)
+
+- **Archivos:** `web/src/ui/i18n/` (nuevo: `Idioma.tsx` con `ProveedorIdioma` y `useIdioma` con `idioma`, `cambiarIdioma` y `t`; `diccionarios.ts`; `preferencia.ts`; `SelectorIdioma.tsx`; `idioma.css`; prueba), Inicio y `BarraPasos` traducidos (rama `balam`, `06ada93`, PR #13).
+- **Cambio:** `[DECIDIDO]` (Mompin, 15/11): la app tendrá selector de idioma español/inglés. Esta parte trae la base y las dos primeras pantallas. Los textos de las tarjetas los arma el motor (`web/src/motor/tarjetas.ts`) y se traducen ahí, no en la UI.
+- **Propuesto:** campo opcional `nombreComunEn` en el contrato de cultivo, con fuente.
+- **Toca archivos de otros:** front de Eduardo (D1), acordado por el buzón.
+- **Decisiones afectadas:** idioma de la app (antes pendiente de la fase de entrega).
+
 ### 2026-11-15 — Tarjetas del motor: «año habitual» pasa a «año normal» (Mompin)
 
 - **Archivos:** `web/src/motor/tarjetas.ts`, `web/src/motor/pruebas/tarjetas.test.ts`, `web/src/motor/pruebas/regresion/demo-isla.json` (regenerada con `ACTUALIZAR_REGRESION=1`).
@@ -40,7 +74,7 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 ### 2026-11-15 — MF10 (D10): cifras visibles y su fuente en «Método y fuentes» (Mafer)
 
 - **Archivos:** `web/evidencia/cifras-visibles-d10.md` (nuevo).
-- **Cambio:** revisión de solo lectura, sin tocar código: se recorrió la demo (Terreno, Cultivos con los 6 consejos de Esquilote, Escenarios, Comparación, dashboard, próxima temporada y Método) y se cruzó cada cifra visible con las fuentes que lista Método. Hallazgos principales: las cifras de SMAP y NDVI de los consejos y las plagas (GBIF y hospederos) no tienen fuente ni licencia en Método; la leyenda de Validación dice «calor» pero el motor no lo evalúa; Método promete pesos y exclusiones que la comparación no muestra; dos tarjetas con los mismos cultivos dan resultados distintos sin explicar por qué; el aviso del dashboard dice «no son datos reales» con clima real. Incluye 6 propuestas para Eduardo.
+- **Cambio:** revisión de solo lectura, sin tocar código: se recorrió la demo (Terreno, Cultivos con los 6 consejos de Esquilote, Escenarios, Comparación, dashboard, próxima temporada y Método) y se cruzó cada cifra visible con las fuentes que lista Método. Hallazgos principales: las cifras de SMAP y NDVI de los consejos y las plagas (GBIF y hospederos) no tienen fuente ni licencia en Método; la leyenda de Validación dice «calor» pero el motor no lo evalúa; Método promete pesos y exclusiones que la comparación no muestra; dos tarjetas con los mismos cultivos dan resultados distintos sin explicar por qué; el aviso del dashboard dice «no son datos reales» con clima real. Incluye 6 propuestas para Eduardo. Segunda pasada el mismo día sobre `994170d` (demo mundial E10, ejemplos de Bajío y Sorriso): Eduardo ya arregló el título del dashboard y el texto de próxima temporada, el hallazgo de las tarjetas iguales ya no se reproduce, y se reforzó que «La más robusta» no coincide con la única métrica visible (agua); quedan vigentes SMAP, NDVI y plagas sin fuente, la leyenda de calor y el aviso del dashboard.
 - **Límites:** solo la parcela demo de Isla, en escritorio y con el plan por defecto; no se probó una parcela propia ni fuera de México (R9), ni móvil, ni todos los cultivos de «Ver más». Se hizo con Chrome sin pantalla y leyendo el texto del DOM.
 - **Decisiones afectadas:** ninguna.
 
@@ -137,6 +171,40 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** la protección guardaba ids de celda que cambian con el tamaño de celda (mismo problema que el plan `porCelda`), y el botón anterior protegía celdas sin plaga, lo que no reflejaba una decisión.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
+
+### 2026-11-15 — Selector de idioma con banderas (Eduardo)
+
+- **Archivos:** `web/src/ui/i18n/SelectorIdioma.tsx`, `idioma.css`, `idioma.test.tsx`.
+- **Cambio:** el selector de idioma deja de ser un `<select>` con etiqueta y pasa a ser un grupo de dos botones con bandera (español: México; inglés: EE. UU.), dibujadas en SVG porque los emojis de bandera no se ven en Windows. El nombre del idioma va en `aria-label` y `title`, el grupo tiene nombre accesible (\"Idioma\"/\"Language\") solo para lectores de pantalla y la elegida lleva un anillo. Mismo cambio de idioma de antes, sin tocar diccionarios.
+- **Evidencia:** `tsc` sin errores; pruebas del front 3466 en verde (la del selector ahora comprueba las dos banderas, los `lang`, el estado marcado y que ya no hay `<select>`). No se revisó visualmente.
+- **Límites:** una bandera es un país, no un idioma; se eligieron México (demo en español) y EE. UU. (inglés) y el nombre queda en `title` y `aria-label`.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — Vistas de clima en Cultivos, plagas estables, cosecha y muerte por evento, paneles plegables (Eduardo)
+
+- **Archivos:** `web/src/escena/EscenaParcela.tsx` (`serieVistas`), `ui/lab/plagas.ts`, `eventos.ts`, `EventoPantalla.tsx`, `evento.css`, `historial.ts`, `PanelHistorial.tsx`, `Laboratorio.tsx`, `PanelIzq.tsx`, `panelColapsable.ts`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `ui/sonido.ts`, pruebas; `docs/06`.
+- **Cambio:** (1) Las vistas de luz y temperatura también están en el paso Cultivos. (2) La plaga ya no cambia al plantar: la zona de cada cultivo (20 % de la parcela) es fija y solo aparece o desaparece en las celdas afectadas. (3) La animación de cosecha sale por cada cultivo en su fecha, y una nueva de plantas muertas sale cada vez que unas plantas pasan a marchitas o podridas, cada una con su sonido. (4) Los paneles de la izquierda se pliegan.
+- **Evidencia:** `tsc` sin errores; pruebas del front en verde (nuevas: plantar no mueve la plaga, cosecha por fecha, detección de plantas muertas, panel plegable). No se probó en el navegador por instrucción del equipo.
+- **Límites:** un cultivo plantado solo fuera de su zona no tiene plaga; las plantas "mueren" según el estado del motor (marchita o podrida), no hay otra definición; no se revisó visualmente ni se oyó el sonido nuevo.
+- **Decisiones afectadas:** ninguna de alcance del MVP.
+
+### 2026-11-15 — La plaga en el 20 % de cada grupo de cultivo, en lugar del radio (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/plagas.ts` (`cuantasConPlaga`, `focoDelGrupo`, `celdasConPlaga`, `focosDelPlan`; se quita `celdasEnRadio`), `Laboratorio.tsx`, `PanelCultivos.tsx`, `BarraHerramientas.tsx`, `escena/EscenaParcela.tsx` (ya no avisa la celda elegida), `ui/tutorial/pasos.ts`, `lab.css`, `plagas.test.ts`; `docs/06`.
+- **Cambio:** el equipo aclaró que "radio" no era una selección: lo que se quiere es que, en un grupo de celdas del mismo cultivo, solo el 20 % lleve la plaga. Se quitó el control de radio y la celda elegida como centro. Ahora, por cada cultivo y ciclo atacado por una plaga registrada, cerca del 20 % de sus celdas (al menos una) lleva la plaga, juntas, con un foco fijo por plan, ciclo, cultivo y plaga. El aviso de riesgos, "Proteger los N bloques en riesgo" y "Tu plan" cuentan solo ese foco; el insecticida de la barra vuelve a cubrir toda la parcela.
+- **Evidencia:** pruebas nuevas de la proporción, la contigüidad, la estabilidad y el orden de las celdas; suite del front 3407 en verde. En la demo (4 celdas de maíz) el panel dice "1 bloque sin insecticida" y "Proteger los 1 bloque" deja el ciclo protegido.
+- **Límites:** ilustrativo; no cambia el motor ni el ranking. El 20 % es una decisión de dibujo del equipo, no un dato de GBIF. Solo se vio con la demo de 4 celdas; con parcelas grandes se prueba con mallas de 8 × 8 y 10 × 10.
+- **Decisiones afectadas:** ninguna de alcance del MVP. Reemplaza lo de "zona de plagas por radio" de la entrada anterior.
+
+### 2026-11-15 — Esquilote con iconos y anillo, tiempo por semanas, luz y temperatura, marcas por cultivo, sonido, historial y PDF (Eduardo)
+
+- **Archivos:** `web/src/ui/tutorial/` (`texto.ts`, `TextoConIconos.tsx`, `useEscribir.ts`, `Resalte.tsx`, `Esquilote.tsx`, `Tutorial.tsx`, CSS); `ui/tiempo.ts`, `ControlTiempo.tsx`, `lab/PanelEscenarios.tsx`; `escena/clima-vista.ts`, `problemas.ts`, `MarcaProblema.tsx`, `vistas.ts`, `EscenaParcela.tsx`; `ui/sonido.ts`, `BotonSonido.tsx`; `ui/lab/historial.ts`, `useHistorial.ts`, `PanelHistorial.tsx`, `armarResumen.ts`, `Mascota.tsx`, `consejos.ts`, `Laboratorio.tsx`, `PanelComparacion.tsx`, `PlanElegido.tsx`; `ui/pdf/` (`pdf.ts`, `resumenComparacion.ts`, `descargar.ts`); pruebas de cada pieza; `docs/06`.
+- **Cambio:** (1) Esquilote usa los iconos de la barra dentro del texto, habla (escritura de a poco y animación) y un anillo dorado encierra e ilumina el componente del que habla; se descarta el dibujo 2D (queda solo el retrato del modelo 3D). Los consejos de la mascota hacen lo mismo. (2) El tiempo del escenario avanza por semanas y la reproducción espera durante los avisos y 2.5 s después. (3) Vistas de luz y temperatura en Escenarios con datos reales de NASA POWER y rangos de FAO EcoCrop. (4) Una mini marca por grupo de cultivo con problemas, no por celda. (5) Efectos de sonido sintetizados con botón para silenciar. (6) Historial de hechos por parcela. (7) Resumen de la comparación descargable en PDF.
+- **Por qué:** pedidos del equipo el 15/11.
+- **Fuente / evidencia:** `tsc` sin errores; pruebas del front 3402 en verde (nuevas: texto con iconos, semanas, clima de la semana y rangos del catálogo real, problemas, sonido con un contexto de audio falso, historial, PDF con la tabla de referencias verificada byte a byte y contenido). En Chrome con SwiftShader, demo de Isla: vistas de luz (17.7 MJ/m²) y temperatura (26.1 °C), mini marca en el año seco (4 de 4 celdas estresadas, una marca por grupo), anillo sobre la barra de herramientas, historial con cosecha e insecticida, botón de PDF que descarga. Un PDF de muestra se abrió y se renderizó con las herramientas de macOS.
+- **Defecto encontrado y corregido:** el historial guardaba el doble (4 bloques salían como 8) porque `useHistorial` leía y escribía el almacenamiento dentro de la función de actualización de React, que en desarrollo se ejecuta dos veces. Ahora es un almacén fuera de React (`useSyncExternalStore`) con una prueba del caso.
+- **Límites:** no se oyó el sonido (solo se probó con un contexto de audio falso y que no hay errores); el PDF no se abrió en Acrobat ni en un lector distinto de macOS; la luz no distingue celdas (el dato es regional); la temperatura compara con rangos de medias mensuales; con la demo solo se vio un caso de problemas (maíz estresado en el año seco). Las animaciones de plaga siguen siendo ilustrativas.
+- **Decisiones afectadas:** ninguna de alcance del MVP.
 
 ### 2026-11-15 — Despliegue de `5f985da` en el droplet (Eduardo)
 

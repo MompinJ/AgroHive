@@ -8,6 +8,7 @@ import { Esquilote } from './Esquilote';
 import { Resalte } from './Resalte';
 import { TextoConIconos } from './TextoConIconos';
 import { useEscribir } from './useEscribir';
+import { PENTATONICA, tocar } from '../sonido';
 import { textoPlano } from './texto';
 import { marcarVisto, navegar, TUTORIALES, tutorialDeRuta, tutorialVisto, type EstadoTutorial, type IdTutorial, type PasoTutorial } from './pasos';
 import './tutorial.css';
@@ -18,7 +19,8 @@ export function TarjetaTutorial({ pasos, paso, onSiguiente, onAnterior, onCerrar
   const actual = pasos[paso]!;
   const ultimo = paso === pasos.length - 1;
   // El texto se escribe de a poco y Esquilote "habla" mientras tanto; tocar el texto lo completa.
-  const { visibles, escribiendo, completar } = useEscribir(actual.texto);
+  // Cada tres letras, un blip suave de la escala pentatonica: Esquilote "habla".
+  const { visibles, escribiendo, completar } = useEscribir(actual.texto, (k) => { if (k % 3 === 0) tocar('habla', PENTATONICA[(k / 3) % PENTATONICA.length]! / PENTATONICA[2]!); });
   return <section className="esquilote esquilote-tarjeta" role="dialog" aria-modal="false" aria-labelledby="esquilote-titulo" aria-describedby="esquilote-texto">
     <Esquilote saluda={paso === 0 && !escribiendo} habla={escribiendo} />
     <div className="esquilote-cuerpo">
@@ -26,9 +28,9 @@ export function TarjetaTutorial({ pasos, paso, onSiguiente, onAnterior, onCerrar
       <h2 id="esquilote-titulo">{actual.titulo}</h2>
       <p id="esquilote-texto" aria-live="polite" aria-label={textoPlano(actual.texto)} onClick={completar}><TextoConIconos texto={actual.texto} visibles={visibles} /></p>
       <div className="esquilote-acciones">
-        <button type="button" className="esquilote-saltar" onClick={onCerrar}>{ultimo ? 'Cerrar' : 'Saltar tutorial'}</button>
-        {paso > 0 && <button type="button" className="esquilote-atras" onClick={onAnterior}>Anterior</button>}
-        <button type="button" className="esquilote-siguiente" onClick={onSiguiente} autoFocus={enfocar}>{ultimo ? '¡Entendido!' : 'Siguiente'}</button>
+        <button type="button" className="esquilote-saltar" data-sin-sonido onClick={onCerrar}>{ultimo ? 'Cerrar' : 'Saltar tutorial'}</button>
+        {paso > 0 && <button type="button" className="esquilote-atras" data-sin-sonido onClick={onAnterior}>Anterior</button>}
+        <button type="button" className="esquilote-siguiente" data-sin-sonido onClick={onSiguiente} autoFocus={enfocar}>{ultimo ? '¡Entendido!' : 'Siguiente'}</button>
       </div>
     </div>
   </section>;
@@ -49,6 +51,7 @@ export function TutorialEsquilote() {
   const terminar = (e: EstadoTutorial) => { marcarVisto(e.id); setEstado(null); };
   const mover = (accion: 'siguiente' | 'anterior' | 'cerrar') => {
     if (!estado) return;
+    tocar(accion === 'cerrar' ? 'clic' : 'paso');
     const siguiente = navegar(estado, accion);
     if (siguiente) setEstado(siguiente); else terminar(estado);
   };

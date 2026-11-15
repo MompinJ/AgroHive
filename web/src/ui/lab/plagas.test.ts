@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { pintarCeldas, planesIniciales } from '../planes';
 import { parcelaConTerrenoDemo } from '../../escena/demo-motor';
-import { celdaCentral, celdasEnRadio, celdasEnRiesgo, firmaMalla, mapaPlagas, plagaDeCultivo, plagasPresentes, proteger, protegidas, riesgosDelPlan, type PlagaZona } from './plagas';
+import { celdasConPlaga, celdasEnRiesgo, cuantasConPlaga, focoDelGrupo, focosDelPlan, firmaMalla, mapaPlagas, plagaDeCultivo, plagasPresentes, proteger, protegidas, riesgosDelPlan, type PlagaZona } from './plagas';
 import calendarioJson from '../../../../datos/catalogos/calendario-isla.json';
 import type { CalendarioLocal as CalendarioPrueba } from '../../../../contratos/tipos/contratos';
 /** Calendario SIAP/INIFAP de Isla: fixture de prueba (la app ya no lo usa como demo). */
@@ -69,34 +69,90 @@ describe('plagas en el simulador', () => {
     expect(celdasEnRiesgo([])).toEqual([]);
   });
 
-  describe('zona de plagas por radio', () => {
-    const malla = Array.from({ length: 9 * 9 }, (_, n) => ({ id: `c-${Math.floor(n / 9)}-${n % 9}`, i: Math.floor(n / 9), j: n % 9 }));
-    it('la celda central de una malla de 9 x 9 es la del medio', () => {
-      expect(celdaCentral(malla)).toBe('c-4-4');
-      expect(celdaCentral([])).toBeNull();
+  describe('la plaga en el 20 % de cada grupo de cultivo', () => {
+    const malla = (n: number) => Array.from({ length: n * n }, (_, k) => ({ id: `c-${Math.floor(k / n)}-${k % n}`, i: Math.floor(k / n), j: k % n }));
+    const planGrande = { rotacionId: 'R1', ciclos: [{ ciclo: 1, cultivo: 'maiz', siembra: '2026-06-15' }, { ciclo: 2, cultivo: 'tomate', siembra: '2026-11-01' }], porCelda: null } as unknown as Parameters<typeof celdasConPlaga>[0];
+
+    it('cuenta el 20 % redondeado y al menos una celda si hay grupo', () => {
+      expect([0, 1, 2, 4, 5, 10, 11, 25, 100].map((n) => cuantasConPlaga(n))).toEqual([0, 1, 1, 1, 1, 2, 2, 5, 20]);
+      expect(cuantasConPlaga(3, 1)).toBe(3); // con 100 % son todas
+      expect(cuantasConPlaga(3, 5)).toBe(3); // nunca mas que el grupo
     });
-    it('el radio cubre un circulo de celdas alrededor de la elegida', () => {
-      expect([...celdasEnRadio(malla, 'c-4-4', 1)].sort()).toHaveLength(9); // 3 x 3
-      const r2 = celdasEnRadio(malla, 'c-4-4', 2);
-      expect(r2.size).toBe(21); // circulo, no cuadrado de 25
-      expect(r2.has('c-2-3')).toBe(true);
-      expect(r2.has('c-2-2')).toBe(false); // la esquina queda fuera
-      expect(celdasEnRadio(malla, 'c-4-4', 3).size).toBeGreaterThan(r2.size);
+    it('el foco tiene exactamente ese numero de celdas, todas del grupo y sin repetir', () => {
+      const grupo = malla(10);
+      const f = focoDelGrupo(grupo, 'R1:1:maiz');
+      expect(f).toHaveLength(20);
+      expect(new Set(f).size).toBe(20);
+      for (const id of f) expect(grupo.map((c) => c.id)).toContain(id);
+      expect(focoDelGrupo([], 'x')).toEqual([]);
     });
-    it('sin celda elegida usa la central, y una elegida que ya no existe tambien', () => {
-      expect(celdasEnRadio(malla, null, 1).has('c-4-4')).toBe(true);
-      expect(celdasEnRadio(malla, 'c-99-99', 1).has('c-4-4')).toBe(true);
+    it('es un foco de celdas contiguas, no celdas sueltas por toda la parcela', () => {
+      const grupo = malla(10);
+      const f = focoDelGrupo(grupo, 'R1:1:maiz').map((id) => grupo.find((c) => c.id === id)!);
+      const alto = Math.max(...f.map((c) => c.i)) - Math.min(...f.map((c) => c.i)) + 1;
+      const ancho = Math.max(...f.map((c) => c.j)) - Math.min(...f.map((c) => c.j)) + 1;
+      expect(alto).toBeLessThanOrEqual(5);
+      expect(ancho).toBeLessThanOrEqual(5);
     });
-    it('en una esquina la zona se recorta a la parcela y toda la parcela es radio null', () => {
-      expect(celdasEnRadio(malla, 'c-0-0', 1).size).toBe(4);
-      expect(celdasEnRadio(malla, 'c-0-0', null).size).toBe(81);
-      expect(celdasEnRadio([], null, 2).size).toBe(0);
+    it('es estable: mismo grupo y semilla, mismo foco, sin importar el orden en que lleguen las celdas', () => {
+      const grupo = malla(8);
+      const a = focoDelGrupo(grupo, 'R1:1:maiz');
+      expect(focoDelGrupo([...grupo].reverse(), 'R1:1:maiz')).toEqual(a);
+      expect(focoDelGrupo(grupo, 'R1:1:maiz')).toEqual(a);
     });
-    it('la zona reduce los bloques con plaga dibujados', () => {
-      const todas = celdas.map((id) => ({ celdaId: id, cultivo: 'maiz', ciclo: 1 }));
-      const dentro = new Set([celdas[0]!]);
-      const mapa = mapaPlagas(todas.filter((r) => dentro.has(r.celdaId)), plagasPresentes(zona), {}, 'R1');
-      expect(mapa.size).toBe(1);
+    it('otra semilla puede dar otro foco (cada cultivo y ciclo tiene el suyo)', () => {
+      const grupo = malla(10);
+      const focos = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map((s) => focoDelGrupo(grupo, s).join(',')));
+      expect(focos.size).toBeGreaterThan(1);
+    });
+    it('con 4 celdas, como la demo, la plaga esta en una sola', () => {
+      expect(focoDelGrupo(malla(2), 'R1:1:maiz')).toHaveLength(1);
+    });
+    it('solo hay plaga en los cultivos que una plaga presente ataca, y con todo de un cultivo es el 20 % de la parcela', () => {
+      const celdas = malla(10);
+      expect(celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1).size).toBe(20); // maiz: lo ataca el cogollero
+      expect(celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 2).size).toBe(0); // tomate: ninguna plaga presente lo ataca
+      expect(celdasConPlaga(planGrande, celdas, [], 1).size).toBe(0);
+    });
+    it('plantar algo nuevo NO mueve la plaga: solo aparece o desaparece en las celdas afectadas', () => {
+      const celdas = malla(10);
+      const antes = celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1);
+      // Se pintan 30 celdas de tomate (que ninguna plaga ataca) y 10 de frijol (que ataca el chapulin).
+      const tomates = celdas.filter((c) => c.i < 3).map((c) => c.id);
+      const frijoles = celdas.filter((c) => c.i === 9).map((c) => c.id);
+      const nuevo = { ...planGrande, porCelda: { ...Object.fromEntries(tomates.map((id) => [id, [{ ciclo: 1, cultivo: 'tomate' }]])), ...Object.fromEntries(frijoles.map((id) => [id, [{ ciclo: 1, cultivo: 'frijol' }]])) } } as unknown as typeof planGrande;
+      const despues = celdasConPlaga(nuevo, celdas, plagasPresentes(zona), 1);
+      const intactas = celdas.map((c) => c.id).filter((id) => !tomates.includes(id) && !frijoles.includes(id));
+      for (const id of intactas) expect(despues.has(id), id).toBe(antes.has(id)); // las celdas que no se tocaron conservan su plaga
+      for (const id of tomates) expect(despues.has(id)).toBe(false); // el tomate no es atacado: la plaga desaparece ahi
+      for (const id of antes) if (!tomates.includes(id)) expect(despues.has(id)).toBe(true); // y no se pierde en otro lado
+    });
+    it('quitar lo pintado devuelve la plaga exactamente donde estaba', () => {
+      const celdas = malla(10);
+      const base = celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1);
+      const pintado = { ...planGrande, porCelda: { 'c-0-0': [{ ciclo: 1, cultivo: 'tomate' }] } } as unknown as typeof planGrande;
+      celdasConPlaga(pintado, celdas, plagasPresentes(zona), 1);
+      expect(celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1)).toEqual(base);
+    });
+    it('el aviso de riesgos cuenta solo las celdas del foco, y proteger el foco lo deja en cero', () => {
+      const celdas = malla(10);
+      const focos = focosDelPlan(planGrande, celdas, plagasPresentes(zona));
+      const ids = celdas.map((c) => c.id);
+      const sin = riesgosDelPlan(planGrande, ids, plagasPresentes(zona), {}, focos).filter((r) => r.ciclo === 1);
+      expect(sin).toHaveLength(1);
+      expect(sin[0]!.sinProteger).toHaveLength(20);
+      expect(new Set(sin[0]!.sinProteger)).toEqual(new Set(focos(1)));
+      const protegido = proteger({}, 'R1', 1, [...focos(1)]);
+      expect(riesgosDelPlan(planGrande, ids, plagasPresentes(zona), protegido, focos).filter((r) => r.ciclo === 1)).toEqual([]);
+      // Sin focos (comportamiento anterior), la plaga cuenta todas las celdas.
+      expect(riesgosDelPlan(planGrande, ids, plagasPresentes(zona), {}).find((r) => r.ciclo === 1)!.sinProteger).toHaveLength(100);
+    });
+    it('los insectos de la escena salen solo de las celdas con plaga', () => {
+      const celdas = malla(10);
+      const foco = celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1);
+      const registros = celdas.map((c) => ({ celdaId: c.id, cultivo: 'maiz', ciclo: 1 }));
+      const mapa = mapaPlagas(registros.filter((r) => foco.has(r.celdaId)), plagasPresentes(zona), {}, 'R1');
+      expect(mapa.size).toBe(20);
     });
   });
 });

@@ -1,6 +1,6 @@
 # datos/catalogos/
 
-Catalogos propios de AgroHive (A1.5 cultivos, A1.6 suelos). Se generan desde `generar.py`, que es la fuente de verdad; no editar los JSON a mano.
+Catalogos propios de AgroHive (A1.5 cultivos, A1.6 suelos). Contrato 0.16.0 (cada cultivo con su nombre en ingles, `nombreComunEn`). Se generan desde `generar.py`, que es la fuente de verdad; no editar los JSON a mano.
 
 ```bash
 python datos/catalogos/generar.py      # escribe cultivos.json y suelos.json
@@ -95,6 +95,56 @@ Total: 40 cultivos (8 anteriores y 32 de la ampliacion).
 | Zanahoria y espinaca | Zanahoria: Mediterraneo, febrero/marzo (150 d). Espinaca: region arida, noviembre (100 d) | Se saltaron filas con etapas ambiguas (`50/30`; `15/25` y `60/70`), regla (d) |
 | Berenjena | `Egg plant`, region arida, octubre: 30/40/40/20 = 130 d | La fila de mayo/junio imprime total 40 y sus etapas suman 140; se salto, regla (d). La pagina imprime el total elegido como `130\1`. **Cotejada (MF5, 15/11) con la edicion web de FAO-56: `Arid Region`, octubre, 30/40/40/20 = 130 (suma bien); la fila `Mediterranean`, mayo/junio, imprime 30/45/40/25 y total `40` (suma 140): error de impresion de la fuente, y se mantiene el salto de esa fila.** |
 | Brocoli, col y coliflor | Unica fila de cada una: desierto de California, septiembre (135, 165 y 140 d) | Nota 1 de Tabla 11: la duracion de las cruciferas varia mucho con la variedad |
+| Nombres en ingles | `nombreComunEn` de la fila que ya usa cada cultivo; chile "Chili pepper" (GRIN-Global) y melon "Melon" | Eleccion del equipo en esos dos; tabla completa en "Nombres en ingles" (abajo) |
+
+## Nombres en ingles (`nombreComunEn`, contrato 0.16.0)
+
+`[DECIDIDO]` (Mompin, 15/11): la app tiene espanol e ingles. Cada cultivo trae `nombreComunEn`, tomado de una fila que el cultivo **ya usa** (FAO-56 Tabla 11 o 12, o FAO EcoCrop; tabla `NOMBRES_EN` de `generar.py`). La fila citada va tambien en `notas` ("Nombre en ingles '...': ...") y `validar.mjs` comprueba que este. Si el nombre no es la fila tal cual (singular, orden invertido o un nombre comun en lugar del tecnico), la columna "Como se tomo" lo dice. Las dos marcadas **revisar** son eleccion del equipo y quedan para revision humana. Las tarjetas del motor en ingles usan este nombre (en minusculas dentro de la frase).
+
+| id | Nombre (es) | `nombreComunEn` | Fuente (fila) | Como se tomo |
+| --- | --- | --- | --- | --- |
+| `maiz` | Maiz | Maize | FAO EcoCrop, `Maize` | tal cual |
+| `frijol` | Frijol | Common bean | FAO EcoCrop, `Bean, Common` | orden invertido de `Bean, Common` |
+| `calabaza` | Calabaza | Pumpkin | FAO EcoCrop, `Pumpkin` | tal cual |
+| `chile` | Chile | Chili pepper | GRIN-Global (USDA ARS), *Capsicum annuum* var. *annuum* ([id 311784](https://npgsweb.ars-grin.gov/gringlobal/taxon/taxonomydetail?id=311784)), Hortus third | FAO-56 y EcoCrop solo traen `Sweet peppers (bell)`, el pimiento dulce; **revisar** |
+| `sorgo` | Sorgo | Sorghum | FAO-56 Tabla 11, `Sorghum` | tal cual |
+| `sandia` | Sandia | Watermelon | FAO-56 Tabla 12, `Watermelon` | tal cual |
+| `camote` | Camote | Sweet potato | FAO-56 Tabla 11, `Sweet potato` | tal cual |
+| `cacahuate` | Cacahuate | Peanut | FAO-56 Tabla 12, `Groundnut (Peanut)` | el nombre entre parentesis de `Groundnut (Peanut)`, el usual en America |
+| `soya` | Soya | Soybean | FAO-56 Tabla 12, `Soybeans` | singular de `Soybeans` |
+| `caupi` | Frijol caupi | Cowpea | FAO EcoCrop, `Cowpea` | tal cual |
+| `haba` | Haba | Faba bean | FAO-56 Tabla 11, `Faba bean, broad bean` | primer nombre de `Faba bean, broad bean` |
+| `chicharo` | Chicharo | Pea | FAO EcoCrop, `Pea` | tal cual |
+| `lenteja` | Lenteja | Lentil | FAO-56 Tabla 11, `Lentil` | tal cual |
+| `ejote` | Ejote | Green bean | FAO-56 Tabla 12, `Beans, green` | orden invertido y singular de `Beans, green` |
+| `cebada` | Cebada | Barley | FAO-56 Tabla 12, `Barley` | tal cual |
+| `trigo` | Trigo | Wheat | FAO EcoCrop, `Wheat, common` | sin el calificativo de `Wheat, common` |
+| `avena` | Avena | Oats | FAO-56 Tabla 12, `Oats` | tal cual |
+| `maiz_dulce` | Maiz dulce (elote) | Sweet corn | FAO EcoCrop, `Sweet Corn` | tal cual |
+| `yuca` | Yuca | Cassava | FAO EcoCrop, `Cassava` | tal cual |
+| `cana` | Cana de azucar | Sugarcane | FAO EcoCrop, `Sugarcane` | tal cual |
+| `ajonjoli` | Ajonjoli | Sesame | FAO-56 Tabla 11, `Sesame` | tal cual |
+| `girasol` | Girasol | Sunflower | FAO-56 Tabla 11, `Sunflower` | tal cual |
+| `algodon` | Algodon | Cotton | FAO-56 Tabla 11, `Cotton` | tal cual |
+| `cartamo` | Cartamo | Safflower | FAO-56 Tabla 11, `Safflower` | tal cual |
+| `higuerilla` | Higuerilla | Castor bean | FAO-56 Tabla 11, `Castor beans` | singular de `Castor beans` |
+| `tomate` | Jitomate | Tomato | FAO-56 Tabla 11, `Tomato` | tal cual |
+| `papa` | Papa | Potato | FAO-56 Tabla 11, `Potato` | tal cual |
+| `calabacita` | Calabacita | Zucchini | FAO-56 Tabla 12, `Squash, Zucchini` | el nombre del cultivo en `Squash, Zucchini` |
+| `cebolla` | Cebolla | Onion | FAO EcoCrop, `Onion` | tal cual |
+| `pepino` | Pepino | Cucumber | FAO-56 Tabla 11, `Cucumber` | tal cual |
+| `melon` | Melon | Melon | FAO-56 Tabla 12, `Sweet Melons` | nombre comun en vez de `Sweet Melons` (EcoCrop: `Musk melon`); **revisar** |
+| `lechuga` | Lechuga | Lettuce | FAO-56 Tabla 11, `Lettuce` | tal cual |
+| `zanahoria` | Zanahoria | Carrot | FAO EcoCrop, `Carrot` | tal cual |
+| `berenjena` | Berenjena | Eggplant | FAO EcoCrop, `Eggplant` | tal cual |
+| `brocoli` | Brocoli | Broccoli | FAO-56 Tabla 11, `Broccoli` | tal cual |
+| `col` | Col (repollo) | Cabbage | FAO-56 Tabla 11, `Cabbage` | tal cual |
+| `coliflor` | Coliflor | Cauliflower | FAO-56 Tabla 11, `Cauliflower` | tal cual |
+| `espinaca` | Espinaca | Spinach | FAO-56 Tabla 11, `Spinach` | tal cual |
+| `rabano` | Rabano | Radish | FAO-56 Tabla 11, `Radish` | tal cual |
+| `betabel` | Betabel | Table beet | FAO-56 Tabla 12, `Beets, table` | orden invertido y singular de `Beets, table` |
+
+Elecciones a revisar: **chile = "Chili pepper"** (FAO-56 y EcoCrop solo traen `Sweet peppers (bell)`, el pimiento dulce, que en ingles es otro producto en el mercado; "chili pepper" es uno de los nombres en ingles que GRIN-Global da para *C. annuum* var. *annuum*, la misma especie del catalogo); **melon = "Melon"** (FAO-56 dice `Sweet Melons` y EcoCrop `Musk melon`; se uso el nombre comun corto). Tambien conviene mirar `Peanut` (y no `Groundnut`) y `Maize` (y no `Corn`): se eligio el nombre de la fila o de EcoCrop, no el uso de EE. UU.
 
 ## Huecos (NO_EVALUABLE)
 
