@@ -6,7 +6,9 @@ import type { ResultadoCeldas } from '../../../../contratos/tipos/contratos';
 import { conLimite, type LaboratorioEstado } from '../useLaboratorio';
 import { useSerieBalance } from '../useSerieBalance';
 import { rangoDelCiclo } from '../tiempo';
-import { aplicarAcomodando, colorCultivo, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
+import { aplicarAcomodando, colorCultivo, cultivoDeCelda, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
+import { EventoPantalla } from './EventoPantalla';
+import { eventosAlAvanzar, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
 import type { PincelEscena } from '../../escena/pincel';
 import { PanelCultivos } from './PanelCultivos';
 import { BarraHerramientas, type Herramienta } from './BarraHerramientas';
@@ -140,6 +142,35 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const riesgos = useMemo(() => (plan && visible ? riesgosDelPlan(plan, celdasZona, presentes, proteccion).filter((r) => r.ciclo === visible.ciclo) : []), [plan, visible, celdasZona, presentes, proteccion]);
   const plagasEscena = useMemo(() => (resultado && plan ? mapaPlagas(resultado.registros.filter((r) => zonaPlaga.has(r.celdaId)), presentes, proteccion, plan.rotacionId) : undefined), [resultado, plan, presentes, proteccion, zonaPlaga]);
 
+  // Eventos a pantalla completa (paso Escenarios): al avanzar la fecha hasta la mitad del ciclo (plaga, ilustrativa) o hasta su
+  // ultimo dia (cosecha, segun el motor). Solo al avanzar: cambiar de rotacion, ciclo o escenario no dispara nada.
+  const [cola, setCola] = useState<EventoLab[]>([]);
+  const cultivosDelCiclo = useMemo<CultivoCosechado[]>(() => {
+    if (!plan || !visible) return [];
+    const n = new Map<string, number>();
+    for (const id of celdasParcela) { const c = cultivoDeCelda(plan, id, visible.ciclo); if (c) n.set(c, (n.get(c) ?? 0) + 1); }
+    return [...n].sort((a, b) => b[1] - a[1]).map(([c, celdas]) => ({ nombre: nombresCultivos[c] ?? c, celdas }));
+  }, [plan, visible, celdasParcela]);
+  const plagaActiva = useMemo<PlagaActiva | null>(() => {
+    const r = [...riesgos].sort((a, b) => b.sinProteger.length - a.sinProteger.length)[0];
+    return r ? { plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length } : null;
+  }, [riesgos]);
+  const datosEvento = useRef({ cosecha: cultivosDelCiclo, plaga: plagaActiva });
+  datosEvento.current = { cosecha: cultivosDelCiclo, plaga: plagaActiva };
+  const fechaPrevia = useRef<{ clave: string; fecha: string } | null>(null);
+  useEffect(() => {
+    if (paso !== 'escenarios' || !rango || !fecha || !plan || !visible) {
+      fechaPrevia.current = null;
+      setCola((c) => (c.length ? [] : c));
+      return;
+    }
+    const clave = `${plan.rotacionId}:${visible.ciclo}:${escenario}`;
+    const anterior = fechaPrevia.current?.clave === clave ? fechaPrevia.current.fecha : null;
+    fechaPrevia.current = { clave, fecha };
+    const nuevos = eventosAlAvanzar({ anterior, actual: fecha, rango, clave, cosecha: datosEvento.current.cosecha, plaga: datosEvento.current.plaga });
+    if (nuevos.length) setCola((c) => [...c, ...nuevos]);
+  }, [paso, fecha, rango, plan?.rotacionId, visible?.ciclo, escenario]);
+
   const pincel: PincelEscena | null = useMemo(() => {
     if (paso !== 'cultivos' || herramienta === 'mover' || !plan || !visible || !datos) return null;
     if (herramienta === 'insecticida') return { tamano, color: '#7cc3ea', onTrazo: rociar };
@@ -192,6 +223,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   return <div className={`lab lab-paso-${paso}`}>
     <Globo />
     {datos && paso !== 'comparacion' && <Mascota consejos={listaConsejos} paso={paso} />}
+    <EventoPantalla evento={cola[0] ?? null} onTerminar={() => setCola((c) => c.slice(1))} />
     <div className="lab-fondo">{fondo}</div>
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
     {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} calculando={!estado.calculo || !celdasListas} riesgos={riesgos} hayPlagas={presentes.some((p) => plan?.ciclos.some((c) => p.cultivos.includes(c.cultivo)))} onProteger={riesgos.length ? protegerRiesgo : null} zona={{ radio: radioPlaga, setRadio: setRadioPlaga, centro: centroZona, celdas: celdasZona.length, total: celdasParcela.length }} presentes={presentes} />}

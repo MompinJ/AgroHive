@@ -26,7 +26,7 @@ export const TUTORIALES: Record<IdTutorial, readonly PasoTutorial[]> = {
   ],
   escenarios: [
     { titulo: 'Años de prueba', texto: 'Mira cómo le iría a tu plan en un año seco, uno habitual y uno lluvioso, con clima real de NASA.', destacar: '.lab-escenarios' },
-    { titulo: 'Mueve el tiempo', texto: 'Al mover la fecha cambian las plantas y el cielo: se pone gris cuando llueve, y cálido o fresco según la época del año de tu parcela.' },
+    { titulo: 'Mueve el tiempo', texto: 'Al mover la fecha cambian las plantas y el cielo: se pone gris cuando llueve, y cálido o fresco según la época del año de tu parcela. En el último día del ciclo verás la cosecha; si quedan plagas sin insecticida, a la mitad del ciclo verás una ilustración de plaga.' },
     { titulo: 'Sigue con la comparación', texto: 'Cuando hayas visto tus años de prueba, avanza para comparar tus rotaciones.' },
   ],
   comparacion: [

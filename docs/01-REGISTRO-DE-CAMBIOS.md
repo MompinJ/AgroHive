@@ -21,6 +21,15 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — Animaciones a pantalla completa de cosecha y plaga (Eduardo)
+
+- **Archivos:** `web/src/ui/lab/eventos.ts`, `EventoPantalla.tsx`, `evento.css` (nuevos) y pruebas; `Laboratorio.tsx`; `ui/tutorial/pasos.ts`; `docs/06`.
+- **Cambio:** en el paso Escenarios, al avanzar la fecha hasta el último día del ciclo (la cosecha según el motor) una guadaña barre la pantalla con una estela y caen briznas, con el aviso "X se cosecha el D" y cuántas celdas. A la mitad del ciclo, si quedan bloques con plaga sin insecticida en la zona, un enjambre cruza la pantalla con "X se está comiendo tu cultivo". Solo al avanzar; con "reducir movimiento" solo se muestra el aviso.
+- **Por qué:** pedido del equipo el 15/11: que la cosecha se represente como cosecha y no como plantas que desaparecen, y algo parecido para las plagas.
+- **Fuente / evidencia:** pruebas de `eventos.ts` y del componente; `tsc` sin errores; suite del front 3308 en verde. En Chrome con SwiftShader, demo de Isla: cosecha el 17/10/2026 con "Se cosechan 4 celdas", sin evento al retroceder, plaga al cruzar el 16/08/2026.
+- **Límites:** la animación de plaga es ilustrativa. El motor no tiene fechas de ataque (GBIF solo dice que la plaga está en la región) y no modela daño ni pérdida de cosecha, así que la mitad del ciclo es una convención de dibujo `[PROPUESTA]` y el aviso lo dice. Las plantas de la escena no cambian: lo que se agrega es el aviso y la animación.
+- **Decisiones afectadas:** ninguna de alcance del MVP. Momento de la animación de plaga (mitad del ciclo) `[PROPUESTA]` hasta que el equipo decida otro.
+
 ### 2026-11-15 — Tope de 200 celdas, leyenda de escala, plagas por radio, gráficos, cielo por clima y tutorial de Esquilote (Eduardo)
 
 - **Archivos:** `web/src/geo/tamano-celda.ts`, `escala-celda.ts` (nuevo), `ui/SelectorTamanoCelda.tsx`, `ui/DibujarParcela.tsx`; `ui/lab/plagas.ts`, `Laboratorio.tsx`, `PanelCultivos.tsx`, `BarraHerramientas.tsx`, `Mascota.tsx`; `escena/EscenaParcela.tsx`, `escena/graficos.ts` y `escena/clima-fondo.ts` (nuevos), `escena/render/escena-three.ts` y `plagas.ts`, `escena/escena.css`; `ui/tutorial/` (nuevo); `main.tsx`; pruebas de cada pieza; `docs/06`, `web/README.md`.
