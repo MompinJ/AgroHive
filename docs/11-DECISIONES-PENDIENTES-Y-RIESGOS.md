@@ -66,6 +66,10 @@ Recursos que dio el reto, evaluados para Isla y para el alcance mundial (13, "Al
 | NLDAS | No | Su dominio llega al sur solo hasta 25°N; Isla está en ~18°N |
 | CoCoRaHS | No | Sin evidencia de que opere en México `[VERIFICAR]` |
 
+## Decisiones abiertas del día final
+
+Team Owner y envío, horario de juicio local (V-01), inglés, placa de estado, licencia del repo, revisión humana de términos (Esri, Planetary Computer, CDL) y de las imágenes generadas, deploy y formato de la demo: lista D1 a D15, con a quién bloquea cada una, en [16, sección 2](16-PLAN-DIA-FINAL.md#2-bloqueos-y-decisiones-abiertas-de-mompin).
+
 ## Se decide después (menor)
 - Numeración y nombres de documentos.
 - Secciones que falten o sobren.

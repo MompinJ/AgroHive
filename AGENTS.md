@@ -4,7 +4,7 @@ Proyecto de hackathon (NASA Space Apps 2026, reto Field Shift): simulador "what 
 
 ## Antes de hacer nada
 1. Cambiar a tu rama y traer lo ultimo: `git checkout <tu-rama> && git merge origin/main`.
-2. Leer: `docs/00-LEEME-PRIMERO.md`, `docs/13-DECISIONES-HACKATHON.md`, `docs/14-CRONOGRAMA.md` (tablero de reparto al final) y el doc del tema que vayas a tocar.
+2. Leer: `docs/00-LEEME-PRIMERO.md`, `docs/16-PLAN-DIA-FINAL.md` (cola y reglas del dia final), `docs/13-DECISIONES-HACKATHON.md`, `docs/14-CRONOGRAMA.md` (tablero de reparto al final) y el doc del tema que vayas a tocar.
 3. Antes de escribir codigo, resumir en 5 lineas que vas a hacer y que archivos tocaras.
 
 Contexto resumido por herramienta: `AgroVault/` (Codex: `AgroVault/Codex/AGENTS.md`; nucleo comun en `AgroVault/Compartido/`). Si contradice a `docs/13`, `docs/14` o a `contratos/*.schema.json`, mandan estos.
@@ -20,7 +20,8 @@ Contexto resumido por herramienta: `AgroVault/` (Codex: `AgroVault/Codex/AGENTS.
 - Ningun cambio de contrato que rompa algo entra a `main` hasta que todo lo que depende de el este en verde (API, catalogos, web): se arregla en el mismo cambio avisando al dueno, o el contrato acepta la version anterior durante la transicion. Antes de subir a `main`: `npm test` en `contratos/`, `pytest` en `api/`, `node datos/catalogos/validar.mjs` y `npx tsc --noEmit -p web`.
 - Antes y despues de trabajar, verifica los cambios (`git fetch`, revisa lo que subieron otros, corre las pruebas) y actualiza la documentacion existente que tu cambio afecte (`docs/`, `AgroVault/`, README, `AGENTS.md`) en vez de dejarla desfasada o crear duplicados.
 - Trabaja solo en tu rama y en las carpetas de tu carril. No edites archivos de otro responsable sin avisar.
-- Commits pequenos y frecuentes. Nunca hagas push a `main`: abre un pull request cuando cierres una actividad con su entregable verificable. Mompin integra.
+- Commits pequenos y frecuentes. Nunca hagas push a `main` ni mergees PR a `main`: sube a tu rama y avisa por el buzon "listo para integrar" con el commit. Solo Mompin integra, en ventanas cada hora en punto.
+- Dia final (15/11): reglas de organizacion `[DECIDIDO]` (apartar por el buzon, duenos, ramas cortas, ventanas, 15 min, tareas de relleno, archivos calientes) y cola por persona en `docs/16-PLAN-DIA-FINAL.md`.
 - Cada vez que algo entre a `main`, haz `git merge origin/main` en tu rama antes de seguir.
 - Nunca inventes datos: un parametro faltante es `NO_EVALUABLE`, no un numero. Toda cifra cientifica o agronomica lleva fuente; las fuentes las verifica una persona.
 - El frontend no recalcula indicadores; el 3D solo representa lo que entrega el motor. Cambiar 2D/3D no vuelve a pedir datos.
