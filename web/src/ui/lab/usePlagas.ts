@@ -1,21 +1,22 @@
-// Plagas registradas cerca de la parcela (GBIF via /api/plagas; la demo usa su paquete) y la
+// Plagas registradas cerca de la parcela (GBIF via /api/plagas; un ejemplo trae las suyas grabadas) y la
 // proteccion con insecticida que el usuario aplica, guardada en el navegador por parcela.
 import { useEffect, useState } from 'react';
 import { obtenerPlagas } from '../../api/cliente';
+import type { Plagas } from '../../../../contratos/tipos/contratos';
 import type { PlagaZona, Proteccion } from './plagas';
 
-export function usePlagasZona(centroide: readonly [number, number] | null, esDemo: boolean): PlagaZona[] | null {
+/** `grabadas`: las de un ejemplo (undefined en una parcela dibujada; null si el ejemplo no las pudo grabar). */
+export function usePlagasZona(centroide: readonly [number, number] | null, grabadas?: Plagas | null): PlagaZona[] | null {
   const [plagas, setPlagas] = useState<PlagaZona[] | null>(null);
-  const clave = centroide ? `${centroide[0]},${centroide[1]}:${esDemo}` : '';
+  const clave = centroide ? `${centroide[0]},${centroide[1]}:${grabadas === undefined ? 'viva' : 'grabada'}` : '';
   useEffect(() => {
     if (!centroide) return;
     const control = new AbortController();
     let activo = true;
     setPlagas(null);
     void (async () => {
-      if (esDemo) {
-        const p = await import('../../../../datos/demo/respuestas/plagas.json');
-        if (activo) setPlagas((p.default as unknown as { plagas: PlagaZona[] }).plagas);
+      if (grabadas !== undefined) {
+        if (activo) setPlagas(grabadas ? (grabadas.plagas as unknown as PlagaZona[]) : null);
         return;
       }
       const r = await obtenerPlagas(centroide[0], centroide[1], { senal: control.signal });

@@ -1,11 +1,22 @@
 import { useEffect, useRef } from 'react';
-import { demo } from '../ui/demo';
+import { AVISO_EJEMPLOS, listarEjemplos } from '../demo/ejemplos';
+import { nombresCultivos } from '../ui/planes';
 import type { Parcela } from '../../../contratos/tipos/contratos';
 import { DibujarParcela } from '../ui/DibujarParcela';
 import hero from '../ui/assets/terreno-hero-v1.png';
-import field from '../ui/assets/terreno-demo-v1.png';
 import polygon from '../ui/assets/terreno-poligono-v1.png';
 import '../ui/terreno.css';
+
+const ejemplos = listarEjemplos();
+const nombreCultivo = (id: string) => (nombresCultivos[id] ?? id).toLowerCase();
+
+/** Baja a una seccion y le da el foco (sin animar si se pide menos movimiento). */
+function bajarA(seccion: HTMLElement | null) {
+  if (!seccion) return;
+  const reducir = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  seccion.scrollIntoView({ behavior: reducir ? 'auto' : 'smooth', block: 'start' });
+  seccion.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
+}
 
 /** Baja al editor del contorno y le da el foco (sin animar si se pide menos movimiento). */
 function irAlEditor(editor: HTMLElement | null) {
@@ -15,8 +26,9 @@ function irAlEditor(editor: HTMLElement | null) {
   editor.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
 }
 
-export function Terreno({ polygonMode, onSelectDemo, parcela, onGuardar }: { polygonMode: boolean; onSelectDemo: () => void; parcela: Parcela | null; onGuardar: (p: Parcela) => void }) {
+export function Terreno({ polygonMode, onElegirEjemplo, ejemplo, parcela, onGuardar }: { polygonMode: boolean; onElegirEjemplo: (id: string) => void; ejemplo: string | null; parcela: Parcela | null; onGuardar: (p: Parcela) => void }) {
   const editor = useRef<HTMLDivElement>(null);
+  const lista = useRef<HTMLElement>(null);
   // Al entrar en modo poligono, despues de que App sube la pagina y enfoca el h1 al cambiar de ruta.
   useEffect(() => {
     if (!polygonMode) return;
@@ -27,9 +39,9 @@ export function Terreno({ polygonMode, onSelectDemo, parcela, onGuardar }: { pol
     <section className="terrain-hero" aria-labelledby="terreno-titulo">
       <div className="terrain-copy">
         <h1 id="terreno-titulo" tabIndex={-1}>Empieza por<br />un terreno.</h1>
-        <p className="terrain-intro">Explora el caso de ejemplo o dibuja el contorno de tu parcela para consultar su relieve.</p>
+        <p className="terrain-intro">Abre una parcela de ejemplo en otro lugar del mundo o dibuja el contorno de la tuya.</p>
         <div className="terrain-actions">
-          <a className="terrain-button" href="#/laboratorio" onClick={onSelectDemo}>Abrir laboratorio demo</a>
+          <button type="button" className="terrain-button" onClick={() => bajarA(lista.current)}>Ver ejemplos</button>
           <a className="terrain-button terrain-button-secondary" href="#/terreno?modo=poligono" aria-current={polygonMode ? 'location' : undefined} onClick={() => { if (polygonMode) irAlEditor(editor.current); }}>Dibujar mi parcela</a>
         </div>
       </div>
@@ -38,16 +50,20 @@ export function Terreno({ polygonMode, onSelectDemo, parcela, onGuardar }: { pol
       </div>
     </section>
     <div className="terrain-options">
-      <section className="terrain-option terrain-option-demo" aria-labelledby="demo-titulo">
-        <img className="terrain-option-image" src={field} alt="" width="1254" height="1254" />
+      <section ref={lista} className="terrain-option terrain-option-demo terrain-ejemplos" aria-labelledby="demo-titulo">
         <div className="terrain-option-copy">
-          <p className="terrain-eyebrow">Parcela de demostración</p>
-          <div className="terrain-option-heading"><h2 id="demo-titulo">{demo.location}</h2><span className="terrain-status">SUPUESTO</span></div>
-          <p>{demo.areaHa} hectáreas ficticias para explorar la interfaz. No corresponden a un levantamiento real del terreno.</p>
-          <div className="terrain-data-note">
-            <svg width="32" height="28" viewBox="0 0 32 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M9 23h15a5.5 5.5 0 0 0 1-10.9A8 8 0 0 0 9.4 9 7 7 0 0 0 9 23Z" strokeLinejoin="round" /></svg>
-            <p>El laboratorio ya integra clima histórico, elevación y estimaciones del suelo. La demo usa un contorno ficticio; cada fuente conserva sus advertencias.</p>
-          </div>
+          <p className="terrain-eyebrow">Parcelas de ejemplo</p>
+          <h2 id="demo-titulo" tabIndex={-1}>Seis lugares del mundo</h2>
+          <ul className="terrain-ejemplos-lista">
+            {ejemplos.map((e) => <li key={e.id}>
+              <a className="terrain-ejemplo" href="#/laboratorio" aria-current={ejemplo === e.id ? 'true' : undefined} onClick={() => onElegirEjemplo(e.id)}>
+                <strong>{e.nombre}</strong>
+                <span className="terrain-ejemplo-lugar">{e.pais}{e.clima ? ` · clima ${e.clima.descripcion}` : ''}</span>
+                <span className="terrain-ejemplo-cultivos">{e.cultivosSugeridos.map(nombreCultivo).join(', ')}</span>
+              </a>
+            </li>)}
+          </ul>
+          <p className="terrain-ejemplos-aviso">{AVISO_EJEMPLOS}</p>
         </div>
       </section>
       <section className={`terrain-option terrain-option-custom${polygonMode ? ' terrain-option-selected' : ''}`} aria-labelledby="poligono-titulo">

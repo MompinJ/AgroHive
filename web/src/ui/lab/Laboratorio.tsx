@@ -8,13 +8,18 @@ import { useSerieBalance } from '../useSerieBalance';
 import { rangoDelCiclo } from '../tiempo';
 import { aplicarAcomodando, colorCultivo, cultivoDeCelda, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
 import { EventoPantalla } from './EventoPantalla';
-import { eventosAlAvanzar, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
+import { eventosAlAvanzar, PAUSA_EXTRA_EVENTO_MS, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
 import type { PincelEscena } from '../../escena/pincel';
 import { PanelCultivos } from './PanelCultivos';
 import { BarraHerramientas, type Herramienta } from './BarraHerramientas';
 import { celdaCentral, celdasEnRadio, celdasEnRiesgo, firmaMalla, mapaPlagas, plagasPresentes, proteger, RADIO_PLAGA_INICIAL, riesgosDelPlan } from './plagas';
 import { usePlagasZona, useProteccion } from './usePlagas';
-import { biomaDe, climatologia, NOMBRE_BIOMA } from './conveniencia';
+import { climatologia } from './conveniencia';
+import { climaDeSerie } from '../../geo/koppen';
+import type { Bioma } from '../../escena/render/entorno';
+
+/** Sin clima evaluable no se adivina la zona: entorno templado, que no sugiere un lugar concreto. */
+const BIOMA_NEUTRO: Bioma = 'templado';
 import { PanelEscenarios } from './PanelEscenarios';
 import { PanelComparacion } from './PanelComparacion';
 import { Aviso, textoMovidos } from './piezas';
@@ -122,7 +127,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
 
   const cultivoActivo = cultivoPincel ?? visible?.cultivo ?? null;
   // Plagas registradas en la zona y proteccion con insecticida (por rotacion y ciclo).
-  const plagasZona = usePlagasZona(datos?.parcela.centroide ?? null, datos?.esDemo ?? false);
+  const plagasZona = usePlagasZona(datos?.parcela.centroide ?? null, datos?.evidencia ? datos.evidencia.plagas : undefined);
   const presentes = useMemo(() => plagasPresentes(plagasZona), [plagasZona]);
   const celdasParcela = useMemo(() => datos?.parcela.celdas.map((c) => c.id) ?? [], [datos]);
   // Zona de plagas: solo las celdas dentro del radio de la celda elegida llevan insectos (menos modelos y una zona que se ve y se protege).
@@ -155,6 +160,14 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     const r = [...riesgos].sort((a, b) => b.sinProteger.length - a.sinProteger.length)[0];
     return r ? { plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length } : null;
   }, [riesgos]);
+  // Con un aviso o una animacion en pantalla, la reproduccion espera; y unos segundos mas despues, para que se alcance a leer.
+  const [retener, setRetener] = useState(false);
+  useEffect(() => {
+    if (cola.length > 0) { setRetener(true); return; }
+    if (!retener) return;
+    const t = window.setTimeout(() => setRetener(false), PAUSA_EXTRA_EVENTO_MS);
+    return () => window.clearTimeout(t);
+  }, [cola.length, retener]);
   const datosEvento = useRef({ cosecha: cultivosDelCiclo, plaga: plagaActiva });
   datosEvento.current = { cosecha: cultivosDelCiclo, plaga: plagaActiva };
   const fechaPrevia = useRef<{ clave: string; fecha: string } | null>(null);
@@ -202,24 +215,26 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const protegerRiesgo = () => rociar(celdasEnRiesgo(riesgos));
 
   const clima = useMemo(() => climatologia(datos?.serie), [datos?.serie]);
-  const bioma = useMemo(() => biomaDe(clima), [clima]);
+  // Zona climatica de Koppen-Geiger (Peel 2007): la grabada en un ejemplo o la de la serie de la parcela dibujada.
+  const koppen = useMemo(() => datos?.clima ?? climaDeSerie(datos?.serie), [datos?.clima, datos?.serie]);
+  const bioma = koppen.bioma;
   const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
   const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
     : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
-      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} onCeldaElegida={setCentroPlaga} tMediaDia={clima.tMediaDia} rociado={rociado} bioma={bioma ?? undefined} />
+      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} onCeldaElegida={setCentroPlaga} tMediaDia={clima.tMediaDia} rociado={rociado} bioma={bioma ?? BIOMA_NEUTRO} />
     </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
 
   const comun = { estado, onAvanzar };
-  const evidencia = useEvidencia(datos?.parcela.centroide ?? null, datos?.esDemo ?? false);
+  const evidencia = useEvidencia(datos?.parcela.centroide ?? null, datos?.evidencia);
   const leguminosas = useMemo(() => new Set((datos?.catalogo.cultivos ?? []).filter((c) => c.esLeguminosa === true).map((c) => c.id)), [datos]);
   const listaConsejos = useMemo(() => consejos({
     paso, plan: plan ?? null, ciclo, calendario: datos?.calendario ?? null, escenario,
     resultado: estado.calculo?.ranking.rotaciones.find((r) => r.rotacionId === plan?.rotacionId) ?? null,
     ordenadas: ordenarRotaciones(estado.calculo?.ranking.rotaciones ?? []),
     nombreRotacion: (id) => nombreRotacion(id, estado.planes), leguminosas, ndvi: evidencia.ndvi, smap: evidencia.smap,
-    bioma: bioma ? { nombre: NOMBRE_BIOMA[bioma], tMedia: clima.tMediaAnual, lluvia: clima.lluviaAnualMm } : null,
+    bioma: koppen.estado === 'EVALUABLE' ? { nombre: `clima ${koppen.descripcion}`, tMedia: clima.tMediaAnual, lluvia: clima.lluviaAnualMm } : null,
     riesgos: riesgos.map((r) => ({ plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })),
-  }), [paso, plan, ciclo, datos, escenario, estado.calculo, estado.planes, leguminosas, evidencia, riesgos, bioma, clima]);
+  }), [paso, plan, ciclo, datos, escenario, estado.calculo, estado.planes, leguminosas, evidencia, riesgos, koppen, clima]);
   return <div className={`lab lab-paso-${paso}`}>
     <Globo />
     {datos && paso !== 'comparacion' && <Mascota consejos={listaConsejos} paso={paso} />}
@@ -230,7 +245,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     {paso === 'cultivos' && datos && <BarraHerramientas herramienta={herramienta} setHerramienta={setHerramienta} tamano={tamano} setTamano={setTamano}
       onSembrarTodo={sembrarTodo} sembrarTexto={`Sembrar ${nombresCultivos[cultivoActivo ?? ''] ?? cultivoActivo ?? ''} en toda la parcela`}
       onRociarTodo={presentes.length ? rociarTodo : null} deshacer={estado.deshacer} rehacer={estado.rehacer} puedeDeshacer={estado.puedeDeshacer} puedeRehacer={estado.puedeRehacer} />}
-    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} />}
+    {paso === 'escenarios' && <PanelEscenarios {...comun} fecha={fecha} rango={rango} serie={serie} celdasListas={celdasListas} errorCeldas={errorCeldas} onFecha={cambiarFecha} claveTiempo={`${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${visible?.ciclo}`} retener={retener} />}
     {paso === 'comparacion' && <PanelComparacion {...comun} serie={serie} setGraficas={setGraficas} plagasDe={(id) => {
       const p = estado.planes.find((x) => x.rotacionId === id);
       return p ? riesgosDelPlan(p, celdasZona, presentes, proteccion).map((r) => ({ ciclo: r.ciclo, plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length })) : [];

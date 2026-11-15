@@ -79,7 +79,7 @@ export const obtenerSuelo = (lon: number, lat: number, o?: Opciones) => pedir<Su
 export const obtenerProximaTemporada = (lon: number, lat: number, o?: Opciones) =>
   pedir<ProximaTemporadaAproximada>(`/api/proxima-temporada?${consulta({ lat, lon })}`, {}, o);
 export const obtenerCultivos = (o?: Opciones) => pedir<CatalogoCultivos>('/api/cultivos', {}, o);
-/** Calendario de siembra del punto: SIAP/INIFAP en Isla; fuera de Mexico, maiz de temporal de GGCMI fase 3 (A4.13). */
+/** Calendario de siembra del punto: GGCMI y MIRCA en cualquier punto, FAO Crop Calendar donde hay, y SIAP en los municipios de Mexico. */
 export const obtenerCalendario = (lon: number, lat: number, o?: Opciones) => pedir<CalendarioLocal>(`/api/calendario?${consulta({ lat, lon })}`, {}, o);
 /** Elevacion y pendiente de una cuadricula ya generada por el front (tope 1600 celdas). */
 export const obtenerTerreno = (entrada: TerrenoEntrada, o?: Opciones) =>

@@ -22,3 +22,28 @@ export function desplazarMes(fecha: string, direccion: -1 | 1, rango: RangoTiemp
   const destino = new Date(Date.UTC(origen.getUTCFullYear(), mes, Math.min(origen.getUTCDate(), ultimoDia))).toISOString().slice(0, 10);
   return destino < rango.desde ? rango.desde : destino > rango.hasta ? rango.hasta : destino;
 }
+
+/** El tiempo del escenario avanza por semanas: el deslizador, los botones y la reproduccion dan pasos de 7 dias; el ultimo se recorta al ultimo dia del ciclo (la cosecha). */
+export const DIAS_POR_PASO = 7;
+
+/** Pasos semanales del ciclo: el deslizador va de 0 a este numero. */
+export const totalSemanas = (rango: RangoTiempo): number => Math.ceil(rango.pasos / DIAS_POR_PASO);
+
+/** Fecha del paso `k` (0 = siembra). Nunca pasa del ultimo dia del ciclo. */
+export function fechaDeSemana(rango: RangoTiempo, k: number): string {
+  const paso = Math.max(0, Math.min(totalSemanas(rango), Math.round(k)));
+  return paso >= totalSemanas(rango) ? rango.hasta : fechaEnIndice(rango.desde, paso * DIAS_POR_PASO);
+}
+
+/** Paso semanal que le corresponde a una fecha (la semana en curso); el ultimo dia es el ultimo paso. */
+export function semanaDeFecha(rango: RangoTiempo, fecha: string): number {
+  if (fecha >= rango.hasta) return totalSemanas(rango);
+  if (fecha <= rango.desde) return 0;
+  return Math.floor(indiceDeFecha(rango.desde, fecha) / DIAS_POR_PASO);
+}
+
+/** Una semana adelante o atras, sin salir del ciclo. */
+export function desplazarSemana(fecha: string, direccion: -1 | 1, rango: RangoTiempo): string {
+  const destino = fechaEnIndice(fecha, direccion * DIAS_POR_PASO);
+  return destino < rango.desde ? rango.desde : destino > rango.hasta ? rango.hasta : destino;
+}
