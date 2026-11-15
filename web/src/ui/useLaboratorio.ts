@@ -5,7 +5,7 @@ import { avisosDe, type AvisoDatos } from '../api/datosParcela';
 import { crearClienteMotor, type ClienteMotor } from '../motor/cliente';
 import type { ResultadoRanking } from '../motor/ranking';
 import type { VistaProximaTemporada } from '../motor/proxima';
-import { calendarioIsla, planesIniciales } from './planes';
+import { calendarioIsla, claveDeParcela, planesIniciales, reconstruirPlan } from './planes';
 
 export interface DatosLaboratorio { esDemo: boolean; parcela: Parcela; serie: SerieClima; suelo: Suelo | null; catalogo: CatalogoCultivos; tabla: TablaSuelos; calendario: CalendarioLocal | null; capa: ProximaTemporadaAproximada | null; avisos: string[]; avisosDatos: AvisoDatos[] }
 type Calculo = { clave: string; ranking: ResultadoRanking; proxima: VistaProximaTemporada; cliente: ClienteMotor };
@@ -81,12 +81,14 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
     return () => { activo = false; control.abort(); };
   }, [claveParcela, iniciado, intento, datosRemotos]);
   const actual = datos?.clave === claveParcela && (!parcela || remotos.state === 'ready') ? datos.datos : null;
-  // La clave del guardado es el id de la parcela (la demo siempre es la misma).
-  const claveGuardado = actual?.parcela.id ?? 'demo';
+  // Cada parcela guarda lo suyo: la demo por su id; una propia por su centro y su cuadricula
+  // (todas las parcelas dibujadas tienen el mismo id).
+  const claveGuardado = actual ? claveDeParcela(actual.parcela, actual.esDemo) : 'demo';
   const planes = useMemo(() => {
     if (!actual) return [];
     if (planesEditados?.clave === claveParcela) return planesEditados.planes;
-    const guardados = leerPlanes(claveGuardado)?.filter((p) => p.parcelaId === actual.parcela.id);
+    // Lo guardado se rearma contra la parcela y el calendario de ahora.
+    const guardados = leerPlanes(claveGuardado)?.filter((p) => p.parcelaId === actual.parcela.id).map((p) => reconstruirPlan(p, actual.parcela, actual.calendario));
     return guardados?.length ? guardados : planesIniciales(actual.parcela, actual.calendario);
   }, [actual, planesEditados, claveParcela, claveGuardado]);
   const aplicarPlanes = (lista: PlanSiembra[]) => { guardarPlanes(claveGuardado, lista); setPlanes({ clave: claveParcela, planes: lista }); };
@@ -128,7 +130,7 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
     return () => { activo = false; cliente?.terminar(); };
   }, [actual, planes, clave]);
   return { seleccion: { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda }, datos: actual, planes, calculo: calculo?.clave === clave && actual ? calculo : null, error: parcela && remotos.state === 'error' ? remotos.error.motivo : error || errorMotor, actualizar: (plan: PlanSiembra) => fijarPlanes(planes.map((p) => p.rotacionId === plan.rotacionId ? plan : p)),
-    deshacer, rehacer, puedeDeshacer: pila.atras.length > 0, puedeRehacer: pila.adelante.length > 0,
+    claveGuardado, deshacer, rehacer, puedeDeshacer: pila.atras.length > 0, puedeRehacer: pila.adelante.length > 0,
     agregarRotacion: (plan: PlanSiembra) => { fijarPlanes([...planes, plan]); setRotacion(plan.rotacionId); setCiclo(1); },
     quitarRotacion: (id: string) => {
       if (planes.length <= 1) return;

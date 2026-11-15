@@ -121,7 +121,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   // Plagas registradas en la zona y proteccion con insecticida (por rotacion y ciclo).
   const plagasZona = usePlagasZona(datos?.parcela.centroide ?? null, datos?.esDemo ?? false);
   const presentes = useMemo(() => plagasPresentes(plagasZona), [plagasZona]);
-  const [proteccion, setProteccion] = useProteccion(datos?.parcela.id ?? null);
+  const [proteccion, setProteccion] = useProteccion(datos ? estado.claveGuardado : null);
   const rociar = useCallback((ids: string[]) => {
     if (!plan || !visible || !ids.length) return;
     setProteccion(proteger(proteccion, plan.rotacionId, visible.ciclo, ids));

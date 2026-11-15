@@ -2,6 +2,12 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Arreglo: rotaciones guardadas de otra parcela en parcelas dibujadas (Eduardo)
+
+- **Archivos:** `web/src/ui/planes.ts` (`reconstruirPlan`, `claveDeParcela`) y su prueba, `web/src/ui/useLaboratorio.ts`, `web/src/ui/lab/Laboratorio.tsx`.
+- **Problema:** todas las parcelas dibujadas tienen el id `parcela-usuario` y las rotaciones y la protección contra plagas se guardaban por ese id. Al dibujar una parcela nueva en otro lugar se cargaban las de una parcela anterior, que citaban el calendario de Isla: textos con "Isla" y el motor con calendario que no coincide (NO_EVALUABLE).
+- **Arreglo:** la llave del guardado de una parcela propia incluye su centro y su número de celdas, y lo guardado se rearma al cargarlo contra la parcela y el calendario de ahora (calendario citado, motivos, ventana, temporada; se quita lo pintado en celdas o ciclos que ya no existen). Lo guardado con la llave anterior se ignora.
+
 ### 2026-11-15 — Plagas con GBIF (contratos 0.15.0), barra de herramientas, vida y biomas en la escena, paleta por conveniencia y "Tu plan" (Eduardo)
 
 - **Archivos:** `contratos/plagas.schema.json`, ejemplo, casos inválidos, tipos y README (0.15.0, compatible); `api/app/plagas.py`, `clientes/gbif.py`, `modelos_plagas.py`, `rutas/plagas.py`, `main.py`, `config.py`, `openapi.json`, `cliente/api.d.ts`, `tests/test_plagas.py`, `README.md`; `datos/plagas/plagas.json` y `datos/demo/respuestas/plagas.json` (nuevos); `web/src/motor/tipos.ts` (`VERSION_CONTRATO` 0.15.0), `web/src/api/cliente.ts`; `web/src/ui/lab/` (`BarraHerramientas`, `plagas`, `usePlagas`, `conveniencia`, `PlanElegido` y sus pruebas, más `Laboratorio`, `PanelCultivos`, `PanelComparacion`, `consejos`, `iconos`, `lab.css`), `web/src/ui/useLaboratorio.ts`; `web/src/escena/render/` (`vida.ts`, `plagas.ts` nuevos; `entorno.ts`, `camara.ts`, `escena-three.ts`), `EscenaParcela.tsx`, `escena.css`; `docs/06`.

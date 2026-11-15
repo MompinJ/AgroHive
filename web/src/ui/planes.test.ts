@@ -133,3 +133,20 @@ describe('rotaciones sin limite de ciclos', () => {
     expect(validadorContrato('plan-siembra')(con4)).toEqual([]);
   });
 });
+
+describe('guardado por parcela', () => {
+  it('una rotacion guardada de otra parcela o calendario se rearma con la de ahora', async () => {
+    const { reconstruirPlan, claveDeParcela } = await import('./planes');
+    const guardada = pintarCeldas(planesIniciales(parcela, calendarioIsla)[0]!, parcela, 1, [parcela.celdas[0]!.id], 'frijol', calendarioIsla);
+    // Otra parcela con otras celdas y sin calendario local (por ejemplo, fuera de Mexico).
+    const otra = { ...parcela, centroide: [-98.5, 39.5] as [number, number], celdas: parcela.celdas.slice(1) } as typeof parcela;
+    const r = reconstruirPlan(guardada, otra, null);
+    expect(r.calendarioLocal).toHaveProperty('sinCalendarioLocal', true);
+    expect(r.ciclos.every((c) => !c.porQue.includes('Isla'))).toBe(true);
+    expect(r.ciclos.every((c) => c.dentroDeVentana === null)).toBe(true);
+    expect(r.porCelda).toBeNull();
+    expect(validadorContrato('plan-siembra')(r)).toEqual([]);
+    expect(claveDeParcela(parcela, true)).toBe(parcela.id);
+    expect(claveDeParcela(otra, false)).not.toBe(claveDeParcela({ ...otra, centroide: [-90, 20] } as typeof parcela, false));
+  });
+});

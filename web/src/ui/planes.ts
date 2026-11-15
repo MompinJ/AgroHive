@@ -272,3 +272,31 @@ export function quitarCiclo(plan: PlanSiembra, parcela: Parcela, ciclo: number, 
   }
   return armarPlan(plan.rotacionId, parcela, ciclos, calendario, porCelda);
 }
+
+/**
+ * Rearma una rotacion guardada contra la parcela y el calendario de ahora: recalcula el
+ * calendario citado, los motivos, la ventana y la temporada, y quita lo pintado en celdas que
+ * ya no existen o en ciclos que ya no estan. Asi un guardado viejo (otra parcela u otro
+ * calendario) no llega al motor con referencias que no corresponden.
+ */
+export function reconstruirPlan(plan: PlanSiembra, parcela: Parcela, calendario: CalendarioLocal | null): PlanSiembra {
+  const celdas = new Set(parcela.celdas.map((c) => c.id));
+  const ciclos = new Set(plan.ciclos.map((c) => c.ciclo));
+  let porCelda: PlanSiembra['porCelda'] = null;
+  if (plan.porCelda) {
+    const salida: NonNullable<PlanSiembra['porCelda']> = {};
+    for (const [celda, lista] of Object.entries(plan.porCelda)) {
+      const validos = celdas.has(celda) ? lista.filter((x) => ciclos.has(x.ciclo)) : [];
+      if (validos.length) salida[celda] = validos as typeof lista;
+    }
+    porCelda = salida;
+  }
+  return armarPlan(plan.rotacionId, parcela, plan.ciclos.map((c) => ({ ...c, temporada: temporadaDeFecha(c.siembra) })), calendario, porCelda);
+}
+
+/** Llave del guardado local: la demo por su id; una parcela propia por su centro y su cuadricula. */
+export function claveDeParcela(parcela: Parcela, esDemo: boolean): string {
+  if (esDemo) return parcela.id;
+  const [lon, lat] = parcela.centroide;
+  return `${parcela.id}@${lon.toFixed(5)},${lat.toFixed(5)}#${parcela.celdas.length}`;
+}
