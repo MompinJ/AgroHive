@@ -19,6 +19,7 @@ import {
   parcelaCargaSintetica,
   parcelaConTerrenoDemo,
   parcelaCuadriculaBalam,
+  POLIGONO_BORDES,
   ROTACIONES_PRUEBA,
   type ModoSuelo,
   type RotacionPrueba,
@@ -32,15 +33,19 @@ declare global {
   }
 }
 import { EscenaParcela } from './EscenaParcela';
+import { Parcela2D } from '../ui/Parcela2D';
 
-type Fuente = 'motor' | 'cuadricula' | 'carga' | 'ejemplo';
+type Fuente = 'motor' | 'cuadricula' | 'bordes' | 'carga' | 'ejemplo';
 
 const ESCENARIOS: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 const FECHAS = fechasPlan();
 const estiloFila = { display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', minHeight: 44 } as const;
 
 function VistaPrevia() {
-  const [fuente, setFuente] = useState<Fuente>('motor');
+  // ?fuente=bordes&tamano=20 abre directo la prueba de bordes diagonales (capturas sin pantalla).
+  const consulta = new URLSearchParams(window.location.search);
+  const [fuente, setFuente] = useState<Fuente>(() => (['motor', 'cuadricula', 'bordes', 'carga', 'ejemplo'].includes(consulta.get('fuente') ?? '') ? consulta.get('fuente') as Fuente : 'motor'));
+  const tamanoBordes = Number(consulta.get('tamano')) > 0 ? Number(consulta.get('tamano')) : 'auto';
   const [suelo, setSuelo] = useState<ModoSuelo>('manual_franco');
   const [escenario, setEscenario] = useState<Escenario>('seco');
   const [rotacion, setRotacion] = useState<RotacionPrueba>('R1');
@@ -75,16 +80,18 @@ function VistaPrevia() {
   const parcelaCarga = useMemo(() => parcelaCargaSintetica(), []);
   const [parcelaBalam, setParcelaBalam] = useState<Parcela | null>(null);
   const parcela =
-    fuente === 'motor' ? parcelaMotor : fuente === 'carga' ? parcelaCarga : fuente === 'cuadricula' ? (parcelaBalam ?? parcelaMotor) : (parcelaEjemplo as unknown as Parcela);
-  const conMotor = fuente !== 'ejemplo' && (fuente !== 'cuadricula' || parcelaBalam !== null);
+    fuente === 'motor' ? parcelaMotor : fuente === 'carga' ? parcelaCarga : fuente === 'cuadricula' || fuente === 'bordes' ? (parcelaBalam ?? parcelaMotor) : (parcelaEjemplo as unknown as Parcela);
+  const conMotor = fuente !== 'ejemplo' && ((fuente !== 'cuadricula' && fuente !== 'bordes') || parcelaBalam !== null);
   const sueloEscena = useMemo(() => (fuente === 'ejemplo' ? null : entradasDemo(suelo).suelo), [fuente, suelo]);
   const idRotacion: RotacionPrueba = fuente === 'carga' ? 'R1' : rotacion;
 
   useEffect(() => {
-    if (fuente !== 'cuadricula' || parcelaBalam) return;
+    if ((fuente !== 'cuadricula' && fuente !== 'bordes') || (parcelaBalam && parcelaBalam.id === (fuente === 'bordes' ? 'parcela-bordes' : 'parcela-cuadricula-balam'))) return;
     setEstado('Generando la cuadricula y pidiendo la elevacion...');
-    void parcelaCuadriculaBalam().then(({ parcela: p, nota }) => {
-      setParcelaBalam(p);
+    const pedido = fuente === 'bordes' ? parcelaCuadriculaBalam(POLIGONO_BORDES, { id: 'parcela-bordes', tamanoCeldaM: tamanoBordes }) : parcelaCuadriculaBalam();
+    void pedido.then(({ parcela: p, nota }) => {
+      // ?formas=0: sin el campo forma (como una parcela de contratos 0.13), para comparar antes y despues.
+      setParcelaBalam(consulta.get('formas') === '0' ? { ...p, celdas: p.celdas.map(({ forma: _f, ...c }) => c) as Parcela['celdas'] } : p);
       console.info(`[escena] ${nota}`);
     });
   }, [fuente, parcelaBalam]);
@@ -109,7 +116,7 @@ function VistaPrevia() {
         const entradas =
           fuente === 'carga'
             ? entradasCarga(suelo)
-            : fuente === 'cuadricula' && parcelaBalam
+            : (fuente === 'cuadricula' || fuente === 'bordes') && parcelaBalam
               ? { ...entradasDemo(suelo, rotacion), parcela: parcelaBalam, plan: planPrueba(parcelaBalam.id, rotacion) }
               : entradasDemo(suelo, rotacion);
         const t0 = performance.now();
@@ -180,13 +187,14 @@ function VistaPrevia() {
             <select value={fuente} onChange={(e) => setFuente(e.target.value as Fuente)}>
               <option value="motor">Motor real + paquete de demo</option>
               <option value="cuadricula">Cuadricula de balam (poligono en L) + elevacion de la API</option>
+              <option value="bordes">Bordes diagonales (octagono de prueba) + elevacion de la API</option>
               <option value="carga">Prueba de carga: 1600 celdas sinteticas (no son datos)</option>
               <option value="ejemplo">Ejemplo de contratos (ficticio)</option>
             </select>
           </label>
           {conMotor && (
             <>
-              {(fuente === 'motor' || fuente === 'cuadricula') && (
+              {(fuente === 'motor' || fuente === 'cuadricula' || fuente === 'bordes') && (
                 <label>
                   Rotacion{' '}
                   <select value={rotacion} onChange={(e) => setRotacion(e.target.value as RotacionPrueba)}>
@@ -244,6 +252,8 @@ function VistaPrevia() {
           window.escenaPrueba = e;
         }}
       />
+      {/* ?vista=2d agrega la vista 2D debajo, con el mismo resultado (capturas de bordes diagonales). */}
+      {consulta.get('vista') === '2d' && <Parcela2D parcela={parcela} resultado={resultado} suelo={sueloEscena} />}
     </main>
   );
 }

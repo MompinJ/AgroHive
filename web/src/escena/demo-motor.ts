@@ -19,12 +19,14 @@ import type {
   Advertencia,
   CatalogoCultivos,
   Fuente,
+  LonLat,
   Parcela,
   PlanSiembra,
   Suelo,
   TablaSuelos,
 } from '../../../contratos/tipos/contratos';
 import type { EntradasMotor } from '../motor/motor';
+import type { PedidoTamano } from '../geo/tamano-celda';
 
 export type ModoSuelo = 'mapa' | 'manual_franco';
 
@@ -182,19 +184,32 @@ export function entradasCarga(modo: ModoSuelo): Omit<EntradasMotor, 'escenarios'
  * responda POST /api/elevacion (en desarrollo, la API local con el paquete de
  * demo: VITE_API_URL). Si la API falla, las celdas quedan sin elevacion (huecos).
  */
-export async function parcelaCuadriculaBalam(): Promise<{ parcela: Parcela; nota: string }> {
+/**
+ * Prueba de bordes diagonales (sesion bordes): octagono irregular de unas 3 ha junto a la
+ * parcela demo, con orillas a 45 grados y en otros angulos. Solo para ver como se dibujan los
+ * medios cuadrados; la elevacion sale de la API como en la cuadricula de balam.
+ */
+export const POLIGONO_BORDES: LonLat[] = [
+  [-95.5255, 18.0280], [-95.5240, 18.0280], [-95.5232, 18.0288], [-95.5232, 18.0296],
+  [-95.5242, 18.0305], [-95.5252, 18.0305], [-95.5262, 18.0297], [-95.5262, 18.0287],
+];
+
+export async function parcelaCuadriculaBalam(
+  poligono: LonLat[] = [[-95.526, 18.028], [-95.5236, 18.028], [-95.5236, 18.0302], [-95.5248, 18.0302], [-95.5248, 18.0292], [-95.526, 18.0292]],
+  opciones: { id?: string; tamanoCeldaM?: PedidoTamano } = {},
+): Promise<{ parcela: Parcela; nota: string }> {
   const { generarCuadricula } = await import('../ui/cuadricula');
   const { obtenerTerreno } = await import('../api/cliente');
-  // El mismo poligono de las revisiones de punta a punta: 4.8 ha y 518 celdas de 10 m.
-  const { parcela } = generarCuadricula([[-95.526, 18.028], [-95.5236, 18.028], [-95.5236, 18.0302], [-95.5248, 18.0302], [-95.5248, 18.0292], [-95.526, 18.0292]]);
+  // Por defecto, el mismo poligono de las revisiones de punta a punta: 4.8 ha y 518 celdas de 10 m.
+  const { parcela } = generarCuadricula(poligono, { tamanoCeldaM: opciones.tamanoCeldaM ?? 'auto' });
   const r = await obtenerTerreno({ tamanoCeldaM: parcela.tamanoCeldaM, celdas: parcela.celdas.map(({ id, i, j, centro }) => ({ id, i, j, centro })) });
-  if (!r.ok) return { parcela, nota: `Sin elevacion: ${r.error.motivo}` };
+  if (!r.ok) return { parcela: { ...parcela, id: opciones.id ?? 'parcela-cuadricula-balam' }, nota: `Sin elevacion: ${r.error.motivo}` };
   const alturas = new Map(r.datos.celdas.map((c) => [c.id, c]));
   return {
     nota: `Cuadricula de balam: ${parcela.celdas.length} celdas de ${parcela.tamanoCeldaM.toFixed(1)} m; elevacion de ${r.datos.terreno.fuente.nombre}.`,
     parcela: {
       ...parcela,
-      id: 'parcela-cuadricula-balam',
+      id: opciones.id ?? 'parcela-cuadricula-balam',
       terreno: { estado: r.datos.terreno.estado, fuente: { nombre: r.datos.terreno.fuente.nombre } },
       celdas: parcela.celdas.map((c) => ({ ...c, elevacionM: alturas.get(c.id)?.elevacionM ?? null, pendientePct: alturas.get(c.id)?.pendientePct ?? null })) as Parcela['celdas'],
       advertencias: (r.datos.advertencias ?? []) as Advertencia[],

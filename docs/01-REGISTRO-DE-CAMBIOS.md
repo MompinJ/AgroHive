@@ -2,6 +2,18 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 (madrugada) — Bordes diagonales, parte 3: escena 3D, vista 2D y selector de escala `[DECIDIDO]` (Mompin; IA de Mompin, sesión "bordes", rama `Mompin-motor`)
+
+- **Archivos nuevos:** `web/src/ui/SelectorTamanoCelda.tsx` y su prueba, `web/src/escena/media-2d.ts` y `media-2d.css`, `docs/capturas/bordes-diagonales/` (4 comparaciones antes y después).
+- **Archivos de la escena (Mompin):** `web/src/escena/demo-motor.ts` (`POLIGONO_BORDES`; `parcelaCuadriculaBalam` acepta polígono, id y tamaño), `web/src/escena/vista-previa.tsx` (fuente "Bordes diagonales" y parámetros `?fuente=bordes`, `?tamano=N`, `?formas=0`, `?vista=2d`). Docs: `docs/06` (sección "Bordes diagonales y escala de celda").
+- **Toca archivos de Eduardo (con OK de Mompin por la maestra; buzón caído, la maestra le pasa el aviso). Para el merge de mañana, exactamente esto:**
+  - `web/src/escena/render/escena-three.ts` (+46 / −24): 3 imports nuevos (`unirCubosMedia`, `./media-celda`, tipo `FormaCelda`); `MetaPlantas.forma`; en `construirTerreno`, los `if (medidos.length > 0)` y `if (huecos.length > 0)` pasan a `for (const [forma, …] of porForma(…))` con la caja o el prisma (`geometriaPrisma`) y su giro (`giroForma`); la placa usa `placaEnCelda` (corrimiento y escala) y el banderín `banderinEnCelda`; las losas se agrupan por `losa|forma` y no giran si son medio cuadrado; `geometriaDe` recibe `forma` (entra en la llave de caché) y llama a `unirCubosMedia` en vez de `unirCubos` si no es completa; `construirPlantas` divide cada grupo por forma (`porForma`), pasa la forma a `geometriaDe` y no aplica `giroSurcos` al medio cuadrado; `aplicarDetalle` pide el detallado con `meta.forma`. Si Eduardo reescribió esas funciones, basta repetir esas llamadas: toda la lógica está en `render/media-celda.ts` y `voxel/media.ts`.
+  - `web/src/ui/Parcela2D.tsx` (+2 / −1): import de `claseMedia2D` y `${claseMedia2D(b.forma)}` al final del `className` de la celda.
+  - `web/src/ui/DibujarParcela.tsx` (+10 / −5): imports de `SelectorTamanoCelda` y `PedidoTamano`; estado `tamano`; `preparar(pedido)` llama a `generarCuadricula(puntos, { tamanoCeldaM: pedido })`, cancela la consulta en curso y antepone al mensaje el aviso de tamaño ajustado; el mapa recibe `cuadricula.contornos` en vez de `bordes`; al consultar la elevación se conservan las advertencias de la cuadrícula (`TAMANO_CELDA_AJUSTADO`) junto a las de la API; `<SelectorTamanoCelda>` debajo de los botones, que regenera la cuadrícula si ya existe.
+  - `web/src/ui/cuadricula.ts`: ya quedó como reexportación en la parte 1.
+- **Evidencia:** `contratos/` 102/102, `api/` 162, catálogos en verde, `tsc --noEmit` limpio, `vitest` 1 004 (1 `todo`). Capturas en Chrome sin pantalla (SwiftShader) con la vista previa y elevación de la API: las orillas a 45° quedan rectas en 3D y en 2D. Medido con un solo cultivo: de 6 a 18 draw calls; los triángulos bajan un poco (316 120 a 311 535 con 1 516 celdas).
+- **Pendiente:** el marco de selección y la marca de la brocha siguen cuadrados; no se midió en hardware real; no se tocó `docs/14` (el cronograma no tiene una actividad para esto).
+
 ### 2026-11-15 (madrugada) — Bordes diagonales, parte 2: piezas de medio cuadrado por recorte en el render `[DECIDIDO]` (Mompin; IA de Mompin, sesión "bordes", rama `Mompin-motor`)
 
 - **Archivos nuevos:** `web/src/escena/voxel/media.ts` (recorte de cualquier `.bbmodel` por la diagonal, con tapa), `web/src/escena/render/media-celda.ts` (prisma de suelo, giro por forma, placa y banderín en medio cuadrado), `web/src/escena/pruebas/media.test.ts` y `media-celda.test.ts`.

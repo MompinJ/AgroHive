@@ -16,6 +16,10 @@ import { agruparPorModelo, claveModelo, escalaPorAvance, giroCelda, giroSurcos, 
 import { bloqueProvisional, claveBloque } from '../voxel/bloque';
 import { cargarModelo, MODELOS_DISPONIBLES } from '../voxel/fuente-modelos';
 import { unirCubos } from '../voxel/geometria';
+// Bordes diagonales (sesion bordes, 15/11): piezas de medio cuadrado; ver docs/01.
+import { unirCubosMedia } from '../voxel/media';
+import { banderinEnCelda, esMedia, geometriaPrisma, giroForma, placaEnCelda, porForma } from './media-celda';
+import type { FormaCelda } from '../../geo/forma-celda';
 import { decodificarPaletaPng, type ColorPaleta } from '../voxel/paleta-png';
 
 export class ErrorWebGL extends Error {
@@ -140,6 +144,8 @@ function soportaWebGL(): boolean {
 
 interface MetaPlantas {
   clave: string;
+  /** Forma de las celdas de esta malla (bordes diagonales): el detallado se recorta igual. */
+  forma: FormaCelda;
   /** Modelo detallado que se muestra en la celda elegida. */
   tipoDetallado: 'bbmodel' | 'respaldo';
   celdas: string[];
@@ -567,9 +573,9 @@ export class EscenaThree {
       this.oculta = { mesh, k, meta };
       let geo: THREE.BufferGeometry;
       try {
-        geo = await this.geometriaDe(meta.clave, meta.tipoDetallado);
+        geo = await this.geometriaDe(meta.clave, meta.tipoDetallado, 'bbmodel', meta.forma);
       } catch {
-        geo = await this.geometriaDe(meta.clave, 'respaldo');
+        geo = await this.geometriaDe(meta.clave, 'respaldo', 'bbmodel', meta.forma);
       }
       if (token !== this.tokenDetalle) return; // la seleccion cambio mientras cargaba
       const detalle = new THREE.Mesh(geo, this.materialMascota);
@@ -646,9 +652,14 @@ export class EscenaThree {
 
     // Bloques de suelo: caja de base en y = 0, escalada hasta su altura; color por humedad del motor.
     const caja = this.registrar(new THREE.BoxGeometry(1, 1, 1).translate(0, 0.5, 0));
-    if (medidos.length > 0) {
+    const prisma = this.registrar(geometriaPrisma());
+    const ejeY = new THREE.Vector3(0, 1, 0);
+    const giroDe = (f: FormaCelda) => (esMedia(f) ? new THREE.Quaternion().setFromAxisAngle(ejeY, giroForma(f)) : q);
+    for (const [forma, medidosForma] of porForma(medidos)) {
+      const q = giroDe(forma);
+      const medidos = medidosForma;
       const mat = this.registrar(new THREE.MeshLambertMaterial());
-      const suelo = new THREE.InstancedMesh(caja, mat, medidos.length);
+      const suelo = new THREE.InstancedMesh(esMedia(forma) ? prisma : caja, mat, medidos.length);
       medidos.forEach((b, k) => {
         // Con losa, la columna baja lo que mide el cuerpo de la losa: la cara superior de la losa
         // queda a la altura del relieve y no se encima con la de la columna.
@@ -666,10 +677,12 @@ export class EscenaThree {
     }
 
     // Huecos sin elevacion: bloque hundido con cruces, no a nivel cero.
-    if (huecos.length > 0) {
+    for (const [forma, huecosForma] of porForma(huecos)) {
+      const q = giroDe(forma);
+      const huecos = huecosForma;
       const tex = this.registrar(texturaDe(ESTILO_SIN_ELEVACION));
       const mat = this.registrar(new THREE.MeshBasicMaterial({ map: tex }));
-      const hueco = new THREE.InstancedMesh(caja, mat, huecos.length);
+      const hueco = new THREE.InstancedMesh(esMedia(forma) ? prisma : caja, mat, huecos.length);
       huecos.forEach((b, k) => {
         m.compose(new THREE.Vector3(b.x, -GROSOR_BASE, b.z), q, new THREE.Vector3(LADO_BLOQUE, GROSOR_BASE + TOPE_HUECO, LADO_BLOQUE));
         hueco.setMatrixAt(k, m);
@@ -695,7 +708,8 @@ export class EscenaThree {
       const placa = new THREE.InstancedMesh(plano, mat, lista.length);
       lista.forEach((b, k) => {
         // Sobre la losa, la placa va por encima de su detalle para que no la tape.
-        m.compose(new THREE.Vector3(b.x, this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0) + 0.002, b.z), q, new THREE.Vector3(1, 1, 1));
+        const p = placaEnCelda(b.forma, LADO_PLACA_ESCENA);
+        m.compose(new THREE.Vector3(b.x + p.dx, this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0) + 0.002, b.z + p.dz), q, new THREE.Vector3(p.escala, 1, p.escala));
         placa.setMatrixAt(k, m);
       });
       placa.instanceMatrix.needsUpdate = true;
@@ -713,7 +727,8 @@ export class EscenaThree {
       const mat = this.registrar(new THREE.MeshBasicMaterial({ vertexColors: true }));
       const banderas = new THREE.InstancedMesh(geo, mat, noRecomendados.length);
       noRecomendados.forEach((b, k) => {
-        m.compose(new THREE.Vector3(b.x - 0.42, this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0), b.z - 0.42), q, new THREE.Vector3(1, 1, 1));
+        const p = banderinEnCelda(b.forma);
+        m.compose(new THREE.Vector3(b.x + p.dx, this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0), b.z + p.dz), new THREE.Quaternion().setFromAxisAngle(ejeY, p.giro), new THREE.Vector3(1, 1, 1));
         banderas.setMatrixAt(k, m);
       });
       banderas.instanceMatrix.needsUpdate = true;
@@ -738,8 +753,9 @@ export class EscenaThree {
   private async construirLosas(modelo: EscenaModelo, version: number) {
     const porLosa = new Map<string, BloqueEscena[]>();
     for (const b of modelo.bloques) {
-      const clave = this.losaDe(b);
-      if (!clave) continue;
+      const losa = this.losaDe(b);
+      if (!losa) continue;
+      const clave = `${losa}|${b.forma}`;
       porLosa.set(clave, [...(porLosa.get(clave) ?? []), b]);
     }
     if (porLosa.size === 0) return;
@@ -748,10 +764,11 @@ export class EscenaThree {
     const q = new THREE.Quaternion();
     const eje = new THREE.Vector3(0, 1, 0);
     const uno = new THREE.Vector3(1, 1, 1);
-    for (const [clave, lista] of [...porLosa].sort(([a], [b]) => a.localeCompare(b))) {
+    for (const [claveForma, lista] of [...porLosa].sort(([a], [b]) => a.localeCompare(b))) {
+      const [clave, forma] = claveForma.split('|') as [string, FormaCelda];
       let geo: THREE.BufferGeometry;
       try {
-        geo = await this.geometriaDe(clave, 'bbmodel');
+        geo = await this.geometriaDe(clave, 'bbmodel', 'bbmodel', forma);
       } catch (e) {
         this.opciones.onAviso?.('LOSA_ILEGIBLE', `${clave}.bbmodel no se pudo leer (${(e as Error).message}); esas celdas quedan sin losa.`);
         continue;
@@ -759,13 +776,14 @@ export class EscenaThree {
       if (version !== this.version) return;
       const losas = new THREE.InstancedMesh(geo, mat, lista.length);
       lista.forEach((b, k) => {
-        q.setFromAxisAngle(eje, (giroCelda(b.celdaId) * Math.PI) / 2);
+        // El medio cuadrado ya viene recortado en su orientacion: no se gira.
+        q.setFromAxisAngle(eje, esMedia(forma) ? 0 : (giroCelda(b.celdaId) * Math.PI) / 2);
         m.compose(new THREE.Vector3(b.x, this.topeDe(b), b.z), q, uno);
         losas.setMatrixAt(k, m);
       });
       losas.instanceMatrix.needsUpdate = true;
       losas.computeBoundingSphere();
-      losas.name = `losa-${clave}`;
+      losas.name = esMedia(forma) ? `losa-${clave}-${forma}` : `losa-${clave}`;
       this.raiz.add(losas);
       this.bloquesPorMalla.set(losas, lista);
       this.pedirCuadro('losas');
@@ -788,8 +806,8 @@ export class EscenaThree {
    * Geometria unida de un modelo. 'bloque': el manchon de plantas de la celda; usa
    * <clave>_bloque.bbmodel si existe y si no, uno provisional hecho del detallado.
    */
-  private geometriaDe(clave: string, tipo: 'bbmodel' | 'respaldo' | 'bloque', detalladoTipo: 'bbmodel' | 'respaldo' = 'bbmodel'): Promise<THREE.BufferGeometry> {
-    const llave = `${tipo}:${detalladoTipo}:${clave}`;
+  private geometriaDe(clave: string, tipo: 'bbmodel' | 'respaldo' | 'bloque', detalladoTipo: 'bbmodel' | 'respaldo' = 'bbmodel', forma: FormaCelda = 'completa'): Promise<THREE.BufferGeometry> {
+    const llave = `${tipo}:${detalladoTipo}:${clave}:${forma}`;
     let g = this.cacheGeometria.get(llave);
     if (!g) {
       g = (async () => {
@@ -816,13 +834,15 @@ export class EscenaThree {
           ({ modelo, paleta } = await detallado(tipo));
         }
         const c = new THREE.Color();
-        const unida = unirCubos(modelo, (i) => {
+        const colorDe = (i: number) => {
           const p = paleta?.[i];
           if (paleta && (!p || p.alfa === 0)) return null;
           // Sin paleta (no hay ningun .bbmodel): verde neutro para el respaldo.
           c.setStyle(p?.hex ?? '#4aa33a', THREE.SRGBColorSpace);
           return [c.r, c.g, c.b] as Vec3;
-        });
+        };
+        // Medio cuadrado (bordes diagonales): el mismo modelo recortado por la diagonal.
+        const unida = esMedia(forma) ? unirCubosMedia(modelo, colorDe, forma) : unirCubos(modelo, colorDe);
         const geo = new THREE.BufferGeometry();
         geo.setAttribute('position', new THREE.BufferAttribute(unida.posiciones, 3));
         geo.setAttribute('normal', new THREE.BufferAttribute(unida.normales, 3));
@@ -836,7 +856,8 @@ export class EscenaThree {
   }
 
   private async construirPlantas(modelo: EscenaModelo, version: number, previas: Map<string, PlantaPrevia>, animar: boolean) {
-    const grupos = agruparPorModelo(modelo.bloques, MODELOS_DISPONIBLES);
+    const grupos = agruparPorModelo(modelo.bloques, MODELOS_DISPONIBLES)
+      .flatMap((g) => [...porForma(g.bloques)].map(([forma, bloques]) => ({ ...g, forma, bloques })));
     const m = new THREE.Matrix4();
     const eje = new THREE.Vector3(0, 1, 0);
     for (const grupo of grupos) {
@@ -848,24 +869,25 @@ export class EscenaThree {
       // Cada celda lleva el manchon de plantas (bloque); el detallado va solo en la celda elegida.
       let tipoDetallado: 'bbmodel' | 'respaldo' = grupo.resolucion.tipo;
       try {
-        geo = await this.geometriaDe(grupo.clave, 'bloque', tipoDetallado);
+        geo = await this.geometriaDe(grupo.clave, 'bloque', tipoDetallado, grupo.forma);
       } catch (e) {
         aviso = ['MODELO_ILEGIBLE', `${grupo.clave}.bbmodel no se pudo leer (${(e as Error).message}); se dibuja una planta provisional.`];
         tipoDetallado = 'respaldo';
-        geo = await this.geometriaDe(grupo.clave, 'bloque', 'respaldo');
+        geo = await this.geometriaDe(grupo.clave, 'bloque', 'respaldo', grupo.forma);
       }
       if (version !== this.version) return; // llego otra actualizacion mientras cargaba
       if (aviso) this.opciones.onAviso?.(aviso[0], aviso[1]);
       const plantas = new THREE.InstancedMesh(geo, this.materialPlantas, grupo.bloques.length);
       plantas.frustumCulled = false; // su tamano cambia durante la transicion
-      const meta: MetaPlantas = { clave: grupo.clave, tipoDetallado, celdas: [], pos: [], rot: [] };
+      const meta: MetaPlantas = { clave: grupo.clave, forma: grupo.forma, tipoDetallado, celdas: [], pos: [], rot: [] };
       const desde: number[] = [];
       const hasta: number[] = [];
       grupo.bloques.forEach((b, k) => {
         const final = escalaPorAvance(b.avanceEtapa);
         const inicio = escalaInicial(previas.get(b.celdaId), grupo.clave, final, animar);
         const pos = new THREE.Vector3(b.x, this.topeDe(b), b.z);
-        const rot = new THREE.Quaternion().setFromAxisAngle(eje, (giroSurcos(b.celdaId) * Math.PI) / 2);
+        // El medio cuadrado ya viene recortado en su orientacion: sin el giro de los surcos.
+        const rot = new THREE.Quaternion().setFromAxisAngle(eje, esMedia(grupo.forma) ? 0 : (giroSurcos(b.celdaId) * Math.PI) / 2);
         meta.celdas.push(b.celdaId);
         meta.pos.push(pos);
         meta.rot.push(rot);
@@ -877,7 +899,7 @@ export class EscenaThree {
       });
       plantas.instanceMatrix.needsUpdate = true;
       plantas.computeBoundingSphere();
-      plantas.name = `planta-${grupo.clave}`;
+      plantas.name = esMedia(grupo.forma) ? `planta-${grupo.clave}-${grupo.forma}` : `planta-${grupo.clave}`;
       this.raiz.add(plantas);
       this.metaPlantas.set(plantas, meta);
       this.bloquesPorMalla.set(plantas, grupo.bloques);
