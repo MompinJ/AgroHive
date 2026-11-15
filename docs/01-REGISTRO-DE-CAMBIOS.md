@@ -2,6 +2,16 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Contratos 0.16.0: `nombreComunEn` en el catálogo de cultivos (IA de Mompin, sesión "ingles", parte 2)
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; los cultivos necesitan nombre en inglés con fuente.
+- **Contrato:** `cultivo` gana el campo opcional `nombreComunEn` (versión menor, compatible: un catálogo sin el campo sigue siendo válido). `contratos/package.json` 0.16.0 (la API lo lee para `/health`), tipos regenerados (`contratos/tipos/contratos.d.ts`), ejemplo con el campo en el maíz y sin él en el cultivo ficticio, caso inválido nuevo `pruebas/invalidos/cultivo.nombre-en-vacio.json`, historial en `contratos/README.md`.
+- **API:** `api/app/modelos.py` declara `CultivoCatalogo` con `nombreComunEn` opcional (el resto del cultivo pasa tal cual) dentro de `CatalogoCultivos`; `api/openapi.json` y `api/cliente/api.d.ts` regenerados (`exportar_openapi.py`, `npm run todo`); prueba nueva en `api/tests/test_contratos_api.py` (catálogo real con el campo y catálogo viejo sin él, sin `null`); `api/README.md`. `api/tests/test_ejemplos.py` acepta ejemplos grabados en 0.15.0 (`COMPATIBLES`): 0.16.0 solo toca el catálogo de cultivos, que los ejemplos no graban, así que no hace falta regrabarlos; un cambio que toque lo grabado sí obliga a regrabar.
+- **Catálogo:** `datos/catalogos/generar.py` (`NOMBRES_EN`, `nombre_en`; `VERSION_CONTRATO` de los catálogos de 0.14.0 a 0.16.0) llena los 40 cultivos desde la fila de FAO-56 (Tabla 11 o 12) o EcoCrop que ya usa cada uno, con la fila citada en `notas`; el chile, sin fila propia, desde GRIN-Global (USDA ARS, *Capsicum annuum* var. *annuum*, id 311784, consultado el 15/11). Chile ("Chili pepper") y melón ("Melon") quedan marcados para revisión humana. `cultivos.json`, `suelos.json` y `calendario-isla.json` regenerados con `generar.py`: en `cultivos.json` solo cambian `versionContrato`, `nombreComunEn` y `notas`; en los otros dos, solo `versionContrato`. `validar.mjs` comprueba que cada cultivo tenga el nombre y su fuente en `notas`. Tabla completa en `datos/catalogos/README.md` ("Nombres en inglés").
+- **Motor:** `VERSION_CONTRATO` 0.16.0. Las tarjetas en inglés usan `nombreComunEn` (maize, sorghum, common bean). Regresiones regeneradas con `ACTUALIZAR_REGRESION=1`: en `demo-isla.json` y en las seis de `regresion/ejemplos/` solo cambia `versionContrato` (0.15.0 a 0.16.0); en `regresion/ingles/bajio-guanajuato.json`, además, los nombres de cultivo pasan del español al inglés. Ninguna cifra cambia.
+- **Docs:** `docs/04` (catálogo), `docs/05` (paso 8), `datos/catalogos/README.md`.
+- **Pendiente:** revisión humana de chile y melón (y, si el equipo quiere, `Maize` frente a `Corn` y `Peanut` frente a `Groundnut`); desplegar para que `/api/cultivos` sirva el campo.
+
 ### 2026-11-15 — README al día con el alcance mundial y lo hecho el 15/11 (Mafer)
 
 - **Archivos:** `README.md`.
@@ -15,7 +25,7 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Archivos:** `web/src/motor/idioma.ts` (nuevo: `IdiomaMotor`, `IDIOMA_MOTOR_POR_DEFECTO`, `esIdiomaMotor`, `idiomaMotor`), `web/src/motor/tarjetas.ts` (las frases pasan a un diccionario `TEXTOS` por idioma; `ContextoTarjetas.idioma`; `AVISOS_EXPERTO`, `nombreEscenario`; `ventanasDe` con idioma), `web/src/motor/ranking.ts` (`rankear(entrada, opciones, idioma)`: `mensaje` y motivos de `noOrdenadas`), `web/src/motor/protocolo.ts` (`idioma?` en la petición `rankear`), `web/src/motor/cliente.ts` (`rankear(rotacionIds?, opciones?, idioma?)`; solo manda `idioma` si se lo pasan), `web/src/motor/index.ts`; pruebas nuevas `web/src/motor/pruebas/tarjetas-ingles.test.ts` y `regresion-ingles.test.ts` con `regresion/ingles/bajio-guanajuato.json`; `docs/05` (paso 8: cómo se usa, qué se traduce y qué no), `docs/16` (fila B7), `AgroVault/Compartido/Resumen.md`.
 - **Cambio:** con `idioma: 'en'` las tarjetas salen en inglés con las mismas cifras y fuentes; sin idioma, en español. Los motivos técnicos de `NO_EVALUABLE` se citan en español, marcados ("Engine reason (in Spanish)"); las fuentes y sus citas no se traducen. Detalle en `docs/05`.
 - **Evidencia:** la regresión A5.5 en español (`demo-isla.json`) no cambia; la de los ejemplos mundiales tampoco.
-- **Pendiente:** (1) la UI pasa `idioma` desde `useIdioma` (balam, B7; línea exacta en `docs/05`); (2) los nombres de cultivo en inglés llegan con `nombreComunEn` del catálogo (parte 2); mientras, la tarjeta en inglés usa el nombre en español.
+- **Pendiente:** (1) la UI pasa `idioma` desde `useIdioma` (balam, B7; línea exacta en `docs/05`); (2) los nombres de cultivo en inglés llegan con `nombreComunEn` del catálogo (parte 2, entrada de arriba).
 - **No se tocó:** `web/src/ui/`, `web/src/paginas/`.
 
 ### 2026-11-15 — B7, parte 1: base de idioma español/inglés (balam; registrado por Mompin)
