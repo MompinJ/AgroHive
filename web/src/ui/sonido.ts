@@ -4,7 +4,7 @@
 // Reglas: el audio solo arranca despues de una accion del usuario (politica de los navegadores), se puede silenciar con un boton y la
 // eleccion se guarda; sin audio disponible no pasa nada. Es decoracion: nada depende de que suene.
 
-export type NombreSonido = 'clic' | 'pintar' | 'rociar' | 'semana' | 'aviso' | 'cosecha' | 'plaga' | 'habla' | 'paso' | 'exito';
+export type NombreSonido = 'clic' | 'pintar' | 'rociar' | 'semana' | 'aviso' | 'cosecha' | 'plaga' | 'muerte' | 'habla' | 'paso' | 'exito';
 
 /** Una nota o soplido de una receta. t y d en segundos desde el inicio del sonido. */
 export interface Nota { t: number; d: number; f: number; tipo?: OscillatorType; g?: number; f2?: number; ruido?: boolean; q?: number }
@@ -27,6 +27,8 @@ export const RECETAS: Readonly<Record<NombreSonido, readonly Nota[]>> = {
   ],
   // Plaga: un zumbido grave que baja un poco, con un segundo tono desafinado.
   plaga: [{ t: 0, d: 0.7, f: 150, f2: 105, tipo: 'sawtooth', g: 0.06 }, { t: 0, d: 0.7, f: 158, f2: 110, tipo: 'square', g: 0.035 }, { t: 0.1, d: 0.5, f: 2600, ruido: true, g: 0.04, q: 3 }],
+  // Muerte de plantas: dos notas graves que caen, como un suspiro.
+  muerte: [{ t: 0, d: 0.35, f: SOL5 / 2, f2: MI5 / 2, tipo: 'triangle', g: 0.17 }, { t: 0.22, d: 0.55, f: MI5 / 2, f2: DO5 / 2, tipo: 'triangle', g: 0.17 }, { t: 0.1, d: 0.5, f: 900, ruido: true, g: 0.05, q: 0.7 }],
   habla: [{ t: 0, d: 0.05, f: MI5, tipo: 'triangle', g: 0.08 }],
   paso: [{ t: 0, d: 0.09, f: RE5, tipo: 'triangle', g: 0.15 }, { t: 0.07, d: 0.13, f: SOL5, tipo: 'triangle', g: 0.14 }],
   exito: [{ t: 0, d: 0.16, f: DO5, tipo: 'sine', g: 0.18 }, { t: 0.1, d: 0.16, f: MI5, tipo: 'sine', g: 0.18 }, { t: 0.2, d: 0.4, f: SOL5, tipo: 'sine', g: 0.2 }],

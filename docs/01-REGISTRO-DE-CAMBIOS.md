@@ -162,6 +162,22 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — Selector de idioma con banderas (Eduardo)
+
+- **Archivos:** `web/src/ui/i18n/SelectorIdioma.tsx`, `idioma.css`, `idioma.test.tsx`.
+- **Cambio:** el selector de idioma deja de ser un `<select>` con etiqueta y pasa a ser un grupo de dos botones con bandera (español: México; inglés: EE. UU.), dibujadas en SVG porque los emojis de bandera no se ven en Windows. El nombre del idioma va en `aria-label` y `title`, el grupo tiene nombre accesible (\"Idioma\"/\"Language\") solo para lectores de pantalla y la elegida lleva un anillo. Mismo cambio de idioma de antes, sin tocar diccionarios.
+- **Evidencia:** `tsc` sin errores; pruebas del front 3466 en verde (la del selector ahora comprueba las dos banderas, los `lang`, el estado marcado y que ya no hay `<select>`). No se revisó visualmente.
+- **Límites:** una bandera es un país, no un idioma; se eligieron México (demo en español) y EE. UU. (inglés) y el nombre queda en `title` y `aria-label`.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — Vistas de clima en Cultivos, plagas estables, cosecha y muerte por evento, paneles plegables (Eduardo)
+
+- **Archivos:** `web/src/escena/EscenaParcela.tsx` (`serieVistas`), `ui/lab/plagas.ts`, `eventos.ts`, `EventoPantalla.tsx`, `evento.css`, `historial.ts`, `PanelHistorial.tsx`, `Laboratorio.tsx`, `PanelIzq.tsx`, `panelColapsable.ts`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `ui/sonido.ts`, pruebas; `docs/06`.
+- **Cambio:** (1) Las vistas de luz y temperatura también están en el paso Cultivos. (2) La plaga ya no cambia al plantar: la zona de cada cultivo (20 % de la parcela) es fija y solo aparece o desaparece en las celdas afectadas. (3) La animación de cosecha sale por cada cultivo en su fecha, y una nueva de plantas muertas sale cada vez que unas plantas pasan a marchitas o podridas, cada una con su sonido. (4) Los paneles de la izquierda se pliegan.
+- **Evidencia:** `tsc` sin errores; pruebas del front en verde (nuevas: plantar no mueve la plaga, cosecha por fecha, detección de plantas muertas, panel plegable). No se probó en el navegador por instrucción del equipo.
+- **Límites:** un cultivo plantado solo fuera de su zona no tiene plaga; las plantas "mueren" según el estado del motor (marchita o podrida), no hay otra definición; no se revisó visualmente ni se oyó el sonido nuevo.
+- **Decisiones afectadas:** ninguna de alcance del MVP.
+
 ### 2026-11-15 — La plaga en el 20 % de cada grupo de cultivo, en lugar del radio (Eduardo)
 
 - **Archivos:** `web/src/ui/lab/plagas.ts` (`cuantasConPlaga`, `focoDelGrupo`, `celdasConPlaga`, `focosDelPlan`; se quita `celdasEnRadio`), `Laboratorio.tsx`, `PanelCultivos.tsx`, `BarraHerramientas.tsx`, `escena/EscenaParcela.tsx` (ya no avisa la celda elegida), `ui/tutorial/pasos.ts`, `lab.css`, `plagas.test.ts`; `docs/06`.
