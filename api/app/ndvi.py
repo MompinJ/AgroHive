@@ -2,7 +2,7 @@
 import asyncio
 from datetime import date, datetime, timezone
 
-from . import cache, http, servicios
+from . import cache, config, http, servicios
 from .clientes import planetary
 
 LIMITES = ["PIXEL_MAYOR_QUE_PARCELA", "NO_MUESTRA_CULTIVO_DEL_USUARIO", "NO_ENTRA_AL_RANKING"]
@@ -27,7 +27,7 @@ async def _una(sem: asyncio.Semaphore, lat: float, lon: float, ini: date, fin: d
                 r = guardado[0]
                 return r["datos"], r["escala"], r["calidadOk"], r["consultado"]
             return str(e)[:160]
-    consultado = date.today().isoformat()
+    consultado = config.hoy().isoformat()
     if calidad_ok:  # una ventana sin calidad no se fija en cache: se vuelve a pedir
         # Solo el NDVI ya convertido. El token SAS y la URL firmada del COG no se escriben.
         cache.escribir(clave, {"consultado": consultado, "datos": datos, "escala": escala, "calidadOk": True})

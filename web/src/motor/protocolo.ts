@@ -44,6 +44,9 @@ export class EstadoMotor {
         case 'escenarios':
           return { id: p.id, ok: true, resultado: seleccionarEscenarios(p.serie) };
         case 'simular': {
+          // Primero se invalida lo anterior: si el nuevo plan falla, no debe quedar el resultado viejo para 'celdas' ni 'rankear'.
+          this.rotaciones.delete(p.entradas.plan.rotacionId);
+          this.entradas.delete(p.entradas.plan.rotacionId);
           const r = simularRotacionCompleta(p.entradas);
           this.rotaciones.set(p.entradas.plan.rotacionId, r);
           this.entradas.set(p.entradas.plan.rotacionId, p.entradas);
@@ -58,6 +61,7 @@ export class EstadoMotor {
         }
         case 'rankear': {
           const ids = p.rotacionIds ?? [...this.rotaciones.keys()].sort();
+          if (ids.length === 0) return { id: p.id, ok: true, resultado: rankear([], p.opciones ?? {}) }; // sin rotaciones no hay tarjetas que armar
           const faltan = ids.filter((i) => !this.rotaciones.has(i));
           if (faltan.length > 0) return { id: p.id, ok: false, error: `Rotaciones sin calcular: ${faltan.join(', ')}.` };
           const entrada = ids.map((i) => {

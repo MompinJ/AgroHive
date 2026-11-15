@@ -687,7 +687,9 @@ export function resultadoCeldas(res: ResultadoMotor, escenario: Escenario, fecha
   const sim = res.simulaciones[escenario];
   if (sim.anioReal === null) return null;
   const registros: RegistroCelda[] = res.parcela.celdas.map((celda) => registroCelda(res, sim, celda.id, fecha));
-  const estado = peorEstado(...registros.map((x) => x.estado));
+  // El documento hereda tambien el estado del escenario: un registro de suelo desnudo es EVALUABLE, pero si el escenario no se
+  // pudo simular (sin TAW, plan invalido, clima faltante) el resultado de la fecha no lo es.
+  const estado = peorEstado(...registros.map((x) => x.estado), sim.estado);
   const salida: ResultadoCeldas = {
     meta: res.esEjemplo
       ? { versionContrato: VERSION_CONTRATO, esEjemplo: true, aviso: 'Calculado con entradas de ejemplo o sinteticas: no son datos reales.' }

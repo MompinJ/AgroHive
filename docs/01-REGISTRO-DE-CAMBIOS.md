@@ -2,6 +2,15 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — Auditoría de fallos del back (Mompin, sesión cazafallos)
+
+- **Archivos:** `docs/hallazgos-back.md` (nuevo); `api/app/config.py` (`hoy()` en hora de la sede), `api/app/servicios.py`, `proxima.py`, `ndvi.py`, `regional.py`, `pedotransferencia.py`, `rutas/clima.py`, `rutas/ndvi.py`, `rutas/smap.py`, `clientes/terrarium.py`; `api/openapi.json` y `api/cliente/api.d.ts` regenerados; `api/tests/conftest.py` (`FormatChecker`) y `api/tests/test_hallazgos_back.py` (nuevo); `web/src/motor/protocolo.ts`, `motor.ts` y `pruebas/hallazgos-back.test.ts` (nuevo); `api/README.md`, `docs/05`.
+- **Cambio:** 22 hallazgos (4 medios, 18 menores, ninguno crítico para la demo). Se arreglan 9 con su prueba: fechas de la API en hora de la sede y no en la del servidor (UTC); IMERG antes de 1998 sin periodo invertido; aviso cuando el respaldo de Open-Meteo sale de la caché; un 503 de un tile de Terrarium ya no se toma como 404; OpenAPI desfasado más una prueba que lo vigila; la prueba de contratos de la API revisa el formato de las fechas; `rankear` vacío, `simular` fallido que dejaba el resultado anterior y el estado de `resultado-celda` en un escenario no simulado. El resto queda propuesto o a decidir en el informe.
+- **Por qué:** pedido de Mompin en la fase de revisión: cazar fallos del back sin tocar el front.
+- **Toca archivos de otros:** `api/` (Eduardo) y el motor; son arreglos acotados con prueba. Los números de la demo no cambian (la regresión A5.5 sigue en verde).
+- **Pendiente:** decidir H-B6 (tiempos de espera frente a los 90 s del front), H-M1 (pilares del ranking con rotaciones EXPLORATORIO) y H-M9 (pilares con número en un escenario NO_EVALUABLE).
+- **Decisiones afectadas:** ninguna todavía.
+
 ### 2026-11-14 (noche) — La entrega sale del plan del día final `[DECIDIDO]` (Mompin; sesión "estado")
 
 - **Archivos:** `docs/16` (secciones 2 a 6), `docs/00`, `docs/11`, `docs/12`, `docs/13` (fila "Reglas de organización del día final"), `docs/14` (enlace en "Fase de revisión"), `AgroVault/Compartido/Reglas.md` (número de sección).

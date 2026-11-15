@@ -54,6 +54,7 @@ Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas. Plan, decisi
 | A4.13 | Hecha en la API (`GET /api/calendario`) y conectada: `web/src/api/datosParcela.ts` la pide para parcelas propias; si falla, avisa y las fechas quedan `NO_EVALUABLE` |
 | A5.7 | `[EN CURSO]`, pospuesta (fase de revisión) (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |
 | A5.9 | Pospuesta: envío final según las reglas oficiales (`docs/02`), solo cuando todos estén satisfechos |
+| Back | Auditoría del 14/11 noche (`docs/hallazgos-back.md`, rama `Mompin-fallos`): 9 arreglados. Falta decidir H-B6 (tiempos de espera de la API frente a los 90 s del front), H-M1 (pilares del ranking con rotaciones EXPLORATORIO) y H-M9 (pilares con número en un escenario NO_EVALUABLE). Lo propuesto es de cada dueño |
 
 ## Huecos científicos que el motor deja en `NO_EVALUABLE` a propósito
 

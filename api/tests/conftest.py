@@ -3,7 +3,7 @@ from pathlib import Path
 
 import httpx
 import pytest
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 from referencing import Registry, Resource
 
 from app import config, http
@@ -64,5 +64,5 @@ def validar():
 
     def _validar(instancia, ref):
         archivo, _, ruta = ref.partition("#")
-        Draft202012Validator({"$ref": f"{BASE}{archivo}.schema.json#{ruta}"}, registry=registro).validate(instancia)
+        Draft202012Validator({"$ref": f"{BASE}{archivo}.schema.json#{ruta}"}, registry=registro, format_checker=FormatChecker()).validate(instancia)
     return _validar

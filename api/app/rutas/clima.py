@@ -2,7 +2,7 @@ from datetime import date
 
 from fastapi import APIRouter, HTTPException, Query
 
-from .. import servicios
+from .. import config, servicios
 from ..modelos import ErrorDatos, SerieClima
 
 router = APIRouter(prefix="/api", tags=["clima"])
@@ -17,7 +17,7 @@ async def clima(
     hasta: date = Query(description="Ultimo dia; no puede ser futuro"),
 ):
     """Serie diaria de NASA POWER con cache; respaldo Open-Meteo (estado RESPALDO_HISTORICO)."""
-    if desde < date(1981, 1, 1) or hasta < desde or hasta > date.today():
+    if desde < date(1981, 1, 1) or hasta < desde or hasta > config.hoy():
         raise HTTPException(422, "Periodo invalido: desde >= 1981-01-01, desde <= hasta y hasta no futuro")
     if (hasta - desde).days > LIMITE_ANIOS * 366:
         raise HTTPException(422, f"Periodo mayor a {LIMITE_ANIOS} anios")
