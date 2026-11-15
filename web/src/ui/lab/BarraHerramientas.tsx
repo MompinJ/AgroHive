@@ -50,7 +50,7 @@ export function BarraHerramientas({ herramienta, setHerramienta, tamano, setTama
     <span className="barra-herr-sep" aria-hidden="true" />
     <div className="barra-herr-grupo">
       {onSembrarTodo && <button type="button" className="lab-tip" data-tip={sembrarTexto} aria-label={sembrarTexto} onClick={onSembrarTodo}><IconoCubeta /></button>}
-      {onRociarTodo && <button type="button" className="lab-tip" data-tip="Insecticida en la zona de plagas (este ciclo)" aria-label="Insecticida en la zona de plagas, este ciclo" onClick={onRociarTodo}><IconoInsecticida /></button>}
+      {onRociarTodo && <button type="button" className="lab-tip" data-tip="Insecticida en toda la parcela (este ciclo)" aria-label="Insecticida en toda la parcela, este ciclo" onClick={onRociarTodo}><IconoInsecticida /></button>}
       <button type="button" className="lab-tip" data-tip="Deshacer (Ctrl + Z)" aria-label="Deshacer" disabled={!puedeDeshacer} onClick={deshacer}><IconoDeshacer /></button>
       <button type="button" className="lab-tip" data-tip="Rehacer (Ctrl + Y)" aria-label="Rehacer" disabled={!puedeRehacer} onClick={rehacer}><IconoRehacer /></button>
     </div>

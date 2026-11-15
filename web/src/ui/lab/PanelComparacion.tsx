@@ -12,17 +12,25 @@ import { IconoInfo } from './iconos';
 import { nombresPilares } from './PanelEscenarios';
 import type { PasoLab } from './Laboratorio';
 import { PlanElegido } from './PlanElegido';
+import { armarDatosResumen } from './armarResumen';
+import { construirResumenPdf, nombreArchivoPdf } from '../pdf/resumenComparacion';
+import { descargarArchivo } from '../pdf/descargar';
+import { tocar } from '../sonido';
+import type { Hecho } from './historial';
 
 const DashboardBalance = lazy(() => import('../DashboardBalance'));
 const escenarios: Escenario[] = ['seco', 'habitual', 'lluvioso'];
 
-export function PanelComparacion({ estado, onAvanzar, serie, setGraficas, plagasDe }: {
+export function PanelComparacion({ estado, onAvanzar, serie, setGraficas, plagasDe, hechos = [] }: {
   estado: LaboratorioEstado; onAvanzar: (d: PasoLab) => void; serie: EstadoSerieBalance; setGraficas: (v: boolean) => void;
   /** Por rotacion: plagas registradas en la zona que atacan sus cultivos y bloques sin insecticida. */
   plagasDe: (rotacionId: string) => readonly { ciclo: number; plaga: string; cultivo: string; bloques: number }[];
+  /** Historial de hechos, que va en el resumen en PDF. */
+  hechos?: readonly Hecho[];
 }) {
   const { rotacion, setRotacion, setCiclo, setEscenario, setMostrarBanda } = estado.seleccion;
   const [elegido, setElegido] = useState<string | null>(null);
+  const [descarga, setDescarga] = useState<'ok' | 'error' | null>(null);
   const planElegido = elegido ? estado.planes.find((p) => p.rotacionId === elegido) : undefined;
   const ranking = estado.calculo?.ranking;
   const ordenadas = ordenarRotaciones(ranking?.rotaciones ?? []);
@@ -32,6 +40,21 @@ export function PanelComparacion({ estado, onAvanzar, serie, setGraficas, plagas
   const comoSeOrdena = ranking?.ponderacion
     ? `Gana la que menos sufre en su peor año. Se toma en cuenta: ${Object.keys(ranking.ponderacion.pesos).map((p) => (nombresPilares[p] ?? p).toLowerCase()).join(', ')}.`
     : 'Gana la que menos sufre en su peor año.';
+
+  // Resumen descargable en PDF: lo que la pantalla ya muestra (ranking, anios, debilidades, plagas) mas el historial de hechos.
+  const descargarResumen = (elegida: string | null) => {
+    if (!ranking || !estado.datos) return;
+    try {
+      const fecha = new Date();
+      const bytes = construirResumenPdf(armarDatosResumen({
+        ordenadas, planes: estado.planes, catalogo: estado.datos.catalogo, nombreRotacion: (id) => nombreRotacion(id, estado.planes), plagasDe,
+        parcela: estado.datos.parcela, esDemo: estado.datos.esDemo, ponderacion: comoSeOrdena, limites, hechos, elegida, fecha,
+      }));
+      const ok = descargarArchivo(bytes, nombreArchivoPdf(fecha));
+      setDescarga(ok ? 'ok' : 'error');
+      if (ok) tocar('exito');
+    } catch { setDescarga('error'); }
+  };
 
   const ir = (id: string, destino: PasoLab, escenario?: Escenario) => {
     setRotacion(id); setCiclo(1);
@@ -119,9 +142,11 @@ export function PanelComparacion({ estado, onAvanzar, serie, setGraficas, plagas
 
     <footer className="panel-pie">
       <a className="lab-boton lab-boton-suave" href="#/escenarios"><span aria-hidden="true">←</span> Escenarios</a>
+      <button type="button" className="lab-boton lab-boton-primario" disabled={!ranking || !estado.datos} onClick={() => descargarResumen(elegido)}>Descargar resumen (PDF)</button>
     </footer>
+    <p className="panel-ayuda" role="status">{descarga === 'ok' ? 'Se descargó el resumen en PDF.' : descarga === 'error' ? 'No se pudo generar el PDF en este navegador. Prueba "Imprimir o guardar PDF" en Elegir este plan.' : ''}</p>
     <p className="panel-legal">La decisión final es tuya. AgroHive no predice cosechas ni reemplaza a un agrónomo.</p>
     {elegido && planElegido && estado.datos && <PlanElegido nombre={nombreRotacion(elegido, estado.planes)} plan={planElegido} resultado={ranking?.rotaciones.find((x) => x.rotacionId === elegido)}
-      catalogo={estado.datos.catalogo} plagas={plagasDe(elegido)} onCerrar={() => setElegido(null)} />}
+      catalogo={estado.datos.catalogo} plagas={plagasDe(elegido)} onDescargar={() => descargarResumen(elegido)} onCerrar={() => setElegido(null)} />}
   </section>;
 }

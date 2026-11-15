@@ -415,14 +415,42 @@
   .lab-paso-cultivos .lab-toast { top: calc(var(--lab-top) + 60px); }
 }
 
-/* Zona de plagas: radio alrededor de la celda elegida. */
-.lab-zona-plaga { display: grid; gap: 6px; }
-.lab-radios { display: flex; gap: 4px; }
-.lab-radio { min-width: 44px; min-height: 36px; padding: 4px 12px; border: 1px solid var(--color-control-border, #b8c4b8); border-radius: 999px; background: transparent; color: inherit; font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
-.lab-radio[aria-checked="true"] { background: var(--color-forest-700, #1f4d38); border-color: var(--color-forest-700, #1f4d38); color: #fff; }
 .mascota-nombre { margin: 0 0 2px; font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .7; }
 /* Parcela de ejemplo (E10): lugar, por que se eligio y lo que no se grabo. */
 .lab-ejemplo { font-size: .8rem; padding: 8px 10px; border-radius: 10px; background: var(--color-sage-50); }
 .lab-ejemplo summary { cursor: pointer; font-weight: 600; }
 .lab-ejemplo .panel-ayuda { margin: 6px 0 0; }
 .lab-ejemplo ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; color: var(--color-text-body); }
+
+/* Mini marca de problema en la seccion de un cultivo (icono del ciclo y nombre). */
+.lab-iconos button { position: relative; }
+.lab-iconos .marca-problema { position: absolute; top: -5px; right: -5px; margin: 0; width: 14px; height: 14px; font-size: .6rem; }
+.lab-otros-problemas { margin: 4px 0 0; font-size: .8rem; color: var(--color-text-muted, #5a6b5e); }
+.lab-otros-problemas span { margin-left: 8px; }
+.mascota-globo p .icono-en-texto { vertical-align: -.3em; }
+@media (prefers-reduced-motion: no-preference) {
+  .mascota-habla { transform-origin: 50% 100%; animation: esquilote-hablar .34s ease-in-out infinite alternate; }
+}
+
+/* Historial de hechos: boton a la derecha, debajo de la mascota, y panel que se abre hacia la izquierda. */
+.boton-historial { position: fixed; z-index: 59; right: 16px; top: 236px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px 0 12px; border-radius: 999px; border: 1px solid var(--color-border, #cfd8cf); background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); font: inherit; font-size: .85rem; font-weight: 700; box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 10px 24px -10px rgb(17 34 26 / 35%); cursor: pointer; }
+.boton-historial svg { width: 18px; height: 18px; }
+.boton-historial-cuenta { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--color-action, #1f4d38); color: var(--color-on-action, #fff); font-size: .72rem; line-height: 20px; text-align: center; }
+.historial { position: fixed; z-index: 59; right: 72px; top: 236px; width: min(400px, calc(100% - 96px)); max-height: min(60vh, 520px); display: flex; flex-direction: column; border-radius: 18px; background: var(--color-surface, #fff); color: var(--color-text, #1d2b21); border: 1px solid var(--color-border, #cfd8cf); box-shadow: 0 2px 4px rgb(17 34 26 / 10%), 0 18px 48px -12px rgb(17 34 26 / 35%); overflow: hidden; }
+.historial-cabeza { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 8px 16px; }
+.historial-cabeza h2 { margin: 0; font-size: 1rem; }
+.historial-cerrar { width: 36px; height: 36px; border: 0; border-radius: 50%; background: transparent; color: inherit; font-size: 1.3rem; cursor: pointer; }
+.historial-lista { list-style: none; margin: 0; padding: 0 10px 8px; overflow-y: auto; display: grid; gap: 6px; }
+.historial-vacio { margin: 0; padding: 4px 16px 18px; font-size: .88rem; color: var(--color-text-muted, #5a6b5e); }
+.hecho { display: flex; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--color-panel, #f1f5f1); }
+.hecho-icono { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; background: #fff; color: var(--color-forest-700, #1f4d38); }
+.hecho-cosecha .hecho-icono { color: #8a6a12; background: #fbf1cf; }
+.hecho-plaga .hecho-icono, .hecho-problema .hecho-icono { color: #a4481a; background: #fbe3d4; }
+.hecho-insecticida .hecho-icono { color: #1d6a99; background: #dcedf8; }
+.hecho-cuerpo { min-width: 0; }
+.hecho-cuerpo p { margin: 0; font-size: .85rem; line-height: 1.35; }
+.hecho-tipo { font-size: .66rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-muted, #5a6b5e); margin-right: 4px; }
+.hecho-detalle { color: var(--color-text-muted, #5a6b5e); margin-top: 2px !important; }
+.hecho-cuando { margin-top: 3px !important; font-size: .74rem !important; color: var(--color-text-muted, #5a6b5e); }
+.historial-pie { padding: 8px 12px 12px; display: flex; justify-content: flex-end; border-top: 1px solid var(--color-border, #e0e6e0); }
+@media (max-width: 520px) { .boton-historial-texto { display: none; } }
