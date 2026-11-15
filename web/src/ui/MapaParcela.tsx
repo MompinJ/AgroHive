@@ -2,12 +2,13 @@
 // medio de cada lado se arrastra para insertar uno nuevo; doble clic o clic derecho en un
 // vertice lo borra. El contorno se actualiza en vivo durante el arrastre y el cambio se
 // entrega al soltar. La vista se cambia con un interruptor Satelite / Mapa.
-import { useIdioma } from './i18n/Idioma';
 import { tt } from './i18n/actual';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { LonLat } from '../../../contratos/tipos/contratos';
+import { useIdioma } from './i18n/Idioma';
+import { BuscadorMapa } from './mapa/BuscadorMapa';
 
 export interface MapaParcelaProps {
   puntos: LonLat[];
@@ -30,39 +31,88 @@ function icono(clase: string, tamano: number) {
 }
 
 export default function MapaParcela({ puntos, bordes, onPunto, onMover, onInsertar, onBorrar, centrar = 0, children }: MapaParcelaProps) {
+  const { idioma, t } = useIdioma();
   const contenedor = useRef<HTMLDivElement>(null);
   const mapaRef = useRef<L.Map | null>(null);
   const capaBordes = useRef<L.LayerGroup | null>(null);
   const capaContorno = useRef<L.LayerGroup | null>(null);
   const capaVertices = useRef<L.LayerGroup | null>(null);
-  const fondos = useRef<{ satelite: L.TileLayer; calles: L.TileLayer } | null>(null);
+  const fondos = useRef<{ satelite: L.TileLayer; calles: L.TileLayer; etiquetas: L.TileLayer } | null>(null);
+  const versionVista = useRef(0);
+  const pedidoUbicacion = useRef(0);
+  const puntosActuales = useRef(puntos);
+  puntosActuales.current = puntos;
   const llamadas = useRef({ onPunto, onMover, onInsertar, onBorrar });
   llamadas.current = { onPunto, onMover, onInsertar, onBorrar };
   const [vista, setVista] = useState<'satelite' | 'calles'>('satelite');
   const [error, setError] = useState(false);
-  const { t } = useIdioma();
+  const [ubicando, setUbicando] = useState(false);
+  const [ubicacion, setUbicacion] = useState<'amplia' | 'localizada' | 'denegada' | 'sinubicacion' | 'busqueda'>('amplia');
+  const mensajes = idioma === 'en'
+    ? { amplia: '', localizada: '', denegada: 'Location access was not allowed. You can still search or move the map.', sinubicacion: 'Your location could not be obtained. Search for a place or move the map.', busqueda: '' }
+    : { amplia: '', localizada: '', denegada: 'No se permitió acceder a tu ubicación. Puedes buscar un lugar o mover el mapa.', sinubicacion: 'No se pudo obtener tu ubicación. Busca un lugar o mueve el mapa.', busqueda: '' };
+
+  function ubicar() {
+    const mapa = mapaRef.current;
+    if (!mapa) return;
+    if (!navigator.geolocation) { setUbicacion('sinubicacion'); return; }
+    const pedido = ++pedidoUbicacion.current;
+    const version = versionVista.current;
+    setUbicando(true);
+    navigator.geolocation.getCurrentPosition((posicion) => {
+      if (mapaRef.current !== mapa || pedidoUbicacion.current !== pedido) return;
+      setUbicando(false);
+      // Un permiso tardio no debe deshacer una busqueda, un dibujo o un desplazamiento.
+      if (versionVista.current !== version) return;
+      const { latitude, longitude } = posicion.coords;
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude) >= 85 || Math.abs(longitude) > 180) { setUbicacion('sinubicacion'); return; }
+      mapa.setView([latitude, longitude], 13, { animate: false });
+      setUbicacion('localizada');
+    }, (fallo) => {
+      if (mapaRef.current !== mapa || pedidoUbicacion.current !== pedido) return;
+      setUbicando(false);
+      if (versionVista.current === version) setUbicacion(fallo.code === 1 ? 'denegada' : 'sinubicacion');
+    }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 300_000 });
+  }
 
   useEffect(() => {
     if (!contenedor.current) return;
     // Sin zoom por doble clic: el doble clic borra vertices y no debe sumar puntos ni acercar.
-    const mapa = L.map(contenedor.current, { doubleClickZoom: false, zoomControl: false }).setView([18.03, -95.53], 16);
+    const mapa = L.map(contenedor.current, { doubleClickZoom: false, zoomControl: false }).setView([20, 0], 2);
     mapaRef.current = mapa;
+    mapa.attributionControl.addAttribution('Lugares: <a href="https://open-meteo.com/en/docs/geocoding-api">Open-Meteo</a> / <a href="https://www.geonames.org/">GeoNames</a>');
+    if (puntosActuales.current.length) mapa.fitBounds(L.latLngBounds(puntosActuales.current.map(latlng)), { padding: [48, 48], maxZoom: 16 });
+    mapa.on('dragstart zoomstart', () => { versionVista.current++; });
+    const panelEtiquetas = mapa.createPane('nombresCiudades');
+    panelEtiquetas.style.zIndex = '350';
+    panelEtiquetas.style.pointerEvents = 'none';
     const calles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>', maxZoom: 19,
     });
     const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Imágenes: <a href="https://goto.arcgisonline.com/maps/World_Imagery">Esri</a>', maxZoom: 19,
     });
-    fondos.current = { satelite, calles };
-    for (const fondo of [satelite, calles]) fondo.on('tileerror', () => { if (mapa.hasLayer(fondo)) setError(true); });
+    const etiquetas = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Nombres: Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>', maxZoom: 19, pane: 'nombresCiudades',
+    });
+    fondos.current = { satelite, calles, etiquetas };
+    for (const fondo of [satelite, calles, etiquetas]) fondo.on('tileerror', () => { if (mapa.hasLayer(fondo)) setError(true); });
     capaBordes.current = L.layerGroup().addTo(mapa);
     capaContorno.current = L.layerGroup().addTo(mapa);
     capaVertices.current = L.layerGroup().addTo(mapa);
-    mapa.on('click', (ev: L.LeafletMouseEvent) => llamadas.current.onPunto(lonlat(ev.latlng)));
+    mapa.on('click', (ev: L.LeafletMouseEvent) => { versionVista.current++; llamadas.current.onPunto(lonlat(ev.latlng)); });
+    const versionInicial = versionVista.current;
+    // Solo centra automaticamente si el usuario ya concedio el permiso.
+    if (!puntosActuales.current.length && navigator.permissions?.query) {
+      void navigator.permissions.query({ name: 'geolocation' }).then((permiso) => {
+        if (permiso.state === 'granted' && mapaRef.current === mapa && versionVista.current === versionInicial && !puntosActuales.current.length) ubicar();
+      }).catch(() => { /* El boton de ubicacion sigue disponible. */ });
+    }
     const observador = new ResizeObserver(() => mapa.invalidateSize());
     observador.observe(contenedor.current);
     return () => {
       observador.disconnect(); mapa.remove();
+      pedidoUbicacion.current++;
       mapaRef.current = null; fondos.current = null; capaBordes.current = null; capaContorno.current = null; capaVertices.current = null;
     };
   }, []);
@@ -74,6 +124,8 @@ export default function MapaParcela({ puntos, bordes, onPunto, onMover, onInsert
     setError(false);
     mapa.removeLayer(vista === 'satelite' ? bases.calles : bases.satelite);
     bases[vista].addTo(mapa);
+    if (vista === 'satelite') bases.etiquetas.addTo(mapa);
+    else mapa.removeLayer(bases.etiquetas);
   }, [vista]);
 
   useEffect(() => {
@@ -136,13 +188,21 @@ export default function MapaParcela({ puntos, bordes, onPunto, onMover, onInsert
     }
   }, [puntos]);
 
-  return <div className="mapa-dibujo">
+  return <div className="mapa-editor">
+    <div className="mapa-dibujo">
     <div ref={contenedor} className="mapa-dibujo-lienzo" role="application" aria-label={t('mapa.lienzo')} />
+    <BuscadorMapa ubicando={ubicando} aviso={mensajes[ubicacion]} onUbicar={ubicar} onElegir={(lugar) => {
+      versionVista.current++;
+      mapaRef.current?.setView(latlng(lugar.centro), 13, { animate: false });
+      setUbicacion('busqueda');
+      contenedor.current?.focus({ preventScroll: true });
+    }} />
     <div className="mapa-capa mapa-capa-vista" role="radiogroup" aria-label={t('mapa.vista')}>
       <button type="button" role="radio" aria-checked={vista === 'satelite'} onClick={() => setVista('satelite')}>{t('mapa.satelite')}</button>
       <button type="button" role="radio" aria-checked={vista === 'calles'} onClick={() => setVista('calles')}>{t('mapa.calles')}</button>
     </div>
-    {error && <p className="mapa-capa mapa-aviso" role="status">{t('mapa.errorTeselas')}</p>}
+    {error && <p className="mapa-capa mapa-aviso" role="status">{idioma === 'en' ? 'Some map tiles or labels could not load. Try the other view.' : 'No cargó parte del mapa o sus etiquetas. Prueba la otra vista.'}</p>}
     {children?.({ acercar: () => mapaRef.current?.zoomIn(), alejar: () => mapaRef.current?.zoomOut() })}
+    </div>
   </div>;
 }

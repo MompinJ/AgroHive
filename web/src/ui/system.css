@@ -1,10 +1,10 @@
 html { color: var(--color-text); background: var(--color-canvas); font-family: var(--font-ui); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-body { color: var(--color-text); background: var(--color-canvas); font-family: var(--font-ui); }
+body { color: var(--color-text); background: var(--color-canvas); font-family: var(--font-ui); font-size: var(--text-body); font-weight: 400; line-height: var(--leading-body); }
 p { text-wrap: pretty; overflow-wrap: break-word; }
 h1, h2, h3 { text-wrap: balance; font-weight: 400; overflow-wrap: anywhere; }
 li { overflow-wrap: anywhere; }
 h2 { font-size: 1.5rem; }
-h3 { font-size: 1.125rem; }
+h3 { font-size: var(--text-intro); line-height: var(--leading-heading); }
 input, select, textarea { font: inherit; font-size: 1rem; min-height: 44px; border: 1px solid var(--color-control-border); border-radius: var(--radius-input); background: var(--color-input); color: var(--color-text); padding: 10px 12px; max-width: 100%; }
 input[type="checkbox"], input[type="radio"] { min-height: auto; padding: 0; accent-color: var(--color-action); flex: 0 0 auto; }
 button { font: inherit; }

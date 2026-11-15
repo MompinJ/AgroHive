@@ -20,6 +20,20 @@ npm run preview
 
 ## Vistas y estado
 
+En Terreno, los seis ejemplos ocupan el ancho disponible: tres columnas en escritorio, dos hasta 960 px y una hasta 520 px. Se retiró la tarjeta informativa «Tu propio terreno»; el botón superior «Dibujar mi parcela» sigue abriendo el editor de contorno.
+
+Cada tarjeta muestra a la derecha una fotografía real de su zona, guardada localmente en `src/ui/assets/lugares/` para funcionar también sin conexión. Son referencias visuales, no fotos de las parcelas ficticias. Autor, licencia, URL original y fecha de consulta están en `src/ui/assets/lugares/creditos.json`. A pedido de Balam (15/11), Terreno ya no muestra el aviso general de ejemplos ni el desplegable de créditos. Las fotos se presentan con recorte CSS, sin modificar los originales; conservan sus licencias individuales (CC BY, CC BY-SA o CC0).
+
+### Navegación del mapa de Terreno (15/11/2026)
+
+`ui/MapaParcela.tsx` combina Esri World Imagery con la capa transparente [World Boundaries and Places](https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer), debajo de los polígonos y sin capturar clics. Al cambiar a OpenStreetMap se retira esa capa para evitar nombres duplicados. Las atribuciones quedan en el control de Leaflet.
+
+La barra mínima dentro del mapa (`ui/mapa/`) busca ciudades, localidades y códigos postales mediante [Open-Meteo Geocoding](https://open-meteo.com/en/docs/geocoding-api), con datos de GeoNames. Se consulta solo al enviar, ofrece hasta cinco coincidencias con región/país, conserva hasta 50 consultas en memoria y aborta búsquedas sustituidas o que exceden diez segundos. Sin servicio o sin coincidencias muestra un aviso; no inventa coordenadas. Requiere conexión y el servicio público es para uso no comercial según sus condiciones. No es un buscador de direcciones o parcelas catastrales.
+
+Sin contorno guardado abre una vista mundial amplia. Centra automáticamente cerca del usuario solo si el navegador ya concedió el permiso de geolocalización; el icono de ubicación permite solicitarlo. Se necesita un contexto seguro y permiso del navegador. Si se deniega o falla, siguen disponibles búsqueda y navegación. No se guarda la ubicación. Con contorno guardado se encuadra la parcela, y una respuesta tardía de ubicación no deshace una búsqueda, un dibujo o un movimiento del mapa. Buscar y localizar nunca agregan vértices ni modifican el contorno.
+
+Diseño: una barra con campo y dos iconos, sin mensajes de éxito persistentes; foco de 2 px alrededor de la barra al escribir y foco propio en botones. El selector de idioma usa una flecha decorativa alineada al centro, con 12 px de separación del borde. Verificados en Chromium a 320/390/760/1440 px: barra dentro del mapa, controles sin solaparse y sin desbordamiento. Búsqueda real de Veracruz y carga de etiquetas verificadas; respuestas vacías/error, ubicación permitida/denegada y respuesta tardía se comprobaron con datos controlados. Tres vértices permanecen tras buscar. No se verificaron Safari ni un dispositivo GPS físico.
+
 ### B7: idioma, primera parte (15/11/2026)
 
 Base propia sin dependencias en `src/ui/i18n/`: `ProveedorIdioma`, `useIdioma`, `SelectorIdioma`, diccionarios tipados y preferencia `agrohive-idioma`. Prioridad: elección guardada válida, idioma inglés del navegador y, en los demás casos, español. Lectura y escritura de almacenamiento protegidas con `try/catch`; si falla, el selector sigue funcionando en memoria. El proveedor actualiza `html[lang]` sin recargar la página.
