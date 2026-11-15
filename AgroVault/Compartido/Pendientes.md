@@ -49,7 +49,7 @@ Corte 14/11, 18:15, desde las marcas de `docs/14` (54 de 60 hechas tras A0.5 y A
 | A0.3 | Acta de roles, cultivos y criterio de ranking (equipo). Lo decidido ya está en `docs/13` |
 | A3.9 | Chile y mascota hechos; la escena muestra la mascota por defecto (`EscenaParcela`, `mascota = true`). Falta la revisión humana del visor y de la equivalencia con el pimiento dulce |
 | A4.4 | Redacción con LLM, opcional, solo sobre números ya calculados |
-| A4.12 | `[HECHO]` 15/11 (Eduardo decidió no esperar a C5: es un extra aditivo que la interfaz no llama). `GET /api/ee-uu/cdl` y `/api/ee-uu/ssurgo`; schema propuesto a Mompin en `api/propuestas-contrato/ee-uu.schema.json` |
+| A4.12 | `[HECHO]` 15/11 (Eduardo decidió no esperar a C5: es un extra aditivo que la interfaz no llama). `GET /api/ee-uu/cdl` y `/api/ee-uu/ssurgo`; schema en `contratos/ee-uu.schema.json` (0.13.0). Falta el OK de Mompin para desplegar |
 | A4.13 | Hecha en la API: `GET /api/calendario`. El front sigue leyendo solo `calendario-isla.json` (balam) |
 | A5.4 | `[HECHO]` 15/11: medida con GPU real (Apple M5 Max, 105 a 115 cuadros/s con 518 celdas) y sin GPU (SwiftShader, 9.4 cuadros/s); cifras y límites en `docs/06`. Falta, opcional, un celular o una laptop modesta física con `/medir.html` |
 | A5.7 | `[EN CURSO]` (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |

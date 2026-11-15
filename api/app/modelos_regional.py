@@ -1,5 +1,4 @@
-"""Modelos de GET /api/ee-uu/cdl y /api/ee-uu/ssurgo (A4.12). Siguen la propuesta api/propuestas-contrato/ee-uu.schema.json hasta que Mompin
-la pase a contratos/; la prueba de conformidad valida contra esa propuesta."""
+"""Modelos de GET /api/ee-uu/cdl y /api/ee-uu/ssurgo (A4.12). Siguen contratos/ee-uu.schema.json (0.13.0)."""
 from typing import Literal
 
 from pydantic import BaseModel, Field
