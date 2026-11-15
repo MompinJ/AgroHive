@@ -76,6 +76,8 @@ export interface EscenaParcelaProps {
   bioma?: Bioma | undefined;
   /** Serie climatica real de la parcela y rangos de temperatura por cultivo (FAO EcoCrop): con ellas, en el paso Escenarios, hay vistas de luz y temperatura. */
   serieClima?: SerieClima | null | undefined;
+  /** Serie del motor solo para ubicar la fecha en el clima real: habilita las vistas de luz y temperatura en pasos donde no hay lluvia ni cielo por clima (Cultivos). */
+  serieVistas?: SerieBalance | null | undefined;
   rangosTemperatura?: Readonly<Record<string, RangoTemperatura>> | undefined;
   /** Temperatura media tipica por dia del ano (climatologia de la parcela): con la lluvia del dia decide el color del cielo. */
   tMediaDia?: readonly (number | null)[] | undefined;
@@ -111,7 +113,7 @@ function MuestraEstado({ entrada }: { entrada: EntradaLeyenda }) {
   return <canvas ref={ref} className="escena-muestra" width={32} height={32} aria-hidden="true" />;
 }
 
-export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO, tMediaDia, serieClima = null, rangosTemperatura }: EscenaParcelaProps) {
+export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosDatos = [], serieBalance = null, mascota = true, className = '', onEscena, modo = 'panel', hud = true, pincel = null, marcas = SIN_MARCAS, desplazamiento, dentroDeVentana, plagas = null, rociado = null, nombresPlaga, bioma = BIOMA_DEFECTO, tMediaDia, serieClima = null, serieVistas = null, rangosTemperatura }: EscenaParcelaProps) {
   const lienzo = useRef<HTMLCanvasElement>(null);
   const escena = useRef<EscenaThree | null>(null);
   const [exageracion, setExageracion] = useState(EXAGERACION_VERTICAL_DEFECTO);
@@ -166,8 +168,10 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   );
 
   // Luz y temperatura (paso Escenarios): el clima real de la semana que corresponde a la fecha; solo si la escena tiene la serie del escenario.
-  const tieneClima = modo === 'fondo' && !!serieValida && !!serieClima;
-  const climaSemana = useMemo(() => (tieneClima ? climaDeLaSemana(serieClima, lluvia?.estado === 'con_dato' ? lluvia.fechaClima : null) : null), [tieneClima, serieClima, lluvia]);
+  const serieDeVistas = serieValida ?? (serieVistas && resultado && serieVistas.rotacionId === resultado.rotacionId && serieVistas.escenario === resultado.escenario ? serieVistas : null);
+  const lluviaVistas = useMemo(() => (serieDeVistas === serieValida ? lluvia : lluviaDelDia(serieDeVistas, modelo.fecha)), [serieDeVistas, serieValida, lluvia, modelo.fecha]);
+  const tieneClima = modo === 'fondo' && !!serieDeVistas && !!serieClima;
+  const climaSemana = useMemo(() => (tieneClima ? climaDeLaSemana(serieClima, lluviaVistas?.estado === 'con_dato' ? lluviaVistas.fechaClima : null) : null), [tieneClima, serieClima, lluviaVistas]);
   const contextoVista = useMemo<ContextoVista>(() => ({ clima: climaSemana, rangos: rangosTemperatura ?? {} }), [climaSemana, rangosTemperatura]);
   // Mini marca por cultivo con problemas (un grupo de celdas de la misma planta = una marca).
   const problemas = useMemo(() => problemasPorCultivo(modelo.bloques.map((b) => ({ cultivo: b.cultivo, ...(b.registro ?? {}) }))), [modelo]);

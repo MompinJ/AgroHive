@@ -5,16 +5,17 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } fro
 import type { ResultadoCeldas } from '../../../../contratos/tipos/contratos';
 import { conLimite, type LaboratorioEstado } from '../useLaboratorio';
 import { useSerieBalance } from '../useSerieBalance';
-import { rangoDelCiclo } from '../tiempo';
-import { aplicarAcomodando, colorCultivo, cultivoDeCelda, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
+import { fechaEnIndice, rangoDelCiclo } from '../tiempo';
+import { aplicarAcomodando, colorCultivo, cultivoDeCelda, diasCultivo, fechaParaVer, nombresCultivos, pintarCeldas, rellenarCiclo, ventanaDelPlan } from '../planes';
 import { EventoPantalla } from './EventoPantalla';
 import { tocar } from '../sonido';
 import { PanelHistorial } from './PanelHistorial';
+import { usePanelPlegado } from './panelColapsable';
 import { useHistorial } from './useHistorial';
 import { textoProblema } from '../../escena/problemas';
 import { rangosTemperatura } from '../../escena/clima-vista';
 import { problemasPorCultivo } from '../../escena/problemas';
-import { eventosAlAvanzar, PAUSA_EXTRA_EVENTO_MS, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
+import { eventoMuerte, eventosAlAvanzar, PAUSA_EXTRA_EVENTO_MS, plantasQueMueren, type CultivoCosechado, type EventoPantalla as EventoLab, type PlagaActiva } from './eventos';
 import type { PincelEscena } from '../../escena/pincel';
 import { PanelCultivos } from './PanelCultivos';
 import { BarraHerramientas, type Herramienta } from './BarraHerramientas';
@@ -77,13 +78,14 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const [graficas, setGraficas] = useState(false);
   const [rociado, setRociado] = useState<{ celdas: string[]; clave: number } | null>(null);
   const ventana = useVentana();
+  const plegado = usePanelPlegado();
   // Mismos anchos que lab.css: panel izquierdo de 372 px (336 px hasta 1180 px) y hoja inferior en movil.
   const desplazamiento = useMemo(() => {
     if (paso === 'comparacion') return { x: 0, y: 0 };
     if (ventana.ancho <= 760) return { x: 0, y: Math.round(ventana.alto * 0.22) };
-    const panel = ventana.ancho <= 1180 ? 336 : 372;
+    const panel = plegado ? 44 : ventana.ancho <= 1180 ? 336 : 372; // plegado: solo la pestana
     return { x: Math.round((panel + 16) / 2), y: paso === 'escenarios' ? 40 : 0 };
-  }, [paso, ventana.ancho, ventana.alto]);
+  }, [paso, ventana.ancho, ventana.alto, plegado]);
 
   const datos = estado.datos;
   const plan = estado.planes.find((p) => p.rotacionId === rotacion) ?? estado.planes[0];
@@ -95,7 +97,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const claveCeldas = `${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${fecha}:${intentoCeldas}`;
   const errorCeldas = falloCeldas?.clave === claveCeldas ? falloCeldas.motivo : '';
   const celdasListas = !!estado.calculo && celdas?.clave === claveCeldas;
-  const serie = useSerieBalance(estado.calculo?.cliente, estado.calculo?.clave, plan?.rotacionId, escenario, paso === 'escenarios' || graficas);
+  const serie = useSerieBalance(estado.calculo?.cliente, estado.calculo?.clave, plan?.rotacionId, escenario, paso === 'escenarios' || paso === 'cultivos' || graficas);
   const rango = useMemo(() => rangoDelCiclo(serie.datos, visible?.ciclo ?? ciclo), [serie.datos, visible?.ciclo, ciclo]);
   const cambiarFecha = useCallback((nueva: string) => setFecha({ clave: claveFecha, fecha: nueva }), [claveFecha, setFecha]);
 
@@ -162,8 +164,14 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     if (!plan || !visible) return [];
     const n = new Map<string, number>();
     for (const id of celdasParcela) { const c = cultivoDeCelda(plan, id, visible.ciclo); if (c) n.set(c, (n.get(c) ?? 0) + 1); }
-    return [...n].sort((a, b) => b[1] - a[1]).map(([c, celdas]) => ({ nombre: nombresCultivos[c] ?? c, celdas }));
-  }, [plan, visible, celdasParcela]);
+    // Cada cultivo se cosecha en su fecha: siembra mas los dias de su ciclo (catalogo); sin dato, el ultimo dia simulado.
+    const diaSim = (c: string) => { const d = datos ? diasCultivo(c, datos.catalogo) : null; return d ? fechaEnIndice(visible.siembra, d) : null; };
+    return [...n].sort((a, b) => b[1] - a[1]).map(([c, celdas]) => {
+      const propia = diaSim(c);
+      const fecha = propia && rango ? (propia > rango.hasta ? rango.hasta : propia) : propia ?? rango?.hasta ?? visible.siembra;
+      return { nombre: nombresCultivos[c] ?? c, celdas, fecha };
+    });
+  }, [plan, visible, celdasParcela, datos, rango]);
   const plagaActiva = useMemo<PlagaActiva | null>(() => {
     const r = [...riesgos].sort((a, b) => b.sinProteger.length - a.sinProteger.length)[0];
     return r ? { plaga: r.plaga.nombreComun, cultivo: nombresCultivos[r.cultivo] ?? r.cultivo, bloques: r.sinProteger.length } : null;
@@ -195,6 +203,24 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
       for (const e of nuevos) historial.agregar({ tipo: e.tipo, titulo: e.titulo, detalle: e.detalle, fechaSim: e.fecha, ciclo: visible.ciclo });
     }
   }, [paso, fecha, rango, plan?.rotacionId, visible?.ciclo, escenario]);
+
+  // Plantas que mueren: al avanzar la fecha, las celdas que pasan de viva a marchita o podrida (segun el motor) disparan la animacion.
+  const estadosPrevios = useRef<{ clave: string; fecha: string; estados: Map<string, string | null> } | null>(null);
+  useEffect(() => {
+    if (paso !== 'escenarios' || !celdasListas || !celdas || !plan || !visible) { if (paso !== 'escenarios') estadosPrevios.current = null; return; }
+    const clave = `${plan.rotacionId}:${visible.ciclo}:${escenario}`;
+    const prev = estadosPrevios.current;
+    const registros = celdas.valor.registros.filter((r) => r.ciclo === visible.ciclo);
+    if (prev && prev.clave === clave && fecha > prev.fecha) {
+      const muertas = plantasQueMueren(prev.estados, registros, (c) => nombresCultivos[c] ?? c);
+      if (muertas.length) {
+        const e = eventoMuerte(fecha, muertas, clave);
+        setCola((c) => [...c, e]);
+        historial.agregar({ tipo: 'muerte', titulo: e.titulo, detalle: e.detalle, fechaSim: fecha, ciclo: visible.ciclo });
+      }
+    }
+    estadosPrevios.current = { clave, fecha, estados: new Map(registros.map((r) => [r.celdaId, r.estadoPlanta ?? null])) };
+  }, [celdasListas, claveCeldas]);
 
   // Luz y temperatura (paso Escenarios): rangos de temperatura de cada cultivo (FAO EcoCrop, del catalogo) y problemas por cultivo en la fecha mostrada.
   const rangosCultivos = useMemo(() => rangosTemperatura(datos?.catalogo), [datos?.catalogo]);
@@ -252,7 +278,7 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
   const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
     : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
-      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} tMediaDia={clima.tMediaDia} serieClima={datos.serie} rangosTemperatura={rangosCultivos} rociado={rociado} bioma={bioma ?? BIOMA_NEUTRO} />
+      <Escena modo="fondo" mascota={false} hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} plagas={plagasEscena} tMediaDia={clima.tMediaDia} serieClima={datos.serie} serieVistas={serie.datos} rangosTemperatura={rangosCultivos} rociado={rociado} bioma={bioma ?? BIOMA_NEUTRO} />
     </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
 
   const comun = { estado, onAvanzar };

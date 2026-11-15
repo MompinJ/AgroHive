@@ -27,14 +27,18 @@ describe('B7: idioma de la interfaz', () => {
     expect(traducir('en', 'pasos.descripcion', { actual: 2, total: 4, nombre: 'Crops' })).toBe('Step 2 of 4: Crops');
     expect(traducir('en', 'estado.NO_EVALUABLE')).toBe('Not evaluable');
   });
-  it('renderiza un selector con nombre accesible y nombres nativos de los idiomas', () => {
+  it('renderiza dos banderas con nombre accesible en su idioma y marca la elegida', () => {
     const html = renderToStaticMarkup(<ProveedorIdioma idiomaInicial="en"><SelectorIdioma /></ProveedorIdioma>);
-    expect(html).toContain('Language');
+    expect(html).toContain('role="radiogroup"');
+    expect(html).toContain('Language'); // nombre del grupo, solo para lectores de pantalla
+    expect(html).toContain('aria-label="Español"');
+    expect(html).toContain('aria-label="English"');
     expect(html).toContain('lang="es"');
     expect(html).toContain('lang="en"');
-    expect(html).toMatch(/<option[^>]*value="en"[^>]*selected=""/);
-    expect(html).toContain('Español');
-    expect(html).toContain('English');
+    expect(html).toMatch(/<button[^>]*lang="en"[^>]*aria-checked="true"|<button[^>]*aria-checked="true"[^>]*lang="en"/);
+    expect(html).toMatch(/<button[^>]*lang="es"[^>]*aria-checked="false"|<button[^>]*aria-checked="false"[^>]*lang="es"/);
+    expect((html.match(/<svg/g) ?? []).length).toBe(2); // una bandera por idioma
+    expect(html).not.toContain('<select');
   });
   it('traduce Inicio y la navegacion sin cambiar destinos ni desbloquear pasos', () => {
     const html = renderToStaticMarkup(<ProveedorIdioma idiomaInicial="en"><Inicio /><BarraPasos path="/terreno" progreso={0} /></ProveedorIdioma>);

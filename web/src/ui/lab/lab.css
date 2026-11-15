@@ -445,7 +445,7 @@
 .hecho { display: flex; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--color-panel, #f1f5f1); }
 .hecho-icono { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; background: #fff; color: var(--color-forest-700, #1f4d38); }
 .hecho-cosecha .hecho-icono { color: #8a6a12; background: #fbf1cf; }
-.hecho-plaga .hecho-icono, .hecho-problema .hecho-icono { color: #a4481a; background: #fbe3d4; }
+.hecho-plaga .hecho-icono, .hecho-problema .hecho-icono, .hecho-muerte .hecho-icono { color: #a4481a; background: #fbe3d4; }
 .hecho-insecticida .hecho-icono { color: #1d6a99; background: #dcedf8; }
 .hecho-cuerpo { min-width: 0; }
 .hecho-cuerpo p { margin: 0; font-size: .85rem; line-height: 1.35; }
@@ -454,3 +454,12 @@
 .hecho-cuando { margin-top: 3px !important; font-size: .74rem !important; color: var(--color-text-muted, #5a6b5e); }
 .historial-pie { padding: 8px 12px 12px; display: flex; justify-content: flex-end; border-top: 1px solid var(--color-border, #e0e6e0); }
 @media (max-width: 520px) { .boton-historial-texto { display: none; } }
+
+/* Panel izquierdo plegable: boton en la esquina y, plegado, una pestana con el titulo. */
+.panel-izq { position: absolute; }
+.panel-plegar { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; color: var(--color-text, #1d2b21); font: inherit; font-size: .82rem; font-weight: 700; cursor: pointer; }
+.panel-plegar-esquina { position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; justify-content: center; border-radius: 50%; background: var(--color-panel, #eef3ee); }
+.panel-plegar-esquina:hover { background: var(--color-sage-50, #e3efe6); }
+.panel-plegado { width: auto !important; max-height: none !important; height: auto !important; padding: 6px 12px 6px 8px !important; border-radius: 999px; overflow: visible; }
+.panel-plegado .panel-plegar { min-height: 40px; }
+@media (max-width: 760px) { .panel-plegado { top: auto; bottom: var(--lab-borde); right: auto; } }

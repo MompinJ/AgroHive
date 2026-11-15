@@ -11,9 +11,11 @@ import { fechaEnIndice } from '../tiempo';
 /** Segundos extra (ms) que la reproduccion espera despues de que un aviso o una animacion termina, para que se alcance a leer. */
 export const PAUSA_EXTRA_EVENTO_MS = 2500;
 
-export type TipoEvento = 'cosecha' | 'plaga';
+export type TipoEvento = 'cosecha' | 'plaga' | 'muerte';
 export interface EventoPantalla { tipo: TipoEvento; clave: string; titulo: string; detalle: string; /** Fecha de la simulacion a la que se refiere. */ fecha: string }
-export interface CultivoCosechado { nombre: string; celdas: number }
+/** Un cultivo del ciclo con el dia de su cosecha (siembra mas los dias de su ciclo, o el ultimo dia simulado si no hay dato). */
+export interface CultivoCosechado { nombre: string; celdas: number; fecha: string }
+export interface PlantasMuertas { nombre: string; estado: 'marchita' | 'podrida'; celdas: number }
 export interface PlagaActiva { plaga: string; cultivo: string; bloques: number }
 
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -64,9 +66,24 @@ export function eventoPlaga(fecha: string, plaga: PlagaActiva, clave: string): E
   };
 }
 
+/** Hojas y estados de planta que mueren, en lenguaje llano. */
+const VERBO_MUERTE = { marchita: 'se marchitan', podrida: 'se pudren' } as const;
+
+export function eventoMuerte(fecha: string, muertas: readonly PlantasMuertas[], clave: string): EventoPantalla {
+  const total = muertas.reduce((s, m) => s + m.celdas, 0);
+  const una = muertas.length === 1 ? muertas[0]! : null;
+  const titulo = una
+    ? `${una.nombre}: ${una.celdas === 1 ? 'una planta' : 'las plantas'} ${una.celdas === 1 ? (una.estado === 'marchita' ? 'se marchita' : 'se pudre') : VERBO_MUERTE[una.estado]} (${celdas(una.celdas)})`
+    : `Mueren plantas en ${celdas(total)}`;
+  const detalle = (una ? [] : muertas.map((m) => `${m.nombre}: ${celdas(m.celdas)} (${m.estado === 'marchita' ? 'marchitas' : 'podridas'})`)).concat(['Según el balance de agua del motor en esa fecha: el agua o el exceso de agua las dejó sin remedio.']).join('. ');
+  return { tipo: 'muerte', clave: `${clave}:muerte:${fecha}`, fecha, titulo, detalle };
+}
+
 /**
- * Eventos que dispara avanzar de `anterior` a `actual` dentro del ciclo `rango`: primero la plaga (mitad del ciclo, solo si
- * quedan bloques sin insecticida) y despues la cosecha (ultimo dia). Si saltas de golpe de un extremo al otro salen los dos, en ese orden.
+ * Eventos al avanzar de `anterior` a `actual` dentro del ciclo `rango`:
+ *  - plaga: a la mitad del ciclo, solo si quedan bloques sin insecticida (ilustrativa);
+ *  - cosecha: UNA por cada dia en que algun cultivo del ciclo llega a su cosecha (cada cultivo en su fecha; los que coinciden van juntos).
+ * Si un salto cruza varias marcas salen todas, en orden de fecha.
  */
 export function eventosAlAvanzar(a: {
   anterior: string | null; actual: string; rango: RangoTiempo; clave: string;
@@ -75,6 +92,29 @@ export function eventosAlAvanzar(a: {
   const salida: EventoPantalla[] = [];
   const mitad = momentoPlaga(a.rango);
   if (a.plaga && a.plaga.bloques > 0 && cruzo(a.anterior, a.actual, mitad)) salida.push(eventoPlaga(mitad, a.plaga, a.clave));
-  if (a.cosecha.length > 0 && cruzo(a.anterior, a.actual, a.rango.hasta)) salida.push(eventoCosecha(a.rango.hasta, a.cosecha, a.plaga && a.plaga.bloques > 0 ? a.plaga : null, a.clave));
+  const porFecha = new Map<string, CultivoCosechado[]>();
+  for (const c of a.cosecha) if (cruzo(a.anterior, a.actual, c.fecha)) porFecha.set(c.fecha, [...(porFecha.get(c.fecha) ?? []), c]);
+  for (const fecha of [...porFecha.keys()].sort()) salida.push(eventoCosecha(fecha, porFecha.get(fecha)!, a.plaga && a.plaga.bloques > 0 ? a.plaga : null, a.clave));
   return salida;
+}
+
+/** Celdas cuya planta paso de viva a marchita o podrida entre dos fechas, agrupadas por cultivo y estado. */
+export function plantasQueMueren(
+  antes: ReadonlyMap<string, string | null | undefined>,
+  ahora: readonly { celdaId: string; cultivo?: string | null; estado?: string; estadoPlanta?: string | null }[],
+  nombre: (cultivo: string) => string,
+): PlantasMuertas[] {
+  const grupos = new Map<string, PlantasMuertas>();
+  for (const r of ahora) {
+    if (r.estado !== undefined && r.estado !== 'EVALUABLE') continue;
+    const e = r.estadoPlanta;
+    if ((e !== 'marchita' && e !== 'podrida') || !r.cultivo) continue;
+    const previo = antes.get(r.celdaId);
+    if (previo === e || (previo === 'podrida' && e === 'marchita')) continue; // ya estaba asi (o ya estaba peor)
+    const clave = `${r.cultivo}:${e}`;
+    const g = grupos.get(clave) ?? { nombre: nombre(r.cultivo), estado: e, celdas: 0 };
+    g.celdas += 1;
+    grupos.set(clave, g);
+  }
+  return [...grupos.values()].sort((x, y) => y.celdas - x.celdas || x.nombre.localeCompare(y.nombre));
 }

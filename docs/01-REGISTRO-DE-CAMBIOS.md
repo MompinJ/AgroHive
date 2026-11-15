@@ -2,6 +2,16 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Contratos 0.16.0: `nombreComunEn` en el catálogo de cultivos (IA de Mompin, sesión "ingles", parte 2)
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; los cultivos necesitan nombre en inglés con fuente.
+- **Contrato:** `cultivo` gana el campo opcional `nombreComunEn` (versión menor, compatible: un catálogo sin el campo sigue siendo válido). `contratos/package.json` 0.16.0 (la API lo lee para `/health`), tipos regenerados (`contratos/tipos/contratos.d.ts`), ejemplo con el campo en el maíz y sin él en el cultivo ficticio, caso inválido nuevo `pruebas/invalidos/cultivo.nombre-en-vacio.json`, historial en `contratos/README.md`.
+- **API:** `api/app/modelos.py` declara `CultivoCatalogo` con `nombreComunEn` opcional (el resto del cultivo pasa tal cual) dentro de `CatalogoCultivos`; `api/openapi.json` y `api/cliente/api.d.ts` regenerados (`exportar_openapi.py`, `npm run todo`); prueba nueva en `api/tests/test_contratos_api.py` (catálogo real con el campo y catálogo viejo sin él, sin `null`); `api/README.md`. `api/tests/test_ejemplos.py` acepta ejemplos grabados en 0.15.0 (`COMPATIBLES`): 0.16.0 solo toca el catálogo de cultivos, que los ejemplos no graban, así que no hace falta regrabarlos; un cambio que toque lo grabado sí obliga a regrabar.
+- **Catálogo:** `datos/catalogos/generar.py` (`NOMBRES_EN`, `nombre_en`; `VERSION_CONTRATO` de los catálogos de 0.14.0 a 0.16.0) llena los 40 cultivos desde la fila de FAO-56 (Tabla 11 o 12) o EcoCrop que ya usa cada uno, con la fila citada en `notas`; el chile, sin fila propia, desde GRIN-Global (USDA ARS, *Capsicum annuum* var. *annuum*, id 311784, consultado el 15/11). Chile ("Chili pepper") y melón ("Melon") quedan marcados para revisión humana. `cultivos.json`, `suelos.json` y `calendario-isla.json` regenerados con `generar.py`: en `cultivos.json` solo cambian `versionContrato`, `nombreComunEn` y `notas`; en los otros dos, solo `versionContrato`. `validar.mjs` comprueba que cada cultivo tenga el nombre y su fuente en `notas`. Tabla completa en `datos/catalogos/README.md` ("Nombres en inglés").
+- **Motor:** `VERSION_CONTRATO` 0.16.0. Las tarjetas en inglés usan `nombreComunEn` (maize, sorghum, common bean). Regresiones regeneradas con `ACTUALIZAR_REGRESION=1`: en `demo-isla.json` y en las seis de `regresion/ejemplos/` solo cambia `versionContrato` (0.15.0 a 0.16.0); en `regresion/ingles/bajio-guanajuato.json`, además, los nombres de cultivo pasan del español al inglés. Ninguna cifra cambia.
+- **Docs:** `docs/04` (catálogo), `docs/05` (paso 8), `datos/catalogos/README.md`.
+- **Pendiente:** revisión humana de chile y melón (y, si el equipo quiere, `Maize` frente a `Corn` y `Peanut` frente a `Groundnut`); desplegar para que `/api/cultivos` sirva el campo.
+
 ### 2026-11-15 — README en inglés (Mafer)
 
 - **Archivos:** `README.en.md` (nuevo) y una línea de enlace al inicio de `README.md`.
@@ -22,7 +32,7 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Archivos:** `web/src/motor/idioma.ts` (nuevo: `IdiomaMotor`, `IDIOMA_MOTOR_POR_DEFECTO`, `esIdiomaMotor`, `idiomaMotor`), `web/src/motor/tarjetas.ts` (las frases pasan a un diccionario `TEXTOS` por idioma; `ContextoTarjetas.idioma`; `AVISOS_EXPERTO`, `nombreEscenario`; `ventanasDe` con idioma), `web/src/motor/ranking.ts` (`rankear(entrada, opciones, idioma)`: `mensaje` y motivos de `noOrdenadas`), `web/src/motor/protocolo.ts` (`idioma?` en la petición `rankear`), `web/src/motor/cliente.ts` (`rankear(rotacionIds?, opciones?, idioma?)`; solo manda `idioma` si se lo pasan), `web/src/motor/index.ts`; pruebas nuevas `web/src/motor/pruebas/tarjetas-ingles.test.ts` y `regresion-ingles.test.ts` con `regresion/ingles/bajio-guanajuato.json`; `docs/05` (paso 8: cómo se usa, qué se traduce y qué no), `docs/16` (fila B7), `AgroVault/Compartido/Resumen.md`.
 - **Cambio:** con `idioma: 'en'` las tarjetas salen en inglés con las mismas cifras y fuentes; sin idioma, en español. Los motivos técnicos de `NO_EVALUABLE` se citan en español, marcados ("Engine reason (in Spanish)"); las fuentes y sus citas no se traducen. Detalle en `docs/05`.
 - **Evidencia:** la regresión A5.5 en español (`demo-isla.json`) no cambia; la de los ejemplos mundiales tampoco.
-- **Pendiente:** (1) la UI pasa `idioma` desde `useIdioma` (balam, B7; línea exacta en `docs/05`); (2) los nombres de cultivo en inglés llegan con `nombreComunEn` del catálogo (parte 2); mientras, la tarjeta en inglés usa el nombre en español.
+- **Pendiente:** (1) la UI pasa `idioma` desde `useIdioma` (balam, B7; línea exacta en `docs/05`); (2) los nombres de cultivo en inglés llegan con `nombreComunEn` del catálogo (parte 2, entrada de arriba).
 - **No se tocó:** `web/src/ui/`, `web/src/paginas/`.
 
 ### 2026-11-15 — B7, parte 1: base de idioma español/inglés (balam; registrado por Mompin)
@@ -168,6 +178,22 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Por qué:** la protección guardaba ids de celda que cambian con el tamaño de celda (mismo problema que el plan `porCelda`), y el botón anterior protegía celdas sin plaga, lo que no reflejaba una decisión.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
+
+### 2026-11-15 — Selector de idioma con banderas (Eduardo)
+
+- **Archivos:** `web/src/ui/i18n/SelectorIdioma.tsx`, `idioma.css`, `idioma.test.tsx`.
+- **Cambio:** el selector de idioma deja de ser un `<select>` con etiqueta y pasa a ser un grupo de dos botones con bandera (español: México; inglés: EE. UU.), dibujadas en SVG porque los emojis de bandera no se ven en Windows. El nombre del idioma va en `aria-label` y `title`, el grupo tiene nombre accesible (\"Idioma\"/\"Language\") solo para lectores de pantalla y la elegida lleva un anillo. Mismo cambio de idioma de antes, sin tocar diccionarios.
+- **Evidencia:** `tsc` sin errores; pruebas del front 3466 en verde (la del selector ahora comprueba las dos banderas, los `lang`, el estado marcado y que ya no hay `<select>`). No se revisó visualmente.
+- **Límites:** una bandera es un país, no un idioma; se eligieron México (demo en español) y EE. UU. (inglés) y el nombre queda en `title` y `aria-label`.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-15 — Vistas de clima en Cultivos, plagas estables, cosecha y muerte por evento, paneles plegables (Eduardo)
+
+- **Archivos:** `web/src/escena/EscenaParcela.tsx` (`serieVistas`), `ui/lab/plagas.ts`, `eventos.ts`, `EventoPantalla.tsx`, `evento.css`, `historial.ts`, `PanelHistorial.tsx`, `Laboratorio.tsx`, `PanelIzq.tsx`, `panelColapsable.ts`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `ui/sonido.ts`, pruebas; `docs/06`.
+- **Cambio:** (1) Las vistas de luz y temperatura también están en el paso Cultivos. (2) La plaga ya no cambia al plantar: la zona de cada cultivo (20 % de la parcela) es fija y solo aparece o desaparece en las celdas afectadas. (3) La animación de cosecha sale por cada cultivo en su fecha, y una nueva de plantas muertas sale cada vez que unas plantas pasan a marchitas o podridas, cada una con su sonido. (4) Los paneles de la izquierda se pliegan.
+- **Evidencia:** `tsc` sin errores; pruebas del front en verde (nuevas: plantar no mueve la plaga, cosecha por fecha, detección de plantas muertas, panel plegable). No se probó en el navegador por instrucción del equipo.
+- **Límites:** un cultivo plantado solo fuera de su zona no tiene plaga; las plantas "mueren" según el estado del motor (marchita o podrida), no hay otra definición; no se revisó visualmente ni se oyó el sonido nuevo.
+- **Decisiones afectadas:** ninguna de alcance del MVP.
 
 ### 2026-11-15 — La plaga en el 20 % de cada grupo de cultivo, en lugar del radio (Eduardo)
 

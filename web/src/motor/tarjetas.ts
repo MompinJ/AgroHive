@@ -302,7 +302,7 @@ const NOMBRE_CULTIVO_ES: Record<string, string> = { maiz: 'maíz', frijol: 'frij
 
 /** Nombre del cultivo en el texto: en ingles, nombreComunEn del catalogo (contratos 0.16.0); si falta, el de espanol. */
 function nombreCultivo(ctx: ContextoTarjetas, id: string): string {
-  const c = ctx.catalogo.cultivos.find((x) => x.id === id) as ({ nombreComun?: string; nombreComunEn?: string } | undefined);
+  const c = ctx.catalogo.cultivos.find((x) => x.id === id);
   if (idiomaMotor(ctx.idioma) === 'en' && c?.nombreComunEn) return c.nombreComunEn.toLowerCase();
   return NOMBRE_CULTIVO_ES[id] ?? (c?.nombreComun ?? id).toLowerCase();
 }

@@ -66,8 +66,6 @@ const textos = (r: ResultadoRotacion) => {
 
 /** Palabras del espanol que no deben quedar en una tarjeta en ingles (los nombres propios y las citas no se cuentan). */
 const ESPANOL = /\b(año|años|días|dias|lluvia|cultivo|cultivos|siembra|suelo|agua|falta|faltó|ventana|rotación|rotacion|sembrado|ciclo|seco|lluvioso|del|las|los|que|una|por|con|sin)\b|[áéíóúñ]/i;
-/** Hasta que el catalogo tenga nombreComunEn (parte 2), el nombre del cultivo sale en espanol. */
-const NOMBRES_PENDIENTES = /\b(maíz|sorgo|frijol|trigo)\b/gi;
 
 describe('regresion de las tarjetas en ingles: Bajio (Jaral del Progreso, Guanajuato)', async () => {
   const d = await cargarEjemplo('bajio-guanajuato');
@@ -120,16 +118,21 @@ describe('regresion de las tarjetas en ingles: Bajio (Jaral del Progreso, Guanaj
   it('no queda espanol en las tarjetas (fuera de nombres propios y citas) y cumplen el contrato', () => {
     const validar = validadorContrato('resultado-rotacion');
     for (const r of en.rotaciones) {
-      for (const x of textos(r)) expect(x.replace(/Jaral del Progreso|SIAP|GGCMI[^,;)]*/g, '').replace(NOMBRES_PENDIENTES, ''), x).not.toMatch(ESPANOL);
+      for (const x of textos(r)) expect(x.replace(/Jaral del Progreso|SIAP|GGCMI[^,;)]*/g, ''), x).not.toMatch(ESPANOL);
       expect(r.explicacion.avisoExperto).toMatch(/^This is a comparison with real past years, not a prediction\./);
       expect(validar(r)).toEqual([]);
     }
     expect(en.noOrdenadas.every((x) => !ESPANOL.test(x.motivo))).toBe(true);
   });
 
+  it('los cultivos salen con su nombre en ingles del catalogo (nombreComunEn)', () => {
+    expect(ren.R1!.explicacion.porQue).toMatch(/Crops: maize and sorghum\.$/);
+    expect(ren.R2!.explicacion.beneficios).toContain('Rotation: it combines 2 species and includes a legume (common bean). This simulator does not measure its contribution to the soil.');
+  });
+
   it('el trigo que SIAP no registra se explica en ingles, con el municipio y la temporada', () => {
     expect(ren.R4!.estado).toBe('EXPLORATORIO');
-    expect(ren.R4!.explicacion.porQue).toMatch(/^Shown for exploration, but not recommended: SIAP does not record rainfed (wheat|trigo) in Jaral del Progreso in the OI season\.$/);
+    expect(ren.R4!.explicacion.porQue).toMatch(/^Shown for exploration, but not recommended: SIAP does not record rainfed wheat in Jaral del Progreso in the OI season\.$/);
     expect(res.R4!.explicacion.porQue).toMatch(/^Se muestra para explorar, pero no se recomienda: SIAP no registra 'Trigo grano'/);
   });
 });

@@ -57,6 +57,22 @@ def test_cultivos_del_catalogo_real_cumplen_el_contrato(validar):
     validar(cuerpo, "cultivo#")  # el schema describe el catalogo completo (meta, versionCatalogo y cultivos)
 
 
+def test_cultivos_con_nombre_en_ingles_y_sin_el(validar):
+    """0.16.0: nombreComunEn es opcional. El catalogo real lo trae en todos los cultivos y la API lo pasa tal cual;
+    un catalogo anterior, sin el campo, sigue cumpliendo el contrato y la API no inventa el nombre ni manda null."""
+    config.CATALOGOS_DIR.mkdir(parents=True)
+    real_ = json.loads((RAIZ / "datos" / "catalogos" / "cultivos.json").read_text(encoding="utf-8"))
+    (config.CATALOGOS_DIR / "cultivos.json").write_text(json.dumps(real_), encoding="utf-8")
+    cuerpo = cliente.get("/api/cultivos").json()
+    assert [c["nombreComunEn"] for c in cuerpo["cultivos"]] == [c["nombreComunEn"] for c in real_["cultivos"]]
+    assert cuerpo["cultivos"][0]["nombreComunEn"] == "Maize"
+    viejo = {**real_, "cultivos": [{k: v for k, v in c.items() if k != "nombreComunEn"} for c in real_["cultivos"]]}
+    (config.CATALOGOS_DIR / "cultivos.json").write_text(json.dumps(viejo), encoding="utf-8")
+    cuerpo = cliente.get("/api/cultivos").json()
+    assert all("nombreComunEn" not in c for c in cuerpo["cultivos"])
+    validar(cuerpo, "cultivo#")
+
+
 def test_cultivos_sin_catalogo_es_503_error_datos():
     """H-B8: antes respondia 200 con {estado, motivo, cultivos: []}, que no cumple cultivo.schema.json (sin meta ni versionCatalogo)."""
     r = cliente.get("/api/cultivos")

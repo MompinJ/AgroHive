@@ -108,21 +108,31 @@ describe('plagas en el simulador', () => {
     it('con 4 celdas, como la demo, la plaga esta en una sola', () => {
       expect(focoDelGrupo(malla(2), 'R1:1:maiz')).toHaveLength(1);
     });
-    it('solo hay plaga en los cultivos que una plaga presente ataca, y solo en ese ciclo', () => {
+    it('solo hay plaga en los cultivos que una plaga presente ataca, y con todo de un cultivo es el 20 % de la parcela', () => {
       const celdas = malla(10);
-      const c1 = celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1); // maiz: lo ataca el cogollero
-      expect(c1.size).toBe(20);
+      expect(celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1).size).toBe(20); // maiz: lo ataca el cogollero
       expect(celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 2).size).toBe(0); // tomate: ninguna plaga presente lo ataca
       expect(celdasConPlaga(planGrande, celdas, [], 1).size).toBe(0);
     });
-    it('cada grupo de cultivo tiene su 20 %: dos cultivos pintados dan dos focos', () => {
+    it('plantar algo nuevo NO mueve la plaga: solo aparece o desaparece en las celdas afectadas', () => {
       const celdas = malla(10);
-      const mixto = { ...planGrande, porCelda: Object.fromEntries(celdas.filter((c) => c.j >= 5).map((c) => [c.id, [{ ciclo: 1, cultivo: 'frijol' }]])) } as unknown as typeof planGrande;
-      const f = celdasConPlaga(mixto, celdas, plagasPresentes(zona), 1);
-      // 50 celdas de maiz y 50 de frijol (el chapulin ataca frijol): 10 + 10.
-      expect(f.size).toBe(20);
-      const enMaiz = [...f].filter((id) => Number(id.split('-')[2]) < 5).length;
-      expect(enMaiz).toBe(10);
+      const antes = celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1);
+      // Se pintan 30 celdas de tomate (que ninguna plaga ataca) y 10 de frijol (que ataca el chapulin).
+      const tomates = celdas.filter((c) => c.i < 3).map((c) => c.id);
+      const frijoles = celdas.filter((c) => c.i === 9).map((c) => c.id);
+      const nuevo = { ...planGrande, porCelda: { ...Object.fromEntries(tomates.map((id) => [id, [{ ciclo: 1, cultivo: 'tomate' }]])), ...Object.fromEntries(frijoles.map((id) => [id, [{ ciclo: 1, cultivo: 'frijol' }]])) } } as unknown as typeof planGrande;
+      const despues = celdasConPlaga(nuevo, celdas, plagasPresentes(zona), 1);
+      const intactas = celdas.map((c) => c.id).filter((id) => !tomates.includes(id) && !frijoles.includes(id));
+      for (const id of intactas) expect(despues.has(id), id).toBe(antes.has(id)); // las celdas que no se tocaron conservan su plaga
+      for (const id of tomates) expect(despues.has(id)).toBe(false); // el tomate no es atacado: la plaga desaparece ahi
+      for (const id of antes) if (!tomates.includes(id)) expect(despues.has(id)).toBe(true); // y no se pierde en otro lado
+    });
+    it('quitar lo pintado devuelve la plaga exactamente donde estaba', () => {
+      const celdas = malla(10);
+      const base = celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1);
+      const pintado = { ...planGrande, porCelda: { 'c-0-0': [{ ciclo: 1, cultivo: 'tomate' }] } } as unknown as typeof planGrande;
+      celdasConPlaga(pintado, celdas, plagasPresentes(zona), 1);
+      expect(celdasConPlaga(planGrande, celdas, plagasPresentes(zona), 1)).toEqual(base);
     });
     it('el aviso de riesgos cuenta solo las celdas del foco, y proteger el foco lo deja en cero', () => {
       const celdas = malla(10);

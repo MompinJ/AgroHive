@@ -959,8 +959,7 @@
         "properties": {
           "cultivos": {
             "items": {
-              "additionalProperties": true,
-              "type": "object"
+              "$ref": "#/components/schemas/CultivoCatalogo"
             },
             "type": "array",
             "title": "Cultivos"
@@ -1215,6 +1214,26 @@
           "nombre"
         ],
         "title": "ComponenteSsurgo"
+      },
+      "CultivoCatalogo": {
+        "properties": {
+          "nombreComunEn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nombrecomunen"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "title": "CultivoCatalogo",
+        "description": "Un cultivo de contratos/cultivo.schema.json. Pasa tal cual (lo valida el contrato en las pruebas); se declara el campo\nnuevo de 0.16.0 para que quede en OpenAPI y en el cliente generado."
       },
       "DatoNdvi": {
         "properties": {

@@ -48,6 +48,11 @@
           "type": "string",
           "minLength": 1
         },
+        "nombreComunEn": {
+          "description": "Nombre comun en ingles (0.16.0, opcional; [DECIDIDO] 15/11: la app tiene espanol e ingles). Sale de la fila de FAO-56 (Tabla 11 o 12) o de FAO EcoCrop que usa el cultivo; la fila citada esta en notas y en la tabla de datos/catalogos/README.md. Sin el campo, la interfaz y las tarjetas en ingles usan nombreComun.",
+          "type": "string",
+          "minLength": 1
+        },
         "nombreCientifico": {
           "type": "string",
           "minLength": 1

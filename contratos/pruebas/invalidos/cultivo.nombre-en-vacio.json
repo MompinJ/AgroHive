@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "versionContrato": "0.13.0",
+    "esEjemplo": true,
+    "aviso": "DATOS DE EJEMPLO, NO REALES. Valores ficticios para probar los contratos; coordenadas ilustrativas en Isla, Veracruz."
+  },
+  "versionCatalogo": "0.0.0-ejemplo",
+  "cultivos": [
+    {
+      "id": "maiz",
+      "nombreComun": "Maiz",
+      "nombreComunEn": "",
+      "nombreCientifico": "Zea mays",
+      "estado": "NO_EVALUABLE",
+      "esLeguminosa": false,
+      "cicloDias": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+      },
+      "duracionEtapasDias": {
+        "inicial": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "desarrollo": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "media": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "final": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        }
+      },
+      "kc": {
+        "inicial": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "media": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        },
+        "final": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+        }
+      },
+      "profundidadRaizM": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+      },
+      "fraccionAgotamientoP": {
+        "estado": "NO_EVALUABLE",
+        "motivo": "Pendiente de A1.5: tomar de FAO-56 con cita verificada por una persona."
+      },
+      "etapasSensibles": [],
+      "umbrales": {
+        "tMinAbsC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "tMaxAbsC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "tOptMinC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "tOptMaxC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "lluviaCicloMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "lluviaCicloMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: tomar de FAO EcoCrop con cita verificada por una persona."
+        },
+        "lluviaAnualMinMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: rango anual de FAO EcoCrop con cita verificada por una persona."
+        },
+        "lluviaAnualMaxMm": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: rango anual de FAO EcoCrop con cita verificada por una persona."
+        },
+        "tEstresCalorC": {
+          "estado": "NO_EVALUABLE",
+          "motivo": "Pendiente de A1.5: umbral de calor con fuente."
+        }
+      },
+      "modelo3d": {
+        "prefijo": "maiz"
+      },
+      "notas": "Ejemplo de cultivo real cuyos parametros aun no tienen fuente: todo va como NO_EVALUABLE, nunca como cero."
+    }
+  ]
+}
