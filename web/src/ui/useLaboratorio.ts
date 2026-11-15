@@ -10,6 +10,24 @@ import { calendarioIsla, planesIniciales } from './planes';
 export interface DatosLaboratorio { parcela: Parcela; serie: SerieClima; suelo: Suelo | null; catalogo: CatalogoCultivos; tabla: TablaSuelos; calendario: CalendarioLocal | null; capa: ProximaTemporadaAproximada | null; avisos: string[]; avisosDatos: AvisoDatos[] }
 type Calculo = { clave: string; ranking: ResultadoRanking; proxima: VistaProximaTemporada; cliente: ClienteMotor };
 
+/**
+ * Rotaciones guardadas en el navegador (caché local), por parcela. Si el navegador no deja
+ * guardar o lo guardado no sirve, se usan las rotaciones de ejemplo.
+ */
+const LLAVE_PLANES = 'agrohive:rotaciones:v1:';
+function leerPlanes(clave: string): PlanSiembra[] | null {
+  try {
+    const crudo = localStorage.getItem(LLAVE_PLANES + clave);
+    if (!crudo) return null;
+    const planes = JSON.parse(crudo) as PlanSiembra[];
+    const valido = Array.isArray(planes) && planes.length > 0 && planes.every((p) => /^R\d+$/.test(p.rotacionId) && Array.isArray(p.ciclos) && p.ciclos.length > 0);
+    return valido ? planes : null;
+  } catch { return null; }
+}
+function guardarPlanes(clave: string, planes: PlanSiembra[]) {
+  try { localStorage.setItem(LLAVE_PLANES + clave, JSON.stringify(planes)); } catch { /* sin almacenamiento: queda en memoria */ }
+}
+
 export function conLimite<T>(promesa: Promise<T>, ms = 120000): Promise<T> {
   return new Promise((resolve, reject) => {
     const reloj = setTimeout(() => reject(new Error('El motor no respondió a tiempo. Reintenta el cálculo.')), ms);
@@ -61,7 +79,15 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
     return () => { activo = false; control.abort(); };
   }, [claveParcela, iniciado, intento, datosRemotos]);
   const actual = datos?.clave === claveParcela && (!parcela || remotos.state === 'ready') ? datos.datos : null;
-  const planes = useMemo(() => actual ? planesEditados?.clave === claveParcela ? planesEditados.planes : planesIniciales(actual.parcela, actual.calendario) : [], [actual, planesEditados, claveParcela]);
+  // La clave del guardado es el id de la parcela (la demo siempre es la misma).
+  const claveGuardado = actual?.parcela.id ?? 'demo';
+  const planes = useMemo(() => {
+    if (!actual) return [];
+    if (planesEditados?.clave === claveParcela) return planesEditados.planes;
+    const guardados = leerPlanes(claveGuardado)?.filter((p) => p.parcelaId === actual.parcela.id);
+    return guardados?.length ? guardados : planesIniciales(actual.parcela, actual.calendario);
+  }, [actual, planesEditados, claveParcela, claveGuardado]);
+  const fijarPlanes = (lista: PlanSiembra[]) => { guardarPlanes(claveGuardado, lista); setPlanes({ clave: claveParcela, planes: lista }); };
   const clave = JSON.stringify([claveParcela, planes, revision, intento]);
   useEffect(() => {
     if (!actual || !planes.length) return;
@@ -78,6 +104,14 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
     void simular().catch((e: unknown) => { if (activo) { setErrorMotor(e instanceof Error ? e.message : 'No se pudo simular.'); cliente?.terminar(); } });
     return () => { activo = false; cliente?.terminar(); };
   }, [actual, planes, clave]);
-  return { seleccion: { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda }, datos: actual, planes, calculo: calculo?.clave === clave && actual ? calculo : null, error: parcela && remotos.state === 'error' ? remotos.error.motivo : error || errorMotor, actualizar: (plan: PlanSiembra) => setPlanes({ clave: claveParcela, planes: planes.map((p) => p.rotacionId === plan.rotacionId ? plan : p) }), reintentar: () => { setDatos(null); remotos.reintentar(); setIntento((n) => n + 1); setRevision((n) => n + 1); } };
+  return { seleccion: { rotacion, setRotacion, ciclo, setCiclo, escenario, setEscenario, fechaElegida, setFecha, mostrarBanda, setMostrarBanda }, datos: actual, planes, calculo: calculo?.clave === clave && actual ? calculo : null, error: parcela && remotos.state === 'error' ? remotos.error.motivo : error || errorMotor, actualizar: (plan: PlanSiembra) => fijarPlanes(planes.map((p) => p.rotacionId === plan.rotacionId ? plan : p)),
+    agregarRotacion: (plan: PlanSiembra) => { fijarPlanes([...planes, plan]); setRotacion(plan.rotacionId); setCiclo(1); },
+    quitarRotacion: (id: string) => {
+      if (planes.length <= 1) return;
+      const resto = planes.filter((p) => p.rotacionId !== id);
+      fijarPlanes(resto);
+      if (rotacion === id) { setRotacion(resto[0]!.rotacionId); setCiclo(1); }
+    },
+    restablecerRotaciones: () => { if (actual) fijarPlanes(planesIniciales(actual.parcela, actual.calendario)); setRotacion('R1'); setCiclo(1); }, reintentar: () => { setDatos(null); remotos.reintentar(); setIntento((n) => n + 1); setRevision((n) => n + 1); } };
 }
 export type LaboratorioEstado = ReturnType<typeof useLaboratorio>;

@@ -36,7 +36,7 @@ export function planesIniciales(parcela: Parcela, calendario: CalendarioLocal | 
   const definiciones: Record<string, [string, string, Ciclo['temporada']][]> = {
     R1: [['maiz', '2026-06-15', 'PV'], ['frijol', '2026-11-01', 'OI'], ['maiz', '2027-06-15', 'PV']],
     R2: [['maiz', '2026-06-15', 'PV'], ['maiz', '2027-06-15', 'PV']],
-    R4: [['maiz', '2026-06-01', 'PV'], ['frijol', '2026-10-10', 'OI'], ['maiz', '2027-06-01', 'PV']],
+    R3: [['maiz', '2026-06-01', 'PV'], ['frijol', '2026-10-10', 'OI'], ['maiz', '2027-06-01', 'PV']],
   };
   return Object.entries(definiciones).map(([id, lista]) => armarPlan(id, parcela, lista.map(([cultivo, siembra, temporada], i) => ({ ciclo: i + 1, cultivo, siembra, temporada, porQue: 'Plan de demostración editable, no recomendación.' })), calendario));
 }
@@ -221,4 +221,54 @@ export function agruparCultivos<T extends { id: string; esLeguminosa?: boolean |
   const agrupados = new Set(grupos.flatMap((g) => g.cultivos.map((c) => c.id)));
   grupos.push({ nombre: 'Otros', cultivos: resto.filter((c) => !agrupados.has(c.id)) });
   return grupos.filter((g) => g.cultivos.length > 0);
+}
+
+/** Nombre visible de una rotacion: su lugar en la lista ("Rotacion 1", "Rotacion 2"...). */
+export function nombreRotacion(id: string, planes: readonly Pick<PlanSiembra, 'rotacionId'>[]): string {
+  const i = planes.findIndex((p) => p.rotacionId === id);
+  return `Rotación ${i >= 0 ? i + 1 : id.replace(/^R/, '')}`;
+}
+
+/** Rotacion nueva: copia de la elegida con el siguiente id libre (R1, R2...). */
+export function nuevaRotacion(base: PlanSiembra, planes: readonly PlanSiembra[], parcela: Parcela, calendario: CalendarioLocal | null): PlanSiembra {
+  const siguiente = Math.max(0, ...planes.map((p) => Number(p.rotacionId.slice(1)) || 0)) + 1;
+  return armarPlan(`R${siguiente}`, parcela, base.ciclos, calendario, base.porCelda);
+}
+
+/**
+ * Agrega un ciclo al final: alterna con el cultivo de dos ciclos atras (o repite el ultimo) y
+ * se siembra al terminar el ciclo anterior, en el inicio de la ventana local si la hay despues.
+ */
+export function agregarCiclo(plan: PlanSiembra, parcela: Parcela, calendario: CalendarioLocal | null, catalogo: CatalogoCultivos): PlanSiembra {
+  const ciclos = [...plan.ciclos].sort((a, b) => a.ciclo - b.ciclo);
+  const ultimo = ciclos[ciclos.length - 1]!;
+  const cultivo = ciclos[ciclos.length - 2]?.cultivo ?? ultimo.cultivo;
+  const dias = Math.max(1, ...cultivosDelCiclo(plan, ultimo.ciclo).map((c) => diasCultivo(c, catalogo) ?? 0));
+  const libre = aDia(ultimo.siembra) + dias + 1;
+  // Si el dia libre ya cae en una ventana local, se siembra ahi; si la siguiente ventana empieza
+  // pronto (90 dias o menos), se espera a ella; si no, se siembra al quedar libre la parcela.
+  const ventanas = (calendario?.entradas ?? []).flatMap((e) => (e.cultivo === cultivo && e.regimen === 'temporal' && e.ventana.estado === 'EVALUABLE' ? [e.ventana] : []));
+  const fechaLibre = deDia(libre);
+  const anio = Number(fechaLibre.slice(0, 4));
+  const proxima = ventanas.flatMap((v) => [anio, anio + 1].map((a) => inicioDeVentana(v, a))).filter((f) => aDia(f) >= libre).sort()[0];
+  const siembra = ventanas.some((v) => dentroDeVentana(fechaLibre, v)) ? fechaLibre
+    : proxima && aDia(proxima) - libre <= 90 ? proxima : fechaLibre;
+  const nuevo: Ciclo = { ciclo: ultimo.ciclo + 1, cultivo, siembra, temporada: temporadaDeFecha(siembra), porQue: 'Ciclo agregado en el selector.' };
+  return armarPlan(plan.rotacionId, parcela, [...ciclos, nuevo], calendario, plan.porCelda);
+}
+
+/** Quita un ciclo (queda al menos uno) y renumera los siguientes, tambien en lo pintado. */
+export function quitarCiclo(plan: PlanSiembra, parcela: Parcela, ciclo: number, calendario: CalendarioLocal | null): PlanSiembra {
+  if (plan.ciclos.length <= 1) return plan;
+  const ciclos = plan.ciclos.filter((c) => c.ciclo !== ciclo).map((c) => (c.ciclo > ciclo ? { ...c, ciclo: c.ciclo - 1 } : c));
+  let porCelda: PlanSiembra['porCelda'] = null;
+  if (plan.porCelda) {
+    const salida: NonNullable<PlanSiembra['porCelda']> = {};
+    for (const [celda, lista] of Object.entries(plan.porCelda)) {
+      const resto = lista.filter((x) => x.ciclo !== ciclo).map((x) => (x.ciclo > ciclo ? { ...x, ciclo: x.ciclo - 1 } : x));
+      if (resto.length) salida[celda] = resto as typeof lista;
+    }
+    porCelda = salida;
+  }
+  return armarPlan(plan.rotacionId, parcela, ciclos, calendario, porCelda);
 }

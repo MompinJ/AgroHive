@@ -1,46 +1,89 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+// Editor del contorno de la parcela (paso 1). El mapa ocupa el editor; encima van la barra de
+// herramientas con iconos, el resumen y la accion final. La cuadricula se genera sola al tener
+// un contorno valido; "Usar esta parcela" consulta la elevacion, guarda y abre el laboratorio.
+import { forwardRef, lazy, Suspense, useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import type { LonLat, Parcela } from '../../../contratos/tipos/contratos';
 import { obtenerTerreno } from '../api/cliente';
 import { generarCuadricula, type Cuadricula } from './cuadricula';
 
 const MapaParcela = lazy(() => import('./MapaParcela'));
 const sinBordes: LonLat[][] = [];
+const LIMITE = 200;
+
+function Icono({ children }: { children: ReactNode }) {
+  return <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{children}</svg>;
+}
+const iconos = {
+  deshacer: <Icono><path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" /></Icono>,
+  borrar: <Icono><path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M6 6l1 14h10l1-14" /><path d="M10 11v6M14 11v6" /></Icono>,
+  coordenadas: <Icono><circle cx="12" cy="12" r="7" /><path d="M12 2v4M12 18v4M2 12h4M18 12h4" /><circle cx="12" cy="12" r="1.5" fill="currentColor" /></Icono>,
+  centrar: <Icono><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /><rect x="9" y="9" width="6" height="6" rx="1" /></Icono>,
+  acercar: <Icono><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3M11 8v6M8 11h6" /></Icono>,
+  alejar: <Icono><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3M8 11h6" /></Icono>,
+  ayuda: <Icono><circle cx="12" cy="12" r="9" /><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7" /><path d="M12 17h.01" /></Icono>,
+};
+
+const BotonHerramienta = forwardRef<HTMLButtonElement, { nombre: string; icono: ReactNode; onClick: () => void; disabled?: boolean; activo?: boolean }>(
+  ({ nombre, icono, onClick, disabled = false, activo }, ref) => <button ref={ref} type="button" className="dibujo-herramienta" aria-label={nombre} title={nombre} disabled={disabled} aria-pressed={activo} onClick={onClick}>
+    {icono}<span className="dibujo-tooltip" aria-hidden="true">{nombre}</span>
+  </button>,
+);
+
+type Estado = { tipo: 'nada' } | { tipo: 'consultando' } | { tipo: 'error'; mensaje: string };
 
 export function DibujarParcela({ onGuardar, guardada }: { onGuardar: (p: Parcela) => void; guardada: Parcela | null }) {
+  const id = useId();
   const [puntos, setPuntos] = useState<LonLat[]>(() => guardada?.origen === 'poligono_usuario' ? guardada.poligono.slice(0, -1) : []);
+  const [historial, setHistorial] = useState<LonLat[][]>([]);
+  const [centrar, setCentrar] = useState(0);
+  const [coordenadas, setCoordenadas] = useState(false);
+  const [ayuda, setAyuda] = useState(false);
   const [longitud, setLongitud] = useState('');
   const [latitud, setLatitud] = useState('');
-  const [cuadricula, setCuadricula] = useState<Cuadricula | null>(null);
-  const [mensaje, setMensaje] = useState('');
-  const [cargando, setCargando] = useState(false);
-  const [resultado, setResultado] = useState<Parcela | null>(null);
+  const [errorCoordenadas, setErrorCoordenadas] = useState('');
+  const [aviso, setAviso] = useState('');
+  const [estado, setEstado] = useState<Estado>({ tipo: 'nada' });
   const peticion = useRef<AbortController | null>(null);
+  const botonCoordenadas = useRef<HTMLButtonElement>(null);
   useEffect(() => () => peticion.current?.abort(), []);
+
+  // La cuadricula se genera sola con un contorno de 3 o mas vertices.
+  const cuadricula = useMemo<{ ok: true; valor: Cuadricula } | { ok: false; motivo: string } | null>(() => {
+    if (puntos.length < 3) return null;
+    try { return { ok: true, valor: generarCuadricula(puntos) }; }
+    catch (e) { return { ok: false, motivo: e instanceof Error ? e.message : 'No se pudo generar la cuadrícula.' }; }
+  }, [puntos]);
 
   function cambiar(nuevos: LonLat[]) {
     peticion.current?.abort();
-    setCargando(false); setPuntos(nuevos); setCuadricula(null); setResultado(null); setMensaje('');
+    setEstado({ tipo: 'nada' });
+    setAviso('');
+    setHistorial((h) => [...h.slice(-49), puntos]);
+    setPuntos(nuevos);
   }
   function agregar(p: LonLat) {
-    if (puntos.length >= 200) { setMensaje('El límite es de 200 vértices.'); return; }
+    if (puntos.length >= LIMITE) { setAviso(`El límite es de ${LIMITE} vértices.`); return; }
     cambiar([...puntos, p]);
   }
-  function preparar() {
-    try { setCuadricula(generarCuadricula(puntos)); setMensaje('Revisa el contorno y confirma para consultar elevación.'); }
-    catch (e) { setMensaje(e instanceof Error ? e.message : 'No se pudo generar la cuadrícula.'); }
-  }
-  async function consultar() {
-    if (!cuadricula) return;
+  const mover = (i: number, p: LonLat) => cambiar(puntos.map((x, k) => (k === i ? p : x)));
+  const insertar = (i: number, p: LonLat) => {
+    if (puntos.length >= LIMITE) { setAviso(`El límite es de ${LIMITE} vértices.`); return; }
+    cambiar([...puntos.slice(0, i), p, ...puntos.slice(i)]);
+  };
+  const borrar = (i: number) => cambiar(puntos.filter((_, k) => k !== i));
+  function deshacer() {
+    const anterior = historial.at(-1);
+    if (!anterior) return;
     peticion.current?.abort();
-    const control = new AbortController();
-    peticion.current = control;
-    setCargando(true); setMensaje('Consultando elevación y pendiente…'); setResultado(null);
-    const r = await obtenerTerreno({ tamanoCeldaM: cuadricula.parcela.tamanoCeldaM, celdas: cuadricula.parcela.celdas.map(({ id, i, j, centro }) => ({ id, i, j, centro })) }, { senal: control.signal });
-    if (control.signal.aborted) return;
-    setCargando(false);
-    if (!r.ok) { setMensaje(r.error.motivo); return; }
-    const alturas = new Map(r.datos.celdas.map((c) => [c.id, c]));
-    const f = r.datos.terreno.fuente;
+    setEstado({ tipo: 'nada' });
+    setHistorial((h) => h.slice(0, -1));
+    setPuntos(anterior);
+  }
+
+  function construir(c: Cuadricula, datos?: Awaited<ReturnType<typeof obtenerTerreno>> & { ok: true }): Parcela {
+    if (!datos) return c.parcela;
+    const alturas = new Map(datos.datos.celdas.map((x) => [x.id, x]));
+    const f = datos.datos.terreno.fuente;
     const fuente: Parcela['terreno']['fuente'] = {
       nombre: f.nombre,
       ...(f.url != null ? { url: f.url } : {}),
@@ -52,44 +95,98 @@ export function DibujarParcela({ onGuardar, guardada }: { onGuardar: (p: Parcela
       ...(f.resolucion != null ? { resolucion: f.resolucion } : {}),
       ...(f.nota != null ? { nota: f.nota } : {}),
     };
-    const parcela: Parcela = {
-      ...cuadricula.parcela, terreno: { estado: r.datos.terreno.estado, fuente },
-      celdas: cuadricula.parcela.celdas.map((c) => ({ ...c, elevacionM: alturas.get(c.id)?.elevacionM ?? null, pendientePct: alturas.get(c.id)?.pendientePct ?? null })) as Parcela['celdas'],
-      advertencias: [...r.datos.advertencias, ...(r.datos.meta.esEjemplo ? [{ codigo: 'ELEVACION_DE_EJEMPLO', severidad: 'critico' as const, mensaje: 'La elevación recibida es de ejemplo, no corresponde a mediciones reales.' }] : [])],
+    return {
+      ...c.parcela, terreno: { estado: datos.datos.terreno.estado, fuente },
+      celdas: c.parcela.celdas.map((x) => ({ ...x, elevacionM: alturas.get(x.id)?.elevacionM ?? null, pendientePct: alturas.get(x.id)?.pendientePct ?? null })) as Parcela['celdas'],
+      advertencias: [...datos.datos.advertencias, ...(datos.datos.meta.esEjemplo ? [{ codigo: 'ELEVACION_DE_EJEMPLO', severidad: 'critico' as const, mensaje: 'La elevación recibida es de ejemplo, no corresponde a mediciones reales.' }] : [])],
     };
-    setResultado(parcela); onGuardar(parcela);
-    setMensaje('Parcela guardada para esta sesión. El suelo y la simulación se conectan en el laboratorio.');
   }
-  return <section className="parcel-editor" aria-labelledby="dibujar-titulo">
-    <h2 id="dibujar-titulo">Dibuja tu parcela</h2>
-    <p>Toca los vértices del contorno en orden. Desplaza y acerca el mapa para localizar tu terreno. También puedes escribir coordenadas con el teclado.</p>
-    <Suspense fallback={<p role="status">Cargando mapa…</p>}><MapaParcela puntos={puntos} bordes={cuadricula?.bordes ?? sinBordes} onPunto={agregar} /></Suspense>
-    <form className="parcel-coordinate-form" onSubmit={(e) => {
-      e.preventDefault(); const lon = Number(longitud), lat = Number(latitud);
-      if (!longitud.trim() || !latitud.trim() || !Number.isFinite(lon) || !Number.isFinite(lat) || Math.abs(lon) > 180 || Math.abs(lat) >= 85) { setMensaje('Escribe coordenadas válidas: longitud −180 a 180; latitud −85 a 85.'); return; }
-      agregar([lon, lat]); setLongitud(''); setLatitud('');
-    }}>
-      <label>Longitud<input required type="number" step="any" min="-180" max="180" value={longitud} onChange={(e) => setLongitud(e.target.value)} /></label>
-      <label>Latitud<input required type="number" step="any" min="-84.999999" max="84.999999" value={latitud} onChange={(e) => setLatitud(e.target.value)} /></label>
-      <button type="submit">Agregar vértice</button>
-    </form>
-    <p>{puntos.length} vértices · límite de 200</p>
-    {puntos.length > 0 && <details><summary>Ver coordenadas del contorno</summary><ol>{puntos.map(([lon, lat], i) => <li key={i}>{lon.toFixed(6)}, {lat.toFixed(6)}</li>)}</ol></details>}
-    <div className="parcel-actions">
-      <button disabled={!puntos.length} onClick={() => cambiar(puntos.slice(0, -1))}>Deshacer vértice</button>
-      <button disabled={!puntos.length} onClick={() => cambiar([])}>Reiniciar</button>
-      <button disabled={puntos.length < 3 || cargando} onClick={preparar}>Generar cuadrícula</button>
+  function usar(parcela: Parcela) {
+    onGuardar(parcela);
+    window.location.hash = '/laboratorio';
+  }
+  async function confirmar() {
+    if (!cuadricula?.ok) return;
+    const c = cuadricula.valor;
+    peticion.current?.abort();
+    const control = new AbortController();
+    peticion.current = control;
+    setEstado({ tipo: 'consultando' });
+    const r = await obtenerTerreno({ tamanoCeldaM: c.parcela.tamanoCeldaM, celdas: c.parcela.celdas.map(({ id: celda, i, j, centro }) => ({ id: celda, i, j, centro })) }, { senal: control.signal });
+    if (control.signal.aborted) return;
+    if (!r.ok) { setEstado({ tipo: 'error', mensaje: r.error.motivo }); return; }
+    setEstado({ tipo: 'nada' });
+    usar(construir(c, r));
+  }
+
+  function agregarCoordenada(e: FormEvent) {
+    e.preventDefault();
+    const lon = Number(longitud), lat = Number(latitud);
+    if (!longitud.trim() || !latitud.trim() || !Number.isFinite(lon) || !Number.isFinite(lat) || Math.abs(lon) > 180 || Math.abs(lat) >= 85) {
+      setErrorCoordenadas('Longitud entre −180 y 180; latitud entre −85 y 85.');
+      return;
+    }
+    setErrorCoordenadas('');
+    agregar([lon, lat]);
+    setLongitud(''); setLatitud('');
+    setCentrar((n) => n + 1);
+  }
+
+  const area = cuadricula?.ok ? cuadricula.valor.parcela.areaHa : null;
+  const celdas = cuadricula?.ok ? cuadricula.valor.parcela.celdas.length : null;
+  const resumen = puntos.length === 0 ? 'Haz clic en el mapa para marcar el primer vértice'
+    : `${puntos.length} ${puntos.length === 1 ? 'vértice' : 'vértices'}${area != null ? ` · ${area.toLocaleString('es-MX', { maximumFractionDigits: 2 })} ha · ${celdas} celdas` : puntos.length < 3 ? ' · faltan ' + (3 - puntos.length) : ''}`;
+
+  return <section className="dibujo" aria-labelledby={`${id}-titulo`}>
+    <div className="dibujo-cabeza">
+      <h2 id={`${id}-titulo`} tabIndex={-1}>Dibuja tu parcela</h2>
+      <p>Marca las esquinas en el mapa. Arrastra un vértice para moverlo o el punto de en medio de un lado para agregar uno.</p>
     </div>
-    {cuadricula && <div className="parcel-summary">
-      <p>{cuadricula.parcela.areaHa.toLocaleString('es-MX', { maximumFractionDigits: 3 })} ha · {cuadricula.parcela.celdas.length} celdas · lado {cuadricula.parcela.tamanoCeldaM.toFixed(1)} m. Los bordes usan solo su fracción dentro del contorno.</p>
-      <button disabled={cargando} onClick={() => void consultar()}>{cargando ? 'Consultando…' : 'Confirmar y consultar elevación / reintentar'}</button>
-      <button disabled={cargando} onClick={() => { onGuardar(cuadricula.parcela); setResultado(cuadricula.parcela); setMensaje('Contorno guardado sin elevación. Relieve NO_EVALUABLE.'); }}>Guardar sin elevación</button>
-    </div>}
-    <p role="status">{mensaje}</p>
-    {resultado && <div><p>Terreno: {resultado.terreno.estado}. Fuente: {resultado.terreno.fuente.nombre}.</p>
-      {resultado.advertencias?.map((a, i) => <p key={i}>{a.mensaje}</p>)}
-      <p>{resultado.celdas.filter((c) => c.elevacionM === null).length} celdas sin elevación; no se sustituyen por cero.</p>
-      <a className="terrain-button" href="#/laboratorio">Continuar al laboratorio</a>
-    </div>}
+    <Suspense fallback={<div className="mapa-dibujo mapa-dibujo-carga" role="status">Cargando mapa…</div>}>
+      <MapaParcela puntos={puntos} bordes={cuadricula?.ok ? cuadricula.valor.bordes : sinBordes} onPunto={agregar} onMover={mover} onInsertar={insertar} onBorrar={borrar} centrar={centrar}>
+        {(mapa) => <>
+        <div className="mapa-capa dibujo-barra" role="toolbar" aria-label="Herramientas de dibujo" aria-orientation="vertical">
+          <BotonHerramienta nombre="Deshacer" icono={iconos.deshacer} onClick={deshacer} disabled={!historial.length} />
+          <BotonHerramienta nombre="Borrar todo" icono={iconos.borrar} onClick={() => cambiar([])} disabled={!puntos.length} />
+          <BotonHerramienta ref={botonCoordenadas} nombre="Agregar por coordenadas" icono={iconos.coordenadas} onClick={() => setCoordenadas((v) => !v)} activo={coordenadas} />
+          <BotonHerramienta nombre="Centrar en el contorno" icono={iconos.centrar} onClick={() => setCentrar((n) => n + 1)} disabled={!puntos.length} />
+          <span className="dibujo-separador" aria-hidden="true" />
+          <BotonHerramienta nombre="Acercar" icono={iconos.acercar} onClick={mapa.acercar} />
+          <BotonHerramienta nombre="Alejar" icono={iconos.alejar} onClick={mapa.alejar} />
+          <span className="dibujo-separador" aria-hidden="true" />
+          <BotonHerramienta nombre="Cómo dibujar" icono={iconos.ayuda} onClick={() => setAyuda((v) => !v)} activo={ayuda} />
+        </div>
+
+        {coordenadas && <form className="mapa-capa dibujo-pop" onSubmit={agregarCoordenada} aria-label="Agregar vértice por coordenadas" onKeyDown={(e) => { if (e.key === 'Escape') { setCoordenadas(false); botonCoordenadas.current?.focus(); } }}>
+          <label>Longitud<input autoFocus inputMode="decimal" type="number" step="any" min="-180" max="180" value={longitud} onChange={(e) => setLongitud(e.target.value)} placeholder="-95.53" /></label>
+          <label>Latitud<input inputMode="decimal" type="number" step="any" min="-84.999999" max="84.999999" value={latitud} onChange={(e) => setLatitud(e.target.value)} placeholder="18.03" /></label>
+          <button type="submit" className="dibujo-boton">Agregar</button>
+          {errorCoordenadas && <p role="alert">{errorCoordenadas}</p>}
+        </form>}
+
+        {ayuda && <div className="mapa-capa dibujo-pop dibujo-ayuda" role="note">
+          <p><strong>Clic</strong> en el mapa: agrega un vértice.</p>
+          <p><strong>Arrastra</strong> un vértice: lo mueve.</p>
+          <p><strong>Arrastra</strong> el punto medio de un lado: agrega uno ahí.</p>
+          <p><strong>Doble clic</strong> o clic derecho en un vértice: lo borra (con teclado, Suprimir).</p>
+        </div>}
+
+        <p className="mapa-capa dibujo-chip" role="status">{resumen}</p>
+
+        {(cuadricula || aviso) && <div className="mapa-capa dibujo-final">
+          {aviso && <p className="dibujo-error" role="alert">{aviso}</p>}
+          {cuadricula && !cuadricula.ok && <p className="dibujo-error" role="alert">{cuadricula.motivo}</p>}
+          {cuadricula?.ok && estado.tipo === 'error' && <>
+            <p className="dibujo-error" role="alert">No se pudo consultar la elevación. {estado.mensaje}</p>
+            <button type="button" className="dibujo-enlace" onClick={() => usar(cuadricula.valor.parcela)}>Continuar sin elevación</button>
+          </>}
+          {cuadricula?.ok && <button type="button" className="dibujo-boton dibujo-usar" disabled={estado.tipo === 'consultando'} onClick={() => void confirmar()}>
+            {estado.tipo === 'consultando' ? 'Consultando elevación…' : estado.tipo === 'error' ? 'Reintentar' : 'Usar esta parcela'}
+            {estado.tipo !== 'consultando' && <span aria-hidden="true">→</span>}
+          </button>}
+        </div>}
+        </>}
+      </MapaParcela>
+    </Suspense>
   </section>;
 }

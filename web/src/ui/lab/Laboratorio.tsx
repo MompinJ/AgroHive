@@ -12,6 +12,7 @@ import { PanelCultivos, type Herramienta } from './PanelCultivos';
 import { PanelEscenarios } from './PanelEscenarios';
 import { PanelComparacion } from './PanelComparacion';
 import { Aviso } from './piezas';
+import { Globo } from './Globo';
 import './lab.css';
 
 const Escena = lazy(() => import('../../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
@@ -97,13 +98,14 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
     return () => clearTimeout(t);
   }, [aviso]);
 
-  // En Cultivos la escena conserva el ultimo resultado mientras el motor recalcula, para que
-  // pintar no deje la parcela vacia; lo pintado se cubre con su marca hasta que llega lo nuevo.
-  // En Escenarios y Comparacion solo se muestra el resultado vigente.
-  const ultimo = useRef<{ rotacion: string; ciclo: number; valor: ResultadoCeldas } | null>(null);
-  if (celdasListas && plan && visible) ultimo.current = { rotacion: plan.rotacionId, ciclo: visible.ciclo, valor: celdas!.valor };
-  const resultado = celdasListas ? celdas!.valor
-    : paso === 'cultivos' && ultimo.current && ultimo.current.rotacion === plan?.rotacionId && ultimo.current.ciclo === visible?.ciclo ? ultimo.current.valor : null;
+  // La escena conserva el ultimo resultado de la misma rotacion y ciclo mientras llega el nuevo
+  // (otra fecha, escenario o plan recalculado), para que no parpadee vacia; lo pintado se cubre
+  // con su marca hasta que llega lo nuevo. Las cifras de los paneles solo usan el vigente.
+  const ultimo = useRef<{ rotacion: string; ciclo: number; fecha: string; valor: ResultadoCeldas } | null>(null);
+  if (celdasListas && plan && visible) ultimo.current = { rotacion: plan.rotacionId, ciclo: visible.ciclo, fecha, valor: celdas!.valor };
+  const previo = !celdasListas && ultimo.current && ultimo.current.rotacion === plan?.rotacionId && ultimo.current.ciclo === visible?.ciclo ? ultimo.current : null;
+  const resultado = celdasListas ? celdas!.valor : previo?.valor ?? null;
+  const fechaEscena = previo?.fecha ?? fecha;
 
   const cultivoActivo = cultivoPincel ?? visible?.cultivo ?? null;
   const pincel: PincelEscena | null = useMemo(() => {
@@ -127,11 +129,12 @@ export function Laboratorio({ estado, paso, onAvanzar }: { estado: LaboratorioEs
   const dentroDeVentana = useMemo(() => (plan && datos ? ventanaDelPlan(plan, datos.calendario) : undefined), [plan, datos]);
   const fondo = !webglDisponible ? <div className="lab-sin-webgl" role="alert"><strong>Este navegador no puede dibujar la parcela en 3D (WebGL).</strong><p>Prueba con otro navegador o equipo. Las cifras del motor siguen en los paneles.</p></div>
     : datos && plan ? <Suspense fallback={<div className="lab-fondo-carga" aria-hidden="true" />}>
-      <Escena modo="fondo" hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fecha} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} />
+      <Escena modo="fondo" hud={paso !== 'comparacion'} parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={paso === 'escenarios' ? serie.datos : null} resultado={resultado} fecha={fechaEscena} pincel={pincel} marcas={pendientes} desplazamiento={desplazamiento} dentroDeVentana={dentroDeVentana} />
     </Suspense> : <div className="lab-fondo-carga" aria-hidden="true" />;
 
   const comun = { estado, onAvanzar };
   return <div className={`lab lab-paso-${paso}`}>
+    <Globo />
     <div className="lab-fondo">{fondo}</div>
     {paso === 'comparacion' && <div className="lab-velo" aria-hidden="true" />}
     {paso === 'cultivos' && <PanelCultivos {...comun} herramienta={herramienta} setHerramienta={setHerramienta} cultivoActivo={cultivoActivo} setCultivoPincel={setCultivoPincel} tamano={tamano} setTamano={setTamano} calculando={!estado.calculo || !celdasListas} />}

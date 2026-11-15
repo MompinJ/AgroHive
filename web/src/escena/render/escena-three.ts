@@ -49,6 +49,11 @@ export interface OpcionesRender {
    * x positivo mueve la parcela a la derecha, y positivo la sube. Por defecto, centrada.
    */
   desplazamiento?: { x: number; y: number };
+  /**
+   * Celdas sin cultivo (entre ciclos o sin resultado aun) con pasto verde encima y sin placa,
+   * en vez del suelo gris; solo cuando no hay una vista de color activa. Por defecto, no.
+   */
+  pastoSinCultivo?: boolean;
   /** Azimut de la camara en grados (para la brujula); se avisa solo cuando cambia. */
   onAzimut?: (grados: number) => void;
   onPintar?: (bloque: BloqueEscena | null, fase: 'inicio' | 'trazo' | 'fin') => void;
@@ -98,6 +103,17 @@ export type MotivoCuadro =
   | 'lluvia-animada'
   | 'pintura'
   | 'camara';
+
+/** Lados de tierra de las celdas con pasto (sin cultivo): no dicen humedad. */
+const TIERRA_PASTO = '#6e5038';
+
+/** Verde de pasto con una variacion leve y estable por celda (no es un dato: es el piso sin cultivo). */
+function colorPasto(celdaId: string): string {
+  let h = 0;
+  for (const c of celdaId) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const luz = 42 + (h % 5);
+  return `hsl(${96 + (h % 7)}, 38%, ${luz}%)`;
+}
 
 /** Hueco de una celda sin elevacion: por debajo del punto mas bajo, nunca "a nivel cero". */
 const TOPE_HUECO = -GROSOR_BASE * 0.6;
@@ -431,6 +447,7 @@ export class EscenaThree {
     const desplazamientoAntes = this.opciones.desplazamiento;
     this.opciones = opciones;
     if (desplazamientoAntes?.x !== opciones.desplazamiento?.x || desplazamientoAntes?.y !== opciones.desplazamiento?.y) this.ajustarTamano();
+    if (opciones.pastoSinCultivo && this.modeloActual) this.colorearBase(this.coloresBase);
     this.aplicarMovimiento();
     if (opciones.reducirMovimiento) this.terminarTransiciones();
     if (mascotaAntes !== opciones.mascota && this.modeloActual) void this.construirMascota(this.modeloActual, this.version);
@@ -524,7 +541,7 @@ export class EscenaThree {
     // Conserva la seleccion si la celda sigue existiendo (cambio de fecha, ciclo o escenario).
     this.seleccionar(this.seleccionId ? (modelo.bloques.find((b) => b.celdaId === this.seleccionId) ?? null) : null);
     if (this.marcasActuales.size > 0) this.marcarPintura(this.marcasActuales);
-    if (this.coloresBase) this.colorearBase(this.coloresBase);
+    if (this.coloresBase || this.opciones.pastoSinCultivo) this.colorearBase(this.coloresBase);
   }
 
   /**
@@ -543,13 +560,22 @@ export class EscenaThree {
       this.azulejosBase = null;
     }
     const color = new THREE.Color();
+    // Sin vista de color: pasto encima de las celdas sin cultivo (sus lados siguen de tierra).
+    const sinCultivo = (b: BloqueEscena) => !b.cultivo || b.estadoVisual === 'suelo_desnudo' || b.estadoVisual === 'sin_resultado';
+    const pasto = !colores && this.opciones.pastoSinCultivo && modelo
+      ? new Map(modelo.bloques.filter(sinCultivo).map((b) => [b.celdaId, colorPasto(b.celdaId)]))
+      : null;
     for (const hijo of this.raiz.children) {
-      if (hijo.name.startsWith('placa-')) hijo.visible = !colores;
+      if (hijo.name.startsWith('placa-')) {
+        const sinPlanta = hijo.name === 'placa-suelo_desnudo' || hijo.name === 'placa-sin_resultado';
+        hijo.visible = !colores && !(pasto && sinPlanta);
+      }
       if (hijo.name !== 'suelo' || !(hijo instanceof THREE.InstancedMesh) || !modelo) continue;
       const bloques = this.bloquesPorMalla.get(hijo) ?? [];
       bloques.forEach((b, k) => {
         const propio = colores?.get(b.celdaId);
         if (propio) color.set(propio);
+        else if (pasto?.has(b.celdaId)) color.set(TIERRA_PASTO);
         else {
           const [r, g, bl] = colorSuelo(b.registro?.humedad ?? null, modelo.grupoSuelo);
           color.setRGB(r / 255, g / 255, bl / 255, THREE.SRGBColorSpace);
@@ -558,7 +584,8 @@ export class EscenaThree {
       });
       if (hijo.instanceColor) hijo.instanceColor.needsUpdate = true;
     }
-    const conColor = colores && modelo ? modelo.bloques.filter((b) => colores.has(b.celdaId)) : [];
+    const arriba = colores ?? pasto;
+    const conColor = arriba && modelo ? modelo.bloques.filter((b) => arriba.has(b.celdaId)) : [];
     if (conColor.length > 0) {
       const geo = new THREE.BoxGeometry(LADO_BLOQUE, 0.04, LADO_BLOQUE);
       const mat = new THREE.MeshLambertMaterial();
@@ -567,7 +594,7 @@ export class EscenaThree {
       conColor.forEach((b, k) => {
         m.makeTranslation(b.x, this.topeDe(b) + (this.losaDe(b) ? DETALLE_LOSA : 0) + 0.02, b.z);
         malla.setMatrixAt(k, m);
-        malla.setColorAt(k, color.set(colores!.get(b.celdaId)!));
+        malla.setColorAt(k, color.set(arriba!.get(b.celdaId)!));
       });
       malla.name = 'base-vista';
       this.scene.add(malla);

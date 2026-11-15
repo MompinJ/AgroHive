@@ -41,6 +41,5 @@ export default function DashboardBalance({ serie }: { serie: EstadoSerieBalance 
       </>}
     </Card>)}
     {datos.advertencias?.map((a, i) => <p className="ui-warning" key={i}>{a.mensaje}</p>)}
-    <details><summary>Fuentes de las series del balance</summary><ul>{datos.fuentes.map((f, i) => <li key={i}>{f.url ? <a href={f.url} target="_blank" rel="noreferrer">{f.nombre}</a> : f.nombre}{f.cita ? ` · ${f.cita}` : ''}</li>)}</ul></details>
   </section>;
 }

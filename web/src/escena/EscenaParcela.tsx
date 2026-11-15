@@ -166,6 +166,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       pincel: !!pincel,
       onPintar,
       onAzimut: setAzimut,
+      pastoSinCultivo: modo === 'fondo',
       ...(desplazamiento ? { desplazamiento } : {}),
       onSeleccion: setSeleccion,
       onContexto: (estado: 'perdido' | 'restaurado') => setContexto(estado),

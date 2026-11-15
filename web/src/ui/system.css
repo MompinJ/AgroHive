@@ -20,15 +20,12 @@ button { font: inherit; }
 .card > .quiet-note { font-size: var(--text-caption); }
 .card > h2, .card > .eyebrow { margin-bottom: 0; }
 .page-intro { max-width: 70ch; }
-.button, .terrain-button, .parcel-editor button { border-radius: var(--radius-pill); background: var(--color-action); color: var(--color-on-action); border: 1px solid var(--color-action); min-height: 44px; font-weight: 400; }
+.button, .terrain-button { border-radius: var(--radius-pill); background: var(--color-action); color: var(--color-on-action); border: 1px solid var(--color-action); min-height: 44px; font-weight: 400; }
 .button-secondary, .terrain-button-secondary { background: transparent; color: var(--color-text); border-color: var(--color-control-border); }
 .small-tag { border-radius: var(--radius-pill); color: var(--color-text-body); border-color: var(--color-border); }
 .eyebrow, .quiet-note { color: var(--color-text-muted); font-size: var(--text-caption); }
 .data-state { background: var(--color-panel); color: var(--color-text); border-radius: var(--radius-input); border-color: var(--color-border); }
 .segmented input:checked + span { background: var(--color-action); color: var(--color-on-action); }
-.parcel-coordinate-form input { background: var(--color-input); border-color: var(--color-control-border); color: var(--color-text); }
-.parcel-editor { color: var(--color-text); background: var(--color-surface); }
-.parcel-editor :focus-visible { outline-color: var(--color-focus); }
 .numeric, .metrics-list dd, .scenario-results dd { font-variant-numeric: tabular-nums; }
 .metrics-list dd { font-size: 1.25rem; font-weight: 400; color: var(--color-text); }
 .metrics-list dt { font-size: var(--text-caption); }
@@ -51,9 +48,9 @@ th, td { text-align: start; padding: 12px; border-bottom: 1px solid var(--color-
 dialog { overscroll-behavior: contain; }
 .lab-connected .escena { --escena-tinta: var(--color-text); --escena-tenue: var(--color-text-body); --escena-linea: var(--color-border); --escena-fondo: var(--color-surface); }
 .lab-connected .escena button { border-radius: var(--radius-pill); color: var(--color-text); border-color: var(--color-control-border); background: var(--color-surface); }
-@media (hover: hover) { .ui-action:not(:disabled):hover, .button:not(:disabled):hover, .terrain-button:hover, .parcel-editor button:not(:disabled):hover { background: var(--color-action-hover); color: var(--color-on-action); } }
+@media (hover: hover) { .ui-action:not(:disabled):hover, .button:not(:disabled):hover, .terrain-button:hover { background: var(--color-action-hover); color: var(--color-on-action); } }
 @media (prefers-reduced-motion: no-preference) {
-  .ui-action, .button, .terrain-button, .parcel-editor button { transition: transform 150ms ease-out, background-color 150ms ease-out; }
-  .ui-action:not(:disabled):active, .button:not(:disabled):active, .terrain-button:active, .parcel-editor button:not(:disabled):active { transform: scale(.96); }
+  .ui-action, .button, .terrain-button { transition: transform 150ms ease-out, background-color 150ms ease-out; }
+  .ui-action:not(:disabled):active, .button:not(:disabled):active, .terrain-button:active { transform: scale(.96); }
 }
 @media (forced-colors: active) { .card, .ui-action, .button { border: 1px solid CanvasText; } :focus-visible { outline-color: Highlight; } }

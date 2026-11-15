@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { demo } from '../ui/demo';
 import type { Parcela } from '../../../contratos/tipos/contratos';
 import { DibujarParcela } from '../ui/DibujarParcela';
@@ -6,7 +7,22 @@ import field from '../ui/assets/terreno-demo-v1.png';
 import polygon from '../ui/assets/terreno-poligono-v1.png';
 import '../ui/terreno.css';
 
+/** Baja al editor del contorno y le da el foco (sin animar si se pide menos movimiento). */
+function irAlEditor(editor: HTMLElement | null) {
+  if (!editor) return;
+  const reducir = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  editor.scrollIntoView({ behavior: reducir ? 'auto' : 'smooth', block: 'start' });
+  editor.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
+}
+
 export function Terreno({ polygonMode, onSelectDemo, parcela, onGuardar }: { polygonMode: boolean; onSelectDemo: () => void; parcela: Parcela | null; onGuardar: (p: Parcela) => void }) {
+  const editor = useRef<HTMLDivElement>(null);
+  // Al entrar en modo poligono, despues de que App sube la pagina y enfoca el h1 al cambiar de ruta.
+  useEffect(() => {
+    if (!polygonMode) return;
+    const t = setTimeout(() => irAlEditor(editor.current), 60);
+    return () => clearTimeout(t);
+  }, [polygonMode]);
   return <div className="terrain-page">
     <section className="terrain-hero" aria-labelledby="terreno-titulo">
       <div className="terrain-copy">
@@ -14,7 +30,7 @@ export function Terreno({ polygonMode, onSelectDemo, parcela, onGuardar }: { pol
         <p className="terrain-intro">Explora el caso de ejemplo o dibuja el contorno de tu parcela para consultar su relieve.</p>
         <div className="terrain-actions">
           <a className="terrain-button" href="#/laboratorio" onClick={onSelectDemo}>Abrir laboratorio demo</a>
-          <a className="terrain-button terrain-button-secondary" href="#/terreno?modo=poligono" aria-current={polygonMode ? 'location' : undefined}>Dibujar mi parcela</a>
+          <a className="terrain-button terrain-button-secondary" href="#/terreno?modo=poligono" aria-current={polygonMode ? 'location' : undefined} onClick={() => { if (polygonMode) irAlEditor(editor.current); }}>Dibujar mi parcela</a>
         </div>
       </div>
       <div className="terrain-art" aria-hidden="true">
@@ -44,6 +60,6 @@ export function Terreno({ polygonMode, onSelectDemo, parcela, onGuardar }: { pol
         </div>
       </section>
     </div>
-    {polygonMode && <DibujarParcela onGuardar={onGuardar} guardada={parcela} />}
+    <div ref={editor} className="terrain-editor">{polygonMode && <DibujarParcela onGuardar={onGuardar} guardada={parcela} />}</div>
   </div>;
 }

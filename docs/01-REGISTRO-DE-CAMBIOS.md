@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Terreno, rotaciones sin límite, laboratorio sin fuentes y comparación directa (Eduardo)
+
+- **Archivos:** `web/src/paginas/Terreno.tsx`, `ui/MapaParcela.tsx`, `ui/DibujarParcela.tsx`, `ui/terreno.css`, `ui/system.css`; `ui/planes.ts` y `planes.test.ts`, `ui/useLaboratorio.ts`, `ui/ControlTiempo.tsx`, `ui/DashboardBalance.tsx`, `ui/lab/` (`PanelCultivos`, `PanelEscenarios`, `PanelComparacion`, `Laboratorio`, `piezas`, `lab.css`, nuevos `iconos.tsx` y `Globo.tsx`); `escena/render/escena-three.ts`, `escena/EscenaParcela.tsx`; `docs/06`.
+- **Cambio:** dibujo de parcela con vértices arrastrables y barra de íconos; rotaciones 1, 2, 3 con ciclos ilimitados guardadas en el navegador; herramientas con íconos y globo; sin fuentes en el laboratorio; escenarios con nombres simples; pasto en celdas sin cultivo; línea de tiempo que aplica al soltar; comparación por tarjetas con debilidades. Detalle en 06, "Terreno, rotaciones sin límite y comparación directa".
+- **Por qué:** pedido de Eduardo; front a su cargo (D1) y control administrativo dado por Mompin.
+- **Pendiente:** la consulta real de elevación desde el editor nuevo no se probó en vivo; mover vértices con flechas del teclado.
+- **Decisiones afectadas:** ninguna de alcance. Las fuentes siguen completas en Método y fuentes.
+
 ### 2026-11-15 — Vistas de la base (cultivos, validación, agua) y retiro del modo 2D (Eduardo)
 
 - **Archivos:** `web/src/escena/vistas.ts` y `vistas.test.ts` (nuevos), `escena/EscenaParcela.tsx`, `escena/render/escena-three.ts`, `escena/render/camara.ts`, `escena/ficha.ts`, `escena/escena.css`; `ui/lab/Laboratorio.tsx`, `ui/lab/PanelCultivos.tsx`, `ui/lab/lab.css`, `ui/planes.ts`, `ui/useLaboratorio.ts`; se borran `ui/Parcela2D.tsx`, `ui/Parcela2D.test.tsx` y `ui/parcela2d.css`; `docs/06`, `docs/11`, `web/README.md`, `AgroVault/Compartido/{Reglas,Resumen}.md`.
