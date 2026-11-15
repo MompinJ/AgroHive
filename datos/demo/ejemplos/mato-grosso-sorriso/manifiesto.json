@@ -1,0 +1,158 @@
+{
+  "id": "mato-grosso-sorriso",
+  "grabado": "2026-11-15T16:27:32+00:00",
+  "regrabado": {
+    "smap": "2026-11-15T16:28:56+00:00"
+  },
+  "parcela": "ejemplo-mato-grosso-sorriso",
+  "centroide": [
+    -55.79753824000001,
+    -12.599928420000001
+  ],
+  "coordenadasIlustrativas": true,
+  "ventanaClima": [
+    "2005-10-01",
+    "2025-12-31"
+  ],
+  "versionContrato": "0.15.0",
+  "datos": {
+    "clima": {
+      "estado": "EVALUABLE",
+      "archivo": "respuestas/serie-clima.json",
+      "contrato": "serie-clima#"
+    },
+    "suelo": {
+      "estado": "EVALUABLE",
+      "archivo": "respuestas/suelo.json",
+      "contrato": "suelo#"
+    },
+    "terreno": {
+      "estado": "EVALUABLE",
+      "archivo": "respuestas/terreno.json",
+      "contrato": "parcela#/properties/terreno"
+    },
+    "proxima-temporada": {
+      "estado": "EXPLORATORIO",
+      "archivo": "respuestas/proxima-temporada.json",
+      "contrato": "proxima-temporada#"
+    },
+    "calendario": {
+      "estado": "EVALUABLE",
+      "archivo": "respuestas/calendario.json",
+      "contrato": "calendario-local#",
+      "entradasEvaluables": 1
+    },
+    "plagas": {
+      "estado": "EVALUABLE",
+      "archivo": "respuestas/plagas.json",
+      "contrato": "plagas#"
+    },
+    "ndvi": {
+      "estado": "EXPLORATORIO",
+      "archivo": "respuestas/ndvi.json",
+      "contrato": "ndvi#"
+    },
+    "smap": {
+      "estado": "EVALUABLE",
+      "archivo": "respuestas/smap.json",
+      "contrato": "smap#",
+      "origen": "servidor publico https://64-23-143-102.sslip.io"
+    },
+    "cdl": {
+      "estado": "NO_EVALUABLE",
+      "archivo": "respuestas/cdl.json",
+      "contrato": "ee-uu#/$defs/cdl"
+    },
+    "ssurgo": {
+      "estado": "NO_EVALUABLE",
+      "archivo": "respuestas/ssurgo.json",
+      "contrato": "ee-uu#/$defs/ssurgo"
+    },
+    "worldcover": {
+      "estado": "EVALUABLE",
+      "item": "ESA_WorldCover_10m_2021_v200_S15W057",
+      "fraccionCultivo": 1.0,
+      "pixeles": 340,
+      "fuente": "Zanaga, D. et al. (2022). ESA WorldCover 10 m 2021 v200. doi:10.5281/zenodo.7254221. CC BY 4.0. Servido por Microsoft Planetary Computer (coleccion esa-worldcover).",
+      "nota": "Fraccion de pixeles de clase 40 (Cropland) en la caja envolvente del poligono."
+    }
+  },
+  "archivos": [
+    "cache/estacional_-25_-112.json",
+    "cache/imerg_v1_-12.55_-55.75_20051001_20251231.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20050709_20051129.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20051130_20060422.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20060423_20060913.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20060914_20070204.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20070205_20070628.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20070629_20071119.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20071120_20080411.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20080412_20080902.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20080903_20090124.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20090125_20090617.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20090618_20091108.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20091109_20100401.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20100402_20100823.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20100824_20110114.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20110115_20110607.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20110608_20111029.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20111030_20120321.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20120322_20120812.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20120813_20130103.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20130104_20130527.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20130528_20131018.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20131019_20140311.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20140312_20140802.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20140803_20141224.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20141225_20150517.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20150518_20151008.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20151009_20160229.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20160301_20160722.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20160723_20161213.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20161214_20170506.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20170507_20170927.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20170928_20180218.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20180219_20180712.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20180713_20181203.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20181204_20190426.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20190427_20190917.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20190918_20200208.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20200209_20200701.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20200702_20201122.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20201123_20210415.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20210416_20210906.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20210907_20220128.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20220129_20220621.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20220622_20221112.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20221113_20230405.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20230406_20230827.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20230828_20240118.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20240119_20240610.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20240611_20241101.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20241102_20250325.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20250326_20250816.json",
+    "cache/ndvi_v1_-12.59993_-55.79754_20250817_20260107.json",
+    "cache/olm_urls_v1.json",
+    "cache/plagas_v1_1048505_-12.60_-55.80_1.5_2000_2026.json",
+    "cache/plagas_v1_1727733_-12.60_-55.80_1.5_2000_2026.json",
+    "cache/plagas_v1_1792564_-12.60_-55.80_1.5_2000_2026.json",
+    "cache/plagas_v1_2012126_-12.60_-55.80_1.5_2000_2026.json",
+    "cache/plagas_v1_5109855_-12.60_-55.80_1.5_2000_2026.json",
+    "cache/plagas_v1_9083295_-12.60_-55.80_1.5_2000_2026.json",
+    "cache/power_v2_-12.500_-55.625_20051001_20251231.json",
+    "cache/suelo_isric_v2_-5040_-22319.json",
+    "cache/suelo_olm_v1_-12600_-55798.json",
+    "cache/terrarium/14/5652/8770.png",
+    "parcela.json",
+    "respuestas/calendario.json",
+    "respuestas/cdl.json",
+    "respuestas/ndvi.json",
+    "respuestas/plagas.json",
+    "respuestas/proxima-temporada.json",
+    "respuestas/serie-clima.json",
+    "respuestas/smap.json",
+    "respuestas/ssurgo.json",
+    "respuestas/suelo.json",
+    "respuestas/terreno.json"
+  ]
+}
