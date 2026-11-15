@@ -21,7 +21,7 @@ npm run preview
 ## Vistas y estado
 
 - `#/`: P0, presentación y acceso a demo o entrada de polígono.
-- `#/terreno`: paso 1, Isla, Veracruz (2 hectáreas ficticias) o `?modo=poligono` para dibujar la parcela.
+- `#/terreno`: paso 1, una de las seis parcelas de ejemplo mundiales (`demo/ejemplos.ts`) o `?modo=poligono` para dibujar la parcela.
 - `#/laboratorio`: paso 2, Cultivos: rotación, ciclo y brocha sobre la escena de fondo.
 - `#/escenarios`: paso 3, escenario seco/habitual/lluvioso, métricas del motor y dock del tiempo.
 - `#/comparacion`: paso 4, ranking por robustez, explicación, gráficas de agua y próxima temporada.
@@ -39,7 +39,7 @@ App conserva las selecciones de interfaz mientras permanece montada, incluso al 
 - El adaptador no importa el ejemplo de resultados: sus mediciones, años históricos y ranking son ficticios. Todos los indicadores continúan NO_EVALUABLE. Un cultivo ausente o desconocido también se muestra como NO_EVALUABLE. No se generan geometrías, parámetros de cultivo ni mediciones.
 - Compatibilidad con contratos 0.5.0: se conserva la corrección integrada por Mompin en `main` (2deb464): los ciclos del JSON de ejemplo se interpretan como `Ciclo[]` del tipo generado, y el ejemplo se valida contra su schema en las pruebas de contratos. La edición de fechas, temporadas y calendario local pertenece a la integración de A3.4 y sigue pendiente.
 - R1 parte de maíz/frijol/maíz del ejemplo del contrato; R0 y R2 son alternativas locales para probar los controles, sin parámetros científicos ni resultados. Las secuencias no son recomendaciones agronómicas.
-- Isla y 2 ha son el supuesto de la demo del doc 06; la verificación de zona está pendiente según doc 13. La ilustración es decorativa, sin datos geográficos.
+- Los ejemplos son polígonos ficticios sobre tierra de cultivo real con datos de la API grabados (`datos/demo/ejemplos/`, decisión "Demo mundial" del doc 13). La ilustración es decorativa, sin datos geográficos.
 - El mapa (A2.10), cuadrícula (A2.9), escena y motor se integrarán después. No hay botones que simulen calcular, cambiar a 3D ni dibujar polígonos.
 - **Worker integrado:** `src/motor/worker.ts` y `crearClienteMotor()` de Mompin. A1.2 comprueba respuesta mediante `olvidar`; A3.4 ejecuta planes y consulta celdas mediante el protocolo existente. No se usa PING/READY.
 - En P1–P3, método y fuentes se consultan mediante un acordeón nativo sin perder selecciones. El enlace a NASA POWER solo se abre por acción explícita.
@@ -116,7 +116,7 @@ Referencias técnicas: [Leaflet](https://leafletjs.com/reference.html), [Turf in
 
 La referencia visual está en `../DESIGN.md`. `src/ui/tokens.css` contiene los valores globales; `system.css`, los componentes y estados comunes. Inicio y Terreno usan alias semánticos. Los colores de estados del motor en la escena se conservan. No se incorporó GT America porque no se proporcionó; se usa la pila local declarada.
 
-Los pasos 2 a 4 usan `ui/lab/` (antes `LaboratorioConectado`) y `useLaboratorio`. La demo carga datos precargados de Isla con contorno ficticio y mediciones regionales reales; una parcela propia llama al cargador de Eduardo (`cargarDatosParcela`) con su centroide, ventana estándar y cancelación. Clima, suelo y catálogo deben responder; la capa próxima temporada es opcional. Se muestran motivos de error y reintento. No se hereda el calendario de Isla para otras parcelas.
+Los pasos 2 a 4 usan `ui/lab/` (antes `LaboratorioConectado`) y `useLaboratorio`. Un ejemplo se carga con `cargarEjemplo(id)` (datos reales grabados, sirven sin red; sus rotaciones de arranque salen de sus cultivos sugeridos y del calendario del lugar); una parcela propia llama al cargador de Eduardo (`cargarDatosParcela`) con su centroide, ventana estándar y cancelación. Clima, suelo y catálogo deben responder; la capa próxima temporada es opcional. Se muestran motivos de error y reintento. El bioma de la escena sale de Köppen-Geiger (`geo/koppen.ts`).
 
 Los planes R1 a R4, las selecciones y la banda se conservan en App durante la navegación. Los cultivos usan ids del catálogo; las fechas muestran por qué y su fuente. Cada cambio de plan invalida resultados y reemplaza el Worker, ignorando respuestas obsoletas. Escenario/ciclo/fecha solo consultan resultados de celdas. La escena se carga diferida. El rango de próxima temporada se puede apagar; sus números, años análogos, advertencias y exclusiones salen del motor.
 

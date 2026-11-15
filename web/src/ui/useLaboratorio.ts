@@ -1,13 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CalendarioLocal, CatalogoCultivos, Escenario, Parcela, PlanSiembra, ProximaTemporadaAproximada, SerieClima, Suelo, TablaSuelos } from '../../../contratos/tipos/contratos';
+import { cargarEjemplo, listarEjemplos, type DatosEjemplo } from '../demo/ejemplos';
 import { usarDatosParcela } from '../api/usarDatosParcela';
-import { avisosDe, type AvisoDatos } from '../api/datosParcela';
+import type { AvisoDatos } from '../api/datosParcela';
 import { crearClienteMotor, type ClienteMotor } from '../motor/cliente';
 import type { ResultadoRanking } from '../motor/ranking';
 import type { VistaProximaTemporada } from '../motor/proxima';
-import { calendarioIsla, claveDeParcela, planesIniciales, reconstruirPlan } from './planes';
+import { claveDeParcela, planesIniciales, reconstruirPlan } from './planes';
 
-export interface DatosLaboratorio { esDemo: boolean; parcela: Parcela; serie: SerieClima; suelo: Suelo | null; catalogo: CatalogoCultivos; tabla: TablaSuelos; calendario: CalendarioLocal | null; capa: ProximaTemporadaAproximada | null; avisos: string[]; avisosDatos: AvisoDatos[] }
+export interface DatosLaboratorio {
+  esDemo: boolean; parcela: Parcela; serie: SerieClima; suelo: Suelo | null; catalogo: CatalogoCultivos; tabla: TablaSuelos; calendario: CalendarioLocal | null; capa: ProximaTemporadaAproximada | null; avisos: string[]; avisosDatos: AvisoDatos[];
+  /** Solo en una parcela de ejemplo (demo/ejemplos.ts): el lugar, la evidencia grabada (sirve sin red), el clima de Koppen y lo que no se grabo. */
+  ejemplo?: DatosEjemplo['ejemplo']; evidencia?: DatosEjemplo['evidencia']; clima?: DatosEjemplo['clima']; bioma?: DatosEjemplo['bioma']; faltan?: DatosEjemplo['faltan'];
+}
+/** Ejemplo que se abre si no se eligio ninguno (el primero del indice). */
+export const EJEMPLO_INICIAL = listarEjemplos()[0]?.id ?? '';
 type Calculo = { clave: string; ranking: ResultadoRanking; proxima: VistaProximaTemporada; cliente: ClienteMotor };
 
 /**
@@ -28,13 +35,17 @@ function guardarPlanes(clave: string, planes: PlanSiembra[]) {
   try { localStorage.setItem(LLAVE_PLANES + clave, JSON.stringify(planes)); } catch { /* sin almacenamiento: queda en memoria */ }
 }
 
+/** En un ejemplo, las rotaciones de arranque salen de sus cultivos sugeridos. */
+function opcionesIniciales(d: DatosLaboratorio) {
+  return d.ejemplo ? { sugeridos: d.ejemplo.cultivosSugeridos, catalogo: d.catalogo } : undefined;
+}
 export function conLimite<T>(promesa: Promise<T>, ms = 120000): Promise<T> {
   return new Promise((resolve, reject) => {
     const reloj = setTimeout(() => reject(new Error('El motor no respondió a tiempo. Reintenta el cálculo.')), ms);
     promesa.then((r) => { clearTimeout(reloj); resolve(r); }, (e: unknown) => { clearTimeout(reloj); reject(e); });
   });
 }
-export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
+export function useLaboratorio(parcela: Parcela | null, habilitado: boolean, ejemploId: string = EJEMPLO_INICIAL) {
   const [rotacion, setRotacion] = useState('R1');
   const [ciclo, setCiclo] = useState(1);
   const [escenario, setEscenario] = useState<Escenario>('habitual');
@@ -52,23 +63,19 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
   const [calculo, setCalculo] = useState<Calculo | null>(null);
   const [errorMotor, setErrorMotor] = useState('');
   const [revision, setRevision] = useState(0);
-  const claveParcela = JSON.stringify(parcela ?? 'demo');
+  const claveParcela = JSON.stringify(parcela ?? `ejemplo:${ejemploId}`);
   useEffect(() => { if (habilitado) setIniciado(true); }, [habilitado]);
   useEffect(() => {
     if (!iniciado) return;
     const control = new AbortController(); let activo = true;
     setError('');
     async function cargar() {
-      const [cat, tab] = await Promise.all([import('../../../datos/catalogos/cultivos.json'), import('../../../datos/catalogos/suelos.json')]);
       let siguiente: DatosLaboratorio;
       if (!parcela) {
-        const [p, serie, suelo, capa] = await Promise.all([import('../escena/demo-motor'), import('../../../datos/demo/respuestas/serie-clima.json'), import('../../../datos/demo/respuestas/suelo.json'), import('../../../datos/demo/respuestas/proxima-temporada.json')]);
-        const clima = serie.default as unknown as SerieClima;
-        const sueloDatos = suelo.default as Suelo;
-        const proxima = capa.default as ProximaTemporadaAproximada;
-        siguiente = { esDemo: true, parcela: p.parcelaConTerrenoDemo(), serie: clima, suelo: sueloDatos, capa: proxima, catalogo: cat.default as CatalogoCultivos, tabla: tab.default as TablaSuelos, calendario: calendarioIsla, avisos: ['Paquete precargado de Isla: parcela ficticia con datos climáticos y estimaciones de suelo de fuentes reales. No representa un levantamiento de campo.'], avisosDatos: avisosDe({ clima: { ok: true, datos: clima }, suelo: { ok: true, datos: sueloDatos }, cultivos: { ok: true, datos: cat.default as CatalogoCultivos }, proximaTemporada: { ok: true, datos: proxima } }) };
+        siguiente = await cargarEjemplo(ejemploId);
       } else {
         if (!datosRemotos || remotos.state !== 'ready') return;
+        const tab = await import('../../../datos/catalogos/suelos.json');
         const respuesta = datosRemotos;
         if (!respuesta.clima.ok) throw new Error(respuesta.clima.error.motivo);
         if (!respuesta.suelo.ok) throw new Error(respuesta.suelo.error.motivo);
@@ -89,7 +96,7 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
     if (planesEditados?.clave === claveParcela) return planesEditados.planes;
     // Lo guardado se rearma contra la parcela y el calendario de ahora.
     const guardados = leerPlanes(claveGuardado)?.filter((p) => p.parcelaId === actual.parcela.id).map((p) => reconstruirPlan(p, actual.parcela, actual.calendario));
-    return guardados?.length ? guardados : planesIniciales(actual.parcela, actual.calendario);
+    return guardados?.length ? guardados : planesIniciales(actual.parcela, actual.calendario, opcionesIniciales(actual));
   }, [actual, planesEditados, claveParcela, claveGuardado]);
   const aplicarPlanes = (lista: PlanSiembra[]) => { guardarPlanes(claveGuardado, lista); setPlanes({ clave: claveParcela, planes: lista }); };
   const pila = historia.clave === claveParcela ? historia : { clave: claveParcela, atras: [], adelante: [] };
@@ -138,6 +145,6 @@ export function useLaboratorio(parcela: Parcela | null, habilitado: boolean) {
       fijarPlanes(resto);
       if (rotacion === id) { setRotacion(resto[0]!.rotacionId); setCiclo(1); }
     },
-    restablecerRotaciones: () => { if (actual) fijarPlanes(planesIniciales(actual.parcela, actual.calendario)); setRotacion('R1'); setCiclo(1); }, reintentar: () => { setDatos(null); remotos.reintentar(); setIntento((n) => n + 1); setRevision((n) => n + 1); } };
+    restablecerRotaciones: () => { if (actual) fijarPlanes(planesIniciales(actual.parcela, actual.calendario, opcionesIniciales(actual))); setRotacion('R1'); setCiclo(1); }, reintentar: () => { setDatos(null); remotos.reintentar(); setIntento((n) => n + 1); setRevision((n) => n + 1); } };
 }
 export type LaboratorioEstado = ReturnType<typeof useLaboratorio>;

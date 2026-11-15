@@ -54,7 +54,7 @@ export function PanelEscenarios({ estado, onAvanzar, fecha, rango, serie, celdas
         {!estado.calculo ? <Cargando>Calculando…</Cargando> : <dl className="lab-metricas">
           <div className="lab-tip" data-tip="Agua que el cultivo necesitó y no tuvo en todo el plan"><dt>Agua que faltó</dt><dd>{numero(pilar?.deficitHidrico.deficitTotalMm, ' mm')}</dd></div>
           <div className="lab-tip" data-tip="Parte de lo que el cultivo pidió de agua que no recibió"><dt>Sed del cultivo</dt><dd>{porcentaje(pilar?.deficitHidrico.proporcionDemandaNoCubierta)}</dd></div>
-          <div className="lab-tip" data-tip="Agua de lluvia que sobró y escurrió o se fue al subsuelo"><dt>Agua de más</dt><dd>{numero(pilar?.excesoHidrico?.excesoTotalMm, ' mm')}</dd></div>
+          <div className="lab-tip" data-tip="Lluvia que sobró y bajó más allá de la raíz: el cultivo ya no la aprovecha"><dt>Agua de más</dt><dd>{numero(pilar?.excesoHidrico?.excesoTotalMm, ' mm')}</dd></div>
         </dl>}
       </div>
 

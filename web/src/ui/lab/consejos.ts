@@ -70,7 +70,7 @@ export function consejos(e: EntradaConsejos): Consejo[] {
       const ref = referenciaSiembra(visible.cultivo, visible.temporada, e.calendario);
       const v = ref?.ventana.estado === 'EVALUABLE' ? ref.ventana : null;
       if (v && visible.dentroDeVentana === false) salida.push({ id: 'ventana-fuera', tono: 'ojo', texto: `Tu ${nombreCultivo(visible.cultivo).toLowerCase()} se siembra fuera de su mejor época aquí (${rangoVentana(v)}). Prueba moverla en "Siembra".` });
-      else if (v) salida.push({ id: 'ventana', tono: 'dato', texto: `La mejor época para sembrar ${nombreCultivo(visible.cultivo).toLowerCase()} en esta zona es del ${rangoVentana(v)}.` });
+      else if (v) salida.push({ id: 'ventana', tono: 'dato', texto: `La mejor época para sembrar ${nombreCultivo(visible.cultivo).toLowerCase()} en esta zona es ${/^(cerca|en) /.test(rangoVentana(v)) ? '' : 'del '}${rangoVentana(v)}.` });
       if (ref?.presencia.estado === 'no_registrado') salida.push({ id: 'no-registrado', tono: 'ojo', texto: `${nombreCultivo(visible.cultivo)} casi no se siembra en esta zona. Compáralo con un cultivo que sí se dé aquí.` });
     }
     if (e.plan && !e.plan.ciclos.some((c) => e.leguminosas.has(c.cultivo))) {
@@ -78,7 +78,7 @@ export function consejos(e: EntradaConsejos): Consejo[] {
     }
     const r = e.riesgos?.[0];
     if (r) salida.splice(1, 0, { id: 'plaga', tono: 'ojo', texto: `¡Cuidado! Hay registros de ${r.plaga.toLowerCase()} cerca de aquí y ataca tu ${r.cultivo.toLowerCase()}. Usa el insecticida o se comerá tus plantas (${r.bloques} ${r.bloques === 1 ? 'bloque' : 'bloques'} sin proteger).` });
-    if (e.bioma && e.bioma.tMedia != null && e.bioma.lluvia != null) salida.push({ id: 'bioma', tono: 'dato', texto: `Tu parcela está en ${e.bioma.nombre}: unos ${Math.round(e.bioma.tMedia)} °C en promedio y ${Math.round(e.bioma.lluvia).toLocaleString('es-MX')} mm de lluvia al año. Los cultivos de arriba en la lista son los que mejor van con eso.` });
+    if (e.bioma && e.bioma.tMedia != null && e.bioma.lluvia != null) salida.push({ id: 'bioma', tono: 'dato', texto: `Tu parcela tiene ${e.bioma.nombre}: unos ${Math.round(e.bioma.tMedia)} °C en promedio y ${Math.round(e.bioma.lluvia).toLocaleString('es-MX')} mm de lluvia al año. Los cultivos de arriba en la lista son los que mejor van con eso.` });
     if (humedad) salida.push({ id: 'smap', tono: 'dato', texto: `Según el satélite SMAP, el suelo de tu zona estaba ${nivelSmap(humedad.valor)} el ${fechaLarga(humedad.fecha)} (${dos(humedad.valor)} m³/m³). Es un dato regional, no de tu parcela.` });
     if (verdor) salida.push({ id: 'ndvi', tono: 'dato', texto: `El verdor de la zona (NDVI) era de ${dos(verdor.valor)} el ${fechaLarga(verdor.fecha)} de ${verdor.fecha.slice(0, 4)}: ${nivelNdvi(verdor.valor)}. Mide la vegetación de alrededor, no tu cultivo.` });
   }

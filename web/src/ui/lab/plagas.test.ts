@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { calendarioIsla, pintarCeldas, planesIniciales } from '../planes';
+import { pintarCeldas, planesIniciales } from '../planes';
 import { parcelaConTerrenoDemo } from '../../escena/demo-motor';
 import { celdaCentral, celdasEnRadio, celdasEnRiesgo, firmaMalla, mapaPlagas, plagaDeCultivo, plagasPresentes, proteger, protegidas, riesgosDelPlan, type PlagaZona } from './plagas';
+import calendarioJson from '../../../../datos/catalogos/calendario-isla.json';
+import type { CalendarioLocal as CalendarioPrueba } from '../../../../contratos/tipos/contratos';
+/** Calendario SIAP/INIFAP de Isla: fixture de prueba (la app ya no lo usa como demo). */
+const calendarioIsla = calendarioJson as unknown as CalendarioPrueba;
 
 const zona: PlagaZona[] = [
   { id: 'cogollero', nombreComun: 'Gusano cogollero', tipoVisual: 'gusano', estado: 'presente', registros: 40, cultivos: ['maiz', 'sorgo'] },

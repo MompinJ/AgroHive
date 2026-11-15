@@ -69,7 +69,7 @@ export interface EscenaParcelaProps {
   rociado?: { celdas: readonly string[]; clave: number } | null | undefined;
   /** Nombres de plaga para el globo; por defecto, genericos por tipo. */
   nombresPlaga?: Partial<Record<TipoPlaga, string>> | undefined;
-  /** Bioma del entorno decorativo (modo fondo). Por defecto, tropical humedo (demo de Isla). */
+  /** Bioma del entorno decorativo (modo fondo): sale de Koppen-Geiger en el laboratorio; templado si no hay clima evaluable. */
   bioma?: Bioma | undefined;
   /** Avisa cual es la celda elegida (null si se cierra la ficha): centra la zona de plagas. */
   onCeldaElegida?: ((celdaId: string | null) => void) | undefined;

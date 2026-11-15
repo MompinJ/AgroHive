@@ -421,3 +421,8 @@
 .lab-radio { min-width: 44px; min-height: 36px; padding: 4px 12px; border: 1px solid var(--color-control-border, #b8c4b8); border-radius: 999px; background: transparent; color: inherit; font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
 .lab-radio[aria-checked="true"] { background: var(--color-forest-700, #1f4d38); border-color: var(--color-forest-700, #1f4d38); color: #fff; }
 .mascota-nombre { margin: 0 0 2px; font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .7; }
+/* Parcela de ejemplo (E10): lugar, por que se eligio y lo que no se grabo. */
+.lab-ejemplo { font-size: .8rem; padding: 8px 10px; border-radius: 10px; background: var(--color-sage-50); }
+.lab-ejemplo summary { cursor: pointer; font-weight: 600; }
+.lab-ejemplo .panel-ayuda { margin: 6px 0 0; }
+.lab-ejemplo ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; color: var(--color-text-body); }

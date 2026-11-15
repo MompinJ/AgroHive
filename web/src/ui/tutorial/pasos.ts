@@ -14,7 +14,7 @@ export interface PasoTutorial {
 export const TUTORIALES: Record<IdTutorial, readonly PasoTutorial[]> = {
   terreno: [
     { titulo: '¡Hola, soy Esquilote!', texto: 'Te acompaño a probar qué pasaría si cambias lo que siembras, con la historia del clima de NASA. Empecemos por tu terreno.' },
-    { titulo: 'Elige por dónde empezar', texto: 'Puedes abrir la parcela de demostración (Isla, Veracruz) o dibujar tu propio terreno en el mapa.', destacar: '.terrain-options' },
+    { titulo: 'Elige por dónde empezar', texto: 'Abre una de las seis parcelas de ejemplo en distintos lugares del mundo o dibuja tu propio terreno en el mapa.', destacar: '.terrain-options' },
     { titulo: 'Tamaño de celda', texto: 'Tu terreno se parte en celdas, hasta 200. Cerca del selector te digo cuánto equivale cada una en el terreno real.', destacar: '.dibujo-escala' },
   ],
   cultivos: [
@@ -26,7 +26,7 @@ export const TUTORIALES: Record<IdTutorial, readonly PasoTutorial[]> = {
     { titulo: 'Sigue con los escenarios', texto: 'Cuando termines de sembrar, avanza al siguiente paso.' },
   ],
   escenarios: [
-    { titulo: 'Años de prueba', texto: 'Mira cómo le iría a tu plan en un año seco, uno habitual y uno lluvioso, con clima real de NASA.', destacar: '.lab-escenarios' },
+    { titulo: 'Años de prueba', texto: 'Mira cómo le iría a tu plan en un año seco, uno normal y uno lluvioso, con clima real de NASA.', destacar: '.lab-escenarios' },
     { titulo: 'Semana a semana', texto: 'Cada paso de la línea de tiempo {calendario} es una semana. Al moverla cambian las plantas y el cielo: se pone gris cuando llueve, y cálido o fresco según la época del año de tu parcela. En el último día del ciclo verás la cosecha; si quedan plagas sin insecticida, a la mitad del ciclo verás una ilustración de plaga.' },
     { titulo: 'Sigue con la comparación', texto: 'Cuando hayas visto tus años de prueba, avanza para comparar tus rotaciones.' },
   ],

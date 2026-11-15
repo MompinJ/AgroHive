@@ -205,3 +205,17 @@
 .dibujo-escala .parcel-scale { display: grid; gap: 6px; padding-top: 6px; max-width: 300px; }
 .dibujo-escala select { min-height: 38px; border-radius: 10px; border: 1px solid var(--color-line); background: #fff; }
 .dibujo-escala .parcel-scale-leyenda { margin: 0; font-size: var(--text-caption); color: var(--color-text); }
+
+/* Parcelas de ejemplo (E10): seis lugares del mundo con datos grabados. */
+.terrain-ejemplos { grid-template-columns: minmax(0, 1fr); }
+.terrain-ejemplos h2:focus { outline: none; }
+.terrain-ejemplos h2:focus-visible { outline: 3px solid var(--terrain-ink); outline-offset: 4px; }
+.terrain-ejemplos-lista { list-style: none; margin: 20px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.terrain-ejemplo { display: grid; gap: 2px; height: 100%; padding: 14px 16px; border: 1px solid var(--color-border); border-radius: 18px; color: var(--terrain-ink); text-decoration: none; background: var(--terrain-canvas); }
+.terrain-ejemplo strong { font-size: 16px; font-weight: 500; letter-spacing: -.01em; }
+.terrain-ejemplo-lugar { font-size: 13px; color: var(--terrain-body); }
+.terrain-ejemplo-cultivos { font-size: 12px; color: var(--terrain-muted); }
+.terrain-ejemplo[aria-current] { border-color: var(--terrain-ink); box-shadow: inset 0 0 0 1px var(--terrain-ink); }
+.terrain-option-copy > p.terrain-ejemplos-aviso { margin-top: 14px; font-size: 12px; color: var(--terrain-muted); }
+@media (hover: hover) { .terrain-ejemplo:hover { background: var(--terrain-panel); } }
+@media (max-width: 520px) { .terrain-ejemplos-lista { grid-template-columns: 1fr; } }
