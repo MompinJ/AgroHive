@@ -151,7 +151,7 @@ Los `null` son huecos que se llenan con valores calculados; nunca con números i
 - **Requisitos mínimos:** medirlos y documentarlos para los jueces; modo 2D para equipos de 4 GB de RAM. No prometer cifras sin medir.
 
 ## Errores y resiliencia
-- POWER falla ⇒ Open-Meteo ⇒ caché, con aviso visible.
+- POWER falla ⇒ Open-Meteo ⇒ caché, con aviso visible. `[DECIDIDO]` H-B6 (Mompin, 14/11 noche): 20 s por intento y 2 intentos por fuente, con un plazo total de 70 s por petición, para que la cadena quepa en los 90 s que espera el front (`api/app/http.py`).
 - Sin internet ⇒ parcela de demo precargada.
 - Cuotas ⇒ cola y reintentos con espera.
 - Datos faltantes ⇒ se muestran, no se ocultan.

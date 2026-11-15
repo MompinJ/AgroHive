@@ -94,11 +94,15 @@ const ESTADO = `(() => { const e = window.escenaPrueba; if (!e) return null; con
   let mn = Infinity, mx = 0; for (const m of pl) for (let k = 0; k < m.count; k++) { const a = m.instanceMatrix.array, o = k * 16, esc = Math.hypot(a[o], a[o+1], a[o+2]); if (esc < mn) mn = esc; if (esc > mx) mx = esc; }
   const caja = (t) => [...document.querySelectorAll('label')].find((l) => l.textContent.includes(t))?.querySelector('input');
   return { cuadros: s.cuadros, inercia: s.inercia, transiciones: s.transiciones, viento: s.viento, mascota: s.mascota,
+    lluvia: s.lluvia, gotas: s.gotas, intensidadLluvia: e.intensidadLluviaActual(),
     plantas: pl.length, escalaMin: pl.length ? mn : null, escalaMax: pl.length ? mx : null, saliendo: e.salida.children.length,
     chkReducir: caja('Reducir movimiento')?.checked ?? null, chkVientoDeshab: caja('Viento leve')?.disabled ?? null, chkViento: caja('Viento leve')?.checked ?? null }; })()`;
 const CAMBIAR_ETAPA = `(() => { const e = window.escenaPrueba; const m = JSON.parse(JSON.stringify(e.modeloActual));
   let c = 0; for (const b of m.bloques) if (b.cultivo && b.etapa && b.etapa !== 'suelo_desnudo') { b.etapa = b.etapa === 'madurez' ? 'brote' : 'madurez'; c++; }
   e.actualizar(m); return c; })()`;
+// La lluvia del dia (doc 06) anima a proposito mientras se ve, como el viento: el reposo se mide sin ella, igual que
+// web/medir.html. El dia por defecto de la vista previa (seco, 2016-07-16, clima real 2023-07-16) trae 19.9 mm.
+const QUITAR_LLUVIA = `(() => { window.escenaPrueba.setLluvia(0); return true; })()`;
 const CLIC = (t) => `(() => { const i = [...document.querySelectorAll('label')].find((l) => l.textContent.includes(${JSON.stringify(t)}))?.querySelector('input'); if (!i) return false; i.click(); return true; })()`;
 
 async function cargar(reducir) {
@@ -119,6 +123,12 @@ const cuadrosEnReposo = async (ms = 700) => { const a = (await evaluar(ESTADO)).
 // ---------- A. Sin reducir movimiento: debe animar y quedar quieta (control) ----------
 let s = await cargar(false);
 anotar('A0. sin preferencia: la inercia esta activa y hay plantas', s.inercia === true && s.plantas > 0, `inercia=${s.inercia}, mallas=${s.plantas}, checkbox reducir=${s.chkReducir}`);
+// Control de la lluvia: si el dia de la vista previa no lloviera, se pone una intensidad de prueba.
+if (!(s.intensidadLluvia > 0)) await evaluar(`(() => { window.escenaPrueba.setLluvia(0.4); return true; })()`);
+await dormir(100); s = await evaluar(ESTADO);
+anotar('L1. con lluvia del dia y sin reducir, la lluvia se anima y la escena dibuja (control)', s.lluvia === true && s.gotas > 0 && (await cuadrosEnReposo(500)) > 5, `lluvia=${s.lluvia}, gotas=${s.gotas}, intensidad=${s.intensidadLluvia?.toFixed(2)}`);
+await evaluar(QUITAR_LLUVIA); await dormir(100);
+anotar('L2. sin lluvia, viento ni transiciones, la escena queda en reposo (0 cuadros)', (await cuadrosEnReposo()) === 0, '');
 await evaluar(CAMBIAR_ETAPA);
 let m = await muestrear(1400);
 anotar('A1. al cambiar de etapa HAY transicion (control: si no la hubiera, la prueba no probaria nada)', m.maxT > 0, `transiciones max=${m.maxT}, termino a los ${m.finT} ms (esperado ~450), plantas saliendo max=${m.maxSal}`);
@@ -159,6 +169,7 @@ anotar('D1. arranque con la preferencia activa: sin inercia, sin transiciones, s
 anotar('D2. arranque con la preferencia activa: el checkbox sale marcado y las plantas en escala final', s.chkReducir === true && s.escalaMin > 0.8, `checkbox=${s.chkReducir}, escala min=${s.escalaMin?.toFixed(3)}`);
 anotar('D3. arranque con la preferencia activa: reposo total (0 cuadros)', (await cuadrosEnReposo()) === 0, '');
 anotar('D4. la mascota esta en la escena y no se mueve (0 cuadros)', s.mascota === true, `mascota=${s.mascota}`);
+anotar('L3. con reducir, un dia con lluvia no dibuja gotas ni anima (queda el indicador fijo)', s.intensidadLluvia > 0 && s.lluvia === false && s.gotas === 0, `intensidad=${s.intensidadLluvia?.toFixed(2)}, lluvia=${s.lluvia}, gotas=${s.gotas}`);
 
 // ---------- E. El control manual (sin preferencia del sistema) ----------
 s = await cargar(false);
@@ -199,6 +210,7 @@ anotar('F5. con reducir: tras soltar, la escena queda en reposo (0 cuadros)', (a
 // ---------- G. Cambios rapidos no se acumulan ----------
 for (const reducir of [false, true]) {
   s = await cargar(reducir);
+  await evaluar(QUITAR_LLUVIA);
   for (let i = 0; i < 8; i++) { await evaluar(CAMBIAR_ETAPA); await dormir(35); }      // 8 cambios en ~0.3 s
   await dormir(1600);
   const f = await evaluar(ESTADO);

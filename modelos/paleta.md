@@ -12,7 +12,7 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 4. Por material, 3 tonos (oscuro, base, claro). Lo claro va en tapas y puntas; lo oscuro en bajos, nudos y arrugas.
 5. Los indices 0-15 son `PALETA_BASE` de `herramientas/voxelkit.py`, en el mismo orden.
 
-## Colores (86)
+## Colores (110)
 
 | Indice | Nombre | Hex | Uso |
 | --- | --- | --- | --- |
@@ -102,6 +102,30 @@ Cada color ocupa el pixel `(i % 16, i // 16)` de la textura 16x16 incrustada en 
 | 83 | chile_rojo_dark | #86160f | Punta del chile rojo maduro (el cuerpo usa `red`, 11) |
 | 84 | chile_semilla | #ecdca2 | Semilla de chile, plana y amarillo palido |
 | 85 | mascota_mejilla | #f0857f | Mejillas rosadas de la mascota (elote feliz, `props/mascota_feliz`) |
+| 86 | sandia_hoja_dark | #2f5a34 | Hoja de sandia en sombra, guia, cotiledon de sandia |
+| 87 | sandia_hoja | #4f7f4a | Lamina de la hoja lobulada de sandia (verde grisaceo) |
+| 88 | sandia_hoja_light | #82a872 | Lobulo con luz de la hoja de sandia, zarcillo |
+| 89 | sandia_cascara_dark | #1e4526 | Rayas oscuras de la cascara de sandia |
+| 90 | sandia_cascara | #3f7a38 | Cascara de la sandia joven o en sombra |
+| 91 | sandia_cascara_light | #9cc37a | Fondo claro entre rayas de la cascara |
+| 92 | sandia_pulpa | #e2474f | Pulpa roja de la sandia (rebanada, fruto partido) |
+| 93 | sandia_corteza | #e9efc4 | Corteza blanca entre cascara y pulpa |
+| 94 | camote_hoja_dark | #244f27 | Hoja de camote en sombra, hojas bajas |
+| 95 | camote_hoja | #3a7a34 | Lamina de la hoja acorazonada de camote |
+| 96 | camote_hoja_light | #69a649 | Hoja nueva y borde con luz del camote |
+| 97 | camote_morado | #6a3a6c | Guia rastrera y peciolo morado del camote |
+| 98 | camote_flor | #d9b8e8 | Flor en campanita del camote, lila palido |
+| 99 | camote_piel_dark | #73304a | Piel del camote en sombra, raicillas |
+| 100 | camote_piel | #a6506c | Piel rosa morada de la raiz tuberosa |
+| 101 | camote_pulpa | #e8893c | Pulpa naranja del camote partido |
+| 102 | cacahuate_hoja_dark | #3c6f2e | Foliolo de cacahuate en sombra, tallo |
+| 103 | cacahuate_hoja | #5f9c3e | Foliolo de cacahuate (hoja de 4 foliolos) |
+| 104 | cacahuate_hoja_light | #93c562 | Foliolo con luz, brote de cacahuate |
+| 105 | cacahuate_vaina_dark | #9c7a4c | Reticulado y sombra de la vaina de cacahuate |
+| 106 | cacahuate_vaina | #c8a674 | Vaina de cacahuate (beige) |
+| 107 | cacahuate_vaina_light | #e4cc98 | Vaina con luz, cacahuate seco |
+| 108 | cacahuate_semilla | #b5634a | Semilla de cacahuate con su tegumento rojizo |
+| 109 | cacahuate_clavo | #d8cfa2 | Clavo (ginoforo) que baja a enterrar la vaina |
 
 Los hex son elegidos a ojo para el estilo voxel (no medidos de fotos). Las manchas plateadas de la hoja de calabaza y el fruto verde de C. moschata se tomaron de descripciones varietales (no de una variedad concreta).
 
@@ -110,3 +134,5 @@ Los tonos de suelo arenoso (60-68) y arcilloso (69-77) son cualitativos, elegido
 Los tonos de chile (78-84) son cualitativos, elegidos a ojo: hoja verde oscuro brillante (mas oscura que el frijol y menos azulada que la calabaza), fruto verde mas claro que la hoja para que resalte, y rojo de madurez apoyado en `red` (11). No estan medidos de fotos.
 
 La mascota (`modelos/props/mascota_feliz`) reutiliza grano (31-33), totomoxtle (34-36), cabello (37-38), `black` (10) para ojos y boca y `white` (9) para el brillo de los ojos; solo agrega el rosa de las mejillas (85), elegido a ojo.
+
+Los tonos de sandia (86-93), camote (94-101) y cacahuate (102-109) son cualitativos, elegidos a ojo (14/11 noche, sesion de cultivos con OK de Mompin): hoja de sandia verde grisaceo y cascara con rayas oscuras sobre verde claro, pulpa roja y corteza blanca; camote con hoja acorazonada verde oscuro, guia morada, piel rosa morada y pulpa naranja (variedad de pulpa naranja); cacahuate con foliolos verde medio, vaina beige y semilla de tegumento rojizo. No estan medidos de fotos. Se agregaron juntos y antes de modelar para que los tres generadores trabajen con la paleta fija.

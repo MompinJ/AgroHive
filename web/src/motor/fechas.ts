@@ -2,11 +2,17 @@
 
 const MS_DIA = 86_400_000;
 
+/** true si `fecha` es un dia que existe con la forma 'AAAA-MM-DD' (rechaza '2026-02-30', que Date.UTC llevaria al 2 de marzo). */
+export function esFechaValida(fecha: unknown): fecha is string {
+  if (typeof fecha !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return false;
+  const [a, m, d] = fecha.split('-').map(Number) as [number, number, number];
+  const t = new Date(Date.UTC(a, m - 1, d));
+  return t.getUTCFullYear() === a && t.getUTCMonth() === m - 1 && t.getUTCDate() === d;
+}
+
 export function aDia(fecha: string): number {
-  const [a, m, d] = fecha.split('-').map(Number);
-  if (a === undefined || m === undefined || d === undefined || Number.isNaN(a + m + d)) {
-    throw new Error(`Fecha invalida: ${fecha}`);
-  }
+  if (!esFechaValida(fecha)) throw new Error(`Fecha invalida: ${fecha}`);
+  const [a, m, d] = fecha.split('-').map(Number) as [number, number, number];
   return Math.round(Date.UTC(a, m - 1, d) / MS_DIA);
 }
 

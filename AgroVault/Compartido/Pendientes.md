@@ -10,7 +10,7 @@ No cierres una fila "para ir avanzando". Si un default es inevitable para compil
 
 ## Hecho y que el vault no debe volver a abrir
 
-Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo, años análogos, tarjetas en el motor, regresión, contratos 0.12.2, catálogo y calendario de Isla, TAW de Saxton y Rawls conectado a `/api/suelo`, ISRIC y OpenLandMap, IMERG como evidencia, escena 3D con modelos de la milpa y el chile, losas de suelo en la escena, estados con daltonismo, selector R1–R4, banda en la interfaz, paquete de demo, API y front en el droplet. Detalle en [[Resumen]] y `docs/13`.
+Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo, años análogos, tarjetas en el motor, regresión, contratos 0.12.2, catálogo y calendario de Isla, TAW de Saxton y Rawls conectado a `/api/suelo`, ISRIC y OpenLandMap, IMERG como evidencia, escena 3D con modelos de los 8 cultivos del catálogo (milpa, chile, sorgo, sandía, camote y cacahuate; los cuatro últimos en `Mompin-escena` el 14/11 noche), losas de suelo en la escena, estados con daltonismo, selector R1–R4, banda en la interfaz, paquete de demo, API y front en el droplet. Detalle en [[Resumen]] y `docs/13`.
 
 ## Marcas de `docs/14` que ya no describen el código
 
@@ -54,7 +54,7 @@ Corte 14/11, 18:45, desde las marcas de `docs/14`: 56 de 60 hechas. Plan, decisi
 | A4.13 | Hecha en la API (`GET /api/calendario`) y conectada: `web/src/api/datosParcela.ts` la pide para parcelas propias; si falla, avisa y las fechas quedan `NO_EVALUABLE` |
 | A5.7 | `[EN CURSO]`, pospuesta (fase de revisión) (Mafer): `README.md` ya reemplaza al anterior. Falta la revisión humana de licencias y de la declaración de IA: decidir la licencia del repo, marca de agua en imágenes generadas con IA (`web/src/ui/assets`) y citas de NSIDC e IMERG. Licencias sin constancia en el repo: `[VERIFICAR]` |
 | A5.9 | Pospuesta: envío final según las reglas oficiales (`docs/02`), solo cuando todos estén satisfechos |
-| Back | Auditoría del 14/11 noche (`docs/hallazgos-back.md`, rama `Mompin-fallos`): 9 arreglados. Falta decidir H-B6 (tiempos de espera de la API frente a los 90 s del front), H-M1 (pilares del ranking con rotaciones EXPLORATORIO) y H-M9 (pilares con número en un escenario NO_EVALUABLE). Lo propuesto es de cada dueño |
+| Back | Auditoría del 14/11 noche (`docs/hallazgos-back.md`, rama `Mompin-fallos`): 21 de 22 arreglados en dos rondas; H-B6, H-M1 y H-M9 los decidió Mompin. Falta H-M7 (horizonte de los análogos que cruza septiembre), propuesto al motor. Falta integrar la segunda ronda a `main` y desplegar la API |
 
 ## Huecos científicos que el motor deja en `NO_EVALUABLE` a propósito
 

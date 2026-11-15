@@ -11,6 +11,55 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Evidencia:** `contratos/` 102/102, `api/` 155, catálogos en verde, `tsc --noEmit` limpio, `vitest` 683 (1 `todo`). Medido en `vitest`: rombo de 150 m de diagonal, error de área dibujada 1 528 m² con triángulos contra 2 978 m² con cuadrados; franja diagonal de unos 30 km pidiendo 10 m: 1 598 celdas de 69.4 m (antes 92 de 556 m), en 0.8 s.
 - **Sigue:** parte 2 (modelos de medio cuadrado) y parte 3 (escena 3D, vista 2D y selector de escala).
 
+### 2026-11-15 (madrugada) — Ampliación del catálogo de cultivos `[DECIDIDO]` (Mompin; sesión "catalogo", rama `Mompin-features`)
+
+- **Archivos:** `datos/catalogos/generar.py` (lista `AMPLIACION` al final de `CULTIVOS`), `cultivos.json` y `calendario-isla.json` regenerados, `datos/catalogos/README.md` (ampliación, criterio de fila, elecciones y cultivos que quedaron fuera), `docs/04` (nota del catálogo), `docs/16` (E7 para Eduardo), `web/src/motor/pruebas/catalogo-ampliado.test.ts` (nueva).
+- **Cambio:** tanda 1, de 8 a 18 cultivos: soya, frijol caupí, haba, chícharo, lenteja, ejote, cebada, trigo, avena y maíz dulce. Tanda 2, a 28: yuca, caña de azúcar, ajonjolí, girasol, algodón, cártamo, higuerilla, jitomate, papa y calabacita; la caña toma su presencia del ciclo `Perennes` de SIAP (registrada en Isla) y, con 480 días, solo cabe en la serie si se siembra de octubre a diciembre (en PV sale `NO_EVALUABLE` con motivo, con prueba). Cada cifra sale de FAO-56 (Tablas 11, 12 y 22) o de EcoCrop (Recocrop, mismo archivo y sha256) y se cotejó con un script contra las tablas descargadas. Sin `modelo3d` y con entrada PV y OI en el calendario de Isla (ventana `NO_EVALUABLE`; presencia según SIAP).
+- **Por qué:** pedido de Mompin: 30 a 50 cultivos con prioridad para México, el trópico húmedo y las rotaciones.
+- **Quedan fuera:** arroz (FAO-56 es de arroz inundado y el balance no modela la lámina), garbanzo y ajo (sin días por etapa en Tabla 11), alfalfa (perenne de cortes), sorgo forrajero, piña (790 d, no cabe en la serie), plátano (solo filas mediterráneas), papaya, ñame, tomatillo, chayote, jícama, amaranto y chía (sin fila en FAO-56).
+- **Comprobado:** el motor simula cada cultivo del catálogo en PV y OI sin tronar; la compatibilidad sale `NO_EVALUABLE` con motivo y la rotación `EXPLORATORIO` si SIAP no registra el cultivo en Isla. La escena usa la planta provisional (ya declarada) cuando falta el modelo. La API devuelve el catálogo tal cual (prueba de contratos genérica). La regresión A5.5 no cambia.
+- **Toca archivos de otros:** `datos/catalogos/` es de Mafer; lo hace la IA de Mompin por su decisión. No toca las entradas de sorgo, sandía, camote y cacahuate ni `versionContrato` (los lleva la sesión "cultivos").
+
+### 2026-11-14 (noche) — Cultivos nuevos con modelo, prefijos, catálogos 0.13.0 y prueba de movimiento en verde (MF1, MF2, MF4, M4 y M5; IA de Mompin, sesión "cultivos", rama `Mompin-escena`)
+
+- **Archivos:** `datos/catalogos/generar.py` (prefijos y `VERSION_CONTRATO`) y los tres JSON regenerados; `modelos/paleta.py` y `paleta.md` (24 colores, índices 86 a 109); `modelos/cultivos/sandia.py`, `camote.py`, `cacahuate.py` con sus 15 `.bbmodel` y visores; `modelos/cultivos/bloques/bloques.py` (15 bloques, y ahora regenera `visor_bloques.html`); `modelos/iconos2d/iconos2d.py` (15 SVG) y su README; todos los `.bbmodel` existentes regenerados (solo cambia la paleta incrustada); `web/src/escena/voxel/bloque.ts`; `web/src/escena/pruebas/bloques.test.ts` e `iconos2d.test.ts` (8 cultivos); `herramientas/prueba-movimiento/movimiento.mjs` y su README; `docs/06`, `docs/07`, `docs/16`, `docs/hallazgos-back.md`; capturas en `docs/capturas/cultivos-nuevos/`.
+- **Cambio:** MF1, el sorgo declara `modelo3d.prefijo`. MF2, sandía, camote y cacahuate con 5 detallados, 5 bloques (de 15 a 24 cubos) y 5 iconos 2D cada uno, y su prefijo. M5, la escena y la vista 2D los toman solos (glob de `modelos/`): no hizo falta tocar `catalogo.ts` ni `web/src/ui/`; revisados en la vista previa, las 15 combinaciones cargan su `.bbmodel` sin respaldo. MF4 (H-B9), los catálogos declaran `versionContrato` 0.13.0 y validan sin cambiar datos (todo por `generar.py`, sin editar el JSON a mano). M4, `prueba-movimiento` 33 de 33: A2 y G1b fallaban porque el día por defecto de la vista previa (2016-07-16, 19.9 mm) tiene lluvia y la lluvia anima a propósito; la prueba ahora la apaga antes de medir el reposo, como `medir.html`, y agrega L1 a L3 (la lluvia anima, el reposo sin ella es 0, con reducir no hay gotas). Arreglo de paso: el bloque provisional de respaldo medía la altura del detallado sin sus rotaciones y con las hojas tendidas de la sandía salía más alto que la planta.
+- **Por qué:** reparto de Mompin para esta noche (`docs/16`, D4 `[DECIDIDO]`: los cultivos nuevos se terminan).
+- **Toca archivos de otros:** `modelos/` y `datos/catalogos/` son de Mafer; los hizo la IA de Mompin con OK de Mompin porque Mafer no estaba trabajando. No se tocó la escena de Eduardo (`EscenaParcela.tsx`, `escena-three.ts`, `camara.ts`) ni `web/src/ui/`.
+- **Pendiente:** mirar los modelos en Blockbench; B1 (aviso en el selector de cultivos no registrados en Isla) sigue con su dueño. Los colores nuevos son a ojo, no medidos.
+- **Decisiones afectadas:** ninguna.
+
+### 2026-11-14 (noche) — Hallazgos del back, segunda ronda (cazafallos, `Mompin-fallos`)
+
+- **Archivos:**
+  - `api/`: `app/http.py`, `rutas/{clima,suelo,terreno,proxima,cultivos}.py`, `servicios.py`, `ndvi.py`, `calendario.py`, `modelos.py`, `openapi.json` y `cliente/api.d.ts` regenerados; pruebas en `tests/test_hallazgos_back.py`, `test_basico.py` y `test_contratos_api.py`.
+  - Motor: `web/src/motor/{ranking,motor,fechas,protocolo,cliente,analogos,tarjetas}.ts`; pruebas en `pruebas/hallazgos-back.test.ts` y `pruebas/ranking.test.ts`.
+  - `datos/demo/respuestas/*.json` y `manifiesto.json`.
+  - Documentación: `docs/05`, `docs/08`, `docs/16` (M6 y E4), `docs/hallazgos-back.md`, `api/README.md`, `datos/calendario/LEEME.md`, `datos/demo/LEEME.md` y `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:**
+  - Decisiones de Mompin (ya en `docs/13` y `docs/16`):
+    - H-B6: 20 s por intento, 2 intentos por fuente y un plazo total de 70 s por petición.
+    - H-M1: los pilares del puntaje se cuentan solo sobre las rotaciones que se ordenan; una EXPLORATORIO a la que le falta uno lleva puntaje `null`.
+    - H-M9: un escenario NO_EVALUABLE lleva todos sus indicadores en `null`.
+  - Además, cada uno con su prueba:
+    - H-M2: fin y etapa del ciclo por los parámetros del catálogo.
+    - H-B8: `/api/cultivos` sin catálogo responde 503 `ERROR_DATOS`.
+    - H-B11: aviso `NDVI_EN_CACHE`.
+    - H-M4: fechas inválidas dan NO_EVALUABLE con motivo.
+    - H-M5: errores y cierre del Worker sin promesas colgadas.
+    - H-M8: sin área dentro de la parcela, NO_EVALUABLE.
+    - H-M10: huecos según la simulación.
+    - H-M6: sin año de corte fijo en los análogos.
+    - H-B10: país más cercano a 25 km o menos en la costa.
+    - H-B9: el paquete de demo se revalidó contra 0.13.0 y solo cambió `versionContrato`.
+    - H-M11: la tarjeta nombra la institución de la ventana.
+- **Regresión A5.5:** no cambia. Con H-M11, en Isla la institución sigue siendo INIFAP y el texto queda igual, así que no hizo falta regenerarla.
+- **Toca archivos de otros:** `api/` y `datos/demo/` son de Eduardo; esta noche los lleva cazafallos **con OK de Mompin, porque Eduardo trabaja en el front**. No se tocaron `web/src/ui/`, `web/src/escena/`, `web/src/api/cliente.ts` ni `datos/catalogos/`.
+- **Pendiente:**
+  - H-M7, propuesto: un horizonte de los análogos que cruce septiembre necesita definir su año agrícola.
+  - Integrar a `main` y desplegar la API (E1).
+- **Decisiones afectadas:** H-B6, H-M1 y H-M9 quedan aplicadas.
+
 ### 2026-11-14 (noche) — Decisiones y reparto del día final: D1, D4, H-B6, H-M1, H-M9 `[DECIDIDO]` (Mompin; sesión "estado")
 
 - **Archivos:** `docs/13` (seis filas nuevas), `docs/16` (sección 2 con decididas y abiertas; sección 3 con el reparto sobre `main` `582e482`), `docs/11` (resumen de decisiones).

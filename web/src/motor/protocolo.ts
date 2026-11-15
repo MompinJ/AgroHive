@@ -93,6 +93,11 @@ export class EstadoMotor {
             this.entradas.clear();
           }
           return { id: p.id, ok: true, resultado: null };
+        default: {
+          // H-M5: un tipo desconocido responde un error con su id; antes devolvia undefined y el cliente fallaba al leerlo.
+          const x = p as { id: number; tipo?: unknown };
+          return { id: x.id, ok: false, error: `Peticion desconocida: ${String(x.tipo)}.` };
+        }
       }
     } catch (e) {
       return { id: p.id, ok: false, error: e instanceof Error ? e.message : String(e) };

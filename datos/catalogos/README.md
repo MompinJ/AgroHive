@@ -9,10 +9,33 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 
 | Archivo | Contrato | Contenido |
 | --- | --- | --- |
-| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa (maiz, frijol, calabaza), chile (cultivo extra de la demo) y, del encargo #198, sorgo, sandia, camote y cacahuate (aun sin modelo 3D: no declaran `modelo3d`) |
+| `cultivos.json` | `contratos/cultivo.schema.json` | Milpa (maiz, frijol, calabaza), chile (cultivo extra de la demo), del encargo #198 sorgo, sandia, camote y cacahuate (aun sin modelo 3D: no declaran `modelo3d`) y la ampliacion del 15/11 (lista abajo), tambien sin `modelo3d` |
 | `suelos.json` | `contratos/tabla-suelos.schema.json` | TAW por clase USDA, FAO-56 Tabla 19 |
 | `calendario-isla.json` | `contratos/calendario-local.schema.json` | Ventanas de siembra y presencia en SIAP de Isla, por cultivo y temporada |
 | `saxton_rawls.py` | `agua` de `contratos/suelo.schema.json` | TAW y retencion (θsat, θFC, θWP) por pedotransferencia de Saxton y Rawls (2006) para cualquier textura; pruebas contra la Tabla 3 del articulo con `python -m unittest discover -s datos/catalogos` |
+
+## Ampliacion del catalogo (15/11/2026) `[DECIDIDO]` (Mompin)
+
+Meta: 30 a 50 cultivos con prioridad para Mexico, el tropico humedo y las rotaciones. Van al final de `CULTIVOS` (lista `AMPLIACION` de `generar.py`), sin `modelo3d` (la escena dibuja la planta provisional y lo declara) y con entrada en `calendario-isla.json` para PV y OI: ventana `NO_EVALUABLE` (aun no se consulta INIFAP) y presencia segun el extracto de SIAP de Isla.
+
+| Tanda | Cultivos |
+| --- | --- |
+| 1, leguminosas y cereales | soya, frijol caupi, haba, chicharo, lenteja, ejote, cebada, trigo, avena, maiz dulce |
+| 2, cultivos de campo del tropico y de Mexico | yuca, cana de azucar, ajonjoli, girasol, algodon, cartamo, higuerilla, jitomate, papa, calabacita |
+
+**Criterio de fila de Tabla 11 para la ampliacion:** (a) la fila tropical si existe; (b) si no, la de siembra mas cercana a junio (temporal PV de Isla, como maiz, frijol, chile y sorgo); (c) en empate, la region mas calida; (d) se salta una fila con etapas impresas ambiguas (por ejemplo `50/30`) o que no suman su total, si otra fila cumple. Kc ini, Zr y p siguen las reglas de la tabla de abajo; un rango de Kc sin nota que elija se resuelve con el punto medio (como el Kc medio del sorgo).
+
+**Quedaron fuera** (regla: un parametro obligatorio sin fuente, o un dato que el motor usaria con otro significado):
+
+| Cultivo | Por que |
+| --- | --- |
+| Arroz | FAO-56 describe arroz inundado: su p es fraccion de la saturacion (Tabla 22 nota 4), no de TAW, y su Kc ini supone lamina de agua. El balance de cubeta no modela inundacion, asi que el numero seria enganoso |
+| Garbanzo, ajo | Tienen Kc (Tabla 12) y Zr (Tabla 22), pero Tabla 11 no trae sus dias por etapa |
+| Alfalfa | Tabla 11 da la temporada total como `var.`: es perenne de cortes, no un ciclo de siembra a cosecha |
+| Sorgo forrajero | FAO-56 solo trae `Sudan grass`, otra especie, y `Sorghum - sweet` sin fila propia en Tabla 11 |
+| Platano | Tabla 11 solo trae filas mediterraneas (primer ano 390 d, segundo 365 d) para una planta perenne, y EcoCrop tiene cuatro filas de *Musa* sin forma de saber cual es el platano de Isla |
+| Pina | Tabla 11 da 790 dias: no cabe en la serie de 18 meses del escenario (doc 05), siempre saldria `NO_EVALUABLE` |
+| Papaya, name, tomatillo, chayote, jicama, amaranto, chia | Sin fila en las Tablas 11, 12 y 22 de FAO-56 |
 
 ## Fuentes (consultadas el 14/11/2026)
 
@@ -44,11 +67,29 @@ node datos/catalogos/validar.mjs       # valida contra contratos/ (antes: npm in
 | Camote | Fila tropical (temporada de lluvias): 15/30/50/30 = 125 d; Kc ini 0.5 del grupo Roots and Tubers | Unica fila tropical; no esta en SIAP de Isla (si en San Andres y Santiago Tuxtla) |
 | Cacahuate | Fila `Groundnut`, Africa Occidental, "Dry season": 25/35/45/25 = 130 d; Kc ini 0.4 del grupo Legumes | Sin fila tropical etiquetada; la fecha es de temporada seca. La pagina parte las fechas: cotejar con el PDF. No esta en SIAP de Isla (si en Catemaco) |
 | Grupos del selector | arenoso = arena franca, franco = franco, arcilloso = arcilla | Eleccion del equipo, no de FAO |
+| Soya, fila de Tabla 11 | `Soybeans`, Tropics, diciembre: 15/15/40/15 = 85 d | Unica fila tropical; su siembra cae en OI. SIAP no la registra en Isla (en Veracruz solo en Panuco) |
+| Frijol caupi | Fila `Green gram, cowpeas` (Mediterraneo, marzo): etapas 20/30/30/20 = 100 d; Kc end 0.35 | La fila imprime total 110 pero las etapas suman 100 (como el sorgo, se guardan las etapas y el ciclo es la suma; cotejar con el PDF). Kc end: nota 6, grano seco |
+| Haba | `Faba bean`, Europa, mayo: 90 d; Kc de la subfila `Dry/Seed` (0.5/1.15/0.30) | SIAP registra "haba grano"; la subfila fresca tiene Kc end 1.10 |
+| Chicharo | `Peas`, Europa, mayo: 90 d; Kc y p de la subfila `Fresh` (0.5/1.15/1.10, p 0.35) | Chicharo verde de consumo en fresco: eleccion del equipo, revisar. `Dry/Seed` da Kc end 0.30 y p 0.40 |
+| Lenteja | `Lentil`, Europa, abril: 150 d | Siembra mas cercana a junio; la otra fila es arida de octubre/noviembre (170 d) |
+| Ejote | `Beans (green)`, California/Egipto/Libano, agosto/septiembre: 75 d; EcoCrop `Bean, Common` | EcoCrop no separa el ejote del frijol (misma especie) |
+| Cebada, trigo y avena | Fila comun `Barley/Oats/Wheat`, Africa Oriental, julio: 15/30/65/40 = 150 d | De las dos filas tropicales (India central, noviembre; Africa Oriental, julio) la de julio es la mas cercana al PV. La tabla no dice la altitud: revisar |
+| Trigo, Kc end | 0.25 de 0.25-0.4 (nota 10: el mayor es para cosecha manual) | Se supone cosecha mecanica; revisar. Se usa trigo de primavera: el de invierno supone suelo helado o latencia |
+| Maiz dulce (elote) | `Maize (sweet)`, Filipinas, marzo: 80 d; Kc end 1.05 (nota 12, cosecha en fresco) | Unica fila tropical. No es el elote de maiz criollo cosechado tierno, que FAO-56 no publica |
+| Yuca | `Cassava: year 1`, regiones tropicales, temporada de lluvias: 20/40/90/60 = 210 d; Kc y p de la subfila `year 1` | Unica fila tropical; el ano 2 (360 d) continua el mismo cultivo y no cabe en la serie. La pagina parte "Rainy season" entre dos filas: cotejar |
+| Cana de azucar | `Sugarcane, virgin`, Tropics: 50/70/220/140 = 480 d; EcoCrop `Sugarcane` de *S. officinarum* | Cana de planta (siembra nueva); la soca (320 d) es rebrote sin siembra. Con 480 d solo cabe en la serie del escenario si se siembra de octubre a diciembre; en PV el motor la deja `NO_EVALUABLE` con motivo. SIAP la registra en Isla como `Perennes`: la presencia usa ese ciclo para PV y OI |
+| Ajonjoli | `Sesame`, China, junio: etapas 20/30/40/20 = 110 d | La fila imprime total 100 pero las etapas suman 110 (como el sorgo: se guardan las etapas, el ciclo es la suma; cotejar con el PDF) |
+| Girasol y cartamo, Kc medio | 1.0 de 1.0-1.15 (nota 9: los menores son para temporal con menor densidad) | Temporal. Cartamo: fila de California, abril (125 d) |
+| Algodon | `Cotton`, Egipto/Pakistan/California, marzo a mayo: 195 d; Kc medio 1.175 y Kc end 0.60 (puntos medios de 1.15-1.20 y 0.70-0.50) | Sin nota que elija dentro del rango; EcoCrop `Cotton, American upland` (*G. hirsutum*) |
+| Higuerilla | `Castor beans`, Indonesia, noviembre: 135 d | Unica fila tropical; cae en OI |
+| Jitomate | `Tomato`, Mediterraneo, abril/mayo: 145 d; Kc end 0.80 (punto medio de 0.70-0.90) | Empate de siembra con California (155 d); se eligio el Mediterraneo, como con la calabaza. El id es `tomate` y el nombre "Jitomate" para no confundirlo con el tomate verde |
+| Papa | `Potato`, clima continental, mayo: 130 d | Siembra mas cercana a junio; la fila (semi)arida imprime etapas ambiguas (30/45) |
+| Calabacita | `Squash, Zucchini`, Mediterraneo/Europa, mayo/junio: 90 d; EcoCrop `Vegetable marrow` (*C. pepo*) | Calabacita tierna; la calabaza de milpa madura sigue siendo `calabaza` |
 
 ## Huecos (NO_EVALUABLE)
 
 - **Lluvia por ciclo**: sin fuente. La lluvia de EcoCrop es **anual** y va en `lluviaAnualMinMm/MaxMm` (rango absoluto RMIN-RMAX; el optimo queda en la nota de la fuente). No se convierte a lluvia del ciclo.
 - **Umbral de estres por calor**: sin fuente verificada (EcoCrop solo da medias mensuales).
-- **Ventanas de siembra**: no van en `cultivos.json` (contratos 0.5.0): dependen del lugar y viven en `calendario-isla.json` (contrato `calendario-local`). Maiz PV y OI y frijol OI tienen ventana con fuente; frijol PV y chile no la tienen y la calabaza no esta registrada en Isla segun SIAP.
+- **Ventanas de siembra**: no van en `cultivos.json` (contratos 0.5.0): dependen del lugar y viven en `calendario-isla.json` (contrato `calendario-local`). Maiz PV y OI y frijol OI tienen ventana con fuente; frijol PV y chile no la tienen y la calabaza no esta registrada en Isla segun SIAP. Ningun cultivo de la ampliacion del 15/11 tiene ventana con fuente todavia (no se consulto INIFAP para ellos).
 - **Etapas sensibles**: pendiente de fuente (FAO-33, Ky); el campo se omite.
 - **Suelos sin fila en Tabla 19**: franco arcillo arenoso, franco arcilloso, arcillo arenoso.
