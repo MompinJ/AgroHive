@@ -18,8 +18,8 @@ const TOPE_CUBOS = 24;
 const MIN_CUBOS = 12; // 9 plantas de un cubo y 3 lomos, como minimo
 const MIN_LOMOS = 3;
 
-/** Los 20 modelos: 4 cultivos x 5 etapas. */
-const ESPERADOS = ['maiz', 'frijol', 'calabaza', 'chile'].flatMap((c) => ['siembra', 'brote', 'crecimiento', 'madurez', 'podrida'].map((e) => `${c}_${e}_bloque.bbmodel`));
+/** Los 25 modelos: 5 cultivos x 5 etapas (los 4 de la milpa y el chile, mas el sorgo). */
+const ESPERADOS = ['maiz', 'frijol', 'calabaza', 'chile', 'sorgo'].flatMap((c) => ['siembra', 'brote', 'crecimiento', 'madurez', 'podrida'].map((e) => `${c}_${e}_bloque.bbmodel`));
 
 const paletaDocumentada = [...readFileSync(`${raiz}modelos/paleta.md`, 'utf8').matchAll(/^\| (\d+) \| \S+ \| (#[0-9a-f]{6}) \|/gm)]
   .map((m) => [Number(m[1]), m[2]] as const);
@@ -29,7 +29,7 @@ const opaco = (paleta: Awaited<ReturnType<typeof decodificarPaletaPng>>) => (i: 
 const geometria = async (m: ModeloVoxel) => unirCubos(m, opaco(await decodificarPaletaPng(m.textura.fuente)));
 
 describe('modelos de bloque de modelos/cultivos/bloques (varias plantas por bloque)', () => {
-  it('estan los 20 (4 cultivos x 5 etapas)', () => {
+  it('estan los 25 (5 cultivos x 5 etapas)', () => {
     for (const f of ESPERADOS) expect(archivos, `falta ${f}`).toContain(f);
   });
 
@@ -38,7 +38,7 @@ describe('modelos de bloque de modelos/cultivos/bloques (varias plantas por bloq
       const modelo = leer(carpeta + f, f);
 
       it('sigue el nombre <cultivo>_<etapa>_bloque', () => {
-        expect(f).toMatch(/^(maiz|frijol|calabaza|chile)_(siembra|brote|crecimiento|madurez|podrida)_bloque\.bbmodel$/);
+        expect(f).toMatch(/^(maiz|frijol|calabaza|chile|sorgo)_(siembra|brote|crecimiento|madurez|podrida)_bloque\.bbmodel$/);
       });
 
       it('su paleta incrustada coincide con modelos/paleta.md', async () => {

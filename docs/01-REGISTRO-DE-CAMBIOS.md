@@ -40,6 +40,14 @@ Fuente / evidencia:
 Decisiones afectadas:
 ```
 
+### 2026-11-14 (noche) — Modelo 3D del sorgo y sus 5 bloques (encargo #198, Mafer)
+
+- **Archivos:** `modelos/cultivos/sorgo.py`, `sorgo_<etapa>.bbmodel` (5), `visor_sorgo.html`; `modelos/cultivos/bloques/bloques.py`, `sorgo_<etapa>_bloque.bbmodel` (5), `visor_bloques.html`; `web/src/escena/pruebas/bloques.test.ts` (ahora 25 bloques, 5 cultivos).
+- **Cambio:** el sorgo detallado en 5 etapas (10, 9, 24, 45 y 40 cubos; el tope es el maíz maduro, 55) con la paleta compartida y sin colores nuevos: planta alta de un tallo, hojas angostas y panoja rojiza compacta que se inclina al madurar, sin mazorca. Lo generó el agente `modelador-voxel`; lo revisé (regeneración idéntica, 446 pruebas de la escena, captura de las 5 etapas) y la usuaria lo aprobó a la vista. Bloques con las reglas de Mompin: siembra 15 cubos y el resto 21, sin cara inferior.
+- **Límites:** brote y crecimiento se parecen al maíz (solo cambian hojas más angostas y tallo más delgado). Proporciones cualitativas; forma de la panoja de una búsqueda del agente en fichas de universidades. No probado en Blockbench ni en la escena de la app.
+- **Pendiente:** ícono 2D del sorgo; que la escena (catálogo de modelos de Mompin) reconozca `sorgo` y el campo `modelo3d` del catálogo, que no declaré todavía; sandía, camote y cacahuate.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-14 (noche) — Catálogo: camote y cacahuate (encargo #198 punto 2, Mafer)
 
 - **Archivos:** `datos/catalogos/generar.py`, `cultivos.json` (8 cultivos), `calendario-isla.json` (16 entradas), `README.md`.

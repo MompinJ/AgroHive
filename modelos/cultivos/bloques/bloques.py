@@ -238,6 +238,14 @@ PLANTAS = {
     'calabaza_podrida': alterna_plantas(
         fruto_podrido(2.0, 1.4),
         con_tallo('hoja_seca_dark', 2.0, 0.6, hoja_sobre_peciolo('hoja_seca', 2.2, 1.0))),
+    # sorgo
+    'sorgo_siembra': semilla(('cabello', 'wood'), (0.7, 0.5, 0.8)),
+    'sorgo_brote': con_tallo('maiz_tallo_light', 2.8, 0.5, hoja('maiz_hoja', 0.6, 0.9, 3.0, 45, 60)),
+    'sorgo_crecimiento': con_tallo('maiz_tallo', 6.0, 0.7, hoja('maiz_hoja', 0.55, 1.2, 4.0, 52, 64)),
+    'sorgo_madurez': con_tallo('maiz_tallo', 8.5, 0.7, pieza(('cabello', 'wood'), 1.0, 1.2, 2.4, 4, 14)),
+    'sorgo_podrida': con_tallo('hoja_seca_dark', 4.4, 0.7, alterna(
+        pieza(('podrido', 'moho'), 0.9, 1.1, 2.2, 150, 170),
+        hoja('hoja_seca', 0.3, 1.4, 3.0, 95, 115, 150)), tilt=(20, 32)),
     # chile
     'chile_siembra': semilla(('chile_semilla',), (0.8, 0.5, 1.0)),
     'chile_brote': con_tallo('chile_hoja_dark', 2.4, 0.6, hoja('chile_hoja_light', 0.85, 1.4, 1.5, 55, 70)),
@@ -250,7 +258,7 @@ PLANTAS = {
         hoja('hoja_marchita', 0.4, 1.6, 2.0, 95, 115, 160)), tilt=(20, 32)),
 }
 
-CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile')
+CULTIVOS_ETAPAS = [(c, e) for c in ('maiz', 'frijol', 'calabaza', 'chile', 'sorgo')
                    for e in ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')]
 
 
