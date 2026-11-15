@@ -1,6 +1,6 @@
 {
   "meta": {
-    "versionContrato": "0.6.0",
+    "versionContrato": "0.13.0",
     "esEjemplo": false,
     "generado": "2026-11-14T00:00:00Z",
     "aviso": "Ventanas de recomendaciones regionales de INIFAP y presencia segun SIAP; no son un calendario validado para la parcela. Requieren validacion con un tecnico local."

@@ -64,6 +64,20 @@ Del ejemplo de la zanahoria, que conviene repetir para cada cultivo:
 
 Todas las etapas comparten el mismo punto de anclaje para poder interpolar escala. El motor (05) decide la etapa y el estado; el modelo solo los representa.
 
+## Sandía, camote y cacahuate (MF2, 14/11 noche)
+
+Hechos por la IA de Mompin con OK de Mompin (Mafer no estaba), con cuatro agentes `modelador-voxel` en paralelo: uno por cultivo para el detallado (`modelos/cultivos/<cultivo>.py`) y uno solo para bloques e iconos, que son los únicos que editan `bloques.py` e `iconos2d.py`. Para que no chocaran, los colores se agregaron antes y juntos (índices 86 a 109 de `paleta.md`) y todos los modelos se regeneraron una vez.
+
+| Cultivo | Rasgos que se respetan | Cubos (siembra, brote, crecimiento, madurez, podrida) |
+| --- | --- | --- |
+| Sandía | Rastrera; guías con hoja partida en lóbulos angostos, zarcillos, flor amarilla; fruto ovalado con rayas oscuras sobre verde claro | 10, 11, 30, 55, 56 |
+| Camote | Rastrero; guías moradas, hoja acorazonada, flor lila en campanita; se siembra por esqueje; camotes rosa morado que asoman del lomo, uno con pulpa naranja | 11, 13, 30, 60, 55 |
+| Cacahuate | Mata baja más ancha que alta; hoja de 4 foliolos, flor amarilla, clavos (ginóforos) que bajan al suelo; vainas beige con cintura | 12, 13, 28, 57, 52 |
+
+- Nada va bajo y = 0 (lo pide la prueba): camotes y vainas se asoman sobre el lomo en vez de enterrarse. Tamaños cualitativos, no medidos; las referencias de forma están en el docstring de cada generador.
+- Bloques: de 15 a 24 cubos (el camote en siembra llega justo al tope). `bloques.py` ahora también regenera `visor_bloques.html`.
+- **Límite conocido:** el `preview` de `voxelkit.py` ordena mal la profundidad con cajas largas o giradas (las rayas de la sandía o el lomo tapan piezas); los agentes revisaron con renders propios con z-buffer, fuera del repo. La revisión final fue en la escena real (`docs/capturas/cultivos-nuevos/`). Falta mirarlos en Blockbench.
+
 ## Losas de suelo por tipo y humedad (A2.12) — `modelos/suelos/`
 
 En la escena, el suelo es una columna procedural que se estira hasta la altura del relieve y se pinta según la humedad del motor (`escena/suelo.ts`); un bloque voxel completo se deformaría al estirarlo. Por eso las variantes son **losas delgadas que se ponen encima de la columna**, no bloques.
@@ -98,7 +112,7 @@ La mascota es un **elote con cara feliz** (la "verdura con cara feliz" del doc 0
 - glTF/GLB es **opcional**: se exporta desde Blockbench (File > Export) si algún día hiciera falta.
 - **Rendimiento en escena grande:** el visor de ejemplo crea una malla por cubo, lo que está bien para unos pocos modelos. Para una parcela con cientos de celdas, unir los cubos de cada modelo en una geometría y usar **`InstancedMesh` por combinación cultivo + etapa**, con variación por celda (rotación en pasos de 90°, ligera escala). Fijar un tope de celdas (propuesta: ~1 600).
 - **Respaldo:** si un modelo se atrasa, plantas procedurales con cajas en código para no bloquear el MVP.
-- **Implementado (A3.2, 14/11):** `web/src/escena/voxel/` lee cualquier `<cultivo>_<etapa>.bbmodel` que esté en `modelos/cultivos/` (sin tocar código), toma los colores de la paleta incrustada (coinciden con `modelos/paleta.md`, verificado en pruebas) y rechaza con error visible los que no siguen estas convenciones. Faltan los modelos de frijol y calabaza (A2.11): mientras tanto se ve la planta provisional.
+- **Implementado (A3.2, 14/11):** `web/src/escena/voxel/` lee cualquier `<cultivo>_<etapa>.bbmodel` que esté en `modelos/cultivos/` (sin tocar código), toma los colores de la paleta incrustada (coinciden con `modelos/paleta.md`, verificado en pruebas) y rechaza con error visible los que no siguen estas convenciones. Desde el 14/11 noche están los 8 cultivos del catálogo (maíz, frijol, calabaza, chile, sorgo, sandía, camote y cacahuate), cada uno con 5 detallados, 5 bloques y 5 iconos 2D; la planta provisional queda solo de respaldo.
 
 ## Flujo de trabajo de arte
 

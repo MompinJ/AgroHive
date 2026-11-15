@@ -3,7 +3,8 @@
 Correr desde la raiz del repo:
     python modelos/iconos2d/iconos2d.py
 
-Genera 20 SVG (maiz, frijol, calabaza, chile x siembra, brote, crecimiento, madurez, podrida) y visor_iconos.html.
+Genera 40 SVG (maiz, frijol, calabaza, chile, sorgo, sandia, camote y cacahuate x siembra, brote, crecimiento, madurez,
+podrida) y visor_iconos.html.
 Cada icono es pixel art de 16 x 16 con fondo transparente: `shape-rendering="crispEdges"` y rectangulos por tramo
 de color, asi que a 32 px (x2) y 64 px (x4) conserva los pixeles. Usa SOLO colores de modelos/paleta.py (los mismos
 de los modelos 3D): ningun color nuevo. El color nunca va solo: cada icono tiene silueta propia y un <title> en
@@ -23,7 +24,8 @@ from paleta import PALETA_AGROHIVE as PAL  # noqa: E402
 
 N = 16
 ETAPAS = ('siembra', 'brote', 'crecimiento', 'madurez', 'podrida')
-NOMBRES = {'maiz': 'Maíz', 'frijol': 'Frijol', 'calabaza': 'Calabaza', 'chile': 'Chile', 'sorgo': 'Sorgo'}
+NOMBRES = {'maiz': 'Maíz', 'frijol': 'Frijol', 'calabaza': 'Calabaza', 'chile': 'Chile', 'sorgo': 'Sorgo',
+           'sandia': 'Sandía', 'camote': 'Camote', 'cacahuate': 'Cacahuate'}
 ETIQUETAS = {'siembra': 'en siembra', 'brote': 'en brote', 'crecimiento': 'en crecimiento', 'madurez': 'en madurez',
              'podrida': 'podrida'}
 
@@ -274,6 +276,190 @@ def sorgo_podrida(c):
     c.r(3, 8, 5, 12, 'podrido'); c.r(3, 7, 4, 7, 'moho_light'); c.r(3, 10, 3, 11, 'moho'); c.p(5, 12, 'podrido_dark')
     c.r(10, 10, 13, 10, 'hoja_seca'); c.p(14, 11, 'hoja_seca_dark')
     c.r(9, 12, 10, 12, 'moho_dark')
+
+
+# ---------------- ayudas de sandia, camote y cacahuate ----------------
+def corazon(c, x, y, col, punta=None):
+    """Hoja acorazonada de 3 x 3 (camote): dos lobulos arriba y la punta abajo."""
+    c.p(x, y, col); c.p(x + 2, y, col); c.r(x, y + 1, x + 2, y + 1, col); c.p(x + 1, y + 2, punta or col)
+
+
+def vaina_cintura(c, x, y, col, luz, sombra):
+    """Vaina de cacahuate de 5 x 3, con dos lomos y su cintura al centro."""
+    c.r(x, y, x + 1, y, luz); c.r(x + 3, y, x + 4, y, luz)
+    c.r(x, y + 1, x + 4, y + 1, col); c.p(x + 2, y + 1, sombra)
+    c.r(x, y + 2, x + 1, y + 2, sombra); c.r(x + 3, y + 2, x + 4, y + 2, sombra)
+
+
+# ---------------- sandia ----------------
+def sandia_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((1, 11), (6, 11), (11, 11)):
+        c.r(x, y, x + 2, y + 1, 'black'); c.p(x, y, 'stone')
+    for x in (3, 9, 13):
+        c.r(x, 14, x + 1, 14, 'black')
+
+
+def sandia_brote(c):
+    c.suelo()
+    c.r(8, 8, 8, 12, 'sandia_hoja_dark')
+    c.r(4, 9, 7, 9, 'sandia_hoja_light'); c.r(3, 10, 7, 10, 'sandia_hoja'); c.p(3, 9, 'sandia_hoja')
+    c.r(9, 9, 12, 9, 'sandia_hoja_light'); c.r(9, 10, 13, 10, 'sandia_hoja'); c.p(13, 9, 'sandia_hoja')
+    c.p(6, 4, 'sandia_hoja'); c.p(8, 4, 'sandia_hoja'); c.p(10, 4, 'sandia_hoja')
+    c.r(6, 5, 10, 5, 'sandia_hoja'); c.r(7, 6, 9, 6, 'sandia_hoja'); c.p(8, 7, 'sandia_hoja_dark')
+    c.p(8, 5, 'sandia_hoja_dark'); c.p(7, 5, 'sandia_hoja_light')
+
+
+def sandia_crecimiento(c):
+    c.suelo()
+    c.r(0, 12, 15, 12, 'sandia_hoja_dark')
+    c.p(2, 7, 'sandia_hoja'); c.p(4, 7, 'sandia_hoja'); c.r(1, 8, 5, 8, 'sandia_hoja'); c.r(2, 9, 6, 9, 'sandia_hoja')
+    c.r(1, 10, 4, 10, 'sandia_hoja'); c.p(3, 11, 'sandia_hoja_dark'); c.p(2, 8, 'sandia_hoja_light'); c.p(4, 9, 'sandia_hoja_light')
+    c.p(10, 5, 'sandia_hoja'); c.p(13, 5, 'sandia_hoja'); c.r(9, 6, 14, 6, 'sandia_hoja'); c.r(10, 7, 14, 7, 'sandia_hoja')
+    c.r(9, 8, 13, 8, 'sandia_hoja'); c.r(10, 9, 14, 9, 'sandia_hoja'); c.r(11, 10, 13, 10, 'sandia_hoja')
+    c.p(12, 11, 'sandia_hoja_dark'); c.p(10, 6, 'sandia_hoja_light'); c.p(11, 7, 'sandia_hoja_light'); c.p(12, 8, 'sandia_hoja_light')
+    c.p(7, 8, 'yellow'); c.p(6, 9, 'yellow'); c.p(8, 9, 'yellow'); c.p(7, 9, 'orange'); c.p(7, 10, 'yellow')
+    c.p(7, 11, 'sandia_hoja_dark')
+
+
+def sandia_madurez(c):
+    c.suelo()
+    c.r(3, 6, 8, 6, 'sandia_cascara_light'); c.r(2, 7, 9, 7, 'sandia_cascara_light')
+    c.r(1, 8, 10, 11, 'sandia_cascara_light'); c.r(2, 12, 9, 12, 'sandia_cascara')
+    for x0 in (3, 6, 9):
+        for y in range(6, 13):
+            x = x0 + (y // 2) % 2 - 1
+            if c.px.get((x, y)) in ('sandia_cascara_light', 'sandia_cascara'):
+                c.p(x, y, 'sandia_cascara_dark')
+    c.p(5, 5, 'sandia_hoja_dark'); c.p(6, 4, 'sandia_hoja_dark'); c.p(7, 4, 'sandia_hoja_dark')
+    c.p(9, 2, 'sandia_hoja'); c.p(11, 2, 'sandia_hoja'); c.r(8, 3, 12, 3, 'sandia_hoja'); c.r(9, 4, 13, 4, 'sandia_hoja')
+    c.r(10, 5, 12, 5, 'sandia_hoja'); c.p(10, 3, 'sandia_hoja_light'); c.p(11, 4, 'sandia_hoja_light')
+    c.r(11, 12, 15, 12, 'sandia_cascara'); c.r(11, 11, 15, 11, 'sandia_corteza')
+    c.r(12, 10, 15, 10, 'sandia_pulpa'); c.r(13, 9, 15, 9, 'sandia_pulpa'); c.r(14, 8, 15, 8, 'sandia_pulpa')
+    c.p(13, 10, 'black'); c.p(15, 9, 'black')
+
+
+def sandia_podrida(c):
+    c.suelo(seco=True)
+    c.r(4, 9, 9, 9, 'podrido'); c.r(2, 10, 11, 12, 'podrido')
+    for x in (3, 6, 10):
+        c.p(x, 10, 'podrido_dark'); c.p(x + 1, 11, 'podrido_dark'); c.p(x, 12, 'podrido_dark')
+    c.p(6, 9, 'podrido_dark'); c.p(7, 9, 'sandia_pulpa'); c.p(7, 10, 'podrido_dark')
+    c.r(3, 8, 5, 8, 'moho'); c.p(4, 7, 'moho_light'); c.r(9, 8, 10, 8, 'moho'); c.p(10, 7, 'moho_light')
+    c.p(12, 9, 'hoja_seca'); c.p(14, 9, 'hoja_seca'); c.r(12, 10, 14, 10, 'hoja_seca'); c.p(13, 11, 'hoja_seca_dark')
+    c.r(12, 12, 15, 12, 'hoja_seca_dark'); c.p(1, 11, 'hoja_seca'); c.p(0, 12, 'hoja_seca')
+
+
+# ---------------- camote ----------------
+def camote_siembra(c):
+    c.suelo('suelo_humedo')
+    for x, y in ((2, 12), (3, 12), (4, 11), (5, 11), (6, 10), (7, 10), (8, 9), (9, 9), (10, 8), (11, 8), (12, 7), (1, 13)):
+        c.p(x, y, 'camote_morado')
+    corazon(c, 4, 7, 'camote_hoja'); c.p(6, 9, 'camote_morado')
+    corazon(c, 8, 5, 'camote_hoja_dark'); c.p(9, 8, 'camote_morado')
+    corazon(c, 12, 4, 'camote_hoja_light', 'camote_hoja')
+
+
+def camote_brote(c):
+    c.suelo()
+    c.r(7, 6, 7, 13, 'camote_morado'); c.r(5, 8, 6, 8, 'camote_morado'); c.r(8, 7, 10, 7, 'camote_morado')
+    c.r(1, 5, 2, 5, 'camote_hoja'); c.r(4, 5, 5, 5, 'camote_hoja'); c.r(1, 6, 5, 6, 'camote_hoja')
+    c.r(2, 7, 4, 7, 'camote_hoja'); c.p(3, 8, 'camote_hoja_dark'); c.p(4, 8, 'camote_morado')
+    c.r(9, 3, 10, 3, 'camote_hoja_light'); c.r(12, 3, 13, 3, 'camote_hoja_light'); c.r(9, 4, 13, 4, 'camote_hoja_light')
+    c.r(10, 5, 12, 5, 'camote_hoja_light'); c.p(11, 6, 'camote_hoja')
+    c.r(7, 4, 7, 5, 'camote_hoja_light'); c.p(6, 4, 'camote_hoja_light')
+
+
+def camote_crecimiento(c):
+    c.suelo()
+    c.r(5, 6, 9, 6, 'camote_hoja_light'); c.r(3, 7, 11, 7, 'camote_hoja'); c.r(2, 8, 13, 9, 'camote_hoja')
+    c.r(1, 10, 14, 11, 'camote_hoja_dark'); c.r(0, 12, 15, 12, 'camote_morado')
+    for x, y in ((3, 8), (6, 7), (9, 8), (12, 9), (5, 10), (10, 10)):
+        corazon(c, x - 1, y, 'camote_hoja_light')
+    c.p(6, 11, 'camote_morado'); c.p(9, 11, 'camote_morado')
+    c.r(2, 4, 4, 4, 'camote_flor'); c.p(3, 5, 'camote_morado'); c.p(3, 6, 'camote_hoja_dark')
+    c.r(10, 3, 12, 3, 'camote_flor'); c.p(11, 4, 'camote_morado'); c.p(11, 5, 'camote_hoja_dark'); c.p(11, 6, 'camote_hoja_dark')
+    c.p(7, 5, 'camote_flor')
+
+
+def camote_madurez(c):
+    c.suelo()
+    c.r(5, 3, 9, 3, 'camote_hoja_light'); c.r(3, 4, 11, 4, 'camote_hoja'); c.r(2, 5, 12, 7, 'camote_hoja')
+    c.r(3, 8, 12, 8, 'camote_hoja_dark'); c.r(4, 9, 11, 9, 'camote_hoja_dark')
+    for x, y in ((4, 4), (8, 5), (11, 6), (5, 7)):
+        corazon(c, x - 1, y, 'camote_hoja_light')
+    c.p(5, 10, 'camote_morado'); c.p(10, 10, 'camote_morado')
+    c.r(2, 11, 5, 11, 'camote_piel'); c.r(1, 12, 6, 12, 'camote_piel'); c.r(2, 13, 5, 13, 'camote_piel_dark')
+    c.r(9, 11, 12, 11, 'camote_piel'); c.r(8, 12, 12, 12, 'camote_piel'); c.r(9, 13, 12, 13, 'camote_piel_dark')
+    c.r(13, 11, 13, 13, 'camote_pulpa'); c.p(14, 12, 'camote_pulpa'); c.p(0, 13, 'camote_piel_dark')
+
+
+def camote_podrida(c):
+    c.suelo(seco=True)
+    corazon(c, 1, 8, 'hoja_marchita', 'hoja_seca_dark'); c.p(2, 8, 'hoja_marchita')
+    corazon(c, 11, 6, 'hoja_seca', 'hoja_seca_dark'); c.r(12, 9, 12, 10, 'hoja_seca_dark')
+    c.r(3, 11, 3, 12, 'hoja_seca_dark'); c.p(13, 8, 'hoja_seca_dark')
+    c.r(5, 11, 10, 12, 'podrido'); c.r(6, 10, 9, 10, 'podrido'); c.r(5, 12, 10, 12, 'podrido_dark')
+    c.r(6, 9, 7, 9, 'moho'); c.p(8, 9, 'moho_light'); c.p(9, 10, 'moho'); c.p(7, 11, 'camote_piel_dark')
+    c.r(12, 12, 15, 12, 'camote_piel_dark'); c.p(13, 11, 'moho_dark')
+
+
+# ---------------- cacahuate ----------------
+def cacahuate_siembra(c):
+    c.suelo('suelo_humedo')
+    vaina_cintura(c, 1, 10, 'cacahuate_vaina', 'cacahuate_vaina_light', 'cacahuate_vaina_dark')
+    c.r(6, 11, 7, 12, 'cacahuate_semilla'); c.p(7, 11, 'cacahuate_vaina_light')
+    for x in (3, 8, 12):
+        c.r(x, 13, x + 1, 14, 'cacahuate_semilla'); c.p(x + 1, 13, 'cacahuate_vaina_light')
+    c.r(9, 10, 9, 11, 'cacahuate_vaina'); c.r(10, 12, 14, 12, 'cacahuate_vaina_dark'); c.r(15, 10, 15, 11, 'cacahuate_vaina')
+    c.r(10, 10, 11, 11, 'cacahuate_semilla'); c.p(12, 11, 'cacahuate_vaina'); c.r(13, 10, 14, 11, 'cacahuate_semilla')
+    c.p(11, 10, 'cacahuate_vaina_light'); c.p(14, 10, 'cacahuate_vaina_light')
+
+
+def cacahuate_brote(c):
+    c.suelo()
+    c.r(7, 5, 7, 12, 'cacahuate_hoja_dark'); c.p(8, 12, 'cacahuate_hoja_dark')
+    c.r(2, 7, 6, 7, 'cacahuate_hoja_dark'); c.r(8, 5, 13, 5, 'cacahuate_hoja_dark')
+    for x, y in ((2, 5), (5, 5), (2, 8), (5, 8), (9, 3), (12, 3), (9, 6), (12, 6)):
+        c.r(x, y, x + 1, y + 1, 'cacahuate_hoja_light'); c.p(x + 1, y + 1, 'cacahuate_hoja')
+    c.r(7, 3, 7, 4, 'cacahuate_hoja_light')
+
+
+def cacahuate_crecimiento(c):
+    c.suelo()
+    for x in (1, 5, 9, 13):
+        c.r(x, 7, x + 1, 7, 'cacahuate_hoja_light')
+    c.r(0, 8, 15, 9, 'cacahuate_hoja'); c.r(1, 10, 14, 10, 'cacahuate_hoja_dark')
+    for x in (1, 4, 7, 10, 13):
+        c.p(x, 8, 'cacahuate_hoja_light'); c.p(x + 1, 9, 'cacahuate_hoja_dark')
+    for x in (3, 7, 8, 12):
+        c.r(x, 11, x, 12, 'cacahuate_hoja_dark')
+    c.r(3, 5, 4, 5, 'yellow'); c.p(3, 6, 'orange'); c.r(10, 5, 11, 5, 'yellow'); c.p(11, 6, 'orange')
+    c.p(5, 11, 'yellow'); c.p(10, 11, 'yellow')
+
+
+def cacahuate_madurez(c):
+    c.suelo()
+    c.r(5, 3, 10, 3, 'cacahuate_hoja_light'); c.r(3, 4, 12, 4, 'cacahuate_hoja'); c.r(1, 5, 14, 8, 'cacahuate_hoja')
+    c.r(2, 9, 13, 9, 'cacahuate_hoja_dark'); c.r(4, 10, 11, 10, 'cacahuate_hoja_dark')
+    for x, y in ((4, 4), (8, 4), (11, 5), (2, 6), (6, 6), (12, 7), (9, 7), (4, 8)):
+        c.r(x, y, x + 1, y, 'cacahuate_hoja_light'); c.p(x, y + 1, 'cacahuate_hoja_dark')
+    c.p(7, 3, 'yellow'); c.p(13, 5, 'yellow'); c.p(1, 7, 'yellow')
+    c.p(3, 10, 'cacahuate_clavo'); c.p(3, 11, 'cacahuate_clavo'); c.p(12, 10, 'cacahuate_clavo'); c.p(12, 11, 'cacahuate_clavo')
+    c.p(7, 11, 'cacahuate_clavo')
+    vaina_cintura(c, 1, 12, 'cacahuate_vaina', 'cacahuate_vaina_light', 'cacahuate_vaina_dark')
+    vaina_cintura(c, 10, 12, 'cacahuate_vaina', 'cacahuate_vaina_light', 'cacahuate_vaina_dark')
+    c.r(6, 12, 8, 12, 'cacahuate_vaina_light'); c.r(6, 13, 8, 13, 'cacahuate_vaina_dark')
+
+
+def cacahuate_podrida(c):
+    c.suelo(seco=True)
+    c.r(6, 9, 6, 12, 'hoja_seca_dark'); c.p(5, 8, 'hoja_seca_dark'); c.p(4, 7, 'hoja_seca_dark'); c.r(7, 10, 9, 10, 'hoja_seca_dark')
+    for x, y in ((2, 6), (3, 8), (9, 9), (11, 10), (13, 11), (7, 7)):
+        c.r(x, y, x + 1, y, 'hoja_seca'); c.p(x + 1, y + 1, 'hoja_seca_light')
+    c.r(1, 10, 3, 10, 'hoja_marchita')
+    vaina_cintura(c, 0, 11, 'podrido', 'moho_light', 'podrido_dark')
+    vaina_cintura(c, 8, 11, 'cacahuate_vaina_dark', 'moho', 'podrido')
 
 
 DIBUJOS = {f'{cultivo}_{etapa}': globals()[f'{cultivo}_{etapa}'] for cultivo in NOMBRES for etapa in ETAPAS}
