@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { AVISO_EJEMPLOS, listarEjemplos } from '../demo/ejemplos';
-import { fotoPorEjemplo, fotosEjemplos } from '../ui/fotosEjemplos';
+import { listarEjemplos } from '../demo/ejemplos';
+import { fotoPorEjemplo } from '../ui/fotosEjemplos';
 import { nombreCultivo as nombreDelCultivo } from '../ui/lab/piezas';
 import type { Parcela } from '../../../contratos/tipos/contratos';
 import { DibujarParcela } from '../ui/DibujarParcela';
@@ -73,12 +73,6 @@ export function Terreno({ polygonMode, onElegirEjemplo, ejemplo, parcela, onGuar
               </a>
             </li>)}
           </ul>
-          <p className="terrain-ejemplos-aviso">{idioma === 'en' ? t('terreno.avisoEjemplos') : AVISO_EJEMPLOS}</p>
-          <details className="terrain-foto-creditos">
-            <summary>Créditos de fotografías</summary>
-            <p>Fotografías de las zonas de referencia; no representan las parcelas de ejemplo. Se muestran recortadas para adaptarse a las tarjetas.</p>
-            <ul>{fotosEjemplos.map((foto) => <li key={foto.id}><a href={foto.fuente} target="_blank" rel="noreferrer">{foto.alt}</a> {foto.autor} · <a href={foto.licenciaUrl} target="_blank" rel="noreferrer">{foto.licencia}</a>.</li>)}</ul>
-          </details>
         </div>
       </section>
     </div>
