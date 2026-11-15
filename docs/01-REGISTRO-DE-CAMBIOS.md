@@ -2,6 +2,20 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 (noche) — A4.8 hecha: SMAP publico con humedad real (Eduardo)
+
+- **Archivos:** `docs/14` (A4.8 `[HECHO]`; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`, `AgroVault/Compartido/Servidor.md`.
+- **Cambio:** `GET /api/smap` en `https://64-23-143-102.sslip.io` (Isla, -95.53, 18.03, 2024-06-01 a 2024-06-03) responde 200 `EVALUABLE` en unos 20 s. El 2024-06-03 trae humedad real 0.1432 m3/m3 (AM 0.1402, PM 0.1463, granulo `SMAP_L3_SM_P_20240603_R19240_001.h5`). El 1 y el 2 tienen granulo pero sin recuperacion valida (`NO_EVALUABLE`; no se inventa). Contraste, fuera del ranking. `web/src` no llama a SMAP. `EARTHDATA_TOKEN` queda solo en el entorno del servicio (`/opt/agrohive/agrohive.env`, modo 640) y en un `.env` local no versionado. No esta en el repo.
+- **Fuente / evidencia:** respuesta publica del 14/11 noche, API en `23f8a53`, contrato 0.12.2. `/health` seguia en 200.
+- **Decisiones afectadas:** ninguna. Eduardo pasa de 16 de 19 hechas (84 %) a 17 de 19 (89 %). Con A0.5 de balam ya en `main`, el proyecto queda en 54 de 60 (90 %).
+
+### 2026-11-14 — Entrada de medición en producción y verificación A0.5 (balam)
+
+- **Archivos:** `web/vite.config.ts`, `web/README.md`, `herramientas/medir-escena/README.md`; `docs/02`, `docs/11`, `docs/14` y vistas generadas.
+- **Cambio:** build multipágina con `index.html` y `medir.html`, solicitado por Mompin en buzón #216 y autorizado por Balam. No despliega al droplet ni realiza la medición de hardware.
+- **A0.5:** guías oficiales de entrega/evaluación de 2026, publicadas el 13/11, leídas directamente en Chrome el 14/11; búsqueda daba 502. Reglas y fuentes centralizadas en docs/02; V-03/V-04 documentadas, A0.5 hecha como verificación de reglas. El cumplimiento, revisión humana de permisos, inglés, demo del equipo y envío siguen pendientes en A5.7/A5.9; horario de juicio local V-01 no confirmado. No se reactiva video/presentación en el carril de Balam.
+- **Evidencia:** build genera ambos HTML; `medir.html?auto=0` en preview de producción devuelve 200 y muestra el control de inicio. Fuentes enlazadas en docs/02: guías 2026, FAQ, respuestas GO Team #1849/#1916 y guía NASA de medios. No se marca el proyecto como conforme ni enviado.
+
 ### 2026-11-14 — Los 20 bloques de Mafer en la escena, medidos (Mompin)
 
 - **Archivos:** `web/src/escena/voxel/bloque.ts` (tope de 24; el provisional queda solo de respaldo), `medir/medir.tsx` (caso nuevo: mezcla de los 4 cultivos con `plan.porCelda`); `docs/06`.

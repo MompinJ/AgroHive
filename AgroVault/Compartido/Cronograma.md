@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
-| **Eduardo** | 16 | 1 | 1 | 1 | 84 % de 19 |
+| **Eduardo** | 17 | 0 | 1 | 1 | 89 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
-| **balam** | 12 | 0 | 0 | 3 | 80 % de 15 |
+| **balam** | 13 | 0 | 0 | 2 | 87 % de 15 |
 
-Proyecto completo: **52 de 60** actividades hechas (87 %), 2 en curso, 1 bloqueadas.
+Proyecto completo: **54 de 60** actividades hechas (90 %), 1 en curso, 1 bloqueadas.
 
 ## Mompin
 
@@ -54,7 +54,7 @@ Proyecto completo: **52 de 60** actividades hechas (87 %), 2 en curso, 1 bloquea
 - [x] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) `HECHO`
 - [x] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `HECHO` — 14/11 noche: P0 a P3 de la demo de Isla en Chrome sin salida (año 2016 EVALUABLE; comparación criterio B con R4, R2 y R1 evaluables). API local sin red: clima 7397 días, suelo, elevación, próxima y cultivos. El despliegue de ese código quedó en A4.7
 - [x] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `HECHO` — 14/11 noche: `https://64-23-143-102.sslip.io` en `23f8a53`. `/health` con `versionContrato` 0.12.2, front 200, `/api/calendario` y `/api/cultivos` 200, `mediworks.mx` 200. `actualizar-servidor.sh` corrido en el droplet
-- [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — 14/11 noche, droplet `23f8a53`: `GET /api/smap` (2024-06-01 a 2024-06-03) responde 503 `ERROR_DATOS` porque el servicio no tiene `EARTHDATA_TOKEN` (tampoco esta en esta maquina ni en `agrohive.env`). La ruta y el schema existen; `web/src` no llama a SMAP. Sin token no hay humedad real y no se inventa
+- [x] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `HECHO` — 14/11 noche: `GET /api/smap` publico (Isla, 2024-06-01 a 2024-06-03) responde 200 `EVALUABLE` en unos 20 s. El 2024-06-03 trae humedad real 0.1432 m3/m3 (AM 0.1402, PM 0.1463, granulo `SMAP_L3_SM_P_20240603_R19240_001.h5`). El 1 y el 2 tienen granulo pero sin recuperacion valida (`NO_EVALUABLE`; no se inventa). Contraste, fuera del ranking. `web/src` no llama a SMAP. El token queda solo en el entorno del servicio
 - [x] **A4.10** Lluvia GPM IMERG vía NASA POWER (IMERG_PRECTOT con time-standard=UTC, sin cuenta Earthdata) en GET /api/clima y en el paquete de demo, como evidencia: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en features/imerg/ y features/encargos/eduardo-datos-globales.md `HECHO` — `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance
 - [x] **A4.11** NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto, como evidencia de los años de escenario; no entra al ranking. El servicio previsto era ORNL DAAC; se sustituyo porque no respondia `HECHO` — ORNL DAAC no respondio (502, 503). La serie sale de Microsoft Planetary Computer, MOD13Q1 V061, validada contra ORNL en 4 fechas. Cache, limites del pixel y paquete completo en `datos/demo/respuestas/ndvi.json`. Cita del producto: doi:10.5067/MODIS/MOD13Q1.061. El schema traido en este merge (contratos 0.12.2) cita Planetary Computer, coleccion `modis-13Q1-061`; ORNL queda como respaldo que no se llama en vivo
 - [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después — C5 no está cruzada (el producto no está congelado); no se empieza
@@ -77,7 +77,7 @@ Proyecto completo: **52 de 60** actividades hechas (87 %), 2 en curso, 1 bloquea
 
 ## balam
 
-- [ ] **A0.5** Verificar reglas de entrega e IA (V-03, V-04)
+- [x] **A0.5** Verificar reglas de entrega e IA (V-03, V-04) `HECHO`
 - [x] **A1.2** Esqueleto web/: React + Vite + TS, Worker del motor, rutas P0 a P3 vacías `HECHO` — rutas P0 a P3, Worker inicializado desde la UI con confirmacion de respuesta y build verificados
 - [x] **A2.9** Cuadrícula desde polígono (Turf.js) con tope de celdas `HECHO`
 - [x] **A2.10** Mapa y dibujo de polígono libre (Leaflet) `HECHO`
