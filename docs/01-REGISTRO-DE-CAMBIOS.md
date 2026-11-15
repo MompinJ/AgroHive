@@ -2,6 +2,13 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — MF6: revisión de tres elecciones del catálogo (Mafer)
+
+- **Archivos:** `datos/catalogos/README.md` (tres filas de «Elecciones que una persona debe revisar»).
+- **Cambio:** `[DECIDIDO]` Mafer, 15/11 (tarea MF6 de Mompin, `docs/16`): se mantienen (1) el chícharo en fresco (Kc final 1.10, p 0.35, subfila `Fresh`), (2) el Kc final del trigo en 0.25 (cosecha mecanizada) y (3) el chile con los parámetros del pimiento dulce, rotulado como equivalencia de especie. Las tres filas pasan de «revisar» a «revisado». Ningún valor cambia: `cultivos.json` y los JSON generados quedan igual.
+- **Límites:** revisado con lo que dice el propio README y el catálogo; no se cotejó con el PDF de FAO-56 (eso es MF3 y MF5). Las demás filas marcadas «revisar» (cebada, trigo y avena por altitud; maíz dulce; yuca) siguen abiertas.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Calendario MUNDIAL, parte 4: FAO Crop Calendar encima (CC BY-NC-SA, 57 países) (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
 
 - **Decisión aplicada:** `[DECIDIDO]` Mompin, 15/11 (docs/13): FAO Crop Calendar entra con la licencia más restrictiva (CC BY-NC-SA 4.0), en carpeta aparte con su aviso; GGCMI es la base y FAO va encima; donde no hay GGCMI, FAO cubre. Anotado en docs/11 que condiciona la licencia del repo (D, para la entrega).
