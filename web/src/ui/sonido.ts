@@ -84,11 +84,14 @@ export function programar(ctx: AudioContext, salida: AudioNode, receta: readonly
   return n;
 }
 
-export function crearMotor(fabrica: FabricaAudio = fabricaNavegador, almacen: Pick<Storage, 'getItem' | 'setItem'> | null = typeof localStorage === 'undefined' ? null : localStorage) {
+export function crearMotor(fabrica: FabricaAudio = fabricaNavegador, almacen: Pick<Storage, 'getItem' | 'setItem'> | null = typeof localStorage === 'undefined' ? null : localStorage, exigirGesto = false) {
   let ctx: AudioContext | null = null;
   let maestro: GainNode | null = null;
   let ruido: AudioBuffer | undefined;
   let activo = true;
+  // Los navegadores (Safari sobre todo) solo dejan sonar un audio creado y reanudado DENTRO de un gesto del usuario: con exigirGesto, no se crea
+  // nada hasta el primer clic, toque o tecla (`desbloquear`). Un audio creado antes se queda dormido y las notas programadas no suenan.
+  let desbloqueado = !exigirGesto;
   try { if (almacen?.getItem(LLAVE) === '0') activo = false; } catch { /* sin almacenamiento: queda activo */ }
   const oyentes = new Set<() => void>();
 
@@ -107,36 +110,64 @@ export function crearMotor(fabrica: FabricaAudio = fabricaNavegador, almacen: Pi
     return ctx;
   }
 
+  /** Crea y despierta el audio; hay que llamarlo desde un gesto del usuario. Suena un instante en silencio para que iOS lo libere. */
+  function desbloquear(): void {
+    if (desbloqueado && ctx && ctx.state === 'running') return; // ya despierto: nada que hacer en cada clic
+    desbloqueado = true;
+    const c = asegurar();
+    if (!c) return;
+    if (c.state !== 'running') void c.resume().catch(() => {});
+    try {
+      const buf = c.createBuffer(1, 1, c.sampleRate);
+      const f = c.createBufferSource();
+      f.buffer = buf;
+      f.connect(c.destination);
+      f.start(0);
+    } catch { /* sin audio utilizable */ }
+  }
+
   return {
     estaActivo: () => activo,
+    estaDesbloqueado: () => desbloqueado,
+    desbloquear,
     alternar(valor?: boolean) {
       activo = valor ?? !activo;
       try { almacen?.setItem(LLAVE, activo ? '1' : '0'); } catch { /* sin almacenamiento */ }
       oyentes.forEach((f) => f());
     },
     suscribir(f: () => void) { oyentes.add(f); return () => { oyentes.delete(f); }; },
-    /** Toca un efecto; no hace nada si esta silenciado o no hay audio. `tono` multiplica las frecuencias (1 = normal). */
+    /** Toca un efecto; no hace nada si esta silenciado, si aun no hubo un gesto del usuario o si no hay audio. `tono` multiplica las frecuencias (1 = normal). */
     tocar(nombre: NombreSonido, tono = 1): boolean {
-      if (!activo) return false;
+      if (!activo || !desbloqueado) return false;
       const c = asegurar();
       if (!c || !maestro) return false;
-      if (c.state === 'suspended') void c.resume().catch(() => {});
-      programar(c, maestro, RECETAS[nombre], c.currentTime, tono, ruido);
+      const salida = maestro;
+      const sonar = () => { programar(c, salida, RECETAS[nombre], c.currentTime, tono, ruido); };
+      if (c.state === 'running') { sonar(); return true; }
+      // Dormido (suspended) o interrumpido: se despierta y las notas se programan cuando ya corre el reloj de audio, no antes.
+      void c.resume().then(() => { if (c.state === 'running') sonar(); }).catch(() => {});
       return true;
     },
   };
 }
 
 // Motor unico de la aplicacion.
-export const motor = crearMotor();
+export const motor = crearMotor(undefined, undefined, true);
 export const tocar = (nombre: NombreSonido, tono = 1) => motor.tocar(nombre, tono);
 
-/** Un "clic" suave en cada boton o enlace de la pagina. Devuelve la funcion que lo quita. */
+/** Un "clic" suave en cada boton o enlace de la pagina, y el desbloqueo del audio en el primer gesto (clic, toque o tecla). Devuelve la funcion que lo quita. */
 export function instalarClicGlobal(raiz: Document = document): () => void {
+  const desbloquear = () => motor.desbloquear();
   const alClic = (ev: Event) => {
+    desbloquear();
     const objetivo = (ev.target as Element | null)?.closest?.('button, a, [role="radio"], summary');
     if (objetivo && !objetivo.hasAttribute('disabled') && objetivo.getAttribute('aria-disabled') !== 'true' && !objetivo.hasAttribute('data-sin-sonido')) motor.tocar('clic');
   };
+  // pointerdown/touchend/keydown cuentan como gesto para el audio; click por si acaso.
+  const gestos = ['pointerdown', 'touchend', 'keydown'] as const;
   raiz.addEventListener('click', alClic, true);
-  return () => raiz.removeEventListener('click', alClic, true);
+  for (const g of gestos) raiz.addEventListener(g, desbloquear, true);
+  const alVolver = () => { if (!raiz.hidden && motor.estaDesbloqueado()) motor.desbloquear(); };
+  raiz.addEventListener('visibilitychange', alVolver);
+  return () => { raiz.removeEventListener('click', alClic, true); for (const g of gestos) raiz.removeEventListener(g, desbloquear, true); raiz.removeEventListener('visibilitychange', alVolver); };
 }

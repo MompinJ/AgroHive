@@ -199,6 +199,14 @@ Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 - **Fuente / evidencia:** pruebas nuevas en `plagas.test.ts`; suite completa del front 3264 pruebas en verde; `tsc` sin errores. No se verificó visualmente en el navegador.
 - **Decisiones afectadas:** ninguna. Costo y efecto del insecticida quedan sin modelar hasta tener una fuente.
 
+### 2026-11-15 — Arreglo del sonido: el audio se despierta en el primer gesto (Eduardo)
+
+- **Archivos:** `web/src/ui/sonido.ts` y `sonido.test.ts`; `docs/06`.
+- **Cambio:** el equipo reportó que "otra vez se rompieron los sonidos". El código de sonido no había cambiado; el fallo era de diseño: el audio se creaba la primera vez que algo sonaba, a veces sin ningún clic previo (por ejemplo, los blips de Esquilote al escribir), y los navegadores, sobre todo Safari, dejan dormido un audio así; además las notas se programaban antes de que despertara. Ahora el audio se crea y se reanuda en el primer gesto (clic, toque o tecla, y al volver a la pestaña), sin gesto no se crea ni suena nada, y las notas se programan solo cuando el reloj de audio corre.
+- **Evidencia:** 4 pruebas nuevas con un audio falso (sin gesto no suena, con gesto despierta, las notas esperan al reloj, un navegador que no deja despertar no falla); en Chrome headless se había visto antes que el audio programaba notas con el contexto activo.
+- **Límites:** **no se puede oír el sonido desde aquí**; el arreglo corrige la causa más probable en Safari y Chrome, pero si sigue sin sonar hay que revisar el botón de silencio, el volumen del equipo y el interruptor de silencio del iPhone.
+- **Decisiones afectadas:** ninguna.
+
 ### 2026-11-15 — Dominio propio agrohive.space (Eduardo)
 
 - **Archivos:** `api/despliegue/agrohive.nginx.conf` (copia de la configuración real), `README.md`, `AgroVault/Compartido/Servidor.md`. En el droplet: `/etc/nginx/sites-available/agrohive`, `/opt/agrohive/agrohive.env`, certificado `agrohive-space`.
