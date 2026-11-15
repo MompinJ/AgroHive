@@ -48,7 +48,7 @@ Nombres del montaje (bloque 6), en este orden: Bajío, Mexico · Sorriso, Brazil
 
 **Si sobra voz** al grabar, lo primero que se corta es "20 years of" (bloque 3) y luego "Watch your field react" se vuelve texto en pantalla.
 
-**Enlace del cierre** `[EN EVENTO]`: el equipo decide si va la app publicada (hoy `https://64-23-143-102.sslip.io/`) o el repositorio (`github.com/MompinJ/AgroHive`). En pantalla conviene uno solo, corto.
+**Enlace del cierre** `[DECIDIDO]` (Mompin, 15/11): se muestra la URL de la app publicada (hoy `https://64-23-143-102.sslip.io/`). Si cambia el despliegue, se cambia en el cartón.
 
 **Evento en el cierre:** "Field Shift challenge" en texto, sin logos del evento ni de NASA. Si se quiere poner "NASA Space Apps Challenge 2026" como texto, confirmar antes con las reglas de marca (`docs/02`, guía de imágenes y medios) `[VERIFICAR]`.
 
@@ -67,7 +67,8 @@ Archivos listos para importar en el editor (SRT, mismos tiempos que la tabla):
 **Voz con IA en Krea** `[DECIDIDO]` (Mompin, 15/11: "tengo KREA, para la voz"). Krea tiene texto a voz (ElevenLabs `elevenlabs/tts` y Seed Audio). Flujo obligatorio: se pule el texto, se pide el costo con preflight, se muestra la ficha (modelo, voz, texto, costo y saldo) y **no se genera nada sin el OK de Mompin**; primero una sola toma para validar el tono.
 
 - **Tono:** voz adulta, cálida y segura, ritmo de trailer pero sin exagerar; acento neutro.
-- **Se generan los 6 bloques por separado** (más fácil de ajustar al corte) o el texto completo con pausas marcadas; se decide en la ficha.
+- **Toma 1 generada** (15/11, OK de Mompin): ElevenLabs TTS `eleven_v4`, voz **Brian**, texto completo con pausas; 22.6 créditos. Archivo: [`trailer-30s/voz/voz-v1-brian.mp3`](trailer-30s/voz/voz-v1-brian.mp3) (20.7 s, con la declaración de IA en los metadatos). Job de Krea `acc8a6de-7199-4b2d-a49e-fa240b8750a3`.
+- **Dónde cae cada frase en el archivo** (medido con `silencedetect`, para cortar y alinear subtítulos): 1) 0.0-1.8 s · 2) 2.2-4.7 s · 3) 5.1-9.3 s · 4) 9.7-14.2 s · 5) 14.6-17.9 s (con pausa antes de "not their best") · 6) 18.3-20.7 s. Cada frase cabe en su bloque de la escaleta.
 - **Declaración (obligatoria por `docs/02`):** en el video, una línea visible en el cartón final ("Voice: AI-generated (Krea / ElevenLabs)" o el modelo real); en el audio exportado, el mismo texto en los metadatos (`comment`/`description`); y la mención en `docs/02` y en el README.
 
 ## Música y sonido
@@ -131,7 +132,7 @@ Se graba **más largo de lo que se usa** (5 a 8 s por toma) para elegir el mejor
 | T6a-f | Lista para grabar | | |
 | T6g | Espera B7 | | |
 | T7 | Por hacer en el editor | | |
-| Voz | Espera OK de la ficha de Krea | | |
+| Voz | Toma 1 lista, falta validarla en el corte | `voz/voz-v1-brian.mp3` | Brian, eleven_v4 |
 | Música | Por elegir (A, B o C) | | |
 
 ## Cómo se arma
