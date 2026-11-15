@@ -131,7 +131,7 @@
 - La escena 3D es cualitativa: etapas y estados, no alturas reales.
 - Todo resultado requiere validación en campo con agrónomos locales.
 - Pruébalo
-- 64-23-143-102.sslip.io
+- agrohive.space
 - Equipo Code Hive: Mompin, Eduardo, Mafer y balam
 - Uso de IA. La idea viene del video de un integrante, no de una IA. Asistentes de IA (Claude, Codex, Cursor, ChatGPT, Gemini, Copilot) ayudaron a escribir código, pruebas, documentación y esta presentación; agentes de IA hicieron los modelos 3D en código con nuestra librería de vóxeles; algunas ilustraciones de la interfaz y la voz del tráiler (ElevenLabs vía Krea) son generadas con IA. Los datos de la NASA se usan como fuente; la NASA no avala este proyecto.
 
