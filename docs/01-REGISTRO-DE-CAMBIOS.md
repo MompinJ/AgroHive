@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — Calendario MUNDIAL, parte 4: FAO Crop Calendar encima (CC BY-NC-SA, 57 países) (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
+
+- **Decisión aplicada:** `[DECIDIDO]` Mompin, 15/11 (docs/13): FAO Crop Calendar entra con la licencia más restrictiva (CC BY-NC-SA 4.0), en carpeta aparte con su aviso; GGCMI es la base y FAO va encima; donde no hay GGCMI, FAO cubre. Anotado en docs/11 que condiciona la licencia del repo (D, para la entrega).
+- **Archivos:** `datos/calendario/fao-crop-calendar/` (nuevo: `LICENCIA.md`, `extraer_fao.py`, `fao-crop-calendar.json` de 288 KB), `api/app/calendario.py`, `api/tests/test_calendario.py`, `datos/calendario/LEEME.md`, `docs/04`, `docs/11`, `docs/13`, `datos/catalogos/README.md`, `api/README.md`, `AgroVault/Compartido/APIs.md` y `Resumen.md`.
+- **Cambio:** en los 57 países de FAO Crop Calendar (África, Asia, Andes; no trae México ni EE. UU.) la ventana de cada cultivo y temporada sale de FAO cuando la hay: unión de los periodos de siembra de las zonas agroecológicas del país, porque FAO no publica sus límites; tramos separados en una temporada no se eligen (`FAO_ZONAS_DISTINTAS`). Cada ventana cita a FAO y la licencia; la respuesta lleva `FAO_CROP_CALENDAR_NC_SA`. Advertencia nueva `CALENDARIO_RESUMEN` con el conteo del punto.
+- **Conteo:** 18/40 en cualquier punto (GGCMI y MIRCA); con FAO, Kenia 23, Perú 23, Etiopía 23, Bangladesh 24, Pakistán 28, Colombia 29 y Marruecos 33. Memoria: 144 MB de RSS con todos los extractos.
+- **Para el front:** contrato sin cambios. En países de FAO aparecen ventanas que cruzan el año (por ejemplo, octubre a marzo); el motor ya las acepta (`dentroDeVentana`).
+
 ### 2026-11-15 — Calendario MUNDIAL, parte 3: MIRCA2000 y frijol desde GGCMI `bea`; 18 de 40 cultivos con ventana (IA de Mompin, sesión "calendario", rama `Mompin-fallos`)
 
 - **Decisiones:** `[DECIDIDO]` Mompin, 15/11, registradas en `docs/13`: (1) frijol y ejote se toman de GGCMI `bea` ("Beans" en el protocolo ISIMIP3, sin especie) como equivalencia `SUPUESTO`, con la advertencia `FRIJOL_SIN_ESPECIE`; (2) FAO Crop Calendar entra con la licencia más restrictiva (CC BY-NC-SA), en carpeta separada (parte 4).

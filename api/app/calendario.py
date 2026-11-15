@@ -140,6 +140,14 @@ def _mirca() -> dict:
 
 
 @lru_cache(maxsize=1)
+def _fao() -> dict:
+    """Extracto de FAO Crop Calendar (CC BY-NC-SA 4.0, carpeta aparte con su LICENCIA.md). Si se quita la carpeta (docs/11,
+    licencia del repo), la API sigue sin FAO."""
+    ruta = config.CALENDARIO_DIR / "fao-crop-calendar" / "fao-crop-calendar.json"
+    return json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else {"paises": {}}
+
+
+@lru_cache(maxsize=1)
 def _ids_catalogo() -> tuple:
     # El catalogo del repo, no CATALOGOS_DIR: el test redirige esa carpeta a una vacia.
     crudo = json.loads((config.RAIZ / "datos" / "catalogos" / "cultivos.json").read_text(encoding="utf-8"))
@@ -404,7 +412,7 @@ def _base_mundial(celda: tuple[int, int, float, float]) -> tuple[list, list]:
     adv = [
         {"codigo": "CALENDARIO_BASE_MUNDIAL", "severidad": "info",
          "mensaje": (f"Base mundial GGCMI fase 3 y MIRCA2000 (celda de 0.5 grados): {len(con)} de {len(_ids_catalogo())} cultivos con "
-                     f"ventana en esta celda. Sin ventana: {', '.join(sin)}.")},
+                     f"ventana en esta celda antes de las capas de pais. Sin ventana en la base: {', '.join(sin)}.")},
         {"codigo": "GGCMI_UN_SOLO_CICLO", "severidad": "aviso",
          "mensaje": "GGCMI fase 3 publica un solo ciclo de temporal por celda y cultivo. La otra temporada no tiene dato."},
         {"codigo": "PRESENCIA_MIRCA2000", "severidad": "aviso",
@@ -420,6 +428,71 @@ def _base_mundial(celda: tuple[int, int, float, float]) -> tuple[list, list]:
         adv.append({"codigo": "CALENDARIO_EQUIVALENCIA_SUPUESTO", "severidad": "aviso",
                     "mensaje": f"Calendario tomado de otro producto o de una clase agregada (SUPUESTO): {', '.join(equivalencias)}. Ver el motivo de cada entrada."})
     return entradas, adv
+
+
+CONSULTADO_FAO = "2026-11-15"
+LICENCIA_FAO = "CC BY-NC-SA 4.0 (la mas restrictiva de las fichas de FAO; ver datos/calendario/fao-crop-calendar/LICENCIA.md)"
+
+
+def _texto_ventana(v: dict) -> str:
+    return f"{v['desdeDia']} de {MESES[v['desdeMes'] - 1]} al {v['hastaDia']} de {MESES[v['hastaMes'] - 1]}"
+
+
+def _fao_encima(entradas: list, iso: str) -> tuple[list, list]:
+    """Ventanas de FAO Crop Calendar del pais encima de la base (GGCMI/MIRCA). La presencia no cambia."""
+    fao = _fao()
+    pais = fao["paises"].get(iso)
+    if not pais:
+        return entradas, []
+    salida, usados, ambiguos = [], [], []
+    for e in entradas:
+        reg = pais.get(e["cultivo"])
+        v = reg.get(e["temporada"]) if reg else None
+        if not v:
+            salida.append(e)
+            continue
+        nota_cultivo = fao["cultivos"][e["cultivo"]]["nota"]
+        zonas = reg["zonas"]
+        base = (f"{fao['fuente']}, {iso}: {', '.join(reg['productos'])}; actualizado {reg['actualizado']}. "
+                + (f"{nota_cultivo} " if nota_cultivo else "")
+                + ("Se siembra todo el ano; la ventana es la temporada entera. " if reg.get("todoElAno") else "")
+                + f"FAO publica {len(zonas)} zona(s) agroecologica(s) sin limites ({'; '.join(zonas)}): AgroHive no sabe en cual cae el "
+                "punto y toma la union de sus periodos. FAO no separa riego y temporal.")
+        if "ambiguo" in v:
+            tramos = "; ".join(_texto_ventana(x) for x in v["ambiguo"])
+            ambiguos.append(f"{e['cultivo']} {e['temporada']}")
+            if e["ventana"]["estado"] == "EVALUABLE":
+                salida.append(e)  # la base mundial se queda; FAO no da una sola ventana
+                continue
+            motivo = f"FAO da varios periodos separados en esta temporada segun la zona ({tramos}) y no se sabe cual aplica. " + base
+            fuente = {"nombre": fao["fuente"], "url": fao["ficha"], "cita": f"FAO Crop Calendar. Licencia: {LICENCIA_FAO}",
+                      "consultado": CONSULTADO_FAO, "nota": motivo}
+            salida.append({**_entrada_no(e["cultivo"], e["temporada"], motivo, fuente), "presencia": e["presencia"]})
+            continue
+        nota = base
+        if e["ventana"]["estado"] == "EVALUABLE":
+            nota += f" Debajo, la base mundial ({e['ventana']['fuente']['nombre']}) daba otra ventana: FAO va encima."
+        fuente = {"nombre": fao["fuente"], "url": fao["ficha"], "cita": f"FAO Crop Calendar ({fao['app']}). Licencia: {LICENCIA_FAO}",
+                  "unidades": "fecha de siembra (mes y dia)", "consultado": CONSULTADO_FAO, "resolucion": "pais (union de zonas agroecologicas)",
+                  "nota": nota}
+        salida.append({
+            "cultivo": e["cultivo"], "temporada": e["temporada"], "regimen": "temporal", "estado": "EXPLORATORIO",
+            "motivo": ("Ventana nacional de FAO Crop Calendar (union de zonas agroecologicas, sin separar riego y temporal); "
+                       "no es una recomendacion local." + (f" {nota_cultivo}" if nota_cultivo and "SUPUESTO" in nota_cultivo else "")),
+            "ventana": {"estado": "EVALUABLE", **{k: v[k] for k in ("desdeMes", "desdeDia", "hastaMes", "hastaDia")}, "fuente": fuente},
+            "presencia": e["presencia"],
+        })
+        usados.append(f"{e['cultivo']} {e['temporada']}")
+    adv = []
+    if usados:
+        adv.append({"codigo": "FAO_CROP_CALENDAR_NC_SA", "severidad": "aviso",
+                    "mensaje": (f"Ventanas de FAO Crop Calendar encima de la base mundial en {', '.join(usados)}. Licencia {LICENCIA_FAO}: "
+                                "uso no comercial y compartir igual. Son la union de las zonas agroecologicas del pais.")})
+    if ambiguos:
+        adv.append({"codigo": "FAO_ZONAS_DISTINTAS", "severidad": "aviso",
+                    "mensaje": (f"FAO da periodos separados segun la zona agroecologica en {', '.join(ambiguos)}; sin el limite de las "
+                                "zonas no se elige uno (queda la base mundial si la hay, o NO_EVALUABLE).")})
+    return salida, adv
 
 
 def _isla_encima(entradas: list) -> tuple[list, list, dict]:
@@ -453,6 +526,8 @@ def armar(lon: float, lat: float) -> dict:
     celda = _celda(lon, lat)
     i, j, lat_c, lon_c = celda
     entradas, adv = _base_mundial(celda)
+    entradas, adv_fao = _fao_encima(entradas, lugar["iso"])
+    adv = adv_fao + adv
     ubicacion = {"pais": lugar["nombre"], "paisIso": lugar["iso"], "region": f"celda GGCMI {lat_c:.2f},{lon_c:.2f}",
                  "unidadAdministrativa": {"sistema": "Natural Earth 110m", "clave": lugar["iso"], "nombre": lugar["nombre"], "nivel": 0}}
     ident = f"calendario-ggcmi-{lugar['iso'].lower()}-{i}-{j}"
@@ -472,6 +547,10 @@ def armar(lon: float, lat: float) -> dict:
                        "mensaje": ("El punto no cae en un municipio con pareja en SIAP (zona urbana sin agricultura registrada, "
                                    "nombre ambiguo o fuera de la rejilla): no se aplica la presencia de SIAP; queda la de MIRCA2000 "
                                    "donde el cultivo tiene clase propia, o sin_dato. Ver sinPareja en datos/calendario/siap-mexico.json.")})
+    con = [c for c in _ids_catalogo() if any(e["cultivo"] == c and e["ventana"]["estado"] == "EVALUABLE" for e in entradas)]
+    adv.insert(0, {"codigo": "CALENDARIO_RESUMEN", "severidad": "info",
+                   "mensaje": (f"{len(con)} de {len(_ids_catalogo())} cultivos del catalogo con ventana de siembra con fuente en este punto. "
+                               f"Sin ventana (NO_EVALUABLE, ver el motivo de cada uno): {', '.join(c for c in _ids_catalogo() if c not in con) or 'ninguno'}.")})
     adv.append({"codigo": "PAIS_NATURAL_EARTH_110M", "severidad": "info",
                 "mensaje": "El pais sale de Natural Earth 1:110m. En la costa el limite es grueso."})
     adv.extend(_aviso_cercania(lugar))
