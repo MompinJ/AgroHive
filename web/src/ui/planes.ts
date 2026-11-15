@@ -1,4 +1,6 @@
 import type { CalendarioLocal, CatalogoCultivos, Ciclo, Fuente, Parcela, PlanSiembra } from '../../../contratos/tipos/contratos';
+import { idiomaActual, tt } from './i18n/actual';
+import { NOMBRES_CULTIVO_EN } from './i18n/cultivos-en';
 import { parametrosCultivo } from '../motor/cultivo';
 import version from '../../../contratos/package.json';
 import { dentroDeVentana } from '../motor/pilares';
@@ -156,13 +158,13 @@ export function conflictosPlan(plan: PlanSiembra, catalogo: CatalogoCultivos): s
     const a = ciclos[k - 1]!;
     const b = ciclos[k]!;
     if (aDia(b.siembra) <= aDia(a.siembra)) {
-      errores.push(`La siembra del ciclo ${b.ciclo} debe ser posterior a la del ciclo ${a.ciclo}.`);
+      errores.push(tt('plan.orden', { b: b.ciclo, a: a.ciclo }));
       continue;
     }
     for (const cultivo of cultivosDelCiclo(plan, a.ciclo)) {
       const dias = diasCultivo(cultivo, catalogo);
       if (dias != null && aDia(a.siembra) + dias > aDia(b.siembra)) {
-        errores.push(`${nombresCultivos[cultivo] ?? cultivo} del ciclo ${a.ciclo} dura ${dias} días y termina el ${deDia(aDia(a.siembra) + dias)}, después de la siembra del ciclo ${b.ciclo} (${b.siembra}).`);
+        errores.push(tt('plan.dura', { cultivo: idiomaActual() === 'en' ? NOMBRES_CULTIVO_EN[cultivo] ?? cultivo : nombresCultivos[cultivo] ?? cultivo, a: a.ciclo, dias, fin: deDia(aDia(a.siembra) + dias), b: b.ciclo, siembra: b.siembra }));
       }
     }
   }
@@ -281,7 +283,7 @@ export function agruparCultivos<T extends { id: string; esLeguminosa?: boolean |
 /** Nombre visible de una rotacion: su lugar en la lista ("Rotacion 1", "Rotacion 2"...). */
 export function nombreRotacion(id: string, planes: readonly Pick<PlanSiembra, 'rotacionId'>[]): string {
   const i = planes.findIndex((p) => p.rotacionId === id);
-  return `Rotación ${i >= 0 ? i + 1 : id.replace(/^R/, '')}`;
+  return tt('plan.rotacion', { n: i >= 0 ? i + 1 : id.replace(/^R/, '') });
 }
 
 /** Rotacion nueva: copia de la elegida con el siguiente id libre (R1, R2...). */

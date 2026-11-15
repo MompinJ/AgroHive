@@ -1,5 +1,5 @@
 1
-00:00:00,300 --> 00:00:03,000
+00:00:00,300 --> 00:00:02,900
 ¿Y si la próxima temporada viene seca?
 
 2
@@ -12,16 +12,16 @@ AgroHive pone a prueba tu rotación
 con 20 años de clima real de la NASA.
 
 4
-00:00:12,100 --> 00:00:16,800
+00:00:12,100 --> 00:00:16,850
 Año seco, normal y lluvioso.
 Mira cómo reacciona tu campo.
 
 5
-00:00:17,000 --> 00:00:20,900
+00:00:16,950 --> 00:00:20,700
 Ordena las rotaciones por su peor año,
 no por el mejor.
 
 6
-00:00:26,200 --> 00:00:28,600
+00:00:26,200 --> 00:00:28,900
 AgroHive. Planea para el año malo.
 

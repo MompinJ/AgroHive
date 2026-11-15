@@ -4,6 +4,8 @@
 // (temperatura optima y absoluta, lluvia anual), el calendario local y las plagas registradas.
 // Es una ayuda para elegir `[PROPUESTA]`: no es un indicador del motor ni entra al ranking.
 import type { CalendarioLocal, Cultivo, SerieClima } from '../../../../contratos/tipos/contratos';
+import { tt } from '../i18n/actual';
+import { nombrePlaga } from '../i18n/textos/laboratorio';
 import { dentroDeVentana } from '../../motor/pilares';
 import { DIAS_MAX_CLIMA, referenciaSiembra } from '../planes';
 
@@ -65,30 +67,30 @@ export function conveniencia(cultivo: Cultivo, entrada: {
   const u = cultivo.umbrales as unknown as Record<string, { estado: string; valor?: number | null } | undefined>;
   const demasiadoLargo = entrada.dias != null && entrada.dias > DIAS_MAX_CLIMA;
   const noCabe = !demasiadoLargo && entrada.disponibles != null && entrada.dias != null && entrada.dias > entrada.disponibles;
-  if (demasiadoLargo) motivos.push(`Tarda ${entrada.dias} días: más que el año de clima del simulador, no se puede evaluar.`);
-  else if (noCabe) { puntos -= 1; motivos.push(`Tarda ${entrada.dias} días: los ciclos siguientes se recorren para que quepa.`); }
+  if (demasiadoLargo) motivos.push(tt('conv.muyLargo', { dias: entrada.dias ?? '' }));
+  else if (noCabe) { puntos -= 1; motivos.push(tt('conv.noCabe', { dias: entrada.dias ?? '' })); }
   const t = entrada.dias ? tMediaCiclo(entrada.clima, entrada.siembra, entrada.dias) : null;
   const [optMin, optMax, absMin, absMax] = [valor(u.tOptMinC), valor(u.tOptMaxC), valor(u.tMinAbsC), valor(u.tMaxAbsC)];
   if (t != null && optMin != null && optMax != null) {
-    if (t >= optMin && t <= optMax) { puntos += 2; motivos.push(`Temperatura ideal en esa época (${redondo(t)} °C).`); }
-    else if (absMin != null && absMax != null && (t < absMin || t > absMax)) { puntos -= 3; motivos.push(`${t < absMin ? 'Demasiado frío' : 'Demasiado calor'} en esa época (${redondo(t)} °C).`); }
-    else motivos.push(`Temperatura aceptable, no la ideal (${redondo(t)} °C).`);
+    if (t >= optMin && t <= optMax) { puntos += 2; motivos.push(tt('conv.ideal', { t: redondo(t) })); }
+    else if (absMin != null && absMax != null && (t < absMin || t > absMax)) { puntos -= 3; motivos.push(tt(t < absMin ? 'conv.frio' : 'conv.calor', { t: redondo(t) })); }
+    else motivos.push(tt('conv.aceptable', { t: redondo(t) }));
   }
   const p = entrada.clima.lluviaAnualMm;
   const [lMin, lMax] = [valor(u.lluviaAnualMinMm), valor(u.lluviaAnualMaxMm)];
   if (p != null && lMin != null && lMax != null) {
-    if (p >= lMin && p <= lMax) { puntos += 1; motivos.push(`Aguanta la lluvia de la zona (${redondo(p)} mm al año).`); }
-    else { puntos -= 2; motivos.push(p > lMax ? `Llueve más de lo que aguanta (${redondo(p)} mm al año).` : `Llueve menos de lo que necesita (${redondo(p)} mm al año).`); }
+    if (p >= lMin && p <= lMax) { puntos += 1; motivos.push(tt('conv.aguanta', { p: redondo(p) })); }
+    else { puntos -= 2; motivos.push(tt(p > lMax ? 'conv.masLluvia' : 'conv.menosLluvia', { p: redondo(p) })); }
   }
   const ref = referenciaSiembra(cultivo.id, entrada.temporada, entrada.calendario);
-  if (ref?.presencia.estado === 'registrado') { puntos += 2; motivos.push('Se siembra en esta zona.'); }
-  else if (ref?.presencia.estado === 'no_registrado') { puntos -= 2; motivos.push('Casi no se siembra en esta zona.'); }
+  if (ref?.presencia.estado === 'registrado') { puntos += 2; motivos.push(tt('conv.seSiembra')); }
+  else if (ref?.presencia.estado === 'no_registrado') { puntos -= 2; motivos.push(tt('conv.casiNo')); }
   if (ref?.ventana.estado === 'EVALUABLE') {
-    if (dentroDeVentana(entrada.siembra, ref.ventana)) { puntos += 2; motivos.push('Tu fecha cae en su mejor época.'); }
-    else { puntos -= 1; motivos.push('Tu fecha no es su mejor época.'); }
+    if (dentroDeVentana(entrada.siembra, ref.ventana)) { puntos += 2; motivos.push(tt('conv.enEpoca')); }
+    else { puntos -= 1; motivos.push(tt('conv.fueraEpoca')); }
   }
   const plaga = entrada.plagas.find((x) => x.cultivos.includes(cultivo.id));
-  if (plaga) { puntos -= 1; motivos.push(`${plaga.nombreComun} registrada cerca lo ataca.`); }
+  if (plaga) { puntos -= 1; motivos.push(tt('conv.plaga', { plaga: nombrePlaga(plaga.nombreComun) })); }
   const nivel = demasiadoLargo || puntos < 0 ? 'mala' : puntos >= 3 ? 'buena' : 'regular';
   return { puntos: demasiadoLargo ? -99 : puntos, nivel, motivos, noCabe, demasiadoLargo };
 }

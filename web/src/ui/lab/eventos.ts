@@ -7,6 +7,8 @@
 
 import type { RangoTiempo } from '../tiempo';
 import { fechaEnIndice } from '../tiempo';
+import { idiomaActual, tt } from '../i18n/actual';
+import type { ClaveTexto } from '../i18n/diccionarios';
 
 /** Segundos extra (ms) que la reproduccion espera despues de que un aviso o una animacion termina, para que se alcance a leer. */
 export const PAUSA_EXTRA_EVENTO_MS = 2500;
@@ -18,14 +20,13 @@ export interface CultivoCosechado { nombre: string; celdas: number; fecha: strin
 export interface PlantasMuertas { nombre: string; estado: 'marchita' | 'podrida'; celdas: number }
 export interface PlagaActiva { plaga: string; cultivo: string; bloques: number }
 
-const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
 /** "2026-10-17" -> "17 de octubre de 2026". Una fecha invalida se devuelve tal cual: no se inventa otra. */
 export function fechaLarga(fecha: string): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(fecha);
   if (!m) return fecha;
-  const mes = MESES[Number(m[2]) - 1];
-  return mes ? `${Number(m[3])} de ${mes} de ${m[1]}` : fecha;
+  const n = Number(m[2]);
+  return n >= 1 && n <= 12 ? tt('fecha.larga', { dia: Number(m[3]), mes: tt(`mesLargo.${n}` as ClaveTexto), anio: m[1]! }) : fecha;
 }
 
 /** Mitad del ciclo (convencion de dibujo para la plaga). */
@@ -38,21 +39,26 @@ export function cruzo(anterior: string | null, actual: string, marca: string): b
   return anterior !== null && anterior < marca && marca <= actual;
 }
 
-const celdas = (n: number) => `${n} ${n === 1 ? 'celda' : 'celdas'}`;
-const bloques = (n: number) => `${n} ${n === 1 ? 'bloque' : 'bloques'}`;
+const celdas = (n: number) => tt(n === 1 ? 'ev.celda' : 'ev.celdas', { n });
+const bloques = (n: number) => tt(n === 1 ? 'ev.bloque' : 'ev.bloques', { n });
+/** En ingles los nombres de cultivo y plaga van en minusculas dentro de la frase, salvo al inicio. */
+const minus = (x: string) => x.toLowerCase();
+
+/** Primera letra en mayuscula (en ingles una frase puede empezar con un numero o un nombre en minuscula). */
+const mayus = (x: string) => (idiomaActual() === 'en' ? x.charAt(0).toUpperCase() + x.slice(1) : x);
 
 function lista(nombres: string[]): string {
   if (nombres.length <= 1) return nombres[0] ?? '';
-  return `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}`;
+  return `${nombres.slice(0, -1).join(', ')}${tt('ev.y')}${nombres.at(-1)}`;
 }
 
 export function eventoCosecha(fecha: string, cultivos: readonly CultivoCosechado[], plaga: PlagaActiva | null, clave: string): EventoPantalla {
   const total = cultivos.reduce((s, c) => s + c.celdas, 0);
   const titulo = cultivos.length === 1
-    ? `${cultivos[0]!.nombre} se cosecha el ${fechaLarga(fecha)}`
-    : `Se cosechan ${lista(cultivos.map((c) => c.nombre.toLowerCase()))} el ${fechaLarga(fecha)}`;
-  const partes = [cultivos.length > 1 ? cultivos.map((c) => `${c.nombre}: ${celdas(c.celdas)}`).join(' · ') : `Se cosechan ${celdas(total)}`];
-  if (plaga) partes.push(`Quedaron ${bloques(plaga.bloques)} sin insecticida frente a ${plaga.plaga.toLowerCase()} (ilustración, no un pronóstico de daño).`);
+    ? tt('ev.cosechaUno', { cultivo: cultivos[0]!.nombre, fecha: fechaLarga(fecha) })
+    : mayus(tt('ev.cosechaVarios', { lista: lista(cultivos.map((c) => c.nombre.toLowerCase())), fecha: fechaLarga(fecha) }));
+  const partes = [cultivos.length > 1 ? cultivos.map((c) => `${c.nombre}: ${celdas(c.celdas)}`).join(' · ') : mayus(tt('ev.seCosechan', { celdas: celdas(total) }))];
+  if (plaga) partes.push(mayus(tt('ev.quedaron', { bloques: bloques(plaga.bloques), plaga: minus(plaga.plaga) })));
   return { tipo: 'cosecha', clave: `${clave}:cosecha`, fecha, titulo, detalle: partes.join('. ').replace(/\.\./g, '.') };
 }
 
@@ -61,21 +67,21 @@ export function eventoPlaga(fecha: string, plaga: PlagaActiva, clave: string): E
     tipo: 'plaga',
     clave: `${clave}:plaga`,
     fecha,
-    titulo: `${plaga.plaga} se está comiendo tu ${plaga.cultivo.toLowerCase()}`,
-    detalle: `${bloques(plaga.bloques)} sin insecticida, hacia el ${fechaLarga(fecha)}. Es una ilustración: la plaga está registrada en tu zona, pero no se predice cuándo ataca ni cuánto daño haría.`,
+    titulo: tt('ev.plagaTitulo', { plaga: plaga.plaga, cultivo: plaga.cultivo.toLowerCase() }),
+    detalle: tt('ev.plagaDetalle', { bloques: bloques(plaga.bloques), fecha: fechaLarga(fecha) }),
   };
 }
 
 /** Hojas y estados de planta que mueren, en lenguaje llano. */
-const VERBO_MUERTE = { marchita: 'se marchitan', podrida: 'se pudren' } as const;
+const VERBO_MUERTE = { marchita: 'ev.seMarchitan', podrida: 'ev.sePudren' } as const;
 
 export function eventoMuerte(fecha: string, muertas: readonly PlantasMuertas[], clave: string): EventoPantalla {
   const total = muertas.reduce((s, m) => s + m.celdas, 0);
   const una = muertas.length === 1 ? muertas[0]! : null;
   const titulo = una
-    ? `${una.nombre}: ${una.celdas === 1 ? 'una planta' : 'las plantas'} ${una.celdas === 1 ? (una.estado === 'marchita' ? 'se marchita' : 'se pudre') : VERBO_MUERTE[una.estado]} (${celdas(una.celdas)})`
-    : `Mueren plantas en ${celdas(total)}`;
-  const detalle = (una ? [] : muertas.map((m) => `${m.nombre}: ${celdas(m.celdas)} (${m.estado === 'marchita' ? 'marchitas' : 'podridas'})`)).concat(['Según el balance de agua del motor en esa fecha: el agua o el exceso de agua las dejó sin remedio.']).join('. ');
+    ? `${una.nombre}: ${una.celdas === 1 ? tt('ev.unaPlanta') : tt('ev.lasPlantas')} ${una.celdas === 1 ? (una.estado === 'marchita' ? tt('ev.seMarchita') : tt('ev.sePudre')) : tt(VERBO_MUERTE[una.estado])} (${celdas(una.celdas)})`
+    : tt('ev.mueren', { celdas: celdas(total) });
+  const detalle = (una ? [] : muertas.map((m) => `${m.nombre}: ${celdas(m.celdas)} (${m.estado === 'marchita' ? tt('ev.marchitas') : tt('ev.podridas')})`)).concat([tt('ev.segunBalance')]).join('. ');
   return { tipo: 'muerte', clave: `${clave}:muerte:${fecha}`, fecha, titulo, detalle };
 }
 

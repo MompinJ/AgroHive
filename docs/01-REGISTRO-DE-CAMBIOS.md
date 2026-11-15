@@ -2,6 +2,26 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-15 — B7, pantalla 3: Laboratorio en inglés, parte de la interfaz (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/ui/tutorial/Tutorial.tsx` (usa el tutorial en inglés `TUTORIALES_EN`, mismos pasos, resaltes e iconos), `web/src/ui/lab/` (`Laboratorio.tsx`, `BarraHerramientas.tsx`, `PanelCultivos.tsx`, `PanelEscenarios.tsx`, `PanelIzq.tsx`, `EventoPantalla.tsx`, `eventos.ts`, `Mascota.tsx`, `consejos.ts`, `historial.ts`, `PanelHistorial.tsx`, `piezas.tsx`, `conveniencia.ts`), `web/src/ui/ControlTiempo.tsx`, `web/src/ui/planes.ts` (nombre de la rotación y mensajes de ciclos encimados), `web/src/ui/i18n/textos/tutorial.ts` y `laboratorio.ts` (nuevos), pruebas en `web/src/ui/i18n/pantallas-en.test.tsx`.
+- **Cambio:** el tutorial de Esquilote, la brocha y la barra de herramientas, la paleta y su conveniencia, las plagas y el insecticida, los años Dry / Normal / Wet, la línea de tiempo, los avisos de cosecha, plaga y plantas muertas, el historial y los consejos de la mascota salen en inglés (tomas T3b, T4a, T4b y T4c). Las plagas llevan su nombre común en inglés (Entomological Society of America para cinco; el chapulín de la milpa, *Sphenarium purpurascens*, sin nombre en esa lista, como "Chapulín grasshopper"). `nombreEscenario`, `nombresPilares` y `NOMBRE_TIPO_HECHO` se siguen leyendo igual (`nombreEscenario[e]`) y dan el texto del idioma activo. Sin cambios visuales.
+- **Pendiente (fuera de lo autorizado, `web/src/escena/`):** el HUD de la escena (gráficos, leyenda de cultivos), la ficha de la celda, las marcas de problema y sus textos (`problemas.ts`) y los avisos de datos (`AvisosDatos.tsx`). Lo que el historial guardó antes de cambiar de idioma queda en el idioma en que se escribió.
+
+### 2026-11-15 — B7, pantalla 2: Terreno en inglés (IA de Mompin, sesión "ingles")
+
+- **Archivos:** `web/src/paginas/Terreno.tsx`, `web/src/ui/DibujarParcela.tsx`, `web/src/ui/MapaParcela.tsx`, `web/src/ui/SelectorTamanoCelda.tsx`, `web/src/ui/i18n/diccionarios.ts` (une los textos por pantalla), `web/src/ui/i18n/textos/terreno.ts` (nuevo), `web/src/ui/i18n/sin-espanol.ts` (detector de español sin traducir para las pruebas) y `web/src/ui/i18n/pantallas-en.test.tsx` (nuevo).
+- **Cambio:** la lista de los seis ejemplos (países, clima de Köppen en inglés con los nombres de Peel et al. 2007 y aviso), el dibujo de la parcela, el mapa y el tamaño de celda salen en inglés (tomas T3a y T6g). Los datos no cambian: el país, el clima y los mensajes de `web/src/geo/` llegan en español y la interfaz les pone su etiqueta en inglés (por país, por clase de Köppen o por el mensaje exacto). Sin cambios visuales; los nombres propios de los lugares no se traducen.
+- **Base:** `useIdioma` sin `ProveedorIdioma` (pruebas o componentes sueltos) devuelve español en lugar de lanzar un error, para que los componentes que ahora usan `t` sigan funcionando como antes fuera del proveedor.
+- **Pendiente:** el pie de página y el enlace "Saltar al contenido" de `web/src/App.tsx` siguen en español: están fuera de lo autorizado (`web/src/ui/` y `web/src/paginas/`).
+
+### 2026-11-15 — B7, pantalla 1: tarjetas del motor y nombres de cultivo en el idioma elegido (IA de Mompin, sesión "ingles")
+
+- **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la IA de Mompin toma B7 (interfaz en inglés); balam lo deja. Mompin autorizó editar `web/src/ui/` y `web/src/paginas/`, solo textos con `t('clave')`, avisando a Eduardo antes de cada pantalla (buzón).
+- **Archivos:** `web/src/ui/useLaboratorio.ts` (`useIdioma`; `cliente.rankear(ids, undefined, idioma)`; `idioma` en la clave del cálculo), `web/src/ui/i18n/actual.ts` (nuevo: idioma activo para el código que no es React, lo fija `ProveedorIdioma`), `web/src/ui/i18n/cultivos-en.ts` y su prueba (nombres en inglés, iguales a `nombreComunEn` del catálogo), `web/src/ui/i18n/Idioma.tsx`, `web/src/ui/i18n/diccionarios.ts` ("Typical year" pasa a "Normal year", como las tarjetas y el trailer), `web/src/ui/lab/piezas.tsx` (`nombreCultivo` según el idioma), `web/src/ui/lab/Laboratorio.tsx` y `web/src/paginas/Terreno.tsx` (usan `nombreCultivo`).
+- **Cambio:** con el idioma en inglés, las tarjetas y los nombres de cultivo de la paleta, el plan, los escenarios, la comparación y los ejemplos de Terreno salen en inglés. Sin cambios visuales.
+- **Pendiente:** la ficha de la celda y la leyenda de la escena (`web/src/escena/ficha.ts`, `vistas.ts`, `EscenaParcela.tsx`) siguen con sus nombres en español: están fuera de lo autorizado (`web/src/escena/`).
+
 ### 2026-11-15 — Contratos 0.16.0: `nombreComunEn` en el catálogo de cultivos (IA de Mompin, sesión "ingles", parte 2)
 
 - **Decisión:** `[DECIDIDO]` (Mompin, 15/11): la app tiene español e inglés; los cultivos necesitan nombre en inglés con fuente.
