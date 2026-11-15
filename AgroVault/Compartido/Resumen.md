@@ -19,7 +19,7 @@ Persona guía: Elena, productora ficticia de temporal en Veracruz. La decisión 
 
 Rotación = secuencia en el tiempo, no sembrar todo junto. La escena muestra el cultivo **del ciclo elegido**.
 
-Arquitectura **mundial**, demo validada en **Isla**. Las fuentes globales (POWER, IMERG vía POWER, MODIS, SoilGrids, OpenLandMap, Terrarium, Open-Meteo) sirven en cualquier coordenada. SIAP e INIFAP se suman solo en México. CDL y SSURGO son extra de fase 2, solo si la coordenada cae en EE. UU. (A4.12). Fuera de México, el calendario y el pilar de compatibilidad ya tienen respaldo para el maíz: `GET /api/calendario` devuelve la ventana de GGCMI fase 3 (A4.13 `[HECHO]`); frijol, calabaza y chile siguen `NO_EVALUABLE` y el front aún lee solo el calendario de Isla. GAEZ v4 solo puede usarse como evidencia: su licencia es CC BY-NC-SA 4.0.
+Arquitectura **mundial**, demo validada en **Isla**. Las fuentes globales (POWER, IMERG vía POWER, MODIS, SoilGrids, OpenLandMap, Terrarium, Open-Meteo) sirven en cualquier coordenada. SIAP e INIFAP se suman solo en México. CDL y SSURGO son extra de fase 2, solo si la coordenada cae en EE. UU. (A4.12). **Desde el 15/11 AgroHive es MUNDIAL** (`[DECIDIDO]` Mompin): Isla ya no es zona demo. El calendario de siembra tiene base mundial, también en México: `GET /api/calendario` da ventana para 18 de los 40 cultivos con GGCMI fase 3 y MIRCA2000 (A4.13); SIAP (presencia, todos los municipios) e INIFAP (Isla) se suman encima; calabaza, chile, hortalizas y otros siguen `NO_EVALUABLE` con motivo (`datos/calendario/LEEME.md`). GAEZ v4 solo puede usarse como evidencia: su licencia es CC BY-NC-SA 4.0.
 
 ### Qué ya hace el producto
 

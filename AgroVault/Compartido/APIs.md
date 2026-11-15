@@ -148,7 +148,7 @@ Regla: cualquiera de las dos queda `SUPUESTO`; el selector manual FAO-56 sigue d
 
 ## Calendario por coordenada (A4.13)
 
-`GET /api/calendario` no llama a una API en vivo. En el recuadro OSM de Isla lee `datos/catalogos/calendario-isla.json`. Fuera de México lee el NetCDF `mai_rf` de GGCMI fase 3 (doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): un día de siembra y la madurez en la nota. El país sale de Natural Earth 110m. `bea_rf` no se sirve: la ficha de Zenodo no lo identifica como frijol.
+`GET /api/calendario` no llama a una API en vivo. Base mundial (15/11): en cualquier coordenada, también en México, lee el extracto `datos/calendario/ggcmi-rf.npz` de GGCMI fase 3 (doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): día de siembra de temporal para 15 de los 40 cultivos y la madurez en la nota; MIRCA2000 (`mirca-rf.npz`, CC BY 4.0) suma caupí, haba y lenteja (clase Pulses, `SUPUESTO`) y la presencia fuera de México. En México suma encima la presencia de SIAP de cada municipio (`datos/calendario/siap-mexico.*`) y, en Isla, las ventanas de INIFAP de `datos/catalogos/calendario-isla.json`. El país sale de Natural Earth 110m. `bea_rf` ("Beans" en ISIMIP3) se sirve como frijol y ejote `SUPUESTO` (decisión del 15/11). Mapeo en `datos/calendario/LEEME.md`.
 
 ## Cultivos y calendario (sin API)
 

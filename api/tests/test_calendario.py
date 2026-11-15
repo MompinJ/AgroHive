@@ -1,61 +1,165 @@
-"""A4.13: Isla sigue con SIAP/INIFAP; fuera de Mexico el maiz sale de GGCMI y el frijol no se inventa."""
+"""A4.13, calendario MUNDIAL (15/11): GGCMI fase 3 es la base en cualquier coordenada, tambien en Mexico; Isla (SIAP/INIFAP)
+se suma encima. Lo que no tiene fuente mundial queda NO_EVALUABLE con motivo; el frijol no se lee de bea_rf."""
+import json
+
+import pytest
 from fastapi.testclient import TestClient
 
+from app import calendario
 from app.main import app
 
 cliente = TestClient(app)
+DOI = "10.5281/zenodo.5062513"
+CON_GGCMI = {"maiz", "sorgo", "soya", "cacahuate", "trigo", "cebada", "papa", "yuca", "cana", "girasol", "algodon",
+             "chicharo", "maiz_dulce", "frijol", "ejote"}
+PULSES = {"caupi", "haba", "lenteja"}  # MIRCA2000, clase agregada Pulses
+EQUIVALENCIAS = {"chicharo", "maiz_dulce", "frijol", "ejote"} | PULSES
+MIRCA_PRESENCIA = {"maiz", "trigo", "cebada", "sorgo", "soya", "girasol", "papa", "yuca", "cana", "cacahuate", "algodon"}
 
 
-def _maiz(cuerpo, temporada):
-    return next(e for e in cuerpo["entradas"] if e["cultivo"] == "maiz" and e["temporada"] == temporada)
+def _entrada(cuerpo, cultivo, temporada):
+    return next(e for e in cuerpo["entradas"] if e["cultivo"] == cultivo and e["temporada"] == temporada)
 
 
-def test_isla_sigue_con_siap_e_inifap(validar):
-    cuerpo = cliente.get("/api/calendario", params={"lat": 18.03, "lon": -95.53}).json()
+def _con_ventana(cuerpo) -> dict:
+    return {e["cultivo"]: e for e in cuerpo["entradas"] if e["ventana"]["estado"] == "EVALUABLE"}
+
+
+def _ids_catalogo():
+    return [c["id"] for c in json.loads((calendario.config.RAIZ / "datos" / "catalogos" / "cultivos.json").read_text())["cultivos"]]
+
+
+# Puntos en varios continentes: (lat, lon, pais ISO, dia de siembra esperado del maiz de temporal en GGCMI (mes, dia, temporada)).
+# Los dias salen del extracto de GGCMI fase 3 (datos/calendario/ggcmi-rf.npz) leidos el 15/11.
+PUNTOS = {
+    "mexico-cdmx": (19.43, -99.13, "MX", (6, 1, "PV")),  # alcaldia urbana, sin pareja en SIAP
+    "mexico-sinaloa": (24.80, -107.39, "MX", (7, 1, "PV")),  # Culiacan
+    "ee-uu-iowa": (42.0, -93.5, "US", (5, 13, "PV")),
+    "brasil-mato-grosso": (-12.5, -55.5, "BR", (2, 14, "OI")),
+    "kenia": (-0.5, 36.8, "KE", (10, 17, "OI")),
+    "india-madhya-pradesh": (23.2, 77.4, "IN", (6, 26, "PV")),
+    "espana-castilla": (40.0, -4.0, "ES", (4, 1, "PV")),
+    "australia-nsw": (-33.0, 148.0, "AU", (12, 30, "OI")),
+}
+
+
+@pytest.mark.parametrize("nombre", PUNTOS)
+def test_base_mundial_en_varios_continentes(nombre, validar):
+    lat, lon, iso, (mes, dia, temporada) = PUNTOS[nombre]
+    cuerpo = cliente.get("/api/calendario", params={"lat": lat, "lon": lon}).json()
     validar(cuerpo, "calendario-local#")
-    assert cuerpo["id"] == "calendario-isla"
-    pv = _maiz(cuerpo, "PV")
-    assert pv["estado"] == "EVALUABLE"
-    assert pv["ventana"]["desdeMes"] == 6 and pv["ventana"]["desdeDia"] == 1
-    assert pv["ventana"]["hastaMes"] == 7 and pv["ventana"]["hastaDia"] == 15
-    assert "INIFAP" in pv["ventana"]["fuente"]["nombre"]
-    assert "10.5281/zenodo.5062513" not in json_citas(cuerpo)
+    assert cuerpo["ubicacion"]["paisIso"] == iso
+    assert cuerpo["id"].startswith(f"calendario-ggcmi-{iso.lower()}-" if iso != "MX" or nombre == "mexico-cdmx" else "calendario-mx-")
+    # Cada cultivo del catalogo trae PV y OI, sin repetir.
+    claves = [(e["cultivo"], e["temporada"]) for e in cuerpo["entradas"]]
+    assert len(claves) == len(set(claves)) == 2 * len(_ids_catalogo())
+    con = _con_ventana(cuerpo)
+    assert set(con) == CON_GGCMI | PULSES  # todos los puntos de prueba tienen Pulses de temporal en MIRCA2000
+    for cultivo, e in con.items():
+        assert e["estado"] == "EXPLORATORIO"
+        assert (DOI if cultivo in CON_GGCMI else "10.5281/zenodo.7422506") in e["ventana"]["fuente"]["cita"]
+        assert ("SUPUESTO" in e["motivo"]) == (cultivo in EQUIVALENCIAS)
+        if cultivo in CON_GGCMI:  # un solo ciclo por celda: la otra temporada no tiene dato
+            otra = _entrada(cuerpo, cultivo, "OI" if e["temporada"] == "PV" else "PV")
+            assert otra["estado"] == "NO_EVALUABLE" and otra["ventana"]["estado"] == "NO_EVALUABLE"
+        else:  # MIRCA da meses: la ventana es el mes de inicio entero
+            assert e["ventana"]["desdeMes"] == e["ventana"]["hastaMes"] and "desdeDia" not in e["ventana"]
+        # Presencia: SIAP en municipios de Mexico, MIRCA2000 en el resto para las clases propias, nunca para equivalencias.
+        if cultivo in EQUIVALENCIAS:
+            assert e["presencia"]["estado"] == "sin_dato" or "SIAP" in e["presencia"]["fuente"]["nombre"]
+        elif iso != "MX" or nombre == "mexico-cdmx":
+            assert e["presencia"]["estado"] in ("registrado", "no_registrado") and "MIRCA2000" in e["presencia"]["fuente"]["nombre"]
+    maiz = _entrada(cuerpo, "maiz", temporada)
+    assert (maiz["ventana"]["desdeMes"], maiz["ventana"]["desdeDia"]) == (mes, dia)
+    assert maiz["ventana"]["desdeMes"] == maiz["ventana"]["hastaMes"] and maiz["ventana"]["desdeDia"] == maiz["ventana"]["hastaDia"]
+    assert "Madurez" in maiz["ventana"]["fuente"]["nota"]
+    # Sin fuente mundial: NO_EVALUABLE con motivo, nunca el calendario de otro cultivo.
+    for cultivo in set(_ids_catalogo()) - CON_GGCMI - PULSES:
+        for t in ("PV", "OI"):
+            e = _entrada(cuerpo, cultivo, t)
+            assert e["estado"] == "NO_EVALUABLE" and e["motivo"]
+    assert all("bea_rf" in e["motivo"] and "Beans" in e["motivo"] for e in cuerpo["entradas"] if e["cultivo"] in ("frijol", "ejote") and e["estado"] != "NO_EVALUABLE")
+    assert any(a["codigo"] == "CALENDARIO_BASE_MUNDIAL" for a in cuerpo["advertencias"])
 
 
-def test_iowa_devuelve_el_dia_de_siembra_de_ggcmi_y_no_inventa_frijol(validar):
+def test_india_lenteja_de_rabi_y_maiz_registrado_en_mirca(validar):
+    cuerpo = cliente.get("/api/calendario", params={"lat": 23.2, "lon": 77.4}).json()
+    validar(cuerpo, "calendario-local#")
+    lenteja = _entrada(cuerpo, "lenteja", "OI")
+    assert lenteja["ventana"]["estado"] == "EVALUABLE" and lenteja["ventana"]["desdeMes"] == 10
+    assert "Pulses" in lenteja["motivo"] and "SUPUESTO" in lenteja["motivo"]
+    assert _entrada(cuerpo, "lenteja", "PV")["estado"] == "NO_EVALUABLE"
+    maiz = _entrada(cuerpo, "maiz", "PV")
+    assert maiz["presencia"]["estado"] == "registrado" and "ha cosechadas" in maiz["presencia"]["nota"]
+
+
+def test_iowa_conserva_el_dia_de_ggcmi_y_declara_el_frijol(validar):
     cuerpo = cliente.get("/api/calendario", params={"lat": 42.0, "lon": -93.5}).json()
     validar(cuerpo, "calendario-local#")
-    assert cuerpo["ubicacion"]["paisIso"] == "US"
-    pv = _maiz(cuerpo, "PV")
-    assert pv["estado"] == "EXPLORATORIO"
-    assert pv["ventana"]["desdeMes"] == 5 and pv["ventana"]["desdeDia"] == 13
-    assert pv["ventana"]["hastaMes"] == 5 and pv["ventana"]["hastaDia"] == 13
-    assert "10.5281/zenodo.5062513" in pv["ventana"]["fuente"]["cita"]
-    assert "Madurez" in pv["ventana"]["fuente"]["nota"]
-    assert pv["presencia"]["estado"] == "sin_dato"
-    oi = _maiz(cuerpo, "OI")
-    assert oi["estado"] == "NO_EVALUABLE" and oi["ventana"]["estado"] == "NO_EVALUABLE"
-    frijol = [e for e in cuerpo["entradas"] if e["cultivo"] == "frijol"]
-    assert frijol and all(e["estado"] == "NO_EVALUABLE" and "bea" in e["motivo"] for e in frijol)
-    for cultivo in ("calabaza", "chile"):
-        assert all(e["estado"] == "NO_EVALUABLE" for e in cuerpo["entradas"] if e["cultivo"] == cultivo)
+    pv = _entrada(cuerpo, "maiz", "PV")
+    assert pv["ventana"]["fuente"]["nombre"] == "GGCMI Phase 3 crop calendar v1.01, maize de temporal (mai_rf)"
+    assert "Duracion" in pv["ventana"]["fuente"]["nota"]
+    soya = _entrada(cuerpo, "soya", "PV")
+    assert soya["ventana"]["estado"] == "EVALUABLE" and "(soy_rf)" in soya["ventana"]["fuente"]["nombre"]
+    assert all(e["estado"] == "NO_EVALUABLE" for e in cuerpo["entradas"] if e["cultivo"] in ("calabaza", "chile"))
+    frijol = next(e for e in cuerpo["entradas"] if e["cultivo"] == "frijol" and e["ventana"]["estado"] == "EVALUABLE")
+    assert "(bea_rf)" in frijol["ventana"]["fuente"]["nombre"] and "no distingue" in frijol["motivo"]
+    assert _entrada(cuerpo, "maiz", "PV")["presencia"]["estado"] == "registrado"
 
 
-def test_mexico_fuera_de_isla_no_usa_ggcmi(validar):
+def test_isla_suma_siap_e_inifap_encima_de_la_base_mundial(validar):
+    cuerpo = cliente.get("/api/calendario", params={"lat": 18.03, "lon": -95.53}).json()
+    validar(cuerpo, "calendario-local#")
+    assert cuerpo["id"].startswith("calendario-mx-30077-ggcmi-")
+    assert cuerpo["ubicacion"]["municipio"] == "Isla" and cuerpo["ubicacion"]["paisIso"] == "MX"
+    assert cuerpo["ubicacion"]["claveEstadoInegi"] == "30" and cuerpo["ubicacion"]["claveMunicipioInegi"] == "077"
+    # Lo que INIFAP publica para Isla manda sobre GGCMI.
+    pv = _entrada(cuerpo, "maiz", "PV")
+    assert pv["estado"] == "EVALUABLE"
+    assert (pv["ventana"]["desdeMes"], pv["ventana"]["desdeDia"], pv["ventana"]["hastaMes"], pv["ventana"]["hastaDia"]) == (6, 1, 7, 15)
+    assert "INIFAP" in pv["ventana"]["fuente"]["nombre"]
+    assert _entrada(cuerpo, "maiz", "OI")["ventana"]["estado"] == "EVALUABLE"
+    assert "INIFAP" in _entrada(cuerpo, "frijol", "OI")["ventana"]["fuente"]["nombre"]
+    # Sin ventana local, la base mundial rellena la ventana y SIAP pone la presencia.
+    sorgo = next(e for e in cuerpo["entradas"] if e["cultivo"] == "sorgo" and e["ventana"]["estado"] == "EVALUABLE")
+    assert DOI in sorgo["ventana"]["fuente"]["cita"]
+    assert sorgo["presencia"]["estado"] in ("registrado", "no_registrado")
+    assert "SIAP" in json.dumps(sorgo["presencia"]["fuente"])
+    # La calabaza sigue sin calendario en ninguna fuente y SIAP no la registra en Isla.
+    calabaza = _entrada(cuerpo, "calabaza", "PV")
+    assert calabaza["estado"] == "NO_EVALUABLE" and calabaza["presencia"]["estado"] == "no_registrado"
+    assert any(a["codigo"] == "CAPA_LOCAL_ISLA" for a in cuerpo["advertencias"])
+
+
+def test_mexico_fuera_de_isla_usa_la_base_mundial_y_siap_encima(validar):
+    # Texcoco, Estado de Mexico (INEGI 15/099): GGCMI da la ventana, SIAP la presencia de temporal.
+    cuerpo = cliente.get("/api/calendario", params={"lat": 19.50, "lon": -98.85}).json()
+    validar(cuerpo, "calendario-local#")
+    u = cuerpo["ubicacion"]
+    assert (u["paisIso"], u["claveEstadoInegi"], u["claveMunicipioInegi"], u["municipio"]) == ("MX", "15", "099", "Texcoco")
+    assert cuerpo["id"].startswith("calendario-mx-15099-ggcmi-")
+    maiz = next(e for e in cuerpo["entradas"] if e["cultivo"] == "maiz" and e["ventana"]["estado"] == "EVALUABLE")
+    assert DOI in maiz["ventana"]["fuente"]["cita"]
+    assert maiz["presencia"]["estado"] == "registrado" and "SIAP" in maiz["presencia"]["fuente"]["nombre"]
+    registrados = {e["cultivo"] for e in cuerpo["entradas"] if e["presencia"]["estado"] == "registrado"}
+    assert {"maiz", "frijol", "cebada", "trigo", "avena", "haba"} <= registrados
+    # Un cultivo que SIAP separa pero no registra en el municipio: no_registrado, con periodo.
+    yuca = _entrada(cuerpo, "yuca", "PV")
+    assert yuca["presencia"]["estado"] == "no_registrado" and yuca["presencia"]["periodo"]["desde"] == "2021-01-01"
+    # Sin nombre equivalente en SIAP: la presencia sigue sin_dato.
+    assert all(e["presencia"]["estado"] == "sin_dato" for e in cuerpo["entradas"] if e["cultivo"] in ("caupi", "maiz_dulce"))
+    assert any(a["codigo"] == "CAPA_SIAP_MUNICIPIO" for a in cuerpo["advertencias"])
+    assert "No se usa GGCMI" not in json.dumps(cuerpo)
+
+
+def test_mexico_urbano_sin_pareja_en_siap_lo_dice(validar):
     cuerpo = cliente.get("/api/calendario", params={"lat": 19.43, "lon": -99.13}).json()
     validar(cuerpo, "calendario-local#")
-    assert cuerpo["ubicacion"]["paisIso"] == "MX"
-    assert cuerpo["id"] != "calendario-isla"
-    assert all(e["estado"] == "NO_EVALUABLE" for e in cuerpo["entradas"])
-    assert "10.5281/zenodo.5062513" not in json_citas(cuerpo)
-    assert "Isla" in cuerpo["entradas"][0]["motivo"]
+    assert "municipio" not in cuerpo["ubicacion"]
+    assert any(a["codigo"] == "SIAP_SIN_MUNICIPIO" for a in cuerpo["advertencias"])
+    assert _entrada(cuerpo, "maiz", "PV")["ventana"]["estado"] == "EVALUABLE"
 
 
 def test_sin_pais_no_inventa_ubicacion():
     r = cliente.get("/api/calendario", params={"lat": 0, "lon": -40})
     assert r.status_code == 422
-
-
-def json_citas(cuerpo) -> str:
-    import json
-    return json.dumps(cuerpo)

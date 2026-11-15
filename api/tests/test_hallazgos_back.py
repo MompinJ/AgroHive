@@ -154,7 +154,7 @@ def test_h_b10_la_costa_de_veracruz_es_mexico_y_lo_dice(validar):
     validar(c, "calendario-local#")
     assert c["ubicacion"]["paisIso"] == "MX"
     codigos = {a["codigo"] for a in c["advertencias"]}
-    assert {"PAIS_POR_CERCANIA", "CALENDARIO_SIN_FUENTE_LOCAL"} <= codigos
+    assert {"PAIS_POR_CERCANIA", "CALENDARIO_BASE_MUNDIAL"} <= codigos
 
 
 def test_h_b10_mar_abierto_y_estrechos_no_adivinan_pais():
