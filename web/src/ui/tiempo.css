@@ -1,0 +1,5 @@
+.time-control { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); min-width: 0; }
+.time-control input[type="range"] { width: 100%; min-width: 0; min-height: 44px; margin: 0; padding: 0; accent-color: var(--color-action); cursor: pointer; }
+.time-limits { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); font-size: var(--text-caption); color: var(--color-text-body); }
+.time-control .ui-action { flex: 1 1 auto; }
+.time-control .ui-action:active { transform: none; }

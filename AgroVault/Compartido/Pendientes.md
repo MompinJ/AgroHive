@@ -16,7 +16,7 @@ Motor de agua, escenarios, ranking B, pilares de compatibilidad y suelo desnudo,
 
 | ID | La marca dice | El código, el 14/11 por la noche |
 | --- | --- | --- |
-| A4.6 | Falta conectar las páginas | `[HECHO]` el 14/11 noche: P0 a P3 de la demo de Isla y la API local sin red. La URL pública sigue en `d182af4` (A4.7) |
+| A4.6 | Falta conectar las páginas | `[HECHO]` el 14/11 noche: P0 a P3 de la demo de Isla y la API local sin red. La URL pública quedó en A4.7 (`23f8a53`) |
 | A4.9 | A2.13 aún dice "falta la interfaz" | A4.9 está `[HECHO]`: la banda se muestra y se apaga |
 | A4.8 | Falta el schema `smap` | `contratos/smap.schema.json` existe desde 0.10.0. Sigue abierto el token en el droplet y el uso en la interfaz |
 | A2.12 / A3.1 | La escena no carga losas o no está en el Laboratorio | La escena carga las 9 losas y el Laboratorio la monta en diferido |
@@ -44,15 +44,14 @@ No reescribas esas filas de `docs/14` si no te toca el cronograma. Sí puedes de
 
 | ID | Qué falta |
 | --- | --- |
-| A3.6 | Hecho en `origin/main` (`58fab7a`). Esta rama todavía no lo tiene, así que A5.4 sigue bloqueada aquí |
+| A3.6 | Hecho en `origin/main` y en la rama `Eduardo`. A5.4 sigue bloqueada: faltan hardware real y la pérdida de contexto WebGL |
 | A3.8 | Tooltip o toque: humedad, déficit, pendiente |
 | A3.9 | Chile y mascota hechos. Falta revisión humana del visor y de la equivalencia pimiento dulce. La escena no muestra la mascota. Props descartados |
 | A4.1 | Gráficas de lluvia, demanda y balance (balam). El motor ya entrega las series: `cliente.serieBalance(rotacionId, escenario)` con lluvia, ET0, ETc, ETc ajustada, Dr, RAW, humedad, percolación y déficit por día y por mes, por ciclo (contrato `serie-balance` 0.11.0). La interfaz no recalcula |
 | A4.3 | Pintar `explicacion` en la comparación. La plantilla ya sale de `rankear` |
 | A4.4 | Redacción con LLM, opcional, solo sobre números ya calculados |
 | A4.5 | Pantalla de método, fuentes y advertencias |
-| A4.7 | La URL pública responde, pero el droplet sigue en `d182af4` (contrato 0.9.0). Esta sesión no pudo entrar por SSH |
-| A4.8 | `/api/smap` existe y sin token responde 503. Hace falta el OK explícito para `EARTHDATA_TOKEN` en el droplet. No está en la interfaz ni entra al ranking |
+| A4.8 | `[EN CURSO]`. En el droplet `23f8a53`, `GET /api/smap` (2024-06-01 a 2024-06-03) responde 503: no hay `EARTHDATA_TOKEN` en el servicio ni en esta maquina. `web/src` no llama a SMAP. Sin token no se inventa humedad. No entra al ranking |
 | A4.12 | CDL y SSURGO, después de C5. C5 no está cruzada |
 | A4.13 | Hecha en la API: `GET /api/calendario`. El front sigue leyendo solo `calendario-isla.json` (balam) |
 | A5.1 | Animación mínima al cambiar de etapa |

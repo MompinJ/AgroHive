@@ -28,6 +28,8 @@ export class ErrorWebGL extends Error {
 export interface OpcionesRender {
   reducirMovimiento: boolean;
   onSeleccion?: (bloque: BloqueEscena | null) => void;
+  /** Perdida y recuperacion del contexto WebGL (el navegador puede quitarlo con poca memoria). */
+  onContexto?: (estado: 'perdido' | 'restaurado') => void;
   /** Viento leve en las plantas (A5.1, deseable). Nunca con reducirMovimiento. */
   viento?: boolean;
   /** Lugar de la mascota (modelos/props/mascota_feliz.bbmodel); apagado si no existe el modelo. */
@@ -56,6 +58,7 @@ export interface EstadisticasRender {
   lluvia: boolean;
   gotas: number;
   mascota: boolean;
+  contextoPerdido: boolean;
 }
 
 /** Hueco de una celda sin elevacion: por debajo del punto mas bajo, nunca "a nivel cero". */
@@ -342,6 +345,8 @@ export class EscenaThree {
     this.controles.addEventListener('change', () => this.pedirCuadro());
     this.aplicarMovimiento();
 
+    lienzo.addEventListener('webglcontextlost', this.alPerderContexto);
+    lienzo.addEventListener('webglcontextrestored', this.alRestaurarContexto);
     lienzo.addEventListener('pointerdown', this.alBajarPuntero);
     lienzo.addEventListener('pointerup', this.alSubirPuntero);
     lienzo.addEventListener('pointermove', this.alMoverPuntero);
@@ -374,6 +379,7 @@ export class EscenaThree {
       lluvia: this.lluviaActiva(),
       gotas: this.lluvia.objeto.visible ? this.lluvia.objeto.geometry.drawRange.count / 2 : 0,
       mascota: !!this.raiz.getObjectByName('mascota'),
+      contextoPerdido: this.contextoPerdido,
     };
   }
 
@@ -504,6 +510,8 @@ export class EscenaThree {
     this.version++;
     cancelAnimationFrame(this.cuadroPendiente);
     this.observador.disconnect();
+    this.lienzo.removeEventListener('webglcontextlost', this.alPerderContexto);
+    this.lienzo.removeEventListener('webglcontextrestored', this.alRestaurarContexto);
     this.lienzo.removeEventListener('pointerdown', this.alBajarPuntero);
     this.lienzo.removeEventListener('pointerup', this.alSubirPuntero);
     this.lienzo.removeEventListener('pointermove', this.alMoverPuntero);
@@ -883,6 +891,44 @@ export class EscenaThree {
 
   private readonly alCambiarVisibilidad = () => this.pedirCuadro();
 
+  private contextoPerdido = false;
+
+  // three.js ya llama preventDefault al perder el contexto (asi el navegador puede devolverlo).
+  private readonly alPerderContexto = () => {
+    this.contextoPerdido = true;
+    cancelAnimationFrame(this.cuadroPendiente);
+    this.cuadroPendiente = 0;
+    this.opciones.onContexto?.('perdido');
+  };
+
+  // Al volver el contexto se reconstruye la escena (geometrias y texturas se suben de nuevo).
+  private readonly alRestaurarContexto = () => {
+    this.contextoPerdido = false;
+    this.cacheGeometria.clear();
+    if (this.modeloActual) this.actualizar(this.modeloActual);
+    this.opciones.onContexto?.('restaurado');
+    this.pedirCuadro();
+  };
+
+  /**
+   * Prueba de perdida de contexto (A5.4): lo pierde con WEBGL_lose_context, espera y lo
+   * restaura. Devuelve si el navegador ofrece la extension y si la escena volvio a dibujar.
+   */
+  async probarPerdidaContexto(esperaMs = 1500): Promise<{ extension: boolean; perdido: boolean; restaurado: boolean; cuadrosTras: number; triangulosTras: number }> {
+    const gl = this.renderer.getContext();
+    const ext = gl.getExtension('WEBGL_lose_context');
+    if (!ext) return { extension: false, perdido: false, restaurado: false, cuadrosTras: 0, triangulosTras: 0 };
+    ext.loseContext();
+    await new Promise((r) => setTimeout(r, esperaMs));
+    const perdido = this.contextoPerdido;
+    ext.restoreContext();
+    await new Promise((r) => setTimeout(r, esperaMs));
+    const antes = this.cuadros;
+    this.pedirCuadro();
+    await new Promise((r) => setTimeout(r, 500));
+    return { extension: true, perdido, restaurado: !this.contextoPerdido && !gl.isContextLost(), cuadrosTras: this.cuadros - antes, triangulosTras: this.renderer.info.render.triangles };
+  }
+
   private vientoActivo(): boolean {
     return !!this.opciones.viento && !this.opciones.reducirMovimiento && this.enPantalla && document.visibilityState === 'visible';
   }
@@ -895,6 +941,11 @@ export class EscenaThree {
     this.intensidadLluvia = Math.min(1, Math.max(0, intensidad));
     this.lluvia.cantidad(this.intensidadLluvia);
     this.pedirCuadro();
+  }
+
+  /** Intensidad de lluvia que se esta dibujando (0 a 1). */
+  intensidadLluviaActual(): number {
+    return this.intensidadLluvia;
   }
 
   private lluviaActiva(): boolean {
@@ -918,7 +969,7 @@ export class EscenaThree {
   }
 
   private pedirCuadro() {
-    if (this.cuadroPendiente) return;
+    if (this.cuadroPendiente || this.contextoPerdido) return;
     this.cuadroPendiente = requestAnimationFrame(() => {
       this.cuadroPendiente = 0;
       // Con inercia, update() devuelve true mientras la camara se sigue moviendo.

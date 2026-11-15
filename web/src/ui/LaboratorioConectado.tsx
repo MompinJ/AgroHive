@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import type { Ciclo, Escenario, Fuente, ResultadoCeldas } from '../../../contratos/tipos/contratos';
 import { ActionLink, Card, DataState, PageHeading } from './components';
 import { armarPlan, explicarFecha, nombresCultivos, referenciaSiembra } from './planes';
@@ -6,6 +6,9 @@ import { conLimite, type LaboratorioEstado } from './useLaboratorio';
 import './laboratorio.css';
 import { TarjetasRotacion } from './TarjetasRotacion';
 import { ordenarRotaciones } from './ordenRotaciones';
+import { ControlTiempo } from './ControlTiempo';
+import { rangoDelCiclo } from './tiempo';
+import { useSerieBalance } from './useSerieBalance';
 
 const Escena = lazy(() => import('../escena/EscenaParcela').then((m) => ({ default: m.EscenaParcela })));
 const Parcela2D = lazy(() => import('./Parcela2D').then((m) => ({ default: m.Parcela2D })));
@@ -33,23 +36,34 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
   const [webglDisponible] = useState(puedeUsarWebGL);
   const vistaVisible = webglDisponible ? vista : '2d';
   const [celdas, setCeldas] = useState<{ clave: string; valor: ResultadoCeldas } | null>(null);
-  const [errorCeldas, setErrorCeldas] = useState('');
+  const [falloCeldas, setFalloCeldas] = useState<{ clave: string; motivo: string } | null>(null);
+  const [intentoCeldas, setIntentoCeldas] = useState(0);
   const [mostrarDashboard, setMostrarDashboard] = useState(false);
   const plan = estado.planes.find((p) => p.rotacionId === rotacion) ?? estado.planes[0];
   const visible = plan?.ciclos.find((c) => c.ciclo === ciclo) ?? plan?.ciclos[0];
   const claveFecha = `${plan?.rotacionId}:${visible?.ciclo}:${visible?.siembra}`;
   const fecha = fechaElegida?.clave === claveFecha ? fechaElegida.fecha : visible?.siembra ?? '';
-  const claveCeldas = `${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${fecha}`;
+  const claveCeldas = `${estado.calculo?.clave}:${plan?.rotacionId}:${escenario}:${fecha}:${intentoCeldas}`;
+  const errorCeldas = falloCeldas?.clave === claveCeldas ? falloCeldas.motivo : '';
+  const serie = useSerieBalance(estado.calculo?.cliente, estado.calculo?.clave, plan?.rotacionId, escenario, !comparacion || mostrarDashboard);
+  const rango = useMemo(() => rangoDelCiclo(serie.datos, visible?.ciclo ?? ciclo), [serie.datos, visible?.ciclo, ciclo]);
+  const cambiarFecha = useCallback((nueva: string) => setFecha({ clave: claveFecha, fecha: nueva }), [claveFecha, setFecha]);
   useEffect(() => {
     if (!estado.calculo || !plan || !fecha || comparacion) return;
     let activo = true;
-    setErrorCeldas('');
-    void conLimite(estado.calculo.cliente.celdas(plan.rotacionId, escenario, fecha)).then((valor) => {
-      if (activo) setCeldas({ clave: claveCeldas, valor });
-    }).catch((e: unknown) => { if (activo) setErrorCeldas(e instanceof Error ? e.message : 'No se pudieron consultar las celdas.'); });
-    return () => { activo = false; };
+    const calculo = estado.calculo;
+    // Agrupa el arrastre rápido: solo consulta la última fecha estable.
+    const reloj = setTimeout(() => {
+      setFalloCeldas(null);
+      void conLimite(calculo.cliente.celdas(plan.rotacionId, escenario, fecha)).then((valor) => {
+        if (activo) { setCeldas({ clave: claveCeldas, valor }); setFalloCeldas(null); }
+      }).catch((e: unknown) => { if (activo) setFalloCeldas({ clave: claveCeldas, motivo: e instanceof Error ? e.message : 'No se pudieron consultar las celdas.' }); });
+    }, 120);
+    return () => { activo = false; clearTimeout(reloj); };
   }, [estado.calculo, plan, escenario, fecha, claveCeldas, comparacion]);
-  if (!estado.datos || !plan) return <><PageHeading step="03" title="Prepara tu comparación">Cargamos los datos para tu parcela.</PageHeading><DataState state={estado.error ? 'error' : 'loading'}>{estado.error || 'Preparando clima, suelo y cultivos.'}</DataState>{estado.error && <button className="ui-action" onClick={estado.reintentar}>Reintentar carga</button>}</>;
+  // Mantiene el mismo encabezado DOM durante la carga: conserva el foco de ruta.
+  const encabezado = <PageHeading step={comparacion ? '04' : '03'} title={comparacion ? 'Compara las rotaciones' : '¿Y si siembras algo distinto?'}>Usa historia climática real para explorar alternativas. La fecha del plan se traslada a la temporada de cada año histórico; no predice la cosecha.</PageHeading>;
+  if (!estado.datos || !plan) return <div className="ui-flow">{encabezado}<DataState state={estado.error ? 'error' : 'loading'}>{estado.error || 'Preparando clima, suelo y cultivos.'}</DataState>{estado.error && <button className="ui-action" onClick={estado.reintentar}>Reintentar carga</button>}</div>;
   const datos = estado.datos;
   const ranking = estado.calculo?.ranking;
   const rotacionesOrdenadas = ordenarRotaciones(ranking?.rotaciones ?? []);
@@ -60,7 +74,7 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
     estado.actualizar(armarPlan(plan.rotacionId, datos.parcela, plan.ciclos.map((c, i) => i === index ? { ...c, ...cambio } : c), datos.calendario));
   }
   return <div className="ui-flow">
-    <PageHeading step={comparacion ? '04' : '03'} title={comparacion ? 'Compara las rotaciones' : '¿Y si siembras algo distinto?'}>Usa historia climática real para explorar alternativas. La fecha del plan se traslada a la temporada de cada año histórico; no predice la cosecha.</PageHeading>
+    {encabezado}
     <details className="ui-warning"><summary>Parcela, fuentes y advertencias</summary><p>{datos.parcela.meta.aviso}</p>{datos.avisos.map((m) => <p key={m}>{m}</p>)}<p>Clima: {datos.serie.estado} · {datos.serie.fuente.nombre}</p><FuenteVisible fuente={datos.serie.fuente} /><p>{datos.suelo?.aviso ?? 'Sin suelo evaluable.'}</p>{datos.serie.advertencias?.map((a, i) => <p key={i}>{a.mensaje}</p>)}{datos.parcela.advertencias?.map((a, i) => <p key={i}>{a.mensaje}</p>)}</details>
     {!comparacion && <div className="lab-grid lab-connected">
       <Card title="Configura la rotación" eyebrow="01 / Elige">
@@ -86,13 +100,14 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
         <p className="quiet-note numeric">{numero(datos.parcela.areaHa, ' ha')} · {datos.parcela.celdas.length} celdas · relieve {datos.parcela.terreno.estado}</p>
         <div className="ui-actions">{plan.ciclos.map((c) => <button className="ui-action" key={c.ciclo} aria-pressed={visible?.ciclo === c.ciclo} onClick={() => setCiclo(c.ciclo)}>Ciclo {c.ciclo}</button>)}</div>
         <p role="status">{plan.rotacionId} · Ciclo {visible?.ciclo} · {nombresCultivos[visible?.cultivo ?? ''] ?? visible?.cultivo} · {escenario} {metricas?.anioReal ?? 'sin año evaluable'}</p>
-        <label htmlFor="fecha-observacion">Fecha que muestra la parcela</label><input id="fecha-observacion" type="date" value={fecha} onChange={(e) => { if (e.target.value) setFecha({ clave: claveFecha, fecha: e.target.value }); }} />
+        <ControlTiempo key={`${estado.calculo?.clave}:${plan.rotacionId}:${escenario}:${visible?.ciclo}:${vistaVisible}`} fecha={fecha} rango={rango} listo={!!estado.calculo && celdas?.clave === claveCeldas} fallo={!!errorCeldas} onFecha={cambiarFecha} />
+        {serie.error && <><DataState state="error">{serie.error} Puedes consultar fechas manualmente o reintentar el recorrido.</DataState><button className="ui-action" onClick={serie.reintentar}>Reintentar serie temporal</button></>}
         <fieldset className="choice-group"><legend>Vista de la parcela</legend><div className="ui-actions"><label><input type="radio" name="vista-parcela" checked={vistaVisible === '2d'} onChange={() => setVista('2d')} /> 2D ligera</label><label><input type="radio" name="vista-parcela" checked={vistaVisible === '3d'} disabled={!webglDisponible} onChange={() => setVista('3d')} /> 3D con relieve</label></div></fieldset>
         {!webglDisponible && <p className="ui-warning" role="status">WebGL no está disponible. Mostramos la vista 2D con los mismos resultados del motor.</p>}
-        {errorCeldas && <DataState state="error">{errorCeldas} Cambia la fecha o reintenta el cálculo.</DataState>}
+        {errorCeldas && <><DataState state="error">{errorCeldas} Cambia la fecha o reintenta la consulta.</DataState><button className="ui-action" onClick={() => setIntentoCeldas((n) => n + 1)}>Reintentar celdas</button></>}
         <Suspense fallback={<DataState state="loading">Cargando vista {vistaVisible.toUpperCase()}.</DataState>}>{vistaVisible === '2d'
           ? <Parcela2D parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} />
-          : <Escena parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} />}</Suspense>
+          : <Escena parcela={datos.parcela} suelo={datos.suelo} avisosDatos={datos.avisosDatos} serieBalance={serie.datos} resultado={estado.calculo && celdas?.clave === claveCeldas ? celdas.valor : null} fecha={fecha} />}</Suspense>
       </Card>
       <Card title="Lee el escenario" eyebrow="03 / Observa">
         <fieldset className="choice-group"><legend>Escenario histórico</legend><div className="ui-actions">{escenarios.map((e) => <label key={e}><input type="radio" name="escenario-real" value={e} checked={e === escenario} onChange={() => setEscenario(e)} /> {e}</label>)}</div></fieldset>
@@ -119,10 +134,10 @@ export function LaboratorioConectado({ estado, comparacion = false }: { estado: 
       {comparacion && <ActionLink href="#/laboratorio" secondary>Volver al laboratorio</ActionLink>}
     </Card>}
     <button className="ui-action" aria-expanded={mostrarDashboard} onClick={() => setMostrarDashboard((v) => !v)}>{mostrarDashboard ? 'Ocultar gráficas de agua' : 'Mostrar gráficas de agua'}</button>
-    {mostrarDashboard && estado.calculo && <Suspense fallback={<DataState state="loading">Cargando dashboard.</DataState>}><DashboardBalance cliente={estado.calculo.cliente} revision={estado.calculo.clave} rotacion={plan.rotacionId} escenario={escenario} /></Suspense>}
+    {mostrarDashboard && estado.calculo && <Suspense fallback={<DataState state="loading">Cargando dashboard.</DataState>}><DashboardBalance serie={serie} /></Suspense>}
     {ranking && <TarjetasRotacion rotaciones={rotacionesOrdenadas} />}
     <Card title="Próxima temporada aproximada" eyebrow="Exploratorio">
-      <label><input type="checkbox" checked={mostrarBanda} onChange={(e) => setMostrarBanda(e.target.checked)} /> Mostrar banda de incertidumbre</label>
+      <label className="choice-label"><input type="checkbox" checked={mostrarBanda} onChange={(e) => setMostrarBanda(e.target.checked)} /> Mostrar banda de incertidumbre</label>
       <p>No es una predicción de cosecha ni de una temporada exacta.</p>
       {mostrarBanda && <>{estado.calculo ? <>
         <p>{estado.calculo.proxima.aviso} · {estado.calculo.proxima.estado}</p><p>{estado.calculo.proxima.motivo}</p>

@@ -2,6 +2,14 @@
 
 Toda edición de esta carpeta se anota aquí. No borrar entradas anteriores.
 
+### 2026-11-14 — A5.2 y A5.3: tiempo compartido, móvil y accesibilidad (balam)
+
+- **Archivos:** `web/src/ui/ControlTiempo.tsx`, `tiempo.ts`, `useSerieBalance.ts`, `tiempo.css` y pruebas; `LaboratorioConectado`, `DashboardBalance`, `InicioHeader`, `system.css`, `terreno.css`; `docs/06`, `docs/14`, vistas del tablero y `web/README.md`.
+- **Cambio:** deslizador diario, pasos mensuales y reproducción iniciada por el usuario; fechas limitadas a la serie del ciclo que devuelve el Worker, sin inventar duración. Consulta compartida para control temporal, dashboard y lluvia 3D. Un temporizador espera cada resultado; arrastre agrupado en 120 ms, respuestas antiguas descartadas. Pausa al cambiar contexto, ocultar pestaña, error o movimiento reducido. Consulta fallida recuperable sin dejar avisos viejos.
+- **Accesibilidad:** se conserva el h1 enfocado al completar la carga, se amplían opciones táctiles y se corrigen desbordamientos de palabras largas e imagen de Terreno al ampliar texto. Inicio explica el motor ya conectado. Tokens globales de DESIGN.md, sin bibliotecas nuevas.
+- **Evidencia:** navegador: un solo `serieBalance` compartido; 25 cambios rápidos producen una consulta de celdas; retraso simulado de 2.2 s no acumula pasos; errores transitorios recuperados. Cinco rutas a 320/720/1440 px con texto base al 200% sin desborde; axe sin incidencias A/AA revisadas; teclado, foco de ruta y retorno del diálogo con Escape. Capturas `web/evidencia/a5-2-tiempo-*`. No se verificó con lector de pantalla real ni hardware táctil físico.
+- **Alcance:** A5.2/A5.3 hechas en el tablero; A5.4 sigue con Eduardo y sus límites documentados. No cambia motor, contratos ni indicadores.
+
 ## Formato de entrada
 
 ```text
@@ -20,6 +28,13 @@ Decisiones afectadas:
 - **Pendiente:** ninguna pantalla los carga aún; dónde se muestran en `ui/Parcela2D.tsx` es de balam. Revisión visual humana. El punto 2 del encargo (ampliar el catálogo) no se ha empezado.
 - **Decisiones afectadas:** ninguna.
 
+### 2026-11-14 (noche) — A4.8 sigue en curso: SMAP en el droplet responde 503 (Eduardo)
+
+- **Archivos:** `docs/14` (nota de A4.8; vistas regeneradas), `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** se volvio a pedir `GET /api/smap` en `https://64-23-143-102.sslip.io` (2024-06-01 a 2024-06-03). Responde 503 `ERROR_DATOS`: el servicio no tiene `EARTHDATA_TOKEN`. La variable tampoco esta en esta maquina ni en `/opt/agrohive/agrohive.env`. `web/src` no llama a SMAP. No se inventan humedades, asi que A4.8 no pasa a `[HECHO]`. A4.12 sigue sin empezar (C5 no esta cruzada). A5.4 sigue `[BLOQUEADO]` (falta hardware real; la herramienta de Mompin ya esta).
+- **Fuente / evidencia:** respuesta publica del 14/11 noche, commit de la API `23f8a53`, contrato 0.12.2. `mediworks.mx` seguia en 200.
+- **Decisiones afectadas:** ninguna. El porcentaje de Eduardo no cambia: 16 de 19 hechas, 84 %.
+
 ### 2026-11-14 (noche) — Los 20 modelos de bloque con las reglas nuevas de Mompin (Mafer)
 
 - **Archivos:** `modelos/cultivos/bloques/bloques.py` y los 20 `<cultivo>_<etapa>_bloque.bbmodel` (maíz, frijol, calabaza y chile × 5 etapas; los 2 de maíz ya existentes se rehacen), `visor_bloques.html`; `web/src/escena/pruebas/bloques.test.ts`.
@@ -28,6 +43,19 @@ Decisiones afectadas:
 - **Pruebas:** `bloques.test.ts` pide los 20 archivos, tope de 24, sin cara inferior, 3 lomos, huella y menos vértices que el detallado (141 pruebas del archivo en verde; `web` completo 511 en verde, `tsc` y `build` bien, `contratos` 92, catálogos en verde; pytest de `api` no corre en esta máquina).
 - **Pendiente:** el visto bueno visual de la sesión de escena sobre los 18 nuevos; `docs/06` (de Mompin/balam) todavía dice 55 cubos en la línea del manchón de plantas.
 - **Decisiones afectadas:** ninguna nueva.
+
+### 2026-11-14 — Herramienta de medición de la escena para A5.4 (Mompin)
+
+- **Archivos:** `web/medir.html` y `web/src/escena/medir/medir.tsx` (nuevos), `herramientas/medir-escena/` (`medir.mjs` y `README.md`), `render/escena-three.ts` y `EscenaParcela.tsx` (recuperación ante pérdida del contexto WebGL); `docs/06`, `docs/14` (nota en A5.4).
+- **Cambio:** página y script que miden la escena en el equipo real: GPU, WebGL, triángulos, draw calls, reposo, viento, memoria, primera escena y pérdida de contexto. La escena se reconstruye si el navegador devuelve el contexto; si no, avisa que se use el modo 2D.
+- **Fuente / evidencia:** corrida en headless con SwiftShader (tabla en el README); falta la del hardware real (Eduardo). Para publicar `medir.html` en el droplet hace falta una línea en `web/vite.config.ts` (de balam).
+
+### 2026-11-14 (noche) — A4.7: droplet en `23f8a53` (Eduardo)
+
+- **Archivos:** `docs/14` (A4.7 `[HECHO]`; vistas regeneradas), `api/despliegue/README.md`, `README.md`, `AgroVault/Compartido/Servidor.md`, `AgroVault/Compartido/Pendientes.md`.
+- **Cambio:** se corrio `api/despliegue/actualizar-servidor.sh` en el droplet. La URL publica queda en `main` `23f8a53`: `/health` con `versionContrato` 0.12.2 (leida de `contratos/package.json`), front 200, `/api/calendario` y `/api/cultivos` 200. `mediworks.mx` sigue en 200. No se puso `EARTHDATA_TOKEN`.
+- **Fuente / evidencia:** `https://64-23-143-102.sslip.io/health`.
+- **Decisiones afectadas:** ninguna. A4.8 sigue `[EN CURSO]` (falta el OK del token). A4.12 sigue despues de C5. A5.4 sigue `[BLOQUEADO]`.
 
 ### 2026-11-14 (noche) — `/health` lee la version de contratos (Eduardo)
 

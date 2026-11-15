@@ -14,11 +14,11 @@ Nota **generada** por `herramientas/cronograma.py` desde las marcas de `docs/14-
 | Persona | Hechas | En curso | Bloqueadas | Pendientes | Avance |
 | --- | --- | --- | --- | --- | --- |
 | **Mompin** | 17 | 0 | 0 | 0 | 100 % de 17 |
-| **Eduardo** | 15 | 2 | 1 | 1 | 79 % de 19 |
+| **Eduardo** | 16 | 1 | 1 | 1 | 84 % de 19 |
 | **Mafer** | 9 | 1 | 0 | 0 | 90 % de 10 |
-| **balam** | 10 | 0 | 0 | 5 | 67 % de 15 |
+| **balam** | 12 | 0 | 0 | 3 | 80 % de 15 |
 
-Proyecto completo: **49 de 60** actividades hechas (82 %), 3 en curso, 1 bloqueadas.
+Proyecto completo: **52 de 60** actividades hechas (87 %), 2 en curso, 1 bloqueadas.
 
 ## Mompin
 
@@ -36,7 +36,7 @@ Proyecto completo: **49 de 60** actividades hechas (82 %), 3 en curso, 1 bloquea
 - [x] **A3.7** Pilares 2 y 3 (compatibilidad de ciclo, erosión relativa) `HECHO` — 14/11 (compatibilidad desde el calendario de Isla; protección del suelo por días de suelo desnudo; índice de erosión `NO_EVALUABLE` sin I30 ni C/LS con fuente)
 - [x] **A3.8** Tooltips y valores por bloque `HECHO` — con balam: ficha por celda en `web/src/escena/` (clic, toque, cursor, teclado y lista de celdas)
 - [x] **A4.2** Ranking de rotaciones por robustez: criterio B [DECIDIDO] (puntaje + arrepentimiento minimax), respaldo A si A3.7 no llega `HECHO` — 14/11 (corre B con déficit y exceso de agua; A3.7 suma los pilares 2 y 3)
-- [x] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `HECHO` — 14/11 noche: P0 a P3 de la demo de Isla en Chrome sin salida (año 2016 EVALUABLE; comparación criterio B con R4, R2 y R1 evaluables). API local sin red: clima 7397 días, suelo, elevación, próxima y cultivos. El droplet no tiene este código (A4.7)
+- [x] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `HECHO` — 14/11 noche: P0 a P3 de la demo de Isla en Chrome sin salida (año 2016 EVALUABLE; comparación criterio B con R4, R2 y R1 evaluables). API local sin red: clima 7397 días, suelo, elevación, próxima y cultivos. El despliegue de ese código quedó en A4.7
 - [x] **A5.1** Animaciones mínimas (cambio de modelo por etapa) y deseables (escala, viento) `HECHO` — con Mafer: transición por etapa, escala al crecer y viento leve opcional en `web/src/escena/`; sin animación con reducir movimiento. Además (Mompin): lluvia del día desde `serieBalance`, con mm y fuente
 - [x] **A5.5** Pruebas de regresión del motor y de contratos `HECHO` — 14/11 (`web/src/motor/pruebas/regresion.test.ts` contra `regresion/demo-isla.json`)
 
@@ -52,14 +52,14 @@ Proyecto completo: **49 de 60** actividades hechas (82 %), 3 en curso, 1 bloquea
 - [x] **A2.13** Capa "próxima temporada aproximada": anomalía del pronóstico estacional sobre la climatología, con respaldo estadístico (percentiles; sin tendencia, con advertencia); salida como banda de incertidumbre ([[Contratos]]) `HECHO` — 14/11: backend (Eduardo) y motor (Mompin): banda validada y comparada con los escenarios, y escenario de años análogos `EXPLORATORIO` (contratos 0.8.0); falta la interfaz (A4.9)
 - [x] **A2.14** Textura y pH estimados de la zona (ISRIC WCS u OpenLandMap) por script offline y servidos desde caché ([[APIs]]) `HECHO`
 - [x] **A2.15** Cliente OpenLandMap y comparación con ISRIC en GET /api/suelo (V-23: ambos servicios) `HECHO`
-- [x] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `HECHO` — 14/11 noche: P0 a P3 de la demo de Isla en Chrome sin salida (año 2016 EVALUABLE; comparación criterio B con R4, R2 y R1 evaluables). API local sin red: clima 7397 días, suelo, elevación, próxima y cultivos. El droplet no tiene este código (A4.7)
-- [/] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `EN CURSO` — `https://64-23-143-102.sslip.io` responde (front 200, `/health` en `d182af4`, contrato 0.9.0, mediworks 200). Esta sesión no entró por SSH (`Permission denied (publickey,password)`); no se desplegó
-- [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — `GET /api/smap` y `contratos/smap.schema.json` existen. No está en la interfaz. Sin `EARTHDATA_TOKEN` responde 503 (comprobado en local el 14/11 noche, 2024-06-01 a 2024-06-08). No se puso el token: hace falta el OK explícito, también en el droplet
+- [x] **A4.6** Conectar front y API (cliente generado, estados de carga y error) `HECHO` — 14/11 noche: P0 a P3 de la demo de Isla en Chrome sin salida (año 2016 EVALUABLE; comparación criterio B con R4, R2 y R1 evaluables). API local sin red: clima 7397 días, suelo, elevación, próxima y cultivos. El despliegue de ese código quedó en A4.7
+- [x] **A4.7** Despliegue en el droplet (nginx, systemd, SSL) ([[Servidor]]) `HECHO` — 14/11 noche: `https://64-23-143-102.sslip.io` en `23f8a53`. `/health` con `versionContrato` 0.12.2, front 200, `/api/calendario` y `/api/cultivos` 200, `mediworks.mx` 200. `actualizar-servidor.sh` corrido en el droplet
+- [/] **A4.8** Extras NASA: SMAP, GPM o MODIS vía earthaccess (solo si aportan) `EN CURSO` — 14/11 noche, droplet `23f8a53`: `GET /api/smap` (2024-06-01 a 2024-06-03) responde 503 `ERROR_DATOS` porque el servicio no tiene `EARTHDATA_TOKEN` (tampoco esta en esta maquina ni en `agrohive.env`). La ruta y el schema existen; `web/src` no llama a SMAP. Sin token no hay humedad real y no se inventa
 - [x] **A4.10** Lluvia GPM IMERG vía NASA POWER (IMERG_PRECTOT con time-standard=UTC, sin cuenta Earthdata) en GET /api/clima y en el paquete de demo, como evidencia: no entra al balance ni cambia los escenarios. Prototipo, hallazgos y encargo en features/imerg/ y features/encargos/eduardo-datos-globales.md `HECHO` — `lluviaSatelital` en `GET /api/clima` y en el paquete de demo (7 397 dias, ninguno en -999 hasta 2025-12-31); evidencia, sin tocar el balance
 - [x] **A4.11** NDVI de MODIS (MOD13Q1, 250 m, 16 días) por punto, como evidencia de los años de escenario; no entra al ranking. El servicio previsto era ORNL DAAC; se sustituyo porque no respondia `HECHO` — ORNL DAAC no respondio (502, 503). La serie sale de Microsoft Planetary Computer, MOD13Q1 V061, validada contra ORNL en 4 fechas. Cache, limites del pixel y paquete completo en `datos/demo/respuestas/ndvi.json`. Cita del producto: doi:10.5067/MODIS/MOD13Q1.061. El schema traido en este merge (contratos 0.12.2) cita Planetary Computer, coleccion `modis-13Q1-061`; ORNL queda como respaldo que no se llama en vivo
 - [ ] **A4.12** Extra de fase 2, después de C5: fuentes regionales de EE. UU. cuando la coordenada cae ahí: CDL (rotación real por año, F8) primero y SSURGO después — C5 no está cruzada (el producto no está congelado); no se empieza
 - [x] **A4.13** Después de C4: calendario de siembra de respaldo fuera de México con GGCMI fase 3 (Jägermeyr et al. 2021, Nature Food 2: 873-885; datos doi:10.5281/zenodo.5062513, CC BY 4.0, 0.5°): siembra y madurez de temporal para maíz (mai_rf) y frijol (bea_rf, [VERIFICAR] que sea frijol), servido como calendario-local con su fuente. Calabaza y chile quedan NO_EVALUABLE; en México siguen mandando SIAP e INIFAP `HECHO` — `GET /api/calendario`. Isla (18.03, -95.53) devuelve SIAP/INIFAP. Iowa (42, -93.5) devuelve maiz de temporal de GGCMI: dia 133 (13 de mayo) y la madurez en la nota de la fuente, doi:10.5281/zenodo.5062513. Frijol `NO_EVALUABLE`: ni Zenodo ni el NetCDF dicen que `bea_rf` sea frijol. Calabaza y chile `NO_EVALUABLE`. En Mexico, fuera de Isla, no se usa GGCMI
-- [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — Cifras de SwiftShader ya en `docs/06` (Mompin, buzón #202; no se re-midió): polígono de 518 celdas, maíz en madurez de 449 380 a 216 280 triángulos y de 3.2 a 5.0 cuadros/s con manchones; 6 draw calls (8 con celda); en reposo no se dibuja. A3.6 ya está en la rama: modo 2D y fallback inicial sin WebGL. Falta hardware real (laptop sin GPU dedicada y celular) y la pérdida de contexto WebGL
+- [-] **A5.4** Medición de requisitos mínimos y fallback WebGL `BLOQUEADO` — Cifras de SwiftShader ya en `docs/06` (Mompin, buzón #202; no se re-midió): polígono de 518 celdas, maíz en madurez de 449 380 a 216 280 triángulos y de 3.2 a 5.0 cuadros/s con manchones; 6 draw calls (8 con celda); en reposo no se dibuja. A3.6 ya está en la rama: modo 2D y fallback inicial sin WebGL. Falta correrlo en hardware real (laptop sin GPU dedicada y celular) con la herramienta lista: `web/medir.html` y `herramientas/medir-escena/` (Mompin), que también prueba la pérdida de contexto WebGL
 - [x] **A5.8** Respaldo local sin internet y capturas `HECHO` — 14/11 noche, segunda pasada: API con `herramientas/demo-sin-red.sh` y Chrome headless con proxy inválido. P0 a P3 y método de la demo de Isla sin peticiones externas; NDVI del paquete 200; SMAP 503 sin token; clima lejano 503. Capturas en `docs/capturas/noche-14/`. No se apagó el wifi. El mapa de polígono pide teselas de Esri
 
 ## Mafer
@@ -89,8 +89,8 @@ Proyecto completo: **49 de 60** actividades hechas (82 %), 3 en curso, 1 bloquea
 - [ ] **A4.4** Redacción con LLM sobre números ya calculados (opcional)
 - [x] **A4.5** Pantalla de método, fuentes y advertencias (A1, A3) `HECHO`
 - [x] **A4.9** Interfaz de "próxima temporada aproximada": banda de incertidumbre y aviso visible de que no es predicción `HECHO`
-- [ ] **A5.2** Slider de meses
-- [ ] **A5.3** Móvil y accesibilidad (táctil, teclado)
+- [x] **A5.2** Slider de meses `HECHO`
+- [x] **A5.3** Móvil y accesibilidad (táctil, teclado) `HECHO`
 - [ ] **A5.9** Envío final según reglas oficiales
 
 ## Equipo (sin responsable único)

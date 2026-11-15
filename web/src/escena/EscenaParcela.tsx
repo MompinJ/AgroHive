@@ -83,6 +83,15 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
   const [hover, setHover] = useState<{ bloque: BloqueEscena; x: number; y: number } | null>(null);
   const [avisosRender, setAvisosRender] = useState<Advertencia[]>([]);
   const [sinWebGL, setSinWebGL] = useState(false);
+  const [contexto, setContexto] = useState<'perdido' | 'restaurado' | null>(null);
+
+  // Si el navegador quita el contexto WebGL y no lo devuelve en 5 s, la escena se rinde
+  // y avisa que se use el modo 2D (los valores son los mismos).
+  useEffect(() => {
+    if (contexto !== 'perdido') return;
+    const t = setTimeout(() => setSinWebGL(true), 5000);
+    return () => clearTimeout(t);
+  }, [contexto]);
 
   const modelo = useMemo(
     () => construirEscena(parcela, resultado, { exageracionVertical: exageracion, suelo, ...(fecha ? { fecha } : {}) }),
@@ -101,6 +110,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       viento,
       mascota,
       onSeleccion: setSeleccion,
+      onContexto: (estado: 'perdido' | 'restaurado') => setContexto(estado),
       onHover: (bloque: BloqueEscena | null, x: number, y: number) => setHover(bloque ? { bloque, x, y } : null),
       onAviso: (codigo: string, mensaje: string) =>
         setAvisosRender((prev) => (prev.some((a) => a.mensaje === mensaje) ? prev : [...prev, { codigo, mensaje, severidad: 'aviso' }])),
@@ -171,7 +181,7 @@ export function EscenaParcela({ parcela, resultado, fecha, suelo = null, avisosD
       <div className="escena-lienzo-caja">
         {sinWebGL ? (
           <div className="escena-sin-webgl" role="alert">
-            <strong>WebGL no esta disponible.</strong>
+            <strong>{contexto === 'perdido' ? 'Se perdió la escena 3D (el navegador quitó el contexto WebGL).' : 'WebGL no esta disponible.'}</strong>
             <p>La escena 3D no puede dibujarse en este equipo. Usa el modo 2D; los valores son los mismos.</p>
           </div>
         ) : (
